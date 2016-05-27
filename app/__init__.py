@@ -12,17 +12,7 @@ def create_app(config_name):
 
     db.init_app(app)
 
-    if not app.debug and not app.testing and not app.config['SSL_DISABLE']:
-        from flask.ext.sslify import SSLify
-        sslify = SSLify(app)
-
-    from .main import main as main_blueprint
-    app.register_blueprint(main_blueprint)
-
-    from .auth import auth as auth_blueprint
-    app.register_blueprint(auth_blueprint, url_prefix='/auth')
-
-    from .api_1_0 import api as api_1_0_blueprint
-    app.register_blueprint(api_1_0_blueprint, url_prefix='/api/v1.0')
+    from import_xml import import_xml as import_xml_blueprint
+    app.register_blueprint(import_xml_blueprint, url_prefix='/import')
 
     return app
