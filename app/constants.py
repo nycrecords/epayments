@@ -1,0 +1,20 @@
+# Order Type
+TAX_PHOTO = 10000048
+PHOTO_GALLERY = 10000060
+BIRTH_SEARCH = 10000102
+BIRTH_CERTIFICATE = 10000147
+MARRIAGE_SEARCH = 10000104
+MARRIAGE_CERTIFICATE = 10000181
+DEATH_SEARCH = 10000103
+DEATH_CERTIFICATE = 10000182
+
+TYPE = {
+    TAX_PHOTO: 'tax photo',
+    PHOTO_GALLERY: 'photo gallery',
+    BIRTH_SEARCH: 'birth search',
+    BIRTH_CERTIFICATE: 'birth certificate',
+    MARRIAGE_SEARCH: 'marriage search',
+    MARRIAGE_CERTIFICATE: 'marriage certificate',
+    DEATH_SEARCH: 'death search',
+    DEATH_CERTIFICATE: 'death certificate',
+}
