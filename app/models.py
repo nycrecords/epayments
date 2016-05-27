@@ -1,30 +1,5 @@
-"""
-CREATE TABLE orders
-(
-    OrderNo REAL,
-    ClientAgencyName TEXT,
-    ShipToName TEXT,
-    ShipToStreetAdd TEXT,
-    ShipToStreetAdd2 TEXT,
-    ShipToCity TEXT,
-    ShipToState TEXT,
-    ShipToZipCode TEXT,
-    ShipToCountry TEXT,
-    ShipToPhone TEXT,
-    CustomerEmail TEXT,
-    ShippingInstructions TEXT,
-    ClientsData TEXT,
-    ConfirmationMessage TEXT,
-    DateReceived TEXT,
-    BillingName TEXT,
-    DateLastModified TEXT,
-    SubOrderNo REAL,
-    ClientID TEXT
-);
-"""
-
 from . import db
-
+from . import app
 
 class Order(db.Model):
     __tablename__ = 'order'
@@ -47,3 +22,30 @@ class Order(db.Model):
     date_last_modified = db.Column(db.DateTime)
     sub_order_no = db.Column(db.Integer)
     client_id = db.Column(db.Integer)
+
+    def __init__(self, **kwargs):
+        """
+        Creates a new order in the database
+        :param order_no: Order Number
+        :param client_agency_nam: Line of Business
+        :param ship_to_name: Customer Name for Shipping
+        :param ship_to_street_address_one: Address, Line 1
+        :param ship_to_street_address_two: Address, Line 2
+        :param ship_to_city: Shipping City
+        :param ship_to_state: Shipping State
+        :param ship_to_zip_code: Shipping Zip Code
+        :param ship_to_country: Shipping Country
+        :param ship_to_phone: Shipping Phone (Customer)
+        :param customer_email: Customer's email address
+        :param shipping_instructions: Shipping Instructions
+        :param clients_data: Order Information as Pipe Delimited String
+        :param confirmation_message: Confirmation Message (sent to customer)
+        :param date_received: Date request was entered into system
+        :param billing_name: Billing Customer Name
+        :param date_last_modified: Date order was modified on system
+        :param sub_order_no: Sub Order Number (used by multi-part orders)
+        :param client_id): Line of Business ID #
+        """
+        super(Order, self).__init__(**kwargs)
+
+        return self.order_no
