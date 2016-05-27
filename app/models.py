@@ -1,5 +1,5 @@
 from . import db
-from . import app
+
 
 class Order(db.Model):
     __tablename__ = 'order'
