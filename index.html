@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>ePayments</title>
+  <link href='http://fonts.googleapis.com/css?family=Open+Sans+Condensed:300|Open+Sans' rel='stylesheet' type='text/css'>
+  <link rel="stylesheet" href="/build/css/style.css">
+  <link rel="shortcut icon" href="/css/images/nycgov.ico" type="image/x-icon">
+  <link rel="icon" href="/css/images/nycgov.ico" type="image/x-icon">
+  <link rel="stylesheet" href="//code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css">
+  <script src="//code.jquery.com/jquery-1.10.2.js"></script>
+  <script src="//code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
+  <script>
+  $(function() {
+    $( "#datepicker" ).datepicker();
+  });
+  </script>
+</head>
+<body>
+  
+    <input type="checkbox" id="fold">
+    
+    <div id="main">
+      <!-- This is where our React app will go -->
+    </div>
+
+  <script src="/build/main.js"></script>
+<!--   <script type="text/javascript">
+  function TasksViewModel() {
+        var self = this;
+        self.tasksURI = 'http://localhost:5000/epayments/api/v1.0/orders';
+        self.tasks = ko.observableArray();
+
+        self.ajax = function(uri, method, data) {
+            var request = {
+                url: uri,
+                type: method,
+                contentType: "application/json",
+                accepts: "application/json",
+                cache: false,
+                dataType: 'json',
+                data: JSON.stringify(data),
+                beforeSend: function (xhr) {
+                    xhr.setRequestHeader("Authorization", 
+                        "Basic " + btoa(self.username + ":" + self.password));
+                },
+                error: function(jqXHR) {
+                    console.log("ajax error " + jqXHR.status);
+                }
+            };
+            return $.ajax(request);
+        }
+
+         self.ajax(self.tasksURI, 'GET').done(function(data) {
+            for (var i = 0; i < data.tasks.length; i++) {
+                self.tasks.push({
+                    uri: ko.observable(data.tasks[i].uri),
+                    ordernumber: ko.observable(data.tasks[i].ordernumber),
+                    subordernumber: ko.observable(data.tasks[i].subordernumber),
+                    ordertype: ko.observable(data.tasks[i].ordertype),
+                    name: ko.observable(data.tasks[i].name),
+                    date: ko.observable(data.tasks[i].date),
+                    done: ko.observable(data.tasks[i].done)
+                });
+            }
+        });
+  }
+</script> -->
+</body>
+</html>
