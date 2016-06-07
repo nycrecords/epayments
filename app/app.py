@@ -3,7 +3,7 @@ from flask import Flask, jsonify, abort, request, make_response, url_for
 from flask.ext.sqlalchemy import SQLAlchemy
 from crossdomain import crossdomain
 # import os
-# from flask.ext.sqlalchemy import SQLAlchemy
+# from flask.ext.sqlalchemy import SQLAlchemya
 
 app = Flask(__name__, static_url_path="/build")
 
@@ -106,4 +106,4 @@ orders = [
 ]
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run(debug=True, host='0.0.0.0')

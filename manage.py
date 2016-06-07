@@ -13,7 +13,7 @@ if os.path.exists('.env'):
         if len(var) == 2:
             os.environ[var[0]] = var[1]
 
-from app import create_app, db
+from app import db
 from app.models import Order
 from flask.ext.script import Manager, Shell
 from flask.ext.migrate import Migrate, MigrateCommand
