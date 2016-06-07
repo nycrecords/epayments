@@ -40,27 +40,30 @@ var App = React.createClass({
   filterOrder: function (order) {
     console.log(order)
     console.log(this.state.order)
+    var filteredOrders = []
     for (var i = 0; i < this.state.order.length; i++) {
       console.log(this.state.order[i].OrderNo)
       console.log(order.ordernumber)
       if (order.ordernumber === (this.state.order[i].OrderNo).toString()) {
         console.log(1)
-        this.setState({ order: order })
+        filteredOrders.push(this.state.order[i])
         console.log(this.state.order)
       } else if (order.subordernumber === (this.state.order[i].OrderNo).toString()) {
         console.log(2)
-        this.setState({ order: order })
+        filteredOrders.push(this.state.order[i])
       } else if (order.ordertype === (this.state.order[i].ClientAgencyName).toString()) {
         console.log(3)
-        this.setState({ order: order })
+        filteredOrders.push(this.state.order[i])
       } else if (order.name === (this.state.order[i].BillingName).toString()) {
         console.log(4)
-        this.setState({ order: order })
+        filteredOrders.push(this.state.order[i])
       } else if (order.date === (this.state.order[i].DateReceived).toString()) {
         console.log(5)
-        this.setState({ order: order })
+        filteredOrders.push(this.state.order[i])
       }
     }
+    this.setState({ order : filteredOrders })
+    console.log(this.state.order)
   },
   render: function () {
     return (
@@ -157,7 +160,7 @@ var OrderForm = React.createClass({
         <option value='marriagecert'>
           Marriage Certificate
         </option>
-        <option value='deathcert'>
+        <option value='Death Cert'>
           Death Certificate
         </option>
         <option disabled value='photos'>
