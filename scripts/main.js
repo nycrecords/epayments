@@ -20,12 +20,18 @@ var App = React.createClass({
 
   getInitialState: function () {
     return {
-      order: {}
+      order: []
     }
   },
   componentDidMount: function () {
     this.serverRequest = $.get(this.props.source, function (result) {
-      this.state.order = result.orders
+      var allOrders = []
+      for (var i = 0; i < result.orders.length; i++) {
+        allOrders.push(result.orders[i])
+      }
+      this.setState({ order : allOrders })
+      console.log(this.state.order)
+      console.log(allOrders)
     }.bind(this))
   },
   componentWillUnmount: function () {
@@ -60,7 +66,7 @@ var App = React.createClass({
     return (
     <div className='epayments'>
       <Inventory tagline='Department of Records' filterOrder={this.filterOrder} />
-      <Order {...this.props} />
+      <Order order={this.state.order} />
     </div>
     )
   }
@@ -94,9 +100,9 @@ var Header = React.createClass({
 */
 
 var OrderForm = React.createClass({
-  propTypes: {
-    filterOrder: React.PropTypes.string.isRequired
-  },
+  // propTypes: {
+  //   filterOrder: React.PropTypes.string.isRequired
+  // },
 
   findOrder: function (event) {
     // Stop the form from submitting
@@ -225,20 +231,24 @@ var Inventory = React.createClass({
 
 var Order = React.createClass({
   render: function () {
-    return (
-    <div className='order-wrap'>
-      <h2 className='order-title'>Orders</h2>
-      <ul className='order'>
-        <li className='total'>
-          <strong>Number of Items:</strong> 0
-          <strong>Number of Orders:</strong> 0
-        </li>
-        <br />
-      </ul>
-    </div>
-    )
-  }
-})
+    console.log(this.props.order)
+    // for (var i = 0; i < this.props.order.length; i++) {
+    //             {this.props.order[i].OrderNo}
+      return (
+      <div className='order-wrap'>
+        <h2 className='order-title'>Orders</h2>
+        <ul className='order'>
+          <li className='total'>
+            <strong>Number of Items:</strong> 0
+            <strong>Number of Orders:</strong> 0
+          </li>
+          {this.props.order.map(function(order) {
+            return <li key={order.ClientAgencyName}>{order.BillingName}</li>})}
+        </ul>
+      </div>
+      )
+    }})
+
 
 /*
   Not Found
