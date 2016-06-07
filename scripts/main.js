@@ -57,8 +57,11 @@ var App = React.createClass({
       } else if (order.name === (this.state.order[i].BillingName).toString()) {
         console.log(4)
         filteredOrders.push(this.state.order[i])
-      } else if (order.date === (this.state.order[i].DateReceived).toString()) {
+      } else if (order.datelastmodified === (this.state.order[i].DateLastModified).toString()) {
         console.log(5)
+        filteredOrders.push(this.state.order[i])
+      } else if (order.datereceived === (this.state.order[i].DateReceived).toString()) {
+        console.log(6)
         filteredOrders.push(this.state.order[i])
       }
     }
@@ -116,7 +119,8 @@ var OrderForm = React.createClass({
       subordernumber: this.refs.subordernumber.value,
       ordertype: this.refs.ordertype.value,
       name: this.refs.name.value,
-      date: this.refs.date.value
+      datelastmodified: this.refs.datelastmodified.value,
+      datereceived: this.refs.datereceieved.value
     }
     // Search for the order(s) in database
     console.log(order)
@@ -139,7 +143,7 @@ var OrderForm = React.createClass({
         <option disabled selected value>
           Order Type
         </option>
-        <option value='all'>
+        <option value=''>
           All
         </option>
         <option disabled value='vitalrecords'>
@@ -191,11 +195,17 @@ var OrderForm = React.createClass({
         ref='name'
         placeholder='Name' />
       <input
-        data-bind='value: date'
+        data-bind='value: datelastmodified'
         type='text'
-        ref='date'
-        placeholder='Date'
+        ref='datelastmodified'
+        placeholder='Date Last Modified'
         id='datepicker' />
+      <input
+        data-bind='value: datereceived'
+        type='text'
+        ref='datereceieved'
+        placeholder='Date Received'
+        id='datepicker2' />
       <button data-bind='click: findOrder' type='submit'>
         Apply
       </button>
@@ -244,7 +254,7 @@ var Order = React.createClass({
           <strong>Number of Orders:</strong> {this.props.order.length}
         </li>
         {this.props.order.map(function(order) {
-          return <li key={order.ClientAgencyName}>{order.BillingName}</li>})}
+          return <li key={order.uri}>{order.BillingName}</li>})}
       </ul>
     </div>
     )
