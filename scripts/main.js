@@ -232,22 +232,21 @@ var Inventory = React.createClass({
 var Order = React.createClass({
   render: function () {
     console.log(this.props.order)
-    // for (var i = 0; i < this.props.order.length; i++) {
-    //             {this.props.order[i].OrderNo}
-      return (
-      <div className='order-wrap'>
-        <h2 className='order-title'>Orders</h2>
-        <ul className='order'>
-          <li className='total'>
-            <strong>Number of Items:</strong> 0
-            <strong>Number of Orders:</strong> 0
-          </li>
-          {this.props.order.map(function(order) {
-            return <li key={order.ClientAgencyName}>{order.BillingName}</li>})}
-        </ul>
-      </div>
-      )
-    }})
+    return (
+    <div className='order-wrap'>
+      <h2 className='order-title'>Orders</h2>
+      <ul className='order'>
+        <li className='total'>
+          <strong>Number of Items:</strong> 0
+          <strong>Number of Orders:</strong> {this.props.order.length}
+        </li>
+        {this.props.order.map(function(order) {
+          return <li key={order.ClientAgencyName}>{order.BillingName}</li>})}
+      </ul>
+    </div>
+    )
+  }
+})
 
 
 /*
