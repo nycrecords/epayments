@@ -40,7 +40,6 @@ var App = React.createClass({
   },
   filterOrder: function (order) {
     console.log(order)
-    console.log(this.state.order)
     // Modify datelastmodified to match database value
     if ((parseInt(order.datelastmodified.substr(0, 2))) < 10) {
       // 0#/##/## --> #/##/##
@@ -53,20 +52,16 @@ var App = React.createClass({
     if (!((parseInt(order.datelastmodified.substr(0, 1))) < 10)) {
       if ((parseInt(order.datelastmodified.substr(2, 2))) < 10) {
       // ##/0#/## --> ##/#/##
-        console.log(order.datelastmodified.substr(2, 2))
         order.datelastmodified = (order.datelastmodified.substr(0, 3) + order.datelastmodified.substr(4, 6))
       }
     }
-    console.log(order.datelastmodified)
     var filteredOrders = []
     for (var i = 0; i < this.state.allOrders.length; i++) {
-      console.log(this.state.allOrders[i].OrderNo)
-      console.log(order.ordernumber)
       if (order.ordernumber === (this.state.allOrders[i].OrderNo).toString()) {
         console.log(1)
         filteredOrders.push(this.state.allOrders[i])
         console.log(this.state.order)
-      } else if (order.subordernumber === (this.state.allOrders[i].OrderNo).toString()) {
+      } else if (order.subordernumber === ((this.state.allOrders[i].uri).toString()).substr(48, 10)) {
         console.log(2)
         filteredOrders.push(this.state.allOrders[i])
       } else if (order.ordertype === (this.state.allOrders[i].ClientAgencyName).toString()) {
