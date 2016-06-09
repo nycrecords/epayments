@@ -2,35 +2,20 @@ import six
 from flask import Flask, jsonify, abort, request, make_response, url_for, Blueprint
 from flask.ext.sqlalchemy import SQLAlchemy
 from crossdomain import crossdomain
-# from .main import views, errors
 
 import os
+from ..app import create_app, db
 from flask.ext.script import Manager, Shell
 from flask.ext.sqlalchemy import SQLAlchemy
-# import os
-# from flask.ext.sqlalchemy import SQLAlchemy
-# from ..config import config
-
-app = Flask(__name__, static_url_path="/build")
-# app.config.from_object(config[(os.getenv('FLASK_CONFIG') or 'default')])
-# config[(os.getenv('FLASK_CONFIG') or 'default')].init_app(app)
-
-db = SQLAlchemy(app)
-manager = Manager(app)
-
-db.init_app(app)
-
-main_blueprint = Blueprint('main', __name__)
-app.register_blueprint(main_blueprint)
-
-# app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite://///Users/brandontang/doris-epayments/epayments/testepayments.db'
-
-# migrate = Migrate(app, db)
-
-
 
 # app = Flask(__name__, static_url_path="/build")
 
+app = create_app(os.getenv('FLASK_CONFIG') or 'default')
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite://///Users/brandontang/doris-epayments/epayments/testepayments.db'
+db = SQLAlchemy(app)
+manager = Manager(app)
+
+# Connecting to DB
 # basedir = os.path.abspath(os.path.dirname(__file__))
 
 # app = Flask(__name__)
@@ -41,6 +26,8 @@ app.register_blueprint(main_blueprint)
 
 # db = SQLAlchemy(app)
 
+
+# app/main directory
 # class Orders(db.Model):
 #     __tablename__ = 'orders'
 #     SubOrderNo = db.Column(db.Integer, primary_key=True)
