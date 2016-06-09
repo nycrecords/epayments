@@ -41,6 +41,23 @@ var App = React.createClass({
   filterOrder: function (order) {
     console.log(order)
     console.log(this.state.order)
+    // Modify datelastmodified to match database value
+    if ((parseInt(order.datelastmodified.substr(0, 2))) < 10) {
+      // 0#/##/## --> #/##/##
+      order.datelastmodified = order.datelastmodified.substr(1, 9)
+      if ((parseInt(order.datelastmodified.substr(2, 2))) < 10) {
+      // #/0#/## --> #/#/##
+      order.datelastmodified = (order.datelastmodified.substr(0, 2) + order.datelastmodified.substr(3, 6))
+      }
+    }
+    if (!((parseInt(order.datelastmodified.substr(0, 1))) < 10)) {
+      if ((parseInt(order.datelastmodified.substr(2, 2))) < 10) {
+      // ##/0#/## --> ##/#/##
+        console.log(order.datelastmodified.substr(2, 2))
+        order.datelastmodified = (order.datelastmodified.substr(0, 3) + order.datelastmodified.substr(4, 6))
+      }
+    }
+    console.log(order.datelastmodified)
     var filteredOrders = []
     for (var i = 0; i < this.state.allOrders.length; i++) {
       console.log(this.state.allOrders[i].OrderNo)
@@ -58,8 +75,9 @@ var App = React.createClass({
       } else if (order.name === (this.state.allOrders[i].BillingName).toString()) {
         console.log(4)
         filteredOrders.push(this.state.allOrders[i])
-      } else if (order.datelastmodified === (this.state.allOrders[i].DateLastModified).toString()) {
+      } else if (order.datelastmodified === ((this.state.allOrders[i].DateLastModified).toString()).substr(0, 9)) {
         console.log(5)
+        console.log((this.state.allOrders[i].DateLastModified).toString())
         filteredOrders.push(this.state.allOrders[i])
       } else if (order.datereceived === (this.state.allOrders[i].DateReceived).toString()) {
         console.log(6)
