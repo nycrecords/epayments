@@ -21,18 +21,23 @@ var App = React.createClass({
   getInitialState: function () {
     return {
       order: [],
-      allOrders : []
+      allOrders : [],
+      uniqueOrders : []
     }
   },
   componentDidMount: function () {
     this.serverRequest = $.get(this.props.source, function (result) {
-      // var allOrders = []
       for (var i = 0; i < result.orders.length; i++) {
         (this.state.allOrders).push(result.orders[i])
       }
       this.setState({ order : this.state.allOrders })
-      console.log(this.state.order)
-      console.log(this.state.allOrders)
+      var allUniqueOrders = []
+      for (var i = 0; i < result.orders.length; i++) {
+        if (allUniqueOrders.indexOf(result.orders[i].OrderNo) === -1) {
+          allUniqueOrders.push(result.orders[i].OrderNo)
+        }
+      }
+      this.setState({ uniqueOrders : allUniqueOrders })
     }.bind(this))
   },
   componentWillUnmount: function () {
@@ -86,7 +91,7 @@ var App = React.createClass({
     return (
     <div className='epayments'>
       <Inventory tagline='Department of Records' filterOrder={this.filterOrder} />
-      <Order order={this.state.order} />
+      <Order order={this.state.order} uniqueOrders={this.state.uniqueOrders} />
     </div>
     )
   }
@@ -258,17 +263,26 @@ var Inventory = React.createClass({
 
 var Order = React.createClass({
   render: function () {
-    console.log(this.props.order)
+    // var itemOrders = []
+    // for (var i = 0; i < this.props.order.length; i++) {
+    //   for (var i = 0; i < itemOrders.length; i++) {
+    //     if (this.props.allOrders[i].uri != itemOrders[i]) {
+    //       itemOrders.append(this.props.allOrders[i].uri)
+    //     }
+    //   }
+    // }
+    // var numberItems = itemOrders.length
     return (
     <div className='order-wrap'>
       <h2 className='order-title'>Orders</h2>
       <ul className='order'>
         <li className='total'>
-          <strong>Number of Items:</strong> 0
-          <strong>Number of Orders:</strong> {this.props.order.length}
+          <strong>Number of Items:</strong> {this.props.order.length}
+          <strong>Number of Orders:</strong> {this.props.uniqueOrders.length}
         </li>
         {this.props.order.map(function(order) {
-          return <li key={order.uri}>{order.BillingName}</li>})}
+          return <li key={order.uri}>{order.BillingName}</li>
+        })}
       </ul>
     </div>
     )
