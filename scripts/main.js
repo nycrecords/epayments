@@ -20,18 +20,19 @@ var App = React.createClass({
 
   getInitialState: function () {
     return {
-      order: []
+      order: [],
+      allOrders : []
     }
   },
   componentDidMount: function () {
     this.serverRequest = $.get(this.props.source, function (result) {
-      var allOrders = []
+      // var allOrders = []
       for (var i = 0; i < result.orders.length; i++) {
-        allOrders.push(result.orders[i])
+        (this.state.allOrders).push(result.orders[i])
       }
-      this.setState({ order : allOrders })
+      this.setState({ order : this.state.allOrders })
       console.log(this.state.order)
-      console.log(allOrders)
+      console.log(this.state.allOrders)
     }.bind(this))
   },
   componentWillUnmount: function () {
@@ -41,28 +42,28 @@ var App = React.createClass({
     console.log(order)
     console.log(this.state.order)
     var filteredOrders = []
-    for (var i = 0; i < this.state.order.length; i++) {
-      console.log(this.state.order[i].OrderNo)
+    for (var i = 0; i < this.state.allOrders.length; i++) {
+      console.log(this.state.allOrders[i].OrderNo)
       console.log(order.ordernumber)
-      if (order.ordernumber === (this.state.order[i].OrderNo).toString()) {
+      if (order.ordernumber === (this.state.allOrders[i].OrderNo).toString()) {
         console.log(1)
-        filteredOrders.push(this.state.order[i])
+        filteredOrders.push(this.state.allOrders[i])
         console.log(this.state.order)
-      } else if (order.subordernumber === (this.state.order[i].OrderNo).toString()) {
+      } else if (order.subordernumber === (this.state.allOrders[i].OrderNo).toString()) {
         console.log(2)
-        filteredOrders.push(this.state.order[i])
-      } else if (order.ordertype === (this.state.order[i].ClientAgencyName).toString()) {
+        filteredOrders.push(this.state.allOrders[i])
+      } else if (order.ordertype === (this.state.allOrders[i].ClientAgencyName).toString()) {
         console.log(3)
-        filteredOrders.push(this.state.order[i])
-      } else if (order.name === (this.state.order[i].BillingName).toString()) {
+        filteredOrders.push(this.state.allOrders[i])
+      } else if (order.name === (this.state.allOrders[i].BillingName).toString()) {
         console.log(4)
-        filteredOrders.push(this.state.order[i])
-      } else if (order.datelastmodified === (this.state.order[i].DateLastModified).toString()) {
+        filteredOrders.push(this.state.allOrders[i])
+      } else if (order.datelastmodified === (this.state.allOrders[i].DateLastModified).toString()) {
         console.log(5)
-        filteredOrders.push(this.state.order[i])
-      } else if (order.datereceived === (this.state.order[i].DateReceived).toString()) {
+        filteredOrders.push(this.state.allOrders[i])
+      } else if (order.datereceived === (this.state.allOrders[i].DateReceived).toString()) {
         console.log(6)
-        filteredOrders.push(this.state.order[i])
+        filteredOrders.push(this.state.allOrders[i])
       }
     }
     this.setState({ order : filteredOrders })
