@@ -1,11 +1,35 @@
 import six
-from flask import Flask, jsonify, abort, request, make_response, url_for
+from flask import Flask, jsonify, abort, request, make_response, url_for, Blueprint
 from flask.ext.sqlalchemy import SQLAlchemy
 from crossdomain import crossdomain
+# from .main import views, errors
+
+import os
+from flask.ext.script import Manager, Shell
+from flask.ext.sqlalchemy import SQLAlchemy
 # import os
-# from flask.ext.sqlalchemy import SQLAlchemya
+# from flask.ext.sqlalchemy import SQLAlchemy
+# from ..config import config
 
 app = Flask(__name__, static_url_path="/build")
+# app.config.from_object(config[(os.getenv('FLASK_CONFIG') or 'default')])
+# config[(os.getenv('FLASK_CONFIG') or 'default')].init_app(app)
+
+db = SQLAlchemy(app)
+manager = Manager(app)
+
+db.init_app(app)
+
+main_blueprint = Blueprint('main', __name__)
+app.register_blueprint(main_blueprint)
+
+# app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite://///Users/brandontang/doris-epayments/epayments/testepayments.db'
+
+# migrate = Migrate(app, db)
+
+
+
+# app = Flask(__name__, static_url_path="/build")
 
 # basedir = os.path.abspath(os.path.dirname(__file__))
 
@@ -21,42 +45,42 @@ app = Flask(__name__, static_url_path="/build")
 #     __tablename__ = 'orders'
 #     SubOrderNo = db.Column(db.Integer, primary_key=True)
 
-@app.errorhandler(400)
-def bad_request(error):
-    return make_response(jsonify({'error': 'Bad request'}), 400)
+# @app.errorhandler(400)
+# def bad_request(error):
+#     return make_response(jsonify({'error': 'Bad request'}), 400)
 
 
-@app.errorhandler(404)
-def not_found(error):
-    return make_response(jsonify({'error': 'Not found'}), 404)
+# @app.errorhandler(404)
+# def not_found(error):
+#     return make_response(jsonify({'error': 'Not found'}), 404)
 
-def make_public_order(order):
-	new_order = {}
-	for field in order:
-		if field == 'SubOrderNo':
-			new_order['uri'] = url_for('get_order', order_id=order['SubOrderNo'], _external=True)
-		else:
-			new_order[field] = order[field]
+# def make_public_order(order):
+# 	new_order = {}
+# 	for field in order:
+# 		if field == 'SubOrderNo':
+# 			new_order['uri'] = url_for('get_order', order_id=order['SubOrderNo'], _external=True)
+# 		else:
+# 			new_order[field] = order[field]
 
-	return new_order
+# 	return new_order
 
-@app.route('/epayments/api/v1.0/orders', methods=['GET'])
-@crossdomain(origin='*')
-def get_orders():
-	# ordernumber = request.form['ordernumber']
-	# subordernumber = request.form['subordernumber']
-	# ordertype = request.form['ordertype']
-	# name = request.form['name']
-	# date = request.form['date']
-	return jsonify({'orders': [make_public_order(order) for order in orders]})
+# @app.route('/epayments/api/v1.0/orders', methods=['GET'])
+# @crossdomain(origin='*')
+# def get_orders():
+# 	# ordernumber = request.form['ordernumber']
+# 	# subordernumber = request.form['subordernumber']
+# 	# ordertype = request.form['ordertype']
+# 	# name = request.form['name']
+# 	# date = request.form['date']
+# 	return jsonify({'orders': [make_public_order(order) for order in orders]})
 
-@app.route('/epayments/api/v1.0/orders/<int:order_id>', methods=['GET'])
-@crossdomain(origin='*')
-def get_order():
-	order = [order for order in orders if order['SubOrderNo'] == order_id]
-	if len(order) == 0:
-		abort(404)
-	return jsonify({'order': make_public_order(order[0])})
+# @app.route('/epayments/api/v1.0/orders/<int:order_id>', methods=['GET'])
+# @crossdomain(origin='*')
+# def get_order():
+# 	order = [order for order in orders if order['SubOrderNo'] == order_id]
+# 	if len(order) == 0:
+# 		abort(404)
+# 	return jsonify({'order': make_public_order(order[0])})
 
 # orders = Orders.query.all()
 
@@ -106,4 +130,7 @@ orders = [
 ]
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    manager.run()
+
+# if __name__ == '__main__':
+#     app.run(debug=True)
