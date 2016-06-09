@@ -85,7 +85,13 @@ var App = React.createClass({
       }
     }
     this.setState({ order : filteredOrders })
-    console.log(this.state.order)
+    var allUniqueOrders = []
+    for (var i = 0; i < filteredOrders.length; i++) {
+      if (allUniqueOrders.indexOf(filteredOrders[i].OrderNo) === -1) {
+        allUniqueOrders.push(filteredOrders[i].OrderNo)
+      }
+    }
+    this.setState({ uniqueOrders : allUniqueOrders })
   },
   render: function () {
     return (
