@@ -78,28 +78,38 @@ var App = React.createClass({
         order.datelastmodified = (order.datelastmodified.substr(0, 3) + order.datelastmodified.substr(4, 6))
       }
     }
-    var filteredOrders = []
-    for (var i = 0; i < this.state.allOrders.length; i++) {
-      if (order.ordernumber === (this.state.allOrders[i].OrderNo).toString()) {
+    var filteredOrders = this.state.allOrders
+    for (var i = 0; i < filteredOrders.length; i++) {
+      console.log(filteredOrders)
+      if (order.ordernumber != (this.state.allOrders[i].OrderNo).toString() && order.ordernumber.length > 0) {
+        filteredOrders.splice(i, 1)
         console.log(1)
-        filteredOrders.push(this.state.allOrders[i])
-        console.log(this.state.order)
-      } else if (order.subordernumber === ((this.state.allOrders[i].uri).toString()).substr(48, 10)) {
+        continue
+      }
+      if (order.subordernumber != ((this.state.allOrders[i].uri).toString()).substr(48, 10) && order.subordernumber.length > 0) {
+        filteredOrders.splice(i, 1)
         console.log(2)
-        filteredOrders.push(this.state.allOrders[i])
-      } else if (order.ordertype === (this.state.allOrders[i].ClientAgencyName).toString()) {
+        continue
+      }
+      if (order.ordertype != (this.state.allOrders[i].ClientAgencyName).toString() && order.ordertype.length != 4) {
+        filteredOrders.splice(i, 1)
         console.log(3)
-        filteredOrders.push(this.state.allOrders[i])
-      } else if (order.name === (this.state.allOrders[i].BillingName).toString()) {
+        continue
+      }
+      if (order.name != (this.state.allOrders[i].BillingName).toString() && order.name.length > 0) {
+        filteredOrders.splice(i, 1)
         console.log(4)
-        filteredOrders.push(this.state.allOrders[i])
-      } else if (order.datelastmodified === ((this.state.allOrders[i].DateLastModified).toString()).substr(0, 9)) {
+        continue
+      }
+      if (order.datelastmodified != ((this.state.allOrders[i].DateLastModified).toString()).substr(0, 9) && order.datelastmodified.length > 0) {
+        filteredOrders.splice(i, 1)
         console.log(5)
-        console.log((this.state.allOrders[i].DateLastModified).toString())
-        filteredOrders.push(this.state.allOrders[i])
-      } else if (order.datereceived === (this.state.allOrders[i].DateReceived).toString()) {
+        continue
+      }
+      if (order.datereceived != (this.state.allOrders[i].DateReceived).toString() && order.datereceived.length > 0) {
+        filteredOrders.splice(i, 1)
         console.log(6)
-        filteredOrders.push(this.state.allOrders[i])
+        continue
       }
     }
     this.setState({ order : filteredOrders })
@@ -166,7 +176,6 @@ var OrderForm = React.createClass({
       datereceived: this.refs.datereceieved.value
     }
     // Search for the order(s) in database
-    console.log(order)
     this.props.filterOrder(order)
   },
   render: function () {
