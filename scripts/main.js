@@ -30,11 +30,29 @@ var App = React.createClass({
       for (var i = 0; i < result.orders.length; i++) {
         (this.state.allOrders).push(result.orders[i])
       }
-      this.setState({ order : this.state.allOrders })
-      var allUniqueOrders = []
+      var prevDayOrders = []
+      var prevDay = new Date()
+      prevDay.setDate(prevDay.getDate() - 1)
+      var currYear = prevDay.getFullYear()
+      var currMonth = prevDay.getMonth() + 1
+      if (currMonth < 10) {
+        currMonth = '0' + currMonth
+      }
+      var currDay = prevDay.getDate()
+      if (currDay < 10) {
+        currDay = '0' + currDay
+      }
+      var yesterday = currYear + '-' + currMonth + '-' + currDay
       for (var i = 0; i < result.orders.length; i++) {
-        if (allUniqueOrders.indexOf(result.orders[i].OrderNo) === -1) {
-          allUniqueOrders.push(result.orders[i].OrderNo)
+        if ((result.orders[i].DateReceived.substr(0, 10)) === yesterday) {
+          prevDayOrders.push(result.orders[i])
+        }
+      }
+      this.setState({ order : prevDayOrders })
+      var allUniqueOrders = []
+      for (var i = 0; i < prevDayOrders.length; i++) {
+        if (allUniqueOrders.indexOf(prevDayOrders[i].OrderNo) === -1) {
+          allUniqueOrders.push(prevDayOrders[i].OrderNo)
         }
       }
       this.setState({ uniqueOrders : allUniqueOrders })
