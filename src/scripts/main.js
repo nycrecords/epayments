@@ -11,7 +11,14 @@ var Route = ReactRouter.Route
 /*
   App
   <App />
-  TODO: Insert comment here explaining the App component
+  Return the homepage of the ePayments website. The App component includes the Inventory and Order components.
+  Inventory -- tagline of 'Department of Records' and filterOrder function is passed
+  Order -- state of order object and state of uniqueOrders object is passed
+
+  Functions:
+  getInitialState -- initalizes three empty lists named order, allOrders, and uniqueOrders
+  componentDidMount -- accesses orders from the database and updates the objects in the state
+  filterOrder -- takes an object order as a parameter and filters orders in the database
 */
 var App = React.createClass({
   propTypes: {
@@ -134,7 +141,8 @@ var App = React.createClass({
 /*
   Header
   <Header />
-  TODO: Insert comment here explaining the Header component
+  Return the Header component that is used in the Inventory component.
+  Uses the tagline passed from the App component into the Inventory component.
 */
 
 var Header = React.createClass({
@@ -155,7 +163,13 @@ var Header = React.createClass({
 /*
   OrderForm
   <OrderForm />
-  TODO: Insert comment here explaining the OrderForm component
+  Return the OrderForm component used in the Inventory component.
+  OrderForm includes a field for Order Number, Sub Order Number, Order Type, Name, Date Start, and Date End.
+  Uses the filterOrder function passed from the App component into the Inventory component.
+
+  Functions:
+  findOrder -- upon an event (apply button being clicked), an order object is created using 
+  information from the OrderForm and passed into the filterOrder function.
 */
 
 var OrderForm = React.createClass({
@@ -269,7 +283,8 @@ var OrderForm = React.createClass({
 /*
   Inventory
   <Inventory />
-  TODO: Insert comment here explaining the Inventory component
+  Returns the Inventory component used in the App component.
+  Uses the Header and OrderForm components.
 */
 
 var Inventory = React.createClass({
@@ -291,20 +306,12 @@ var Inventory = React.createClass({
 /*
   Order
   <Order />
-  TODO: Insert comment here explaining the Order component
+  Returns the Order component used in the App component.
+  Uses the states of order and uniqueOrders passed from the App component.
 */
 
 var Order = React.createClass({
   render: function () {
-    // var itemOrders = []
-    // for (var i = 0; i < this.props.order.length; i++) {
-    //   for (var i = 0; i < itemOrders.length; i++) {
-    //     if (this.props.allOrders[i].uri != itemOrders[i]) {
-    //       itemOrders.append(this.props.allOrders[i].uri)
-    //     }
-    //   }
-    // }
-    // var numberItems = itemOrders.length
     return (
     <div className='order-wrap'>
       <h2 className='order-title'>Orders</h2>
@@ -321,32 +328,6 @@ var Order = React.createClass({
     )
   }
 })
-
-
-/*
-  Not Found
-  TODO: Insert comment here explaining the Not Found component
-*/
-
-var NotFound = React.createClass({
-  render: function () {
-    return <h1>Not Found!</h1>
-  }
-})
-
-/*
-  Routes
-  TODO: Insert comment here explaining the Routes component
-
-  Why is this here if it isn't used?
-*/
-
-var routes = (
-<Router history={browserHistory}>
-  <Route path='/' component={App} />
-  <Route path='*' component={NotFound} />
-</Router>
-)
 
 ReactDOM.render(
   <App source='http://localhost:5000/epayments/api/v1.0/orders' />,
