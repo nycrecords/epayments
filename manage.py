@@ -19,6 +19,7 @@ from flask.ext.migrate import Migrate, MigrateCommand
 
 app = create_app(os.getenv('FLASK_CONFIG') or 'default')
 manager = Manager(app)
+# manager = Manager(create_app)
 migrate = Migrate(app, db)
 
 

@@ -2,8 +2,11 @@ from flask import Flask
 from flask.ext.sqlalchemy import SQLAlchemy
 from config import config
 
+# Flask extensions
 db = SQLAlchemy()
 
+# Import models so they are registered with SQLAlchemy
+from . import models
 
 def create_app(config_name):
     """

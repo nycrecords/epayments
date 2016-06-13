@@ -4,9 +4,27 @@ class Order(db.Model):
     """
     Define the Order class with the following columns and relationships:
 
-
+    orderno -- Column: Integer
+    clientagencyname -- Column: String(64)
+    shiptoname -- Column: String(64)
+    shiptostreetadd -- Column: String(64)
+    shiptostreetadd2 -- Column: String(64)
+    shiptocity  -- Column: String(64)
+    shiptostate -- Column: String(64)
+    shiptozipcode -- Column: Integer
+    shiptocountry -- Column: String(64)
+    shiptophone -- Column: String(64)
+    customeremail -- Column: String(64)
+    shippinginstructions -- Column: String(64)
+    clientsdata -- Column: Text
+    confirmationmessage -- Column: Text
+    datereceived -- Column: DateTime
+    billingname -- Column: String(64)
+    datelastmodified -- Column: DateTime
+    suborderno -- Column: Integer, PrimaryKey
+    clientid -- Column: Integer
     """
-    __tablename__ = 'order'
+    __tablename__ = 'orders'
     orderno = db.Column(db.Integer)
     clientagencyname = db.Column(db.String(64))
     shiptoname = db.Column(db.String(64))

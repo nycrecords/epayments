@@ -1,4 +1,3 @@
-import six
 from datetime import timedelta
 from flask import make_response, request, current_app, url_for
 from functools import update_wrapper
@@ -18,7 +17,7 @@ def crossdomain(
         methods = ', '.join(sorted(x.upper() for x in methods))
     if headers is not None:
         headers = ', '.join(x.upper() for x in headers)
-    if not isinstance(origin, six.basestring):
+    if not isinstance(origin, str):
         origin = ', '.join(origin)
     if isinstance(max_age, timedelta):
         max_age = max_age.total_seconds()
