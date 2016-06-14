@@ -10,7 +10,7 @@ def get_orders():
 	return jsonify({'orders': [make_public_order(order) for order in orders]})
 
 
-@api.route('orders/<int:order_id>', methods=['GET'])
+@api.route('/orders/<int:order_id>', methods=['GET'])
 def get_order():
 	order = [order for order in orders if order['SubOrderNo'] == order_id]
 	if len(order) == 0:

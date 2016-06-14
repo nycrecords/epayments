@@ -34,6 +34,7 @@ var App = React.createClass({
   },
   componentDidMount: function () {
     this.serverRequest = $.get(this.props.source, function (result) {
+      console.log(result.orders)
       for (var i = 0; i < result.orders.length; i++) {
         (this.state.allOrders).push(result.orders[i])
       }
