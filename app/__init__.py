@@ -1,5 +1,6 @@
 from flask import Flask
 from flask.ext.sqlalchemy import SQLAlchemy
+from flask.ext.cors import CORS
 from config import config
 
 # Flask extensions
@@ -21,6 +22,7 @@ def create_app(config_name):
     config[config_name].init_app(app)
 
     db.init_app(app)
+    CORS(app)
 
     # Base template that uses React for frontend
     from .main import main as main_blueprint

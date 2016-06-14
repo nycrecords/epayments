@@ -45,7 +45,7 @@ gulp.task('images', function () {
 gulp.task('browser-sync', function () {
   browserSync({
     // we need to disable clicks and forms for when we test multiple rooms
-    server: {},
+    server: { baseDir: 'app/templates' },
     middleware: [ historyApiFallback() ],
     ghostMode: false
   })
