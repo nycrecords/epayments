@@ -77,7 +77,7 @@ function buildScript (file, watch) {
     return stream
       .on('error', handleErrors)
       .pipe(source(file))
-      .pipe(gulp.dest('./app/static/'))
+      .pipe(gulp.dest('./app/static/scripts/'))
       // If you also want to uglify it
       // .pipe(buffer())
       // .pipe(uglify())
@@ -97,7 +97,7 @@ function buildScript (file, watch) {
 }
 
 gulp.task('scripts', function () {
-  return buildScript('main.js', false) // this will run once because we set watch to false
+  return buildScript('main.js', true) // this will run once because we set watch to false
 })
 
 // run 'scripts' task first, then watch for future changes

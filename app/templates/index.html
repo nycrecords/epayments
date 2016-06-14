@@ -27,11 +27,11 @@
       <!-- This is where our React app will go -->
     </div>
 
-  <script src="http://localhost:5000/static/main.js"></script>
+  <script src="http://localhost:5000/static/scripts/main.js"></script>
   <script type="text/javascript">
   function TasksViewModel() {
         var self = this;
-        self.tasksURI = 'http://localhost:5000/epayments/api/v1.0/orders';
+        self.tasksURI = 'http://localhost:5000/api/v1.0/orders';
         self.tasks = ko.observableArray();
 
         self.ajax = function(uri, method, data) {
