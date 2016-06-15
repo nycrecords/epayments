@@ -1,7 +1,7 @@
 from flask import Flask
 from flask.ext.sqlalchemy import SQLAlchemy
 from flask.ext.cors import CORS
-from ..config import config
+from config import config
 
 # Flask extensions
 db = SQLAlchemy()
@@ -30,6 +30,6 @@ def create_app(config_name):
 
     # API calls used by React + Flux to manage data
     from .api_1_0 import api_1_0 as api_1_0_blueprint
-    app.register_blueprint(api_1_0_blueprint, url_prefix='/api/v1.0/')
+    app.register_blueprint(api_1_0_blueprint, url_prefix='/api/v1.0')
 
     return app

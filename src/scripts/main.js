@@ -28,8 +28,8 @@ var App = React.createClass({
   getInitialState: function () {
     return {
       order: [],
-      allOrders : [],
-      uniqueOrders : []
+      allOrders: [],
+      uniqueOrders: []
     }
   },
   componentDidMount: function () {
@@ -56,14 +56,14 @@ var App = React.createClass({
           prevDayOrders.push(result.orders[i])
         }
       }
-      this.setState({ order : prevDayOrders })
+      this.setState({ order: prevDayOrders })
       var allUniqueOrders = []
       for (var i = 0; i < prevDayOrders.length; i++) {
         if (allUniqueOrders.indexOf(prevDayOrders[i].OrderNo) === -1) {
           allUniqueOrders.push(prevDayOrders[i].OrderNo)
         }
       }
-      this.setState({ uniqueOrders : allUniqueOrders })
+      this.setState({ uniqueOrders: allUniqueOrders })
     }.bind(this))
   },
   componentWillUnmount: function () {
@@ -76,13 +76,13 @@ var App = React.createClass({
       // 0#/##/## --> #/##/##
       order.datelastmodified = order.datelastmodified.substr(1, 9)
       if ((parseInt(order.datelastmodified.substr(2, 2))) < 10) {
-      // #/0#/## --> #/#/##
-      order.datelastmodified = (order.datelastmodified.substr(0, 2) + order.datelastmodified.substr(3, 6))
+        // #/0#/## --> #/#/##
+        order.datelastmodified = (order.datelastmodified.substr(0, 2) + order.datelastmodified.substr(3, 6))
       }
     }
     if (!((parseInt(order.datelastmodified.substr(0, 1))) < 10)) {
       if ((parseInt(order.datelastmodified.substr(2, 2))) < 10) {
-      // ##/0#/## --> ##/#/##
+        // ##/0#/## --> ##/#/##
         order.datelastmodified = (order.datelastmodified.substr(0, 3) + order.datelastmodified.substr(4, 6))
       }
     }
@@ -120,14 +120,14 @@ var App = React.createClass({
         continue
       }
     }
-    this.setState({ order : filteredOrders })
+    this.setState({ order: filteredOrders })
     var allUniqueOrders = []
     for (var i = 0; i < filteredOrders.length; i++) {
       if (allUniqueOrders.indexOf(filteredOrders[i].OrderNo) === -1) {
         allUniqueOrders.push(filteredOrders[i].OrderNo)
       }
     }
-    this.setState({ uniqueOrders : allUniqueOrders })
+    this.setState({ uniqueOrders: allUniqueOrders })
   },
   render: function () {
     return (
@@ -169,7 +169,7 @@ var Header = React.createClass({
   Uses the filterOrder function passed from the App component into the Inventory component.
 
   Functions:
-  findOrder -- upon an event (apply button being clicked), an order object is created using 
+  findOrder -- upon an event (apply button being clicked), an order object is created using
   information from the OrderForm and passed into the filterOrder function.
 */
 
@@ -318,12 +318,16 @@ var Order = React.createClass({
       <h2 className='order-title'>Orders</h2>
       <ul className='order'>
         <li className='total'>
-          <strong>Number of Items:</strong> {this.props.order.length}
-          <strong>Number of Orders:</strong> {this.props.uniqueOrders.length}
+          <strong>Number of Items:</strong>
+          {this.props.order.length}
+          <strong>Number of Orders:</strong>
+          {this.props.uniqueOrders.length}
         </li>
-        {this.props.order.map(function(order) {
-          return <li key={order.uri}>{order.BillingName}</li>
-        })}
+        {this.props.order.map(function (order) {
+           return <li key={order.uri}>
+                    {order.BillingName}
+                  </li>
+         })}
       </ul>
     </div>
     )
@@ -331,6 +335,6 @@ var Order = React.createClass({
 })
 
 ReactDOM.render(
-  <App source='http://localhost:5000/epayments/api/v1.0/orders' />,
+  <App source='http://localhost:5000/api/v1.0/orders' />,
   document.getElementById('main')
 )
