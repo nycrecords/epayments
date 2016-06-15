@@ -19,7 +19,7 @@ from flask.ext.migrate import Migrate, MigrateCommand
 # from flask.ext.sqlalchemy import SQLAlchemy
 
 app = create_app(os.getenv('FLASK_CONFIG') or 'default')
-# app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite://///Users/brandontang/doris-epayments/epayments/testepayments.db'
+# app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://root:@localhost/intranet'
 # db = SQLAlchemy(app)
 manager = Manager(app)
 migrate = Migrate(app, db)
