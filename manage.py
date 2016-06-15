@@ -16,10 +16,12 @@ from app import create_app, db
 from app.models import Order
 from flask.ext.script import Manager, Shell
 from flask.ext.migrate import Migrate, MigrateCommand
+# from flask.ext.sqlalchemy import SQLAlchemy
 
 app = create_app(os.getenv('FLASK_CONFIG') or 'default')
+# app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite://///Users/brandontang/doris-epayments/epayments/testepayments.db'
+# db = SQLAlchemy(app)
 manager = Manager(app)
-# manager = Manager(create_app)
 migrate = Migrate(app, db)
 
 

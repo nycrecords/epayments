@@ -335,6 +335,6 @@ var Order = React.createClass({
 })
 
 ReactDOM.render(
-  <App source='http://localhost:5000/api/v1.0/orders' />,
+  <App source='http://localhost:5000/api/v1.0' />,
   document.getElementById('main')
 )
