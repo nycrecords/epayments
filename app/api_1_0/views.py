@@ -1,8 +1,10 @@
 from flask import jsonify, abort
 from . import api_1_0 as api
 from ..utils import make_public_order
-from .constants import orders
-# from ..models import Order
+# from .constants import orders
+from ..models import Order
+from .. import db
+from . import api_1_0
 
 
 @api.route('/orders', methods=['GET'])
@@ -12,9 +14,7 @@ def info():
 
 @api.route('/', methods=['GET'])
 def get_orders():
-	# allOrders = Order.query.all()
-	# print allOrders
-    return jsonify({'orders': [make_public_order(order) for order in orders]})
+    return jsonify(orders=[order.serialize for order in Order.query.all()])
 
 
 @api.route('/orders/<int:order_id>', methods=['GET'])

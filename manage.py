@@ -16,11 +16,11 @@ from app import create_app, db
 from app.models import Order
 from flask.ext.script import Manager, Shell
 from flask.ext.migrate import Migrate, MigrateCommand
-# from flask.ext.sqlalchemy import SQLAlchemy
+from flask.ext.sqlalchemy import SQLAlchemy
 
 app = create_app(os.getenv('FLASK_CONFIG') or 'default')
-# app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://root:@localhost/intranet'
-# db = SQLAlchemy(app)
+app.config['SQLALCHEMY_DATABASE_URI'] = os.environ['DATABASE_URL']
+db = SQLAlchemy(app)
 manager = Manager(app)
 migrate = Migrate(app, db)
 

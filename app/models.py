@@ -1,5 +1,7 @@
 from . import db
 
+# db.Model.metadata.reflect(db.engine)
+
 class Order(db.Model):
     """
     Define the Order class with the following columns and relationships:
@@ -24,7 +26,7 @@ class Order(db.Model):
     suborderno -- Column: Integer, PrimaryKey
     clientid -- Column: Integer
     """
-    __tablename__ = 'orders'
+    __tablename__ = 'order'
     orderno = db.Column(db.Integer)
     clientagencyname = db.Column(db.String(64))
     shiptoname = db.Column(db.String(64))
@@ -44,3 +46,28 @@ class Order(db.Model):
     datelastmodified = db.Column(db.DateTime)
     suborderno = db.Column(db.Integer, primary_key=True)
     clientid = db.Column(db.Integer)
+
+    @property
+    def serialize(self):
+       """Return object data in easily serializeable format"""
+       return {
+            'orderno' : self.orderno,
+            'clientagencyname' : self.clientagencyname,
+            'shiptoname' : self.shiptoname,
+            'shiptostreetadd' : self.shiptostreetadd,
+            'shiptostreetadd2' : self.shiptostreetadd2,
+            'shiptocity' : self.shiptocity,
+            'shiptostate' : self.shiptostate,
+            'shiptozipcode' : self.shiptozipcode,
+            'shiptocountry' : self.shiptocountry,
+            'shiptophone' : self.shiptophone,
+            'customeremail' : self.customeremail,
+            'shippinginstructions' : self.shippinginstructions,
+            'clientsdata' : self.clientsdata,
+            'confirmationmessage' : self.confirmationmessage,
+            'datereceived' : self.datereceived,
+            'billingname' : self.billingname,
+            'datelastmodified' : self.datelastmodified,
+            'suborderno' : self.suborderno,
+            'clientid' : self.clientid
+       }

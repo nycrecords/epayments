@@ -1,3 +1,4 @@
+import os
 from flask import Flask
 from flask.ext.sqlalchemy import SQLAlchemy
 from flask.ext.cors import CORS
@@ -23,6 +24,9 @@ def create_app(config_name):
 
     db.init_app(app)
     CORS(app)
+
+    with app.test_request_context():
+        db.create_all()
 
     # Base template that uses React for frontend
     from .main import main as main_blueprint
