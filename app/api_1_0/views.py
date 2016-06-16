@@ -3,8 +3,7 @@ from . import api_1_0 as api
 from ..utils import make_public_order
 # from .constants import orders
 from ..models import Order
-from .. import db
-from . import api_1_0
+from datetime import date, timedelta
 
 
 @api.route('/orders', methods=['GET'])
@@ -14,7 +13,8 @@ def info():
 
 @api.route('/', methods=['GET'])
 def get_orders():
-    return jsonify(orders=[order.serialize for order in Order.query.all()])
+	yesterday = (date.today() - timedelta(1)).strftime('%-m/%-d/%Y') + " 0:00:00"
+    	return jsonify(orders=[order.serialize for order in Order.query.filter_by(datereceived=yesterday).all()])
 
 
 @api.route('/orders/<int:order_id>', methods=['GET'])

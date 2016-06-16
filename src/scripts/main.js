@@ -36,31 +36,39 @@ var App = React.createClass({
     this.serverRequest = $.get(this.props.source, function (result) {
       console.log(result.orders)
       for (var i = 0; i < result.orders.length; i++) {
-        (this.state.allOrders).push(result.orders[i])
+        (this.state.order).push(result.orders[i])
       }
-      var prevDayOrders = []
-      var prevDay = new Date()
-      prevDay.setDate(prevDay.getDate() - 1)
-      var currYear = prevDay.getFullYear()
-      var currMonth = prevDay.getMonth() + 1
-      if (currMonth < 10) {
-        currMonth = '0' + currMonth
-      }
-      var currDay = prevDay.getDate()
-      if (currDay < 10) {
-        currDay = '0' + currDay
-      }
-      var yesterday = currYear + '-' + currMonth + '-' + currDay
-      for (var i = 0; i < result.orders.length; i++) {
-        if ((result.orders[i].DateReceived.substr(0, 10)) === yesterday) {
-          prevDayOrders.push(result.orders[i])
-        }
-      }
-      this.setState({ order: prevDayOrders })
+      console.log(this.state.order)
+      // var prevDayOrders = []
+      // var prevDay = new Date()
+      // prevDay.setDate(prevDay.getDate() - 1)
+      // var currYear = prevDay.getFullYear()
+      // var currMonth = prevDay.getMonth() + 1
+      // if (currMonth < 10) {
+      //   currMonth = '0' + currMonth
+      // }
+      // var currDay = prevDay.getDate()
+      // if (currDay < 10) {
+      //   currDay = '0' + currDay
+      // }
+      // var yesterday = currMonth + '/' + currDay + '/' + currYear
+      // // for (var i = 0; i < result.orders.length; i++) {
+      // //   yesterdaysdate =  + result.orders[i].DateReceived.getFullYear() + '-' + result.orders[i].DateReceived.getMonth() + 1 +'-'+ result.orders[i].DateReceived.getDate();
+      // //   if (yesterdaysdate === yesterday) {
+      // //     prevDayOrders.push(result.orders[i])
+      // //   }
+      // // }
+      // console.log(yesterday)
+      // for (var i = 0; i < result.orders.length; i++) {
+      //   if ((result.orders[i].DateReceived.substr(0, 10)) === yesterday) {
+      //     prevDayOrders.push(result.orders[i])
+      //   }
+      // }
+      // this.setState({ order: prevDayOrders })
       var allUniqueOrders = []
-      for (var i = 0; i < prevDayOrders.length; i++) {
-        if (allUniqueOrders.indexOf(prevDayOrders[i].OrderNo) === -1) {
-          allUniqueOrders.push(prevDayOrders[i].OrderNo)
+      for (var i = 0; i < this.state.order.length; i++) {
+        if (allUniqueOrders.indexOf(this.state.order[i].OrderNo) === -1) {
+          allUniqueOrders.push(this.state.order[i].OrderNo)
         }
       }
       this.setState({ uniqueOrders: allUniqueOrders })
@@ -324,7 +332,7 @@ var Order = React.createClass({
           {this.props.uniqueOrders.length}
         </li>
         {this.props.order.map(function (order) {
-           return <li key={order.uri}>
+           return <li key={order.suborderno}>
                     {order.BillingName}
                   </li>
          })}
