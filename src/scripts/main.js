@@ -66,9 +66,11 @@ var App = React.createClass({
       // }
       // this.setState({ order: prevDayOrders })
       var allUniqueOrders = []
+      console.log(this.state.order.length)
+      console.log(this.state.order)
       for (var i = 0; i < this.state.order.length; i++) {
-        if (allUniqueOrders.indexOf(this.state.order[i].OrderNo) === -1) {
-          allUniqueOrders.push(this.state.order[i].OrderNo)
+        if (allUniqueOrders.indexOf(this.state.order[i].orderno) === -1) {
+          allUniqueOrders.push(this.state.order[i].orderno)
         }
       }
       this.setState({ uniqueOrders: allUniqueOrders })
@@ -97,7 +99,7 @@ var App = React.createClass({
     var filteredOrders = this.state.allOrders
     for (var i = 0; i < filteredOrders.length; i++) {
       console.log(filteredOrders)
-      if (order.ordernumber != (this.state.allOrders[i].OrderNo).toString() && order.ordernumber.length > 0) {
+      if (order.ordernumber != (this.state.allOrders[i].orderno).toString() && order.ordernumber.length > 0) {
         filteredOrders.splice(i, 1)
         console.log(1)
         continue
@@ -107,22 +109,22 @@ var App = React.createClass({
         console.log(2)
         continue
       }
-      if (order.ordertype != (this.state.allOrders[i].ClientAgencyName).toString() && order.ordertype.length != 4) {
+      if (order.ordertype != (this.state.allOrders[i].clientagencyname).toString() && order.ordertype.length != 4) {
         filteredOrders.splice(i, 1)
         console.log(3)
         continue
       }
-      if (order.name != (this.state.allOrders[i].BillingName).toString() && order.name.length > 0) {
+      if (order.name != (this.state.allOrders[i].billingname).toString() && order.name.length > 0) {
         filteredOrders.splice(i, 1)
         console.log(4)
         continue
       }
-      if (order.datelastmodified != ((this.state.allOrders[i].DateLastModified).toString()).substr(0, 9) && order.datelastmodified.length > 0) {
+      if (order.datelastmodified != ((this.state.allOrders[i].datelastmodified).toString()).substr(0, 9) && order.datelastmodified.length > 0) {
         filteredOrders.splice(i, 1)
         console.log(5)
         continue
       }
-      if (order.datereceived != (this.state.allOrders[i].DateReceived).toString() && order.datereceived.length > 0) {
+      if (order.datereceived != (this.state.allOrders[i].datereceived).toString() && order.datereceived.length > 0) {
         filteredOrders.splice(i, 1)
         console.log(6)
         continue
@@ -131,8 +133,8 @@ var App = React.createClass({
     this.setState({ order: filteredOrders })
     var allUniqueOrders = []
     for (var i = 0; i < filteredOrders.length; i++) {
-      if (allUniqueOrders.indexOf(filteredOrders[i].OrderNo) === -1) {
-        allUniqueOrders.push(filteredOrders[i].OrderNo)
+      if (allUniqueOrders.indexOf(filteredOrders[i].orderno) === -1) {
+        allUniqueOrders.push(filteredOrders[i].orderno)
       }
     }
     this.setState({ uniqueOrders: allUniqueOrders })
