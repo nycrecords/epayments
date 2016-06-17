@@ -16,7 +16,7 @@ var Route = ReactRouter.Route
   Order -- state of order object and state of uniqueOrders object is passed
 
   Functions:
-  getInitialState -- initalizes three empty lists named order, allOrders, and uniqueOrders
+  getInitialState -- initalizes three empty lists named order, prevDayOrders, and uniqueOrders
   componentDidMount -- accesses orders from the database and updates the objects in the state
   filterOrder -- takes an object order as a parameter and filters orders in the database
 */
@@ -28,46 +28,20 @@ var App = React.createClass({
   getInitialState: function () {
     return {
       order: [],
-      allOrders: [],
+      prevDayOrders: [],
       uniqueOrders: []
     }
   },
   componentDidMount: function () {
     this.serverRequest = $.get(this.props.source, function (result) {
-      console.log(result.orders)
+      // console.log(result.orders)
       for (var i = 0; i < result.orders.length; i++) {
         (this.state.order).push(result.orders[i])
       }
-      console.log(this.state.order)
-      // var prevDayOrders = []
-      // var prevDay = new Date()
-      // prevDay.setDate(prevDay.getDate() - 1)
-      // var currYear = prevDay.getFullYear()
-      // var currMonth = prevDay.getMonth() + 1
-      // if (currMonth < 10) {
-      //   currMonth = '0' + currMonth
-      // }
-      // var currDay = prevDay.getDate()
-      // if (currDay < 10) {
-      //   currDay = '0' + currDay
-      // }
-      // var yesterday = currMonth + '/' + currDay + '/' + currYear
-      // // for (var i = 0; i < result.orders.length; i++) {
-      // //   yesterdaysdate =  + result.orders[i].DateReceived.getFullYear() + '-' + result.orders[i].DateReceived.getMonth() + 1 +'-'+ result.orders[i].DateReceived.getDate();
-      // //   if (yesterdaysdate === yesterday) {
-      // //     prevDayOrders.push(result.orders[i])
-      // //   }
-      // // }
-      // console.log(yesterday)
-      // for (var i = 0; i < result.orders.length; i++) {
-      //   if ((result.orders[i].DateReceived.substr(0, 10)) === yesterday) {
-      //     prevDayOrders.push(result.orders[i])
-      //   }
-      // }
-      // this.setState({ order: prevDayOrders })
+      for (var i = 0; i < result.orders.length; i++) {
+        (this.state.prevDayOrders).push(result.orders[i])
+      }
       var allUniqueOrders = []
-      console.log(this.state.order.length)
-      console.log(this.state.order)
       for (var i = 0; i < this.state.order.length; i++) {
         if (allUniqueOrders.indexOf(this.state.order[i].orderno) === -1) {
           allUniqueOrders.push(this.state.order[i].orderno)
@@ -96,40 +70,57 @@ var App = React.createClass({
         order.datelastmodified = (order.datelastmodified.substr(0, 3) + order.datelastmodified.substr(4, 6))
       }
     }
-    var filteredOrders = this.state.allOrders
-    for (var i = 0; i < filteredOrders.length; i++) {
-      console.log(filteredOrders)
-      if (order.ordernumber != (this.state.allOrders[i].orderno).toString() && order.ordernumber.length > 0) {
-        filteredOrders.splice(i, 1)
-        console.log(1)
-        continue
-      }
-      if (order.subordernumber != ((this.state.allOrders[i].uri).toString()).substr(48, 10) && order.subordernumber.length > 0) {
-        filteredOrders.splice(i, 1)
-        console.log(2)
-        continue
-      }
-      if (order.ordertype != (this.state.allOrders[i].clientagencyname).toString() && order.ordertype.length != 4) {
-        filteredOrders.splice(i, 1)
-        console.log(3)
-        continue
-      }
-      if (order.name != (this.state.allOrders[i].billingname).toString() && order.name.length > 0) {
-        filteredOrders.splice(i, 1)
-        console.log(4)
-        continue
-      }
-      if (order.datelastmodified != ((this.state.allOrders[i].datelastmodified).toString()).substr(0, 9) && order.datelastmodified.length > 0) {
-        filteredOrders.splice(i, 1)
-        console.log(5)
-        continue
-      }
-      if (order.datereceived != (this.state.allOrders[i].datereceived).toString() && order.datereceived.length > 0) {
-        filteredOrders.splice(i, 1)
-        console.log(6)
-        continue
-      }
+    var filteredOrders = []
+    for (var i = 0; i < this.state.prevDayOrders.length; i++) {
+      filteredOrders.push(this.state.prevDayOrders[i])
     }
+    console.log(filteredOrders)
+    for (var i = filteredOrders.length - 1; i > -1; i--) {
+      console.log(i)
+      if (order.ordernumber.length > 0) {
+        if (order.ordernumber != (filteredOrders[i].orderno).toString()) {
+          console.log(1)
+          filteredOrders.splice(i, 1)
+          continue
+        }
+      }
+      if (order.subordernumber.length > 0) {
+        if (order.subordernumber != (filteredOrders[i].suborderno).toString()) {
+          console.log(2)
+          filteredOrders.splice(i, 1)
+          continue
+        }
+      }
+      if (order.ordertype.length != 4) {
+        console.log(filteredOrders[i])
+        if (order.ordertype != (filteredOrders[i].clientagencyname)) {
+          console.log(3)
+          filteredOrders.splice(i, 1)
+          continue
+        }
+      }
+      if (order.name.length > 0) {
+        if (order.name != (filteredOrders[i].billingname).toString()) {
+          console.log(4)
+          filteredOrders.splice(i, 1)
+          continue
+        }
+      }
+      // if (order.datereceived.length > 0) {
+        // #AJAX Call
+      // }
+      // if (order.datelastmodified != ((this.state.prevDayOrders[i].datelastmodified).toString()).substr(0, 9) && order.datelastmodified.length > 0) {
+      //   filteredOrders.splice(i, 1)
+      //   console.log(5)
+      //   continue
+      // }
+      // if (order.datereceived != (this.state.prevDayOrders[i].datereceived).toString() && order.datereceived.length > 0) {
+      //   filteredOrders.splice(i, 1)
+      //   console.log(6)
+      //   continue
+      // }
+    }
+    console.log(filteredOrders)
     this.setState({ order: filteredOrders })
     var allUniqueOrders = []
     for (var i = 0; i < filteredOrders.length; i++) {
