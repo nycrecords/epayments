@@ -1,4 +1,4 @@
-from flask import jsonify, abort
+from flask import jsonify, abort, request
 from . import api_1_0 as api
 from ..utils import make_public_order
 # from .constants import orders
@@ -13,8 +13,14 @@ def info():
 
 @api.route('/', methods=['GET'])
 def get_orders():
-	yesterday = (date.today() - timedelta(5)).strftime('%-m/%-d/%Y') + " 0:00:00"
-    	return jsonify(orders=[order.serialize for order in Order.query.filter_by(datereceived=yesterday).all()])
+	# datereceivedstart = request.form['datereceivedstart']
+	# datereceivedend = request.form['datereceivedend']
+	# print 'datereceivedstart:', datereceivedstart
+	# if (datereceivedstart.length > 0) or (datereceivedend.length) > 0:
+	# 	return jsonify(orders=[order.serialize for order in Order.query.filter_by(datereceived>=datereceivedstart, datereceived<=datereceivedend).all()])
+	# else:
+	yesterday = (date.today() - timedelta(6)).strftime('%-m/%-d/%Y') + " 0:00:00"
+    	return jsonify(orders=[order.serialize for order in Order.query.filter(Order.datereceived==yesterday).all()])
 
 
 @api.route('/orders/<int:order_id>', methods=['GET'])

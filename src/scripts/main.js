@@ -71,21 +71,30 @@ var App = React.createClass({
     //   }
     // }
     var filteredOrders = []
-    for (var i = 0; i < this.state.prevDayOrders.length; i++) {
-      filteredOrders.push(this.state.prevDayOrders[i])
+    if (order.datereceivedstart.length > 0 || order.datereceivedend.length > 0) {
+      var datereceivedstart = order.datereceivedstart
+      var datereceivedend = order.datereceivedend
+      this.serverRequest = $.ajax(this.props.source, datereceivedstart, datereceivedend, function (result) {
+        for (var i = 0; i < result.orders.length; i++) {
+          filteredOrders.push(result.orders[i])
+        }
+      }.bind(this))
+    }
+    else {
+      for (var i = 0; i < this.state.prevDayOrders.length; i++) {
+        filteredOrders.push(this.state.prevDayOrders[i])
+      }
     }
     console.log(filteredOrders)
     for (var i = filteredOrders.length - 1; i > -1; i--) {
       if (order.ordernumber.length > 0) {
         if (order.ordernumber != (filteredOrders[i].orderno).toString()) {
-          console.log(1)
           filteredOrders.splice(i, 1)
           continue
         }
       }
       if (order.subordernumber.length > 0) {
         if (order.subordernumber != (filteredOrders[i].suborderno).toString()) {
-          console.log(2)
           filteredOrders.splice(i, 1)
           continue
         }
@@ -93,14 +102,12 @@ var App = React.createClass({
       if (order.ordertype.length != 4) {
         console.log(filteredOrders[i])
         if (order.ordertype != (filteredOrders[i].clientagencyname)) {
-          console.log(3)
           filteredOrders.splice(i, 1)
           continue
         }
       }
       if (order.billingname.length > 0) {
-        if (((filteredOrders[i].billingname).toString().toLowerCase()).indexOf(order.billingname) === -1) {
-          console.log(4)
+        if (((filteredOrders[i].billingname).toString().toLowerCase()).indexOf(order.billingname.toLowerCase()) === -1) {
           filteredOrders.splice(i, 1)
           continue
         }
