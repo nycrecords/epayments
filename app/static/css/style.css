@@ -259,7 +259,7 @@ header.top {
   text-align: center;
 }
 header.top h1 {
-  font-size: 11rem;
+  font-size: 9rem;
   line-height: 0.7;
   -webkit-box-pack: center;
       -ms-flex-pack: center;
@@ -324,8 +324,8 @@ header.top h3:after {
 .epayments > *:first-child {
   -ms-flex-negative: 1;
       flex-shrink: 1;
-  -ms-flex-preferred-size: 50%;
-      flex-basis: 50%;
+  -ms-flex-preferred-size: 40%;
+      flex-basis: 40%;
   -webkit-transform: translateX(50%) rotateY(6deg) translateX(-50%);
           transform: translateX(50%) rotateY(6deg) translateX(-50%);
 }
@@ -339,8 +339,8 @@ header.top h3:after {
 .epayments > *:last-child {
   -ms-flex-negative: 1;
       flex-shrink: 1;
-  -ms-flex-preferred-size: 50%;
-      flex-basis: 50%;
+  -ms-flex-preferred-size: 60%;
+      flex-basis: 60%;
   -webkit-transform: translateX(-50%) rotateY(10deg) translateX(50%) scale(1.08) translateX(24px);
           transform: translateX(-50%) rotateY(10deg) translateX(50%) scale(1.08) translateX(24px);
 }

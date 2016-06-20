@@ -13,7 +13,7 @@ def info():
 
 @api.route('/', methods=['GET'])
 def get_orders():
-	yesterday = (date.today() - timedelta(1)).strftime('%-m/%-d/%Y') + " 0:00:00"
+	yesterday = (date.today() - timedelta(5)).strftime('%-m/%-d/%Y') + " 0:00:00"
     	return jsonify(orders=[order.serialize for order in Order.query.filter_by(datereceived=yesterday).all()])
 
 

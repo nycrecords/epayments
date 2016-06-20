@@ -34,7 +34,7 @@ var App = React.createClass({
   },
   componentDidMount: function () {
     this.serverRequest = $.get(this.props.source, function (result) {
-      // console.log(result.orders)
+      console.log(result.orders)
       for (var i = 0; i < result.orders.length; i++) {
         (this.state.order).push(result.orders[i])
       }
@@ -76,7 +76,6 @@ var App = React.createClass({
     }
     console.log(filteredOrders)
     for (var i = filteredOrders.length - 1; i > -1; i--) {
-      console.log(i)
       if (order.ordernumber.length > 0) {
         if (order.ordernumber != (filteredOrders[i].orderno).toString()) {
           console.log(1)
@@ -99,8 +98,8 @@ var App = React.createClass({
           continue
         }
       }
-      if (order.name.length > 0) {
-        if (order.name != (filteredOrders[i].billingname).toString()) {
+      if (order.billingname.length > 0) {
+        if (order.billingname != (filteredOrders[i].billingname).toString()) {
           console.log(4)
           filteredOrders.splice(i, 1)
           continue
@@ -120,7 +119,6 @@ var App = React.createClass({
       //   continue
       // }
     }
-    console.log(filteredOrders)
     this.setState({ order: filteredOrders })
     var allUniqueOrders = []
     for (var i = 0; i < filteredOrders.length; i++) {
@@ -166,7 +164,7 @@ var Header = React.createClass({
   OrderForm
   <OrderForm />
   Return the OrderForm component used in the Inventory component.
-  OrderForm includes a field for Order Number, Sub Order Number, Order Type, Name, Date Start, and Date End.
+  OrderForm includes a field for Order Number, Sub Order Number, Order Type, Billing Name, Date Start, and Date End.
   Uses the filterOrder function passed from the App component into the Inventory component.
 
   Functions:
@@ -187,9 +185,9 @@ var OrderForm = React.createClass({
       ordernumber: this.refs.ordernumber.value,
       subordernumber: this.refs.subordernumber.value,
       ordertype: this.refs.ordertype.value,
-      name: this.refs.name.value,
-      datelastmodified: this.refs.datelastmodified.value,
-      datereceived: this.refs.datereceieved.value
+      billingname: this.refs.billingname.value,
+      datereceivedstart: this.refs.datereceivedstart.value,
+      datereceivedend: this.refs.datereceivedend.value
     }
     // Search for the order(s) in database
     this.props.filterOrder(order)
@@ -206,7 +204,7 @@ var OrderForm = React.createClass({
         data-bind='value: subordernumber'
         type='text'
         ref='subordernumber'
-        placeholder='Sub Order Number' />
+        placeholder='Suborder Number' />
       <select data-bind='value: ordertype' ref='ordertype'>
         <option disabled selected value>
           Order Type
@@ -258,21 +256,21 @@ var OrderForm = React.createClass({
         </option>
       </select>
       <input
-        data-bind='value: name'
+        data-bind='value: billingname'
         type='text'
-        ref='name'
-        placeholder='Name' />
+        ref='billingname'
+        placeholder='Billing Name' />
       <input
-        data-bind='value: datelastmodified'
+        data-bind='value: datereceivedstart'
         type='text'
-        ref='datelastmodified'
-        placeholder='Date Last Modified'
+        ref='datereceivedstart'
+        placeholder='Date Received - Start'
         id='datepicker' />
       <input
-        data-bind='value: datereceived'
+        data-bind='value: datereceivedend'
         type='text'
-        ref='datereceieved'
-        placeholder='Date Received'
+        ref='datereceieved2'
+        placeholder='Date Received - End'
         id='datepicker2' />
       <button data-bind='click: findOrder' type='submit'>
         Apply
@@ -326,7 +324,11 @@ var Order = React.createClass({
         </li>
         {this.props.order.map(function (order) {
            return <li key={order.suborderno}>
-                    {order.BillingName}
+                    Order #: {order.clientid}<br/>
+                    Suborder #: {order.suborderno}<br/>
+                    Order Type: {order.clientagencyname}<br/>
+                    Billing Name: {order.billingname}<br/>
+                    Date Received: {(order.datereceived).substr(0, 10)}<br/>
                   </li>
          })}
       </ul>
