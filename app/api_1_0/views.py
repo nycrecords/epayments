@@ -19,7 +19,7 @@ def get_orders():
 
 @api.route('/orders/<int:order_id>', methods=['GET'])
 def get_order(order_id):
-    order = [order for order in orders if order['SubOrderNo'] == order_id]
-    if len(order) == 0:
-        abort(404)
-    return jsonify({'order': make_public_order(order[0])})
+	orders=[order.serialize for order in Order.query.filter_by(clientid=order_id).all()]
+    	if len(orders) == 0:
+        	abort(404)
+    	return jsonify(orders)

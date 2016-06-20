@@ -56,20 +56,20 @@ var App = React.createClass({
   filterOrder: function (order) {
     console.log(order)
     // Modify datelastmodified to match database value
-    if ((parseInt(order.datelastmodified.substr(0, 2))) < 10) {
-      // 0#/##/## --> #/##/##
-      order.datelastmodified = order.datelastmodified.substr(1, 9)
-      if ((parseInt(order.datelastmodified.substr(2, 2))) < 10) {
-        // #/0#/## --> #/#/##
-        order.datelastmodified = (order.datelastmodified.substr(0, 2) + order.datelastmodified.substr(3, 6))
-      }
-    }
-    if (!((parseInt(order.datelastmodified.substr(0, 1))) < 10)) {
-      if ((parseInt(order.datelastmodified.substr(2, 2))) < 10) {
-        // ##/0#/## --> ##/#/##
-        order.datelastmodified = (order.datelastmodified.substr(0, 3) + order.datelastmodified.substr(4, 6))
-      }
-    }
+    // if ((parseInt(order.datelastmodified.substr(0, 2))) < 10) {
+    //   // 0#/##/## --> #/##/##
+    //   order.datelastmodified = order.datelastmodified.substr(1, 9)
+    //   if ((parseInt(order.datelastmodified.substr(2, 2))) < 10) {
+    //     // #/0#/## --> #/#/##
+    //     order.datelastmodified = (order.datelastmodified.substr(0, 2) + order.datelastmodified.substr(3, 6))
+    //   }
+    // }
+    // if (!((parseInt(order.datelastmodified.substr(0, 1))) < 10)) {
+    //   if ((parseInt(order.datelastmodified.substr(2, 2))) < 10) {
+    //     // ##/0#/## --> ##/#/##
+    //     order.datelastmodified = (order.datelastmodified.substr(0, 3) + order.datelastmodified.substr(4, 6))
+    //   }
+    // }
     var filteredOrders = []
     for (var i = 0; i < this.state.prevDayOrders.length; i++) {
       filteredOrders.push(this.state.prevDayOrders[i])
@@ -99,7 +99,7 @@ var App = React.createClass({
         }
       }
       if (order.billingname.length > 0) {
-        if (order.billingname != (filteredOrders[i].billingname).toString()) {
+        if (((filteredOrders[i].billingname).toString().toLowerCase()).indexOf(order.billingname) === -1) {
           console.log(4)
           filteredOrders.splice(i, 1)
           continue
@@ -269,7 +269,7 @@ var OrderForm = React.createClass({
       <input
         data-bind='value: datereceivedend'
         type='text'
-        ref='datereceieved2'
+        ref='datereceivedend'
         placeholder='Date Received - End'
         id='datepicker2' />
       <button data-bind='click: findOrder' type='submit'>
