@@ -34,9 +34,10 @@ var App = React.createClass({
   },
   componentDidMount: function () {
     this.serverRequest = $.get(this.props.source, function (result) {
-      console.log(result.orders)
+      console.log(result.orders.length)
       for (var i = 0; i < result.orders.length; i++) {
         (this.state.order).push(result.orders[i])
+        // console.log(typeof(result.orders[i].datereceived)) //6/14/2016 0:00:00
       }
       for (var i = 0; i < result.orders.length; i++) {
         (this.state.prevDayOrders).push(result.orders[i])
@@ -74,11 +75,27 @@ var App = React.createClass({
     if (order.datereceivedstart.length > 0 || order.datereceivedend.length > 0) {
       var datereceivedstart = order.datereceivedstart
       var datereceivedend = order.datereceivedend
-      this.serverRequest = $.ajax(this.props.source, datereceivedstart, datereceivedend, function (result) {
-        for (var i = 0; i < result.orders.length; i++) {
-          filteredOrders.push(result.orders[i])
-        }
-      }.bind(this))
+      $.ajax({
+        url: this.props.source,
+        dataType: 'json',
+        type: 'POST',
+        data: {date_received_start: datereceivedstart, date_received_end: datereceivedend},
+        success: function(data) {
+          // this.setState({data: data});
+          for (var i = 0; i < data.orders.length; i++) {
+            filteredOrders.push(data.orders[i])
+            console.log(i+1)
+          }
+        }.bind(this),
+        error: function(xhr, status, err) {
+          console.error(this.props.url, status, err.toString());
+        }.bind(this)
+      });
+      // this.serverRequest = $.ajax(this.props.source, datereceivedstart, datereceivedend, function (result) {
+        // for (var i = 0; i < result.orders.length; i++) {
+        //   filteredOrders.push(result.orders[i])
+        // }
+      // }.bind(this))
     }
     else {
       for (var i = 0; i < this.state.prevDayOrders.length; i++) {
@@ -345,6 +362,6 @@ var Order = React.createClass({
 })
 
 ReactDOM.render(
-  <App source='http://localhost:5000/api/v1.0' />,
+  <App source='http://localhost:5000/api/v1.0/orders' />,
   document.getElementById('main')
 )
