@@ -65,7 +65,7 @@ class Order(db.Model):
             'shippinginstructions' : self.shippinginstructions,
             'clientsdata' : self.clientsdata,
             'confirmationmessage' : self.confirmationmessage,
-            'datereceived' : self.datereceived,
+            'datereceived' : str(self.datereceived),
             'billingname' : self.billingname,
             'datelastmodified' : self.datelastmodified,
             'suborderno' : self.suborderno,

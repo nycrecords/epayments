@@ -37,7 +37,6 @@ var App = React.createClass({
       console.log(result.orders.length)
       for (var i = 0; i < result.orders.length; i++) {
         (this.state.order).push(result.orders[i])
-        // console.log(typeof(result.orders[i].datereceived)) //6/14/2016 0:00:00
       }
       for (var i = 0; i < result.orders.length; i++) {
         (this.state.prevDayOrders).push(result.orders[i])
@@ -56,98 +55,74 @@ var App = React.createClass({
   },
   filterOrder: function (order) {
     console.log(order)
-    // Modify datelastmodified to match database value
-    // if ((parseInt(order.datelastmodified.substr(0, 2))) < 10) {
-    //   // 0#/##/## --> #/##/##
-    //   order.datelastmodified = order.datelastmodified.substr(1, 9)
-    //   if ((parseInt(order.datelastmodified.substr(2, 2))) < 10) {
-    //     // #/0#/## --> #/#/##
-    //     order.datelastmodified = (order.datelastmodified.substr(0, 2) + order.datelastmodified.substr(3, 6))
-    //   }
-    // }
-    // if (!((parseInt(order.datelastmodified.substr(0, 1))) < 10)) {
-    //   if ((parseInt(order.datelastmodified.substr(2, 2))) < 10) {
-    //     // ##/0#/## --> ##/#/##
-    //     order.datelastmodified = (order.datelastmodified.substr(0, 3) + order.datelastmodified.substr(4, 6))
-    //   }
-    // }
     var filteredOrders = []
+    this.state.order = []
+    console.log(this.state.order)
+    console.log(this.state.prevDayOrders)
     if (order.datereceivedstart.length > 0 || order.datereceivedend.length > 0) {
+      console.log(1)
+      console.log(this.state.order)
       var datereceivedstart = order.datereceivedstart
       var datereceivedend = order.datereceivedend
-      $.ajax({
+      this.serverRequest = $.ajax({
         url: this.props.source,
         dataType: 'json',
         type: 'POST',
         data: {date_received_start: datereceivedstart, date_received_end: datereceivedend},
         success: function(data) {
-          // this.setState({data: data});
-          for (var i = 0; i < data.orders.length; i++) {
-            filteredOrders.push(data.orders[i])
-            console.log(i+1)
-          }
+          console.log(data.orders.length)
+          console.log(this.state.order)
+          this.setState({ order: data.orders })
+          console.log(this.state.order)
         }.bind(this),
         error: function(xhr, status, err) {
           console.error(this.props.url, status, err.toString());
         }.bind(this)
       });
-      // this.serverRequest = $.ajax(this.props.source, datereceivedstart, datereceivedend, function (result) {
-        // for (var i = 0; i < result.orders.length; i++) {
-        //   filteredOrders.push(result.orders[i])
-        // }
-      // }.bind(this))
     }
     else {
+      console.log(2)
       for (var i = 0; i < this.state.prevDayOrders.length; i++) {
-        filteredOrders.push(this.state.prevDayOrders[i])
+        this.state.order.push(this.state.prevDayOrders[i])
       }
     }
-    console.log(filteredOrders)
-    for (var i = filteredOrders.length - 1; i > -1; i--) {
+    console.log(this.state.order)
+    for (var i = this.state.order.length - 1; i > -1; i--) {
+      console.log(order.ordernumber)
+      console.log(this.state.order[i])
       if (order.ordernumber.length > 0) {
-        if (order.ordernumber != (filteredOrders[i].orderno).toString()) {
-          filteredOrders.splice(i, 1)
+        if (order.ordernumber != (this.state.order[i].clientid).toString()) {
+          this.state.order.splice(i, 1)
+          console.log(1)
           continue
         }
       }
       if (order.subordernumber.length > 0) {
-        if (order.subordernumber != (filteredOrders[i].suborderno).toString()) {
-          filteredOrders.splice(i, 1)
+        if (order.subordernumber != (this.state.order[i].suborderno).toString()) {
+          this.state.order.splice(i, 1)
+          console.log(2)
           continue
         }
       }
       if (order.ordertype.length != 4) {
-        console.log(filteredOrders[i])
-        if (order.ordertype != (filteredOrders[i].clientagencyname)) {
-          filteredOrders.splice(i, 1)
+        if (order.ordertype != (this.state.order[i].clientagencyname)) {
+          this.state.order.splice(i, 1)
+          console.log(3)
           continue
         }
       }
       if (order.billingname.length > 0) {
-        if (((filteredOrders[i].billingname).toString().toLowerCase()).indexOf(order.billingname.toLowerCase()) === -1) {
-          filteredOrders.splice(i, 1)
+        if (((this.state.order[i].billingname).toString().toLowerCase()).indexOf(order.billingname.toLowerCase()) === -1) {
+          this.state.order.splice(i, 1)
+          console.log(4)
           continue
         }
       }
-      // if (order.datereceived.length > 0) {
-        // #AJAX Call
-      // }
-      // if (order.datelastmodified != ((this.state.prevDayOrders[i].datelastmodified).toString()).substr(0, 9) && order.datelastmodified.length > 0) {
-      //   filteredOrders.splice(i, 1)
-      //   console.log(5)
-      //   continue
-      // }
-      // if (order.datereceived != (this.state.prevDayOrders[i].datereceived).toString() && order.datereceived.length > 0) {
-      //   filteredOrders.splice(i, 1)
-      //   console.log(6)
-      //   continue
-      // }
     }
-    this.setState({ order: filteredOrders })
     var allUniqueOrders = []
-    for (var i = 0; i < filteredOrders.length; i++) {
-      if (allUniqueOrders.indexOf(filteredOrders[i].orderno) === -1) {
-        allUniqueOrders.push(filteredOrders[i].orderno)
+    for (var i = 0; i < this.state.order.length; i++) {
+      if (allUniqueOrders.indexOf(this.state.order[i].suborderno) === -1) {
+        allUniqueOrders.push(this.state.order[i].suborderno)
       }
     }
     this.setState({ uniqueOrders: allUniqueOrders })
