@@ -55,13 +55,10 @@ var App = React.createClass({
   },
   filterOrder: function (order) {
     console.log(order)
-    var filteredOrders = []
     this.state.order = []
     console.log(this.state.order)
     console.log(this.state.prevDayOrders)
     if (order.datereceivedstart.length > 0 || order.datereceivedend.length > 0) {
-      console.log(1)
-      console.log(this.state.order)
       var datereceivedstart = order.datereceivedstart
       var datereceivedend = order.datereceivedend
       this.serverRequest = $.ajax({
@@ -70,9 +67,17 @@ var App = React.createClass({
         type: 'POST',
         data: {date_received_start: datereceivedstart, date_received_end: datereceivedend},
         success: function(data) {
-          console.log(data.orders.length)
-          console.log(this.state.order)
+          // for (var i = 0; i < data.orders.length; i++) {
+          //   (this.state.order).push(data.orders[i])
+          // }
           this.setState({ order: data.orders })
+          var allUniqueOrders = []
+          for (var i = 0; i < this.state.order.length; i++) {
+            if (allUniqueOrders.indexOf(this.state.order[i].orderno) === -1) {
+              allUniqueOrders.push(this.state.order[i].orderno)
+            }
+          }
+          this.setState({ uniqueOrders: allUniqueOrders })
           console.log(this.state.order)
         }.bind(this),
         error: function(xhr, status, err) {
@@ -81,15 +86,11 @@ var App = React.createClass({
       });
     }
     else {
-      console.log(2)
       for (var i = 0; i < this.state.prevDayOrders.length; i++) {
         this.state.order.push(this.state.prevDayOrders[i])
       }
     }
-    console.log(this.state.order)
     for (var i = this.state.order.length - 1; i > -1; i--) {
-      console.log(order.ordernumber)
-      console.log(this.state.order[i])
       if (order.ordernumber.length > 0) {
         if (order.ordernumber != (this.state.order[i].clientid).toString()) {
           this.state.order.splice(i, 1)
