@@ -56,70 +56,40 @@ var App = React.createClass({
   filterOrder: function (order) {
     console.log(order)
     this.state.order = []
+    var dateRangeOrders = []
+    var allUniqueOrders = []
     console.log(this.state.order)
     console.log(this.state.prevDayOrders)
-    if (order.datereceivedstart.length > 0 || order.datereceivedend.length > 0) {
-      var datereceivedstart = order.datereceivedstart
-      var datereceivedend = order.datereceivedend
-      this.serverRequest = $.ajax({
-        url: this.props.source,
-        dataType: 'json',
-        type: 'POST',
-        data: {date_received_start: datereceivedstart, date_received_end: datereceivedend},
-        success: function(data) {
-          // for (var i = 0; i < data.orders.length; i++) {
-          //   (this.state.order).push(data.orders[i])
-          // }
-          this.setState({ order: data.orders })
-          var allUniqueOrders = []
-          for (var i = 0; i < this.state.order.length; i++) {
-            if (allUniqueOrders.indexOf(this.state.order[i].orderno) === -1) {
-              allUniqueOrders.push(this.state.order[i].orderno)
-            }
+    var ordernumber = order.ordernumber
+    var subordernumber = order.subordernumber
+    var ordertype = order.ordertype
+    var billingname = order.billingname
+    var datereceivedstart = order.datereceivedstart
+    var datereceivedend = order.datereceivedend
+    this.serverRequest = $.ajax({
+      url: this.props.source,
+      dataType: 'json',
+      type: 'POST',
+      data: {order_number: ordernumber, suborder_number: subordernumber, order_type: ordertype, billing_name: billingname, date_received_start: datereceivedstart, date_received_end: datereceivedend},
+      success: function(data) {
+        console.log(data.orders)
+        for (var i = 0; i < data.orders.length; i++) {
+          dateRangeOrders.push(data.orders[i])
+        }
+        this.setState({ order: dateRangeOrders })
+        for (var i = 0; i < this.state.order.length; i++) {
+          if (allUniqueOrders.indexOf(this.state.order[i].orderno) === -1) {
+            allUniqueOrders.push(this.state.order[i].orderno)
           }
-          this.setState({ uniqueOrders: allUniqueOrders })
-          console.log(this.state.order)
-        }.bind(this),
-        error: function(xhr, status, err) {
-          console.error(this.props.url, status, err.toString());
-        }.bind(this)
-      });
-    }
-    else {
-      for (var i = 0; i < this.state.prevDayOrders.length; i++) {
-        this.state.order.push(this.state.prevDayOrders[i])
-      }
-    }
-    for (var i = this.state.order.length - 1; i > -1; i--) {
-      if (order.ordernumber.length > 0) {
-        if (order.ordernumber != (this.state.order[i].clientid).toString()) {
-          this.state.order.splice(i, 1)
-          console.log(1)
-          continue
         }
-      }
-      if (order.subordernumber.length > 0) {
-        if (order.subordernumber != (this.state.order[i].suborderno).toString()) {
-          this.state.order.splice(i, 1)
-          console.log(2)
-          continue
-        }
-      }
-      if (order.ordertype.length != 4) {
-        if (order.ordertype != (this.state.order[i].clientagencyname)) {
-          this.state.order.splice(i, 1)
-          console.log(3)
-          continue
-        }
-      }
-      if (order.billingname.length > 0) {
-        if (((this.state.order[i].billingname).toString().toLowerCase()).indexOf(order.billingname.toLowerCase()) === -1) {
-          this.state.order.splice(i, 1)
-          console.log(4)
-          continue
-        }
-      }
-    }
+        this.setState({ uniqueOrders: allUniqueOrders })
+        console.log(this.state.order)
+      }.bind(this),
+      error: function(xhr, status, err) {
+        console.error(this.props.url, status, err.toString());
+      }.bind(this)
+    });
+    console.log(this.state.order)
     var allUniqueOrders = []
     for (var i = 0; i < this.state.order.length; i++) {
       if (allUniqueOrders.indexOf(this.state.order[i].suborderno) === -1) {
