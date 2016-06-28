@@ -458,7 +458,7 @@ ul.order li span span {
 }
 .apply-order button {
   width: 100%;
-  border: 0;
+  border: 1;
 }
 .list-of-fish {
   border-top: 2px solid #000;

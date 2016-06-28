@@ -89,14 +89,6 @@ var App = React.createClass({
         console.error(this.props.url, status, err.toString());
       }.bind(this)
     });
-    console.log(this.state.order)
-    var allUniqueOrders = []
-    for (var i = 0; i < this.state.order.length; i++) {
-      if (allUniqueOrders.indexOf(this.state.order[i].suborderno) === -1) {
-        allUniqueOrders.push(this.state.order[i].suborderno)
-      }
-    }
-    this.setState({ uniqueOrders: allUniqueOrders })
   },
   render: function () {
     return (
@@ -143,14 +135,8 @@ var Header = React.createClass({
 */
 
 var OrderForm = React.createClass({
-  // propTypes: {
-  //   filterOrder: React.PropTypes.string.isRequired
-  // },
-
   findOrder: function (event) {
-    // Stop the form from submitting
     event.preventDefault()
-    // Take data from form and create object
     var order = {
       ordernumber: this.refs.ordernumber.value,
       subordernumber: this.refs.subordernumber.value,
@@ -159,7 +145,6 @@ var OrderForm = React.createClass({
       datereceivedstart: this.refs.datereceivedstart.value,
       datereceivedend: this.refs.datereceivedend.value
     }
-    // Search for the order(s) in database
     this.props.filterOrder(order)
   },
   render: function () {
@@ -179,7 +164,7 @@ var OrderForm = React.createClass({
         <option disabled selected value>
           Order Type
         </option>
-        <option value=''>
+        <option value='All'>
           All
         </option>
         <option disabled value='vitalrecords'>
@@ -244,6 +229,9 @@ var OrderForm = React.createClass({
         id='datepicker2' />
       <button data-bind='click: findOrder' type='submit'>
         Apply
+      </button><br/><br/>
+      <button type='reset'>
+        Clear
       </button>
     </form>
     )
