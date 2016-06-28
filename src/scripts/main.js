@@ -66,6 +66,11 @@ var App = React.createClass({
     var billingname = order.billingname
     var datereceivedstart = order.datereceivedstart
     var datereceivedend = order.datereceivedend
+    console.log(datereceivedstart)
+    console.log(datereceivedend)
+    if (datereceivedstart > datereceivedend) {
+      alert("Invalid Date Range: 'Date Received - Start' cannot be after 'Date Received - End'.")
+    }
     this.serverRequest = $.ajax({
       url: this.props.source,
       dataType: 'json',
@@ -229,7 +234,7 @@ var OrderForm = React.createClass({
         id='datepicker2' />
       <button data-bind='click: findOrder' type='submit'>
         Apply
-      </button><br/><br/>
+      </button><br/>
       <button type='reset'>
         Clear
       </button>
