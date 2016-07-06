@@ -29,7 +29,8 @@ var App = React.createClass({
     return {
       order: [],
       prevDayOrders: [],
-      uniqueOrders: []
+      uniqueOrders: [],
+      orderFilters: []
     }
   },
   componentDidMount: function () {
@@ -98,8 +99,8 @@ var App = React.createClass({
   render: function () {
     return (
     <div className='epayments'>
-      <Inventory tagline='Department of Records' filterOrder={this.filterOrder} />
-      <Order order={this.state.order} uniqueOrders={this.state.uniqueOrders} />
+      <Inventory tagline='Department of Records' filterOrder={this.filterOrder} orderFilters={this.state.orderFilters} />
+      <Order order={this.state.order} uniqueOrders={this.state.uniqueOrders} orderFilters={this.state.orderFilters} />
     </div>
     )
   }
@@ -120,7 +121,7 @@ var Header = React.createClass({
   render: function () {
     return (
     <header className='top'>
-      <h1>ePayments Orders</h1>
+      <h1>ePayments</h1>
       <h3 className='tagline'><span>{this.props.tagline}</span></h3>
     </header>
     )
@@ -150,6 +151,7 @@ var OrderForm = React.createClass({
       datereceivedstart: this.refs.datereceivedstart.value,
       datereceivedend: this.refs.datereceivedend.value
     }
+    this.props.orderFilters.push(order)
     this.props.filterOrder(order)
   },
   render: function () {
@@ -159,13 +161,15 @@ var OrderForm = React.createClass({
         data-bind='value: ordernumber'
         type='text'
         ref='ordernumber'
+        id='ordernumber'
         placeholder='Order Number' />
       <input
         data-bind='value: subordernumber'
         type='text'
         ref='subordernumber'
+        id='subordernumber'
         placeholder='Suborder Number' />
-      <select data-bind='value: ordertype' ref='ordertype'>
+      <select data-bind='value: ordertype' ref='ordertype' id='ordertype'>
         <option disabled selected value>
           Order Type
         </option>
@@ -219,6 +223,7 @@ var OrderForm = React.createClass({
         data-bind='value: billingname'
         type='text'
         ref='billingname'
+        id='billingname'
         placeholder='Billing Name' />
       <input
         data-bind='value: datereceivedstart'
@@ -232,12 +237,12 @@ var OrderForm = React.createClass({
         ref='datereceivedend'
         placeholder='Date Received - End'
         id='datepicker2' />
-      <button data-bind='click: findOrder' type='submit'>
-        Apply
-      </button><br/>
       <button type='reset'>
         Clear
       </button>
+      <button data-bind='click: findOrder' type='submit' name='submit' value='FindOrder'>
+        Apply
+      </button><br/>
     </form>
     )
   }
@@ -274,6 +279,28 @@ var Inventory = React.createClass({
 */
 
 var Order = React.createClass({
+  printOrders: function (event) {
+    var ordernumber = $("#ordernumber").val()
+    var subordernumber = $("#subordernumber").val()
+    var ordertype = $("#ordertype").val()
+    var billingname = $("#billingname").val()
+    var datereceivedstart = $("#datepicker").val()
+    var datereceivedend = $("#datepicker2").val()
+    $.ajax({
+      url: 'http://localhost:5000/printorders',
+      dataType: 'json',
+      type: 'POST',
+      data: {order_number: ordernumber, suborder_number: subordernumber, order_type: ordertype, billing_name: billingname, date_received_start: datereceivedstart, date_received_end: datereceivedend},
+      success: function (data) {
+        console.log(1)
+      }.bind(this),
+      error: function(xhr, status, err) {
+        console.error(this.props.url, status, err.toString());
+      }.bind(this)
+    });
+    console.log(ordernumber)
+    window.open("http://localhost:5000/printorders")
+  },
   render: function () {
     return (
     <div className='order-wrap'>
@@ -284,6 +311,7 @@ var Order = React.createClass({
           {this.props.order.length}
           <strong>Number of Orders:</strong>
           {this.props.uniqueOrders.length}
+          <input type="submit" name="submit" value="Print" onClick={this.printOrders}/>
         </li>
         {this.props.order.map(function (order) {
            return <li key={order.suborderno}>
