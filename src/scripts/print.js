@@ -88,6 +88,7 @@ var BirthSearch = React.createClass({
   render: function() {
 	return (
 	  <div className='order-wrap'>
+		  Hello World
     	{this.props.birthSearchOrders.map(function (order) {
            return <li key={order.suborderno}>
 		              {order.billingname}<br/>

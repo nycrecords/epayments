@@ -32,14 +32,14 @@ def get_orders():
 		orders = get_orders_by_fields(order_number, suborder_number, order_type, billing_name, date_received_start, date_received_end)
 		return jsonify(orders=orders)
 	else:
-		yesterday = date.today() - timedelta(21)
+		yesterday = date.today() - timedelta(22)
 		orders = [order.serialize for order in Order.query.filter_by(datereceived=yesterday).all()]
 		return jsonify(orders=orders)
 
 
 def get_orders_by_fields(order_number, suborder_number, order_type, billing_name, date_received_start, date_received_end):
 	"""Filters orders by fields received."""
-	yesterday = date.today() - timedelta(21)
+	yesterday = date.today() - timedelta(22)
 	if len(date_received_start) < 1:
 		date_received_start = yesterday
 	if len(date_received_end) < 1:
