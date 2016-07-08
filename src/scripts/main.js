@@ -18,8 +18,10 @@ var Route = ReactRouter.Route
   Functions:
   getInitialState -- initalizes three empty lists named order, prevDayOrders, and uniqueOrders
   componentDidMount -- accesses orders from the database and updates the objects in the state
+  componentWillUnmount -- throws an error if data is not received successfully
   filterOrder -- takes an object order as a parameter and filters orders in the database
 */
+
 var App = React.createClass({
   propTypes: {
     source: React.PropTypes.string.isRequired

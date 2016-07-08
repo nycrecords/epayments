@@ -13,6 +13,15 @@ def info():
 
 @api.route('/orders', methods=['POST', 'GET'])
 def get_orders():
+	"""
+	Retrieves the data for orders to be displayed.
+
+	If a form is submitted, the parameters including order_number, suborder_number, 
+	order_type, billing_name, date_received_start, and date_receieved_end will be retrieved
+	from the form data and used in a function called get_orders_by_fields to filter orders.
+
+	Else, orders are filtered with the previous day's date.
+	"""
 	if request.form:
 		order_number = str(request.form["order_number"])
 		suborder_number = str(request.form["suborder_number"])
@@ -29,6 +38,7 @@ def get_orders():
 
 
 def get_orders_by_fields(order_number, suborder_number, order_type, billing_name, date_received_start, date_received_end):
+	"""Filters orders by fields received."""
 	yesterday = date.today() - timedelta(21)
 	if len(date_received_start) < 1:
 		date_received_start = yesterday
