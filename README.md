@@ -24,7 +24,7 @@ Install postgresql with the following command:
 Initialize the database by entering the following in the psql line:
 
     psql
-        # create database epayments;
+        username=# create database epayments;
 
 Locally run the intranet by entering the following in the command line:
 
