@@ -460,6 +460,9 @@ ul.order li span span {
   width: 50%;
   border: 1;
 }
+.pagebreak {
+  page-break-before: always;
+}
 .list-of-fish {
   border-top: 2px solid #000;
   border-bottom: 1px solid #000;

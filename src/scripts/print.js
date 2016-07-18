@@ -15,7 +15,7 @@ var Route = ReactRouter.Route
 
   Functions:
   getInitialState -- initalizes three empty lists named birthSearchOrders, marriageSearchOrders, deathSearchOrders,
-  					 birthCertOrders, marriageCertOrders, deathCertOrders, photoTaxOrders, and photoTaxOrders
+  birthCertOrders, marriageCertOrders, deathCertOrders, photoTaxOrders, and photoTaxOrders
   componentDidMount -- accesses orders from the database and updates the objects in the state
   componentWillUnmount -- throws an error if data is not received successfully
 */
@@ -36,33 +36,42 @@ var App = React.createClass({
   componentDidMount: function () {
     this.serverRequest = $.get(this.props.source, function (result) {
       console.log(result.orders.length)
-      console.log(this.state.order)
+      console.log(result.orders)
       for (var i = 0; i < result.orders.length; i++) {
-        if (result.orders[i].clientagencyname == "BirthSearch") {
+        if (result.orders[i].clientagencyname == "Birth Search") {
         	(this.state.birthSearchOrders).push(result.orders[i])
         }
-        else if (result.orders[i].clientagencyname == "MarriageSearch") {
+        else if (result.orders[i].clientagencyname == "Marriage Search") {
         	(this.state.marriageSearchOrders).push(result.orders[i])
         }
-        else if (result.orders[i].clientagencyname == "DeathSearch") {
+        else if (result.orders[i].clientagencyname == "Death Search") {
         	(this.state.deathSearchOrders).push(result.orders[i])
         }
-        else if (result.orders[i].clientagencyname == "BirthCert") {
+        else if (result.orders[i].clientagencyname == "Birth Cert") {
         	(this.state.birthCertOrders).push(result.orders[i])
         }
-        else if (result.orders[i].clientagencyname == "MarriageCert") {
+        else if (result.orders[i].clientagencyname == "Marriage Cert") {
         	(this.state.marriageCertOrders).push(result.orders[i])
         }
-        else if (result.orders[i].clientagencyname == "DeathCert") {
+        else if (result.orders[i].clientagencyname == "Death Cert") {
         	(this.state.deathCertOrders).push(result.orders[i])
         }
-        else if (result.orders[i].clientagencyname == "PhotoTax") {
+        else if (result.orders[i].clientagencyname == "Photo Tax") {
         	(this.state.photoTaxOrders).push(result.orders[i])
         }
-        else if (result.orders[i].clientagencyname == "PhotoGallery") {
+        else if (result.orders[i].clientagencyname == "Photo Gallery") {
         	(this.state.photoGalleryOrders).push(result.orders[i])
         }
       }
+      this.setState({ birthSearchOrders: this.state.birthSearchOrders })
+      this.setState({ marriageSearchOrders: this.state.marriageSearchOrders })
+      this.setState({ deathSearchOrders: this.state.deathSearchOrders })
+      this.setState({ birthCertOrders: this.state.birthCertOrders })
+      this.setState({ marriageCertOrders: this.state.marriageCertOrders })
+      this.setState({ deathCertOrders: this.state.deathCertOrders })
+      this.setState({ photoTaxOrders: this.state.photoTaxOrders })
+      this.setState({ photoGalleryOrders: this.state.photoGalleryOrders })
+      console.log(this.state.birthSearchOrders)
     }.bind(this))
   },
   componentWillUnmount: function () {
@@ -70,7 +79,7 @@ var App = React.createClass({
   },
   render: function () {
     return (
-      <div className='epayments'>
+      <div>
       	<BirthSearch birthSearchOrders={this.state.birthSearchOrders} />
       </div>
     )
@@ -87,49 +96,50 @@ var App = React.createClass({
 var BirthSearch = React.createClass({
   render: function() {
 	return (
-	  <div className='order-wrap'>
-		  Hello World
+ 	  <div className='order-wrap'>
     	{this.props.birthSearchOrders.map(function (order) {
-           return <li key={order.suborderno}>
-		              {order.billingname}<br/>
-		              {order.shiptostreetadd}<br/>
-		              {order.shiptocity}, {order.shiptostate} {order.shiptozipcode}<br/>
-		              <br/>
-		              {order.clientagencyname}<br/>
-		              <br/>
-		              Customer Name: {order.billingname}<br/>
-		              Order Number: {order.orderno}<br/>
-		              Time of Order: {order.datelastmodified}<br/>
-		              Phone: {order.shiptophone}<br/>
-		              Email: {order.customeremail}<br/>
-		              <br/>
-		              SubOrderNo: {order.suborderno}<br/>
-		              <br/>
-		              LASTNAME<br/>
-		              {order.clientsdata.split('|')[11]}<br/>
-		              <br/>
-		              FIRSTNAME<br/>
-		              {order.clientsdata.split('|')[13]}<br/>
-		              <br/>
-		              RELATIONSHIP<br/>
-		              {order.clientsdata.split('|')[19]}<br/>
-		              <br/>
-		              PURPOSE<br/>
-		              {order.clientsdata.split('|')[21]}<br/>
-		              <br/>
-		              COPY_REQ<br/>
-		              {order.clientsdata.split('|')[23]}<br/>
-		              <br/>
-		              MONTH<br/>
-		              {order.clientsdata.split('|')[25]}<br/>
-		              <br/>
-		              DAY<br/>
-		              {order.clientsdata.split('|')[27]}<br/>
-		              <br/>
-		              YEAR<br/>
-		              {order.clientsdata.split('|')[31]}<br/>
-		              <br/>
-		           </li>
+           return <ul key={order.suborderno}>
+           	<div className="pagebreak">
+             {order.billingname}<br/>
+             {order.shiptostreetadd}<br/>
+             {order.shiptocity}, {order.shiptostate} {order.shiptozipcode}<br/>
+             <br/>
+             {order.clientagencyname}<br/>
+             <br/>
+             Customer Name: {order.billingname}<br/>
+             Order Number: {order.orderno}<br/>
+             Time of Order: {order.datelastmodified}<br/>
+             Phone: {order.shiptophone}<br/>
+             Email: {order.customeremail}<br/>
+             <br/>
+             SubOrderNo: {order.suborderno}<br/>
+             <br/>
+             LASTNAME<br/>
+             {order.clientsdata.split('|')[9]}<br/>
+             <br/>
+             FIRSTNAME<br/>
+             {order.clientsdata.split('|')[11]}<br/>
+             <br/>
+             RELATIONSHIP<br/>
+             {order.clientsdata.split('|')[17]}<br/>
+             <br/>
+             PURPOSE<br/>
+             {order.clientsdata.split('|')[19]}<br/>
+             <br/>
+             COPY_REQ<br/>
+             {order.clientsdata.split('|')[21]}<br/>
+             <br/>
+             MONTH<br/>
+             {order.clientsdata.split('|')[23]}<br/>
+             <br/>
+             DAY<br/>
+             {order.clientsdata.split('|')[25]}<br/>
+             <br/>
+             YEAR<br/>
+             {order.clientsdata.split('|')[27]}<br/>
+             <br/>
+           </div>
+          </ul>
         })}
       </div>
 	)
