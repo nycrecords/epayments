@@ -71,7 +71,7 @@ var App = React.createClass({
         var datereceivedend = order.datereceivedend;
         console.log(datereceivedstart);
         console.log(datereceivedend);
-        if (datereceivedstart > datereceivedend) {
+        if (Date.parse(datereceivedstart) > Date.parse(datereceivedend)) {
             alert("Invalid Date Range: 'Date Received - Start' cannot be after 'Date Received - End'.")
         }
         this.serverRequest = $.ajax({
@@ -98,7 +98,8 @@ var App = React.createClass({
                     }
                 }
                 this.setState({uniqueOrders: allUniqueOrders});
-                console.log(this.state.order)
+                console.log(this.state.order);
+                console.log(data.orders);
             }.bind(this),
             error: function (xhr, status, err) {
                 console.error(this.props.url, status, err.toString());
@@ -137,7 +138,7 @@ var Header = React.createClass({
             </header>
         )
     }
-})
+});
 
 /*
  OrderForm
@@ -333,12 +334,12 @@ var Order = React.createClass({
                         <input type="submit" name="submit" value="Print" onClick={this.printOrders}/>
                     </li>
                     {this.props.order.map(function (order) {
-                        return <li key={order.suborderno}>
-                            Order #: {order.clientid}<br/>
-                            Suborder #: {order.suborderno}<br/>
-                            Order Type: {order.clientagencyname}<br/>
-                            Billing Name: {order.billingname}<br/>
-                            Date Received: {(order.datereceived).substr(0, 10)}<br/>
+                        return <li key={order.SubOrderNo}>
+                            Order #: {order.ClientID}<br/>
+                            Suborder #: {order.SubOrderNo}<br/>
+                            Order Type: {order.ClientAgencyName}<br/>
+                            Billing Name: {order.BillingName}<br/>
+                            Date Received: {(order.DateReceived).substr(0, 10)}<br/>
                         </li>
                     })}
                 </ul>
