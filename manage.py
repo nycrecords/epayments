@@ -1,7 +1,15 @@
 import os
+from app import create_app, db
+from app.models import Order
+from flask.ext.script import Manager, Shell
+from flask.ext.migrate import Migrate, MigrateCommand
+from flask.ext.sqlalchemy import SQLAlchemy
+
+
 COV = None
 if os.environ.get('FLASK_COVERAGE'):
     import coverage
+
     COV = coverage.coverage(branch=True, include='app/*')
     COV.start()
 
@@ -11,12 +19,6 @@ if os.path.exists('.env'):
         var = line.strip().split('=')
         if len(var) == 2:
             os.environ[var[0]] = var[1]
-
-from app import create_app, db
-from app.models import Order
-from flask.ext.script import Manager, Shell
-from flask.ext.migrate import Migrate, MigrateCommand
-from flask.ext.sqlalchemy import SQLAlchemy
 
 app = create_app(os.getenv('FLASK_CONFIG') or 'default')
 app.config['SQLALCHEMY_DATABASE_URI'] = os.environ['DATABASE_URL']
@@ -28,6 +30,7 @@ migrate = Migrate(app, db)
 def make_shell_context():
     """Create the shell context for the Flask application."""
     return dict(app=app, db=db, Order=Order)
+
 
 manager.add_command('shell', Shell(make_context=make_shell_context))
 manager.add_command('db', MigrateCommand)

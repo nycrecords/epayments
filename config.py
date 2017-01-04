@@ -13,16 +13,16 @@ class Config:
 
 class DevelopmentConfig(Config):
     DEBUG = True
-    SQLALCHEMY_DATABASE_URI = 'postgresql://brandon:@localhost:5432/epayments'
+    SQLALCHEMY_DATABASE_URI = 'postgresql://btang:@localhost:5432/epayments'
 
 
 class TestingConfig(Config):
     TESTING = True
-    SQLALCHEMY_DATABASE_URI = 'postgresql://brandon:@localhost:5432/epayments'
+    SQLALCHEMY_DATABASE_URI = 'postgresql://btang:@localhost:5432/epayments'
 
 
 class ProductionConfig(Config):
-    SQLALCHEMY_DATABASE_URI = 'postgresql://brandon:@localhost:5432/epayments'
+    SQLALCHEMY_DATABASE_URI = 'postgresql://btang:@localhost:5432/epayments'
 
 
 config = {
