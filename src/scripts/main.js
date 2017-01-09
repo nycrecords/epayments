@@ -39,7 +39,7 @@ var App = React.createClass({
         this.serverRequest = $.get(this.props.source, function (result) {
             console.log(result.orders.length);
             for (var i = 0; i < result.orders.length; i++) {
-                (this.state.order).push(result.orders[i])
+                (this.state.order).push(result.orders[i]);
             }
             for (var i = 0; i < result.orders.length; i++) {
                 (this.state.prevDayOrders).push(result.orders[i])
@@ -50,7 +50,8 @@ var App = React.createClass({
                     allUniqueOrders.push(this.state.order[i].orderno)
                 }
             }
-            this.setState({uniqueOrders: allUniqueOrders})
+            this.setState({uniqueOrders: allUniqueOrders});
+            console.log(result.orders[0])
         }.bind(this))
     },
     componentWillUnmount: function () {
@@ -293,33 +294,172 @@ var Inventory = React.createClass({
 
 var Order = React.createClass({
     printOrders: function (event) {
-        var ordernumber = $("#ordernumber").val();
-        var subordernumber = $("#subordernumber").val();
-        var ordertype = $("#ordertype").val();
-        var billingname = $("#billingname").val();
-        var datereceivedstart = $("#datepicker").val();
-        var datereceivedend = $("#datepicker2").val();
-        $.ajax({
-            url: 'http://localhost:5000/printorders',
-            dataType: 'json',
-            type: 'POST',
-            data: {
-                order_number: ordernumber,
-                suborder_number: subordernumber,
-                order_type: ordertype,
-                billing_name: billingname,
-                date_received_start: datereceivedstart,
-                date_received_end: datereceivedend
-            },
-            success: function (data) {
-                console.log(1)
-            }.bind(this),
-            error: function (xhr, status, err) {
-                console.error(this.props.url, status, err.toString());
-            }.bind(this)
-        });
-        console.log(ordernumber);
-        window.open("http://localhost:5000/printorders")
+        for (var i = 0; i < this.props.order.length; i++) {
+            var div = document.createElement('div');
+            div.className = 'separateorder';
+            var order = this.props.order[i];
+            var clientsdata = this.props.order[i].clientsdata.split('|');
+            if (order.clientagencyname == 'Birth Search') {
+                div.innerHTML = order.shiptoname + '<br>' +
+                    'Address: ' + order.shiptostreetadd + ' ' + order.shiptostreetadd2 + ' ' + order.shiptocity + ', ' + order.shiptostate + ' ' + order.shiptozipcode + '<br>' +
+                    '<h3>Birth Search</h3>' +
+                    '<b>Customer Name: ' + order.billingname + '</b><br>' +
+                    '<b>Order Number: ' + order.orderno + '</b><br>' +
+                    '<b>Time of Order: ' + order.datereceived + '</b><br>' +
+                    '<b>Phone: ' + order.shiptophone + '</b><br>' +
+                    '<b>Email: ' + order.customeremail + '</b><br>' + '<br>' +
+                    'SubOrderNo: ' + order.suborderno + '<br><br>' +
+                    '<b>LAST_NAME</b>' + '<br>' + clientsdata[clientsdata.indexOf('LASTNAME') + 1] + '<br><br>' +
+                    '<b>FIRST_NAME</b>' + '<br>' + clientsdata[clientsdata.indexOf('FIRSTNAME') + 1] + '<br><br>' +
+                    '<b>RELATIONSHIP</b>' + '<br>' + clientsdata[clientsdata.indexOf('RELATIONSHIP') + 1] + '<br><br>' +
+                    '<b>PURPOSE</b>' + '<br>' + clientsdata[clientsdata.indexOf('PURPOSE') + 1] + '<br><br>' +
+                    '<b>ADDITIONAL_COPY</b>' + '<br>' + clientsdata[clientsdata.indexOf('ADDITIONAL_COPY') + 1] + '<br><br>' +
+                    '<b>BIRTH_PLACE</b>' + '<br>' + clientsdata[clientsdata.indexOf('BIRTH_PLACE') + 1] + '<br><br>' +
+                    '<b>YEAR_</b>' + '<br>' + clientsdata[clientsdata.indexOf('YEAR_') + 1] + '<br><br>' +
+                    '<b>BOROUGH</b>' + '<br>' + clientsdata[clientsdata.indexOf('BOROUGH') + 1] + '<br><br>' +
+                    '<div class="pagebreak" style="page-break-before: always;}"></div>';
+            }
+            else if (order.clientagencyname == 'Marriage Search') {
+                div.innerHTML = order.shiptoname + '<br>' +
+                    'Address: ' + order.shiptostreetadd + ' ' + order.shiptostreetadd2 + ' ' + order.shiptocity + ', ' + order.shiptostate + ' ' + order.shiptozipcode + '<br>' +
+                    '<h3>Marriage Search</h3>' +
+                    '<b>Customer Name: ' + order.billingname + '</b><br>' +
+                    '<b>Order Number: ' + order.orderno + '</b><br>' +
+                    '<b>Time of Order: ' + order.datereceived + '</b><br>' +
+                    '<b>Phone: ' + order.shiptophone + '</b><br>' +
+                    '<b>Email: ' + order.customeremail + '</b><br>' + '<br>' +
+                    'SubOrderNo: ' + order.suborderno + '<br><br>' +
+                    '<b>LAST_NAME_GROOM</b>' + '<br>' + clientsdata[clientsdata.indexOf('LASTNAME_G') + 1] + '<br><br>' +
+                    '<b>FIRST_NAME_GROOM</b>' + '<br>' + clientsdata[clientsdata.indexOf('FIRSTNAME_G') + 1] + '<br><br>' +
+                    '<b>LAST_NAME_BRIDE</b>' + '<br>' + clientsdata[clientsdata.indexOf('LASTNAME_B') + 1] + '<br><br>' +
+                    '<b>FIRST_NAME_BRIDE</b>' + '<br>' + clientsdata[clientsdata.indexOf('FIRSTNAME_B') + 1] + '<br><br>' +
+                    '<b>RELATIONSHIP</b>' + '<br>' + clientsdata[clientsdata.indexOf('RELATIONSHIP') + 1] + '<br><br>' +
+                    '<b>PURPOSE</b>' + '<br>' + clientsdata[clientsdata.indexOf('PURPOSE') + 1] + '<br><br>' +
+                    '<b>COPY_REQ</b>' + '<br>' + clientsdata[clientsdata.indexOf('COPY_REQ') + 1] + '<br><br>' +
+                    '<b>MONTH</b>' + '<br>' + clientsdata[clientsdata.indexOf('MONTH') + 1] + '<br><br>' +
+                    '<b>DAY</b>' + '<br>' + clientsdata[clientsdata.indexOf('DAY') + 1] + '<br><br>' +
+                    '<b>YEAR</b>' + '<br>' + clientsdata[clientsdata.indexOf('YEAR_') + 1] + '<br><br>' +
+                    '<b>MARRIAGE_PLACE</b>' + '<br>' + clientsdata[clientsdata.indexOf('MARRIAGE_PLACE') + 1] + '<br><br>' +
+                    '<b>BOROUGH</b>' + '<br>' + clientsdata[clientsdata.indexOf('BOROUGH') + 1] + '<br><br>' +
+                    '<div class="pagebreak" style="page-break-before: always;}"></div>';
+            }
+            else if (order.clientagencyname == 'Death Search') {
+                div.innerHTML = order.shiptoname + '<br>' +
+                    'Address: ' + order.shiptostreetadd + ' ' + order.shiptostreetadd2 + ' ' + order.shiptocity + ', ' + order.shiptostate + ' ' + order.shiptozipcode + '<br>' +
+                    '<h3>Death Search</h3>' +
+                    '<b>Customer Name: ' + order.billingname + '</b><br>' +
+                    '<b>Order Number: ' + order.orderno + '</b><br>' +
+                    '<b>Time of Order: ' + order.datereceived + '</b><br>' +
+                    '<b>Phone: ' + order.shiptophone + '</b><br>' +
+                    '<b>Email: ' + order.customeremail + '</b><br>' + '<br>' +
+                    'SubOrderNo: ' + order.suborderno + '<br><br>' +
+                    '<b>LAST_NAME</b>' + '<br>' + clientsdata[clientsdata.indexOf('LASTNAME') + 1] + '<br><br>' +
+                    '<b>FIRST_NAME</b>' + '<br>' + clientsdata[clientsdata.indexOf('FIRSTNAME') + 1] + '<br><br>' +
+                    '<b>RELATIONSHIP</b>' + '<br>' + clientsdata[clientsdata.indexOf('RELATIONSHIP') + 1] + '<br><br>' +
+                    '<b>COPY_REQ</b>' + '<br>' + clientsdata[clientsdata.indexOf('COPY_REQ') + 1] + '<br><br>' +
+                    '<b>ADD_COMMENT</b>' + '<br>' + clientsdata[clientsdata.indexOf('ADD_COMMENT') + 1] + '<br><br>' +
+                    '<b>YEAR</b>' + '<br>' + clientsdata[clientsdata.indexOf('YEAR_') + 1] + '<br><br>' +
+                    '<b>CERTIFICATE_NUMBER</b>' + '<br>' + clientsdata[clientsdata.indexOf('CERTIFICATE_NUMBER') + 1] + '<br><br>' +
+                    '<b>BOROUGH</b>' + '<br>' + clientsdata[clientsdata.indexOf('BOROUGH') + 1] + '<br><br>' +
+                    '<div class="pagebreak" style="page-break-before: always;}"></div>';
+            }
+            else if (order.clientagencyname == 'Birth Cert') {
+                div.innerHTML = order.shiptoname + '<br>' +
+                    'Address: ' + order.shiptostreetadd + ' ' + order.shiptostreetadd2 + ' ' + order.shiptocity + ', ' + order.shiptostate + ' ' + order.shiptozipcode + '<br>' +
+                    '<h3>Birth Cert</h3>' +
+                    '<b>Customer Name: ' + order.billingname + '</b><br>' +
+                    '<b>Order Number: ' + order.orderno + '</b><br>' +
+                    '<b>Time of Order: ' + order.datereceived + '</b><br>' +
+                    '<b>Phone: ' + order.shiptophone + '</b><br>' +
+                    '<b>Email: ' + order.customeremail + '</b><br>' + '<br>' +
+                    'SubOrderNo: ' + order.suborderno + '<br><br>' +
+                    '<b>CERTIFICATE_NUMBER</b>' + '<br>' + clientsdata[clientsdata.indexOf('CERTIFICATE_NUMBER') + 1] + '<br><br>' +
+                    '<b>GENDER</b>' + '<br>' + clientsdata[clientsdata.indexOf('GENDER') + 1] + '<br><br>' +
+                    '<b>LAST_NAME</b>' + '<br>' + clientsdata[clientsdata.indexOf('LASTNAME') + 1] + '<br><br>' +
+                    '<b>FIRST_NAME</b>' + '<br>' + clientsdata[clientsdata.indexOf('FIRSTNAME') + 1] + '<br><br>' +
+                    '<b>FATHER_NAME</b>' + '<br>' + clientsdata[clientsdata.indexOf('FATHER_NAME') + 1] + '<br><br>' +
+                    '<b>MOTHER_NAME</b>' + '<br>' + clientsdata[clientsdata.indexOf('MOTHER_NAME') + 1] + '<br><br>' +
+                    '<b>RELATIONSHIP</b>' + '<br>' + clientsdata[clientsdata.indexOf('RELATIONSHIP') + 1] + '<br><br>' +
+                    '<b>PURPOSE</b>' + '<br>' + clientsdata[clientsdata.indexOf('PURPOSE') + 1] + '<br><br>' +
+                    '<b>ADDITIONAL_COPY</b>' + '<br>' + clientsdata[clientsdata.indexOf('ADDITIONAL_COPY') + 1] + '<br><br>' +
+                    '<b>MONTH</b>' + '<br>' + clientsdata[clientsdata.indexOf('MONTH') + 1] + '<br><br>' +
+                    '<b>DAY</b>' + '<br>' + clientsdata[clientsdata.indexOf('DAY') + 1] + '<br><br>' +
+                    '<b>YEAR</b>' + '<br>' + clientsdata[clientsdata.indexOf('YEAR1') + 1] + '<br><br>' +
+                    '<b>BIRTH_PLACE</b>' + '<br>' + clientsdata[clientsdata.indexOf('BIRTH_PLACE') + 1] + '<br><br>' +
+                    '<b>BOROUGH</b>' + '<br>' + clientsdata[clientsdata.indexOf('BOROUGH') + 1] + '<br><br>' +
+                    '<div class="pagebreak" style="page-break-before: always;}"></div>';
+            }
+            else if (order.clientagencyname == 'Death Cert') {
+                div.innerHTML = order.shiptoname + '<br>' +
+                    'Address: ' + order.shiptostreetadd + ' ' + order.shiptostreetadd2 + ' ' + order.shiptocity + ', ' + order.shiptostate + ' ' + order.shiptozipcode + '<br>' +
+                    '<h3>Death Cert</h3>' +
+                    '<b>Customer Name: ' + order.billingname + '</b><br>' +
+                    '<b>Order Number: ' + order.orderno + '</b><br>' +
+                    '<b>Time of Order: ' + order.datereceived + '</b><br>' +
+                    '<b>Phone: ' + order.shiptophone + '</b><br>' +
+                    '<b>Email: ' + order.customeremail + '</b><br>' + '<br>' +
+                    'SubOrderNo: ' + order.suborderno + '<br><br>' +
+                    '<b>LAST_NAME</b>' + '<br>' + clientsdata[clientsdata.indexOf('LASTNAME') + 1] + '<br><br>' +
+                    '<b>FIRST_NAME</b>' + '<br>' + clientsdata[clientsdata.indexOf('FIRSTNAME') + 1] + '<br><br>' +
+                    '<b>RELATIONSHIP</b>' + '<br>' + clientsdata[clientsdata.indexOf('RELATIONSHIP') + 1] + '<br><br>' +
+                    '<b>PURPOSE</b>' + '<br>' + clientsdata[clientsdata.indexOf('PURPOSE') + 1] + '<br><br>' +
+                    '<b>COPY_REQ</b>' + '<br>' + clientsdata[clientsdata.indexOf('COPY_REQ') + 1] + '<br><br>' +
+                    '<b>MONTH</b>' + '<br>' + clientsdata[clientsdata.indexOf('MONTH') + 1] + '<br><br>' +
+                    '<b>DAY</b>' + '<br>' + clientsdata[clientsdata.indexOf('DAY') + 1] + '<br><br>' +
+                    '<b>YEAR</b>' + '<br>' + clientsdata[clientsdata.indexOf('YEAR') + 1] + '<br><br>' +
+                    '<b>CERTIFICATE_NUMBER</b>' + '<br>' + clientsdata[clientsdata.indexOf('CERTIFICATE_NUMBER') + 1] + '<br><br>' +
+                    '<b>BOROUGH</b>' + '<br>' + clientsdata[clientsdata.indexOf('BOROUGH') + 1] + '<br><br>' +
+                    '<div class="pagebreak" style="page-break-before: always;}"></div>';
+            }
+            else if (order.clientagencyname == 'Marriage Cert') {
+                div.innerHTML = order.shiptoname + '<br>' +
+                    'Address: ' + order.shiptostreetadd + ' ' + order.shiptostreetadd2 + ' ' + order.shiptocity + ', ' + order.shiptostate + ' ' + order.shiptozipcode + '<br>' +
+                    '<h3>Marriage Cert</h3>' +
+                    '<b>Customer Name: ' + order.billingname + '</b><br>' +
+                    '<b>Order Number: ' + order.orderno + '</b><br>' +
+                    '<b>Time of Order: ' + order.datereceived + '</b><br>' +
+                    '<b>Phone: ' + order.shiptophone + '</b><br>' +
+                    '<b>Email: ' + order.customeremail + '</b><br>' + '<br>' +
+                    'SubOrderNo: ' + order.suborderno + '<br><br>' +
+                    '<b>LAST_NAME_GROOM</b>' + '<br>' + clientsdata[clientsdata.indexOf('LASTNAME_G') + 1] + '<br><br>' +
+                    '<b>LAST_NAME_BRIDE</b>' + '<br>' + clientsdata[clientsdata.indexOf('LASTNAME_B') + 1] + '<br><br>' +
+                    '<b>COPY_REQ</b>' + '<br>' + clientsdata[clientsdata.indexOf('COPY_REQ') + 1] + '<br><br>' +
+                    '<b>YEAR</b>' + '<br>' + clientsdata[clientsdata.indexOf('YEAR') + 1] + '<br><br>' +
+                    '<b>CERTIFICATE_NUMBER</b>' + '<br>' + clientsdata[clientsdata.indexOf('CERTIFICATE_NUMBER') + 1] + '<br><br>' +
+                    '<b>BOROUGH</b>' + '<br>' + clientsdata[clientsdata.indexOf('BOROUGH') + 1] + '<br><br>' +
+                    '<div class="pagebreak" style="page-break-before: always;}"></div>';
+            }
+            document.getElementById('printorders').appendChild(div);
+        }
+        // var ordernumber = $("#ordernumber").val();
+        // var subordernumber = $("#subordernumber").val();
+        // var ordertype = $("#ordertype").val();
+        // var billingname = $("#billingname").val();
+        // var datereceivedstart = $("#datepicker").val();
+        // var datereceivedend = $("#datepicker2").val();
+        // $.ajax({
+        //     url: 'http://localhost:5000/printorders',
+        //     dataType: 'json',
+        //     type: 'POST',
+        //     data: {
+        //         order_number: ordernumber,
+        //         suborder_number: subordernumber,
+        //         order_type: ordertype,
+        //         billing_name: billingname,
+        //         date_received_start: datereceivedstart,
+        //         date_received_end: datereceivedend
+        //     },
+        //     success: function (data) {
+        //         console.log(1)
+        //     }.bind(this),
+        //     error: function (xhr, status, err) {
+        //         console.error(this.props.url, status, err.toString());
+        //     }.bind(this)
+        // });
+        var w = window.open();
+        w.document.write(document.getElementById('printorders').innerHTML);
+        w.print();
+        w.close();
     },
     render: function () {
         return (
