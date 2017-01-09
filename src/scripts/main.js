@@ -58,20 +58,15 @@ var App = React.createClass({
         this.serverRequest.abort()
     },
     filterOrder: function (order) {
-        console.log(order);
         this.state.order = [];
         var dateRangeOrders = [];
         var allUniqueOrders = [];
-        console.log(this.state.order);
-        console.log(this.state.prevDayOrders);
         var ordernumber = order.ordernumber;
         var subordernumber = order.subordernumber;
         var ordertype = order.ordertype;
         var billingname = order.billingname;
         var datereceivedstart = order.datereceivedstart;
         var datereceivedend = order.datereceivedend;
-        console.log(datereceivedstart);
-        console.log(datereceivedend);
         if (Date.parse(datereceivedstart) > Date.parse(datereceivedend)) {
             alert("Invalid Date Range: 'Date Received - Start' cannot be after 'Date Received - End'.")
         }
@@ -88,7 +83,6 @@ var App = React.createClass({
                 date_received_end: datereceivedend
             },
             success: function (data) {
-                console.log(data.orders);
                 for (var i = 0; i < data.orders.length; i++) {
                     dateRangeOrders.push(data.orders[i])
                 }
@@ -99,8 +93,6 @@ var App = React.createClass({
                     }
                 }
                 this.setState({uniqueOrders: allUniqueOrders});
-                console.log(this.state.order);
-                console.log(data.orders);
             }.bind(this),
             error: function (xhr, status, err) {
                 console.error(this.props.url, status, err.toString());
