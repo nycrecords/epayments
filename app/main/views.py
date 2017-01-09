@@ -19,7 +19,7 @@ def printorders():
     """Printing page for orders from application."""
     # TODO: Filter orders for printing into an array
     orderfilters = request.json
-    print(orderfilters)
+    print('Printing Orders: ', orderfilters)
     return render_template('printorders.html')
 
 

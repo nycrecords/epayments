@@ -334,12 +334,12 @@ var Order = React.createClass({
                         <input type="submit" name="submit" value="Print" onClick={this.printOrders}/>
                     </li>
                     {this.props.order.map(function (order) {
-                        return <li key={order.SubOrderNo}>
-                            Order #: {order.ClientID}<br/>
-                            Suborder #: {order.SubOrderNo}<br/>
-                            Order Type: {order.ClientAgencyName}<br/>
-                            Billing Name: {order.BillingName}<br/>
-                            Date Received: {(order.DateReceived).substr(0, 10)}<br/>
+                        return <li key={order.orderno}>
+                            Order #: {order.clientid}<br/>
+                            Suborder #: {order.suborderno}<br/>
+                            Order Type: {order.clientagencyname}<br/>
+                            Billing Name: {order.billingname}<br/>
+                            Date Received: {(order.datereceived).substr(0, 10)}<br/>
                         </li>
                     })}
                 </ul>
