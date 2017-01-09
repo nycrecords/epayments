@@ -427,7 +427,7 @@ var Order = React.createClass({
                     '<b>YEAR</b>' + '<br>' + clientsdata[clientsdata.indexOf('YEAR') + 1] + '<br><br>' +
                     '<b>CERTIFICATE_NUMBER</b>' + '<br>' + clientsdata[clientsdata.indexOf('CERTIFICATE_NUMBER') + 1] + '<br><br>' +
                     '<b>BOROUGH</b>' + '<br>' + clientsdata[clientsdata.indexOf('BOROUGH') + 1] + '<br><br>' +
-                    '<div class="pagebreak" style="page-break-before: always;}"></div>';
+                    '<div class="pagebreak" style="page-break-after: always;}"></div>';
             }
             document.getElementById('printorders').appendChild(div);
         }
