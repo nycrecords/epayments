@@ -431,35 +431,10 @@ var Order = React.createClass({
             }
             document.getElementById('printorders').appendChild(div);
         }
-        // var ordernumber = $("#ordernumber").val();
-        // var subordernumber = $("#subordernumber").val();
-        // var ordertype = $("#ordertype").val();
-        // var billingname = $("#billingname").val();
-        // var datereceivedstart = $("#datepicker").val();
-        // var datereceivedend = $("#datepicker2").val();
-        // $.ajax({
-        //     url: 'http://localhost:5000/printorders',
-        //     dataType: 'json',
-        //     type: 'POST',
-        //     data: {
-        //         order_number: ordernumber,
-        //         suborder_number: subordernumber,
-        //         order_type: ordertype,
-        //         billing_name: billingname,
-        //         date_received_start: datereceivedstart,
-        //         date_received_end: datereceivedend
-        //     },
-        //     success: function (data) {
-        //         console.log(1)
-        //     }.bind(this),
-        //     error: function (xhr, status, err) {
-        //         console.error(this.props.url, status, err.toString());
-        //     }.bind(this)
-        // });
-        var w = window.open();
-        w.document.write(document.getElementById('printorders').innerHTML);
-        w.print();
-        w.close();
+        var orderpage = window.open();
+        orderpage.document.write(document.getElementById('printorders').innerHTML);
+        orderpage.print();
+        document.getElementById('printorders').innerHTML = "";
     },
     render: function () {
         return (
