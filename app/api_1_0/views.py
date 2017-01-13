@@ -176,6 +176,8 @@ def get_orders_by_fields_dict(orders, order_number, suborder_number, order_type,
 def get_orders_by_fields(order_number, suborder_number, order_type, billing_name, date_received_start,
                          date_received_end):
     """Filters orders by fields received."""
+    vitalrecordslist = {'Birth search', 'Birth cert', 'Marriage search', 'Marriage cert', 'Death search', 'Death cert'}
+    photolist = {'tax photo', 'online gallery'}
     yesterday = datetime.strptime(date.today().strftime("%Y-%m-%d %H:%M:%S"), "%Y-%m-%d %H:%M:%S")
     if len(date_received_start) < 1:
         date_received_start = yesterday
@@ -186,10 +188,16 @@ def get_orders_by_fields(order_number, suborder_number, order_type, billing_name
         orders = orders.filter(Order.clientid == order_number)
     if len(suborder_number) != 0:
         orders = orders.filter(Order.suborderno == suborder_number)
-    if len(order_type) != 4 and order_type != 'All' and order_type != 'multitems':
-        orders = orders.filter(Order.clientagencyname == order_type)
     if len(billing_name) != 0:
         orders = orders.filter(func.lower(Order.billingname).contains(func.lower(billing_name)))
+    if len(order_type) != 4 and order_type not in ['All', 'multipleitems', 'vitalrecordsphotos']:
+        orders = orders.filter(Order.clientagencyname == order_type)
+    elif order_type == 'multipleitems':
+        orders = [order for order in orders if len(order.ordertypes.split(',')) > 1]
+    elif order_type == 'vitalrecordsphotos':
+        orders = [order for order in orders if
+                  not set(order.ordertypes.split(',')).isdisjoint(vitalrecordslist) and not set(order.ordertypes.split(
+                      ',')).isdisjoint(photolist)]
     order_list = [order.serialize for order in orders]
     return order_list
 

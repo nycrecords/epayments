@@ -97,7 +97,7 @@ function buildScript (file, watch) {
 }
 
 gulp.task('scripts', function () {
-  return buildScript('print.js', true); // this will run once because we set watch to false
+  return buildScript('main.js', true); // this will run once because we set watch to false
 });
 
 // run 'scripts' task first, then watch for future changes
