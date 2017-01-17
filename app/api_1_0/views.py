@@ -179,6 +179,7 @@ def get_orders_by_fields(order_number, suborder_number, order_type, billing_name
     vitalrecordslist = {'Birth search', 'Birth cert', 'Marriage search', 'Marriage cert', 'Death search', 'Death cert'}
     photolist = {'tax photo', 'online gallery'}
     yesterday = datetime.strptime(date.today().strftime("%Y-%m-%d %H:%M:%S"), "%Y-%m-%d %H:%M:%S") - timedelta(4)
+    # print(yesterday)
     if len(date_received_start) < 1:
         date_received_start = yesterday
     if len(date_received_end) < 1:
