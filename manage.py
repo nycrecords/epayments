@@ -72,7 +72,7 @@ manager.add_command('db', MigrateCommand)
 #     """Run deployment tasks."""
 #     from flask.ext.migrate import upgrade
 #     from app.models import Order
-# 
+#
 #     # migrate database to the latest revision
 #     upgrade()
 
@@ -91,6 +91,4 @@ def create_db():
 
 
 if __name__ == '__main__':
-    port = int(os.environ.get('PORT', 5000))
-    app.run(host='0.0.0.0', port=port)
-    # manager.run()
+    manager.run()
