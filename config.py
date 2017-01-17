@@ -6,13 +6,14 @@ class Config:
     # SECRET_KEY = os.environ.get('SECRET_KEY')
     # SQLALCHEMY_COMMIT_ON_TEARDOWN = os.environ.get('SQLALCHEMY_COMMIT_ON_TEARDOWN')
     DATABASE_URL = os.environ.get('DATABASE_URL')
-    SQLALCHEMY_DATABASE_URI = os.environ.get('SQLALCHEMY_DATABASE_URI')
+    # SQLALCHEMY_DATABASE_URI = os.environ.get('SQLALCHEMY_DATABASE_URI') # Uncomment for Heroku
 
     @staticmethod
     def init_app(app):
         pass
 
 
+# Heroku Config Vars
 class DevelopmentConfig(Config):
     DEBUG = True
 
@@ -25,6 +26,7 @@ class ProductionConfig(Config):
     pass
 
 
+# localhost Config Vars
 # class DevelopmentConfig(Config):
 #     DEBUG = True
 #     SQLALCHEMY_DATABASE_URI = 'postgresql://btang:@localhost:5432/epayments'
