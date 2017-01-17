@@ -6,6 +6,7 @@ class Config:
     # SECRET_KEY = os.environ.get('SECRET_KEY')
     # SQLALCHEMY_COMMIT_ON_TEARDOWN = os.environ.get('SQLALCHEMY_COMMIT_ON_TEARDOWN')
     DATABASE_URL = os.environ.get('DATABASE_URL')
+    SQLALCHEMY_DATABASE_URI = os.environ.get('SQLALCHEMY_DATABASE_URI')
 
     @staticmethod
     def init_app(app):
