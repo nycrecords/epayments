@@ -5,11 +5,8 @@
     <title>ePayments</title>
     <link href='http://fonts.googleapis.com/css?family=Open+Sans+Condensed:300|Open+Sans' rel='stylesheet'
           type='text/css'>
-{#    <link rel="stylesheet" href="http://localhost:5000/static/css/style.css">#}
     <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
-{#    <link rel="shortcut icon" href="http://localhost:5000/static/css/images/nycgov.ico" type="image/x-icon">#}
     <link rel="shortcut icon" type="image/x-icon" href="{{ url_for('static', filename='css/images/nycgov.ico') }}">
-{#    <link rel="icon" href="http://localhost:5000/static/css/images/nycgov.ico" type="image/x-icon">#}
     <link rel="icon" href="{{ url_for('static', filename='css/images/nycgov.ico') }}" type="image/x-icon">
     <link rel="stylesheet" href="//code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css">
     <script src="//code.jquery.com/jquery-1.10.2.js"></script>
@@ -57,7 +54,6 @@
     <!-- This is where our orders to print will go -->
 </div>
 
-{#<script src="http://localhost:5000/static/scripts/main.js"></script>#}
 <script src="{{ url_for('static', filename='scripts/main.js') }}"></script>
 <script type="text/javascript">
     function TasksViewModel() {
