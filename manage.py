@@ -3,26 +3,26 @@ from app import create_app, db
 from app.models import Order
 from flask.ext.script import Manager, Shell
 from flask.ext.migrate import Migrate, MigrateCommand
-from flask.ext.sqlalchemy import SQLAlchemy
+# from flask.ext.sqlalchemy import SQLAlchemy
 
 
-COV = None
-if os.environ.get('FLASK_COVERAGE'):
-    import coverage
-
-    COV = coverage.coverage(branch=True, include='app/*')
-    COV.start()
-
-if os.path.exists('.env'):
-    print('Importing environment from .env...')
-    for line in open('.env'):
-        var = line.strip().split('=')
-        if len(var) == 2:
-            os.environ[var[0]] = var[1]
+# COV = None
+# if os.environ.get('FLASK_COVERAGE'):
+#     import coverage
+#
+#     COV = coverage.coverage(branch=True, include='app/*')
+#     COV.start()
+#
+# if os.path.exists('.env'):
+#     print('Importing environment from .env...')
+#     for line in open('.env'):
+#         var = line.strip().split('=')
+#         if len(var) == 2:
+#             os.environ[var[0]] = var[1]
 
 app = create_app(os.getenv('FLASK_CONFIG') or 'default')
-app.config['SQLALCHEMY_DATABASE_URI'] = os.environ['DATABASE_URL']
-db = SQLAlchemy(app)
+# app.config['SQLALCHEMY_DATABASE_URI'] = os.environ['DATABASE_URL']
+# db = SQLAlchemy(app)
 manager = Manager(app)
 migrate = Migrate(app, db)
 
@@ -91,6 +91,6 @@ def create_db():
 
 
 if __name__ == '__main__':
-    port = int(os.environ.get('PORT', 5000))
-    app.run(host='0.0.0.0', port=port)
-    # manager.run(host='0.0.0.0', port=port)
+    # port = int(os.environ.get('PORT', 5000))
+    # app.run(host='0.0.0.0', port=port)
+    manager.run()
