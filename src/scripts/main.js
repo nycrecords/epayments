@@ -45,8 +45,8 @@ var App = React.createClass({
             }
             var allUniqueOrders = [];
             for (var i = 0; i < this.state.order.length; i++) {
-                if (allUniqueOrders.indexOf(this.state.order[i].orderno) === -1) {
-                    allUniqueOrders.push(this.state.order[i].orderno)
+                if (allUniqueOrders.indexOf(this.state.order[i].clientid) === -1) {
+                    allUniqueOrders.push(this.state.order[i].clientid)
                 }
             }
             this.setState({uniqueOrders: allUniqueOrders});
@@ -86,8 +86,8 @@ var App = React.createClass({
                 }
                 this.setState({order: dateRangeOrders});
                 for (var i = 0; i < this.state.order.length; i++) {
-                    if (allUniqueOrders.indexOf(this.state.order[i].orderno) === -1) {
-                        allUniqueOrders.push(this.state.order[i].orderno)
+                    if (allUniqueOrders.indexOf(this.state.order[i].clientid) === -1) {
+                        allUniqueOrders.push(this.state.order[i].clientid)
                     }
                 }
                 this.setState({uniqueOrders: allUniqueOrders});
