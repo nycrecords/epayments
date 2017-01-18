@@ -37,7 +37,6 @@ var App = React.createClass({
     },
     componentDidMount: function () {
         this.serverRequest = $.get(this.props.source, function (result) {
-            console.log(result.orders.length);
             for (var i = 0; i < result.orders.length; i++) {
                 (this.state.order).push(result.orders[i]);
             }
@@ -51,7 +50,6 @@ var App = React.createClass({
                 }
             }
             this.setState({uniqueOrders: allUniqueOrders});
-            console.log(result.orders[0])
         }.bind(this))
     },
     componentWillUnmount: function () {

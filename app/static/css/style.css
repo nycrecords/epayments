@@ -279,18 +279,6 @@ header.top h3 span {
   padding-left: 1rem;
   padding-right: 1rem;
 }
-/*header.top h3:before,*/
-/*header.top h3:after {*/
-  /*display: block;*/
-  /*z-index: 1;*/
-  /*background: #000;*/
-  /*position: absolute;*/
-  /*width: 130%;*/
-  /*height: 1px;*/
-  /*content: '';*/
-  /*top: 5px;*/
-  /*margin-left: -15%;*/
-/*}*/
 header.top h3:after {
   top: auto;
   bottom: 7px;

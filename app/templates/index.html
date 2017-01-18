@@ -19,29 +19,6 @@
             $("#datepicker2").datepicker();
         });
     </script>
-    <script type="text/javascript">
-        function send() {
-            var orderfilters = {
-                ordernumber: $("#ordernumber").val(),
-                subordernumber: $("#subordernumber").val(),
-                ordertype: $("#ordertype").val(),
-                billingname: $("#billingname").val(),
-                datereceivedstart: $("#datepicker").val(),
-                datereceivedend: $("#datepicker2").val()
-            };
-
-            $.ajax({
-                url: 'http://localhost:5000/printorders',
-                type: 'post',
-                dataType: 'application/json',
-                success: function (data) {
-                    console.log(1);
-                    console.log(orderfilters)
-                },
-                data: orderfilters
-            });
-        }
-    </script>
 </head>
 <body>
 
