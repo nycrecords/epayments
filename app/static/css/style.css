@@ -279,18 +279,18 @@ header.top h3 span {
   padding-left: 1rem;
   padding-right: 1rem;
 }
-header.top h3:before,
-header.top h3:after {
-  display: block;
-  z-index: 1;
-  background: #000;
-  position: absolute;
-  width: 130%;
-  height: 1px;
-  content: '';
-  top: 5px;
-  margin-left: -15%;
-}
+/*header.top h3:before,*/
+/*header.top h3:after {*/
+  /*display: block;*/
+  /*z-index: 1;*/
+  /*background: #000;*/
+  /*position: absolute;*/
+  /*width: 130%;*/
+  /*height: 1px;*/
+  /*content: '';*/
+  /*top: 5px;*/
+  /*margin-left: -15%;*/
+/*}*/
 header.top h3:after {
   top: auto;
   bottom: 7px;
@@ -313,7 +313,7 @@ header.top h3:after {
       -ms-flex: 1 4 auto;
           flex: 1 4 auto;
   padding: 2rem;
-  border: 5px double #1a1a1a;
+  border: 2px solid #1a1a1a;
   position: relative;
   background: #fff;
   -webkit-transition: all 0.3s;
@@ -397,8 +397,8 @@ ul.order li button {
 }
 ul.order li.total {
   font-weight: 600;
-  border-bottom: 3px solid #000;
-  border-top: 3px double #000;
+  border-bottom: 2px solid #000;
+  border-top: 2px solid #000;
 }
 ul.order li.unavailable {
   text-decoration: line-through;

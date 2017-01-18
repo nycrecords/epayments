@@ -6,7 +6,7 @@ class Config:
     # SECRET_KEY = os.environ.get('SECRET_KEY')
     # SQLALCHEMY_COMMIT_ON_TEARDOWN = os.environ.get('SQLALCHEMY_COMMIT_ON_TEARDOWN')
     DATABASE_URL = os.environ.get('DATABASE_URL')
-    # SQLALCHEMY_DATABASE_URI = os.environ.get('SQLALCHEMY_DATABASE_URI') # Uncomment for Heroku
+    SQLALCHEMY_DATABASE_URI = os.environ.get('SQLALCHEMY_DATABASE_URI') # Uncomment for Heroku
 
     @staticmethod
     def init_app(app):
