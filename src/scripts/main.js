@@ -374,7 +374,7 @@ var Order = React.createClass({
                 if (clientsdata.includes('ADD_COMMENT')) {
                     var addcomment = '<b>ADD_COMMENT</b>' + '<br>' + clientsdata[clientsdata.indexOf('ADD_COMMENT') + 1] + '<br><br>';
                 } else {
-                    var addcomment = '';
+                    var addcomment = '<b>ADD_COMMENT</b>' + '<br>' + 'N/A' + '<br><br>';
                 }
                 div.innerHTML = order.shiptoname + '<br>' +
                     'Address: ' + address + ' ' + order.shiptocity + ', ' + order.shiptostate + ' ' + order.shiptozipcode + '<br>' +
@@ -397,27 +397,27 @@ var Order = React.createClass({
                 if (clientsdata.includes('FATHER_NAME')) {
                     var fathername = '<b>FATHER_NAME</b>' + '<br>' + clientsdata[clientsdata.indexOf('FATHER_NAME') + 1] + '<br><br>';
                 } else {
-                    var fathername = '<b>FATHER_NAME</b>' + '<br>' + 'Unknown' + '<br><br>';
+                    var fathername = '<b>FATHER_NAME</b>' + '<br>' + 'N/A' + '<br><br>';
                 }
                 if (clientsdata.includes('MOTHER_NAME')) {
                     var mothername = '<b>MOTHER_NAME</b>' + '<br>' + clientsdata[clientsdata.indexOf('MOTHER_NAME') + 1] + '<br><br>';
                 } else {
-                    var mothername = '<b>MOTHER_NAME</b>' + '<br>' + 'Unknown' + '<br><br>';
+                    var mothername = '<b>MOTHER_NAME</b>' + '<br>' + 'N/A' + '<br><br>';
                 }
                 if (clientsdata.includes('BIRTH_PLACE')) {
                     var birthplace = '<b>BIRTH_PLACE</b>' + '<br>' + clientsdata[clientsdata.indexOf('BIRTH_PLACE') + 1] + '<br><br>';
                 } else {
-                    var birthplace = '';
+                    var birthplace = '<b>BIRTH_PLACE</b>' + '<br>' + 'N/A' + '<br><br>';
                 }
                 if (clientsdata.includes('RELATIONSHIP')) {
                     var relationship = '<b>RELATIONSHIP</b>' + '<br>' + clientsdata[clientsdata.indexOf('RELATIONSHIP') + 1] + '<br><br>';
                 } else {
-                    var relationship = '';
+                    var relationship = '<b>RELATIONSHIP</b>' + '<br>' + 'N/A' + '<br><br>';
                 }
                 if (clientsdata.includes('PURPOSE')) {
                     var purpose = '<b>PURPOSE</b>' + '<br>' + clientsdata[clientsdata.indexOf('PURPOSE') + 1] + '<br><br>';
                 } else {
-                    var purpose = '';
+                    var purpose = '<b>PURPOSE</b>' + '<br>' + 'N/A' + '<br><br>';
                 }
                 div.innerHTML = order.shiptoname + '<br>' +
                     'Address: ' + address + ' ' + order.shiptocity + ', ' + order.shiptostate + ' ' + order.shiptozipcode + '<br>' +
@@ -483,17 +483,17 @@ var Order = React.createClass({
                 if (clientsdata.includes('DESCRIPTION')) {
                     var description = '<b>DESCRIPTION</b>' + '<br>' + clientsdata[clientsdata.indexOf('DESCRIPTION') + 1] + '<br><br>';
                 } else {
-                    var description = '';
+                    var description = '<b>DESCRIPTION</b>' + '<br>' + 'N/A' + '<br><br>';
                 }
                 if (clientsdata.includes('BLOCK')) {
                     var block = '<b>BLOCK</b>' + '<br>' + clientsdata[clientsdata.indexOf('BLOCK') + 1] + '<br><br>';
                 } else {
-                    var block = '';
+                    var block = '<b>BLOCK</b>' + '<br>' + 'N/A' + '<br><br>';
                 }
                 if (clientsdata.includes('LOT')) {
                     var lot = '<b>LOT</b>' + '<br>' + clientsdata[clientsdata.indexOf('LOT') + 1] + '<br><br>';
                 } else {
-                    var lot = '';
+                    var lot = '<b>LOT</b>' + '<br>' + 'N/A' + '<br><br>';
                 }
                 div.innerHTML = order.shiptoname + '<br>' +
                     'Address: ' + address + ' ' + order.shiptocity + ', ' + order.shiptostate + ' ' + order.shiptozipcode + '<br>' +
@@ -517,7 +517,7 @@ var Order = React.createClass({
                 if (clientsdata.includes('ADDITIONAL_DESCRIPTION')) {
                     var additionaldescription = '<b>ADDITIONAL_DESCRIPTION</b>' + '<br>' + clientsdata[clientsdata.indexOf('ADDITIONAL_DESCRIPTION') + 1] + '<br><br>';
                 } else {
-                    var additionaldescription = '';
+                    var additionaldescription = '<b>ADDITIONAL_DESCRIPTION</b>' + '<br>' + 'N/A' + '<br><br>';
                 }
                 div.innerHTML = order.shiptoname + '<br>' +
                     'Address: ' + address + ' ' + order.shiptocity + ', ' + order.shiptostate + ' ' + order.shiptozipcode + '<br>' +
