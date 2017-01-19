@@ -409,6 +409,16 @@ var Order = React.createClass({
                 } else {
                     var birthplace = '';
                 }
+                if (clientsdata.includes('RELATIONSHIP')) {
+                    var relationship = '<b>RELATIONSHIP</b>' + '<br>' + clientsdata[clientsdata.indexOf('RELATIONSHIP') + 1] + '<br><br>';
+                } else {
+                    var relationship = '';
+                }
+                if (clientsdata.includes('PURPOSE')) {
+                    var purpose = '<b>PURPOSE</b>' + '<br>' + clientsdata[clientsdata.indexOf('PURPOSE') + 1] + '<br><br>';
+                } else {
+                    var purpose = '';
+                }
                 div.innerHTML = order.shiptoname + '<br>' +
                     'Address: ' + address + ' ' + order.shiptocity + ', ' + order.shiptostate + ' ' + order.shiptozipcode + '<br>' +
                     '<h3>Birth Cert</h3>' + ordertypes +
@@ -421,9 +431,7 @@ var Order = React.createClass({
                     '<b>CERTIFICATE_NUMBER</b>' + '<br>' + clientsdata[clientsdata.indexOf('CERTIFICATE_NUMBER') + 1] + '<br><br>' +
                     '<b>GENDER</b>' + '<br>' + clientsdata[clientsdata.indexOf('GENDER') + 1] + '<br><br>' +
                     '<b>LAST_NAME</b>' + '<br>' + clientsdata[clientsdata.indexOf('LASTNAME') + 1] + '<br><br>' +
-                    '<b>FIRST_NAME</b>' + '<br>' + clientsdata[clientsdata.indexOf('FIRSTNAME') + 1] + '<br><br>' + fathername + mothername +
-                    '<b>RELATIONSHIP</b>' + '<br>' + clientsdata[clientsdata.indexOf('RELATIONSHIP') + 1] + '<br><br>' +
-                    '<b>PURPOSE</b>' + '<br>' + clientsdata[clientsdata.indexOf('PURPOSE') + 1] + '<br><br>' +
+                    '<b>FIRST_NAME</b>' + '<br>' + clientsdata[clientsdata.indexOf('FIRSTNAME') + 1] + '<br><br>' + fathername + mothername + relationship + purpose +
                     '<b>ADDITIONAL_COPY</b>' + '<br>' + clientsdata[clientsdata.indexOf('ADDITIONAL_COPY') + 1] + '<br><br>' +
                     '<b>MONTH</b>' + '<br>' + clientsdata[clientsdata.indexOf('MONTH') + 1] + '<br><br>' +
                     '<b>DAY</b>' + '<br>' + clientsdata[clientsdata.indexOf('DAY') + 1] + '<br><br>' +
