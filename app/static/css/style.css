@@ -379,7 +379,6 @@ ul.order li:hover button {
 }
 ul.order li button {
   border: 0;
-  display: none;
   line-height: 1;
   padding: 0;
 }

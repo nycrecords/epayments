@@ -34,7 +34,7 @@ def get_orders():
                                       date_received_end)
         return jsonify(orders=orders)
     else:
-        yesterday = datetime.strptime(date.today().strftime("%Y-%m-%d %H:%M:%S"), "%Y-%m-%d %H:%M:%S") - timedelta(5)
+        yesterday = datetime.strptime(date.today().strftime("%Y-%m-%d %H:%M:%S"), "%Y-%m-%d %H:%M:%S") - timedelta(1)
         orders = [order.serialize for order in Order.query.filter_by(datereceived=yesterday).all()]
         return jsonify(orders=orders)
 
@@ -44,7 +44,7 @@ def get_orders_by_fields(order_number, suborder_number, order_type, billing_name
     """Filters orders by fields received."""
     vitalrecordslist = {'Birth search', 'Birth cert', 'Marriage search', 'Marriage cert', 'Death search', 'Death cert'}
     photolist = {'tax photo', 'online gallery'}
-    yesterday = datetime.strptime(date.today().strftime("%Y-%m-%d %H:%M:%S"), "%Y-%m-%d %H:%M:%S") - timedelta(5)
+    yesterday = datetime.strptime(date.today().strftime("%Y-%m-%d %H:%M:%S"), "%Y-%m-%d %H:%M:%S") - timedelta(1)
     if len(date_received_start) < 1:
         date_received_start = yesterday
     if len(date_received_end) < 1:
