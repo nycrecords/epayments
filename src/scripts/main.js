@@ -327,6 +327,11 @@ var Order = React.createClass({
                 ordertypes = '';
             }
             if (order.clientagencyname == 'Birth Search') {
+                if (clientsdata.includes('MIDDLENAME')) {
+                    var middlename = '<b>MIDDLE_NAME</b>' + '<br>' + clientsdata[clientsdata.indexOf('MIDDLENAME') + 1] + '<br><br>';
+                } else {
+                    var middlename = '<b>MIDDLE_NAME</b>' + '<br>' + 'N/A' + '<br><br>';
+                }
                 div.innerHTML = order.shiptoname + '<br>' +
                     'Address: ' + address + ' ' + order.shiptocity + ', ' + order.shiptostate + ' ' + order.shiptozipcode + '<br>' +
                     '<h3>Birth Search</h3>' + ordertypes +
@@ -336,7 +341,7 @@ var Order = React.createClass({
                     '<b>Phone: ' + order.shiptophone + '</b><br>' +
                     '<b>Email: ' + order.customeremail + '</b><br>' +
                     '<b>SubOrderNo: ' + order.suborderno + '</b>' + '<br><br>' +
-                    '<b>LAST_NAME</b>' + '<br>' + clientsdata[clientsdata.indexOf('LASTNAME') + 1] + '<br><br>' +
+                    '<b>LAST_NAME</b>' + '<br>' + clientsdata[clientsdata.indexOf('LASTNAME') + 1] + '<br><br>' + middlename +
                     '<b>FIRST_NAME</b>' + '<br>' + clientsdata[clientsdata.indexOf('FIRSTNAME') + 1] + '<br><br>' +
                     '<b>RELATIONSHIP</b>' + '<br>' + clientsdata[clientsdata.indexOf('RELATIONSHIP') + 1] + '<br><br>' +
                     '<b>PURPOSE</b>' + '<br>' + clientsdata[clientsdata.indexOf('PURPOSE') + 1] + '<br><br>' +
@@ -376,6 +381,11 @@ var Order = React.createClass({
                 } else {
                     var addcomment = '<b>ADD_COMMENT</b>' + '<br>' + 'N/A' + '<br><br>';
                 }
+                if (clientsdata.includes('MIDDLENAME')) {
+                    var middlename = '<b>MIDDLE_NAME</b>' + '<br>' + clientsdata[clientsdata.indexOf('MIDDLENAME') + 1] + '<br><br>';
+                } else {
+                    var middlename = '<b>MIDDLE_NAME</b>' + '<br>' + 'N/A' + '<br><br>';
+                }
                 div.innerHTML = order.shiptoname + '<br>' +
                     'Address: ' + address + ' ' + order.shiptocity + ', ' + order.shiptostate + ' ' + order.shiptozipcode + '<br>' +
                     '<h3>Death Search</h3>' + ordertypes +
@@ -385,7 +395,7 @@ var Order = React.createClass({
                     '<b>Phone: ' + order.shiptophone + '</b><br>' +
                     '<b>Email: ' + order.customeremail + '</b><br>' +
                     '<b>SubOrderNo: ' + order.suborderno + '</b>' + '<br><br>' +
-                    '<b>LAST_NAME</b>' + '<br>' + clientsdata[clientsdata.indexOf('LASTNAME') + 1] + '<br><br>' +
+                    '<b>LAST_NAME</b>' + '<br>' + clientsdata[clientsdata.indexOf('LASTNAME') + 1] + '<br><br>' + middlename +
                     '<b>FIRST_NAME</b>' + '<br>' + clientsdata[clientsdata.indexOf('FIRSTNAME') + 1] + '<br><br>' +
                     '<b>RELATIONSHIP</b>' + '<br>' + clientsdata[clientsdata.indexOf('RELATIONSHIP') + 1] + '<br><br>' +
                     '<b>COPY_REQ</b>' + '<br>' + clientsdata[clientsdata.indexOf('COPY_REQ') + 1] + '<br><br>' + addcomment +
@@ -419,6 +429,11 @@ var Order = React.createClass({
                 } else {
                     var purpose = '<b>PURPOSE</b>' + '<br>' + 'N/A' + '<br><br>';
                 }
+                if (clientsdata.includes('MIDDLENAME')) {
+                    var middlename = '<b>MIDDLE_NAME</b>' + '<br>' + clientsdata[clientsdata.indexOf('MIDDLENAME') + 1] + '<br><br>';
+                } else {
+                    var middlename = '<b>MIDDLE_NAME</b>' + '<br>' + 'N/A' + '<br><br>';
+                }
                 div.innerHTML = order.shiptoname + '<br>' +
                     'Address: ' + address + ' ' + order.shiptocity + ', ' + order.shiptostate + ' ' + order.shiptozipcode + '<br>' +
                     '<h3>Birth Cert</h3>' + ordertypes +
@@ -430,7 +445,7 @@ var Order = React.createClass({
                     '<b>SubOrderNo: ' + order.suborderno + '</b>' + '<br><br>' +
                     '<b>CERTIFICATE_NUMBER</b>' + '<br>' + clientsdata[clientsdata.indexOf('CERTIFICATE_NUMBER') + 1] + '<br><br>' +
                     '<b>GENDER</b>' + '<br>' + clientsdata[clientsdata.indexOf('GENDER') + 1] + '<br><br>' +
-                    '<b>LAST_NAME</b>' + '<br>' + clientsdata[clientsdata.indexOf('LASTNAME') + 1] + '<br><br>' +
+                    '<b>LAST_NAME</b>' + '<br>' + clientsdata[clientsdata.indexOf('LASTNAME') + 1] + '<br><br>' + middlename +
                     '<b>FIRST_NAME</b>' + '<br>' + clientsdata[clientsdata.indexOf('FIRSTNAME') + 1] + '<br><br>' + fathername + mothername + relationship + purpose +
                     '<b>ADDITIONAL_COPY</b>' + '<br>' + clientsdata[clientsdata.indexOf('ADDITIONAL_COPY') + 1] + '<br><br>' +
                     '<b>MONTH</b>' + '<br>' + clientsdata[clientsdata.indexOf('MONTH') + 1] + '<br><br>' +
@@ -440,6 +455,11 @@ var Order = React.createClass({
                     '<div class="pagebreak" style="page-break-after: always;}"></div>';
             }
             else if (order.clientagencyname == 'Death Cert') {
+                if (clientsdata.includes('MIDDLENAME')) {
+                    var middlename = '<b>MIDDLE_NAME</b>' + '<br>' + clientsdata[clientsdata.indexOf('MIDDLENAME') + 1] + '<br><br>';
+                } else {
+                    var middlename = '<b>MIDDLE_NAME</b>' + '<br>' + 'N/A' + '<br><br>';
+                }
                 div.innerHTML = order.shiptoname + '<br>' +
                     'Address: ' + address + ' ' + order.shiptocity + ', ' + order.shiptostate + ' ' + order.shiptozipcode + '<br>' +
                     '<h3>Death Cert</h3>' + ordertypes +
@@ -449,7 +469,7 @@ var Order = React.createClass({
                     '<b>Phone: ' + order.shiptophone + '</b><br>' +
                     '<b>Email: ' + order.customeremail + '</b><br>' +
                     '<b>SubOrderNo: ' + order.suborderno + '</b>' + '<br><br>' +
-                    '<b>LAST_NAME</b>' + '<br>' + clientsdata[clientsdata.indexOf('LASTNAME') + 1] + '<br><br>' +
+                    '<b>LAST_NAME</b>' + '<br>' + clientsdata[clientsdata.indexOf('LASTNAME') + 1] + '<br><br>' + middlename +
                     '<b>FIRST_NAME</b>' + '<br>' + clientsdata[clientsdata.indexOf('FIRSTNAME') + 1] + '<br><br>' +
                     '<b>RELATIONSHIP</b>' + '<br>' + clientsdata[clientsdata.indexOf('RELATIONSHIP') + 1] + '<br><br>' +
                     '<b>PURPOSE</b>' + '<br>' + clientsdata[clientsdata.indexOf('PURPOSE') + 1] + '<br><br>' +
