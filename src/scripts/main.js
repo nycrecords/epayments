@@ -563,6 +563,37 @@ var Order = React.createClass({
         orderpage.print();
         document.getElementById('printorders').innerHTML = "";
     },
+    printLabels: function (event) {
+        for (var i = 0; i < this.props.order.length; i++) {
+            var div = document.createElement('div');
+            div.id = 'separatelabel';
+            div.style.width = '50%';
+            div.style.display = 'inline-block';
+            div.style.height = '20%';
+            div.style.fontFamily = 'Arial, Helvetica, sans-serif';
+            div.style.fontSize = '12px';
+            var order = this.props.order[i];
+            if (order.shiptostreetadd2 == null) {
+                var address = order.shiptostreetadd;
+            } else {
+                var address = order.shiptostreetadd + ' ' + order.shiptostreetadd2;
+            }
+            if (order.clientagencyname == ('Photo Tax' || 'Photo Gallery')) {
+                var photo_address = 'NYC DEPARTMENT OF RECORDS/MUNICIPAL ARCHIVES' + '<br>' + '31 Chambers Street' +
+                    '<br>' + 'New York, NY 10007' + '<br><br>' + '<hr style="width: 95%">' + '<br>';
+            } else {
+                var photo_address = '';
+            }
+            div.innerHTML = '<div style="text-align: center;">' + photo_address + '<b>TO: </b>' + order.shiptoname +
+                '<br>' + address + '<br>' + order.shiptocity + ', ' + order.shiptostate + ' ' + order.shiptozipcode +
+                '<br><div>';
+            document.getElementById('printlabels').appendChild(div);
+        }
+        var labelpage = window.open();
+        labelpage.document.write(document.getElementById('printlabels').innerHTML);
+        labelpage.print();
+        document.getElementById('printlabels').innerHTML = "";
+    },
     render: function () {
         return (
             <div className='order-wrap'>
@@ -574,6 +605,7 @@ var Order = React.createClass({
                         <strong>Number of Orders:</strong>
                         {this.props.uniqueOrders.length}
                         <input type="submit" name="submit" value="Print" onClick={this.printOrders}/>
+                        <input type="submit" name="submit" value="Labels" onClick={this.printLabels}/>
                     </li>
                     {this.props.order.map(function (order) {
                         return <li key={order.orderno}>
