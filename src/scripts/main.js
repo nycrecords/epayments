@@ -561,6 +561,7 @@ var Order = React.createClass({
         var orderpage = window.open();
         orderpage.document.write(document.getElementById('printorders').innerHTML);
         orderpage.print();
+        orderpage.close();
         document.getElementById('printorders').innerHTML = "";
     },
     printBigLabels: function (event) {
@@ -601,9 +602,10 @@ var Order = React.createClass({
             }
             document.getElementById('printbiglabels').appendChild(div);
         }
-        var labelpage = window.open();
-        labelpage.document.write(document.getElementById('printbiglabels').innerHTML);
-        labelpage.print();
+        var biglabelpage = window.open();
+        biglabelpage.document.write(document.getElementById('printbiglabels').innerHTML);
+        biglabelpage.print();
+        biglabelpage.close();
         document.getElementById('printbiglabels').innerHTML = "";
     },
     printSmallLabels: function (event) {
@@ -626,9 +628,10 @@ var Order = React.createClass({
                 '<br></div>';
             document.getElementById('printsmalllabels').appendChild(div);
         }
-        var labelpage = window.open();
-        labelpage.document.write(document.getElementById('printsmalllabels').innerHTML);
-        labelpage.print();
+        var smalllabelpage = window.open();
+        smalllabelpage.document.write(document.getElementById('printsmalllabels').innerHTML);
+        smalllabelpage.print();
+        smalllabelpage.close();
         document.getElementById('printsmalllabels').innerHTML = "";
     },
     render: function () {
