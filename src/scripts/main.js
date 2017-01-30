@@ -563,16 +563,23 @@ var Order = React.createClass({
         orderpage.print();
         document.getElementById('printorders').innerHTML = "";
     },
-    printLabels: function (event) {
+    printBigLabels: function (event) {
         for (var i = 0; i < this.props.order.length; i++) {
             var div = document.createElement('div');
-            div.id = 'separatelabel';
+            div.id = 'biglabel';
             div.style.width = '50%';
             div.style.display = 'inline-block';
             div.style.height = '20%';
             div.style.fontFamily = 'Arial, Helvetica, sans-serif';
             div.style.fontSize = '12px';
             var order = this.props.order[i];
+            var clientsdata = order.clientsdata.split('|');
+            if (clientsdata.includes('CONTACT_NUMBER')) {
+                var contactnumber = '<b>CONTACT_NUMBER</b>' + '<br>' +
+                    clientsdata[clientsdata.indexOf('CONTACT_NUMBER') + 1] + '<br><br>';
+            } else {
+                var contactnumber = '';
+            }
             if (order.shiptostreetadd2 == null) {
                 var address = order.shiptostreetadd;
             } else {
@@ -584,15 +591,45 @@ var Order = React.createClass({
             } else {
                 var photo_address = '';
             }
-            div.innerHTML = '<div style="text-align: center;">' + photo_address + '<b>TO: </b>' + order.shiptoname +
-                '<br>' + address + '<br>' + order.shiptocity + ', ' + order.shiptostate + ' ' + order.shiptozipcode +
-                '<br><div>';
-            document.getElementById('printlabels').appendChild(div);
+            if (order.shiptoname.length > 1) {
+                div.innerHTML = '<div style="text-align: center;">' + photo_address + '<b>TO: </b>' + order.shiptoname +
+                    '<br>' + address + '<br>' + order.shiptocity + ', ' + order.shiptostate + ' ' + order.shiptozipcode +
+                    '<br></div>';
+            } else {
+                div.innerHTML = '<div style="text-align: center;">' + 'CALL FOR PICKUP' + '<br>' + order.billingname +
+                    '<br>' + contactnumber + '<br></div>';
+            }
+            document.getElementById('printbiglabels').appendChild(div);
         }
         var labelpage = window.open();
-        labelpage.document.write(document.getElementById('printlabels').innerHTML);
+        labelpage.document.write(document.getElementById('printbiglabels').innerHTML);
         labelpage.print();
-        document.getElementById('printlabels').innerHTML = "";
+        document.getElementById('printbiglabels').innerHTML = "";
+    },
+    printSmallLabels: function (event) {
+        for (var i = 0; i < this.props.order.length; i++) {
+            var div = document.createElement('div');
+            div.id = 'smalllabel';
+            div.style.width = '33%';
+            div.style.display = 'inline-block';
+            div.style.height = '10%';
+            div.style.fontFamily = 'Arial, Helvetica, sans-serif';
+            div.style.fontSize = '12px';
+            var order = this.props.order[i];
+            if (order.shiptostreetadd2 == null) {
+                var address = order.shiptostreetadd;
+            } else {
+                var address = order.shiptostreetadd + ' ' + order.shiptostreetadd2;
+            }
+            div.innerHTML = '<div style="text-align: center;">' + order.shiptoname +
+                '<br>' + address + '<br>' + order.shiptocity + ', ' + order.shiptostate + ' ' + order.shiptozipcode +
+                '<br></div>';
+            document.getElementById('printsmalllabels').appendChild(div);
+        }
+        var labelpage = window.open();
+        labelpage.document.write(document.getElementById('printsmalllabels').innerHTML);
+        labelpage.print();
+        document.getElementById('printsmalllabels').innerHTML = "";
     },
     render: function () {
         return (
@@ -605,7 +642,8 @@ var Order = React.createClass({
                         <strong>Number of Orders:</strong>
                         {this.props.uniqueOrders.length}
                         <input type="submit" name="submit" value="Print" onClick={this.printOrders}/>
-                        <input type="submit" name="submit" value="Labels" onClick={this.printLabels}/>
+                        <input type="submit" name="submit" value="Big Labels" onClick={this.printBigLabels}/>
+                        <input type="submit" name="submit" value="Small Labels" onClick={this.printSmallLabels}/>
                     </li>
                     {this.props.order.map(function (order) {
                         return <li key={order.orderno}>
