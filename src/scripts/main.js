@@ -593,28 +593,28 @@ var Order = React.createClass({
                 var photo_address = '';
             }
             if (order.shiptoname.length > 1) {
-                div.innerHTML = '<div style="display: table-cell; vertical-align: middle; text-align: center; width: 375px; height: 200px; margin: 0px auto; position: relative;">' + photo_address + '<b>TO: </b>' + order.shiptoname +
-                    '<br>' + address + '<br>' + order.shiptocity + ', ' + order.shiptostate + ' ' + order.shiptozipcode +
-                    '<br></div>';
+                div.innerHTML = '<div style="display: table-cell; vertical-align: middle; text-align: center; width: 375px; height: 200px; margin: auto; position: relative;">' +
+                    photo_address + '<b>TO: </b>' + order.shiptoname + '<br>' + address + '<br>' + order.shiptocity +
+                    ', ' + order.shiptostate + ' ' + order.shiptozipcode + '<br></div>';
             } else {
-                div.innerHTML = '<div style="display: table-cell; vertical-align: middle; text-align: center; width: 375px; height: 200px; margin: 0px auto; position: relative;">' + 'CALL FOR PICKUP' + '<br>' + order.billingname +
-                    '<br>' + contactnumber + '<br></div>';
+                div.innerHTML = '<div style="display: table-cell; vertical-align: middle; text-align: center; width: 375px; height: 200px; margin: auto; position: relative;">' +
+                    'CALL FOR PICKUP' + '<br>' + order.billingname + '<br>' + contactnumber + '<br></div>';
             }
             document.getElementById('printbiglabels').appendChild(div);
         }
         var biglabelpage = window.open();
         biglabelpage.document.write(document.getElementById('printbiglabels').innerHTML);
         biglabelpage.print();
-        biglabelpage.close();
+        // biglabelpage.close();
         document.getElementById('printbiglabels').innerHTML = "";
     },
     printSmallLabels: function (event) {
         for (var i = 0; i < this.props.order.length; i++) {
             var div = document.createElement('div');
             div.id = 'smalllabel';
-            div.style.width = '33%';
+            div.style.width = '33.33%';
             div.style.height = '10%';
-            div.style.display = 'inline-block';
+            // div.style.display = 'inline-block';
             div.style.fontFamily = 'Arial, Helvetica, sans-serif';
             div.style.fontSize = '12px';
             var order = this.props.order[i];
@@ -623,15 +623,15 @@ var Order = React.createClass({
             } else {
                 var address = order.shiptostreetadd + ' ' + order.shiptostreetadd2;
             }
-            div.innerHTML = '<div style="text-align: center;">' + order.shiptoname +
-                '<br>' + address + '<br>' + order.shiptocity + ', ' + order.shiptostate + ' ' + order.shiptozipcode +
-                '<br></div>';
+            div.innerHTML = '<div style="display: table-cell; vertical-align: middle; text-align: center; width: 250px; height: 100px; margin: auto; position: relative;">' +
+                order.shiptoname + '<br>' + address + '<br>' + order.shiptocity + ', ' + order.shiptostate + ' ' +
+                order.shiptozipcode + '<br></div>';
             document.getElementById('printsmalllabels').appendChild(div);
         }
         var smalllabelpage = window.open();
         smalllabelpage.document.write(document.getElementById('printsmalllabels').innerHTML);
         smalllabelpage.print();
-        smalllabelpage.close();
+        // smalllabelpage.close();
         document.getElementById('printsmalllabels').innerHTML = "";
     },
     render: function () {
