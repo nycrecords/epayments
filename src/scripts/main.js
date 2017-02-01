@@ -605,7 +605,7 @@ var Order = React.createClass({
         var biglabelpage = window.open();
         biglabelpage.document.write(document.getElementById('printbiglabels').innerHTML);
         biglabelpage.print();
-        // biglabelpage.close();
+        biglabelpage.close();
         document.getElementById('printbiglabels').innerHTML = "";
     },
     printSmallLabels: function (event) {
@@ -631,7 +631,7 @@ var Order = React.createClass({
         var smalllabelpage = window.open();
         smalllabelpage.document.write(document.getElementById('printsmalllabels').innerHTML);
         smalllabelpage.print();
-        // smalllabelpage.close();
+        smalllabelpage.close();
         document.getElementById('printsmalllabels').innerHTML = "";
     },
     render: function () {
