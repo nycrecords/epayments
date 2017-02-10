@@ -30,6 +30,9 @@ def sftp_ctx():
     """
     transport = paramiko.Transport(('localhost', 22))
     transport.connect(username='btang', pkey=paramiko.RSAKey(filename='/Users/btang/.ssh/id_rsa'))
+    # transport = paramiko.Transport((os.environ.get('SFTP_HOSTNAME'), os.environ.get('SFTP_PORT')))
+    # transport.connect(username=os.environ.get('SFTP_USERNAME'),
+    #               pkey=paramiko.RSAKey(filename=os.environ.get('SFTP_RSA_KEY_FILE')))
     sftp = paramiko.SFTPClient.from_transport(transport)
     try:
         yield sftp
@@ -39,13 +42,13 @@ def sftp_ctx():
         sftp.close()
         transport.close()
 
-with sftp_ctx() as sftp:
-    sftp.get('/Users/btang/Desktop/test1.pdf', '/Users/btang/Desktop/test1downloaded.pdf')
-    sftp.close()
-
 
 def import_single_xml():
-    file = 'DOR20161103_125347_CPY100017228.xml' # Change file path
+    # with sftp_ctx() as sftp:
+    #     sftp.get('/Users/btang/Desktop/test1.pdf', '/Users/btang/Desktop/test1downloaded.pdf')
+    #     sftp.close()
+
+    file = 'DOR20161103_125347_CPY100017228.xml'  # Change file path
 
     # Initalize client_agency_name_dict and ordertypelist
     clientagencynamedict = {"10000048": "Photo Tax", "10000060": "Photo Gallery", "10000102": "Birth Search",
@@ -117,7 +120,7 @@ def import_single_xml():
 
 
 def import_xml_folder():
-    xml_folder = '/Users/btang/Downloads/data/files/DOR' # Change folder path
+    xml_folder = '/Users/btang/Downloads/data/files/DOR'  # Change folder path
 
     # Initalize client_agency_name_dict and ordertypelist
     client_agency_name_dict = {"10000048": "Photo Tax", "10000060": "Photo Gallery", "10000102": "Birth Search",
