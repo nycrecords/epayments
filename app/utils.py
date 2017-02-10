@@ -1,28 +1,60 @@
 import os
-import psycopg2
+import paramiko
 import xml.etree.ElementTree as ET
 import datetime
 from datetime import date
-from flask import url_for
+from flask import url_for, current_app
+from app import db
+from app.models import Order
+from contextlib import contextmanager
 
 
-def import_single_xml(file):
-    # file = 'DOR20161103_125347_CPY100017228.xml'
+def create_object(obj):
+    """
+    :param obj: Object class being created in database
+    :return: Adding and committing object to database
+    """
+    try:
+        db.session.add(obj)
+        db.session.commit()
+        return str(obj)
+    except Exception as e:
+        return None
 
-    # Connect to database
-    conn = psycopg2.connect(host='localhost', port=5432, database='epayments', user='btang')
-    # conn = psycopg2.connect(host='ec2-184-72-252-69.compute-1.amazonaws.com', port=5432, database='dabs0ok19r3gri',
-    #                         user='zxyjbtckhwfmtr',
-    #                         password='4d7038760d0279aa2a7f172852076da1a670f8ed8b088b303bf4781e3f23fd08')
-    cursor = conn.cursor()
 
-    # Parse XML file
+@contextmanager
+def sftp_ctx():
+    """
+    Context manager that provides an SFTP client object
+    (an SFTP session across an open SSH Transport)
+    """
+    transport = paramiko.Transport(('localhost', 22))
+    transport.connect(username='btang', pkey=paramiko.RSAKey(filename='/Users/btang/.ssh/id_rsa'))
+    sftp = paramiko.SFTPClient.from_transport(transport)
+    try:
+        yield sftp
+    except Exception as e:
+        current_app.logger.error("Exception occurred with SFTP: {}".format(e))
+    finally:
+        sftp.close()
+        transport.close()
+
+with sftp_ctx() as sftp:
+    sftp.get('/Users/btang/Desktop/test1.pdf', '/Users/btang/Desktop/test1downloaded.pdf')
+    sftp.close()
+
+
+def import_single_xml():
+    file = 'DOR20161103_125347_CPY100017228.xml' # Change file path
+
+    # Initalize client_agency_name_dict and ordertypelist
     clientagencynamedict = {"10000048": "Photo Tax", "10000060": "Photo Gallery", "10000102": "Birth Search",
                             "10000147": "Birth Cert", "10000104": "Marriage Search", "10000181": "Marriage Cert",
                             "10000103": "Death Search", "10000182": "Death Cert"}
     ordertypelist = ['Photo tax', 'Photo gallery', 'Birth search', 'Birth cert', 'Marriage search', 'Marriage cert',
                      'Death search', 'Death cert']
 
+    # Parse XML file
     tree = ET.parse(file)
     root = tree.getroot()
 
@@ -50,8 +82,7 @@ def import_single_xml(file):
     billingname = root.find("EPaymentRes").find("BillingInfo").find("BillingName").text
     confirmationmessage = root.find('ConfirmationMessage').text
     datereceived = date.today()
-    datelastmodified = datetime.datetime.fromtimestamp(
-        os.path.getmtime('/Users/btang/Downloads/data/files/DOR/' + file))
+    datelastmodified = datetime.datetime.fromtimestamp(os.path.getmtime(file))
 
     # Elements in ShippingAdd Root
     shipping_add = root.find("EPaymentRes").find("ShippingAdd")
@@ -66,39 +97,29 @@ def import_single_xml(file):
     shippinginstructions = shipping_add.find("ShippingInstructions").text
 
     # Check for duplicate in database
-    check_duplicate = 'SELECT "orderno" FROM "order" WHERE orderno = %s'
-    cursor.execute(check_duplicate, (orderno,))
-    duplicate = cursor.fetchone()
+    duplicate = Order.query.filter_by(orderno=orderno).first()
 
     # Insert into database if duplicate doesn't exist, else print message
     if not duplicate:
-        insert_order = 'INSERT INTO "order" (orderno, clientagencyname, shiptoname, shiptostreetadd, ' \
-                       'shiptostreetadd2, shiptocity, shiptostate, shiptozipcode, shiptocountry, shiptophone, ' \
-                       'customeremail, shippinginstructions, clientsdata, confirmationmessage, datereceived, ' \
-                       'billingname, datelastmodified, suborderno, clientid, ordertypes) VALUES (%s, %s, %s, %s, ' \
-                       '%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)'
-        cursor.execute(insert_order, (
-            orderno, clientagencyname, shiptoname, shiptostreetadd, shiptostreetadd2, shiptocity, shiptostate,
-            shiptozipcode, shiptocountry, shiptophone, customeremail, shippinginstructions, clientsdata,
-            confirmationmessage, datereceived, billingname, datelastmodified, suborderno, clientid, ordertypes))
+        insert_order = Order(orderno=orderno, clientagencyname=clientagencyname, shiptoname=shiptoname,
+                             shiptostreetadd=shiptostreetadd, shiptostreetadd2=shiptostreetadd2, shiptocity=shiptocity,
+                             shiptostate=shiptostate, shiptozipcode=shiptozipcode, shiptocountry=shiptocountry,
+                             shiptophone=shiptophone, customeremail=customeremail,
+                             shippinginstructions=shippinginstructions, clientsdata=clientsdata,
+                             confirmationmessage=confirmationmessage, datereceived=datereceived,
+                             billingname=billingname, datelastmodified=datelastmodified, suborderno=suborderno,
+                             clientid=clientid, ordertypes=ordertypes)
+        db.session.add(insert_order)
+        db.session.commit()
+
     else:
         print("Order %s already exists in the database." % orderno)
 
-    conn.commit()
-    cursor.close()
 
+def import_xml_folder():
+    xml_folder = '/Users/btang/Downloads/data/files/DOR' # Change folder path
 
-def import_xml_folder(xml_folder):
-    # xml_folder = '/Users/btang/Downloads/data/files/DOR'
-
-    # Connect to database
-    # conn = psycopg2.connect(host='localhost', port=5432, database='epayments', user='btang')
-    conn = psycopg2.connect(host='ec2-184-72-252-69.compute-1.amazonaws.com', port=5432, database='dabs0ok19r3gri',
-                            user='zxyjbtckhwfmtr',
-                            password='4d7038760d0279aa2a7f172852076da1a670f8ed8b088b303bf4781e3f23fd08')
-    cursor = conn.cursor()
-
-    # Initalize xml folder and client_agency_name_dict
+    # Initalize client_agency_name_dict and ordertypelist
     client_agency_name_dict = {"10000048": "Photo Tax", "10000060": "Photo Gallery", "10000102": "Birth Search",
                                "10000147": "Birth Cert", "10000104": "Marriage Search", "10000181": "Marriage Cert",
                                "10000103": "Death Search", "10000182": "Death Cert"}
@@ -107,7 +128,7 @@ def import_xml_folder(xml_folder):
 
     # Parse files in XML folder
     for file in os.listdir(xml_folder):
-        tree = ET.parse('/Users/btang/Downloads/data/files/DOR/' + file)
+        tree = ET.parse(xml_folder + file)
         root = tree.getroot()
 
         # Elements involving ClientsData
@@ -135,7 +156,7 @@ def import_xml_folder(xml_folder):
         confirmationmessage = root.find('ConfirmationMessage').text
         datereceived = date.today()
         datelastmodified = datetime.datetime.fromtimestamp(
-            os.path.getmtime('/Users/btang/Downloads/data/files/DOR/' + file)).strftime('%Y-%m-%d %H:%M:%S')
+            os.path.getmtime(xml_folder + file)).strftime('%Y-%m-%d %H:%M:%S')
 
         # Elements in ShippingAdd Root
         shipping_add = root.find("EPaymentRes").find("ShippingAdd")
@@ -150,26 +171,23 @@ def import_xml_folder(xml_folder):
         shippinginstructions = shipping_add.find("ShippingInstructions").text
 
         # Check for duplicate in database
-        check_duplicate = 'SELECT "orderno" FROM "order" WHERE orderno = %s'
-        cursor.execute(check_duplicate, (orderno,))
-        duplicate = cursor.fetchone()
+        duplicate = Order.query.filter_by(orderno=orderno).first()
 
         # Insert into database if duplicate doesn't exist, else print message
         if not duplicate:
-            insert_order = 'INSERT INTO "order" (orderno, clientagencyname, shiptoname, shiptostreetadd, ' \
-                           'shiptostreetadd2, shiptocity, shiptostate, shiptozipcode, shiptocountry, shiptophone, ' \
-                           'customeremail, shippinginstructions, clientsdata, confirmationmessage, datereceived, ' \
-                           'billingname, datelastmodified, suborderno, clientid, ordertypes) VALUES (%s, %s, %s, ' \
-                           '%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)'
-            cursor.execute(insert_order, (
-                orderno, clientagencyname, shiptoname, shiptostreetadd, shiptostreetadd2, shiptocity, shiptostate,
-                shiptozipcode, shiptocountry, shiptophone, customeremail, shippinginstructions, clientsdata,
-                confirmationmessage, datereceived, billingname, datelastmodified, suborderno, clientid, ordertypes))
+            insert_order = Order(orderno=orderno, clientagencyname=clientagencyname, shiptoname=shiptoname,
+                                 shiptostreetadd=shiptostreetadd, shiptostreetadd2=shiptostreetadd2,
+                                 shiptocity=shiptocity, shiptostate=shiptostate, shiptozipcode=shiptozipcode,
+                                 shiptocountry=shiptocountry, shiptophone=shiptophone, customeremail=customeremail,
+                                 shippinginstructions=shippinginstructions, clientsdata=clientsdata,
+                                 confirmationmessage=confirmationmessage, datereceived=datereceived,
+                                 billingname=billingname, datelastmodified=datelastmodified, suborderno=suborderno,
+                                 clientid=clientid, ordertypes=ordertypes)
+            db.session.add(insert_order)
+            db.session.commit()
+
         else:
             print("Order %s already exists in the database." % orderno)
-
-    conn.commit()
-    cursor.close()
 
 
 def make_public_order(order):
