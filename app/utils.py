@@ -2,7 +2,7 @@ import os
 import xml.etree.ElementTree as ET
 import datetime
 import time
-from datetime import date, timedelta
+from datetime import date
 from flask import url_for
 from app import db, scheduler
 from app.models import Order
@@ -80,7 +80,7 @@ def import_xml_folder():
             clientsdata = root.find('ClientsData').text
             billingname = root.find("EPaymentRes").find("BillingInfo").find("BillingName").text
             confirmationmessage = root.find('ConfirmationMessage').text
-            datereceived = date.today() - timedelta(1)
+            datereceived = date.today()
             datelastmodified = datetime.datetime.fromtimestamp(
                 os.path.getmtime(xml_folder + file)).strftime('%Y-%m-%d %H:%M:%S')
 
