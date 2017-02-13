@@ -23,6 +23,11 @@ def create_object(obj):
 
 
 def import_xml_folder():
+    """
+    Function is called from scheduler at 3AM everyday.
+    Downloads all xml files from a remote folder to local folder.
+    Imports xml files from local folder to database.
+    """
     with scheduler.app.app_context():
         # Create new folder with date of download and download all files
         filepath = '/Users/btang/Desktop/data/files/DOR/'
@@ -114,6 +119,13 @@ def import_xml_folder():
 
 
 def import_missing_xml():
+    """
+    Function called to import a missing xml file.
+    Variables folder_date and file must be changed according to the missing xml file.
+
+    Downloads a single missing xml file from a remote folder to local dated folder.
+    Imports single xml file from local folder to database.
+    """
     # Input date of folder and missing xml file name to insert missing xml file into database
     filepath = '/Users/btang/Desktop/data/files/DOR/'
     localpath = '/Users/btang/Desktop/all_data/'
