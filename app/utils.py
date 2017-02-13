@@ -45,8 +45,8 @@ def import_xml_folder():
 
         xml_folder = localpath + 'DOR-' + time.strftime("%m-%d-%Y") + '/'
 
-        # Initalize client_agency_name_dict and ordertypelist
-        client_agency_name_dict = {"10000048": "Photo Tax", "10000060": "Photo Gallery", "10000102": "Birth Search",
+        # Initalize clientagencynamedict and ordertypelist
+        clientagencynamedict = {"10000048": "Photo Tax", "10000060": "Photo Gallery", "10000102": "Birth Search",
                                    "10000147": "Birth Cert", "10000104": "Marriage Search", "10000181": "Marriage Cert",
                                    "10000103": "Death Search", "10000182": "Death Cert"}
         ordertypelist = ['tax photo', 'online gallery', 'Birth search', 'Birth cert', 'Marriage search',
@@ -60,7 +60,7 @@ def import_xml_folder():
             # Elements involving ClientsData
             clientsdatalist = (root.find('ClientsData').text).split('|')
             clientid = clientsdatalist[clientsdatalist.index("ClientID") + 1]
-            clientagencyname = client_agency_name_dict[clientid]
+            clientagencyname = clientagencynamedict[clientid]
             customeremail = root.find("EPaymentReq").find("CustomerEmail").text
 
             orderno = root.find("EPaymentReq").find("OrderNo").text
@@ -137,7 +137,7 @@ def import_missing_xml():
             sftp.get(os.path.join(filepath, file), os.path.join(folder, file))
         sftp.close()
 
-    # Initalize client_agency_name_dict and ordertypelist
+    # Initalize clientagencynamedict and ordertypelist
     clientagencynamedict = {"10000048": "Photo Tax", "10000060": "Photo Gallery", "10000102": "Birth Search",
                             "10000147": "Birth Cert", "10000104": "Marriage Search", "10000181": "Marriage Cert",
                             "10000103": "Death Search", "10000182": "Death Cert"}
