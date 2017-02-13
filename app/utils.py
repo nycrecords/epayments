@@ -30,8 +30,8 @@ def import_xml_folder():
     """
     with scheduler.app.app_context():
         # Create new folder with date of download and download all files
-        filepath = '/Users/btang/Desktop/data/files/DOR/'
-        localpath = '/Users/btang/Desktop/all_data/'
+        filepath = '/Users/btang/Desktop/data/files/DOR/' # Change this filepath to path where xml exists
+        localpath = '/Users/btang/Desktop/all_data/' # Change this localpath to serverpath
         with sftp_ctx() as sftp:
             new_folder = localpath + 'DOR-' + time.strftime("%m-%d-%Y") + '/'
             if not os.path.isdir(new_folder):
