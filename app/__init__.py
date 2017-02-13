@@ -35,9 +35,9 @@ def create_app(config_name):
     # Create scheduler for importing xml files into database
     import app.utils as utils
     scheduler.add_job(
-        'import_single_xml',
-        utils.import_single_xml,
-        name="Update xml files every day at 3 AM.",
+        'import_xml_folder',
+        utils.import_xml_folder,
+        name="Imports xml files every day at 3 AM.",
         trigger=CronTrigger(hour=3),
     )
 
