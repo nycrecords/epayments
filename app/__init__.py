@@ -6,6 +6,7 @@ from flask.ext.cors import CORS
 from apscheduler.triggers.cron import CronTrigger
 from config import config
 
+
 # Flask extensions
 db = SQLAlchemy()
 scheduler = APScheduler()

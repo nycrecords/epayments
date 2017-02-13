@@ -2,7 +2,7 @@ import os
 import xml.etree.ElementTree as ET
 import datetime
 import time
-from datetime import date
+from datetime import date, timedelta
 from flask import url_for
 from app import db, scheduler
 from app.models import Order
@@ -29,10 +29,13 @@ def import_xml_folder():
         localpath = '/Users/btang/Desktop/all_data/'
         with sftp_ctx() as sftp:
             new_folder = localpath + 'DOR-' + time.strftime("%m-%d-%Y") + '/'
-            sftp.mkdir(new_folder)
+            if not os.path.isdir(new_folder):
+                sftp.mkdir(new_folder)
+                print("SFTP Created Directory: " + new_folder)
             for file in os.listdir(filepath):
-                if os.path.isfile(os.path.join(filepath, file)):
+                if os.path.isfile(os.path.join(filepath, file)) and not os.path.exists(os.path.join(new_folder, file)):
                     sftp.get(os.path.join(filepath, file), os.path.join(new_folder, file))
+                    print("SFTP Transferred File: " + file)
             sftp.close()
 
         xml_folder = localpath + 'DOR-' + time.strftime("%m-%d-%Y") + '/'
@@ -41,8 +44,8 @@ def import_xml_folder():
         client_agency_name_dict = {"10000048": "Photo Tax", "10000060": "Photo Gallery", "10000102": "Birth Search",
                                    "10000147": "Birth Cert", "10000104": "Marriage Search", "10000181": "Marriage Cert",
                                    "10000103": "Death Search", "10000182": "Death Cert"}
-        ordertypelist = ['tax photo', 'online gallery', 'Birth search', 'Birth cert', 'Marriage search', 'Marriage cert',
-                         'Death search', 'Death cert']
+        ordertypelist = ['tax photo', 'online gallery', 'Birth search', 'Birth cert', 'Marriage search',
+                         'Marriage cert', 'Death search', 'Death cert']
 
         # Parse files in XML folder
         for file in os.listdir(xml_folder):
@@ -72,7 +75,7 @@ def import_xml_folder():
             clientsdata = root.find('ClientsData').text
             billingname = root.find("EPaymentRes").find("BillingInfo").find("BillingName").text
             confirmationmessage = root.find('ConfirmationMessage').text
-            datereceived = date.today()
+            datereceived = date.today() - timedelta(1)
             datelastmodified = datetime.datetime.fromtimestamp(
                 os.path.getmtime(xml_folder + file)).strftime('%Y-%m-%d %H:%M:%S')
 
@@ -115,9 +118,9 @@ def import_missing_xml():
     filepath = '/Users/btang/Desktop/data/files/DOR/'
     localpath = '/Users/btang/Desktop/all_data/'
     with sftp_ctx() as sftp:
-        folder_date = time.strftime("%m-%d-%Y") # Change date accordingly
+        folder_date = time.strftime("%m-%d-%Y")  # Change date accordingly
         folder = localpath + 'DOR-' + folder_date + '/'
-        file = 'DOR20161103_125347_CPY100017228.xml' # Change missing xml filename accordingly
+        file = 'DOR20161103_125347_CPY100017228.xml'  # Change missing xml filename accordingly
         if os.path.isfile(os.path.join(filepath, file)):
             sftp.get(os.path.join(filepath, file), os.path.join(folder, file))
         sftp.close()
