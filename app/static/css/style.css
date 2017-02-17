@@ -540,15 +540,15 @@ input[type=submit]:after {
 }
 button:hover,
 input[type=submit]:hover,
-button:focus,
-input[type=submit]:focus {
+button:active,
+input[type=submit]:active {
   color: #fff;
   outline: 0;
 }
 button:hover:after,
 input[type=submit]:hover:after,
-button:focus:after,
-input[type=submit]:focus:after {
+button:active:after,
+input[type=submit]:active:after {
   height: 100%;
 }
 button.warning:after,
