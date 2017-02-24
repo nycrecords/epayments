@@ -1,227 +1,152 @@
 import os
 import xml.etree.ElementTree as ET
-import datetime
-import time
-from datetime import date
-from flask import url_for
+from datetime import datetime, date
+from flask import current_app
 from app import db, scheduler
 from app.models import Order
 from app.file_utils import sftp_ctx
+from app.constants import (
+    ORDER_TYPES,
+    CLIENT_AGENCY_NAMES
+)
 
 
-def create_object(obj):
-    """
-    :param obj: Object class being created in database
-    :return: Adding and committing object to database
-    """
-    try:
-        db.session.add(obj)
-        db.session.commit()
-        return str(obj)
-    except Exception as e:
-        return None
-
-
-def import_xml_folder():
+def import_xml_folder(scheduled=False):
     """
     Function is called from scheduler at 3AM everyday.
     Downloads all xml files from a remote folder to local folder.
     Imports xml files from local folder to database.
+    :param scheduled: Boolean determines whether this is running as a Cron job or manually
     """
-    with scheduler.app.app_context():
-        # Create new folder with date of download and download all files
-        filepath = '/Users/btang/Desktop/data/files/DOR/' # Change this filepath to path where xml exists
-        localpath = '/Users/btang/Desktop/all_data/' # Change this localpath to serverpath
-        with sftp_ctx() as sftp:
-            new_folder = localpath + 'DOR-' + time.strftime("%m-%d-%Y") + '/'
-            if not os.path.isdir(new_folder):
-                sftp.mkdir(new_folder)
-                print("SFTP Created Directory: " + new_folder)
-            for file in os.listdir(filepath):
-                if os.path.isfile(os.path.join(filepath, file)) and not os.path.exists(os.path.join(new_folder, file)):
-                    sftp.get(os.path.join(filepath, file), os.path.join(new_folder, file))
-                    print("SFTP Transferred File: " + file)
-            sftp.close()
 
-        xml_folder = localpath + 'DOR-' + time.strftime("%m-%d-%Y") + '/'
+    file_path = current_app.config['REMOTE_FILE_PATH']
+    local_path = current_app.config['LOCAL_FILE_PATH']
 
-        # Initalize clientagencynamedict and ordertypelist
-        clientagencynamedict = {"10000048": "Photo Tax", "10000060": "Photo Gallery", "10000102": "Birth Search",
-                                   "10000147": "Birth Cert", "10000104": "Marriage Search", "10000181": "Marriage Cert",
-                                   "10000103": "Death Search", "10000182": "Death Cert"}
-        ordertypelist = ['tax photo', 'online gallery', 'Birth search', 'Birth cert', 'Marriage search',
-                         'Marriage cert', 'Death search', 'Death cert']
+    if scheduled:
+        with scheduler.app.app_context():
+            # Create new folder with date of download and download all files
 
-        # Parse files in XML folder
-        for file in os.listdir(xml_folder):
-            tree = ET.parse(xml_folder + file)
-            root = tree.getroot()
+            import_folder = os.path.join(local_path,
+                                         'DOR-{date_time}/'.format(date_time=datetime.strftime('%m-%d-%Y_%H:%M')))
 
-            # Elements involving ClientsData
-            clientsdatalist = (root.find('ClientsData').text).split('|')
-            clientid = clientsdatalist[clientsdatalist.index("ClientID") + 1]
-            clientagencyname = clientagencynamedict[clientid]
-            customeremail = root.find("EPaymentReq").find("CustomerEmail").text
+            if current_app.config['USE_SFTP']:
 
-            orderno = root.find("EPaymentReq").find("OrderNo").text
-            if "CPY" in orderno:
-                orderno = orderno.strip('CPY')
-            suborderno = clientsdatalist[clientsdatalist.index("OrderNo") + 1]
-            # suborderno = clientsdatalist[clientsdatalist.index("OrderNo") + 1] + orderno[:5]
+                with sftp_ctx() as sftp:
+                    if not os.path.isdir(import_folder):
+                        sftp.mkdir(import_folder)
+                        print("SFTP Created Directory: " + import_folder)
+                    for file in os.listdir(file_path):
+                        if os.path.isfile(os.path.join(file_path, file)) \
+                                and not os.path.exists(os.path.join(import_folder, file)):
+                            sftp.get(os.path.join(file_path, file), os.path.join(import_folder, file))
+                            print("SFTP Transferred File: " + file)
+                    sftp.close()
 
-            ordertypes = []
-            itemdescription = root.findall(".//ItemDescription")
-            for item in itemdescription:
-                for ordertype in ordertypelist:
-                    if ordertype in item.text:
-                        ordertypes.append(ordertype)
-            ordertypes = ','.join(ordertypes)
-
-            clientsdata = root.find('ClientsData').text
-            billingname = root.find("EPaymentRes").find("BillingInfo").find("BillingName").text
-            confirmationmessage = root.find('ConfirmationMessage').text
-            datereceived = date.today()
-            datelastmodified = datetime.datetime.fromtimestamp(
-                os.path.getmtime(xml_folder + file)).strftime('%Y-%m-%d %H:%M:%S')
-
-            # Elements in ShippingAdd Root
-            shipping_add = root.find("EPaymentRes").find("ShippingAdd")
-            shiptoname = shipping_add.find("ShipToName").text
-            shiptostreetadd = shipping_add.find("ShipToStreetAdd").text
-            shiptostreetadd2 = shipping_add.find("ShipToStreetAdd2").text
-            shiptocity = shipping_add.find("ShipToCity").text
-            shiptostate = shipping_add.find("ShipToState").text
-            shiptozipcode = shipping_add.find("ShipToZipCode").text
-            shiptocountry = shipping_add.find("ShipToCountry").text
-            shiptophone = shipping_add.find("ShipToPhone").text
-            shippinginstructions = shipping_add.find("ShippingInstructions").text
-
-            # Check for duplicate in database
-            duplicate = Order.query.filter_by(orderno=orderno).first()
-
-            # Insert into database if duplicate doesn't exist, else print message
-            if not duplicate:
-                insert_order = Order(orderno=orderno, clientagencyname=clientagencyname, shiptoname=shiptoname,
-                                     shiptostreetadd=shiptostreetadd, shiptostreetadd2=shiptostreetadd2,
-                                     shiptocity=shiptocity, shiptostate=shiptostate, shiptozipcode=shiptozipcode,
-                                     shiptocountry=shiptocountry, shiptophone=shiptophone, customeremail=customeremail,
-                                     shippinginstructions=shippinginstructions, clientsdata=clientsdata,
-                                     confirmationmessage=confirmationmessage, datereceived=datereceived,
-                                     billingname=billingname, datelastmodified=datelastmodified, suborderno=suborderno,
-                                     clientid=clientid, ordertypes=ordertypes)
-                db.session.add(insert_order)
-                db.session.commit()
-
-                print("Added order " + str(orderno) + " into database.")
-
-            else:
-                print("Order %s already exists in the database." % orderno)
+            for file_ in os.listdir(import_folder):
+                print("Imported {}".format(file_)) if import_file(file_) else print("Failed to Import {}".format(file_))
+    else:
+        for file_ in os.listdir(local_path):
+            file_ = os.path.join(local_path, file_)
+            print("Imported {}".format(file_)) if import_file(file_) else print("Failed to Import {}".format(file_))
 
 
-def import_missing_xml():
+def import_file(file_name):
     """
-    Function called to import a missing xml file.
-    Variables folder_date and file must be changed according to the missing xml file.
-
-    Downloads a single missing xml file from a remote folder to local dated folder.
-    Imports single xml file from local folder to database.
+    Inserts a single order from an XML file into the database.
+    :param file_name: XML file to import
+    :return: Bool
     """
-    # Input date of folder and missing xml file name to insert missing xml file into database
-    filepath = '/Users/btang/Desktop/data/files/DOR/'
-    localpath = '/Users/btang/Desktop/all_data/'
-    with sftp_ctx() as sftp:
-        folder_date = time.strftime("%m-%d-%Y")  # Change date accordingly
-        folder = localpath + 'DOR-' + folder_date + '/'
-        file = 'DOR20161103_125347_CPY100017228.xml'  # Change missing xml filename accordingly
-        if os.path.isfile(os.path.join(filepath, file)):
-            sftp.get(os.path.join(filepath, file), os.path.join(folder, file))
-        sftp.close()
-
-    # Initalize clientagencynamedict and ordertypelist
-    clientagencynamedict = {"10000048": "Photo Tax", "10000060": "Photo Gallery", "10000102": "Birth Search",
-                            "10000147": "Birth Cert", "10000104": "Marriage Search", "10000181": "Marriage Cert",
-                            "10000103": "Death Search", "10000182": "Death Cert"}
-    ordertypelist = ['Photo tax', 'Photo gallery', 'Birth search', 'Birth cert', 'Marriage search', 'Marriage cert',
-                     'Death search', 'Death cert']
-
-    # Parse XML file
-    tree = ET.parse(file)
+    # Populate XML Parser
+    tree = ET.parse(file_name)
     root = tree.getroot()
 
-    # Elements involving ClientsData
-    clientsdatalist = (root.find('ClientsData').text).split('|')
-    clientid = clientsdatalist[clientsdatalist.index("ClientID") + 1]
-    clientagencyname = clientagencynamedict[clientid]
-    customeremail = root.find("EPaymentReq").find("CustomerEmail").text
+    # Order Number: Specific order number for this Order
+    order_no = root.find("EPaymentReq").find("OrderNo").text
 
-    orderno = root.find("EPaymentReq").find("OrderNo").text
-    if "CPY" in orderno:
-        orderno = orderno.strip('CPY')
-    suborderno = clientsdatalist[clientsdatalist.index("OrderNo") + 1]
-    # suborderno = clientsdatalist[clientsdatalist.index("OrderNo") + 1] + orderno[:5]
-
-    ordertypes = []
-    itemdescription = root.findall(".//ItemDescription")
-    for item in itemdescription:
-        for ordertype in ordertypelist:
-            if ordertype in item.text:
-                ordertypes.append(ordertype)
-    ordertypes = ','.join(ordertypes)
-
-    clientsdata = root.find('ClientsData').text
-    billingname = root.find("EPaymentRes").find("BillingInfo").find("BillingName").text
-    confirmationmessage = root.find('ConfirmationMessage').text
-    datereceived = date.today()
-    datelastmodified = datetime.datetime.fromtimestamp(os.path.getmtime(file))
-
-    # Elements in ShippingAdd Root
-    shipping_add = root.find("EPaymentRes").find("ShippingAdd")
-    shiptoname = shipping_add.find("ShipToName").text
-    shiptostreetadd = shipping_add.find("ShipToStreetAdd").text
-    shiptostreetadd2 = shipping_add.find("ShipToStreetAdd2").text
-    shiptocity = shipping_add.find("ShipToCity").text
-    shiptostate = shipping_add.find("ShipToState").text
-    shiptozipcode = shipping_add.find("ShipToZipCode").text
-    shiptocountry = shipping_add.find("ShipToCountry").text
-    shiptophone = shipping_add.find("ShipToPhone").text
-    shippinginstructions = shipping_add.find("ShippingInstructions").text
+    # Remove CPY header from DOF Payment Processing System
+    if "CPY" in order_no:
+        order_no = order_no.strip('CPY')
 
     # Check for duplicate in database
-    duplicate = Order.query.filter_by(orderno=orderno).first()
+    duplicate = Order.query.filter_by(order_no=order_no).first()
 
-    # Insert into database if duplicate doesn't exist, else print message
-    if not duplicate:
-        insert_order = Order(orderno=orderno, clientagencyname=clientagencyname, shiptoname=shiptoname,
-                             shiptostreetadd=shiptostreetadd, shiptostreetadd2=shiptostreetadd2, shiptocity=shiptocity,
-                             shiptostate=shiptostate, shiptozipcode=shiptozipcode, shiptocountry=shiptocountry,
-                             shiptophone=shiptophone, customeremail=customeremail,
-                             shippinginstructions=shippinginstructions, clientsdata=clientsdata,
-                             confirmationmessage=confirmationmessage, datereceived=datereceived,
-                             billingname=billingname, datelastmodified=datelastmodified, suborderno=suborderno,
-                             clientid=clientid, ordertypes=ordertypes)
-        db.session.add(insert_order)
-        db.session.commit()
+    if duplicate:
+        print("Order %s already exists in the database." % order_no)
+        return False
 
-    else:
-        print("Order %s already exists in the database." % orderno)
+    # Extract ClientsData - Information about the Order Type
+    clients_data = root.find('ClientsData').text
+    clients_data_list = clients_data.split('|')
 
+    # Client ID: Order Type ID
+    client_id = clients_data_list[clients_data_list.index("ClientID") + 1]
 
-def make_public_order(order):
-    """
-    Create a JSON object with URI that references a specific order.
+    # Client Agency Name: Order Type as String
+    client_agency_name = CLIENT_AGENCY_NAMES[client_id]
 
-    :param order: order as a JSON object
-    :return: JSON object
-    """
-    new_order = {}
-    for field in order:
-        if field == 'SubOrderNo':
-            new_order['uri'] = url_for(
-                'api_1_0.get_order',
-                order_id=order['SubOrderNo'],
-                _external=True
-            )
-        else:
-            new_order[field] = order[field]
+    # Sub Order Number: Used to identify multi-part orders
+    sub_order_no = clients_data_list[clients_data_list.index("OrderNo") + 1]
 
-    return new_order
+    # Determine if multiple items are requested as part of this order.
+    order_types = []
+    item_description = root.findall(".//ItemDescription")
+    for item in item_description:
+        for order_type in ORDER_TYPES:
+            if order_type in item.text:
+                order_types.append(order_type)
+    order_types = ','.join(order_types)
+
+    # Get Customer Information
+    # Name for Billing Information
+    billing_name = root.find("EPaymentRes").find("BillingInfo").find("BillingName").text
+
+    # Customer Email: Email for person who placed order
+    customer_email = root.find("EPaymentReq").find("CustomerEmail").text
+
+    # Message sent to customer
+    confirmation_message = root.find('ConfirmationMessage').text
+
+    # Get Order Date Information
+    date_received = date.today()
+    date_last_modified = datetime.fromtimestamp(
+        os.path.getmtime(file_name)).strftime('%Y-%m-%d %H:%M:%S')
+
+    # Get Shipping Information
+    shipping_add = root.find("EPaymentRes").find("ShippingAdd")
+    ship_to_name = shipping_add.find("ShipToName").text
+    ship_to_street_add = shipping_add.find("ShipToStreetAdd").text
+    ship_to_street_add_2 = shipping_add.find("ShipToStreetAdd2").text
+    ship_to_city = shipping_add.find("ShipToCity").text
+    ship_to_state = shipping_add.find("ShipToState").text
+    ship_to_zipcode = shipping_add.find("ShipToZipCode").text
+    ship_to_country = shipping_add.find("ShipToCountry").text
+    ship_to_phone = shipping_add.find("ShipToPhone").text
+    shipping_instructions = shipping_add.find("ShippingInstructions").text
+
+    # Create Order in Database
+    insert_order = Order(order_no=order_no,
+                         client_agency_name=client_agency_name,
+                         ship_to_name=ship_to_name,
+                         ship_to_street_add=ship_to_street_add,
+                         ship_to_street_add_2=ship_to_street_add_2,
+                         ship_to_city=ship_to_city,
+                         ship_to_state=ship_to_state,
+                         ship_to_zipcode=ship_to_zipcode,
+                         ship_to_country=ship_to_country,
+                         ship_to_phone=ship_to_phone,
+                         customer_email=customer_email,
+                         shipping_instructions=shipping_instructions,
+                         clients_data=clients_data,
+                         confirmation_message=confirmation_message,
+                         date_received=date_received,
+                         billing_name=billing_name,
+                         date_last_modified=date_last_modified,
+                         sub_order_no=sub_order_no,
+                         client_id=client_id,
+                         order_types=order_types
+                         )
+    db.session.add(insert_order)
+    db.session.commit()
+
+    print("Added order " + str(order_no) + " into database.")
+    return True
