@@ -44,7 +44,7 @@ class Order(db.Model):
     billing_name = db.Column(db.String(64))
     date_last_modified = db.Column(db.DateTime)
     sub_order_no = db.Column(db.BigInteger, primary_key=True)
-    client_id = db.Column(db.Integer)
+    client_id = db.Column(db.BigInteger)
     order_types = db.Column(db.String(256))
 
     @property
