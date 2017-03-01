@@ -45,7 +45,7 @@ def import_xml_folder(scheduled=False):
                     sftp.close()
 
             for file_ in os.listdir(import_folder):
-                file_ = os.path.join(local_path, file_)
+                file_ = os.path.join(import_folder, file_)
                 print("Imported {}".format(file_)) if import_file(file_) else print("Failed to Import {}".format(file_))
         else:
             for file_ in os.listdir(local_path):
