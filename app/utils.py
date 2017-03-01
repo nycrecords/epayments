@@ -19,11 +19,14 @@ def import_xml_folder(scheduled=False):
     :param scheduled: Boolean determines whether this is running as a Cron job or manually
     """
 
-    file_path = current_app.config['REMOTE_FILE_PATH']
-    local_path = current_app.config['LOCAL_FILE_PATH']
+    if not scheduled:
+        file_path = current_app.config['REMOTE_FILE_PATH']
+        local_path = current_app.config['LOCAL_FILE_PATH']
 
     if scheduled:
         with scheduler.app.app_context():
+            file_path = current_app.config['REMOTE_FILE_PATH']
+            local_path = current_app.config['LOCAL_FILE_PATH']
             # Create new folder with date of download and download all files
 
             import_folder = os.path.join(local_path,
@@ -43,6 +46,7 @@ def import_xml_folder(scheduled=False):
                     sftp.close()
 
             for file_ in os.listdir(import_folder):
+                file_ = os.path.join(local_path, file_)
                 print("Imported {}".format(file_)) if import_file(file_) else print("Failed to Import {}".format(file_))
     else:
         for file_ in os.listdir(local_path):
