@@ -29,7 +29,7 @@ def import_xml_folder(scheduled=False):
             # Create new folder with date of download and download all files
 
             import_folder = os.path.join(local_path,
-                                         'DOR-{date_time}/'.format(date_time=datetime.datetime.now().strftime('%m-%d-%Y_%H:%M')))
+                                         'DOR-{date_time}/'.format(date_time=datetime.now().strftime('%m-%d-%Y')))
 
             if current_app.config['USE_SFTP']:
 
