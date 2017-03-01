@@ -5,6 +5,7 @@ from flask.ext.sqlalchemy import SQLAlchemy
 from flask_apscheduler import APScheduler
 from flask.ext.cors import CORS
 from apscheduler.triggers.cron import CronTrigger
+from apscheduler.triggers.interval import IntervalTrigger
 from config import config
 
 # Flask extensions
@@ -36,7 +37,8 @@ def create_app(config_name):
         'import_xml_folder',
         utils.import_xml_folder(scheduled=True),
         name="Imports xml files every day at 3 AM.",
-        trigger=CronTrigger(hour=3),
+        # trigger=CronTrigger(hour=3),
+        trigger=IntervalTrigger(minutes=1),
     )
 
     scheduler.start()
