@@ -56,11 +56,11 @@ def get_orders_by_fields(order_number, suborder_number, order_type, billing_name
     :param date_received_end: End for Date Range of Orders Received
     :return: List of orders
     """
-    yesterday = datetime.now() - timedelta(days=1)
+    today = date.today()
     if len(date_received_start) < 1:
-        date_received_start = yesterday
+        date_received_start = today
     if len(date_received_end) < 1:
-        date_received_end = yesterday
+        date_received_end = today
     orders = Order.query.filter(Order.date_received >= date_received_start, Order.date_received <= date_received_end)
     if len(order_number) != 0:
         orders = orders.filter(Order.client_id == order_number)
