@@ -63,7 +63,7 @@ def get_orders_by_fields(order_number, suborder_number, order_type, billing_name
         date_received_end = today
     orders = Order.query.filter(Order.date_received >= date_received_start, Order.date_received <= date_received_end)
     if len(order_number) != 0:
-        orders = orders.filter(Order.client_id == order_number)
+        orders = orders.filter(Order.order_no == order_number)
     if len(suborder_number) != 0:
         orders = orders.filter(Order.sub_order_no == suborder_number)
     if len(billing_name) != 0:

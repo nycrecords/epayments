@@ -45,8 +45,8 @@ var App = React.createClass({
             }
             var allUniqueOrders = [];
             for (var i = 0; i < this.state.order.length; i++) {
-                if (allUniqueOrders.indexOf(this.state.order[i].clientid) === -1) {
-                    allUniqueOrders.push(this.state.order[i].clientid)
+                if (allUniqueOrders.indexOf(this.state.order[i].orderno) === -1) {
+                    allUniqueOrders.push(this.state.order[i].orderno)
                 }
             }
             this.setState({uniqueOrders: allUniqueOrders});
@@ -86,8 +86,8 @@ var App = React.createClass({
                 }
                 this.setState({order: dateRangeOrders});
                 for (var i = 0; i < this.state.order.length; i++) {
-                    if (allUniqueOrders.indexOf(this.state.order[i].clientid) === -1) {
-                        allUniqueOrders.push(this.state.order[i].clientid)
+                    if (allUniqueOrders.indexOf(this.state.order[i].orderno) === -1) {
+                        allUniqueOrders.push(this.state.order[i].orderno)
                     }
                 }
                 this.setState({uniqueOrders: allUniqueOrders});
@@ -156,7 +156,6 @@ var OrderForm = React.createClass({
             mm = '0' + mm
         }
         today = mm + '/' + dd + '/' + yyyy;
-        console.log(today);
         this.setState({
             today: today
         });
@@ -306,7 +305,6 @@ var Order = React.createClass({
             var div = document.createElement('div');
             div.className = 'separateorder';
             var order = this.props.order[i];
-            console.log(order);
             var clientsdata = order.clientsdata.split('|');
             if (order.ship_to_street_add2 == null) {
                 var address = order.ship_to_streetadd;
