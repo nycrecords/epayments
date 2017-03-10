@@ -68,7 +68,7 @@ def get_orders_by_fields(order_number, suborder_number, order_type, billing_name
         orders = orders.filter(Order.sub_order_no == suborder_number)
     if len(billing_name) != 0:
         orders = orders.filter(func.lower(Order.billing_name).contains(func.lower(billing_name)))
-    if len(order_type) != 4 and order_type not in MULTIPLE_ORDERS:
+    if len(order_type) != 4 and order_type != 'Order Type' and order_type not in MULTIPLE_ORDERS:
         orders = orders.filter(Order.client_agency_name == order_type)
     elif order_type == MULTIPLE_ITEMS_IN_CART:
         orders = [order for order in orders if len(order.order_types.split(',')) > 1]

@@ -144,6 +144,23 @@ var Header = React.createClass({
  */
 
 var OrderForm = React.createClass({
+    setDate: function () {
+        var today = new Date();
+        var dd = today.getDate();
+        var mm = today.getMonth() + 1;
+        var yyyy = today.getFullYear();
+        if (dd < 10) {
+            dd = '0' + dd
+        }
+        if (mm < 10) {
+            mm = '0' + mm
+        }
+        today = mm + '/' + dd + '/' + yyyy;
+        console.log(today);
+        this.setState({
+            today: today
+        });
+    },
     findOrder: function (event) {
         event.preventDefault();
         var order = {
@@ -156,6 +173,9 @@ var OrderForm = React.createClass({
         };
         this.props.orderFilters.push(order);
         this.props.filterOrder(order)
+    },
+    componentWillMount: function () {
+        this.setDate();
     },
     render: function () {
         return (
@@ -172,8 +192,8 @@ var OrderForm = React.createClass({
                     ref='subordernumber'
                     id='subordernumber'
                     placeholder='Suborder Number'/>
-                <select data-bind='value: ordertype' ref='ordertype' id='ordertype'>
-                    <option disabled selected value>
+                <select data-bind='value: ordertype' ref='ordertype' id='ordertype' defaultValue='Order Type'>
+                    <option disabled>
                         Order Type
                     </option>
                     <option value='All'>
@@ -230,7 +250,8 @@ var OrderForm = React.createClass({
                     type='text'
                     ref='datereceivedstart'
                     placeholder='Date Received - Start'
-                    id='datepicker'/>
+                    id='datepicker'
+                    defaultValue={this.state.today}/>
                 <input
                     data-bind='value: datereceivedend'
                     type='text'
@@ -285,12 +306,12 @@ var Order = React.createClass({
             var div = document.createElement('div');
             div.className = 'separateorder';
             var order = this.props.order[i];
+            console.log(order);
             var clientsdata = order.clientsdata.split('|');
-            var orderno = parseInt(order.orderno, 10);
-            if (order.shiptostreetadd2 == null) {
-                var address = order.shiptostreetadd;
+            if (order.ship_to_street_add2 == null) {
+                var address = order.ship_to_streetadd;
             } else {
-                var address = order.shiptostreetadd + ' ' + order.shiptostreetadd2;
+                var address = order.ship_to_streetadd + ' ' + order.ship_to_street_add2;
             }
             var ordertypelist = order.ordertypes.split(',');
             if (ordertypelist.length > 1) {
@@ -332,13 +353,13 @@ var Order = React.createClass({
                 } else {
                     var middlename = '<b>MIDDLE_NAME</b>' + '<br>' + 'N/A' + '<br><br>';
                 }
-                div.innerHTML = order.shiptoname + '<br>' +
-                    'Address: ' + address + ' ' + order.shiptocity + ', ' + order.shiptostate + ' ' + order.shiptozipcode + '<br>' +
+                div.innerHTML = order.ship_to_name + '<br>' +
+                    'Address: ' + address + ' ' + order.ship_to_city + ', ' + order.ship_to_state + ' ' + order.ship_to_zipcode + '<br>' +
                     '<h3>Birth Search</h3>' + ordertypes +
                     '<b>Customer Name: ' + order.billingname + '</b><br>' +
-                    '<b>Order Number: ' + orderno + '</b><br>' +
+                    '<b>Order Number: ' + order.orderno + '</b><br>' +
                     '<b>Time of Order: ' + order.datelastmodified + '</b><br>' +
-                    '<b>Phone: ' + order.shiptophone + '</b><br>' +
+                    '<b>Phone: ' + order.ship_to_phone + '</b><br>' +
                     '<b>Email: ' + order.customeremail + '</b><br>' +
                     '<b>SubOrderNo: ' + order.suborderno + '</b>' + '<br><br>' +
                     '<b>LAST_NAME</b>' + '<br>' + clientsdata[clientsdata.indexOf('LASTNAME') + 1] + '<br><br>' + middlename +
@@ -352,13 +373,13 @@ var Order = React.createClass({
                     '<div class="pagebreak" style="page-break-after: always;}"></div>';
             }
             else if (order.clientagencyname == 'Marriage Search') {
-                div.innerHTML = order.shiptoname + '<br>' +
-                    'Address: ' + address + ' ' + order.shiptocity + ', ' + order.shiptostate + ' ' + order.shiptozipcode + '<br>' +
+                div.innerHTML = order.ship_to_name + '<br>' +
+                    'Address: ' + address + ' ' + order.ship_to_city + ', ' + order.ship_to_state + ' ' + order.ship_to_zipcode + '<br>' +
                     '<h3>Marriage Search</h3>' + ordertypes +
                     '<b>Customer Name: ' + order.billingname + '</b><br>' +
-                    '<b>Order Number: ' + orderno + '</b><br>' +
+                    '<b>Order Number: ' + order.orderno + '</b><br>' +
                     '<b>Time of Order: ' + order.datelastmodified + '</b><br>' +
-                    '<b>Phone: ' + order.shiptophone + '</b><br>' +
+                    '<b>Phone: ' + order.ship_to_phone + '</b><br>' +
                     '<b>Email: ' + order.customeremail + '</b><br>' +
                     '<b>SubOrderNo: ' + order.suborderno + '</b>' + '<br><br>' +
                     '<b>LAST_NAME_GROOM</b>' + '<br>' + clientsdata[clientsdata.indexOf('LASTNAME_G') + 1] + '<br><br>' +
@@ -386,13 +407,13 @@ var Order = React.createClass({
                 } else {
                     var middlename = '<b>MIDDLE_NAME</b>' + '<br>' + 'N/A' + '<br><br>';
                 }
-                div.innerHTML = order.shiptoname + '<br>' +
-                    'Address: ' + address + ' ' + order.shiptocity + ', ' + order.shiptostate + ' ' + order.shiptozipcode + '<br>' +
+                div.innerHTML = order.ship_to_name + '<br>' +
+                    'Address: ' + address + ' ' + order.ship_to_city + ', ' + order.ship_to_state + ' ' + order.ship_to_zipcode + '<br>' +
                     '<h3>Death Search</h3>' + ordertypes +
                     '<b>Customer Name: ' + order.billingname + '</b><br>' +
-                    '<b>Order Number: ' + orderno + '</b><br>' +
+                    '<b>Order Number: ' + order.orderno + '</b><br>' +
                     '<b>Time of Order: ' + order.datelastmodified + '</b><br>' +
-                    '<b>Phone: ' + order.shiptophone + '</b><br>' +
+                    '<b>Phone: ' + order.ship_to_phone + '</b><br>' +
                     '<b>Email: ' + order.customeremail + '</b><br>' +
                     '<b>SubOrderNo: ' + order.suborderno + '</b>' + '<br><br>' +
                     '<b>LAST_NAME</b>' + '<br>' + clientsdata[clientsdata.indexOf('LASTNAME') + 1] + '<br><br>' + middlename +
@@ -434,13 +455,13 @@ var Order = React.createClass({
                 } else {
                     var middlename = '<b>MIDDLE_NAME</b>' + '<br>' + 'N/A' + '<br><br>';
                 }
-                div.innerHTML = order.shiptoname + '<br>' +
-                    'Address: ' + address + ' ' + order.shiptocity + ', ' + order.shiptostate + ' ' + order.shiptozipcode + '<br>' +
+                div.innerHTML = order.ship_to_name + '<br>' +
+                    'Address: ' + address + ' ' + order.ship_to_city + ', ' + order.ship_to_state + ' ' + order.ship_to_zipcode + '<br>' +
                     '<h3>Birth Cert</h3>' + ordertypes +
                     '<b>Customer Name: ' + order.billingname + '</b><br>' +
-                    '<b>Order Number: ' + orderno + '</b><br>' +
+                    '<b>Order Number: ' + order.orderno + '</b><br>' +
                     '<b>Time of Order: ' + order.datelastmodified + '</b><br>' +
-                    '<b>Phone: ' + order.shiptophone + '</b><br>' +
+                    '<b>Phone: ' + order.ship_to_phone + '</b><br>' +
                     '<b>Email: ' + order.customeremail + '</b><br>' +
                     '<b>SubOrderNo: ' + order.suborderno + '</b>' + '<br><br>' +
                     '<b>CERTIFICATE_NUMBER</b>' + '<br>' + clientsdata[clientsdata.indexOf('CERTIFICATE_NUMBER') + 1] + '<br><br>' +
@@ -460,13 +481,13 @@ var Order = React.createClass({
                 } else {
                     var middlename = '<b>MIDDLE_NAME</b>' + '<br>' + 'N/A' + '<br><br>';
                 }
-                div.innerHTML = order.shiptoname + '<br>' +
-                    'Address: ' + address + ' ' + order.shiptocity + ', ' + order.shiptostate + ' ' + order.shiptozipcode + '<br>' +
+                div.innerHTML = order.ship_to_name + '<br>' +
+                    'Address: ' + address + ' ' + order.ship_to_city + ', ' + order.ship_to_state + ' ' + order.ship_to_zipcode + '<br>' +
                     '<h3>Death Cert</h3>' + ordertypes +
                     '<b>Customer Name: ' + order.billingname + '</b><br>' +
-                    '<b>Order Number: ' + orderno + '</b><br>' +
+                    '<b>Order Number: ' + order.orderno + '</b><br>' +
                     '<b>Time of Order: ' + order.datelastmodified + '</b><br>' +
-                    '<b>Phone: ' + order.shiptophone + '</b><br>' +
+                    '<b>Phone: ' + order.ship_to_phone + '</b><br>' +
                     '<b>Email: ' + order.customeremail + '</b><br>' +
                     '<b>SubOrderNo: ' + order.suborderno + '</b>' + '<br><br>' +
                     '<b>LAST_NAME</b>' + '<br>' + clientsdata[clientsdata.indexOf('LASTNAME') + 1] + '<br><br>' + middlename +
@@ -482,13 +503,13 @@ var Order = React.createClass({
                     '<div class="pagebreak" style="page-break-after: always;}"></div>';
             }
             else if (order.clientagencyname == 'Marriage Cert') {
-                div.innerHTML = order.shiptoname + '<br>' +
-                    'Address: ' + address + ' ' + order.shiptocity + ', ' + order.shiptostate + ' ' + order.shiptozipcode + '<br>' +
+                div.innerHTML = order.ship_to_name + '<br>' +
+                    'Address: ' + address + ' ' + order.ship_to_city + ', ' + order.ship_to_state + ' ' + order.ship_to_zipcode + '<br>' +
                     '<h3>Marriage Cert</h3>' + ordertypes +
                     '<b>Customer Name: ' + order.billingname + '</b><br>' +
-                    '<b>Order Number: ' + orderno + '</b><br>' +
+                    '<b>Order Number: ' + order.orderno + '</b><br>' +
                     '<b>Time of Order: ' + order.datelastmodified + '</b><br>' +
-                    '<b>Phone: ' + order.shiptophone + '</b><br>' +
+                    '<b>Phone: ' + order.ship_to_phone + '</b><br>' +
                     '<b>Email: ' + order.customeremail + '</b><br>' +
                     '<b>SubOrderNo: ' + order.suborderno + '</b>' + '<br><br>' +
                     '<b>LAST_NAME_GROOM</b>' + '<br>' + clientsdata[clientsdata.indexOf('LASTNAME_G') + 1] + '<br><br>' +
@@ -515,13 +536,13 @@ var Order = React.createClass({
                 } else {
                     var lot = '<b>LOT</b>' + '<br>' + 'N/A' + '<br><br>';
                 }
-                div.innerHTML = order.shiptoname + '<br>' +
-                    'Address: ' + address + ' ' + order.shiptocity + ', ' + order.shiptostate + ' ' + order.shiptozipcode + '<br>' +
+                div.innerHTML = order.ship_to_name + '<br>' +
+                    'Address: ' + address + ' ' + order.ship_to_city + ', ' + order.ship_to_state + ' ' + order.ship_to_zipcode + '<br>' +
                     '<h3>Photo Tax</h3>' + ordertypes +
                     '<b>Customer Name: ' + order.billingname + '</b><br>' +
-                    '<b>Order Number: ' + orderno + '</b><br>' +
+                    '<b>Order Number: ' + order.orderno + '</b><br>' +
                     '<b>Time of Order: ' + order.datelastmodified + '</b><br>' +
-                    '<b>Phone: ' + order.shiptophone + '</b><br>' +
+                    '<b>Phone: ' + order.ship_to_phone + '</b><br>' +
                     '<b>Email: ' + order.customeremail + '</b><br>' +
                     '<b>SubOrderNo: ' + order.suborderno + '</b>' + '<br><br>' +
                     '<b>COLLECTION</b>' + '<br>' + clientsdata[clientsdata.indexOf('Collection') + 1] + '<br><br>' +
@@ -539,13 +560,13 @@ var Order = React.createClass({
                 } else {
                     var additionaldescription = '<b>ADDITIONAL_DESCRIPTION</b>' + '<br>' + 'N/A' + '<br><br>';
                 }
-                div.innerHTML = order.shiptoname + '<br>' +
-                    'Address: ' + address + ' ' + order.shiptocity + ', ' + order.shiptostate + ' ' + order.shiptozipcode + '<br>' +
+                div.innerHTML = order.ship_to_name + '<br>' +
+                    'Address: ' + address + ' ' + order.ship_to_city + ', ' + order.ship_to_state + ' ' + order.ship_to_zipcode + '<br>' +
                     '<h3>Photo Tax</h3>' + ordertypes +
                     '<b>Customer Name: ' + order.billingname + '</b><br>' +
-                    '<b>Order Number: ' + orderno + '</b><br>' +
+                    '<b>Order Number: ' + order.orderno + '</b><br>' +
                     '<b>Time of Order: ' + order.datelastmodified + '</b><br>' +
-                    '<b>Phone: ' + order.shiptophone + '</b><br>' +
+                    '<b>Phone: ' + order.ship_to_phone + '</b><br>' +
                     '<b>Email: ' + order.customeremail + '</b><br>' +
                     '<b>SubOrderNo: ' + order.suborderno + '</b>' + '<br><br>' +
                     '<b>IMAGE ID/IDENTIFIER</b>' + '<br>' + clientsdata[clientsdata.indexOf('IMAGE_IDENTIFIER') + 1] + '<br><br>' +
@@ -581,10 +602,10 @@ var Order = React.createClass({
             } else {
                 var contactnumber = '';
             }
-            if (order.shiptostreetadd2 == null) {
-                var address = order.shiptostreetadd;
+            if (order.ship_to_street_add_2 == null) {
+                var address = order.ship_to_streetadd;
             } else {
-                var address = order.shiptostreetadd + ' ' + order.shiptostreetadd2;
+                var address = order.ship_to_streetadd + ' ' + order.ship_to_street_add2;
             }
             if (order.clientagencyname == ('Photo Tax' || 'Photo Gallery')) {
                 var photo_address = 'NYC DEPARTMENT OF RECORDS/MUNICIPAL ARCHIVES' + '<br>' + '31 Chambers Street' +
@@ -592,10 +613,10 @@ var Order = React.createClass({
             } else {
                 var photo_address = '';
             }
-            if (order.shiptoname.length > 1) {
+            if (order.ship_to_name.length > 1) {
                 div.innerHTML = '<div style="display: table-cell; vertical-align: middle; text-align: center; width: 375px; height: 200px; margin: auto; position: relative;">' +
-                    photo_address + '<b>TO: </b>' + order.shiptoname + '<br>' + address + '<br>' + order.shiptocity +
-                    ', ' + order.shiptostate + ' ' + order.shiptozipcode + '<br></div>';
+                    photo_address + '<b>TO: </b>' + order.ship_to_name + '<br>' + address + '<br>' + order.ship_to_city +
+                    ', ' + order.ship_to_state + ' ' + order.ship_to_zipcode + '<br></div>';
             } else {
                 div.innerHTML = '<div style="display: table-cell; vertical-align: middle; text-align: center; width: 375px; height: 200px; margin: auto; position: relative;">' +
                     'CALL FOR PICKUP' + '<br>' + order.billingname + '<br>' + contactnumber + '<br></div>';
@@ -618,14 +639,14 @@ var Order = React.createClass({
             div.style.fontFamily = 'Arial, Helvetica, sans-serif';
             div.style.fontSize = '12px';
             var order = this.props.order[i];
-            if (order.shiptostreetadd2 == null) {
-                var address = order.shiptostreetadd;
+            if (order.ship_to_street_add_2 == null) {
+                var address = order.ship_to_streetadd;
             } else {
-                var address = order.shiptostreetadd + ' ' + order.shiptostreetadd2;
+                var address = order.ship_to_streetadd + ' ' + order.ship_to_street_add2;
             }
             div.innerHTML = '<div style="display: table-cell; vertical-align: middle; text-align: center; width: 250px; height: 100px; margin: auto; position: relative;">' +
-                order.shiptoname + '<br>' + address + '<br>' + order.shiptocity + ', ' + order.shiptostate + ' ' +
-                order.shiptozipcode + '<br></div>';
+                order.ship_to_name + '<br>' + address + '<br>' + order.ship_to_city + ', ' + order.ship_to_state + ' ' +
+                order.ship_to_zipcode + '<br></div>';
             document.getElementById('printsmalllabels').appendChild(div);
         }
         var smalllabelpage = window.open();
@@ -650,7 +671,7 @@ var Order = React.createClass({
                     </li>
                     {this.props.order.map(function (order) {
                         return <li key={order.orderno}>
-                            Order #: {order.clientid}<br/>
+                            Order #: {order.orderno}<br/>
                             Suborder #: {order.suborderno}<br/>
                             Order Type: {order.clientagencyname}<br/>
                             Billing Name: {order.billingname}<br/>

@@ -26,8 +26,8 @@ def import_xml_folder(scheduled=False):
         if scheduled:
             file_path = current_app.config['REMOTE_FILE_PATH']
             local_path = current_app.config['LOCAL_FILE_PATH']
-            # Create new folder with date of download and download all files
 
+            # Create new folder with date of download and download all files
             import_folder = os.path.join(local_path,
                                          'DOR-{date_time}/'.format(date_time=datetime.now().strftime('%m-%d-%Y')))
 
@@ -44,13 +44,15 @@ def import_xml_folder(scheduled=False):
                             print("SFTP Transferred File: " + file)
                     sftp.close()
 
-            for file_ in os.listdir(import_folder):
-                file_ = os.path.join(import_folder, file_)
-                print("Imported {}".format(file_)) if import_file(file_) else print("Failed to Import {}".format(file_))
+                for file_ in os.listdir(import_folder):
+                    if not file_.startswith('.'):
+                        file_ = os.path.join(import_folder, file_)
+                        print("Imported {}".format(file_)) if import_file(file_) else print("Failed to Import {}".format(file_))
         else:
             for file_ in os.listdir(local_path):
-                file_ = os.path.join(local_path, file_)
-                print("Imported {}".format(file_)) if import_file(file_) else print("Failed to Import {}".format(file_))
+                if not file_.startswith('.'):
+                    file_ = os.path.join(local_path, file_)
+                    print("Imported {}".format(file_)) if import_file(file_) else print("Failed to Import {}".format(file_))
 
 
 def import_file(file_name):
