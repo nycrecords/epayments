@@ -1,6 +1,6 @@
 from app import db
 
-class Order(db.Model):
+class Orders(db.Model):
     """
     Define the Order class with the following columns and relationships:
 
@@ -25,7 +25,7 @@ class Order(db.Model):
     client_id -- Column: Integer
     order_types -- Column: String(256)
     """
-    __tablename__ = 'order'
+    __tablename__ = 'orders'
     order_no = db.Column(db.String(64))
     client_agency_name = db.Column(db.String(64))
     ship_to_name = db.Column(db.String(64))

@@ -3,7 +3,7 @@ import xml.etree.ElementTree as ET
 from datetime import datetime, date
 from flask import current_app
 from app import db, scheduler
-from app.models import Order
+from app.models import Orders
 from app.file_utils import sftp_ctx
 from app.constants import (
     ORDER_TYPES,
@@ -72,86 +72,89 @@ def import_file(file_name):
     if "CPY" in order_no:
         order_no = order_no.strip('CPY')
 
-    # Check for duplicate in database
-    duplicate = Order.query.filter_by(order_no=order_no).first()
-
-    if duplicate:
-        print("Order %s already exists in the database." % order_no)
-        return False
-
     # Extract ClientsData - Information about the Order Type
     clients_data = root.find('ClientsData').text
-    clients_data_list = clients_data.split('|')
+    clients_data_items = clients_data.split('ClientID')[1:]
+    clients_data_items = ['ClientID' + client for client in clients_data_items]
 
-    # Client ID: Order Type ID
-    client_id = clients_data_list[clients_data_list.index("ClientID") + 1]
+    for i in clients_data_items:
+        clients_data_list = i.split('|')
+        client_id = clients_data_list[clients_data_list.index("ClientID") + 1]
 
-    # Client Agency Name: Order Type as String
-    client_agency_name = CLIENT_AGENCY_NAMES[client_id]
+        # Client Agency Name: Order Type as String
+        client_agency_name = CLIENT_AGENCY_NAMES[client_id]
 
-    # Sub Order Number: Used to identify multi-part orders
-    sub_order_no = clients_data_list[clients_data_list.index("OrderNo") + 1]
+        # Sub Order Number: Used to identify multi-part orders
+        sub_order_no = clients_data_list[clients_data_list.index("OrderNo") + 1]
 
-    # Determine if multiple items are requested as part of this order.
-    order_types = []
-    item_description = root.findall(".//ItemDescription")
-    for item in item_description:
-        for order_type in ORDER_TYPES:
-            if order_type in item.text:
-                order_types.append(order_type)
-    order_types = ','.join(order_types)
+        # Check for duplicate in database
+        duplicate = Orders.query.filter_by(sub_order_no=sub_order_no).first()
 
-    # Get Customer Information
-    # Name for Billing Information
-    billing_name = root.find("EPaymentRes").find("BillingInfo").find("BillingName").text
+        if duplicate:
+            print("Order %s already exists in the database." % order_no)
+            continue
 
-    # Customer Email: Email for person who placed order
-    customer_email = root.find("EPaymentReq").find("CustomerEmail").text
+        # Determine if multiple items are requested as part of this order.
+        order_types = []
+        item_description = root.findall(".//ItemDescription")
+        for item in item_description:
+            for order_type in ORDER_TYPES:
+                if order_type in item.text:
+                    order_types.append(order_type)
+        order_types = ','.join(order_types)
 
-    # Message sent to customer
-    confirmation_message = root.find('ConfirmationMessage').text
+        # Get Customer Information
+        # Name for Billing Information
+        billing_name = root.find("EPaymentRes").find("BillingInfo").find("BillingName").text
 
-    # Get Order Date Information
-    date_received = date.today()
-    date_last_modified = datetime.fromtimestamp(
-        os.path.getmtime(file_name)).strftime('%Y-%m-%d %H:%M:%S')
+        # Customer Email: Email for person who placed order
+        customer_email = root.find("EPaymentReq").find("CustomerEmail").text
 
-    # Get Shipping Information
-    shipping_add = root.find("EPaymentRes").find("ShippingAdd")
-    ship_to_name = shipping_add.find("ShipToName").text
-    ship_to_street_add = shipping_add.find("ShipToStreetAdd").text
-    ship_to_street_add_2 = shipping_add.find("ShipToStreetAdd2").text
-    ship_to_city = shipping_add.find("ShipToCity").text
-    ship_to_state = shipping_add.find("ShipToState").text
-    ship_to_zipcode = shipping_add.find("ShipToZipCode").text
-    ship_to_country = shipping_add.find("ShipToCountry").text
-    ship_to_phone = shipping_add.find("ShipToPhone").text
-    shipping_instructions = shipping_add.find("ShippingInstructions").text
+        # Message sent to customer
+        confirmation_message = root.find('ConfirmationMessage').text
 
-    # Create Order in Database
-    insert_order = Order(order_no=order_no,
-                         client_agency_name=client_agency_name,
-                         ship_to_name=ship_to_name,
-                         ship_to_street_add=ship_to_street_add,
-                         ship_to_street_add_2=ship_to_street_add_2,
-                         ship_to_city=ship_to_city,
-                         ship_to_state=ship_to_state,
-                         ship_to_zipcode=ship_to_zipcode,
-                         ship_to_country=ship_to_country,
-                         ship_to_phone=ship_to_phone,
-                         customer_email=customer_email,
-                         shipping_instructions=shipping_instructions,
-                         clients_data=clients_data,
-                         confirmation_message=confirmation_message,
-                         date_received=date_received,
-                         billing_name=billing_name,
-                         date_last_modified=date_last_modified,
-                         sub_order_no=sub_order_no,
-                         client_id=client_id,
-                         order_types=order_types
-                         )
-    db.session.add(insert_order)
-    db.session.commit()
+        # Get Order Date Information
+        date_received = date.today()
+        date_last_modified = datetime.fromtimestamp(
+            os.path.getmtime(file_name)).strftime('%Y-%m-%d %H:%M:%S')
 
-    print("Added order " + str(order_no) + " into database.")
+        # Get Shipping Information
+        shipping_add = root.find("EPaymentRes").find("ShippingAdd")
+        ship_to_name = shipping_add.find("ShipToName").text
+        ship_to_street_add = shipping_add.find("ShipToStreetAdd").text
+        ship_to_street_add_2 = shipping_add.find("ShipToStreetAdd2").text
+        ship_to_city = shipping_add.find("ShipToCity").text
+        ship_to_state = shipping_add.find("ShipToState").text
+        ship_to_zipcode = shipping_add.find("ShipToZipCode").text
+        ship_to_country = shipping_add.find("ShipToCountry").text
+        ship_to_phone = shipping_add.find("ShipToPhone").text
+        shipping_instructions = shipping_add.find("ShippingInstructions").text
+
+        # Create Order in Database
+        insert_order = Orders(order_no=order_no,
+                             client_agency_name=client_agency_name,
+                             ship_to_name=ship_to_name,
+                             ship_to_street_add=ship_to_street_add,
+                             ship_to_street_add_2=ship_to_street_add_2,
+                             ship_to_city=ship_to_city,
+                             ship_to_state=ship_to_state,
+                             ship_to_zipcode=ship_to_zipcode,
+                             ship_to_country=ship_to_country,
+                             ship_to_phone=ship_to_phone,
+                             customer_email=customer_email,
+                             shipping_instructions=shipping_instructions,
+                             clients_data=clients_data,
+                             confirmation_message=confirmation_message,
+                             date_received=date_received,
+                             billing_name=billing_name,
+                             date_last_modified=date_last_modified,
+                             sub_order_no=sub_order_no,
+                             client_id=client_id,
+                             order_types=order_types
+                             )
+        db.session.add(insert_order)
+        db.session.commit()
+
+        print("Added order " + str(sub_order_no) + " into database.")
     return True
+

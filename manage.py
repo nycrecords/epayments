@@ -1,6 +1,6 @@
 import os
 from app import create_app, db
-from app.models import Order
+from app.models import Orders
 from flask.ext.script import Manager, Shell
 from flask.ext.migrate import Migrate, MigrateCommand
 # from flask.ext.sqlalchemy import SQLAlchemy
@@ -21,6 +21,11 @@ def make_shell_context():
 manager.add_command('shell', Shell(make_context=make_shell_context))
 manager.add_command('db', MigrateCommand)
 
+@manager.command
+def import_xml():
+    """Import XML files"""
+    from app.utils import import_xml_folder
+    import_xml_folder()
 
 @manager.command
 def reset_db():

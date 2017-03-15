@@ -26522,6 +26522,8 @@ var Order = React.createClass({
         for (var i = 0; i < this.props.order.length; i++) {
             var div = document.createElement('div');
             div.className = 'separateorder';
+	    div.style.fontFamily = 'Arial, Helvetica, sans-serif';
+            div.style.fontSize = '14px';
             var order = this.props.order[i];
             var clientsdata = order.clientsdata.split('|');
             if (order.ship_to_street_add2 == null) {
@@ -26666,7 +26668,7 @@ var Order = React.createClass({
             div.style.height = '20%';
             div.style.display = 'inline-block';
             div.style.fontFamily = 'Arial, Helvetica, sans-serif';
-            div.style.fontSize = '12px';
+            div.style.fontSize = '10px';
             var order = this.props.order[i];
             var clientsdata = order.clientsdata.split('|');
             if (clientsdata.includes('CONTACT_NUMBER')) {
@@ -26705,7 +26707,7 @@ var Order = React.createClass({
             div.style.height = '10%';
             div.style.display = 'inline-block';
             div.style.fontFamily = 'Arial, Helvetica, sans-serif';
-            div.style.fontSize = '12px';
+            div.style.fontSize = '10px';
             var order = this.props.order[i];
             if (order.ship_to_street_add_2 == null) {
                 var address = order.ship_to_streetadd;
