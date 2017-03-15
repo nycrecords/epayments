@@ -32,16 +32,16 @@ def create_app(config_name):
     CORS(app)
 
     # Create scheduler for importing xml files into database
-    import app.utils as utils
-    scheduler.add_job(
-        'import_xml_folder',
-        utils.import_xml_folder,
-        name="Imports xml files every day at 3 AM.",
-        trigger=CronTrigger(hour=3),
-        # trigger=IntervalTrigger(minutes=1),
-    )
-
-    scheduler.start()
+    # import app.utils as utils
+    # scheduler.add_job(
+    #     'import_xml_folder',
+    #     utils.import_xml_folder,
+    #     name="Imports xml files every day at 3 AM.",
+    #     trigger=CronTrigger(hour=3),
+    #     # trigger=IntervalTrigger(minutes=1),
+    # )
+    #
+    # scheduler.start()
 
     # Base template that uses React for frontend
     from .main import main as main_blueprint
@@ -51,6 +51,6 @@ def create_app(config_name):
     from .api_1_0 import api_1_0 as api_1_0_blueprint
     app.register_blueprint(api_1_0_blueprint, url_prefix='/api/v1.0')
 
-    atexit.register(lambda: scheduler.shutdown())
+    # atexit.register(lambda: scheduler.shutdown())
 
     return app
