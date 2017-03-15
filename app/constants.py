@@ -43,3 +43,5 @@ MULTIPLE_ORDERS = [
 MULTIPLE_ITEMS_IN_CART = 'multipleitems'
 
 VITAL_RECORDS_PHOTOS_ORDER = 'vitalrecordsphotos'
+
+ALLOWED_EXTENSIONS = frozenset(['tar', 'xml'])

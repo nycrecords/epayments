@@ -11,7 +11,7 @@ from app.constants import (
 )
 
 
-def import_xml_folder(scheduled=False):
+def import_xml_folder(scheduled=False, path=None):
     """
     Function is called from scheduler at 3AM everyday.
     Downloads all xml files from a remote folder to local folder.
@@ -21,14 +21,14 @@ def import_xml_folder(scheduled=False):
 
     with scheduler.app.app_context():
         file_path = current_app.config['REMOTE_FILE_PATH']
-        local_path = current_app.config['LOCAL_FILE_PATH']
+        local_path = path or current_app.config['LOCAL_FILE_PATH']
 
         if scheduled:
             file_path = current_app.config['REMOTE_FILE_PATH']
             local_path = current_app.config['LOCAL_FILE_PATH']
 
             # Create new folder with date of download and download all files
-            import_folder = os.path.join(local_path,
+            import_folder = path or os.path.join(local_path,
                                          'DOR-{date_time}/'.format(date_time=datetime.now().strftime('%m-%d-%Y')))
 
             if current_app.config['USE_SFTP']:
