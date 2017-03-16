@@ -53,12 +53,12 @@ VITAL_RECORDS_LIST = [
     'Death Cert'
 ]
 
+ALL_PHOTOS = 'photos'
+
 PHOTO_ORDERS_LIST = [
     'tax photo',
     'online gallery'
 ]
-
-ALL_PHOTOS = 'photos'
 
 MULTIPLE_ITEMS_IN_CART = 'multipleitems'
 
