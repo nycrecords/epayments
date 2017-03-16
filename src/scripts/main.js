@@ -346,7 +346,7 @@ var Order = React.createClass({
                 ordertypes = '';
             }
             if (order.clientagencyname == 'Birth Search') {
-                if (clientsdata.includes('MIDDLENAME')) {
+                if (clientsdata.indexOf('MIDDLENAME') >= 0) {
                     var middlename = '<b>MIDDLE_NAME</b>' + '<br>' + clientsdata[clientsdata.indexOf('MIDDLENAME') + 1] + '<br><br>';
                 } else {
                     var middlename = '<b>MIDDLE_NAME</b>' + '<br>' + 'N/A' + '<br><br>';
@@ -395,12 +395,12 @@ var Order = React.createClass({
                     '<div class="pagebreak" style="page-break-after: always;}"></div>';
             }
             else if (order.clientagencyname == 'Death Search') {
-                if (clientsdata.includes('ADD_COMMENT')) {
+                if (clientsdata.indexOf('ADD_COMMENT') >= 0) {
                     var addcomment = '<b>ADD_COMMENT</b>' + '<br>' + clientsdata[clientsdata.indexOf('ADD_COMMENT') + 1] + '<br><br>';
                 } else {
                     var addcomment = '<b>ADD_COMMENT</b>' + '<br>' + 'N/A' + '<br><br>';
                 }
-                if (clientsdata.includes('MIDDLENAME')) {
+                if (clientsdata.indexOf('MIDDLENAME') >= 0) {
                     var middlename = '<b>MIDDLE_NAME</b>' + '<br>' + clientsdata[clientsdata.indexOf('MIDDLENAME') + 1] + '<br><br>';
                 } else {
                     var middlename = '<b>MIDDLE_NAME</b>' + '<br>' + 'N/A' + '<br><br>';
@@ -423,32 +423,32 @@ var Order = React.createClass({
                     '<div class="pagebreak" style="page-break-after: always;}"></div>';
             }
             else if (order.clientagencyname == 'Birth Cert') {
-                if (clientsdata.includes('FATHER_NAME')) {
+                if (clientsdata.indexOf('FATHER_NAME') >= 0) {
                     var fathername = '<b>FATHER_NAME</b>' + '<br>' + clientsdata[clientsdata.indexOf('FATHER_NAME') + 1] + '<br><br>';
                 } else {
                     var fathername = '<b>FATHER_NAME</b>' + '<br>' + 'N/A' + '<br><br>';
                 }
-                if (clientsdata.includes('MOTHER_NAME')) {
+                if (clientsdata.indexOf('MOTHER_NAME') >= 0) {
                     var mothername = '<b>MOTHER_NAME</b>' + '<br>' + clientsdata[clientsdata.indexOf('MOTHER_NAME') + 1] + '<br><br>';
                 } else {
                     var mothername = '<b>MOTHER_NAME</b>' + '<br>' + 'N/A' + '<br><br>';
                 }
-                if (clientsdata.includes('BIRTH_PLACE')) {
+                if (clientsdata.indexOf('BIRTH_PLACE') >= 0) {
                     var birthplace = '<b>BIRTH_PLACE</b>' + '<br>' + clientsdata[clientsdata.indexOf('BIRTH_PLACE') + 1] + '<br><br>';
                 } else {
                     var birthplace = '<b>BIRTH_PLACE</b>' + '<br>' + 'N/A' + '<br><br>';
                 }
-                if (clientsdata.includes('RELATIONSHIP')) {
+                if (clientsdata.indexOf('RELATIONSHIP') >= 0) {
                     var relationship = '<b>RELATIONSHIP</b>' + '<br>' + clientsdata[clientsdata.indexOf('RELATIONSHIP') + 1] + '<br><br>';
                 } else {
                     var relationship = '<b>RELATIONSHIP</b>' + '<br>' + 'N/A' + '<br><br>';
                 }
-                if (clientsdata.includes('PURPOSE')) {
+                if (clientsdata.indexOf('PURPOSE') >= 0) {
                     var purpose = '<b>PURPOSE</b>' + '<br>' + clientsdata[clientsdata.indexOf('PURPOSE') + 1] + '<br><br>';
                 } else {
                     var purpose = '<b>PURPOSE</b>' + '<br>' + 'N/A' + '<br><br>';
                 }
-                if (clientsdata.includes('MIDDLENAME')) {
+                if (clientsdata.indexOf('MIDDLENAME') >= 0) {
                     var middlename = '<b>MIDDLE_NAME</b>' + '<br>' + clientsdata[clientsdata.indexOf('MIDDLENAME') + 1] + '<br><br>';
                 } else {
                     var middlename = '<b>MIDDLE_NAME</b>' + '<br>' + 'N/A' + '<br><br>';
@@ -474,7 +474,7 @@ var Order = React.createClass({
                     '<div class="pagebreak" style="page-break-after: always;}"></div>';
             }
             else if (order.clientagencyname == 'Death Cert') {
-                if (clientsdata.includes('MIDDLENAME')) {
+                if (clientsdata.indexOf('MIDDLENAME') >= 0) {
                     var middlename = '<b>MIDDLE_NAME</b>' + '<br>' + clientsdata[clientsdata.indexOf('MIDDLENAME') + 1] + '<br><br>';
                 } else {
                     var middlename = '<b>MIDDLE_NAME</b>' + '<br>' + 'N/A' + '<br><br>';
@@ -519,17 +519,17 @@ var Order = React.createClass({
                     '<div class="pagebreak" style="page-break-after: always;}"></div>';
             }
             else if (order.clientagencyname == 'Photo Tax') {
-                if (clientsdata.includes('DESCRIPTION')) {
+                if (clientsdata.indexOf('DESCRIPTION') >= 0) {
                     var description = '<b>DESCRIPTION</b>' + '<br>' + clientsdata[clientsdata.indexOf('DESCRIPTION') + 1] + '<br><br>';
                 } else {
                     var description = '<b>DESCRIPTION</b>' + '<br>' + 'N/A' + '<br><br>';
                 }
-                if (clientsdata.includes('BLOCK')) {
+                if (clientsdata.indexOf('BLOCK') >= 0) {
                     var block = '<b>BLOCK</b>' + '<br>' + clientsdata[clientsdata.indexOf('BLOCK') + 1] + '<br><br>';
                 } else {
                     var block = '<b>BLOCK</b>' + '<br>' + 'N/A' + '<br><br>';
                 }
-                if (clientsdata.includes('LOT')) {
+                if (clientsdata.indexOf('LOT') >= 0) {
                     var lot = '<b>LOT</b>' + '<br>' + clientsdata[clientsdata.indexOf('LOT') + 1] + '<br><br>';
                 } else {
                     var lot = '<b>LOT</b>' + '<br>' + 'N/A' + '<br><br>';
@@ -553,7 +553,7 @@ var Order = React.createClass({
                     '<div class="pagebreak" style="page-break-after: always;}"></div>';
             }
             else if (order.clientagencyname == 'Photo Gallery') {
-                if (clientsdata.includes('ADDITIONAL_DESCRIPTION')) {
+                if (clientsdata.indexOf('ADDITIONAL_DESCRIPTION') >= 0) {
                     var additionaldescription = '<b>ADDITIONAL_DESCRIPTION</b>' + '<br>' + clientsdata[clientsdata.indexOf('ADDITIONAL_DESCRIPTION') + 1] + '<br><br>';
                 } else {
                     var additionaldescription = '<b>ADDITIONAL_DESCRIPTION</b>' + '<br>' + 'N/A' + '<br><br>';
@@ -594,7 +594,7 @@ var Order = React.createClass({
             div.style.fontSize = '12px';
             var order = this.props.order[i];
             var clientsdata = order.clientsdata.split('|');
-            if (clientsdata.includes('CONTACT_NUMBER')) {
+            if (clientsdata.indexOf('CONTACT_NUMBER') >= 0) {
                 var contactnumber = '<b>CONTACT_NUMBER</b>' + '<br>' +
                     clientsdata[clientsdata.indexOf('CONTACT_NUMBER') + 1] + '<br><br>';
             } else {
@@ -668,7 +668,7 @@ var Order = React.createClass({
                         <input type="submit" name="submit" value="Small Labels" onClick={this.printSmallLabels}/>
                     </li>
                     {this.props.order.map(function (order) {
-                        return <li key={order.orderno}>
+                        return <li key={order.suborderno}>
                             Order #: {order.orderno}<br/>
                             Suborder #: {order.suborderno}<br/>
                             Order Type: {order.clientagencyname}<br/>
