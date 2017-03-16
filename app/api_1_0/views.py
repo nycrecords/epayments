@@ -7,6 +7,10 @@ from app.constants import (
     VITAL_RECORDS_ORDERS,
     PHOTO_ORDERS,
     MULTIPLE_ORDERS,
+    ALL_VITAL_RECORDS,
+    VITAL_RECORDS_LIST,
+    ALL_PHOTOS,
+    PHOTO_ORDERS_LIST,
     VITAL_RECORDS_PHOTOS_ORDER,
     MULTIPLE_ITEMS_IN_CART
 )
@@ -70,6 +74,10 @@ def get_orders_by_fields(order_number, suborder_number, order_type, billing_name
         orders = orders.filter(func.lower(Orders.billing_name).contains(func.lower(billing_name)))
     if len(order_type) != 4 and order_type != 'Order Type' and order_type not in MULTIPLE_ORDERS:
         orders = orders.filter(Orders.client_agency_name == order_type)
+    elif order_type == ALL_VITAL_RECORDS:
+        orders = [order for order in orders if order.client_agency_name in VITAL_RECORDS_LIST]
+    elif order_type == ALL_PHOTOS:
+        orders = [order for order in orders if order.client_agency_name in PHOTO_ORDERS_LIST]
     elif order_type == MULTIPLE_ITEMS_IN_CART:
         orders = [order for order in orders if len(order.order_types.split(',')) > 1]
     elif order_type == VITAL_RECORDS_PHOTOS_ORDER:

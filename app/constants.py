@@ -36,9 +36,29 @@ PHOTO_ORDERS = {
 
 MULTIPLE_ORDERS = [
     'All',
+    'vitalrecords',
+    'photos'
     'multipleitems',
     'vitalrecordsphotos'
 ]
+
+ALL_VITAL_RECORDS = 'vitalrecords'
+
+VITAL_RECORDS_LIST = [
+    'Birth Search',
+    'Birth Cert',
+    'Marriage Search',
+    'Marriage Cert',
+    'Death Search',
+    'Death Cert'
+]
+
+PHOTO_ORDERS_LIST = [
+    'tax photo',
+    'online gallery'
+]
+
+ALL_PHOTOS = 'photos'
 
 MULTIPLE_ITEMS_IN_CART = 'multipleitems'
 

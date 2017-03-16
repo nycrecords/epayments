@@ -198,7 +198,7 @@ var OrderForm = React.createClass({
                     <option value='All'>
                         All
                     </option>
-                    <option disabled value='vitalrecords'>
+                    <option value='vitalrecords'>
                         --Vital Records--
                     </option>
                     <option value='Birth Search'>
@@ -219,7 +219,7 @@ var OrderForm = React.createClass({
                     <option value='Death Cert'>
                         Death Certificate
                     </option>
-                    <option disabled value='photos'>
+                    <option value='photos'>
                         --Photos--
                     </option>
                     <option value='Photo Tax'>
