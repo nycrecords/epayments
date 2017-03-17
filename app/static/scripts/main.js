@@ -26435,6 +26435,11 @@ var OrderForm = React.createClass({
                 ),
                 React.createElement(
                     'option',
+                    { value: 'Property Card - Certified' },
+                    'Property Card - Certified'
+                ),
+                React.createElement(
+                    'option',
                     { disabled: true, value: 'other' },
                     '--Other--'
                 ),
@@ -26540,6 +26545,9 @@ var Order = React.createClass({
                 if (ordertypelist.indexOf('online gallery') != -1) {
                     ordertypes += 'Photo Gallery, ';
                 }
+                if (ordertypelist.indexOf('Property card') != -1) {
+                    ordertypes += 'Property Card, ';sss
+                }
                 if (ordertypelist.indexOf('Birth search') != -1) {
                     ordertypes += 'Birth Search, ';
                 }
@@ -26627,7 +26635,7 @@ var Order = React.createClass({
                 div.innerHTML = order.ship_to_name + '<br>' + 'Address: ' + address + ' ' + order.ship_to_city + ', ' + order.ship_to_state + ' ' + order.ship_to_zipcode + '<br>' + '<h3>Death Cert</h3>' + ordertypes + '<b>Customer Name: ' + order.billingname + '</b><br>' + '<b>Order Number: ' + order.orderno + '</b><br>' + '<b>Time of Order: ' + order.datelastmodified + '</b><br>' + '<b>Phone: ' + order.ship_to_phone + '</b><br>' + '<b>Email: ' + order.customeremail + '</b><br>' + '<b>SubOrderNo: ' + order.suborderno + '</b>' + '<br><br>' + '<b>LAST_NAME</b>' + '<br>' + clientsdata[clientsdata.indexOf('LASTNAME') + 1] + '<br><br>' + middlename + '<b>FIRST_NAME</b>' + '<br>' + clientsdata[clientsdata.indexOf('FIRSTNAME') + 1] + '<br><br>' + '<b>RELATIONSHIP</b>' + '<br>' + clientsdata[clientsdata.indexOf('RELATIONSHIP') + 1] + '<br><br>' + '<b>PURPOSE</b>' + '<br>' + clientsdata[clientsdata.indexOf('PURPOSE') + 1] + '<br><br>' + '<b>COPY_REQ</b>' + '<br>' + clientsdata[clientsdata.indexOf('COPY_REQ') + 1] + '<br><br>' + '<b>MONTH</b>' + '<br>' + clientsdata[clientsdata.indexOf('MONTH') + 1] + '<br><br>' + '<b>DAY</b>' + '<br>' + clientsdata[clientsdata.indexOf('DAY') + 1] + '<br><br>' + '<b>YEAR</b>' + '<br>' + clientsdata[clientsdata.indexOf('YEAR') + 1] + '<br><br>' + '<b>CERTIFICATE_NUMBER</b>' + '<br>' + clientsdata[clientsdata.indexOf('CERTIFICATE_NUMBER') + 1] + '<br><br>' + '<b>BOROUGH</b>' + '<br>' + clientsdata[clientsdata.indexOf('BOROUGH') + 1] + '<br><br>' + '<div class="pagebreak" style="page-break-after: always;}"></div>';
             } else if (order.clientagencyname == 'Marriage Cert') {
                 div.innerHTML = order.ship_to_name + '<br>' + 'Address: ' + address + ' ' + order.ship_to_city + ', ' + order.ship_to_state + ' ' + order.ship_to_zipcode + '<br>' + '<h3>Marriage Cert</h3>' + ordertypes + '<b>Customer Name: ' + order.billingname + '</b><br>' + '<b>Order Number: ' + order.orderno + '</b><br>' + '<b>Time of Order: ' + order.datelastmodified + '</b><br>' + '<b>Phone: ' + order.ship_to_phone + '</b><br>' + '<b>Email: ' + order.customeremail + '</b><br>' + '<b>SubOrderNo: ' + order.suborderno + '</b>' + '<br><br>' + '<b>LAST_NAME_GROOM</b>' + '<br>' + clientsdata[clientsdata.indexOf('LASTNAME_G') + 1] + '<br><br>' + '<b>LAST_NAME_BRIDE</b>' + '<br>' + clientsdata[clientsdata.indexOf('LASTNAME_B') + 1] + '<br><br>' + '<b>COPY_REQ</b>' + '<br>' + clientsdata[clientsdata.indexOf('COPY_REQ') + 1] + '<br><br>' + '<b>YEAR</b>' + '<br>' + clientsdata[clientsdata.indexOf('YEAR') + 1] + '<br><br>' + '<b>CERTIFICATE_NUMBER</b>' + '<br>' + clientsdata[clientsdata.indexOf('CERTIFICATE_NUMBER') + 1] + '<br><br>' + '<b>BOROUGH</b>' + '<br>' + clientsdata[clientsdata.indexOf('BOROUGH') + 1] + '<br><br>' + '<div class="pagebreak" style="page-break-after: always;}"></div>';
-            } else if (order.clientagencyname == 'Photo Tax') {
+            } else if (order.clientagencyname == 'Photo Tax' || order.clientagencyname == 'Property Card') {
                 if (clientsdata.indexOf('DESCRIPTION') >= 0) {
                     var description = '<b>DESCRIPTION</b>' + '<br>' + clientsdata[clientsdata.indexOf('DESCRIPTION') + 1] + '<br><br>';
                 } else {
