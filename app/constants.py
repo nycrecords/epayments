@@ -7,7 +7,7 @@ CLIENT_AGENCY_NAMES = {
     "10000181": "Marriage Cert",
     "10000103": "Death Search",
     "10000182": "Death Cert",
-    "10000058": "Property Card - Certified"
+    "10000058": "Property Card"
 }
 
 ORDER_TYPES = [
