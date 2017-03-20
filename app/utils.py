@@ -143,7 +143,7 @@ def import_file(file_name):
                              ship_to_phone=ship_to_phone,
                              customer_email=customer_email,
                              shipping_instructions=shipping_instructions,
-                             clients_data=clients_data,
+                             clients_data=i,
                              confirmation_message=confirmation_message,
                              date_received=date_received,
                              billing_name=billing_name,
