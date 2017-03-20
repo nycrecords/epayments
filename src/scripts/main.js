@@ -222,6 +222,9 @@ var OrderForm = React.createClass({
                     <option value='photos'>
                         --Photos--
                     </option>
+                    <option value='Property Card'>
+                        Property Card
+                    </option>
                     <option value='Photo Tax'>
                         Photo Tax
                     </option>
@@ -318,6 +321,9 @@ var Order = React.createClass({
                 var ordertypes = '<b>This item was ordered with multiple items in Cart: </b>';
                 if (ordertypelist.indexOf('tax photo') != -1) {
                     ordertypes += 'Photo Tax, ';
+                }
+                if (ordertypelist.indexOf('Property card') != -1) {
+                    ordertypes += 'Property Card, ';
                 }
                 if (ordertypelist.indexOf('online gallery') != -1) {
                     ordertypes += 'Photo Gallery, ';
@@ -551,6 +557,38 @@ var Order = React.createClass({
                     '<b>STREET</b>' + '<br>' + clientsdata[clientsdata.indexOf('STREET') + 1] + '<br><br>' + description +
                     '<b>SIZE</b>' + '<br>' + clientsdata[clientsdata.indexOf('TYPE') + 1] + '<br><br>' +
                     '<b>COPY</b>' + '<br>' + clientsdata[clientsdata.indexOf('COPIES') + 1] + '<br><br>' +
+                    '<b>MAIL_PICKUP</b>' + '<br>' + clientsdata[clientsdata.indexOf('MAIL_PICKUP') + 1] + '<br><br>' +
+                    '<div class="pagebreak" style="page-break-after: always;}"></div>';
+            }
+            else if (order.clientagencyname == 'Property Card') {
+                if (clientsdata.indexOf('DESCRIPTION') >= 0) {
+                    var description = '<b>DESCRIPTION</b>' + '<br>' + clientsdata[clientsdata.indexOf('DESCRIPTION') + 1] + '<br><br>';
+                } else {
+                    var description = '<b>DESCRIPTION</b>' + '<br>' + 'N/A' + '<br><br>';
+                }
+                if (clientsdata.indexOf('BLOCK') >= 0) {
+                    var block = '<b>BLOCK</b>' + '<br>' + clientsdata[clientsdata.indexOf('BLOCK') + 1] + '<br><br>';
+                } else {
+                    var block = '<b>BLOCK</b>' + '<br>' + 'N/A' + '<br><br>';
+                }
+                if (clientsdata.indexOf('LOT') >= 0) {
+                    var lot = '<b>LOT</b>' + '<br>' + clientsdata[clientsdata.indexOf('LOT') + 1] + '<br><br>';
+                } else {
+                    var lot = '<b>LOT</b>' + '<br>' + 'N/A' + '<br><br>';
+                }
+                div.innerHTML = order.ship_to_name + '<br>' +
+                    'Address: ' + address + ' ' + order.ship_to_city + ', ' + order.ship_to_state + ' ' + order.ship_to_zipcode + '<br>' +
+                    '<h3>Property Card</h3>' + ordertypes +
+                    '<b>Customer Name: ' + order.billingname + '</b><br>' +
+                    '<b>Order Number: ' + order.orderno + '</b><br>' +
+                    '<b>Time of Order: ' + order.datelastmodified + '</b><br>' +
+                    '<b>Phone: ' + order.ship_to_phone + '</b><br>' +
+                    '<b>Email: ' + order.customeremail + '</b><br>' +
+                    '<b>SubOrderNo: ' + order.suborderno + '</b>' + '<br><br>' +
+                    '<b>BOROUGH</b>' + '<br>' + clientsdata[clientsdata.indexOf('BOROUGH') + 1] + '<br><br>' + block + lot +
+                    '<b>BUILDING_NUMBER</b>' + '<br>' + clientsdata[clientsdata.indexOf('STREET_NUMBER') + 1] + '<br><br>' +
+                    '<b>STREET</b>' + '<br>' + clientsdata[clientsdata.indexOf('STREET') + 1] + '<br><br>' + description +
+                    '<b>CERTIFIED</b>' + '<br>' + clientsdata[clientsdata.indexOf('COPY_OPTIONS') + 1] + '<br><br>' +
                     '<b>MAIL_PICKUP</b>' + '<br>' + clientsdata[clientsdata.indexOf('MAIL_PICKUP') + 1] + '<br><br>' +
                     '<div class="pagebreak" style="page-break-after: always;}"></div>';
             }

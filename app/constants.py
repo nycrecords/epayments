@@ -6,12 +6,14 @@ CLIENT_AGENCY_NAMES = {
     "10000104": "Marriage Search",
     "10000181": "Marriage Cert",
     "10000103": "Death Search",
-    "10000182": "Death Cert"
+    "10000182": "Death Cert",
+    "10000058": "Property Card"
 }
 
 ORDER_TYPES = [
     'tax photo',
     'online gallery',
+    'Property card'
     'Birth search',
     'Birth cert',
     'Marriage search',
@@ -31,7 +33,8 @@ VITAL_RECORDS_ORDERS = {
 
 PHOTO_ORDERS = {
     'tax photo',
-    'online gallery'
+    'online gallery',
+    'Property card'
 }
 
 MULTIPLE_ORDERS = [
@@ -58,6 +61,7 @@ ALL_PHOTOS = 'photos'
 PHOTO_ORDERS_LIST = [
     'tax photo',
     'online gallery'
+    'Property card'
 ]
 
 MULTIPLE_ITEMS_IN_CART = 'multipleitems'
