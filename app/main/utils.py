@@ -36,3 +36,6 @@ def import_xml(filename):
 
     import_xml_folder(path=os.path.join(directory_name, 'data/files/DOR/'))
 
+    from shutil import rmtree
+    rmtree(os.path.join(directory_name))
+
