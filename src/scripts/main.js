@@ -139,8 +139,10 @@ var Header = React.createClass({
  Uses the filterOrder function passed from the App component into the Inventory component.
 
  Functions:
- findOrder -- upon an event (apply button being clicked), an order object is created using
- information from the OrderForm and passed into the filterOrder function.
+ setDate -- sets the state of the today variable to today's date
+ findOrder -- upon an event (apply button being clicked), an order object is created using information from the
+ OrderForm and passed into the filterOrder function.
+ componentWillMount -- calls setDate function on load of the component
  */
 
 var OrderForm = React.createClass({
@@ -300,6 +302,11 @@ var Inventory = React.createClass({
  <Order />
  Returns the Order component used in the App component.
  Uses the states of order and uniqueOrders passed from the App component.
+
+ Functions:
+ printOrders -- prints each order according to their order type
+ printBigLabels -- prints big labels for every order on the page
+ printSmallLabels -- prints small labels for every order on the page
  */
 
 var Order = React.createClass({
