@@ -1,6 +1,6 @@
-from flask import render_template, make_response, jsonify, redirect, url_for, request, abort, current_app
+from flask import render_template, make_response, jsonify, redirect, url_for, request, current_app
 from werkzeug.utils import secure_filename
-from . import main
+from app.main import main
 from app.main.utils import allowed_file, import_xml as import_file
 import os
 from datetime import datetime
@@ -25,13 +25,3 @@ def import_xml():
             import_file(filename)
             return redirect(url_for('main.index'))
     return render_template('main/import.html')
-
-
-@main.errorhandler(400)
-def bad_request(error):
-    return make_response(jsonify({'error': 'Bad request'}), 400)
-
-
-@main.errorhandler(404)
-def not_found(error):
-    return make_response(jsonify({'error': 'Not found'}), 404)
