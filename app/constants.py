@@ -40,7 +40,7 @@ PHOTO_ORDERS = {
 MULTIPLE_ORDERS = [
     'All',
     'vitalrecords',
-    'photos'
+    'photos',
     'multipleitems',
     'vitalrecordsphotos'
 ]
