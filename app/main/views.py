@@ -18,8 +18,7 @@ def import_xml():
     if request.method == 'POST':
         file_ = request.files['file']
         if file_ and allowed_file(file_.filename):
-            actual_filename = secure_filename(
-                file_.filename.replace('.', '-' + datetime.now().strftime('%Y-%m-%d') + '.'))
+            actual_filename = 'DOR-{date}.tar'.format(date=datetime.now().strftime('%Y-%m-%d'))
             filename = os.path.join(current_app.config['LOCAL_FILE_PATH'], actual_filename)
             file_.save(filename)
             import_file(filename)
