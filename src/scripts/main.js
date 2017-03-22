@@ -411,6 +411,11 @@ var Order = React.createClass({
                 } else {
                     var letter = '<b>EXEMPLIFICATION_LETTER</b>' + '<br>' + 'N/A' + '<br><br>';
                 }
+                if (clientsdata.indexOf('ADD_COMMENT') >= 0) {
+                    var comment = '<b>COMMENT</b>' + '<br>' + clientsdata[clientsdata.indexOf('ADD_COMMENT') + 1] + '<br><br>';
+                } else {
+                    var comment = '';
+                }
                 div.innerHTML = order.ship_to_name + '<br>' +
                     'Address: ' + address + ' ' + order.ship_to_city + ', ' + (order.ship_to_state == null ? '' : order.ship_to_state) + ' ' + order.ship_to_country + ' ' + order.ship_to_zipcode + '<br>' +
                     '<h3>Birth Search</h3>' + ordertypes +
@@ -420,7 +425,7 @@ var Order = React.createClass({
                     '<b>Phone: ' + order.ship_to_phone + '</b><br>' +
                     '<b>Email: ' + order.customeremail + '</b><br>' +
                     '<b>SubOrderNo: ' + order.suborderno + '</b>' + '<br><br>' +
-                    last_name + middle_name + first_name + relationship + purpose + additional_copy + birth_place + year + borough + letter +
+                    last_name + middle_name + first_name + relationship + purpose + additional_copy + birth_place + year + borough + letter + comment +
                     '<div class="pagebreak" style="page-break-after: always;"></div>';
             }
             else if (order.clientagencyname == 'Marriage Search') {
@@ -489,6 +494,11 @@ var Order = React.createClass({
                 } else {
                     var letter = '<b>EXEMPLIFICATION_LETTER</b>' + '<br>' + 'N/A' + '<br><br>';
                 }
+                if (clientsdata.indexOf('ADD_COMMENT') >= 0) {
+                    var comment = '<b>COMMENT</b>' + '<br>' + clientsdata[clientsdata.indexOf('ADD_COMMENT') + 1] + '<br><br>';
+                } else {
+                    var comment = '';
+                }
                 div.innerHTML = order.ship_to_name + '<br>' +
                     'Address: ' + address + ' ' + order.ship_to_city + ', ' + (order.ship_to_state == null ? '' : order.ship_to_state) + ' ' + order.ship_to_country + ' ' + order.ship_to_zipcode + '<br>' +
                     '<h3>Marriage Search</h3>' + ordertypes +
@@ -499,7 +509,7 @@ var Order = React.createClass({
                     '<b>Email: ' + order.customeremail + '</b><br>' +
                     '<b>SubOrderNo: ' + order.suborderno + '</b>' + '<br><br>' +
                     last_name_groom + first_name_groom + last_name_bride + first_name_bride + relationship + purpose +
-                    copy_req + month + day + year + marriage_place + borough + letter +
+                    copy_req + month + day + year + marriage_place + borough + letter + comment +
                     '<div class="pagebreak" style="page-break-after: always;"></div>';
             }
             else if (order.clientagencyname == 'Death Search') {
@@ -548,6 +558,11 @@ var Order = React.createClass({
                 } else {
                     var letter = '<b>EXEMPLIFICATION_LETTER</b>' + '<br>' + 'N/A' + '<br><br>';
                 }
+                if (clientsdata.indexOf('ADD_COMMENT') >= 0) {
+                    var comment = '<b>COMMENT</b>' + '<br>' + clientsdata[clientsdata.indexOf('ADD_COMMENT') + 1] + '<br><br>';
+                } else {
+                    var comment = '';
+                }
                 div.innerHTML = order.ship_to_name + '<br>' +
                     'Address: ' + address + ' ' + order.ship_to_city + ', ' + (order.ship_to_state == null ? '' : order.ship_to_state) + ' ' + order.ship_to_country + ' ' + order.ship_to_zipcode + '<br>' +
                     '<h3>Death Search</h3>' + ordertypes +
@@ -557,7 +572,7 @@ var Order = React.createClass({
                     '<b>Phone: ' + order.ship_to_phone + '</b><br>' +
                     '<b>Email: ' + order.customeremail + '</b><br>' +
                     '<b>SubOrderNo: ' + order.suborderno + '</b>' + '<br><br>' +
-                    last_name + middlename + first_name + relationship + copy_req + add_comment + year + borough + letter +
+                    last_name + middlename + first_name + relationship + copy_req + add_comment + year + borough + letter + comment +
                     '<div class="pagebreak" style="page-break-after: always;"></div>';
             }
             else if (order.clientagencyname == 'Birth Cert') {
@@ -641,6 +656,11 @@ var Order = React.createClass({
                 } else {
                     var letter = '<b>EXEMPLIFICATION_LETTER</b>' + '<br>' + 'N/A' + '<br><br>';
                 }
+                if (clientsdata.indexOf('ADD_COMMENT') >= 0) {
+                    var comment = '<b>COMMENT</b>' + '<br>' + clientsdata[clientsdata.indexOf('ADD_COMMENT') + 1] + '<br><br>';
+                } else {
+                    var comment = '';
+                }
                 div.innerHTML = order.ship_to_name + '<br>' +
                     'Address: ' + address + ' ' + order.ship_to_city + ', ' + (order.ship_to_state == null ? '' : order.ship_to_state) + ' ' + order.ship_to_country + ' ' + order.ship_to_zipcode + '<br>' +
                     '<h3>Birth Cert</h3>' + ordertypes +
@@ -651,7 +671,7 @@ var Order = React.createClass({
                     '<b>Email: ' + order.customeremail + '</b><br>' +
                     '<b>SubOrderNo: ' + order.suborderno + '</b>' + '<br><br>' +
                     certificate_number + gender + last_name + middle_name + first_name + father_name + mother_name +
-                    relationship + purpose + additional_copy + month + day + year + birth_place + borough + letter +
+                    relationship + purpose + additional_copy + month + day + year + birth_place + borough + letter + comment +
                     '<div class="pagebreak" style="page-break-after: always;"></div>';
             }
             else if (order.clientagencyname == 'Death Cert') {
@@ -715,6 +735,11 @@ var Order = React.createClass({
                 } else {
                     var letter = '<b>EXEMPLIFICATION_LETTER</b>' + '<br>' + 'N/A' + '<br><br>';
                 }
+                if (clientsdata.indexOf('ADD_COMMENT') >= 0) {
+                    var comment = '<b>COMMENT</b>' + '<br>' + clientsdata[clientsdata.indexOf('ADD_COMMENT') + 1] + '<br><br>';
+                } else {
+                    var comment = '';
+                }
                 div.innerHTML = order.ship_to_name + '<br>' +
                     'Address: ' + address + ' ' + order.ship_to_city + ', ' + (order.ship_to_state == null ? '' : order.ship_to_state) + ' ' + order.ship_to_country + ' ' + order.ship_to_zipcode + '<br>' +
                     '<h3>Death Cert</h3>' + ordertypes +
@@ -725,7 +750,7 @@ var Order = React.createClass({
                     '<b>Email: ' + order.customeremail + '</b><br>' +
                     '<b>SubOrderNo: ' + order.suborderno + '</b>' + '<br><br>' +
                     last_name + middle_name + first_name + relationship + purpose + copy_req + month + day + year +
-                    certificate_number + borough + letter +
+                    certificate_number + borough + letter + comment +
                     '<div class="pagebreak" style="page-break-after: always;}"></div>';
             }
             else if (order.clientagencyname == 'Marriage Cert') {
@@ -764,6 +789,11 @@ var Order = React.createClass({
                 } else {
                     var letter = '<b>EXEMPLIFICATION_LETTER</b>' + '<br>' + 'N/A' + '<br><br>';
                 }
+                if (clientsdata.indexOf('ADD_COMMENT') >= 0) {
+                    var comment = '<b>COMMENT</b>' + '<br>' + clientsdata[clientsdata.indexOf('ADD_COMMENT') + 1] + '<br><br>';
+                } else {
+                    var comment = '';
+                }
                 div.innerHTML = order.ship_to_name + '<br>' +
                     'Address: ' + address + ' ' + order.ship_to_city + ', ' + (order.ship_to_state == null ? '' : order.ship_to_state) + ' ' + order.ship_to_country + ' ' + order.ship_to_zipcode + '<br>' +
                     '<h3>Marriage Cert</h3>' + ordertypes +
@@ -773,7 +803,7 @@ var Order = React.createClass({
                     '<b>Phone: ' + order.ship_to_phone + '</b><br>' +
                     '<b>Email: ' + order.customeremail + '</b><br>' +
                     '<b>SubOrderNo: ' + order.suborderno + '</b>' + '<br><br>' +
-                    last_name_groom + last_name_bride + copy_req + year + certificate_number + borough + letter +
+                    last_name_groom + last_name_bride + copy_req + year + certificate_number + borough + letter + comment +
                     '<div class="pagebreak" style="page-break-after: always;}"></div>';
             }
             else if (order.clientagencyname == 'Property Card') {
@@ -816,6 +846,11 @@ var Order = React.createClass({
                     var mail_pickup = '<b>MAIL_PICKUP</b>' + '<br>' + clientsdata[clientsdata.indexOf('MAIL_PICKUP') + 1] + '<br><br>';
                 } else {
                     var mail_pickup = '<b>MAIL_PICKUP</b>' + '<br>' + 'N/A' + '<br><br>';
+                }
+                if (clientsdata.indexOf('ADD_COMMENT') >= 0) {
+                    var comment = '<b>COMMENT</b>' + '<br>' + clientsdata[clientsdata.indexOf('ADD_COMMENT') + 1] + '<br><br>';
+                } else {
+                    var comment = '';
                 }
                 div.innerHTML = order.ship_to_name + '<br>' +
                     'Address: ' + address + ' ' + order.ship_to_city + ', ' + (order.ship_to_state == null ? '' : order.ship_to_state) + ' ' + order.ship_to_country + ' ' + order.ship_to_zipcode + '<br>' +
@@ -880,6 +915,11 @@ var Order = React.createClass({
                 } else {
                     var mail_pickup = '<b>MAIL_PICKUP</b>' + '<br>' + 'N/A' + '<br><br>';
                 }
+                if (clientsdata.indexOf('ADD_COMMENT') >= 0) {
+                    var comment = '<b>COMMENT</b>' + '<br>' + clientsdata[clientsdata.indexOf('ADD_COMMENT') + 1] + '<br><br>';
+                } else {
+                    var comment = '';
+                }
                 div.innerHTML = order.ship_to_name + '<br>' +
                     'Address: ' + address + ' ' + order.ship_to_city + ', ' + (order.ship_to_state == null ? '' : order.ship_to_state) + ' ' + order.ship_to_country + ' ' + order.ship_to_zipcode + '<br>' +
                     '<h3>Photo Tax</h3>' + ordertypes +
@@ -927,6 +967,11 @@ var Order = React.createClass({
                     var personal_use_agreement = '<b>PERSONAL_USE_AGREEMENT</b>' + '<br>' + clientsdata[clientsdata.indexOf('PERSONAL_USE_AGREEMENT') + 1] + '<br><br>';
                 } else {
                     var personal_use_agreement = '<b>PERSONAL_USE_AGREEMENT</b>' + '<br>' + 'N/A' + '<br><br>';
+                }
+                if (clientsdata.indexOf('ADD_COMMENT') >= 0) {
+                    var comment = '<b>COMMENT</b>' + '<br>' + clientsdata[clientsdata.indexOf('ADD_COMMENT') + 1] + '<br><br>';
+                } else {
+                    var comment = '';
                 }
                 div.innerHTML = order.ship_to_name + '<br>' +
                     'Address: ' + address + ' ' + order.ship_to_city + ', ' + (order.ship_to_state == null ? '' : order.ship_to_state) + ' ' + order.ship_to_country + ' ' + order.ship_to_zipcode + '<br>' +
@@ -980,7 +1025,7 @@ var Order = React.createClass({
             if (order.ship_to_name.length > 1) {
                 div.innerHTML = '<div style="display: table-cell; vertical-align: middle; text-align: center; width: 375px; height: 200px; margin: auto; position: relative;">' +
                     photo_address + '<b>TO: </b>' + order.ship_to_name + '<br>' + address + '<br>' + order.ship_to_city +
-                    ', ' + (order.ship_to_state == null ? '' : (order.ship_to_state + ' ')) + order.ship_to_country + ' ' + order.ship_to_zipcode +'<br></div>';
+                    ', ' + (order.ship_to_state == null ? '' : (order.ship_to_state + ' ')) + order.ship_to_country + ' ' + order.ship_to_zipcode + '<br></div>';
             } else {
                 div.innerHTML = '<div style="display: table-cell; vertical-align: middle; text-align: center; width: 375px; height: 200px; margin: auto; position: relative;">' +
                     'CALL FOR PICKUP' + '<br>' + order.billingname + '<br>' + contactnumber + '<br></div>';
