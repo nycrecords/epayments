@@ -406,6 +406,11 @@ var Order = React.createClass({
                 } else {
                     var borough = '<b>BOROUGH</b>' + '<br>' + 'N/A' + '<br><br>';
                 }
+                if (clientsdata.indexOf('LETTER') >= 0) {
+                    var letter = '<b>EXEMPLIFICATION_LETTER</b>' + '<br>' + clientsdata[clientsdata.indexOf('LETTER') + 1] + '<br><br>';
+                } else {
+                    var letter = '<b>EXEMPLIFICATION_LETTER</b>' + '<br>' + 'N/A' + '<br><br>';
+                }
                 div.innerHTML = order.ship_to_name + '<br>' +
                     'Address: ' + address + ' ' + order.ship_to_city + ', ' + (order.ship_to_state == null ? '' : order.ship_to_state) + ' ' + order.ship_to_country + ' ' + order.ship_to_zipcode + '<br>' +
                     '<h3>Birth Search</h3>' + ordertypes +
@@ -415,7 +420,7 @@ var Order = React.createClass({
                     '<b>Phone: ' + order.ship_to_phone + '</b><br>' +
                     '<b>Email: ' + order.customeremail + '</b><br>' +
                     '<b>SubOrderNo: ' + order.suborderno + '</b>' + '<br><br>' +
-                    last_name + middle_name + first_name + relationship + purpose + additional_copy + birth_place + year + borough +
+                    last_name + middle_name + first_name + relationship + purpose + additional_copy + birth_place + year + borough + letter +
                     '<div class="pagebreak" style="page-break-after: always;"></div>';
             }
             else if (order.clientagencyname == 'Marriage Search') {
@@ -479,6 +484,11 @@ var Order = React.createClass({
                 } else {
                     var borough = '<b>BOROUGH</b>' + '<br>' + 'N/A' + '<br><br>';
                 }
+                if (clientsdata.indexOf('LETTER') >= 0) {
+                    var letter = '<b>EXEMPLIFICATION_LETTER</b>' + '<br>' + clientsdata[clientsdata.indexOf('LETTER') + 1] + '<br><br>';
+                } else {
+                    var letter = '<b>EXEMPLIFICATION_LETTER</b>' + '<br>' + 'N/A' + '<br><br>';
+                }
                 div.innerHTML = order.ship_to_name + '<br>' +
                     'Address: ' + address + ' ' + order.ship_to_city + ', ' + (order.ship_to_state == null ? '' : order.ship_to_state) + ' ' + order.ship_to_country + ' ' + order.ship_to_zipcode + '<br>' +
                     '<h3>Marriage Search</h3>' + ordertypes +
@@ -489,7 +499,7 @@ var Order = React.createClass({
                     '<b>Email: ' + order.customeremail + '</b><br>' +
                     '<b>SubOrderNo: ' + order.suborderno + '</b>' + '<br><br>' +
                     last_name_groom + first_name_groom + last_name_bride + first_name_bride + relationship + purpose +
-                    copy_req + month + day + year + marriage_place + borough +
+                    copy_req + month + day + year + marriage_place + borough + letter +
                     '<div class="pagebreak" style="page-break-after: always;"></div>';
             }
             else if (order.clientagencyname == 'Death Search') {
@@ -533,6 +543,11 @@ var Order = React.createClass({
                 } else {
                     var borough = '<b>BOROUGH</b>' + '<br>' + 'N/A' + '<br><br>';
                 }
+                if (clientsdata.indexOf('LETTER') >= 0) {
+                    var letter = '<b>EXEMPLIFICATION_LETTER</b>' + '<br>' + clientsdata[clientsdata.indexOf('LETTER') + 1] + '<br><br>';
+                } else {
+                    var letter = '<b>EXEMPLIFICATION_LETTER</b>' + '<br>' + 'N/A' + '<br><br>';
+                }
                 div.innerHTML = order.ship_to_name + '<br>' +
                     'Address: ' + address + ' ' + order.ship_to_city + ', ' + (order.ship_to_state == null ? '' : order.ship_to_state) + ' ' + order.ship_to_country + ' ' + order.ship_to_zipcode + '<br>' +
                     '<h3>Death Search</h3>' + ordertypes +
@@ -542,7 +557,7 @@ var Order = React.createClass({
                     '<b>Phone: ' + order.ship_to_phone + '</b><br>' +
                     '<b>Email: ' + order.customeremail + '</b><br>' +
                     '<b>SubOrderNo: ' + order.suborderno + '</b>' + '<br><br>' +
-                    last_name + middlename + first_name + relationship + copy_req + add_comment + year + borough +
+                    last_name + middlename + first_name + relationship + copy_req + add_comment + year + borough + letter +
                     '<div class="pagebreak" style="page-break-after: always;"></div>';
             }
             else if (order.clientagencyname == 'Birth Cert') {
@@ -621,6 +636,11 @@ var Order = React.createClass({
                 } else {
                     var borough = '<b>BOROUGH</b>' + '<br>' + 'N/A' + '<br><br>';
                 }
+                if (clientsdata.indexOf('LETTER') >= 0) {
+                    var letter = '<b>EXEMPLIFICATION_LETTER</b>' + '<br>' + clientsdata[clientsdata.indexOf('LETTER') + 1] + '<br><br>';
+                } else {
+                    var letter = '<b>EXEMPLIFICATION_LETTER</b>' + '<br>' + 'N/A' + '<br><br>';
+                }
                 div.innerHTML = order.ship_to_name + '<br>' +
                     'Address: ' + address + ' ' + order.ship_to_city + ', ' + (order.ship_to_state == null ? '' : order.ship_to_state) + ' ' + order.ship_to_country + ' ' + order.ship_to_zipcode + '<br>' +
                     '<h3>Birth Cert</h3>' + ordertypes +
@@ -631,7 +651,7 @@ var Order = React.createClass({
                     '<b>Email: ' + order.customeremail + '</b><br>' +
                     '<b>SubOrderNo: ' + order.suborderno + '</b>' + '<br><br>' +
                     certificate_number + gender + last_name + middle_name + first_name + father_name + mother_name +
-                    relationship + purpose + additional_copy + month + day + year + birth_place + borough +
+                    relationship + purpose + additional_copy + month + day + year + birth_place + borough + letter +
                     '<div class="pagebreak" style="page-break-after: always;"></div>';
             }
             else if (order.clientagencyname == 'Death Cert') {
@@ -690,6 +710,11 @@ var Order = React.createClass({
                 } else {
                     var borough = '<b>BOROUGH</b>' + '<br>' + 'N/A' + '<br><br>';
                 }
+                if (clientsdata.indexOf('LETTER') >= 0) {
+                    var letter = '<b>EXEMPLIFICATION_LETTER</b>' + '<br>' + clientsdata[clientsdata.indexOf('LETTER') + 1] + '<br><br>';
+                } else {
+                    var letter = '<b>EXEMPLIFICATION_LETTER</b>' + '<br>' + 'N/A' + '<br><br>';
+                }
                 div.innerHTML = order.ship_to_name + '<br>' +
                     'Address: ' + address + ' ' + order.ship_to_city + ', ' + (order.ship_to_state == null ? '' : order.ship_to_state) + ' ' + order.ship_to_country + ' ' + order.ship_to_zipcode + '<br>' +
                     '<h3>Death Cert</h3>' + ordertypes +
@@ -700,7 +725,7 @@ var Order = React.createClass({
                     '<b>Email: ' + order.customeremail + '</b><br>' +
                     '<b>SubOrderNo: ' + order.suborderno + '</b>' + '<br><br>' +
                     last_name + middle_name + first_name + relationship + purpose + copy_req + month + day + year +
-                    certificate_number + borough +
+                    certificate_number + borough + letter +
                     '<div class="pagebreak" style="page-break-after: always;}"></div>';
             }
             else if (order.clientagencyname == 'Marriage Cert') {
@@ -734,6 +759,11 @@ var Order = React.createClass({
                 } else {
                     var borough = '<b>BOROUGH</b>' + '<br>' + 'N/A' + '<br><br>';
                 }
+                if (clientsdata.indexOf('LETTER') >= 0) {
+                    var letter = '<b>EXEMPLIFICATION_LETTER</b>' + '<br>' + clientsdata[clientsdata.indexOf('LETTER') + 1] + '<br><br>';
+                } else {
+                    var letter = '<b>EXEMPLIFICATION_LETTER</b>' + '<br>' + 'N/A' + '<br><br>';
+                }
                 div.innerHTML = order.ship_to_name + '<br>' +
                     'Address: ' + address + ' ' + order.ship_to_city + ', ' + (order.ship_to_state == null ? '' : order.ship_to_state) + ' ' + order.ship_to_country + ' ' + order.ship_to_zipcode + '<br>' +
                     '<h3>Marriage Cert</h3>' + ordertypes +
@@ -743,7 +773,7 @@ var Order = React.createClass({
                     '<b>Phone: ' + order.ship_to_phone + '</b><br>' +
                     '<b>Email: ' + order.customeremail + '</b><br>' +
                     '<b>SubOrderNo: ' + order.suborderno + '</b>' + '<br><br>' +
-                    last_name_groom + last_name_bride + copy_req + year + certificate_number + borough +
+                    last_name_groom + last_name_bride + copy_req + year + certificate_number + borough + letter +
                     '<div class="pagebreak" style="page-break-after: always;}"></div>';
             }
             else if (order.clientagencyname == 'Property Card') {
