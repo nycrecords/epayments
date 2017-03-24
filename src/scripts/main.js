@@ -364,77 +364,77 @@ var Order = React.createClass({
                 if (clientsdata.indexOf('GENDER') >= 0) {
                     var gender = '<b>GENDER</b>' + '<br>' + clientsdata[clientsdata.indexOf('GENDER') + 1] + '<br><br>';
                 } else {
-                    var gender = '<b>GENDER</b>' + '<br>' + 'N/A' + '<br><br>';
+                    var gender = '';
                 }
                 if (clientsdata.indexOf('LASTNAME') >= 0) {
                     var last_name = '<b>LAST_NAME</b>' + '<br>' + clientsdata[clientsdata.indexOf('LASTNAME') + 1] + '<br><br>';
                 } else {
-                    var last_name = '<b>LAST_NAME</b>' + '<br>' + 'N/A' + '<br><br>';
+                    var last_name = '';
                 }
                 if (clientsdata.indexOf('MIDDLENAME') >= 0) {
                     var middle_name = '<b>MIDDLE_NAME</b>' + '<br>' + clientsdata[clientsdata.indexOf('MIDDLENAME') + 1] + '<br><br>';
                 } else {
-                    var middle_name = '<b>MIDDLE_NAME</b>' + '<br>' + 'N/A' + '<br><br>';
+                    var middle_name = '';
                 }
                 if (clientsdata.indexOf('FIRSTNAME') >= 0) {
                     var first_name = '<b>FIRST_NAME</b>' + '<br>' + clientsdata[clientsdata.indexOf('FIRSTNAME') + 1] + '<br><br>';
                 } else {
-                    var first_name = '<b>FIRST_NAME</b>' + '<br>' + 'N/A' + '<br><br>';
+                    var first_name = '';
                 }
                 if (clientsdata.indexOf('FATHER_NAME') >= 0) {
                     var father_name = '<b>FATHER_NAME</b>' + '<br>' + clientsdata[clientsdata.indexOf('FATHER_NAME') + 1] + '<br><br>';
                 } else {
-                    var father_name = '<b>FATHER_NAME</b>' + '<br>' + 'N/A' + '<br><br>';
+                    var father_name = '';
                 }
                 if (clientsdata.indexOf('MOTHER_NAME') >= 0) {
                     var mother_name = '<b>MOTHER_NAME</b>' + '<br>' + clientsdata[clientsdata.indexOf('MOTHER_NAME') + 1] + '<br><br>';
                 } else {
-                    var mother_name = '<b>MOTHER_NAME</b>' + '<br>' + 'N/A' + '<br><br>';
+                    var mother_name = '';
                 }
                 if (clientsdata.indexOf('RELATIONSHIP') >= 0) {
                     var relationship = '<b>RELATIONSHIP</b>' + '<br>' + clientsdata[clientsdata.indexOf('RELATIONSHIP') + 1] + '<br><br>';
                 } else {
-                    var relationship = '<b>RELATIONSHIP</b>' + '<br>' + 'N/A' + '<br><br>';
+                    var relationship = '';
                 }
                 if (clientsdata.indexOf('PURPOSE') >= 0) {
                     var purpose = '<b>PURPOSE</b>' + '<br>' + clientsdata[clientsdata.indexOf('PURPOSE') + 1] + '<br><br>';
                 } else {
-                    var purpose = '<b>PURPOSE</b>' + '<br>' + 'N/A' + '<br><br>';
+                    var purpose = '';
                 }
                 if (clientsdata.indexOf('ADDITIONAL_COPY') >= 0) {
                     var additional_copy = '<b>ADDITIONAL_COPY</b>' + '<br>' + clientsdata[clientsdata.indexOf('ADDITIONAL_COPY') + 1] + '<br><br>';
                 } else {
-                    var additional_copy = '<b>ADDITIONAL_COPY</b>' + '<br>' + 'N/A' + '<br><br>';
+                    var additional_copy = '';
                 }
                 if (clientsdata.indexOf('MONTH') >= 0) {
                     var month = '<b>MONTH</b>' + '<br>' + clientsdata[clientsdata.indexOf('MONTH') + 1] + '<br><br>';
                 } else {
-                    var month = '<b>MONTH</b>' + '<br>' + 'N/A' + '<br><br>';
+                    var month = '';
                 }
                 if (clientsdata.indexOf('DAY') >= 0) {
                     var day = '<b>DAY</b>' + '<br>' + clientsdata[clientsdata.indexOf('DAY') + 1] + '<br><br>';
                 } else {
-                    var day = '<b>DAY</b>' + '<br>' + 'N/A' + '<br><br>';
+                    var day = '';
                 }
                 if (clientsdata.indexOf('BIRTH_PLACE') >= 0) {
                     var birth_place = '<b>BIRTH_PLACE</b>' + '<br>' + clientsdata[clientsdata.indexOf('BIRTH_PLACE') + 1] + '<br><br>';
                 } else {
-                    var birth_place = '<b>BIRTH_PLACE</b>' + '<br>' + 'N/A' + '<br><br>';
+                    var birth_place = '';
                 }
                 if (clientsdata.indexOf('YEAR_') >= 0) {
                     var year = '<b>YEAR</b>' + '<br>' + clientsdata[clientsdata.indexOf('YEAR_') + 1] + '<br><br>';
                 } else {
-                    var year = '<b>YEAR</b>' + '<br>' + 'N/A' + '<br><br>';
+                    var year = '';
                 }
                 if (clientsdata.indexOf('BOROUGH') >= 0) {
                     var borough = '<b>BOROUGH</b>' + '<br>' + clientsdata[clientsdata.indexOf('BOROUGH') + 1] + '<br><br>';
                 } else {
-                    var borough = '<b>BOROUGH</b>' + '<br>' + 'N/A' + '<br><br>';
+                    var borough = '';
                 }
                 if (clientsdata.indexOf('LETTER') >= 0) {
                     var letter = '<b>EXEMPLIFICATION_LETTER</b>' + '<br>' + clientsdata[clientsdata.indexOf('LETTER') + 1] + '<br><br>';
                 } else {
-                    var letter = '<b>EXEMPLIFICATION_LETTER</b>' + '<br>' + 'N/A' + '<br><br>';
+                    var letter = '';
                 }
                 if (clientsdata.indexOf('ADD_COMMENT') >= 0) {
                     var comment = '<b>COMMENT</b>' + '<br>' + clientsdata[clientsdata.indexOf('ADD_COMMENT') + 1] + '<br><br>';
@@ -458,67 +458,67 @@ var Order = React.createClass({
                 if (clientsdata.indexOf('LASTNAME_G') >= 0) {
                     var last_name_groom = '<b>LAST_NAME_GROOM</b>' + '<br>' + clientsdata[clientsdata.indexOf('LASTNAME_G') + 1] + '<br><br>';
                 } else {
-                    var last_name_groom = '<b>LAST_NAME_GROOM</b>' + '<br>' + 'N/A' + '<br><br>';
+                    var last_name_groom = '';
                 }
                 if (clientsdata.indexOf('FIRSTNAME_G') >= 0) {
                     var first_name_groom = '<b>FIRST_NAME_GROOM</b>' + '<br>' + clientsdata[clientsdata.indexOf('FIRSTNAME_G') + 1] + '<br><br>';
                 } else {
-                    var first_name_groom = '<b>FIRST_NAME_GROOM</b>' + '<br>' + 'N/A' + '<br><br>';
+                    var first_name_groom = '';
                 }
                 if (clientsdata.indexOf('LASTNAME_B') >= 0) {
                     var last_name_bride = '<b>LAST_NAME_BRIDE</b>' + '<br>' + clientsdata[clientsdata.indexOf('LASTNAME_B') + 1] + '<br><br>';
                 } else {
-                    var last_name_bride = '<b>LAST_NAME_BRIDE</b>' + '<br>' + 'N/A' + '<br><br>';
+                    var last_name_bride = '';
                 }
                 if (clientsdata.indexOf('FIRSTNAME_B') >= 0) {
                     var first_name_bride = '<b>FIRST_NAME_BRIDE</b>' + '<br>' + clientsdata[clientsdata.indexOf('FIRSTNAME_B') + 1] + '<br><br>';
                 } else {
-                    var first_name_bride = '<b>FIRST_NAME_BRIDE</b>' + '<br>' + 'N/A' + '<br><br>';
+                    var first_name_bride = '';
                 }
                 if (clientsdata.indexOf('RELATIONSHIP') >= 0) {
                     var relationship = '<b>RELATIONSHIP</b>' + '<br>' + clientsdata[clientsdata.indexOf('RELATIONSHIP') + 1] + '<br><br>';
                 } else {
-                    var relationship = '<b>RELATIONSHIP</b>' + '<br>' + 'N/A' + '<br><br>';
+                    var relationship = '';
                 }
                 if (clientsdata.indexOf('PURPOSE') >= 0) {
                     var purpose = '<b>PURPOSE</b>' + '<br>' + clientsdata[clientsdata.indexOf('PURPOSE') + 1] + '<br><br>';
                 } else {
-                    var purpose = '<b>PURPOSE</b>' + '<br>' + 'N/A' + '<br><br>';
+                    var purpose = '';
                 }
                 if (clientsdata.indexOf('COPY_REQ') >= 0) {
                     var copy_req = '<b>COPY_REQ</b>' + '<br>' + clientsdata[clientsdata.indexOf('COPY_REQ') + 1] + '<br><br>';
                 } else {
-                    var copy_req = '<b>COPY_REQ</b>' + '<br>' + 'N/A' + '<br><br>';
+                    var copy_req = '';
                 }
                 if (clientsdata.indexOf('MONTH') >= 0) {
                     var month = '<b>MONTH</b>' + '<br>' + clientsdata[clientsdata.indexOf('MONTH') + 1] + '<br><br>';
                 } else {
-                    var month = '<b>MONTH</b>' + '<br>' + 'N/A' + '<br><br>';
+                    var month = '';
                 }
                 if (clientsdata.indexOf('DAY') >= 0) {
                     var day = '<b>DAY</b>' + '<br>' + clientsdata[clientsdata.indexOf('DAY') + 1] + '<br><br>';
                 } else {
-                    var day = '<b>DAY</b>' + '<br>' + 'N/A' + '<br><br>';
+                    var day = '';
                 }
                 if (clientsdata.indexOf('YEAR_') >= 0) {
                     var year = '<b>YEAR</b>' + '<br>' + clientsdata[clientsdata.indexOf('YEAR_') + 1] + '<br><br>';
                 } else {
-                    var year = '<b>YEAR</b>' + '<br>' + 'N/A' + '<br><br>';
+                    var year = '';
                 }
                 if (clientsdata.indexOf('MARRIAGE_PLACE') >= 0) {
                     var marriage_place = '<b>MARRIAGE_PLACE</b>' + '<br>' + clientsdata[clientsdata.indexOf('MARRIAGE_PLACE') + 1] + '<br><br>';
                 } else {
-                    var marriage_place = '<b>MARRIAGE_PLACE</b>' + '<br>' + 'N/A' + '<br><br>';
+                    var marriage_place = '';
                 }
                 if (clientsdata.indexOf('BOROUGH') >= 0) {
                     var borough = '<b>BOROUGH</b>' + '<br>' + clientsdata[clientsdata.indexOf('BOROUGH') + 1] + '<br><br>';
                 } else {
-                    var borough = '<b>BOROUGH</b>' + '<br>' + 'N/A' + '<br><br>';
+                    var borough = '';
                 }
                 if (clientsdata.indexOf('LETTER') >= 0) {
                     var letter = '<b>EXEMPLIFICATION_LETTER</b>' + '<br>' + clientsdata[clientsdata.indexOf('LETTER') + 1] + '<br><br>';
                 } else {
-                    var letter = '<b>EXEMPLIFICATION_LETTER</b>' + '<br>' + 'N/A' + '<br><br>';
+                    var letter = '';
                 }
                 if (clientsdata.indexOf('ADD_COMMENT') >= 0) {
                     var comment = '<b>COMMENT</b>' + '<br>' + clientsdata[clientsdata.indexOf('ADD_COMMENT') + 1] + '<br><br>';
@@ -542,72 +542,72 @@ var Order = React.createClass({
                 if (clientsdata.indexOf('LASTNAME') >= 0) {
                     var last_name = '<b>LAST_NAME</b>' + '<br>' + clientsdata[clientsdata.indexOf('LASTNAME') + 1] + '<br><br>';
                 } else {
-                    var last_name = '<b>LAST_NAME</b>' + '<br>' + 'N/A' + '<br><br>';
+                    var last_name = '';
                 }
                 if (clientsdata.indexOf('MIDDLENAME') >= 0) {
                     var middle_name = '<b>MIDDLE_NAME</b>' + '<br>' + clientsdata[clientsdata.indexOf('MIDDLENAME') + 1] + '<br><br>';
                 } else {
-                    var middle_name = '<b>MIDDLE_NAME</b>' + '<br>' + 'N/A' + '<br><br>';
+                    var middle_name = '';
                 }
                 if (clientsdata.indexOf('FIRSTNAME') >= 0) {
                     var first_name = '<b>FIRST_NAME</b>' + '<br>' + clientsdata[clientsdata.indexOf('FIRSTNAME') + 1] + '<br><br>';
                 } else {
-                    var first_name = '<b>FIRST_NAME</b>' + '<br>' + 'N/A' + '<br><br>';
+                    var first_name = '';
                 }
                 if (clientsdata.indexOf('RELATIONSHIP') >= 0) {
                     var relationship = '<b>RELATIONSHIP</b>' + '<br>' + clientsdata[clientsdata.indexOf('RELATIONSHIP') + 1] + '<br><br>';
                 } else {
-                    var relationship = '<b>RELATIONSHIP</b>' + '<br>' + 'N/A' + '<br><br>';
+                    var relationship = '';
                 }
                 if (clientsdata.indexOf('PURPOSE') >= 0) {
                     var purpose = '<b>PURPOSE</b>' + '<br>' + clientsdata[clientsdata.indexOf('PURPOSE') + 1] + '<br><br>';
                 } else {
-                    var purpose = '<b>PURPOSE</b>' + '<br>' + 'N/A' + '<br><br>';
+                    var purpose = '';
                 }
                 if (clientsdata.indexOf('COPY_REQ') >= 0) {
                     var copy_req = '<b>COPY_REQ</b>' + '<br>' + clientsdata[clientsdata.indexOf('COPY_REQ') + 1] + '<br><br>';
                 } else {
-                    var copy_req = '<b>COPY_REQ</b>' + '<br>' + 'N/A' + '<br><br>';
+                    var copy_req = '';
                 }
                 if (clientsdata.indexOf('CEMETERY') >= 0) {
                     var cemetery = '<b>CEMETERY</b>' + '<br>' + clientsdata[clientsdata.indexOf('CEMETERY') + 1] + '<br><br>';
                 } else {
-                    var cemetery = '<b>CEMETERY</b>' + '<br>' + 'N/A' + '<br><br>';
+                    var cemetery = '';
                 }
                 if (clientsdata.indexOf('MONTH') >= 0) {
                     var month = '<b>MONTH</b>' + '<br>' + clientsdata[clientsdata.indexOf('MONTH') + 1] + '<br><br>';
                 } else {
-                    var month = '<b>MONTH</b>' + '<br>' + 'N/A' + '<br><br>';
+                    var month = '';
                 }
                 if (clientsdata.indexOf('DAY') >= 0) {
                     var day = '<b>DAY</b>' + '<br>' + clientsdata[clientsdata.indexOf('DAY') + 1] + '<br><br>';
                 } else {
-                    var day = '<b>DAY</b>' + '<br>' + 'N/A' + '<br><br>';
+                    var day = '';
                 }
                 if (clientsdata.indexOf('YEAR_') >= 0) {
                     var year = '<b>YEAR</b>' + '<br>' + clientsdata[clientsdata.indexOf('YEAR_') + 1] + '<br><br>';
                 } else {
-                    var year = '<b>YEAR</b>' + '<br>' + 'N/A' + '<br><br>';
+                    var year = '';
                 }
                 if (clientsdata.indexOf('DEATH_PLACE') >= 0) {
                     var death_place = '<b>DEATH_PLACE</b>' + '<br>' + clientsdata[clientsdata.indexOf('DEATH_PLACE') + 1] + '<br><br>';
                 } else {
-                    var death_place = '<b>DEATH_PLACE</b>' + '<br>' + 'N/A' + '<br><br>';
+                    var death_place = '';
                 }
                 if (clientsdata.indexOf('AGEOFDEATH') >= 0) {
                     var age_of_death = '<b>AGE_OF_DEATH</b>' + '<br>' + clientsdata[clientsdata.indexOf('AGEOFDEATH') + 1] + '<br><br>';
                 } else {
-                    var age_of_death = '<b>AGE_OF_DEATH</b>' + '<br>' + 'N/A' + '<br><br>';
+                    var age_of_death = '';
                 }
                 if (clientsdata.indexOf('BOROUGH') >= 0) {
                     var borough = '<b>BOROUGH</b>' + '<br>' + clientsdata[clientsdata.indexOf('BOROUGH') + 1] + '<br><br>';
                 } else {
-                    var borough = '<b>BOROUGH</b>' + '<br>' + 'N/A' + '<br><br>';
+                    var borough = '';
                 }
                 if (clientsdata.indexOf('LETTER') >= 0) {
                     var letter = '<b>EXEMPLIFICATION_LETTER</b>' + '<br>' + clientsdata[clientsdata.indexOf('LETTER') + 1] + '<br><br>';
                 } else {
-                    var letter = '<b>EXEMPLIFICATION_LETTER</b>' + '<br>' + 'N/A' + '<br><br>';
+                    var letter = '';
                 }
                 if (clientsdata.indexOf('ADD_COMMENT') >= 0) {
                     var comment = '<b>COMMENT</b>' + '<br>' + clientsdata[clientsdata.indexOf('ADD_COMMENT') + 1] + '<br><br>';
@@ -631,82 +631,82 @@ var Order = React.createClass({
                 if (clientsdata.indexOf('CERTIFICATE_NUMBER') >= 0) {
                     var certificate_number = '<b>CERTIFICATE_NUMBER</b>' + '<br>' + clientsdata[clientsdata.indexOf('CERTIFICATE_NUMBER') + 1] + '<br><br>';
                 } else {
-                    var certificate_number = '<b>CERTIFICATE_NUMBER</b>' + '<br>' + 'N/A' + '<br><br>';
+                    var certificate_number = '';
                 }
                 if (clientsdata.indexOf('GENDER') >= 0) {
                     var gender = '<b>GENDER</b>' + '<br>' + clientsdata[clientsdata.indexOf('GENDER') + 1] + '<br><br>';
                 } else {
-                    var gender = '<b>GENDER</b>' + '<br>' + 'N/A' + '<br><br>';
+                    var gender = '';
                 }
                 if (clientsdata.indexOf('LASTNAME') >= 0) {
                     var last_name = '<b>LAST_NAME</b>' + '<br>' + clientsdata[clientsdata.indexOf('LASTNAME') + 1] + '<br><br>';
                 } else {
-                    var last_name = '<b>LAST_NAME</b>' + '<br>' + 'N/A' + '<br><br>';
+                    var last_name = '';
                 }
                 if (clientsdata.indexOf('MIDDLENAME') >= 0) {
                     var middle_name = '<b>MIDDLE_NAME</b>' + '<br>' + clientsdata[clientsdata.indexOf('MIDDLENAME') + 1] + '<br><br>';
                 } else {
-                    var middle_name = '<b>MIDDLE_NAME</b>' + '<br>' + 'N/A' + '<br><br>';
+                    var middle_name = '';
                 }
                 if (clientsdata.indexOf('FIRSTNAME') >= 0) {
                     var first_name = '<b>FIRST_NAME</b>' + '<br>' + clientsdata[clientsdata.indexOf('FIRSTNAME') + 1] + '<br><br>';
                 } else {
-                    var first_name = '<b>FIRST_NAME</b>' + '<br>' + 'N/A' + '<br><br>';
+                    var first_name = '';
                 }
                 if (clientsdata.indexOf('FATHER_NAME') >= 0) {
                     var father_name = '<b>FATHER_NAME</b>' + '<br>' + clientsdata[clientsdata.indexOf('FATHER_NAME') + 1] + '<br><br>';
                 } else {
-                    var father_name = '<b>FATHER_NAME</b>' + '<br>' + 'N/A' + '<br><br>';
+                    var father_name = '';
                 }
                 if (clientsdata.indexOf('MOTHER_NAME') >= 0) {
                     var mother_name = '<b>MOTHER_NAME</b>' + '<br>' + clientsdata[clientsdata.indexOf('MOTHER_NAME') + 1] + '<br><br>';
                 } else {
-                    var mother_name = '<b>MOTHER_NAME</b>' + '<br>' + 'N/A' + '<br><br>';
+                    var mother_name = '';
                 }
                 if (clientsdata.indexOf('RELATIONSHIP') >= 0) {
                     var relationship = '<b>RELATIONSHIP</b>' + '<br>' + clientsdata[clientsdata.indexOf('RELATIONSHIP') + 1] + '<br><br>';
                 } else {
-                    var relationship = '<b>RELATIONSHIP</b>' + '<br>' + 'N/A' + '<br><br>';
+                    var relationship = '';
                 }
                 if (clientsdata.indexOf('PURPOSE') >= 0) {
                     var purpose = '<b>PURPOSE</b>' + '<br>' + clientsdata[clientsdata.indexOf('PURPOSE') + 1] + '<br><br>';
                 } else {
-                    var purpose = '<b>PURPOSE</b>' + '<br>' + 'N/A' + '<br><br>';
+                    var purpose = '';
                 }
                 if (clientsdata.indexOf('ADDITIONAL_COPY') >= 0) {
                     var additional_copy = '<b>ADDITIONAL_COPY</b>' + '<br>' + clientsdata[clientsdata.indexOf('ADDITIONAL_COPY') + 1] + '<br><br>';
                 } else {
-                    var additional_copy = '<b>ADDITIONAL_COPY</b>' + '<br>' + 'N/A' + '<br><br>';
+                    var additional_copy = '';
                 }
                 if (clientsdata.indexOf('MONTH') >= 0) {
                     var month = '<b>MONTH</b>' + '<br>' + clientsdata[clientsdata.indexOf('MONTH') + 1] + '<br><br>';
                 } else {
-                    var month = '<b>MONTH</b>' + '<br>' + 'N/A' + '<br><br>';
+                    var month = '';
                 }
                 if (clientsdata.indexOf('DAY') >= 0) {
                     var day = '<b>DAY</b>' + '<br>' + clientsdata[clientsdata.indexOf('DAY') + 1] + '<br><br>';
                 } else {
-                    var day = '<b>DAY</b>' + '<br>' + 'N/A' + '<br><br>';
+                    var day = '';
                 }
                 if (clientsdata.indexOf('YEAR1') >= 0) {
                     var year = '<b>YEAR</b>' + '<br>' + clientsdata[clientsdata.indexOf('YEAR1') + 1] + '<br><br>';
                 } else {
-                    var year = '<b>YEAR</b>' + '<br>' + 'N/A' + '<br><br>';
+                    var year = '';
                 }
                 if (clientsdata.indexOf('BIRTH_PLACE') >= 0) {
                     var birth_place = '<b>BIRTH_PLACE</b>' + '<br>' + clientsdata[clientsdata.indexOf('BIRTH_PLACE') + 1] + '<br><br>';
                 } else {
-                    var birth_place = '<b>BIRTH_PLACE</b>' + '<br>' + 'N/A' + '<br><br>';
+                    var birth_place = '';
                 }
                 if (clientsdata.indexOf('BOROUGH') >= 0) {
                     var borough = '<b>BOROUGH</b>' + '<br>' + clientsdata[clientsdata.indexOf('BOROUGH') + 1] + '<br><br>';
                 } else {
-                    var borough = '<b>BOROUGH</b>' + '<br>' + 'N/A' + '<br><br>';
+                    var borough = '';
                 }
                 if (clientsdata.indexOf('LETTER') >= 0) {
                     var letter = '<b>EXEMPLIFICATION_LETTER</b>' + '<br>' + clientsdata[clientsdata.indexOf('LETTER') + 1] + '<br><br>';
                 } else {
-                    var letter = '<b>EXEMPLIFICATION_LETTER</b>' + '<br>' + 'N/A' + '<br><br>';
+                    var letter = '';
                 }
                 if (clientsdata.indexOf('ADD_COMMENT') >= 0) {
                     var comment = '<b>COMMENT</b>' + '<br>' + clientsdata[clientsdata.indexOf('ADD_COMMENT') + 1] + '<br><br>';
@@ -730,77 +730,77 @@ var Order = React.createClass({
                 if (clientsdata.indexOf('LASTNAME') >= 0) {
                     var last_name = '<b>LAST_NAME</b>' + '<br>' + clientsdata[clientsdata.indexOf('LASTNAME') + 1] + '<br><br>';
                 } else {
-                    var last_name = '<b>LAST_NAME</b>' + '<br>' + 'N/A' + '<br><br>';
+                    var last_name = '';
                 }
                 if (clientsdata.indexOf('MIDDLENAME') >= 0) {
                     var middle_name = '<b>MIDDLE_NAME</b>' + '<br>' + clientsdata[clientsdata.indexOf('MIDDLENAME') + 1] + '<br><br>';
                 } else {
-                    var middle_name = '<b>MIDDLE_NAME</b>' + '<br>' + 'N/A' + '<br><br>';
+                    var middle_name = '';
                 }
                 if (clientsdata.indexOf('FIRSTNAME') >= 0) {
                     var first_name = '<b>FIRST_NAME</b>' + '<br>' + clientsdata[clientsdata.indexOf('FIRSTNAME') + 1] + '<br><br>';
                 } else {
-                    var first_name = '<b>FIRST_NAME</b>' + '<br>' + 'N/A' + '<br><br>';
+                    var first_name = '';
                 }
                 if (clientsdata.indexOf('RELATIONSHIP') >= 0) {
                     var relationship = '<b>RELATIONSHIP</b>' + '<br>' + clientsdata[clientsdata.indexOf('RELATIONSHIP') + 1] + '<br><br>';
                 } else {
-                    var relationship = '<b>RELATIONSHIP</b>' + '<br>' + 'N/A' + '<br><br>';
+                    var relationship = '';
                 }
                 if (clientsdata.indexOf('PURPOSE') >= 0) {
                     var purpose = '<b>PURPOSE</b>' + '<br>' + clientsdata[clientsdata.indexOf('PURPOSE') + 1] + '<br><br>';
                 } else {
-                    var purpose = '<b>PURPOSE</b>' + '<br>' + 'N/A' + '<br><br>';
+                    var purpose = '';
                 }
                 if (clientsdata.indexOf('COPY_REQ') >= 0) {
                     var copy_req = '<b>COPY_REQ</b>' + '<br>' + clientsdata[clientsdata.indexOf('COPY_REQ') + 1] + '<br><br>';
                 } else {
-                    var copy_req = '<b>COPY_REQ</b>' + '<br>' + 'N/A' + '<br><br>';
+                    var copy_req = '';
                 }
                 if (clientsdata.indexOf('CEMETERY') >= 0) {
                     var cemetery = '<b>CEMETERY</b>' + '<br>' + clientsdata[clientsdata.indexOf('CEMETERY') + 1] + '<br><br>';
                 } else {
-                    var cemetery = '<b>CEMETERY</b>' + '<br>' + 'N/A' + '<br><br>';
+                    var cemetery = '';
                 }
                 if (clientsdata.indexOf('MONTH') >= 0) {
                     var month = '<b>MONTH</b>' + '<br>' + clientsdata[clientsdata.indexOf('MONTH') + 1] + '<br><br>';
                 } else {
-                    var month = '<b>MONTH</b>' + '<br>' + 'N/A' + '<br><br>';
+                    var month = '';
                 }
                 if (clientsdata.indexOf('DAY') >= 0) {
                     var day = '<b>DAY</b>' + '<br>' + clientsdata[clientsdata.indexOf('DAY') + 1] + '<br><br>';
                 } else {
-                    var day = '<b>DAY</b>' + '<br>' + 'N/A' + '<br><br>';
+                    var day = '';
                 }
                 if (clientsdata.indexOf('YEAR') >= 0) {
                     var year = '<b>YEAR</b>' + '<br>' + clientsdata[clientsdata.indexOf('YEAR') + 1] + '<br><br>';
                 } else {
-                    var year = '<b>YEAR</b>' + '<br>' + 'N/A' + '<br><br>';
+                    var year = '';
                 }
                 if (clientsdata.indexOf('DEATH_PLACE') >= 0) {
                     var death_place = '<b>DEATH_PLACE</b>' + '<br>' + clientsdata[clientsdata.indexOf('DEATH_PLACE') + 1] + '<br><br>';
                 } else {
-                    var death_place = '<b>DEATH_PLACE</b>' + '<br>' + 'N/A' + '<br><br>';
+                    var death_place = '';
                 }
                 if (clientsdata.indexOf('AGEOFDEATH') >= 0) {
                     var age_of_death = '<b>AGE_OF_DEATH</b>' + '<br>' + clientsdata[clientsdata.indexOf('AGEOFDEATH') + 1] + '<br><br>';
                 } else {
-                    var age_of_death = '<b>AGE_OF_DEATH</b>' + '<br>' + 'N/A' + '<br><br>';
+                    var age_of_death = '';
                 }
                 if (clientsdata.indexOf('CERTIFICATE_NUMBER') >= 0) {
                     var certificate_number = '<b>CERTIFICATE_NUMBER</b>' + '<br>' + clientsdata[clientsdata.indexOf('CERTIFICATE_NUMBER') + 1] + '<br><br>';
                 } else {
-                    var certificate_number = '<b>CERTIFICATE_NUMBER</b>' + '<br>' + 'N/A' + '<br><br>';
+                    var certificate_number = '';
                 }
                 if (clientsdata.indexOf('BOROUGH') >= 0) {
                     var borough = '<b>BOROUGH</b>' + '<br>' + clientsdata[clientsdata.indexOf('BOROUGH') + 1] + '<br><br>';
                 } else {
-                    var borough = '<b>BOROUGH</b>' + '<br>' + 'N/A' + '<br><br>';
+                    var borough = '';
                 }
                 if (clientsdata.indexOf('LETTER') >= 0) {
                     var letter = '<b>EXEMPLIFICATION_LETTER</b>' + '<br>' + clientsdata[clientsdata.indexOf('LETTER') + 1] + '<br><br>';
                 } else {
-                    var letter = '<b>EXEMPLIFICATION_LETTER</b>' + '<br>' + 'N/A' + '<br><br>';
+                    var letter = '';
                 }
                 if (clientsdata.indexOf('ADD_COMMENT') >= 0) {
                     var comment = '<b>COMMENT</b>' + '<br>' + clientsdata[clientsdata.indexOf('ADD_COMMENT') + 1] + '<br><br>';
@@ -824,72 +824,72 @@ var Order = React.createClass({
                 if (clientsdata.indexOf('LASTNAME_G') >= 0) {
                     var last_name_groom = '<b>LAST_NAME_GROOM</b>' + '<br>' + clientsdata[clientsdata.indexOf('LASTNAME_G') + 1] + '<br><br>';
                 } else {
-                    var last_name_groom = '<b>LAST_NAME_GROOM</b>' + '<br>' + 'N/A' + '<br><br>';
+                    var last_name_groom = '';
                 }
                 if (clientsdata.indexOf('FIRSTNAME_G') >= 0) {
                     var first_name_groom = '<b>FIRST_NAME_GROOM</b>' + '<br>' + clientsdata[clientsdata.indexOf('FIRSTNAME_G') + 1] + '<br><br>';
                 } else {
-                    var first_name_groom = '<b>FIRST_NAME_GROOM</b>' + '<br>' + 'N/A' + '<br><br>';
+                    var first_name_groom = '';
                 }
                 if (clientsdata.indexOf('LASTNAME_B') >= 0) {
                     var last_name_bride = '<b>LAST_NAME_BRIDE</b>' + '<br>' + clientsdata[clientsdata.indexOf('LASTNAME_B') + 1] + '<br><br>';
                 } else {
-                    var last_name_bride = '<b>LAST_NAME_BRIDE</b>' + '<br>' + 'N/A' + '<br><br>';
+                    var last_name_bride = '';
                 }
                 if (clientsdata.indexOf('FIRSTNAME_B') >= 0) {
                     var first_name_bride = '<b>FIRST_NAME_BRIDE</b>' + '<br>' + clientsdata[clientsdata.indexOf('FIRSTNAME_B') + 1] + '<br><br>';
                 } else {
-                    var first_name_bride = '<b>FIRST_NAME_BRIDE</b>' + '<br>' + 'N/A' + '<br><br>';
+                    var first_name_bride = '';
                 }
                 if (clientsdata.indexOf('RELATIONSHIP') >= 0) {
                     var relationship = '<b>RELATIONSHIP</b>' + '<br>' + clientsdata[clientsdata.indexOf('RELATIONSHIP') + 1] + '<br><br>';
                 } else {
-                    var relationship = '<b>RELATIONSHIP</b>' + '<br>' + 'N/A' + '<br><br>';
+                    var relationship = '';
                 }
                 if (clientsdata.indexOf('PURPOSE') >= 0) {
                     var purpose = '<b>PURPOSE</b>' + '<br>' + clientsdata[clientsdata.indexOf('PURPOSE') + 1] + '<br><br>';
                 } else {
-                    var purpose = '<b>PURPOSE</b>' + '<br>' + 'N/A' + '<br><br>';
+                    var purpose = '';
                 }
                 if (clientsdata.indexOf('COPY_REQ') >= 0) {
                     var copy_req = '<b>COPY_REQ</b>' + '<br>' + clientsdata[clientsdata.indexOf('COPY_REQ') + 1] + '<br><br>';
                 } else {
-                    var copy_req = '<b>COPY_REQ</b>' + '<br>' + 'N/A' + '<br><br>';
+                    var copy_req = '';
                 }
                 if (clientsdata.indexOf('MONTH') >= 0) {
                     var month = '<b>MONTH</b>' + '<br>' + clientsdata[clientsdata.indexOf('MONTH') + 1] + '<br><br>';
                 } else {
-                    var month = '<b>MONTH</b>' + '<br>' + 'N/A' + '<br><br>';
+                    var month = '';
                 }
                 if (clientsdata.indexOf('DAY') >= 0) {
                     var day = '<b>DAY</b>' + '<br>' + clientsdata[clientsdata.indexOf('DAY') + 1] + '<br><br>';
                 } else {
-                    var day = '<b>DAY</b>' + '<br>' + 'N/A' + '<br><br>';
+                    var day = '';
                 }
                 if (clientsdata.indexOf('YEAR') >= 0) {
                     var year = '<b>YEAR</b>' + '<br>' + clientsdata[clientsdata.indexOf('YEAR') + 1] + '<br><br>';
                 } else {
-                    var year = '<b>YEAR</b>' + '<br>' + 'N/A' + '<br><br>';
+                    var year = '';
                 }
                 if (clientsdata.indexOf('MARRIAGE_PLACE') >= 0) {
                     var marriage_place = '<b>MARRIAGE_PLACE</b>' + '<br>' + clientsdata[clientsdata.indexOf('MARRIAGE_PLACE') + 1] + '<br><br>';
                 } else {
-                    var marriage_place = '<b>MARRIAGE_PLACE</b>' + '<br>' + 'N/A' + '<br><br>';
+                    var marriage_place = '';
                 }
                 if (clientsdata.indexOf('CERTIFICATE_NUMBER') >= 0) {
                     var certificate_number = '<b>CERTIFICATE_NUMBER</b>' + '<br>' + clientsdata[clientsdata.indexOf('CERTIFICATE_NUMBER') + 1] + '<br><br>';
                 } else {
-                    var certificate_number = '<b>CERTIFICATE_NUMBER</b>' + '<br>' + 'N/A' + '<br><br>';
+                    var certificate_number = '';
                 }
                 if (clientsdata.indexOf('BOROUGH') >= 0) {
                     var borough = '<b>BOROUGH</b>' + '<br>' + clientsdata[clientsdata.indexOf('BOROUGH') + 1] + '<br><br>';
                 } else {
-                    var borough = '<b>BOROUGH</b>' + '<br>' + 'N/A' + '<br><br>';
+                    var borough = '';
                 }
                 if (clientsdata.indexOf('LETTER') >= 0) {
                     var letter = '<b>EXEMPLIFICATION_LETTER</b>' + '<br>' + clientsdata[clientsdata.indexOf('LETTER') + 1] + '<br><br>';
                 } else {
-                    var letter = '<b>EXEMPLIFICATION_LETTER</b>' + '<br>' + 'N/A' + '<br><br>';
+                    var letter = '';
                 }
                 if (clientsdata.indexOf('ADD_COMMENT') >= 0) {
                     var comment = '<b>COMMENT</b>' + '<br>' + clientsdata[clientsdata.indexOf('ADD_COMMENT') + 1] + '<br><br>';
@@ -913,42 +913,42 @@ var Order = React.createClass({
                 if (clientsdata.indexOf('BOROUGH') >= 0) {
                     var borough = '<b>BOROUGH</b>' + '<br>' + clientsdata[clientsdata.indexOf('BOROUGH') + 1] + '<br><br>';
                 } else {
-                    var borough = '<b>BOROUGH</b>' + '<br>' + 'N/A' + '<br><br>';
+                    var borough = '';
                 }
                 if (clientsdata.indexOf('BLOCK') >= 0) {
                     var block = '<b>BLOCK</b>' + '<br>' + clientsdata[clientsdata.indexOf('BLOCK') + 1] + '<br><br>';
                 } else {
-                    var block = '<b>BLOCK</b>' + '<br>' + 'N/A' + '<br><br>';
+                    var block = '';
                 }
                 if (clientsdata.indexOf('LOT') >= 0) {
                     var lot = '<b>LOT</b>' + '<br>' + clientsdata[clientsdata.indexOf('LOT') + 1] + '<br><br>';
                 } else {
-                    var lot = '<b>LOT</b>' + '<br>' + 'N/A' + '<br><br>';
+                    var lot = '';
                 }
                 if (clientsdata.indexOf('STREET_NUMBER') >= 0) {
                     var building_number = '<b>BUILDING_NUMBER</b>' + '<br>' + clientsdata[clientsdata.indexOf('STREET_NUMBER') + 1] + '<br><br>';
                 } else {
-                    var building_number = '<b>BUILDING_NUMBER</b>' + '<br>' + 'N/A' + '<br><br>';
+                    var building_number = '';
                 }
                 if (clientsdata.indexOf('STREET') >= 0) {
                     var street = '<b>STREET</b>' + '<br>' + clientsdata[clientsdata.indexOf('STREET') + 1] + '<br><br>';
                 } else {
-                    var street = '<b>STREET</b>' + '<br>' + 'N/A' + '<br><br>';
+                    var street = '';
                 }
                 if (clientsdata.indexOf('DESCRIPTION') >= 0) {
                     var description = '<b>DESCRIPTION</b>' + '<br>' + clientsdata[clientsdata.indexOf('DESCRIPTION') + 1] + '<br><br>';
                 } else {
-                    var description = '<b>DESCRIPTION</b>' + '<br>' + 'N/A' + '<br><br>';
+                    var description = '';
                 }
                 if (clientsdata.indexOf('COPY_OPTIONS') >= 0) {
                     var certified = '<b>CERTIFIED</b>' + '<br>' + clientsdata[clientsdata.indexOf('COPY_OPTIONS') + 1] + '<br><br>';
                 } else {
-                    var certified = '<b>CERTIFIED</b>' + '<br>' + 'N/A' + '<br><br>';
+                    var certified = '';
                 }
                 if (clientsdata.indexOf('MAIL_PICKUP') >= 0) {
                     var mail_pickup = '<b>MAIL_PICKUP</b>' + '<br>' + clientsdata[clientsdata.indexOf('MAIL_PICKUP') + 1] + '<br><br>';
                 } else {
-                    var mail_pickup = '<b>MAIL_PICKUP</b>' + '<br>' + 'N/A' + '<br><br>';
+                    var mail_pickup = '';
                 }
                 if (clientsdata.indexOf('ADD_COMMENT') >= 0) {
                     var comment = '<b>COMMENT</b>' + '<br>' + clientsdata[clientsdata.indexOf('ADD_COMMENT') + 1] + '<br><br>';
@@ -971,62 +971,62 @@ var Order = React.createClass({
                 if (clientsdata.indexOf('Collection') >= 0) {
                     var collection = '<b>COLLECTION</b>' + '<br>' + clientsdata[clientsdata.indexOf('Collection') + 1] + '<br><br>';
                 } else {
-                    var collection = '<b>COLLECTION</b>' + '<br>' + 'N/A' + '<br><br>';
+                    var collection = '';
                 }
                 if (clientsdata.indexOf('BOROUGH') >= 0) {
                     var borough = '<b>BOROUGH</b>' + '<br>' + clientsdata[clientsdata.indexOf('BOROUGH') + 1] + '<br><br>';
                 } else {
-                    var borough = '<b>BOROUGH</b>' + '<br>' + 'N/A' + '<br><br>';
+                    var borough = '';
                 }
                 if (clientsdata.indexOf('ROLL') >= 0) {
                     var roll = '<b>ROLL</b>' + '<br>' + clientsdata[clientsdata.indexOf('ROLL') + 1] + '<br><br>';
                 } else {
-                    var roll = '<b>ROLL</b>' + '<br>' + 'N/A' + '<br><br>';
+                    var roll = '';
                 }
                 if (clientsdata.indexOf('BLOCK') >= 0) {
                     var block = '<b>BLOCK</b>' + '<br>' + clientsdata[clientsdata.indexOf('BLOCK') + 1] + '<br><br>';
                 } else {
-                    var block = '<b>BLOCK</b>' + '<br>' + 'N/A' + '<br><br>';
+                    var block = '';
                 }
                 if (clientsdata.indexOf('LOT') >= 0) {
                     var lot = '<b>LOT</b>' + '<br>' + clientsdata[clientsdata.indexOf('LOT') + 1] + '<br><br>';
                 } else {
-                    var lot = '<b>LOT</b>' + '<br>' + 'N/A' + '<br><br>';
+                    var lot = '';
                 }
                 if (clientsdata.indexOf('STREET_NUMBER') >= 0) {
                     var building_number = '<b>BUILDING_NUMBER</b>' + '<br>' + clientsdata[clientsdata.indexOf('STREET_NUMBER') + 1] + '<br><br>';
                 } else {
-                    var building_number = '<b>BUILDING_NUMBER</b>' + '<br>' + 'N/A' + '<br><br>';
+                    var building_number = '';
                 }
                 if (clientsdata.indexOf('STREET') >= 0) {
                     var street = '<b>STREET</b>' + '<br>' + clientsdata[clientsdata.indexOf('STREET') + 1] + '<br><br>';
                 } else {
-                    var street = '<b>STREET</b>' + '<br>' + 'N/A' + '<br><br>';
+                    var street = '';
                 }
                 if (clientsdata.indexOf('DESCRIPTION') >= 0) {
                     var description = '<b>DESCRIPTION</b>' + '<br>' + clientsdata[clientsdata.indexOf('DESCRIPTION') + 1] + '<br><br>';
                 } else {
-                    var description = '<b>DESCRIPTION</b>' + '<br>' + 'N/A' + '<br><br>';
+                    var description = '';
                 }
                 if (clientsdata.indexOf('TYPE') >= 0) {
                     var size = '<b>SIZE</b>' + '<br>' + clientsdata[clientsdata.indexOf('TYPE') + 1] + '<br><br>';
                 } else {
-                    var size = '<b>SIZE</b>' + '<br>' + 'N/A' + '<br><br>';
+                    var size = '';
                 }
                 if (clientsdata.indexOf('COPIES') >= 0) {
                     var copy = '<b>COPY</b>' + '<br>' + clientsdata[clientsdata.indexOf('COPIES') + 1] + '<br><br>';
                 } else {
-                    var copy = '<b>COPY</b>' + '<br>' + 'N/A' + '<br><br>';
+                    var copy = '';
                 }
                 if (clientsdata.indexOf('MAIL_PICKUP') >= 0) {
                     var mail_pickup = '<b>MAIL_PICKUP</b>' + '<br>' + clientsdata[clientsdata.indexOf('MAIL_PICKUP') + 1] + '<br><br>';
                 } else {
-                    var mail_pickup = '<b>MAIL_PICKUP</b>' + '<br>' + 'N/A' + '<br><br>';
+                    var mail_pickup = '';
                 }
                 if (clientsdata.indexOf('CONTACT_NUMBER') >= 0) {
                     var contact_number = '<b>CONTACT_NUMBER</b>' + '<br>' + clientsdata[clientsdata.indexOf('CONTACT_NUMBER') + 1] + '<br><br>';
                 } else {
-                    var contact_number = '<b>CONTACT_NUMBER</b>' + '<br>' + 'N/A' + '<br><br>';
+                    var contact_number = '';
                 }
                 if (clientsdata.indexOf('ADD_COMMENT') >= 0) {
                     var comment = '<b>COMMENT</b>' + '<br>' + clientsdata[clientsdata.indexOf('ADD_COMMENT') + 1] + '<br><br>';
@@ -1049,42 +1049,42 @@ var Order = React.createClass({
                 if (clientsdata.indexOf('IMAGE_IDENTIFIER') >= 0) {
                     var image_identifier = '<b>IMAGE ID/IDENTIFIER</b>' + '<br>' + clientsdata[clientsdata.indexOf('IMAGE_IDENTIFIER') + 1] + '<br><br>';
                 } else {
-                    var image_identifier = '<b>IMAGE ID/IDENTIFIER</b>' + '<br>' + 'N/A' + '<br><br>';
+                    var image_identifier = '';
                 }
                 if (clientsdata.indexOf('IMAGE_DESCRIPTION') >= 0) {
                     var description = '<b>DESCRIPTION</b>' + '<br>' + clientsdata[clientsdata.indexOf('IMAGE_DESCRIPTION') + 1] + '<br><br>';
                 } else {
-                    var description = '<b>DESCRIPTION</b>' + '<br>' + 'N/A' + '<br><br>';
+                    var description = '';
                 }
                 if (clientsdata.indexOf('ADDITIONAL_DESCRIPTION') >= 0) {
                     var additional_description = '<b>ADDITIONAL_DESCRIPTION</b>' + '<br>' + clientsdata[clientsdata.indexOf('ADDITIONAL_DESCRIPTION') + 1] + '<br><br>';
                 } else {
-                    var additional_description = '<b>ADDITIONAL_DESCRIPTION</b>' + '<br>' + 'N/A' + '<br><br>';
+                    var additional_description = '';
                 }
                 if (clientsdata.indexOf('SIZE') >= 0) {
                     var size = '<b>SIZE</b>' + '<br>' + clientsdata[clientsdata.indexOf('SIZE') + 1] + '<br><br>';
                 } else {
-                    var size = '<b>SIZE</b>' + '<br>' + 'N/A' + '<br><br>';
+                    var size = '';
                 }
                 if (clientsdata.indexOf('COPIES') >= 0) {
                     var copy = '<b>COPY</b>' + '<br>' + clientsdata[clientsdata.indexOf('COPIES') + 1] + '<br><br>';
                 } else {
-                    var copy = '<b>COPY</b>' + '<br>' + 'N/A' + '<br><br>';
+                    var copy = '';
                 }
                 if (clientsdata.indexOf('MAIL_PICKUP') >= 0) {
                     var mail_pickup = '<b>MAIL_PICKUP</b>' + '<br>' + clientsdata[clientsdata.indexOf('MAIL_PICKUP') + 1] + '<br><br>';
                 } else {
-                    var mail_pickup = '<b>MAIL_PICKUP</b>' + '<br>' + 'N/A' + '<br><br>';
+                    var mail_pickup = '';
                 }
                 if (clientsdata.indexOf('CONTACT_NUMBER') >= 0) {
                     var contact_number = '<b>CONTACT_NUMBER</b>' + '<br>' + clientsdata[clientsdata.indexOf('CONTACT_NUMBER') + 1] + '<br><br>';
                 } else {
-                    var contact_number = '<b>CONTACT_NUMBER</b>' + '<br>' + 'N/A' + '<br><br>';
+                    var contact_number = '';
                 }
                 if (clientsdata.indexOf('PERSONAL_USE_AGREEMENT') >= 0) {
                     var personal_use_agreement = '<b>PERSONAL_USE_AGREEMENT</b>' + '<br>' + clientsdata[clientsdata.indexOf('PERSONAL_USE_AGREEMENT') + 1] + '<br><br>';
                 } else {
-                    var personal_use_agreement = '<b>PERSONAL_USE_AGREEMENT</b>' + '<br>' + 'N/A' + '<br><br>';
+                    var personal_use_agreement = '';
                 }
                 if (clientsdata.indexOf('ADD_COMMENT') >= 0) {
                     var comment = '<b>COMMENT</b>' + '<br>' + clientsdata[clientsdata.indexOf('ADD_COMMENT') + 1] + '<br><br>';
@@ -1093,7 +1093,7 @@ var Order = React.createClass({
                 }
                 div.innerHTML = order.ship_to_name + '<br>' +
                     'Address: ' + address + ' ' + order.ship_to_city + ', ' + (order.ship_to_state == null ? '' : order.ship_to_state) + ' ' + order.ship_to_country + ' ' + order.ship_to_zipcode + '<br>' +
-                    '<h3>Photo Tax</h3>' + ordertypes +
+                    '<h3>Photo Gallery</h3>' + ordertypes +
                     '<b>Customer Name: ' + order.billingname + '</b><br>' +
                     '<b>Order Number: ' + order.orderno + '</b><br>' +
                     '<b>Time of Order: ' + order.datelastmodified + '</b><br>' +

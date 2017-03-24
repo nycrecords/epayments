@@ -60,7 +60,7 @@ ALL_PHOTOS = 'photos'
 
 PHOTO_ORDERS_LIST = [
     'tax photo',
-    'online gallery'
+    'online gallery',
     'Property card'
 ]
 
