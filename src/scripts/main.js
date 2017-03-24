@@ -1171,7 +1171,7 @@ var Order = React.createClass({
             } else {
                 var address = order.ship_to_streetadd + ' ' + order.ship_to_street_add2;
             }
-            div.innerHTML = '<div style="display: table-cell; vertical-align: middle; text-align: center; width: 250px; height: 100px; margin: auto; position: relative;">' +
+            div.innerHTML = '<div style="display: table-cell; text-align: center; width: 210px; height: 100px; padding: 10px 20px 0px; position: relative;">' +
                 order.ship_to_name + '<br>' + address + '<br>' + order.ship_to_city + ', ' + (order.ship_to_state == null ? '' : order.ship_to_state + ' ') + order.ship_to_country + ' ' +
                 order.ship_to_zipcode + '<br></div>';
             document.getElementById('printsmalllabels').appendChild(div);
