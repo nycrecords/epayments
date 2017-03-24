@@ -315,7 +315,7 @@ var Order = React.createClass({
             var div = document.createElement('div');
             div.className = 'separateorder';
             div.style.fontFamily = 'Arial, Helvetica, sans-serif';
-            div.style.fontSize = '12px';
+            div.style.fontSize = '14px';
             var order = this.props.order[i];
             var clientsdata = order.clientsdata.split('|');
             if (order.ship_to_street_add2 == null) {
