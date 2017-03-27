@@ -27,13 +27,15 @@ var App = React.createClass({
     },
 
     getInitialState: function () {
+        // initalizes the state with three empty arrays called order, uniqueOrders, and orderFilters
         return {
-            order: [],
-            uniqueOrders: [],
-            orderFilters: []
+            order: [], // all suborders returned from ajax call
+            uniqueOrders: [], // all unique orders returned from ajax call
+            orderFilters: [] // order filters when 'Apply' button is pressed
         }
     },
     componentDidMount: function () {
+        // initial ajax called on load to set initial states
         this.serverRequest = $.get(this.props.source, function (result) {
             for (var i = 0; i < result.orders.length; i++) {
                 (this.state.order).push(result.orders[i]);
@@ -48,9 +50,12 @@ var App = React.createClass({
         }.bind(this))
     },
     componentWillUnmount: function () {
+        // performs cleanup of DOM elements created in componentDidMount before a component is unmounted
         this.serverRequest.abort()
     },
     filterOrder: function (order) {
+        // function is called from findOrder() in the OrderForm component
+        // ajax call that passes back a dictionary containing the fields of the order form to retrieve filtered orders
         this.state.order = [];
         var dateRangeOrders = [];
         var allUniqueOrders = [];
@@ -142,6 +147,7 @@ var Header = React.createClass({
 
 var OrderForm = React.createClass({
     setDate: function () {
+        // sets the state of the today variable to today's date
         var today = new Date();
         var dd = today.getDate();
         var mm = today.getMonth() + 1;
@@ -158,6 +164,7 @@ var OrderForm = React.createClass({
         });
     },
     findOrder: function (event) {
+        // when 'Apply' button is pressed, an order object is created and passed to the filterOrder(order) function
         event.preventDefault();
         var order = {
             ordernumber: this.refs.ordernumber.value,
@@ -171,6 +178,7 @@ var OrderForm = React.createClass({
         this.props.filterOrder(order)
     },
     componentWillMount: function () {
+        // calls setDate() functiion on load of component
         this.setDate();
     },
     render: function () {
@@ -306,6 +314,8 @@ var Inventory = React.createClass({
 
 var Order = React.createClass({
     printOrders: function (event) {
+        // creates a new div for each order that is inserted into the div with id called 'printorders' in index.html
+        // depending on the order type, there will be different HTML formatting
         for (var i = 0; i < this.props.order.length; i++) {
             var div = document.createElement('div');
             div.className = 'separateorder';
@@ -1107,6 +1117,7 @@ var Order = React.createClass({
         document.getElementById('printorders').innerHTML = "";
     },
     printBigLabels: function (event) {
+        // create a new div for each order that is inserted into the div with id called 'printbiglabels' in index.html
         for (var i = 0; i < this.props.order.length; i++) {
             var div = document.createElement('div');
             div.id = 'biglabel';
@@ -1152,6 +1163,7 @@ var Order = React.createClass({
         document.getElementById('printbiglabels').innerHTML = "";
     },
     printSmallLabels: function (event) {
+        // create a new div for each order that is inserted into the div with id called 'printsmalllabels' in index.html
         for (var i = 0; i < this.props.order.length; i++) {
             var div = document.createElement('div');
             div.id = 'smalllabel';
