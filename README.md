@@ -26,6 +26,10 @@ Initialize the database by entering the following in the psql line:
     psql
         username=# create database epayments;
 
+Upgrade the database by entering the following in the command line:
+
+    python manage.py db upgrade
+
 Locally run the intranet by entering the following in the command line:
 
     python manage.py runserver

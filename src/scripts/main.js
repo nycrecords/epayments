@@ -16,12 +16,11 @@ var Route = ReactRouter.Route;
  Order -- state of order object and state of uniqueOrders object is passed
 
  Functions:
- getInitialState -- initalizes three empty lists named order, prevDayOrders, and uniqueOrders
+ getInitialState -- initalizes three empty lists named order, uniqueOrders, and orderFilters
  componentDidMount -- accesses orders from the database and updates the objects in the state
  componentWillUnmount -- throws an error if data is not received successfully
  filterOrder -- takes an object order as a parameter and filters orders in the database
  */
-
 var App = React.createClass({
     propTypes: {
         source: React.PropTypes.string.isRequired
@@ -30,7 +29,6 @@ var App = React.createClass({
     getInitialState: function () {
         return {
             order: [],
-            prevDayOrders: [],
             uniqueOrders: [],
             orderFilters: []
         }
@@ -39,9 +37,6 @@ var App = React.createClass({
         this.serverRequest = $.get(this.props.source, function (result) {
             for (var i = 0; i < result.orders.length; i++) {
                 (this.state.order).push(result.orders[i]);
-            }
-            for (var i = 0; i < result.orders.length; i++) {
-                (this.state.prevDayOrders).push(result.orders[i])
             }
             var allUniqueOrders = [];
             for (var i = 0; i < this.state.order.length; i++) {
@@ -1171,7 +1166,7 @@ var Order = React.createClass({
             } else {
                 var address = order.ship_to_streetadd + ' ' + order.ship_to_street_add2;
             }
-            div.innerHTML = '<div style="display: table-cell; text-align: center; width: 210px; height: 100px; padding: 10px 20px 0px; position: relative;">' +
+            div.innerHTML = '<div style="display: table-cell; text-align: center; width: 210px; height: 100px; padding: 10px 20px 0px; position: relative; outline: solid;">' +
                 order.ship_to_name + '<br>' + address + '<br>' + order.ship_to_city + ', ' + (order.ship_to_state == null ? '' : order.ship_to_state + ' ') + order.ship_to_country + ' ' +
                 order.ship_to_zipcode + '<br></div>';
             document.getElementById('printsmalllabels').appendChild(div);
