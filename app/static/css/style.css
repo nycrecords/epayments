@@ -291,15 +291,13 @@ header.top h3:after {
   max-width: 1500px;
   margin: 0 auto;
   margin-top: 5vh;
-  -webkit-perspective: 1000;
-          perspective: 1000;
   -webkit-transform-style: preserve-3d;
           transform-style: preserve-3d;
 }
 .epayments > * {
   -webkit-box-flex: 1;
-      -ms-flex: 1 4 auto;
-          flex: 1 4 auto;
+      -ms-flex: 1 5 auto;
+          flex: 1 5 auto;
   padding: 2rem;
   border: 2px solid #1a1a1a;
   position: relative;
@@ -307,30 +305,12 @@ header.top h3:after {
   -webkit-transition: all 0.3s;
   transition: all 0.3s;
   box-shadow: 0px 5px 5px rgba(0,0,0,0.1);
-  overflow: scroll;
 }
 .epayments > *:first-child {
   -ms-flex-negative: 1;
       flex-shrink: 1;
-  -ms-flex-preferred-size: 40%;
-      flex-basis: 40%;
-  -webkit-transform: translateX(50%) rotateY(6deg) translateX(-50%);
-          transform: translateX(50%) rotateY(6deg) translateX(-50%);
-}
-.epayments > *:nth-child(2) {
-  -webkit-transform: translateX(-50%) rotateY(-14deg) translateX(50%);
-          transform: translateX(-50%) rotateY(-14deg) translateX(50%);
-  border-left: 0;
-  border-right: 0;
-  min-width: 300px;
-}
-.epayments > *:last-child {
-  -ms-flex-negative: 1;
-      flex-shrink: 1;
-  -ms-flex-preferred-size: 60%;
-      flex-basis: 60%;
-  -webkit-transform: translateX(-50%) rotateY(10deg) translateX(50%) scale(1.08) translateX(24px);
-          transform: translateX(-50%) rotateY(10deg) translateX(50%) scale(1.08) translateX(24px);
+  -ms-flex-preferred-size: 10%;
+      flex-basis: 10%;
 }
 input#fold:not(:checked) ~ #main .epayments > * {
   -webkit-transform: none;
@@ -339,7 +319,7 @@ input#fold:not(:checked) ~ #main .epayments > * {
 label[for="fold"] {
   position: absolute;
   top: 1rem;
-  left: 1rem;
+  left: 50rem;
   text-transform: uppercase;
   font-size: 1.3rem;
   background: #000;

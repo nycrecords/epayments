@@ -27,7 +27,7 @@ var App = React.createClass({
     },
 
     getInitialState: function () {
-        // initalizes the state with three empty arrays called order, uniqueOrders, and orderFilters
+        // Initalizes the state with three empty arrays called order, uniqueOrders, and orderFilters
         return {
             order: [], // all suborders returned from ajax call
             uniqueOrders: [], // all unique orders returned from ajax call
