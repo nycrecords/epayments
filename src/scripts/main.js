@@ -257,14 +257,14 @@ var OrderForm = React.createClass({
                     type='text'
                     ref='datereceivedstart'
                     placeholder='Date Received - Start'
-                    id='datepicker'
+                    id='date-received-start'
                     defaultValue={this.state.today}/>
                 <input
                     data-bind='value: datereceivedend'
                     type='text'
                     ref='datereceivedend'
                     placeholder='Date Received - End'
-                    id='datepicker2'/>
+                    id='date-received-end'/>
                 <button type='reset'>
                     Clear
                 </button>
