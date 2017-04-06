@@ -1,13 +1,14 @@
 /* global $ */
-import {browserHistory} from 'react-router'
+// import {browserHistory} from 'react-router'
 
-var React = require('react');
-var ReactDOM = require('react-dom');
-
-var ReactRouter = require('react-router');
-var Router = ReactRouter.Router;
-var Route = ReactRouter.Route;
-
+import React from 'react';
+import ReactDOM from 'react-dom';
+import { Router, 
+        Route,
+        // Link, 
+        // IndexRoute, 
+        // hashHistory, 
+        browserHistory } from 'react-router'
 /*
  App
  <App />
@@ -21,6 +22,7 @@ var Route = ReactRouter.Route;
  componentWillUnmount -- throws an error if data is not received successfully
  filterOrder -- takes an object order as a parameter and filters orders in the database
  */
+    
 var App = React.createClass({
     propTypes: {
         source: React.PropTypes.string.isRequired
@@ -59,13 +61,13 @@ var App = React.createClass({
         this.state.order = [];
         var dateRangeOrders = [];
         var allUniqueOrders = [];
-        var ordernumber = order.ordernumber;
-        var subordernumber = order.subordernumber;
-        var ordertype = order.ordertype;
-        var billingname = order.billingname;
-        var datereceivedstart = order.datereceivedstart;
-        var datereceivedend = order.datereceivedend;
-        if (Date.parse(datereceivedstart) > Date.parse(datereceivedend)) {
+        var orderNumber = order.orderNumber;
+        var subOrderNumber = order.subOrderNumber;
+        var orderType = order.orderType;
+        var billingName = order.billingName;
+        var dateReceivedStart = order.dateReceivedStart;
+        var dateReceivedEnd = order.dateReceivedEnd;
+        if (Date.parse(dateReceivedStart) > Date.parse(dateReceivedEnd)) {
             alert("Invalid Date Range: 'Date Received - Start' cannot be after 'Date Received - End'.")
         }
         this.serverRequest = $.ajax({
@@ -73,12 +75,12 @@ var App = React.createClass({
             dataType: 'json',
             type: 'POST',
             data: {
-                order_number: ordernumber,
-                suborder_number: subordernumber,
-                order_type: ordertype,
-                billing_name: billingname,
-                date_received_start: datereceivedstart,
-                date_received_end: datereceivedend
+                order_number: orderNumber,
+                suborder_number: subOrderNumber,
+                order_type: orderType,
+                billing_name: billingName,
+                date_received_start: dateReceivedStart,
+                date_received_end: dateReceivedEnd
             },
             success: function (data) {
                 for (var i = 0; i < data.orders.length; i++) {
@@ -115,7 +117,6 @@ var App = React.createClass({
  Return the Header component that is used in the Inventory component.
  Uses the tagline passed from the App component into the Inventory component.
  */
-
 var Header = React.createClass({
     propTypes: {
         tagline: React.PropTypes.string.isRequired
@@ -131,151 +132,6 @@ var Header = React.createClass({
     }
 });
 
-/*
- OrderForm
- <OrderForm />
- Return the OrderForm component used in the Inventory component.
- OrderForm includes a field for Order Number, Sub Order Number, Order Type, Billing Name, Date Start, and Date End.
- Uses the filterOrder function passed from the App component into the Inventory component.
-
- Functions:
- setDate -- sets the state of the today variable to today's date
- findOrder -- upon an event (apply button being clicked), an order object is created using information from the
- OrderForm and passed into the filterOrder function.
- componentWillMount -- calls setDate function on load of the component
- */
-
-var OrderForm = React.createClass({
-    setDate: function () {
-        // sets the state of the today variable to today's date
-        var today = new Date();
-        var dd = today.getDate();
-        var mm = today.getMonth() + 1;
-        var yyyy = today.getFullYear();
-        if (dd < 10) {
-            dd = '0' + dd
-        }
-        if (mm < 10) {
-            mm = '0' + mm
-        }
-        today = mm + '/' + dd + '/' + yyyy;
-        this.setState({
-            today: today
-        });
-    },
-    findOrder: function (event) {
-        // when 'Apply' button is pressed, an order object is created and passed to the filterOrder(order) function
-        event.preventDefault();
-        var order = {
-            ordernumber: this.refs.ordernumber.value,
-            subordernumber: this.refs.subordernumber.value,
-            ordertype: this.refs.ordertype.value,
-            billingname: this.refs.billingname.value,
-            datereceivedstart: this.refs.datereceivedstart.value,
-            datereceivedend: this.refs.datereceivedend.value
-        };
-        this.props.orderFilters.push(order);
-        this.props.filterOrder(order)
-    },
-    componentWillMount: function () {
-        // calls setDate() functiion on load of component
-        this.setDate();
-    },
-    render: function () {
-        return (
-            <form className='apply-order' ref='orderForm' onSubmit={this.findOrder}>
-                <input
-                    data-bind='value: ordernumber'
-                    type='text'
-                    ref='ordernumber'
-                    id='ordernumber'
-                    placeholder='Order Number'/>
-                <input
-                    data-bind='value: subordernumber'
-                    type='text'
-                    ref='subordernumber'
-                    id='subordernumber'
-                    placeholder='Suborder Number'/>
-                <select data-bind='value: ordertype' ref='ordertype' id='ordertype' defaultValue='Order Type'>
-                    <option disabled>
-                        Order Type
-                    </option>
-                    <option value='All'>
-                        All
-                    </option>
-                    <option value='vitalrecords'>
-                        --Vital Records--
-                    </option>
-                    <option value='Birth Search'>
-                        Birth Search
-                    </option>
-                    <option value='Marriage Search'>
-                        Marriage Search
-                    </option>
-                    <option value='Death Search'>
-                        Death Search
-                    </option>
-                    <option value='Birth Cert'>
-                        Birth Certificate
-                    </option>
-                    <option value='Marriage Cert'>
-                        Marriage Certificate
-                    </option>
-                    <option value='Death Cert'>
-                        Death Certificate
-                    </option>
-                    <option value='photos'>
-                        --Photos--
-                    </option>
-                    <option value='Property Card'>
-                        Property Card
-                    </option>
-                    <option value='Photo Tax'>
-                        Photo Tax
-                    </option>
-                    <option value='Photo Gallery'>
-                        Photo Gallery
-                    </option>
-                    <option disabled value='other'>
-                        --Other--
-                    </option>
-                    <option value='multipleitems'>
-                        Multiple Items In Cart
-                    </option>
-                    <option value='vitalrecordsphotos'>
-                        Vital Records and Photos In Cart
-                    </option>
-                </select>
-                <input
-                    data-bind='value: billingname'
-                    type='text'
-                    ref='billingname'
-                    id='billingname'
-                    placeholder='Billing Name'/>
-                <input
-                    data-bind='value: datereceivedstart'
-                    type='text'
-                    ref='datereceivedstart'
-                    placeholder='Date Received - Start'
-                    id='date-received-start'
-                    defaultValue={this.state.today}/>
-                <input
-                    data-bind='value: datereceivedend'
-                    type='text'
-                    ref='datereceivedend'
-                    placeholder='Date Received - End'
-                    id='date-received-end'/>
-                <button type='reset'>
-                    Clear
-                </button>
-                <button data-bind='click: findOrder' type='submit' name='submit' value='FindOrder'>
-                    Apply
-                </button>
-                <br/>
-            </form>
-        )
-    }
-});
 
 /*
  Inventory
@@ -1217,6 +1073,153 @@ var Order = React.createClass({
         )
     }
 });
+
+/*
+ OrderForm
+ <OrderForm />
+ Return the OrderForm component used in the Inventory component.
+ OrderForm includes a field for Order Number, Sub Order Number, Order Type, Billing Name, Date Start, and Date End.
+ Uses the filterOrder function passed from the App component into the Inventory component.
+
+ Functions:
+ setDate -- sets the state of the today variable to today's date
+ findOrder -- upon an event (apply button being clicked), an order object is created using information from the
+ OrderForm and passed into the filterOrder function.
+ componentWillMount -- calls setDate function on load of the component
+ */
+
+var OrderForm = React.createClass({
+    setDate: function () {
+        // sets the state of the today variable to today's date
+        var today = new Date();
+        var dd = today.getDate();
+        var mm = today.getMonth() + 1;
+        var yyyy = today.getFullYear();
+        if (dd < 10) {
+            dd = '0' + dd
+        }
+        if (mm < 10) {
+            mm = '0' + mm
+        }
+        today = mm + '/' + dd + '/' + yyyy;
+        this.setState({
+            today: today
+        });
+    },
+    findOrder: function (event) {
+        // when 'Apply' button is pressed, an order object is created and passed to the filterOrder(order) function
+        event.preventDefault();
+        var order = {
+            orderNumber: this.refs.orderNumber.value,
+            subOrderNumber: this.refs.subordernumber.value,
+            orderType: this.refs.orderType.value,
+            billingName: this.refs.billingName.value,
+            dateReceivedStart: this.refs.dateReceivedStart.value,
+            dateReceivedEnd: this.refs.dateReceivedEnd.value
+        };
+        this.props.orderFilters.push(order);
+        this.props.filterOrder(order)
+    },
+    componentWillMount: function () {
+        // calls setDate() functiion on load of component
+        this.setDate();
+    },
+    render: function () {
+        return (
+            <form className='apply-order' ref='orderForm' onSubmit={this.findOrder}>
+                <input
+                    data-bind='value: ordernumber'
+                    type='text'
+                    ref='ordernumber'
+                    id='order-number'
+                    placeholder='Order Number'/>
+                <input
+                    data-bind='value: subordernumber'
+                    type='text'
+                    ref='subordernumber'
+                    id='suborder-number'
+                    placeholder='Suborder Number'/>
+                <select data-bind='value: ordertype' ref='ordertype' id='ordertype' defaultValue='Order Type'>
+                    <option disabled>
+                        Order Type
+                    </option>
+                    <option value='All'>
+                        All
+                    </option>
+                    <option value='vitalrecords'>
+                        --Vital Records--
+                    </option>
+                    <option value='Birth Search'>
+                        Birth Search
+                    </option>
+                    <option value='Marriage Search'>
+                        Marriage Search
+                    </option>
+                    <option value='Death Search'>
+                        Death Search
+                    </option>
+                    <option value='Birth Cert'>
+                        Birth Certificate
+                    </option>
+                    <option value='Marriage Cert'>
+                        Marriage Certificate
+                    </option>
+                    <option value='Death Cert'>
+                        Death Certificate
+                    </option>
+                    <option value='photos'>
+                        --Photos--
+                    </option>
+                    <option value='Property Card'>
+                        Property Card
+                    </option>
+                    <option value='Photo Tax'>
+                        Photo Tax
+                    </option>
+                    <option value='Photo Gallery'>
+                        Photo Gallery
+                    </option>
+                    <option disabled value='other'>
+                        --Other--
+                    </option>
+                    <option value='multipleitems'>
+                        Multiple Items In Cart
+                    </option>
+                    <option value='vitalrecordsphotos'>
+                        Vital Records and Photos In Cart
+                    </option>
+                </select>
+                <input
+                    data-bind='value: billingName'
+                    type='text'
+                    ref='billingName'
+                    id='billingname'
+                    placeholder='Billing Name'/>
+                <input
+                    data-bind='value: datereceivedstart'
+                    type='text'
+                    ref='datereceivedstart'
+                    placeholder='Date Received - Start'
+                    id='date-received-start'
+                    defaultValue={this.state.today}/>
+                <input
+                    data-bind='value: datereceivedend'
+                    type='text'
+                    ref='datereceivedend'
+                    placeholder='Date Received - End'
+                    id='date-received-end'/>
+                <button type='reset'>
+                    Clear
+                </button>
+                <button data-bind='click: findOrder' type='submit' name='submit' value='FindOrder'>
+                    Apply
+                </button>
+                <br/>
+            </form>
+        )
+    }
+});
+
 
 ReactDOM.render(
     <App source='/api/v1.0/orders'/>,
