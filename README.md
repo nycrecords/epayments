@@ -4,7 +4,7 @@ ePayments site for the Department of Records and Information Services
 ## Setup Instructions
 Clone the git repository:
 
-    git clone https://brandontang@bitbucket.org/nycrecordswebdev/epayments.git
+    git clone https://bitbucket.org/nycrecordswebdev/epayments.git
 
 Create a virtual environment and install the requirements:
 
@@ -23,12 +23,13 @@ Install postgresql with the following command:
 
 Initialize the database by entering the following in the psql line:
 
-    psql
-        username=# create database epayments;
+    createdb epayments
 
 Upgrade the database by entering the following in the command line:
 
     python manage.py db upgrade
+
+Create a directory called `data` in the project root directory.
 
 Locally run the intranet by entering the following in the command line:
 
