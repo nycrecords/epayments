@@ -29,6 +29,8 @@ Upgrade the database by entering the following in the command line:
 
     python manage.py db upgrade
 
+Create a directory called `data` in the project root directory.
+
 Locally run the intranet by entering the following in the command line:
 
     python manage.py runserver
