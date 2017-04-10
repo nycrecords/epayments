@@ -246,63 +246,39 @@ var Order = React.createClass({
                 }
                 if (clientsdata.indexOf('LASTNAME') >= 0) {
                     var last_name = '<b>LAST_NAME</b>' + '<br>' + clientsdata[clientsdata.indexOf('LASTNAME') + 1] + '<br><br>';
-                } else {
-                    var last_name = '';
                 }
                 if (clientsdata.indexOf('MIDDLENAME') >= 0) {
                     var middle_name = '<b>MIDDLE_NAME</b>' + '<br>' + clientsdata[clientsdata.indexOf('MIDDLENAME') + 1] + '<br><br>';
-                } else {
-                    var middle_name = '';
                 }
                 if (clientsdata.indexOf('FIRSTNAME') >= 0) {
                     var first_name = '<b>FIRST_NAME</b>' + '<br>' + clientsdata[clientsdata.indexOf('FIRSTNAME') + 1] + '<br><br>';
-                } else {
-                    var first_name = '';
                 }
                 if (clientsdata.indexOf('FATHER_NAME') >= 0) {
                     var father_name = '<b>FATHER_NAME</b>' + '<br>' + clientsdata[clientsdata.indexOf('FATHER_NAME') + 1] + '<br><br>';
-                } else {
-                    var father_name = '';
                 }
                 if (clientsdata.indexOf('MOTHER_NAME') >= 0) {
                     var mother_name = '<b>MOTHER_NAME</b>' + '<br>' + clientsdata[clientsdata.indexOf('MOTHER_NAME') + 1] + '<br><br>';
-                } else {
-                    var mother_name = '';
                 }
                 if (clientsdata.indexOf('RELATIONSHIP') >= 0) {
                     var relationship = '<b>RELATIONSHIP</b>' + '<br>' + clientsdata[clientsdata.indexOf('RELATIONSHIP') + 1] + '<br><br>';
-                } else {
-                    var relationship = '';
                 }
                 if (clientsdata.indexOf('PURPOSE') >= 0) {
                     var purpose = '<b>PURPOSE</b>' + '<br>' + clientsdata[clientsdata.indexOf('PURPOSE') + 1] + '<br><br>';
-                } else {
-                    var purpose = '';
                 }
                 if (clientsdata.indexOf('ADDITIONAL_COPY') >= 0) {
                     var additional_copy = '<b>ADDITIONAL_COPY</b>' + '<br>' + clientsdata[clientsdata.indexOf('ADDITIONAL_COPY') + 1] + '<br><br>';
-                } else {
-                    var additional_copy = '';
                 }
                 if (clientsdata.indexOf('MONTH') >= 0) {
                     var month = '<b>MONTH</b>' + '<br>' + clientsdata[clientsdata.indexOf('MONTH') + 1] + '<br><br>';
-                } else {
-                    var month = '';
                 }
                 if (clientsdata.indexOf('DAY') >= 0) {
                     var day = '<b>DAY</b>' + '<br>' + clientsdata[clientsdata.indexOf('DAY') + 1] + '<br><br>';
-                } else {
-                    var day = '';
                 }
                 if (clientsdata.indexOf('BIRTH_PLACE') >= 0) {
                     var birth_place = '<b>BIRTH_PLACE</b>' + '<br>' + clientsdata[clientsdata.indexOf('BIRTH_PLACE') + 1] + '<br><br>';
-                } else {
-                    var birth_place = '';
                 }
                 if (clientsdata.indexOf('YEAR_') >= 0) {
                     var year = '<b>YEAR</b>' + '<br>' + clientsdata[clientsdata.indexOf('YEAR_') + 1] + '<br><br>';
-                } else {
-                    var year = '';
                 }
                 if (clientsdata.indexOf('BOROUGH') >= 0) {
                     var borough = '<b>BOROUGH</b>' + '<br>' + clientsdata[clientsdata.indexOf('BOROUGH') + 1] + '<br><br>';
