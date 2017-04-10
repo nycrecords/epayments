@@ -3,12 +3,14 @@
 
 import React from 'react';
 import ReactDOM from 'react-dom';
-import { Router, 
-        Route,
-        // Link, 
-        // IndexRoute, 
-        // hashHistory, 
-        browserHistory } from 'react-router'
+import {
+    Router,
+    Route,
+    // Link,
+    // IndexRoute,
+    // hashHistory,
+    browserHistory
+} from 'react-router'
 /*
  App
  <App />
@@ -22,7 +24,7 @@ import { Router,
  componentWillUnmount -- throws an error if data is not received successfully
  filterOrder -- takes an object order as a parameter and filters orders in the database
  */
-    
+
 var App = React.createClass({
     propTypes: {
         source: React.PropTypes.string.isRequired
@@ -222,10 +224,25 @@ var Order = React.createClass({
                 ordertypes = '';
             }
             if (order.clientagencyname == 'Birth Search') {
+                var gender = '',
+                    last_name = '',
+                    middle_name = '',
+                    first_name = '',
+                    father_name = '',
+                    mother_name = '',
+                    relationship = '',
+                    purpose = '',
+                    additional_copy = '',
+                    month = '',
+                    day = '',
+                    birth_place = '',
+                    year = '',
+                    borough = '',
+                    letter = '',
+                    comment = '';
+
                 if (clientsdata.indexOf('GENDER') >= 0) {
-                    var gender = '<b>GENDER</b>' + '<br>' + clientsdata[clientsdata.indexOf('GENDER') + 1] + '<br><br>';
-                } else {
-                    var gender = '';
+                    gender = '<b>GENDER</b>' + '<br>' + clientsdata[clientsdata.indexOf('GENDER') + 1] + '<br><br>';
                 }
                 if (clientsdata.indexOf('LASTNAME') >= 0) {
                     var last_name = '<b>LAST_NAME</b>' + '<br>' + clientsdata[clientsdata.indexOf('LASTNAME') + 1] + '<br><br>';
@@ -303,7 +320,7 @@ var Order = React.createClass({
                     var comment = '';
                 }
                 div.innerHTML = order.ship_to_name + '<br>' +
-                    'Address: ' + address + ' ' + order.ship_to_city + ', ' + (order.ship_to_state == null ? '' : order.ship_to_state) + ' ' + order.ship_to_country + ' ' + order.ship_to_zipcode + '<br>' +
+                    'Addrfess: ' + address + ' ' + order.ship_to_city + ', ' + (order.ship_to_state == null ? '' : order.ship_to_state) + ' ' + order.ship_to_country + ' ' + order.ship_to_zipcode + '<br>' +
                     '<h3>Birth Search</h3>' + ordertypes +
                     '<b>Customer Name: ' + order.billingname + '</b><br>' +
                     '<b>Order Number: ' + order.orderno + '</b><br>' +
@@ -316,6 +333,14 @@ var Order = React.createClass({
                     '<div class="pagebreak" style="page-break-after: always;"></div>';
             }
             else if (order.clientagencyname == 'Marriage Search') {
+                var last_name_groom = '',
+                    first_name_groom = '',
+                    last_name_bride = '',
+                    first_name_bride = '',
+                    purpose = '',
+                    copy_req = '',
+                    marriage_place = '';
+
                 if (clientsdata.indexOf('LASTNAME_G') >= 0) {
                     var last_name_groom = '<b>LAST_NAME_GROOM</b>' + '<br>' + clientsdata[clientsdata.indexOf('LASTNAME_G') + 1] + '<br><br>';
                 } else {
@@ -400,6 +425,10 @@ var Order = React.createClass({
                     '<div class="pagebreak" style="page-break-after: always;"></div>';
             }
             else if (order.clientagencyname == 'Death Search') {
+                var cemetery = '',
+                    death_place = '',
+                    age_of_death = '';
+
                 if (clientsdata.indexOf('LASTNAME') >= 0) {
                     var last_name = '<b>LAST_NAME</b>' + '<br>' + clientsdata[clientsdata.indexOf('LASTNAME') + 1] + '<br><br>';
                 } else {
@@ -489,6 +518,8 @@ var Order = React.createClass({
                     '<div class="pagebreak" style="page-break-after: always;"></div>';
             }
             else if (order.clientagencyname == 'Birth Cert') {
+                var certificate_number = '';
+
                 if (clientsdata.indexOf('CERTIFICATE_NUMBER') >= 0) {
                     var certificate_number = '<b>CERTIFICATE_NUMBER</b>' + '<br>' + clientsdata[clientsdata.indexOf('CERTIFICATE_NUMBER') + 1] + '<br><br>';
                 } else {
@@ -771,6 +802,14 @@ var Order = React.createClass({
                     '<div class="pagebreak" style="page-break-after: always;}"></div>';
             }
             else if (order.clientagencyname == 'Property Card') {
+                var block = '',
+                    lot = '',
+                    building_number = '',
+                    street = '',
+                    description = '',
+                    certified = '',
+                    mail_pickup = '';
+
                 if (clientsdata.indexOf('BOROUGH') >= 0) {
                     var borough = '<b>BOROUGH</b>' + '<br>' + clientsdata[clientsdata.indexOf('BOROUGH') + 1] + '<br><br>';
                 } else {
@@ -829,6 +868,12 @@ var Order = React.createClass({
                     '<div class="pagebreak" style="page-break-after: always;}"></div>';
             }
             else if (order.clientagencyname == 'Photo Tax') {
+                var collection = '',
+                    roll = '',
+                    size = '',
+                    contact_number = '',
+                    copy = '';
+
                 if (clientsdata.indexOf('Collection') >= 0) {
                     var collection = '<b>COLLECTION</b>' + '<br>' + clientsdata[clientsdata.indexOf('Collection') + 1] + '<br><br>';
                 } else {
@@ -907,6 +952,9 @@ var Order = React.createClass({
                     '<div class="pagebreak" style="page-break-after: always;}"></div>';
             }
             else if (order.clientagencyname == 'Photo Gallery') {
+                var image_identifier = '',
+                    additional_description = '',
+                    personal_use_agreement = '';
                 if (clientsdata.indexOf('IMAGE_IDENTIFIER') >= 0) {
                     var image_identifier = '<b>IMAGE ID/IDENTIFIER</b>' + '<br>' + clientsdata[clientsdata.indexOf('IMAGE_IDENTIFIER') + 1] + '<br><br>';
                 } else {
@@ -984,11 +1032,13 @@ var Order = React.createClass({
             div.style.fontSize = '14px';
             var order = this.props.order[i];
             var clientsdata = order.clientsdata.split('|');
+            var photo_address = '';
+
             if (clientsdata.indexOf('CONTACT_NUMBER') >= 0) {
-                var contactnumber = '<b>CONTACT_NUMBER</b>' + '<br>' +
+                var contact_number = '<b>CONTACT_NUMBER</b>' + '<br>' +
                     clientsdata[clientsdata.indexOf('CONTACT_NUMBER') + 1] + '<br><br>';
             } else {
-                var contactnumber = '';
+                var contact_number = '';
             }
             if (order.ship_to_street_add_2 == null) {
                 var address = order.ship_to_streetadd;
@@ -1008,7 +1058,7 @@ var Order = React.createClass({
                     ', ' + (order.ship_to_state == null ? '' : (order.ship_to_state + ' ')) + order.ship_to_country + ' ' + order.ship_to_zipcode + '<br></div>';
             } else {
                 div.innerHTML = '<div style="display: table-cell; vertical-align: middle; text-align: center; width: 375px; height: 200px; margin: auto; position: relative;">' +
-                    'CALL FOR PICKUP' + '<br>' + order.billingname + '<br>' + contactnumber + '<br></div>';
+                    'CALL FOR PICKUP' + '<br>' + order.billingname + '<br>' + contact_number + '<br></div>';
             }
             document.getElementById('printbiglabels').appendChild(div);
         }
