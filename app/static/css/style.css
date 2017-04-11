@@ -305,6 +305,7 @@ header.top h3:after {
   -webkit-transition: all 0.3s;
   transition: all 0.3s;
   box-shadow: 0px 5px 5px rgba(0,0,0,0.1);
+  overflow: scroll;
 }
 .epayments > *:first-child {
   -ms-flex-negative: 1;
