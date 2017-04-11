@@ -908,9 +908,10 @@ var OrderForm = React.createClass({
     findOrder: function (event) {
         // when 'Apply' button is pressed, an order object is created and passed to the filterOrder(order) function
         event.preventDefault();
+        debugger;
         var order = {
             orderNumber: this.refs.orderNumber.value,
-            subOrderNumber: this.refs.subordernumber.value,
+            subOrderNumber: this.refs.subOrderNumber.value,
             orderType: this.refs.orderType.value,
             billingName: this.refs.billingName.value,
             dateReceivedStart: this.refs.dateReceivedStart.value,
@@ -920,25 +921,25 @@ var OrderForm = React.createClass({
         this.props.filterOrder(order)
     },
     componentWillMount: function () {
-        // calls setDate() functiion on load of component
+        // calls setDate() function on load of component
         this.setDate();
     },
     render: function () {
         return (
             <form className='apply-order' ref='orderForm' onSubmit={this.findOrder}>
                 <input
-                    data-bind='value: ordernumber'
+                    data-bind='value: orderNumber'
                     type='text'
-                    ref='ordernumber'
+                    ref='orderNumber'
                     id='order-number'
                     placeholder='Order Number'/>
                 <input
-                    data-bind='value: subordernumber'
+                    data-bind='value: subOrderNumber'
                     type='text'
-                    ref='subordernumber'
+                    ref='subOrderNumber'
                     id='suborder-number'
                     placeholder='Suborder Number'/>
-                <select data-bind='value: ordertype' ref='ordertype' id='ordertype' defaultValue='Order Type'>
+                <select data-bind='value: orderType' ref='orderType' id='ordertype' defaultValue='Order Type'>
                     <option disabled>
                         Order Type
                     </option>
@@ -995,16 +996,16 @@ var OrderForm = React.createClass({
                     id='billingname'
                     placeholder='Billing Name'/>
                 <input
-                    data-bind='value: datereceivedstart'
+                    data-bind='value: dateReceivedStart'
                     type='text'
-                    ref='datereceivedstart'
+                    ref='dateReceivedStart'
                     placeholder='Date Received - Start'
                     id='date-received-start'
                     defaultValue={this.state.today}/>
                 <input
-                    data-bind='value: datereceivedend'
+                    data-bind='value: dateReceivedEnd'
                     type='text'
-                    ref='datereceivedend'
+                    ref='dateReceivedEnd'
                     placeholder='Date Received - End'
                     id='date-received-end'/>
                 <button type='reset'>
