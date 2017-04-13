@@ -45,7 +45,7 @@ var App = React.createClass({
                 (this.state.order).push(result.orders[i]);
             }
             var allUniqueOrders = [];
-            for (var i = 0; i < this.state.order.length; i++) {
+            for (i = 0; i < this.state.order.length; i++) {
                 if (allUniqueOrders.indexOf(this.state.order[i].orderno) === -1) {
                     allUniqueOrders.push(this.state.order[i].orderno)
                 }
@@ -89,7 +89,7 @@ var App = React.createClass({
                     dateRangeOrders.push(data.orders[i])
                 }
                 this.setState({order: dateRangeOrders});
-                for (var i = 0; i < this.state.order.length; i++) {
+                for (i = 0; i < this.state.order.length; i++) {
                     if (allUniqueOrders.indexOf(this.state.order[i].orderno) === -1) {
                         allUniqueOrders.push(this.state.order[i].orderno)
                     }
@@ -286,7 +286,7 @@ var Order = React.createClass({
                     comment = '<b>COMMENT</b>' + '<br>' + clientsData[clientsData.indexOf('ADD_COMMENT') + 1] + '<br><br>';
                 }
                 div.innerHTML = order.ship_to_name + '<br>' +
-                    'Addrfess: ' + address + ' ' + order.ship_to_city + ', ' + (order.ship_to_state == null ? '' : order.ship_to_state) + ' ' + order.ship_to_country + ' ' + order.ship_to_zipcode + '<br>' +
+                    'Address: ' + address + ' ' + order.ship_to_city + ', ' + (order.ship_to_state == null ? '' : order.ship_to_state) + ' ' + order.ship_to_country + ' ' + order.ship_to_zipcode + '<br>' +
                     '<h3>Birth Search</h3>' + orderTypes +
                     '<b>Customer Name: ' + order.billingname + '</b><br>' +
                     '<b>Order Number: ' + order.orderno + '</b><br>' +
@@ -303,7 +303,6 @@ var Order = React.createClass({
                     firstNameGroom = '',
                     lastNameBride = '',
                     firstNameBride = '',
-                    purpose = '',
                     copyReq = '',
                     marriagePlace = '';
 
@@ -831,7 +830,7 @@ var Order = React.createClass({
             if (order.ship_to_street_add_2 == null) {
                 var address = order.ship_to_streetadd;
             } else {
-                var address = order.ship_to_streetadd + ' ' + order.ship_to_street_add2;
+                 address = order.ship_to_streetadd + ' ' + order.ship_to_street_add2;
             }
             div.innerHTML = '<div style="display: table-cell; text-align: center; width: 210px; height: 100px; padding: 10px 20px 0px; position: relative; outline: solid;">' +
                 order.ship_to_name + '<br>' + address + '<br>' + order.ship_to_city + ', ' + (order.ship_to_state == null ? '' : order.ship_to_state + ' ') + order.ship_to_country + ' ' +
