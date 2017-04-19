@@ -2,6 +2,9 @@
  * Created by sinsang on 4/17/17.
  */
 import React from 'react';
+import Inventory from './inventory.js';
+import Order from './order.js';
+
 
 
 // var App = React.createClass({
@@ -96,7 +99,7 @@ export default class App extends React.Component{
         super();
         this.setState = {
         // Initializes the state with three empty arrays called order, uniqueOrders, and orderFilters
-            order: [], // all suborders returned from ajax call
+            orders: [], // all suborders returned from ajax call
             uniqueOrders: [], // all unique orders returned from ajax call
             orderFilters: [] // order filters when 'Apply' button is pressed
     };
@@ -110,8 +113,8 @@ export default class App extends React.Component{
             }
             var allUniqueOrders = [];
             for (i = 0; i < this.state.order.length; i++) {
-                if (allUniqueOrders.indexOf(this.state.order[i].orderno) === -1) {
-                    allUniqueOrders.push(this.state.order[i].orderno)
+                if (allUniqueOrders.indexOf(this.state.orders[i].orderno) === -1) {
+                    allUniqueOrders.push(this.state.orders[i].orderno)
                 }
             }
             this.state({uniqueOrders: allUniqueOrders});
@@ -126,7 +129,7 @@ export default class App extends React.Component{
     filterOrder (order) {
         // function is called from findOrder() in the OrderForm component
         // ajax call that passes back a dictionary containing the fields of the order form to retrieve filtered orders
-        this.state.order = [];
+        this.state.orders = [];
         var dateRangeOrders = [];
         var allUniqueOrders = [];
         var orderNumber = order.orderNumber;
@@ -154,9 +157,9 @@ export default class App extends React.Component{
                 for (var i = 0; i < data.orders.length; i++) {
                     dateRangeOrders.push(data.orders[i])
                 }
-                this.setState({order: dateRangeOrders});
+                this.setState({orders: dateRangeOrders});
                 for (i = 0; i < this.state.order.length; i++) {
-                    if (allUniqueOrders.indexOf(this.state.order[i].orderno) === -1) {
+                    if (allUniqueOrders.indexOf(this.state.orders[i].orderno) === -1) {
                         allUniqueOrders.push(this.state.order[i].orderno)
                     }
                 }
@@ -171,9 +174,8 @@ export default class App extends React.Component{
     render() {
         return (
             <div className='epayments'>
-                <Inventory tagline='Department of Records' filterOrder={this.filterOrder}
-                           orderFilters={this.state.orderFilters}/>
-                <Order order={this.state.order} uniqueOrders={this.state.uniqueOrders}
+                <Inventory tagline='Department of Records' filterOrder={this.filterOrder}/>
+                <Order order={this.state.orders} uniqueOrders={this.state.uniqueOrders}
                        orderFilters={this.state.orderFilters}/>
             </div>
         )

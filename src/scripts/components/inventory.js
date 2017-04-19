@@ -2,7 +2,9 @@
  * Created by sinsang on 4/17/17.
  */
 
-import React from 'react'
+import React from 'react';
+import Header from './header.js';
+import OrderForm from './orderform.js';
 
 export default class Inventory extends React.Component {
 
@@ -17,6 +19,6 @@ export default class Inventory extends React.Component {
     }
 }
 
-Inventory.propTypes = {
-    tagline: React.PropTypes.string.isRequired
-};
+// Inventory.propTypes = {
+//     tagline: React.PropTypes.string.isRequired
+// };

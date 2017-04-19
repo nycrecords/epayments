@@ -1,15 +1,15 @@
-import React from 'react'
+import React from 'react';
 
 export default class Order extends React .Component{
     printOrders (event) {
         // creates a new div for each order that is inserted into the div with id called 'printorders' in index.html
         // depending on the order type, there will be different HTML formatting
-        for (var i = 0; i < this.props.order.length; i++) {
+        for (var i = 0; i < this.props.orders.length; i++) {
             var div = document.createElement('div');
             div.className = 'separateorder';
             div.style.fontFamily = 'Arial, Helvetica, sans-serif';
             div.style.fontSize = '14px';
-            var order = this.props.order[i];
+            var order = this.props.orders[i];
             var clientsData = order.clientsata.split('|');
             var address = order.ship_to_streetadd ? order.ship_to_street_add2 == null : order.ship_to_streetadd + ' ' + order.ship_to_street_add2;
             var orderTypeList = order.ordertypes.split(',');
@@ -683,14 +683,11 @@ export default class Order extends React .Component{
                 <ul className='order'>
                     <li className='total'>
                         <strong>Number of Items:</strong>
-                        {this.props.order.length}
                         <strong>Number of Orders:</strong>
-                        {this.props.uniqueOrders.length}
                         <input type="submit" name="submit" value="Print" onClick={this.printOrders}/>
                         <input type="submit" name="submit" value="Big Labels" onClick={this.printBigLabels}/>
                         <input type="submit" name="submit" value="Small Labels" onClick={this.printSmallLabels}/>
                     </li>
-                    {this.props.order.map(function (order) {
                         return <li key={order.suborderno}>
                             Order #: {order.orderno}<br/>
                             Suborder #: {order.suborderno}<br/>

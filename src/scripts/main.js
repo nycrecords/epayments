@@ -10,13 +10,13 @@ import {
     // IndexRoute,
     // hashHistory,
     browserHistory
-} from 'react-router'
+} from 'react-router';
 
-import App from './components/app.js'
-import Header from './components/header.js'
-import Inventory from './components/inventory.js'
-import Order from './components/order.js'
-import OrderForm from './components/orderform.js'
+import App from './components/app.js';
+import Header from './components/header.js';
+import Inventory from './components/inventory.js';
+import Order from './components/order.js';
+import OrderForm from './components/orderform.js';
 
 /*
  App
@@ -1028,10 +1028,12 @@ import OrderForm from './components/orderform.js'
 
 
 ReactDOM.render(
-    <App source='/api/v1.0/orders'/>,
-    <Header />,
-    <Inventory />,
-    <Order />,
-    <OrderForm />,
+    <div>
+        <App source='/api/v1.0/orders'/>,
+        <Header />,
+        <Inventory />,
+        <Order />,
+        <OrderForm />
+    </div>,
     document.getElementById('main')
 );

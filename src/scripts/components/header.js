@@ -2,7 +2,7 @@
  * Created by sinsang on 4/17/17.
  */
 
-import React from 'react'
+import React from 'react';
 
 export default class Header extends React.Component {
     render() {
@@ -15,6 +15,6 @@ export default class Header extends React.Component {
     };
 }
 
-Header.propTypes = {
-    tagline: React.PropTypes.string.isRequired
-};
+// Header.propTypes = {
+//     tagline: React.PropTypes.string.isRequired
+// };
