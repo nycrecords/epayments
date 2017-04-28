@@ -7,6 +7,7 @@ import Date from './datepicker';
 import 'react-datepicker/dist/react-datepicker.css'
 import 'semantic-ui-css/semantic.min.css';
 
+//Creates the options for the Order Type dropdown.
 const options = [
     {key: 'all', text: 'All', value: 'all'},
     {key: 'vitalrecords', text: '--Vital Records--', value: 'vital records'},
@@ -25,11 +26,21 @@ const options = [
     {key: 'vitalincart', text: 'Vital Records And Photos In Cart', value: 'vital records and photos in cart'}
 ]
 
+//Creates the Search Form for the left side of the website.
 class OrderForm extends React.Component {
     render() {
         return (
             <Container>
                 <Form>
+
+                    {/*This component defines the form fields required for the search form:
+
+                     The Order Number, Suborder Number, Order Type, Billing Name, Date Received Start and End.
+                     Order Number, Suborder Number, and Billing Name are input fields.
+                     Order Type is a dropdown listing the types of orders requested
+                     Date Received Start and End are input fields that call the React Datepicker component
+                     */}
+
                     <Form.Field>
                         <Form.Input label="Order Number" placeholder='Order Number' maxLength="64"/>
                     </Form.Field>
@@ -42,6 +53,7 @@ class OrderForm extends React.Component {
                     <Form.Field>
                         <Form.Input label="Billing Name" placeholder="Billing Name" maxLength="64"/>
                     </Form.Field>
+
                     <Form.Field>
                         <label>Date Received Start</label>
                         <Date />
@@ -50,8 +62,8 @@ class OrderForm extends React.Component {
                         <label>Date Received End</label>
                         <Date />
                     </Form.Field>
-                        <Button type="reset">Clear</Button>
-                        <Button type='submit' positive floated="right">Submit</Button>
+                    <Button type="reset">Clear</Button>
+                    <Button type='submit' positive floated="right">Submit</Button>
                 </Form>
             </Container>
         )
