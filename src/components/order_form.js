@@ -24,7 +24,7 @@ const options = [
     {key: 'other', text: '--Other--', value: 'other'},
     {key: 'multipleincart', text: 'Multiple Items In Cart', value: 'multiple items in cart'},
     {key: 'vitalincart', text: 'Vital Records And Photos In Cart', value: 'vital records and photos in cart'}
-]
+];
 
 //Creates the Search Form for the left side of the website.
 class OrderForm extends React.Component {

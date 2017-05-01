@@ -8,7 +8,7 @@ import 'react-datepicker/dist/react-datepicker.css';
 
 
 class Date extends React.Component {
-    constructor (props) {
+    constructor(props) {
         super(props);
         this.state = {
             startDate: moment()
