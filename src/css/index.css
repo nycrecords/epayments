@@ -1,17 +1,11 @@
 .react-datepicker__input-container {
-  width: 100%;
+    width: 100%;
 }
 
-.test {
-  width: 100%;
+input, label {
+    display: block;
 }
 
-.page-divider {
-  border-left: 1px solid #38546d;
-  border-right: 1px solid #16222c;
-  height: 80px;
-  position: absolute;
-  right: 249px;
-  top: 10px;
-  color: red;
+.field{
+    width: 100%;
 }

@@ -6,6 +6,7 @@ import {Form, Button, Container} from 'semantic-ui-react';
 import Date from './datepicker';
 import 'react-datepicker/dist/react-datepicker.css'
 import 'semantic-ui-css/semantic.min.css';
+import MaskedInput from 'react-text-mask';
 
 //Creates the options for the Order Type dropdown.
 const options = [
@@ -24,47 +25,63 @@ const options = [
     {key: 'other', text: '--Other--', value: 'other'},
     {key: 'multipleincart', text: 'Multiple Items In Cart', value: 'multiple items in cart'},
     {key: 'vitalincart', text: 'Vital Records And Photos In Cart', value: 'vital records and photos in cart'}
-]
+];
 
 //Creates the Search Form for the left side of the website.
 class OrderForm extends React.Component {
+    handleKeyPress = (event) => {
+        if (event.key) {
+            event.preventDefault();
+            return false;
+        }
+    };
+
     render() {
         return (
             <Container>
-                <Form>
+                <div>
+                    <Form>
 
-                    {/*This component defines the form fields required for the search form:
+                        {/*This component defines the form fields required for the search form:
 
-                     The Order Number, Suborder Number, Order Type, Billing Name, Date Received Start and End.
-                     Order Number, Suborder Number, and Billing Name are input fields.
-                     Order Type is a dropdown listing the types of orders requested
-                     Date Received Start and End are input fields that call the React Datepicker component
-                     */}
+                         The Order Number, Suborder Number, Order Type, Billing Name, Date Received Start and End.
+                         Order Number, Suborder Number, and Billing Name are input fields.
+                         Order Type is a dropdown listing the types of orders requested
+                         Date Received Start and End are input fields that call the React Datepicker component
+                         */}
 
-                    <Form.Field>
-                        <Form.Input label="Order Number" placeholder='Order Number' maxLength="64"/>
-                    </Form.Field>
-                    <Form.Field>
-                        <Form.Input label="Suborder Number" placeholder='Suborder Number' maxLength="64"/>
-                    </Form.Field>
-                    <Form.Field>
+                        <Form.Input label="Order Number"
+                                    placeholder="Order Number"
+                                    children={
+                                        <MaskedInput
+                                            mask={[/\d/, /\d/, /\d/, /\d/, /\d/, /\d/, /\d/, /\d/, /\d/, /\d/]}
+                                            guide="false"
+                                            placeholder="Order Number"/>
+                                    }
+                        />
+
+                        <Form.Input label="Suborder Number"
+                                    placeholder='Suborder Number'
+                                    children={
+                                        <MaskedInput
+                                            mask={[/\d/, /\d/, /\d/, /\d/, /\d/, /\d/, /\d/, /\d/, /\d/, /\d/]}
+                                            placeholder="Order Number"/>
+                                    }
+                        />
                         <Form.Select label="Order Type" defaultValue="all" options={options}/>
-                    </Form.Field>
-                    <Form.Field>
-                        <Form.Input label="Billing Name" placeholder="Billing Name" maxLength="64"/>
-                    </Form.Field>
-
-                    <Form.Field>
-                        <label>Date Received Start</label>
-                        <Date />
-                    </Form.Field>
-                    <Form.Field>
-                        <label>Date Received End</label>
-                        <Date />
-                    </Form.Field>
-                    <Button type="reset">Clear</Button>
-                    <Button type='submit' positive floated="right">Submit</Button>
-                </Form>
+                        <Form.Field label="Billing Name" placeholder="Billing Name" control="input"/>
+                        <Form.Field onKeyPress={this.handleKeyPress}>
+                            <label>Date Received Start</label>
+                            <Date />
+                        </Form.Field>
+                        <Form.Field onKeyPress={this.handleKeyPress}>
+                            <label>Date Received End</label>
+                            <Date />
+                        </Form.Field>
+                        <Button type="reset" content="Clear"/>
+                        <Button type='submit' positive floated="right" content="Apply"/>
+                    </Form>
+                </div>
             </Container>
         )
     }
