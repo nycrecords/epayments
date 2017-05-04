@@ -36,6 +36,10 @@ class OrderForm extends React.Component {
         }
     };
 
+    state = {
+        number: ''
+    };
+
     render() {
         return (
             <Container>
@@ -52,21 +56,26 @@ class OrderForm extends React.Component {
 
                         <Form.Input label="Order Number"
                                     placeholder="Order Number"
-                                    children={
-                                        <MaskedInput
-                                            mask={[/\d/, /\d/, /\d/, /\d/, /\d/, /\d/, /\d/, /\d/, /\d/, /\d/]}
-                                            guide="false"
-                                            placeholder="Order Number"/>
-                                    }
+                                    maxLength="64"
+                                    required
+                                    onChange={(e, {value}) => {
+                                        if (/^[0-9]+$/.test(value.slice(-1)) || value === '') {
+                                            this.setState({number: value})
+                                        }
+                                    }}
+                                    value={this.state.number}
                         />
 
                         <Form.Input label="Suborder Number"
                                     placeholder='Suborder Number'
-                                    children={
-                                        <MaskedInput
-                                            mask={[/\d/, /\d/, /\d/, /\d/, /\d/, /\d/, /\d/, /\d/, /\d/, /\d/]}
-                                            placeholder="Order Number"/>
-                                    }
+                                    maxLength="64"
+                                    required
+                                    onChange={(e, {value}) => {
+                                        if (/^[0-9]+$/.test(value.slice(-1)) || value === '') {
+                                            this.setState({number: value})
+                                        }
+                                    }}/>
+                        }
                         />
                         <Form.Select label="Order Type" defaultValue="all" options={options}/>
                         <Form.Field label="Billing Name" placeholder="Billing Name" control="input"/>
