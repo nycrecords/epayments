@@ -5,8 +5,8 @@ import React from 'react';
 import {Form, Button, Container} from 'semantic-ui-react';
 import Date from './datepicker';
 import 'react-datepicker/dist/react-datepicker.css'
+import { AxiosProvider, Request, Get} from 'react-axios'
 import 'semantic-ui-css/semantic.min.css';
-import MaskedInput from 'react-text-mask';
 
 //Creates the options for the Order Type dropdown.
 const options = [
@@ -37,7 +37,9 @@ class OrderForm extends React.Component {
     };
 
     state = {
-        number: ''
+        ordernumber: '',
+        subordernumber: ''
+
     };
 
     render() {
@@ -54,31 +56,27 @@ class OrderForm extends React.Component {
                          Date Received Start and End are input fields that call the React Datepicker component
                          */}
 
-                        <Form.Input label="Order Number"
-                                    placeholder="Order Number"
-                                    maxLength="64"
-                                    required
+                        <Form.Input label="Order Number" placeholder="Order Number" maxLength="64" required
                                     onChange={(e, {value}) => {
-                                        if (/^[0-9]+$/.test(value.slice(-1)) || value === '') {
-                                            this.setState({number: value})
+                                        if (/^[0-9]+$/.test(value.slice(-1)) || value === 'e') {
+                                            this.setState({ordernumber: value})
                                         }
                                     }}
-                                    value={this.state.number}
+                                    value={this.state.ordernumber}
                         />
 
-                        <Form.Input label="Suborder Number"
-                                    placeholder='Suborder Number'
-                                    maxLength="64"
-                                    required
+                        <Form.Input label="Suborder Number" placeholder='Suborder Number' maxLength="64" required
                                     onChange={(e, {value}) => {
                                         if (/^[0-9]+$/.test(value.slice(-1)) || value === '') {
-                                            this.setState({number: value})
+                                            this.setState({subordernumber: value})
                                         }
-                                    }}/>
-                        }
+                                    }}
+                                    value={this.state.subordernumber}
                         />
-                        <Form.Select label="Order Type" defaultValue="all" options={options}/>
-                        <Form.Field label="Billing Name" placeholder="Billing Name" control="input"/>
+                        <Form.Select label="Order Type"
+                                     defaultValue="all"
+                                     options={options}/>
+                        <Form.Field  label="Billing Name" placeholder="Billing Name" maxLength="64" control="input"/>
                         <Form.Field onKeyPress={this.handleKeyPress}>
                             <label>Date Received Start</label>
                             <Date />

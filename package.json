@@ -5,6 +5,7 @@
   "dependencies": {
     "moment": "^2.18.1",
     "react": "^15.5.4",
+    "react-axios": "0.0.9",
     "react-datepicker": "^0.46.0",
     "react-dom": "^15.5.4",
     "react-text-mask": "^5.0.1",

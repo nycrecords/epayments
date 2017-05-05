@@ -7,7 +7,7 @@ import OrderForm from "./order_form";
 class App extends React.Component {
     render() {
         return (
-            <Container padded>
+            <Container>
                 <Grid padded columns={3}>
                     <Grid.Column>
                         <Header as="h1" textAlign="center">Epayments
