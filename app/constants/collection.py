@@ -1,9 +1,9 @@
 # This file will hold the size for the collection years for PHOTO TAX
 
 """
-.. module:: _constants_.collectoion.
+.. module:: constants.collectoion.
 
-    :synopsis: Defines _constants_ used throughout the application
+    :synopsis: Defines constants used throughout the application
 """
 
 YEAR_1940 = '1940'

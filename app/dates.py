@@ -1,9 +1,9 @@
 # This file will hold the day // month // years to store correct info into database
 
 """
-.. module:: _constants_.status.
+.. module:: constants.status.
 
-    :synopsis: Defines _constants_ used throughout the application
+    :synopsis: Defines constants used throughout the application
 """
 
 

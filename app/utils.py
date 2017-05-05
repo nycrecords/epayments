@@ -6,7 +6,7 @@ from app import db, scheduler
 from app.models import Orders, StatusTracker, BirthSearch, BirthCertificate, MarriageCertificate,\
     MarriageSearch, DeathCertificate, DeathSearch, PhotoGallery, PhotoTax, PropertyCard, Shipping
 from app.file_utils import sftp_ctx
-from app._constants_ import borough, collection, gender, purpose, size, status
+from app.constants import borough, collection, gender, purpose, size, status
 
 
 def import_xml_folder(scheduled=False, path=None):

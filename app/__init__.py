@@ -18,7 +18,7 @@ bootstrap = Bootstrap()
 db = SQLAlchemy()
 scheduler = APScheduler()
 
-from app import models
+from app.models import orders, client_info, birth, marriage, death, photo, prop_card
 
 
 def create_app(config_name):

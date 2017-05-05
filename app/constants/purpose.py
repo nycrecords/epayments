@@ -1,9 +1,9 @@
 # This file will hold the purpose
 
 """
-.. module:: _constants_.purpose.
+.. module:: constants.purpose.
 
-    :synopsis: Defines _constants_ used throughout the application
+    :synopsis: Defines constants used throughout the application
 """
 
 # purpose -- Column: enum[Genealogical/Historical, Personal Use, Legal, Immigration, Medicaid/Social Security

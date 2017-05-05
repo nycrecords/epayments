@@ -1,9 +1,9 @@
 # This file will hold the borough for PHOTO TAX
 
 """
-.. module:: _constants_.collectoion.
+.. module:: constants.collectoion.
 
-    :synopsis: Defines _constants_ used throughout the application
+    :synopsis: Defines constants used throughout the application
 """
 
 

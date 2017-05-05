@@ -1,13 +1,13 @@
 """empty message
 
-Revision ID: f3a144ead2b3
+Revision ID: 18fce9744879
 Revises: None
-Create Date: 2017-04-28 16:02:33.331880
+Create Date: 2017-05-05 15:04:53.657784
 
 """
 
 # revision identifiers, used by Alembic.
-revision = 'f3a144ead2b3'
+revision = '18fce9744879'
 down_revision = None
 
 from alembic import op
@@ -46,13 +46,13 @@ def upgrade():
     sa.Column('first_name', sa.String(length=40), nullable=True),
     sa.Column('last_name', sa.String(length=25), nullable=True),
     sa.Column('mid_name', sa.String(length=40), nullable=True),
-    sa.Column('gender_type', sa.Enum('not_known', 'male', 'female', name='gender_type'), nullable=True),
+    sa.Column('gender_type', sa.Enum('not_known', 'Male', 'Female', name='gender_type'), nullable=True),
     sa.Column('father_name', sa.String(length=40), nullable=True),
     sa.Column('mother_name', sa.String(length=40), nullable=True),
     sa.Column('relationship', sa.String(length=30), nullable=True),
     sa.Column('purpose', sa.Enum('Genealogical/Historical', 'Personal Use', 'Legal', 'Immigration', 'Medicaid/Social Security', 'Health', 'Other', name='purpose'), nullable=True),
     sa.Column('additional_copy', sa.String(length=40), nullable=True),
-    sa.Column('month', sa.String(length=2), nullable=True),
+    sa.Column('month', sa.String(length=20), nullable=True),
     sa.Column('day', sa.String(length=2), nullable=True),
     sa.Column('years', postgresql.ARRAY(sa.String(length=4), dimensions=1), nullable=True),
     sa.Column('birth_place', sa.String(length=40), nullable=True),
@@ -68,13 +68,13 @@ def upgrade():
     sa.Column('first_name', sa.String(length=40), nullable=True),
     sa.Column('last_name', sa.String(length=25), nullable=True),
     sa.Column('mid_name', sa.String(length=40), nullable=True),
-    sa.Column('gender_type', sa.Enum('not_known', 'male', 'female', name='gender_type'), nullable=True),
+    sa.Column('gender_type', sa.Enum('not_known', 'Male', 'Female', name='gender_type'), nullable=True),
     sa.Column('father_name', sa.String(length=40), nullable=True),
     sa.Column('mother_name', sa.String(length=40), nullable=True),
     sa.Column('relationship', sa.String(length=30), nullable=True),
     sa.Column('purpose', sa.Enum('Genealogical/Historical', 'Personal Use', 'Legal', 'Immigration', 'Medicaid/Social Security', 'Health', 'Other', name='purpose'), nullable=True),
     sa.Column('additional_copy', sa.String(length=4), nullable=True),
-    sa.Column('month', sa.String(length=2), nullable=True),
+    sa.Column('month', sa.String(length=20), nullable=True),
     sa.Column('day', sa.String(length=2), nullable=True),
     sa.Column('years', postgresql.ARRAY(sa.String(length=4), dimensions=1), nullable=True),
     sa.Column('birth_place', sa.String(length=40), nullable=True),
@@ -95,7 +95,7 @@ def upgrade():
     sa.Column('purpose', sa.Enum('Genealogical/Historical', 'Personal Use', 'Legal', 'Immigration', 'Medicaid/Social Security', 'Health', 'Other', name='purpose'), nullable=True),
     sa.Column('copy_req', sa.String(length=40), nullable=True),
     sa.Column('cemetery', sa.String(length=40), nullable=True),
-    sa.Column('month', sa.String(length=2), nullable=True),
+    sa.Column('month', sa.String(length=20), nullable=True),
     sa.Column('day', sa.String(length=2), nullable=True),
     sa.Column('years', postgresql.ARRAY(sa.String(length=4), dimensions=1), nullable=True),
     sa.Column('death_place', sa.String(length=40), nullable=True),
@@ -116,7 +116,7 @@ def upgrade():
     sa.Column('purpose', sa.Enum('Genealogical/Historical', 'Personal Use', 'Legal', 'Immigration', 'Medicaid/Social Security', 'Health', 'Other', name='purpose'), nullable=True),
     sa.Column('copy_req', sa.String(length=40), nullable=True),
     sa.Column('cemetery', sa.String(length=40), nullable=True),
-    sa.Column('month', sa.String(length=2), nullable=True),
+    sa.Column('month', sa.String(length=20), nullable=True),
     sa.Column('day', sa.String(length=2), nullable=True),
     sa.Column('years', postgresql.ARRAY(sa.String(length=4), dimensions=1), nullable=True),
     sa.Column('death_place', sa.String(length=40), nullable=True),
@@ -138,7 +138,7 @@ def upgrade():
     sa.Column('relationship', sa.String(length=30), nullable=True),
     sa.Column('purpose', sa.Enum('Genealogical/Historical', 'Personal Use', 'Legal', 'Immigration', 'Medicaid/Social Security', 'Health', 'Other', name='purpose'), nullable=True),
     sa.Column('copy_req', sa.String(length=40), nullable=True),
-    sa.Column('month', sa.String(length=2), nullable=True),
+    sa.Column('month', sa.String(length=20), nullable=True),
     sa.Column('day', sa.String(length=2), nullable=True),
     sa.Column('years', postgresql.ARRAY(sa.String(length=4), dimensions=1), nullable=True),
     sa.Column('marriage_place', sa.String(length=40), nullable=True),
@@ -158,7 +158,7 @@ def upgrade():
     sa.Column('relationship', sa.String(length=30), nullable=True),
     sa.Column('purpose', sa.Enum('Genealogical/Historical', 'Personal Use', 'Legal', 'Immigration', 'Medicaid/Social Security', 'Health', 'Other', name='purpose'), nullable=True),
     sa.Column('copy_req', sa.String(length=40), nullable=True),
-    sa.Column('month', sa.String(length=2), nullable=True),
+    sa.Column('month', sa.String(length=20), nullable=True),
     sa.Column('day', sa.String(length=2), nullable=True),
     sa.Column('years', postgresql.ARRAY(sa.String(length=4), dimensions=1), nullable=True),
     sa.Column('marriage_place', sa.String(length=40), nullable=True),
@@ -172,7 +172,7 @@ def upgrade():
     op.create_table('photoTax',
     sa.Column('id', sa.Integer(), nullable=False),
     sa.Column('collection', sa.Enum('1940', '1980', 'Both', name='collection'), nullable=True),
-    sa.Column('borough', sa.Enum('Bronx', 'Manhattan', 'Satan Island', 'Brooklyn', 'Queens', name='collection'), nullable=True),
+    sa.Column('borough', sa.Enum('Bronx', 'Manhattan', 'Satan Island', 'Brooklyn', 'Queens', name='borough'), nullable=True),
     sa.Column('roll', sa.String(length=9), nullable=True),
     sa.Column('block', sa.String(length=9), nullable=True),
     sa.Column('lot', sa.String(length=9), nullable=True),
