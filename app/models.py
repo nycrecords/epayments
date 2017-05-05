@@ -291,7 +291,7 @@ class MarriageSearch(db.Model):
             name='purpose'),
         default=purpose.OTHER)
     copy_req = db.Column(db.String(40))
-    month = db.Column(db.String(2))
+    month = db.Column(db.String(20))
     day = db.Column(db.String(2))
     years = db.Column(ARRAY(db.String(4), dimensions=1))
     marriage_place = db.Column(db.String(40))
@@ -378,7 +378,7 @@ class DeathSearch(db.Model):
         default=purpose.OTHER)
     copy_req = db.Column(db.String(40))
     cemetery = db.Column(db.String(40))
-    month = db.Column(db.String(2))
+    month = db.Column(db.String(20))
     day = db.Column(db.String(2))
     years = db.Column(ARRAY(db.String(4), dimensions=1))
     death_place = db.Column(db.String(40))
@@ -479,7 +479,7 @@ class BirthCertificate(db.Model):
             name='purpose'),
         default=purpose.OTHER)
     additional_copy = db.Column(db.String(40))
-    month = db.Column(db.String(2))
+    month = db.Column(db.String(20))
     day = db.Column(db.String(2))
     years = db.Column(ARRAY(db.String(4), dimensions=1))
     birth_place = db.Column(db.String(40))
@@ -573,7 +573,7 @@ class MarriageCertificate(db.Model):
             name='purpose'),
         default=purpose.OTHER)
     copy_req = db.Column(db.String(40))
-    month = db.Column(db.String(2))
+    month = db.Column(db.String(20))
     day = db.Column(db.String(2))
     years = db.Column(ARRAY(db.String(4), dimensions=1))
     marriage_place = db.Column(db.String(40))
@@ -664,7 +664,7 @@ class DeathCertificate(db.Model):
         default=purpose.OTHER)
     copy_req = db.Column(db.String(40))
     cemetery = db.Column(db.String(40))
-    month = db.Column(db.String(2))
+    month = db.Column(db.String(20))
     day = db.Column(db.String(2))
     years = db.Column(ARRAY(db.String(4), dimensions=1))
     death_place = db.Column(db.String(40))
@@ -807,7 +807,7 @@ class PhotoTax(db.Model):
             borough.SATAN_ISLAND,
             borough.BROOKLYN,
             borough.QUEENS,
-            name='collection'))
+            name='borough'))
     roll = db.Column(db.String(9))
     block = db.Column(db.String(9))
     lot = db.Column(db.String(9))
