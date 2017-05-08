@@ -3,9 +3,8 @@
  */
 import React from 'react';
 import {Form, Button, Container} from 'semantic-ui-react';
-import Date from './datepicker';
+import Date from './datepicker'
 import 'react-datepicker/dist/react-datepicker.css'
-import { AxiosProvider, Request, Get} from 'react-axios'
 import 'semantic-ui-css/semantic.min.css';
 
 //Creates the options for the Order Type dropdown.
@@ -29,18 +28,40 @@ const options = [
 
 //Creates the Search Form for the left side of the website.
 class OrderForm extends React.Component {
-    handleKeyPress = (event) => {
-        if (event.key) {
-            event.preventDefault();
-            return false;
-        }
-    };
+    constructor() {
+        super();
 
-    state = {
-        ordernumber: '',
-        subordernumber: ''
+        this.handleKeyPress = (event) => {
+            if (event.key) {
+                event.preventDefault();
+                return false;
+            }
+        };
 
-    };
+        this.state = {
+            ordernumber: '',
+            subordernumber: '',
+            tasks: ''
+
+        };
+
+        this.onSubmitTaskForm = () => {
+            fetch('/?', {
+                method: "GE",
+                body: JSON.stringify({
+                    title: this.form.state.title,
+                    description: this.form.state.description
+                })
+            }).then((response) => {
+                return response.json()
+            }).then((json) => {
+                this.setState({
+                    tasks: [json.task, ...this.state.tasks]
+                })
+            });
+        };
+    }
+
 
     render() {
         return (
@@ -65,7 +86,7 @@ class OrderForm extends React.Component {
                                     value={this.state.ordernumber}
                         />
 
-                        <Form.Input label="Suborder Number" placeholder='Suborder Number' maxLength="64" required
+                        <Form.Input label="Suborder Number" placeholder='Suborder Number' maxLength="64"
                                     onChange={(e, {value}) => {
                                         if (/^[0-9]+$/.test(value.slice(-1)) || value === '') {
                                             this.setState({subordernumber: value})
@@ -76,7 +97,7 @@ class OrderForm extends React.Component {
                         <Form.Select label="Order Type"
                                      defaultValue="all"
                                      options={options}/>
-                        <Form.Field  label="Billing Name" placeholder="Billing Name" maxLength="64" control="input"/>
+                        <Form.Field label="Billing Name" placeholder="Billing Name" maxLength="64" control="input"/>
                         <Form.Field onKeyPress={this.handleKeyPress}>
                             <label>Date Received Start</label>
                             <Date />
@@ -86,7 +107,8 @@ class OrderForm extends React.Component {
                             <Date />
                         </Form.Field>
                         <Button type="reset" content="Clear"/>
-                        <Button type='submit' positive floated="right" content="Apply"/>
+                        <Button type='submit' positive floated="right" content="Apply"
+                        onClick={this.onSubmitTaskForm()}/>
                     </Form>
                 </div>
             </Container>

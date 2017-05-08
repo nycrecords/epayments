@@ -6,6 +6,10 @@ input, label {
     display: block;
 }
 
+.ui.selection.dropdown{
+    min-width: 10%;
+}
+
 .field{
     width: 100%;
 }
