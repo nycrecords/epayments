@@ -10,6 +10,16 @@ input, label {
     min-width: 10%;
 }
 
+.ui.container {
+    height: 40%; /*set back to 40 to test */
+    overflow: scroll;
+}
 .field{
     width: 100%;
+}
+
+html, body {
+    margin: 0;
+    height: 100%;
+    overflow: hidden
 }

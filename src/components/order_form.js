@@ -60,17 +60,9 @@ class OrderForm extends React.Component {
             });
         };
     }
-    componentDidMount() {
-        fetch("data.json")
-
-
-    }
-
-
     render() {
         return (
             <Container>
-                <div>
                     <Form>
 
                         {/*This component defines the form fields required for the search form:
@@ -114,7 +106,6 @@ class OrderForm extends React.Component {
                         <Button type='submit' positive floated="right" content="Apply">
                         </Button>
                     </Form>
-                </div>
             </Container>
         )
     }
