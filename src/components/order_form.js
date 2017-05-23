@@ -40,14 +40,13 @@ class OrderForm extends React.Component {
 
         this.state = {
             ordernumber: '',
-            subordernumber: '',
-            tasks: ''
+            subordernumber: ''
 
         };
 
         this.onSubmitTaskForm = () => {
-            fetch('/?', {
-                method: "GE",
+            fetch('todo/api/v1.0/tasks', {
+                method: "POST",
                 body: JSON.stringify({
                     title: this.form.state.title,
                     description: this.form.state.description
@@ -60,6 +59,11 @@ class OrderForm extends React.Component {
                 })
             });
         };
+    }
+    componentDidMount() {
+        fetch("data.json")
+
+
     }
 
 
@@ -107,8 +111,8 @@ class OrderForm extends React.Component {
                             <Date />
                         </Form.Field>
                         <Button type="reset" content="Clear"/>
-                        <Button type='submit' positive floated="right" content="Apply"
-                        onClick={this.onSubmitTaskForm()}/>
+                        <Button type='submit' positive floated="right" content="Apply">
+                        </Button>
                     </Form>
                 </div>
             </Container>
