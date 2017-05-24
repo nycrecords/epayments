@@ -1,9 +1,8 @@
-# This file will hold the size for the images requested for both PHOTO TAX and PHOTO GALLERY
-
 """
 .. module:: _constants_.gender.
 
     :synopsis: Defines _constants_ used throughout the application
+    This file will hold the size for the images requested for both PHOTO TAX and PHOTO GALLERY
 """
 
 EIGHT_BY_TEN = '8x10'
