@@ -11,7 +11,11 @@ input, label {
 }
 
 .ui.container {
-    height: 40%; /*set back to 40 to test */
+    /*max-height: calc(100vh - 50px); !*set back to 40 to test *!*/
+    height:100%;
+}
+.eleven.wide.column {
+    max-height: calc(80vh); /*set back to 40 to test */
     overflow: scroll;
 }
 .field{

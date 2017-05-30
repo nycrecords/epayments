@@ -5,6 +5,12 @@ import Order from "./order"
 
 
 //Separates the page into three columns: The search form, divider, and orders list.
+var order = [];
+
+for (var i=0; i<11; i++){
+    order.push(<Order/>);
+}
+
 class Home extends React.Component {
     render() {
         return (
@@ -19,7 +25,7 @@ class Home extends React.Component {
                     <Grid.Column width={1}/>
                     <Grid.Column width={11}>
                         <Header as="h1" dividing textAlign="center">Orders</Header>
-                        <Order/>
+                        {order}
                     </Grid.Column>
                 </Grid>
             </Container>
