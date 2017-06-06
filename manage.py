@@ -1,6 +1,6 @@
 import os
 from app import create_app, db
-from app.models import Orders, StatusTracker, Shipping, BirthSearch, \
+from app.models import Orders, StatusTracker, Customer, BirthSearch, \
     MarriageSearch, DeathSearch, BirthCertificate, MarriageCertificate, \
     DeathCertificate, PropertyCard, PhotoTax, PhotoGallery
 from flask.ext.script import Manager, Shell
@@ -14,7 +14,7 @@ migrate = Migrate(app, db)
 def make_shell_context():
     """Create the shell context for the Flask application."""
     return dict(app=app, db=db, Order=Orders, StatusTracker=StatusTracker,
-                Shipping=Shipping, BirthSearch=BirthSearch, MarriageSearch=MarriageSearch,
+                Customer=Customer, BirthSearch=BirthSearch, MarriageSearch=MarriageSearch,
                 DeathSearch=DeathSearch, BirthCertificate=BirthCertificate,
                 MarriageCertificate=MarriageCertificate, DeathCertificate=DeathCertificate,
                 PropertyCard=PropertyCard, PhotoTax=PhotoTax, PhotoGallery=PhotoGallery)

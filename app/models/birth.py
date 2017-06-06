@@ -26,11 +26,11 @@ class BirthSearch(db.Model):
     comment -- Column: string(255)
     sub_order_no -- Column: BigInteger, foreignKey
     """
-    __tablename__ = 'birthSearch'
+    __tablename__ = 'birth_search'
     id = db.Column(db.Integer, primary_key=True)
-    first_name = db.Column(db.String(40))
-    last_name = db.Column(db.String(25))
-    mid_name = db.Column(db.String(40))
+    first_name = db.Column(db.String(40), nullable=True)
+    last_name = db.Column(db.String(25), nullable=False)
+    mid_name = db.Column(db.String(40), nullable=True)
     gender_type = db.Column(
         db.Enum(
             gender.NOT_KNOWN,
@@ -38,9 +38,9 @@ class BirthSearch(db.Model):
             gender.FEMALE,
             name='gender_type'),
         default=gender.NOT_KNOWN)
-    father_name = db.Column(db.String(40))
-    mother_name = db.Column(db.String(40))
-    relationship = db.Column(db.String(30))
+    father_name = db.Column(db.String(40), nullable=True)
+    mother_name = db.Column(db.String(40), nullable=True)
+    relationship = db.Column(db.String(30), nullable=True)
     purpose = db.Column(
         db.Enum(
             purpose.GENEALOGICAL_HISTORICAL,
@@ -51,16 +51,17 @@ class BirthSearch(db.Model):
             purpose.HEALTH,
             purpose.OTHER,
             name='purpose'),
-        default=purpose.OTHER)
-    additional_copy = db.Column(db.String(4))
-    month = db.Column(db.String(20))
-    day = db.Column(db.String(2))
+        default=purpose.OTHER, nullable=False)
+    additional_copy = db.Column(db.String(4), nullable=True)
+    month = db.Column(db.String(20), nullable=True)
+    day = db.Column(db.String(2), nullable=True)
     years = db.Column(ARRAY(db.String(4), dimensions=1))
-    birth_place = db.Column(db.String(40))
-    borough = db.Column(ARRAY(db.String(20), dimensions=1))
-    letter = db.Column(db.Boolean)
-    comment = db.Column(db.String(255))
-    sub_order_no = db.Column(db.BigInteger, db.ForeignKey('orders.sub_order_no'))
+    birth_place = db.Column(db.String(40), nullable=True)
+    borough = db.Column(ARRAY(db.String(20), dimensions=1), nullable=False)
+    letter = db.Column(db.Boolean, nullable=True)
+    comment = db.Column(db.String(255), nullable=True)
+    sub_order_no = db.Column(db.BigInteger, db.ForeignKey('orders.sub_order_no'),
+                             nullable=False)
 
     def __init__(
                 self,
@@ -82,22 +83,22 @@ class BirthSearch(db.Model):
                 comment,
                 sub_order_no
     ):
-        self.first_name = first_name
+        self.first_name = first_name or None
         self.last_name = last_name
-        self.mid_name = mid_name
+        self.mid_name = mid_name or None
         self.gender_type = gender_type
-        self.father_name = father_name
-        self.mother_name = mother_name
-        self.relationship = relationship
+        self.father_name = father_name or None
+        self.mother_name = mother_name or None
+        self.relationship = relationship or None
         self.purpose = purpose
         self.additional_copy = additional_copy
-        self.month = month
-        self.day = day
+        self.month = month or None
+        self.day = day or None
         self.years = years
-        self.birth_place = birth_place
+        self.birth_place = birth_place or None
         self.borough = borough
-        self.letter = letter
-        self.comment = comment
+        self.letter = letter or None
+        self.comment = comment or None
         self.sub_order_no = sub_order_no
 
 
@@ -127,22 +128,20 @@ class BirthCertificate(db.Model):
 
     """
 
-    __tablename__ = 'birthCert'
+    __tablename__ = 'birth_cert'
     id = db.Column(db.Integer, primary_key=True)
-    certificate_no = db.Column(db.String(40))
-    first_name = db.Column(db.String(40))
-    last_name = db.Column(db.String(25))
-    mid_name = db.Column(db.String(40))
+    first_name = db.Column(db.String(40), nullable=True)
+    last_name = db.Column(db.String(25), nullable=False)
+    mid_name = db.Column(db.String(40), nullable=True)
     gender_type = db.Column(
         db.Enum(
             gender.NOT_KNOWN,
             gender.MALE,
             gender.FEMALE,
-            name='gender_type'),
-        default=gender.NOT_KNOWN)
-    father_name = db.Column(db.String(40))
-    mother_name = db.Column(db.String(40))
-    relationship = db.Column(db.String(30))
+            name='gender_type'), default=gender.NOT_KNOWN, nullable=True)
+    father_name = db.Column(db.String(40), nullable=True)
+    mother_name = db.Column(db.String(40), nullable=True)
+    relationship = db.Column(db.String(30), nullable=True)
     purpose = db.Column(
         db.Enum(
             purpose.GENEALOGICAL_HISTORICAL,
@@ -152,17 +151,17 @@ class BirthCertificate(db.Model):
             purpose.MEDICAID_SOCIAL_SECURITY,
             purpose.HEALTH,
             purpose.OTHER,
-            name='purpose'),
-        default=purpose.OTHER)
-    additional_copy = db.Column(db.String(40))
-    month = db.Column(db.String(20))
-    day = db.Column(db.String(2))
+            name='purpose'), default=purpose.OTHER, nullable=False)
+    additional_copy = db.Column(db.String(4), nullable=True)
+    month = db.Column(db.String(20), nullable=True)
+    day = db.Column(db.String(2), nullable=True)
     years = db.Column(ARRAY(db.String(4), dimensions=1))
-    birth_place = db.Column(db.String(40))
-    borough = db.Column(ARRAY(db.String(20), dimensions=1))
-    letter = db.Column(db.Boolean)
-    comment = db.Column(db.String(255))
-    sub_order_no = db.Column(db.BigInteger, db.ForeignKey('orders.sub_order_no'))
+    birth_place = db.Column(db.String(40), nullable=True)
+    borough = db.Column(ARRAY(db.String(20), dimensions=1), nullable=False)
+    letter = db.Column(db.Boolean, nullable=True)
+    comment = db.Column(db.String(255), nullable=True)
+    sub_order_no = db.Column(db.BigInteger, db.ForeignKey('orders.sub_order_no'),
+                             nullable=False)
 
     def __init__(
             self,
@@ -186,20 +185,21 @@ class BirthCertificate(db.Model):
             sub_order_no
     ):
         self.certificate_no = certificate_no
-        self.first_name = first_name
+        self.first_name = first_name or None
         self.last_name = last_name
-        self.mid_name = mid_name
-        self.gender_type = gender_type
-        self.father_name = father_name
-        self.mother_name = mother_name
-        self.relationship = relationship
+        self.mid_name = mid_name or None
+        self.gender_type = gender_type or None
+        self.father_name = father_name or None
+        self.mother_name = mother_name or None
+        self.relationship = relationship or None
         self.purpose = purpose
         self.additional_copy = additional_copy
-        self.month = month
-        self.day = day
+        self.month = month or None
+        self.day = day or None
         self.years = years
-        self.birth_place = birth_place
+        self.birth_place = birth_place or None
         self.borough = borough
-        self.letter = letter
-        self.comment = comment
+        self.letter = letter or None
+        self.comment = comment or None
         self.sub_order_no = sub_order_no
+

@@ -4,7 +4,7 @@ from datetime import datetime, date
 from flask import current_app
 from app import db, scheduler
 from app.models import Orders, StatusTracker, BirthSearch, BirthCertificate, MarriageCertificate,\
-    MarriageSearch, DeathCertificate, DeathSearch, PhotoGallery, PhotoTax, PropertyCard, Shipping
+    MarriageSearch, DeathCertificate, DeathSearch, PhotoGallery, PhotoTax, PropertyCard, Customer
 from app.file_utils import sftp_ctx
 from app.constants import borough, collection, gender, purpose, size, status
 
@@ -150,7 +150,7 @@ def import_file(file_name):
         db.session.commit()
 
         # Insert into the Shipping Table
-        insert_Shipping = Shipping(name=ship_to_name,
+        insert_Customer = Customer(name=ship_to_name,
                                    address_line_1=ship_to_street_add,
                                    address_line_2=ship_to_street_add_2,
                                    city=ship_to_city,
@@ -160,7 +160,7 @@ def import_file(file_name):
                                    phone=ship_to_phone,
                                    instructions=shipping_instructions)
 
-        db.session.add(insert_Shipping)
+        db.session.add(insert_Customer)
         db.session.commit()
 
         # Insert into the BirthSearch Table
@@ -182,7 +182,7 @@ def import_file(file_name):
         # }
 
 
-        # Marriage Search
+        # Birth Search
         if client_id == '10000102':
             # We are now in the a sub Order that is of type Birth Search
             # Find all the necessary info for birth search
@@ -198,7 +198,8 @@ def import_file(file_name):
                 clients_data_list.index("MIDDLENAME") + 1] if "MIDDLENAME" in clients_data_list else None
 
             # Pull the gender Type
-            gender_type = clients_data_list[clients_data_list.index("GENDER") + 1]
+            gender_type = clients_data_list[
+                clients_data_list.index("GENDER") + 1] if "GENDER" in clients_data_list else None
 
             # Get the Parent's names/relationship && purpose
             father_name = clients_data_list[
@@ -206,7 +207,7 @@ def import_file(file_name):
             mother_name = clients_data_list[
                 clients_data_list.index("MOTHER_NAME") + 1] if "MOTHER_NAME" in clients_data_list else None
             relationship = clients_data_list[
-                clients_data_list.index("RELATIONSHIP") + 1]
+                clients_data_list.index("RELATIONSHIP") + 1] if "RELATIONSHIP" in clients_data_list else None
             purpose = clients_data_list[
                 clients_data_list.index("PURPOSE") + 1] if "PURPOSE" in clients_data_list else None
 
@@ -222,8 +223,7 @@ def import_file(file_name):
             # Indivdual Info
             birth_place = clients_data_list[
                 clients_data_list.index("BIRTH_PLACE") + 1] if "BIRTH_PLACE" in clients_data_list else None
-            borough = clients_data_list[
-                clients_data_list.index("BOROUGH") + 1]
+            borough = clients_data_list[clients_data_list.index("BOROUGH") + 1]
             comment = clients_data_list[
                 clients_data_list.index("ADD_COMMENT") + 1] if "ADD_COMMENT" in clients_data_list else None
 
@@ -260,10 +260,12 @@ def import_file(file_name):
 
             # Pull the Groom & Bride info
             groom_last_name = clients_data_list[clients_data_list.index("LASTNAME_G") + 1]
-            groom_first_name = clients_data_list[clients_data_list.index("FIRSTNAME_G") + 1]
+            groom_first_name = clients_data_list[
+                clients_data_list.index("FIRSTNAME_G") + 1] if "FIRSTNAME_G" in clients_data_list else None
 
             bride_last_name = clients_data_list[clients_data_list.index("LASTNAME_B") + 1]
-            bride_first_name = clients_data_list[clients_data_list.index("FIRSTNAME_B") + 1]
+            bride_first_name = clients_data_list[
+                clients_data_list.index("FIRSTNAME_B") + 1] if "FIRSTNAME_B" in clients_data_list else None
 
             # Realtionship + the purpose
             relationship = clients_data_list[
@@ -318,13 +320,15 @@ def import_file(file_name):
         if client_id == '10000103':
 
             # Pull the Name
-            first_name = clients_data_list[clients_data_list.index("FIRSTNAME") + 1]
+            first_name = clients_data_list[
+                clients_data_list.index("FIRSTNAME") + 1] if "FIRSTNAME" in clients_data_list else None
             last_name = clients_data_list[clients_data_list.index("LASTNAME") + 1]
             mid_name = clients_data_list[
                 clients_data_list.index("MIDDLENAME") + 1] if "MIDDLENAME" in clients_data_list else None
 
-            # The relationship && Purpose
-            relationship = clients_data_list[clients_data_list.index("RELATIONSHIP") + 1]
+            # The relationship && purpose
+            relationship = clients_data_list[
+                clients_data_list.index("RELATIONSHIP") + 1] if "RELATIONSHIP" in clients_data_list else None
             purpose = clients_data_list[
                 clients_data_list.index("PURPOSE") + 1] if "PURPOSE" in clients_data_list else None
 
@@ -403,7 +407,8 @@ def import_file(file_name):
                 clients_data_list.index("FATHER_NAME") + 1] if "FATHER_NAME" in clients_data_list else None
             mother_name = clients_data_list[
                 clients_data_list.index("MOTHER_NAME") + 1] if "MOTHER_NAME" in clients_data_list else None
-            relationship = clients_data_list[clients_data_list.index("RELATIONSHIP") + 1]
+            relationship = clients_data_list[
+                clients_data_list.index("RELATIONSHIP") + 1] if "RELATIONSHIP" in clients_data_list else None
             purpose = clients_data_list[
                 clients_data_list.index("PURPOSE") + 1] if "PURPOSE" in clients_data_list else None
 
@@ -415,7 +420,7 @@ def import_file(file_name):
             month = clients_data_list[
                 clients_data_list.index("MONTH") + 1] if "MONTH" in clients_data_list else None
             day = clients_data_list[clients_data_list.index("DAY") + 1] if "DAY" in clients_data_list else None
-            years = clients_data_list[clients_data_list.index("YEAR_") + 1] if "YEAR_" in clients_data_list else None
+            years = clients_data_list[clients_data_list.index("YEAR1") + 1] if "YEAR1" in clients_data_list else None
 
             # Indivdual Info
             birth_place = clients_data_list[
@@ -460,11 +465,13 @@ def import_file(file_name):
             certificate_no = clients_data_list[clients_data_list.index("CERTIFICATE_NUMBER") + 1]
 
             # Pull the Groom & Bride info
-            groom_last_name = clients_data_list[clients_data_list.index("LASTNAME_G") + 1]
+            groom_last_name = clients_data_list[
+                clients_data_list.index("LASTNAME_G") + 1] if "LASTNAME_G" in clients_data_list else None
             groom_first_name = clients_data_list[clients_data_list.index("FIRSTNAME_G") + 1]
 
             bride_last_name = clients_data_list[clients_data_list.index("LASTNAME_B") + 1]
-            bride_first_name = clients_data_list[clients_data_list.index("FIRSTNAME_B") + 1]
+            bride_first_name = clients_data_list[
+                clients_data_list.index("FIRSTNAME_B") + 1] if "LASTNAME_B" in clients_data_list else None
 
             # Realtionship + the purpose
             relationship = clients_data_list[
@@ -479,7 +486,7 @@ def import_file(file_name):
             month = clients_data_list[
                 clients_data_list.index("MONTH") + 1] if "MONTH" in clients_data_list else None
             day = clients_data_list[clients_data_list.index("DAY") + 1] if "DAY" in clients_data_list else None
-            years = clients_data_list[clients_data_list.index("YEAR_") + 1] if "YEAR_" in clients_data_list else None
+            years = clients_data_list[clients_data_list.index("YEAR") + 1] if "YEAR" in clients_data_list else None
 
             # Pull the info about the Marriage location
             marriage_place = clients_data_list[
@@ -531,8 +538,9 @@ def import_file(file_name):
             mid_name = clients_data_list[
                 clients_data_list.index("MIDDLENAME") + 1] if "MIDDLENAME" in clients_data_list else None
 
-            # The relationship && Purpose
-            relationship = clients_data_list[clients_data_list.index("RELATIONSHIP") + 1]
+            # The relationship && purpose
+            relationship = clients_data_list[
+                clients_data_list.index("RELATIONSHIP") + 1] if "RELATIONSHIP" in clients_data_list else None
             purpose = clients_data_list[
                 clients_data_list.index("PURPOSE") + 1] if "PURPOSE" in clients_data_list else None
 
@@ -549,7 +557,7 @@ def import_file(file_name):
             day = clients_data_list[
                 clients_data_list.index("DAY") + 1] if "DAY" in clients_data_list else None
             years = clients_data_list[
-                clients_data_list.index("YEAR_") + 1] if "YEAR_" in clients_data_list else None
+                clients_data_list.index("YEAR") + 1] if "YEAR" in clients_data_list else None
 
             # Death place and Age of Death
             death_place = clients_data_list[
@@ -596,13 +604,14 @@ def import_file(file_name):
         if client_id == '10000058':
             # Pull the address of the building
             borough = clients_data_list[clients_data_list.index("BOROUGH") + 1]
-            block = clients_data_list[clients_data_list.index("BLOCK") + 1]
-            lot = clients_data_list[clients_data_list.index("LOT") + 1]
+            block = clients_data_list[clients_data_list.index("BLOCK") + 1] if "BLOCK" in clients_data_list else None
+            lot = clients_data_list[clients_data_list.index("LOT") + 1] if "LOT" in clients_data_list else None
             building_no = clients_data_list[clients_data_list.index("BUILDING_NO") + 1]
             street = clients_data_list[clients_data_list.index("STREET") + 1]
 
             # Get the description
-            description = clients_data_list[clients_data_list.index("DESCRIPTION") + 1]
+            description = clients_data_list[clients_data_list.index("DESCRIPTION") + 1] if "DESCRIPTION" in \
+                                                                                           clients_data_list else None
 
             certified = clients_data_list[clients_data_list.index("CERTIFIED") + 1]
 
@@ -613,8 +622,8 @@ def import_file(file_name):
             else:
                 mail_pickup = False
 
-            comment = clients_data_list[
-                clients_data_list.index("ADD_COMMENT") + 1] if "ADD_COMMENT" in clients_data_list else None
+            contact_info = clients_data_list[
+                clients_data_list.index("EMAIL") + 1] if "EMAIL" in clients_data_list else None
 
             insert_propcard = PropertyCard(borough=borough,
                                            block=block,
@@ -624,7 +633,7 @@ def import_file(file_name):
                                            description=description,
                                            certified=certified,
                                            mail_pickup=mail_pickup,
-                                           comment=comment,
+                                           contact_info=contact_info,
                                            sub_order_no=sub_order_no)
 
             print("Let add this to the propcard table")

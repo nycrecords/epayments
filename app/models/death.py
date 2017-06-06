@@ -27,12 +27,12 @@ class DeathSearch(db.Model):
 
     """
 
-    __tablename__ = 'deathSearch'
+    __tablename__ = 'death_search'
     id = db.Column(db.Integer, primary_key=True)
-    last_name = db.Column(db.String(25))
-    first_name = db.Column(db.String(40))
-    mid_name = db.Column(db.String(40))
-    relationship = db.Column(db.String(30))
+    last_name = db.Column(db.String(25), nullable=False)
+    first_name = db.Column(db.String(40), nullable=True)
+    mid_name = db.Column(db.String(40), nullable=True)
+    relationship = db.Column(db.String(30), nullable=True)
     purpose = db.Column(
         db.Enum(
             purpose.GENEALOGICAL_HISTORICAL,
@@ -42,19 +42,19 @@ class DeathSearch(db.Model):
             purpose.MEDICAID_SOCIAL_SECURITY,
             purpose.HEALTH,
             purpose.OTHER,
-            name='purpose'),
-        default=purpose.OTHER)
-    copy_req = db.Column(db.String(40))
-    cemetery = db.Column(db.String(40))
-    month = db.Column(db.String(20))
-    day = db.Column(db.String(2))
-    years = db.Column(ARRAY(db.String(4), dimensions=1))
-    death_place = db.Column(db.String(40))
-    age_of_death = db.Column(db.String(3))
-    borough = db.Column(ARRAY(db.String(20), dimensions=1))
-    letter = db.Column(db.Boolean)
-    comment = db.Column(db.String(255))
-    sub_order_no = db.Column(db.BigInteger, db.ForeignKey('orders.sub_order_no'))
+            name='purpose'), default=purpose.OTHER, nullable=False)
+    copy_req = db.Column(db.String(40), nullable=True)
+    cemetery = db.Column(db.String(40), nullable=True)
+    month = db.Column(db.String(20), nullable=True)
+    day = db.Column(db.String(2), nullable=True)
+    years = db.Column(ARRAY(db.String(4), dimensions=1), nullable=True)
+    death_place = db.Column(db.String(40), nullable=True)
+    age_of_death = db.Column(db.String(3), nullable=True)
+    borough = db.Column(ARRAY(db.String(20), dimensions=1), nullable=False)
+    letter = db.Column(db.Boolean, nullable=True)
+    comment = db.Column(db.String(255), nullable=True)
+    sub_order_no = db.Column(db.BigInteger, db.ForeignKey('orders.sub_order_no'),
+                             nullable=False)
 
     def __init__(
                 self,
@@ -76,20 +76,20 @@ class DeathSearch(db.Model):
                 sub_order_no
     ):
         self.last_name = last_name
-        self.first_name = first_name
-        self.mid_name = mid_name
-        self.relationship = relationship
+        self.first_name = first_name or None
+        self.mid_name = mid_name or None
+        self.relationship = relationship or None
         self.purpose = purpose
-        self.copy_req = copy_req
-        self.cemetery = cemetery
-        self.month = month
-        self.day = day
-        self.years = years
-        self.death_place = death_place
-        self.age_of_death = age_of_death
+        self.copy_req = copy_req or None
+        self.cemetery = cemetery or None
+        self.month = month or None
+        self.day = day or None
+        self.years = years or None
+        self.death_place = death_place or None
+        self.age_of_death = age_of_death or None
         self.borough = borough
-        self.letter = letter
-        self.comment = comment
+        self.letter = letter or None
+        self.comment = comment or None
         self.sub_order_no = sub_order_no
 
 
@@ -118,13 +118,13 @@ class DeathCertificate(db.Model):
 
     """
 
-    __tablename__ = 'deathCert'
+    __tablename__ = 'death_cert'
     id = db.Column(db.Integer, primary_key=True)
-    certificate_no = db.Column(db.String(40))
-    last_name = db.Column(db.String(25))
-    first_name = db.Column(db.String(40))
-    mid_name = db.Column(db.String(40))
-    relationship = db.Column(db.String(30))
+    certificate_no = db.Column(db.String(40), nullable=False)
+    last_name = db.Column(db.String(25), nullable=False)
+    first_name = db.Column(db.String(40), nullable=True)
+    mid_name = db.Column(db.String(40), nullable=True)
+    relationship = db.Column(db.String(30), nullable=True)
     purpose = db.Column(
         db.Enum(
             purpose.GENEALOGICAL_HISTORICAL,
@@ -134,19 +134,19 @@ class DeathCertificate(db.Model):
             purpose.MEDICAID_SOCIAL_SECURITY,
             purpose.HEALTH,
             purpose.OTHER,
-            name='purpose'),
-        default=purpose.OTHER)
-    copy_req = db.Column(db.String(40))
-    cemetery = db.Column(db.String(40))
-    month = db.Column(db.String(20))
-    day = db.Column(db.String(2))
-    years = db.Column(ARRAY(db.String(4), dimensions=1))
-    death_place = db.Column(db.String(40))
-    age_of_death = db.Column(db.String(3))
-    borough = db.Column(ARRAY(db.String(20), dimensions=1))
-    letter = db.Column(db.Boolean)
-    comment = db.Column(db.String(255))
-    sub_order_no = db.Column(db.BigInteger, db.ForeignKey('orders.sub_order_no'))
+            name='purpose'), default=purpose.OTHER, nullable=False)
+    copy_req = db.Column(db.String(40), nullable=True)
+    cemetery = db.Column(db.String(40), nullable=True)
+    month = db.Column(db.String(20), nullable=True)
+    day = db.Column(db.String(2), nullable=True)
+    years = db.Column(ARRAY(db.String(4), dimensions=1), nullable=True)
+    death_place = db.Column(db.String(40), nullable=True)
+    age_of_death = db.Column(db.String(3), nullable=True)
+    borough = db.Column(ARRAY(db.String(20), dimensions=1), nullable=False)
+    letter = db.Column(db.Boolean, nullable=True)
+    comment = db.Column(db.String(255), nullable=True)
+    sub_order_no = db.Column(db.BigInteger, db.ForeignKey('orders.sub_order_no'),
+                             nullable=False)
 
     def __init__(
             self,
@@ -170,19 +170,19 @@ class DeathCertificate(db.Model):
     ):
         self.certificate_no = certificate_no
         self.last_name = last_name
-        self.first_name = first_name
-        self.mid_name = mid_name
-        self.relationship = relationship
+        self.first_name = first_name or None
+        self.mid_name = mid_name or None
+        self.relationship = relationship or None
         self.purpose = purpose
-        self.copy_req = copy_req
-        self.cemetery = cemetery
-        self.month = month
-        self.day = day
+        self.copy_req = copy_req or None
+        self.cemetery = cemetery or None
+        self.month = month or None
+        self.day = day or None
         self.years = years
-        self.death_place = death_place
-        self.age_of_death = age_of_death
+        self.death_place = death_place or None
+        self.age_of_death = age_of_death or None
         self.borough = borough
-        self.letter = letter
-        self.comment = comment
+        self.letter = letter or None
+        self.comment = comment or None
         self.sub_order_no = sub_order_no
 

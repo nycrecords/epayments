@@ -1,7 +1,7 @@
 from app import db
 
 
-class Shipping(db.Model):
+class Customer(db.Model):
 
     """
     Define the Shipping class with the following columns and relationships:
@@ -18,17 +18,17 @@ class Shipping(db.Model):
     order_no -- Column: String(64), foreignKey
 
     """
-    __tablename__ = 'shipping'
-    id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String(64))
-    address_line_1 = db.Column(db.String(64))
-    address_line_2 = db.Column(db.String(64))
-    city = db.Column(db.String(64))
-    state = db.Column(db.String(64))
-    zip_code = db.Column(db.String(64))
-    country = db.Column(db.String(64))
-    phone = db.Column(db.String(64))
-    instructions = db.Column(db.String(64))
+    __tablename__ = 'customer'
+    id = db.Column(db.Integer, primary_key=True, nullable=False)
+    name = db.Column(db.String(64), nullable=False)
+    address_line_1 = db.Column(db.String(64), nullable=True)
+    address_line_2 = db.Column(db.String(64), nullable=True)
+    city = db.Column(db.String(64), nullable=False)
+    state = db.Column(db.String(64), nullable=True)
+    zip_code = db.Column(db.String(64), nullable=False)
+    country = db.Column(db.String(64), nullable=False)
+    phone = db.Column(db.String(64), nullable=True)
+    instructions = db.Column(db.String(64), nullable=True)
 
     def __init__(
                 self,
@@ -44,11 +44,11 @@ class Shipping(db.Model):
 
     ):
         self.name = name
-        self.address_line_1 = address_line_1
-        self.address_line_2 = address_line_2
+        self.address_line_1 = address_line_1 or None
+        self.address_line_2 = address_line_2 or None
         self.city = city
         self.state = state
         self.zip_code = zip_code
         self.country = country
-        self.phone = phone
-        self.instructions = instructions
+        self.phone = phone or None
+        self.instructions = instructions or None

@@ -15,23 +15,24 @@ class PropertyCard(db.Model):
     description -- Column: String(35)
     certified -- Column: Bool
     mail_pickup -- Column: Bool
-    comment -- Column: String(35)
+    contact_no -- Column: String(35)
     sub_order_no -- Column: BigInteger, foreignKey
 
     """
 
     __tablename__ = 'propCard'
     id = db.Column(db.Integer, primary_key=True)
-    borough = db.Column(ARRAY(db.String(20), dimensions=1))
-    block = db.Column(db.String(9))
-    lot = db.Column(db.String(9))
-    building_no = db.Column(db.String(10))
-    street = db.Column(db.String(40))
-    description = db.Column(db.String(40))
-    certified = db.Column(db.Boolean)
-    mail_pickup = db.Column(db.Boolean)
-    comment = db.Column(db.String(35))
-    sub_order_no = db.Column(db.BigInteger, db.ForeignKey('orders.sub_order_no'))
+    borough = db.Column(ARRAY(db.String(20), dimensions=1), nullable=False)
+    block = db.Column(db.String(9), nullable=True)
+    lot = db.Column(db.String(9), nullable=True)
+    building_no = db.Column(db.String(10), nullable=False)
+    street = db.Column(db.String(40), nullable=False)
+    description = db.Column(db.String(40), nullable=True)
+    certified = db.Column(db.Boolean, nullable=False)
+    mail_pickup = db.Column(db.Boolean, nullable=False)
+    contact_info = db.Column(db.String(35), nullable=True)
+    sub_order_no = db.Column(db.BigInteger, db.ForeignKey('orders.sub_order_no'),
+                             nullable=False)
 
     def __init__(
                 self,
@@ -43,16 +44,16 @@ class PropertyCard(db.Model):
                 description,
                 certified,
                 mail_pickup,
-                comment,
+                contact_info,
                 sub_order_no
     ):
         self.borough = borough
-        self.block = block
-        self.lot = lot
+        self.block = block or None
+        self.lot = lot or None
         self.building_no = building_no
         self.street = street
-        self.description = description
+        self.description = description or None
         self.certified = certified
         self.mail_pickup = mail_pickup
-        self.comment = comment
+        self.contact_info = contact_info or None
         self.sub_order_no = sub_order_no

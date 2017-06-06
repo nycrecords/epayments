@@ -19,13 +19,13 @@ class Orders(db.Model):
 
     __tablename__ = 'orders'
     order_no = db.Column(db.String(64))
-    sub_order_no = db.Column(db.BigInteger, primary_key=True)
-    date_submitted = db.Column(db.DateTime)
-    date_received = db.Column(db.DateTime)
-    billing_name = db.Column(db.String(64))
-    customer_email = db.Column(db.String(64))
-    confirmation_message = db.Column(db.Text)
-    client_data = db.Column(db.Text)
+    sub_order_no = db.Column(db.BigInteger, primary_key=True, nullable=False)
+    date_submitted = db.Column(db.DateTime, nullable=False)
+    date_received = db.Column(db.DateTime, nullable=True)
+    billing_name = db.Column(db.String(64), nullable=False)
+    customer_email = db.Column(db.String(64), nullable=False)
+    confirmation_message = db.Column(db.Text, nullable=False)
+    client_data = db.Column(db.Text, nullable=False)
 
     def __init__(
             self,
@@ -42,7 +42,7 @@ class Orders(db.Model):
         self.order_no = order_no
         self.sub_order_no = sub_order_no
         self.date_submitted = date_submitted
-        self.date_submitted = date_receivied
+        self.date_received = date_receivied or None
         self.billing_name = billing_name
         self.customer_email = customer_email
         self.confirmation_message = confirmation_message
@@ -84,8 +84,7 @@ class StatusTracker(db.Model):
             status.LETTER_GENERATED,
             status.UNDELIVERABLE,
             status.DONE,
-            name='current_status'),
-        default=status.RECEIVED)
+            name='current_status'), default=status.RECEIVED, nullable=False)
 
     # Class Constructor to initialize the data
     def __init__(

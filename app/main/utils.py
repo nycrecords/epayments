@@ -4,6 +4,7 @@ import os
 from app.utils import import_xml_folder
 import tarfile
 from datetime import datetime
+from shutil import rmtree
 
 
 ALLOWED_EXTENSIONS = frozenset(['tar', 'xml'])
@@ -21,10 +22,25 @@ def allowed_file(filename):
 
 
 def import_xml(filename):
-    """
+    """ 
     Import XML File(s).
     :param filename: File to import
     :return: Bool
+    """
+    data_path = "data/files/DOR/"
+
+    directory_name = make_directory(filename, data_path)
+
+    import_xml_folder(path=os.path.join(directory_name, data_path))
+
+    rmtree(os.path.join(directory_name))
+
+
+def make_directory(filename, data_path):
+    """
+    Create the directory to hold the XML files      
+    :param filename: 
+    :return: the directory name 
     """
     directory_name = os.path.join(current_app.config['LOCAL_FILE_PATH'], datetime.now().strftime('%Y-%m-%d_%H-%M'))
     if not os.path.exists(directory_name):
@@ -33,12 +49,8 @@ def import_xml(filename):
     with tarfile.open(filename) as tar:
         subdir_and_files = [
             tarinfo for tarinfo in tar.getmembers()
-            if tarinfo.name.startswith("data/files/DOR/")
-            ]
+            if tarinfo.name.startswith(data_path)
+        ]
         tar.extractall(path=directory_name, members=subdir_and_files)
 
-    import_xml_folder(path=os.path.join(directory_name, 'data/files/DOR/'))
-
-    from shutil import rmtree
-    rmtree(os.path.join(directory_name))
-
+    return directory_name
