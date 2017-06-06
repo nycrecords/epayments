@@ -4,12 +4,13 @@
 #
 # from . import views, errors
 
-
+import atexit
 from flask import Flask
 from flask.ext.sqlalchemy import SQLAlchemy
 from flask_bootstrap import Bootstrap
 from flask_apscheduler import APScheduler
 from flask.ext.cors import CORS
+from apscheduler.triggers.cron import CronTrigger
 
 from config import config
 
@@ -43,5 +44,10 @@ def create_app(config_name):
     app.register_blueprint(main_blueprint)
 
     # API CALL GOES HERE
+    from .api_1_0 import api_1_0 as api_1_0_blueprint
+    app.register_blueprint(api_1_0_blueprint, url_prefix='/api/v1.0')
+
+    # Scheduler
+    # atexit.register(lambda: scheduler.shutdown())
 
     return app

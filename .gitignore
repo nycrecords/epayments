@@ -4,4 +4,4 @@ data
 .env
 .vagrant
 Vagrantfile
-
+app/__init__.pyc
