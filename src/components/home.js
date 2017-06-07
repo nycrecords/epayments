@@ -1,5 +1,5 @@
 import React from 'react';
-import {Grid, Container, Header} from 'semantic-ui-react';
+import {Grid, Container, Header, Button} from 'semantic-ui-react';
 import OrderForm from "./order_form";
 import Order from "./order"
 
@@ -7,7 +7,7 @@ import Order from "./order"
 //Separates the page into three columns: The search form, divider, and orders list.
 var order = [];
 
-for (var i=0; i<11; i++){
+for (var i = 0; i < 40; i++) {
     order.push(<Order/>);
 }
 
@@ -28,7 +28,13 @@ class Home extends React.Component {
                         {order}
                     </Grid.Column>
                 </Grid>
+                <Grid>
+                    <Container id="load-more" width={5}>
+                        <Button compact floated="right">Load More</Button>
+                    </Container>
+                </Grid>
             </Container>
+
         )
     }
 }
