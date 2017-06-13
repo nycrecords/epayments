@@ -29,7 +29,7 @@ class Home extends React.Component {
                     </Grid.Column>
                 </Grid>
                 <Grid>
-                    <Container id="load-more" width={5}>
+                    <Container id="load-more" width={2}>
                         <Button compact floated="right">Load More</Button>
                     </Container>
                 </Grid>
