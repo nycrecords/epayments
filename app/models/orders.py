@@ -14,6 +14,7 @@ class Orders(db.Model):
     customer_email -- Column: String(64)
     confirmation_message -- Column: Text
     client_data -- Column: Text
+    client_id -- Column: Integer
 
     """
 
@@ -26,6 +27,7 @@ class Orders(db.Model):
     customer_email = db.Column(db.String(64), nullable=False)
     confirmation_message = db.Column(db.Text, nullable=False)
     client_data = db.Column(db.Text, nullable=False)
+    client_id = db.Column(db.Integer, nullable=False)
 
     def __init__(
             self,
@@ -36,7 +38,8 @@ class Orders(db.Model):
             billing_name,
             customer_email,
             confirmation_message,
-            client_data
+            client_data,
+            client_id
 
     ):
         self.order_no = order_no
@@ -47,6 +50,22 @@ class Orders(db.Model):
         self.customer_email = customer_email
         self.confirmation_message = confirmation_message
         self.client_data = client_data
+        self.client_id = client_id
+
+    @property
+    def serialize(self):
+        """Return object data in easily serializeable format"""
+        return {
+            'orderno': self.order_no,
+            'suborderno': self.sub_order_no,
+            'datesubmitted': self.date_submitted,
+            'datereceived': str(self.date_received),
+            'billingname': self.billing_name,
+            'customeremail': self.customer_email,
+            'confirmationmessage': self.confirmation_message,
+            'clientdata': self.client_data,
+            'clientid': self.client_id
+        }
 
 
 class StatusTracker(db.Model):

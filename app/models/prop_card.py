@@ -20,7 +20,7 @@ class PropertyCard(db.Model):
 
     """
 
-    __tablename__ = 'propCard'
+    __tablename__ = 'prop_card'
     id = db.Column(db.Integer, primary_key=True)
     borough = db.Column(ARRAY(db.String(20), dimensions=1), nullable=False)
     block = db.Column(db.String(9), nullable=True)
