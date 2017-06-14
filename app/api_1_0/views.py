@@ -63,6 +63,39 @@ def get_orders():
         return jsonify(orders=orders)
 
 
+@api.route('/status/<int:sub_order_no>', methods=['GET', 'POST'])
+def status_update(sub_order_no):
+    """
+    GET: {sub_order_no}; returns {sub_order_no, current_status}, 200
+    POST: {sub_order_no, new_status, comment}
+
+    Status Table
+    - ID - Integer
+    - Status - ENUM
+        1. Received || Set to this by default
+        2. Processing
+            a)found
+            b)printed
+        3. Mailed/Pickup
+        4. Not_Found
+           a)Letter_generated
+           b)Undeliverable - Cant move down the line
+        5. Done - End of status changes
+    :return: {status_id, sub_order_no, status, comment}, 201
+    """
+
+    # Access the status table with the use of the the suborder number
+        # query through the status table checking the passed number against the database
+        # to see if the sub_order_no matches
+    # then return the status from that sub_order_no that was passed through
+
+    session = StatusTracker.query.filter_by(sub_order_no=sub_order_no).first_or_404()
+    current_status = session.current_status
+
+    print (current_status)
+    return jsonify(current_status=current_status)
+
+
 def get_orders_by_fields(order_number, suborder_number, order_type, billing_name, user, date_received,
                          date_submitted):
     """
@@ -97,6 +130,20 @@ def get_orders_by_fields(order_number, suborder_number, order_type, billing_name
                       ',')).isdisjoint(photolist)]
     order_list = [order.serialize for order in orders]
     return order_list
+
+
+@api.route('/orders/<int:order_id>', methods=['GET'])
+def get_single_order(order_id):
+    """
+    :param order_id:
+    :return: the orders with that specific client id that was passed
+    """
+    orders = [order.serialize for order in Orders.query.filter_by(client_id=order_id).all()]
+
+    if len(orders) == 0:
+        abort(404)
+
+    return jsonify(orders=orders)
 
 
 def get_orders_by_fields_dict(order_number, suborder_number, order_type, billing_name, user, date_received,
@@ -208,41 +255,6 @@ def get_orders_by_fields_dict(order_number, suborder_number, order_type, billing
         orders = [order for order in orders if billing_name.lower() in order['billingname'].lower()]
 
     print ("Hello")
-    print (date_received)
-    print (date_submitted)
     print (orders)
     return orders
 
-
-#
-# @api.route('/orders', methods=['GET'])
-# def get_order():
-#     """
-#     Sends all the orders in the database back
-#     :return: orders
-#     """
-#     # orders = [order.serialize for order in Orders.query.filter_by(client_id=order_id).all()]
-#
-#     # orders = [order.serialize for order in Orders.query.filter_by(sub_order_no=9131297457).all()]
-#
-#     orders = [order.serialize for order in Orders.query.filter_by()]
-#
-#     if len(orders) == 0:
-#         abort(404)
-#
-#     # return jsonify({'version': 'v2.0'})
-#     return jsonify(orders=orders)
-
-
-@api.route('/orders/<int:order_id>', methods=['GET'])
-def get_single_order(order_id):
-    """
-    :param order_id:
-    :return: the orders with that specific client id that was passed
-    """
-    orders = [order.serialize for order in Orders.query.filter_by(client_id=order_id).all()]
-
-    if len(orders) == 0:
-        abort(404)
-
-    return jsonify(orders=orders)
