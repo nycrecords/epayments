@@ -7,6 +7,7 @@ from app.models import Orders, StatusTracker, BirthSearch, BirthCertificate, Mar
     MarriageSearch, DeathCertificate, DeathSearch, PhotoGallery, PhotoTax, PropertyCard, Customer
 from app.file_utils import sftp_ctx
 from app.constants import borough, collection, gender, purpose, size, status
+from app.constants.client_agency_names import CLIENT_AGENCY_NAMES
 
 
 def import_xml_folder(scheduled=False, path=None):
@@ -83,6 +84,7 @@ def import_file(file_name):
     for i in clients_data_items:
         clients_data_list = i.split('|')
         client_id = clients_data_list[clients_data_list.index("ClientID") + 1]
+        client_agency_name = CLIENT_AGENCY_NAMES[client_id]
 
         # Sub order Number used to identify multi-part orders
         sub_order_no = clients_data_list[clients_data_list.index("OrderNo") + 1]
@@ -126,20 +128,18 @@ def import_file(file_name):
 
         shipping_instructions = shipping_add.find("ShippingInstructions").text
 
-        # Get info for the BirthSearch/BirthCert
-
-
 
         # Insert into the Orders Table
         insert_order = Orders(order_no=order_no,
                               sub_order_no=sub_order_no,
-                              date_submitted=date.today(),
-                              date_receivied=date_received,
+                              date_submitted=date_received,
+                              date_receivied=date_last_modified,
                               billing_name=billing_name,
                               customer_email=customer_email,
                               confirmation_message=confirmation_message,
                               client_data=clients_data,
-                              client_id=client_id)
+                              client_id=client_id,
+                              client_agency_name=client_agency_name)
 
         db.session.add(insert_order)
         db.session.commit()

@@ -15,7 +15,7 @@ class Orders(db.Model):
     confirmation_message -- Column: Text
     client_data -- Column: Text
     client_id -- Column: Integer
-
+    client_agency_name -- Column: String(64)
     """
 
     __tablename__ = 'orders'
@@ -28,6 +28,7 @@ class Orders(db.Model):
     confirmation_message = db.Column(db.Text, nullable=False)
     client_data = db.Column(db.Text, nullable=False)
     client_id = db.Column(db.Integer, nullable=False)
+    client_agency_name = db.Column(db.String(64), nullable=False)
 
     def __init__(
             self,
@@ -39,7 +40,8 @@ class Orders(db.Model):
             customer_email,
             confirmation_message,
             client_data,
-            client_id
+            client_id,
+            client_agency_name
 
     ):
         self.order_no = order_no
@@ -51,6 +53,7 @@ class Orders(db.Model):
         self.confirmation_message = confirmation_message
         self.client_data = client_data
         self.client_id = client_id
+        self.client_agency_name = client_agency_name
 
     @property
     def serialize(self):
@@ -64,7 +67,8 @@ class Orders(db.Model):
             'customeremail': self.customer_email,
             'confirmationmessage': self.confirmation_message,
             'clientdata': self.client_data,
-            'clientid': self.client_id
+            'clientid': self.client_id,
+            'clientagencyname': self.client_agency_name
         }
 
 
