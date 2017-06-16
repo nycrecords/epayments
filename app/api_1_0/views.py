@@ -1,11 +1,13 @@
 from flask import jsonify, abort, request
 import datetime
 from datetime import date, datetime, timedelta
-from sqlalchemy import func
+from sqlalchemy import func, databases, update
 from .import api_1_0 as api
 from app.constants.client_agency_names import CLIENT_AGENCY_NAMES
 from ..models import Orders, Customer, BirthSearch, BirthCertificate, MarriageSearch, MarriageCertificate, \
                      DeathSearch, DeathCertificate, PhotoGallery, PhotoTax, PropertyCard, StatusTracker
+from sqlalchemy.orm import sessionmaker, Query
+from app import db
 
 
 @api.route('/', methods=['GET'])
@@ -63,37 +65,54 @@ def get_orders():
         return jsonify(orders=orders)
 
 
-@api.route('/status/<int:sub_order_no>', methods=['GET', 'POST'])
-def status_update(sub_order_no):
-    """
-    GET: {sub_order_no}; returns {sub_order_no, current_status}, 200
-    POST: {sub_order_no, new_status, comment}
-
-    Status Table
-    - ID - Integer
-    - Status - ENUM
-        1. Received || Set to this by default
-        2. Processing
-            a)found
-            b)printed
-        3. Mailed/Pickup
-        4. Not_Found
-           a)Letter_generated
-           b)Undeliverable - Cant move down the line
-        5. Done - End of status changes
-    :return: {status_id, sub_order_no, status, comment}, 201
+@api.route('/status/<int:sub_order_no>', methods=['GET'])
+def status_lookup(sub_order_no):
     """
 
-    # Access the status table with the use of the the suborder number
-        # query through the status table checking the passed number against the database
-        # to see if the sub_order_no matches
-    # then return the status from that sub_order_no that was passed through
-
+    :param sub_order_no:
+    :return: the status of the sub_order_no that was passed in
+    """
     session = StatusTracker.query.filter_by(sub_order_no=sub_order_no).first_or_404()
     current_status = session.current_status
+    # current_status = 'Done'
 
-    print (current_status)
+    session = StatusTracker.query
+
     return jsonify(current_status=current_status)
+
+
+@api.route('/status/<int:sub_order_no>/update', methods=['GET', 'PUT'])
+def status_change(sub_order_no):
+    """
+        GET: {sub_order_no}; returns {sub_order_no, current_status}, 200
+        POST: {sub_order_no, new_status, comment}
+
+        Status Table
+        - ID - Integer
+        - Status - ENUM
+            1. Received || Set to this by default
+            2. Processing
+                a)Found
+                b)Printed
+            3. Mailed/Pickup
+            4. Not_Found
+               a)Letter_generated
+               b)Undeliverable - Cant move down the line
+            5. Done - End of status changes
+        :return: {status_id, sub_order_no, status, comment}, 201
+    """
+    session = StatusTracker.query.filter_by(sub_order_no=sub_order_no).first_or_404()
+    curr_status = session.current_status
+
+    # This will update the status of the sub_order_no
+    session.current_status = 'Processing'
+    db.session.commit()
+
+    status = {'Received', 'Processing', 'Found', 'Printed' 'Mailed/Pickup', 'Not_Found', 'Letter_generated',
+              'Undeliverable''Done'}
+    if request.form:
+        curr_status = str(request.form["status"])
+    return jsonify(current_status=curr_status)
 
 
 def get_orders_by_fields(order_number, suborder_number, order_type, billing_name, user, date_received,
