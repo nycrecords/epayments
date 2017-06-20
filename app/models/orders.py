@@ -1,5 +1,7 @@
 from app import db
 from app .constants import status
+from sqlalchemy.dialects.postgresql import ARRAY, JSONB
+from datetime import datetime
 
 
 class Orders(db.Model):
@@ -94,6 +96,7 @@ class StatusTracker(db.Model):
 
     """
 
+
     __tablename__ = 'status'
     id = db.Column(db.Integer, primary_key=True)
     sub_order_no = db.Column(db.BigInteger, db.ForeignKey('orders.sub_order_no'))
@@ -107,11 +110,35 @@ class StatusTracker(db.Model):
             status.LETTER_GENERATED,
             status.UNDELIVERABLE,
             status.DONE,
-            name='current_status'), default=status.RECEIVED, nullable=False)
+            name='current_status'), nullable=True)
+    comment = db.Column(db.String(64), nullable=True)
+    timestamp = db.Column(db.DateTime, default=datetime.utcnow())
+    # previous_value = db.Column(JSONB, nullable=True)
+    # new_value = db.Column(JSONB, nullable=True)
 
     # Class Constructor to initialize the data
     def __init__(
                 self,
-                sub_order_no
+                sub_order_no,
+                current_status,
+                comment,
+                timestamp
+                # previous_value,
+                # new_value
     ):
-        self.sub_order_no = sub_order_no
+        self.sub_order_no = sub_order_no,
+        self.current_status = current_status,
+        self.comment = comment or None,
+        self.timestamp = timestamp or datetime.utcnow()
+        # self.previous_value = previous_value or None,
+        # self.new_value = new_value or None
+
+    @property
+    def serialize(self):
+        """Return object data in easily serializeable format"""
+        return {
+            'suborderno': self.sub_order_no,
+            'currentstatus': self.current_status,
+            'comment': self.comment,
+            'timestamp': self.timestamp
+        }

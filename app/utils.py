@@ -145,7 +145,10 @@ def import_file(file_name):
         db.session.commit()
 
         # Insert into the StatusTracker Table
-        insert_status = StatusTracker(sub_order_no=sub_order_no)
+        insert_status = StatusTracker(sub_order_no=sub_order_no,
+                                      current_status='Received',
+                                      comment=None,
+                                      timestamp=None)
 
         db.session.add(insert_status)
         db.session.commit()

@@ -68,20 +68,15 @@ def get_orders():
 @api.route('/status/<int:sub_order_no>', methods=['GET'])
 def status_lookup(sub_order_no):
     """
-
     :param sub_order_no:
-    :return: the status of the sub_order_no that was passed in
+    :return: the status of all records with this sub_order_no that was passed in
     """
-    session = StatusTracker.query.filter_by(sub_order_no=sub_order_no).first_or_404()
-    current_status = session.current_status
-    # current_status = 'Done'
+    status = [status.serialize for status in StatusTracker.query.filter_by(sub_order_no=sub_order_no).all()]
 
-    session = StatusTracker.query
-
-    return jsonify(current_status=current_status)
+    return jsonify(status=status)
 
 
-@api.route('/status/<int:sub_order_no>/update', methods=['GET', 'PUT'])
+@api.route('/status/<int:sub_order_no>/update', methods=['GET', 'POST'])
 def status_change(sub_order_no):
     """
         GET: {sub_order_no}; returns {sub_order_no, current_status}, 200
@@ -103,16 +98,55 @@ def status_change(sub_order_no):
     """
     session = StatusTracker.query.filter_by(sub_order_no=sub_order_no).first_or_404()
     curr_status = session.current_status
+    status_id = session.id
 
     # This will update the status of the sub_order_no
     session.current_status = 'Processing'
     db.session.commit()
 
-    status = {'Received', 'Processing', 'Found', 'Printed' 'Mailed/Pickup', 'Not_Found', 'Letter_generated',
-              'Undeliverable''Done'}
-    if request.form:
+    # status = {'Received', 'Processing', 'Found', 'Printed' 'Mailed/Pickup', 'Not_Found', 'Letter_generated',
+    #           'Undeliverable', 'Done'}
+
+    comment = "The Record is Done."
+    new_status = 'Done'
+    # sub_order_no = 9128144811
+
+    if request.form:  # Means that something was passed from the front
         curr_status = str(request.form["status"])
-    return jsonify(current_status=curr_status)
+
+        """ 
+            POST: {sub_order_no, new_status, comment}; 
+            returns: {status_id, sub_order_no, status, comment}, 201 
+        """
+
+        update_status(sub_order_no, comment, new_status)
+
+    return jsonify(current_status=curr_status, sub_order_no=sub_order_no, comment=comment, status_id=status_id)
+
+
+def update_status(sub_order_no, comment, new_status):
+    """
+        POST: {sub_order_no, new_status, comment};
+        returns: {status_id, sub_order_no, status, comment}, 201
+
+    Take in the info, this function only gets called if the form is filled
+     - access the db to get the status_id for this particular order
+     - now create a new row in the db in the status table with
+     - this row should have a status_id + 1 then the highest status row
+     - 1) it will have the same sub_order_no
+     - 2) it will have the comment that was passed in or None
+     - 3) it will have the new status that was passed from the user
+    """
+
+    # session = StatusTracker.query.filter_by(sub_order_no=sub_order_no).first_or_404()
+
+    insert_status = StatusTracker(sub_order_no=sub_order_no,
+                                  current_status=new_status,
+                                  comment=comment,
+                                  timestamp=None)
+
+    db.session.add(insert_status)
+    db.session.commit()
 
 
 def get_orders_by_fields(order_number, suborder_number, order_type, billing_name, user, date_received,
