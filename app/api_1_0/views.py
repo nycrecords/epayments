@@ -1,14 +1,14 @@
 from flask import jsonify, abort, request
 import datetime
 from datetime import date, datetime, timedelta
-from sqlalchemy import func, databases, update
+from sqlalchemy import func, databases, update, desc
 from .import api_1_0 as api
 from app.constants.client_agency_names import CLIENT_AGENCY_NAMES
 from ..models import Orders, Customer, BirthSearch, BirthCertificate, MarriageSearch, MarriageCertificate, \
                      DeathSearch, DeathCertificate, PhotoGallery, PhotoTax, PropertyCard, StatusTracker
 from sqlalchemy.orm import sessionmaker, Query
 from app import db
-
+import json
 
 @api.route('/', methods=['GET'])
 def info():
@@ -68,20 +68,15 @@ def get_orders():
 @api.route('/status/<int:sub_order_no>', methods=['GET'])
 def status_lookup(sub_order_no):
     """
-
     :param sub_order_no:
-    :return: the status of the sub_order_no that was passed in
+    :return: the status of all records with this sub_order_no that was passed in
     """
-    session = StatusTracker.query.filter_by(sub_order_no=sub_order_no).first_or_404()
-    current_status = session.current_status
-    # current_status = 'Done'
+    status = [status.serialize for status in StatusTracker.query.filter_by(sub_order_no=sub_order_no).all()]
 
-    session = StatusTracker.query
-
-    return jsonify(current_status=current_status)
+    return jsonify(status=status)
 
 
-@api.route('/status/<int:sub_order_no>/update', methods=['GET', 'PUT'])
+@api.route('/status/<int:sub_order_no>/update', methods=['GET', 'POST'])
 def status_change(sub_order_no):
     """
         GET: {sub_order_no}; returns {sub_order_no, current_status}, 200
@@ -103,16 +98,93 @@ def status_change(sub_order_no):
     """
     session = StatusTracker.query.filter_by(sub_order_no=sub_order_no).first_or_404()
     curr_status = session.current_status
+    status_id = session.id
 
     # This will update the status of the sub_order_no
     session.current_status = 'Processing'
     db.session.commit()
 
-    status = {'Received', 'Processing', 'Found', 'Printed' 'Mailed/Pickup', 'Not_Found', 'Letter_generated',
-              'Undeliverable''Done'}
-    if request.form:
+    # status = {'Received', 'Processing', 'Found', 'Printed' 'Mailed/Pickup', 'Not_Found', 'Letter_generated',
+    #           'Undeliverable', 'Done'}
+
+    comment = "The Record is Done."
+    new_status = 'Done'
+    # sub_order_no = 9128144811
+
+    if request.form:  # Means that something was passed from the front
         curr_status = str(request.form["status"])
-    return jsonify(current_status=curr_status)
+
+        """ 
+            POST: {sub_order_no, new_status, comment}; 
+            returns: {status_id, sub_order_no, status, comment}, 201 
+        """
+
+        update_status(sub_order_no, comment, new_status)
+
+    return jsonify(current_status=curr_status, sub_order_no=sub_order_no, comment=comment, status_id=status_id)
+
+
+@api.route('/history/<int:sub_order_no>', methods=['GET'])
+def history(sub_order_no):
+    """
+    GET: {sub_order_no};
+    :param sub_order_no:
+    :return: {sub_order_no, previous value, new value, comment, date}, 200
+
+    Look for all the rows with this sub_order_no and list out the history for each one in Descending order
+     also get the comment and date with these to send to the front
+    """
+
+    history = StatusTracker.query.order_by(StatusTracker.timestamp.desc())
+    history_list = [i.serialize for i in history]  # loop through and use the serialize function
+
+    print(history)
+    print(history_list)
+
+    return jsonify(history_list=history_list)
+
+
+def update_status(sub_order_no, comment, new_status):
+    """
+        POST: {sub_order_no, new_status, comment};
+        returns: {status_id, sub_order_no, status, comment}, 201
+
+    Take in the info, this function only gets called if the form is filled
+     - access the db to get the status_id for this particular order
+     - now create a new row in the db in the status table with
+     - this row should have a status_id + 1 then the highest status row
+     - 1) it will have the same sub_order_no
+     - 2) it will have the comment that was passed in or None
+     - 3) it will have the new status that was passed from the user
+    """
+
+    # use datetime to order and filter the orders to find the most recent one
+    """ 
+    
+    """
+
+    current_time = datetime.utcnow()
+    ten_weeks_ago = current_time - datetime.timedelta(weeks=10)
+
+    """ orders = Orders.query.filter(Orders.date_received >= date_received, Orders.date_received <= date_submitted) """
+
+    # subjects_within_the_last_ten_weeks = session.query(Subject).filter(Subject.time > ten_weeks_ago).all()
+
+    previous_value = StatusTracker.query.filter(StatusTracker.timestamp >= current_time).all()
+
+    previous_value = previous_value.current_status
+
+
+    # Need to pull the old info of the last status
+
+    insert_status = StatusTracker(sub_order_no=sub_order_no,
+                                  current_status=new_status,
+                                  comment=comment,
+                                  timestamp=current_time,
+                                  previous_value=previous_value)
+
+    db.session.add(insert_status)
+    db.session.commit()
 
 
 def get_orders_by_fields(order_number, suborder_number, order_type, billing_name, user, date_received,
