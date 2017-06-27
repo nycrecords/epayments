@@ -10,6 +10,7 @@ from sqlalchemy.orm import sessionmaker, Query
 from app import db
 import json
 
+
 @api.route('/', methods=['GET'])
 def info():
     return jsonify({'version': 'v1.0'})
@@ -137,10 +138,9 @@ def history(sub_order_no):
 
     history = StatusTracker.query.order_by(StatusTracker.timestamp.desc())
     history_list = [i.serialize for i in history]  # loop through and use the serialize function
-
     print(history)
     print(history_list)
-
+    
     return jsonify(history_list=history_list)
 
 
