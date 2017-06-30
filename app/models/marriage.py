@@ -58,35 +58,36 @@ class MarriageSearch(db.Model):
     def __init__(
                 self,
                 groom_last_name,
-                groom_first_name,
                 bride_last_name,
-                bride_first_name,
-                relationship,
                 purpose,
                 copy_req,
-                month,
-                day,
                 years,
-                marriage_place,
                 borough,
-                letter,
-                comment,
-                sub_order_no
+                sub_order_no,
+                groom_first_name=None,
+                bride_first_name=None,
+                relationship=None,
+                month=None,
+                day=None,
+                marriage_place=None,
+                letter=None,
+                comment=None
+
     ):
         self.groom_last_name = groom_last_name
-        self.groom_first_name = groom_first_name or None
+        self.groom_first_name = groom_first_name
         self.bride_last_name = bride_last_name
-        self.bride_first_name = bride_first_name or None
-        self.relationship = relationship or None
+        self.bride_first_name = bride_first_name
+        self.relationship = relationship
         self.purpose = purpose
         self.copy_req = copy_req
-        self.month = month or None
-        self.day = day or None
+        self.month = month
+        self.day = day
         self.years = years
-        self.marriage_place = marriage_place or None
+        self.marriage_place = marriage_place
         self.borough = borough
-        self.letter = letter or None
-        self.comment = comment or None
+        self.letter = letter
+        self.comment = comment
         self.sub_order_no = sub_order_no
 
 
@@ -147,34 +148,35 @@ class MarriageCertificate(db.Model):
             self,
             certificate_no,
             groom_last_name,
-            groom_first_name,
             bride_last_name,
-            bride_first_name,
-            relationship,
             purpose,
             copy_req,
-            month,
-            day,
-            years,
-            marriage_place,
             borough,
-            letter,
-            comment,
-            sub_order_no
+            sub_order_no,
+            groom_first_name=None,
+            bride_first_name=None,
+            relationship=None,
+            month=None,
+            day=None,
+            years=None,
+            marriage_place=None,
+            letter=None,
+            comment=None
+
     ):
         self.certificate_no = certificate_no
         self.groom_last_name = groom_last_name
-        self.groom_first_name = groom_first_name or None
+        self.groom_first_name = groom_first_name
         self.bride_last_name = bride_last_name
-        self.bride_first_name = bride_first_name or None
-        self.relationship = relationship or None
+        self.bride_first_name = bride_first_name
+        self.relationship = relationship
         self.purpose = purpose
         self.copy_req = copy_req
-        self.month = month or None
-        self.day = day or None
-        self.years = years or None
-        self.marriage_place = marriage_place or None
+        self.month = month
+        self.day = day
+        self.years = years
+        self.marriage_place = marriage_place
         self.borough = borough
-        self.letter = letter or None
-        self.comment = comment or None
+        self.letter = letter
+        self.comment = comment
         self.sub_order_no = sub_order_no

@@ -32,17 +32,17 @@ class Orders(db.Model):
             order_no,
             sub_order_no,
             date_submitted,
-            date_receivied,
             billing_name,
             customer_email,
             confirmation_message,
-            client_data
+            client_data,
+            date_received=None
 
     ):
         self.order_no = order_no
         self.sub_order_no = sub_order_no
         self.date_submitted = date_submitted
-        self.date_received = date_receivied or None
+        self.date_received = date_received
         self.billing_name = billing_name
         self.customer_email = customer_email
         self.confirmation_message = confirmation_message

@@ -134,7 +134,7 @@ def import_file(file_name):
         insert_order = Orders(order_no=order_no,
                               sub_order_no=sub_order_no,
                               date_submitted=date.today(),
-                              date_receivied=date_received,
+                              date_received=date_received,
                               billing_name=billing_name,
                               customer_email=customer_email,
                               confirmation_message=confirmation_message,

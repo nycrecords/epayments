@@ -59,37 +59,38 @@ class DeathSearch(db.Model):
     def __init__(
                 self,
                 last_name,
-                first_name,
-                mid_name,
-                relationship,
                 purpose,
-                copy_req,
-                cemetery,
-                month,
-                day,
-                years,
-                death_place,
-                age_of_death,
                 borough,
-                letter,
-                comment,
-                sub_order_no
+                sub_order_no,
+                first_name=None,
+                mid_name=None,
+                relationship=None,
+                copy_req=None,
+                cemetery=None,
+                month=None,
+                day=None,
+                years=None,
+                death_place=None,
+                age_of_death=None,
+                letter=None,
+                comment=None
+
     ):
         self.last_name = last_name
-        self.first_name = first_name or None
-        self.mid_name = mid_name or None
-        self.relationship = relationship or None
+        self.first_name = first_name
+        self.mid_name = mid_name
+        self.relationship = relationship
         self.purpose = purpose
-        self.copy_req = copy_req or None
-        self.cemetery = cemetery or None
-        self.month = month or None
-        self.day = day or None
-        self.years = years or None
-        self.death_place = death_place or None
-        self.age_of_death = age_of_death or None
+        self.copy_req = copy_req
+        self.cemetery = cemetery
+        self.month = month
+        self.day = day
+        self.years = years
+        self.death_place = death_place
+        self.age_of_death = age_of_death
         self.borough = borough
-        self.letter = letter or None
-        self.comment = comment or None
+        self.letter = letter
+        self.comment = comment
         self.sub_order_no = sub_order_no
 
 
@@ -152,37 +153,38 @@ class DeathCertificate(db.Model):
             self,
             certificate_no,
             last_name,
-            first_name,
-            mid_name,
-            relationship,
             purpose,
-            copy_req,
-            cemetery,
-            month,
-            day,
             years,
-            death_place,
-            age_of_death,
             borough,
-            letter,
-            comment,
-            sub_order_no
+            sub_order_no,
+            first_name=None,
+            mid_name=None,
+            relationship=None,
+            copy_req=None,
+            cemetery=None,
+            month=None,
+            day=None,
+            death_place=None,
+            age_of_death=None,
+            letter=None,
+            comment=None
+
     ):
         self.certificate_no = certificate_no
         self.last_name = last_name
-        self.first_name = first_name or None
-        self.mid_name = mid_name or None
-        self.relationship = relationship or None
+        self.first_name = first_name
+        self.mid_name = mid_name
+        self.relationship = relationship
         self.purpose = purpose
-        self.copy_req = copy_req or None
-        self.cemetery = cemetery or None
-        self.month = month or None
-        self.day = day or None
+        self.copy_req = copy_req
+        self.cemetery = cemetery
+        self.month = month
+        self.day = day
         self.years = years
-        self.death_place = death_place or None
-        self.age_of_death = age_of_death or None
+        self.death_place = death_place
+        self.age_of_death = age_of_death
         self.borough = borough
-        self.letter = letter or None
-        self.comment = comment or None
+        self.letter = letter
+        self.comment = comment
         self.sub_order_no = sub_order_no
 
