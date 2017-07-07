@@ -3,7 +3,7 @@ from app import create_app, db
 from app.models import Orders, StatusTracker, Customer, BirthSearch, \
     MarriageSearch, DeathSearch, BirthCertificate, MarriageCertificate, \
     DeathCertificate, PropertyCard, PhotoTax, PhotoGallery
-from flask.ext.script import Manager, Shell
+from flask_script import Manager, Shell
 from flask.ext.migrate import Migrate, MigrateCommand
 
 app = create_app(os.getenv('FLASK_CONFIG') or 'default')
