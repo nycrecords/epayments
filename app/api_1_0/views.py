@@ -97,13 +97,15 @@ def status_change(sub_order_no):
             5. Done - End of status changes
         :return: {status_id, sub_order_no, status, comment}, 201
     """
-    session = StatusTracker.query.filter_by(sub_order_no=sub_order_no).first_or_404()
+
+    # session = StatusTracker.query.filter_by(sub_order_no=sub_order_no).first_or_404()
+    session = StatusTracker.query.order_by(StatusTracker.sub_order_no.desc()).first()
     curr_status = session.current_status
     status_id = session.id
 
     # This will update the status of the sub_order_no
-    session.current_status = 'Processing'
-    db.session.commit()
+    # session.current_status = 'Processing'
+    # db.session.commit()
 
     # status = {'Received', 'Processing', 'Found', 'Printed' 'Mailed/Pickup', 'Not_Found', 'Letter_generated',
     #           'Undeliverable', 'Done'}
@@ -120,7 +122,7 @@ def status_change(sub_order_no):
             returns: {status_id, sub_order_no, status, comment}, 201 
         """
 
-        update_status(sub_order_no, comment, new_status)
+    update_status(sub_order_no, comment, new_status)
 
     return jsonify(current_status=curr_status, sub_order_no=sub_order_no, comment=comment, status_id=status_id)
 
@@ -136,12 +138,14 @@ def history(sub_order_no):
      also get the comment and date with these to send to the front
     """
 
-    history = StatusTracker.query.order_by(StatusTracker.timestamp.desc())
-    history_list = [i.serialize for i in history]  # loop through and use the serialize function
-    print(history)
-    print(history_list)
-    
-    return jsonify(history_list=history_list)
+    # history = StatusTracker.query.order_by(StatusTracker.timestamp.desc())
+    # history_list = [i.serialize for i in history]  # loop through and use the serialize function
+    # print(history)
+    # print(history_list)
+
+    history = [status.serialize for status in StatusTracker.query.filter_by(sub_order_no=sub_order_no).all()]
+
+    return jsonify(history=history)
 
 
 def update_status(sub_order_no, comment, new_status):
@@ -158,24 +162,17 @@ def update_status(sub_order_no, comment, new_status):
      - 3) it will have the new status that was passed from the user
     """
 
-    # use datetime to order and filter the orders to find the most recent one
-    """ 
-    
-    """
-
     current_time = datetime.utcnow()
-    ten_weeks_ago = current_time - datetime.timedelta(weeks=10)
+    # ten_weeks_ago = current_time - datetime.timedelta(weeks=10)
 
     """ orders = Orders.query.filter(Orders.date_received >= date_received, Orders.date_received <= date_submitted) """
 
-    # subjects_within_the_last_ten_weeks = session.query(Subject).filter(Subject.time > ten_weeks_ago).all()
+    object_ = StatusTracker.query.filter_by(sub_order_no=sub_order_no).order_by(StatusTracker.timestamp.desc()).first()
 
-    previous_value = StatusTracker.query.filter(StatusTracker.timestamp >= current_time).all()
-
-    previous_value = previous_value.current_status
-
-
-    # Need to pull the old info of the last status
+    if object_ is not None:
+        previous_value = object_.current_status
+    else:
+        previous_value = object_.current_status
 
     insert_status = StatusTracker(sub_order_no=sub_order_no,
                                   current_status=new_status,
