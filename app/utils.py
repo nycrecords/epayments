@@ -124,7 +124,7 @@ def import_file(file_name):
 
         if '-' in ship_to_phone:
             ship_to_phone = ship_to_phone.strip('-')
-            print("Stripped the -")
+            # print("Stripped the -")
 
         shipping_instructions = shipping_add.find("ShippingInstructions").text
 
@@ -146,6 +146,8 @@ def import_file(file_name):
 
         # Insert into the StatusTracker Table
         insert_status = StatusTracker(sub_order_no=sub_order_no,
+                                      # current_status='Received',
+                                      # current_status='dfjhsjdhsjhdjsh',
                                       current_status='Received',
                                       comment=None,
                                       timestamp=None)

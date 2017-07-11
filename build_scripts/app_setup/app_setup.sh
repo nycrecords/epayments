@@ -42,4 +42,4 @@ yum -y install telnet-server
 yum -y install telnet
 
 # 9. Automatically Use Virtualenv
-echo "source /home/vagrant/.virtualenvs/openrecords_v2_0/bin/activate" >> /home/vagrant/.bash_profile
+echo "source /home/vagrant/.virtualenvs/epayments/bin/activate" >> /home/vagrant/.bash_profile

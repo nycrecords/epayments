@@ -112,6 +112,7 @@ def status_change(sub_order_no):
     # sub_order_no = 9128144811
 
     if request.form:  # Means that something was passed from the front
+                      # Is this done another way thru react
         curr_status = str(request.form["status"])
 
         """ 
@@ -119,7 +120,12 @@ def status_change(sub_order_no):
             returns: {status_id, sub_order_no, status, comment}, 201 
         """
 
-        update_status(sub_order_no, comment, new_status)
+        update_status(sub_order_no, comment, curr_status)
+
+    """ TEST case to update status 
+    # This function is just to test that new status/comments can be added to the DB 
+    update_status(sub_order_no, comment, new_status)
+    """
 
     return jsonify(current_status=curr_status, sub_order_no=sub_order_no, comment=comment, status_id=status_id)
 

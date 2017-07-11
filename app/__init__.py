@@ -11,8 +11,8 @@ from flask_bootstrap import Bootstrap
 from flask_apscheduler import APScheduler
 from flask.ext.cors import CORS
 from apscheduler.triggers.cron import CronTrigger
-
 from config import config
+
 
 # Flask extensions
 bootstrap = Bootstrap()
