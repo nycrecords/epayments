@@ -1,0 +1,5 @@
+.react-datepicker__input-container {
+    /* Lengthens the Date Received fields so that they
+     stretch to the same length as the other form fields */
+    width: 100%;
+}
