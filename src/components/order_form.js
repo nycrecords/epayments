@@ -43,7 +43,7 @@ class OrderForm extends React.Component {
             subordernumber: ''
 
         };
-
+        // TODO: Implement CSRF token
         this.onSubmitTaskForm = () => {
             fetch('todo/api/v1.0/tasks', {
                 method: "POST",

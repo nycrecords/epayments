@@ -3,16 +3,15 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
-    "axios": "^0.16.1",
     "moment": "^2.18.1",
     "react": "^15.5.4",
-    "react-axios": "0.0.9",
     "react-datepicker": "^0.46.0",
     "react-dom": "^15.5.4",
     "react-text-mask": "^5.0.1",
     "semantic-ui-css": "^2.2.10",
     "semantic-ui-react": "^0.68.0",
-    "whatwg-fetch": "^2.0.3"
+    "whatwg-fetch": "^2.0.3",
+    "json-server":"0.11.2"
   },
   "devDependencies": {
     "react-scripts": "0.9.5"
