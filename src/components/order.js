@@ -4,29 +4,14 @@
 import React from 'react';
 import {Button, Divider, Header, Dropdown, Modal} from 'semantic-ui-react';
 import 'semantic-ui-css/semantic.min.css';
+import StatusModal from './status_modal';
 
 class Order extends React.Component {
     render() {
         return (
             <div>
+                <StatusModal/>
                 Order #: {this.props.order_no}
-                {/* TODO: Put in a new component!!!!!
-                           */}
-                <Modal trigger={<Button compact size='mini' floated='right'>Update</Button>}>
-                    <Modal.Header>
-                        <Modal.Content>
-                            Status
-                            <Modal.Description>
-                                <Header>Status Content</Header>
-                                <p>And Smaller Status Content</p>
-                            </Modal.Description>
-                        </Modal.Content>
-                    </Modal.Header>
-                    <Modal.Actions>
-                        <Button negative>Cancel</Button>
-                        <Button positive>Confirm</Button>
-                    </Modal.Actions>
-                </Modal>
                 <Button compact size='mini' floated='right'>Status</Button>
                 <br/>
                 Suborder #: {this.props.suborder_no} <br/>
