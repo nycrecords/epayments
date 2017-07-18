@@ -69,34 +69,35 @@ class PhotoTax(db.Model):
                 self,
                 borough,
                 collection,
-                roll,
-                block,
-                lot,
                 street_no,
                 street,
-                description,
                 type,
                 size,
                 copies,
                 mail_pickup,
-                contact_no,
-                comment,
-                sub_order_no
+                sub_order_no,
+                roll='N/A',
+                block='N/A',
+                lot='N/A',
+                description='N/A',
+                contact_no='N/A',
+                comment='N/A'
+
     ):
         self.borough = borough
         self.collection = collection
-        self.roll = roll or 'N/A'
-        self.block = block or 'N/A'
-        self.lot = lot or 'N/A'
+        self.roll = roll
+        self.block = block
+        self.lot = lot
         self.street_no = street_no
         self.street = street
-        self.description = description or 'N/A'
+        self.description = description
         self.type = type
         self.size = size
         self.copies = copies
         self.mail_pickup = mail_pickup
-        self.contact_no = contact_no or 'N/A'
-        self.comment = comment or 'N/A'
+        self.contact_no = contact_no
+        self.comment = comment
         self.sub_order_no = sub_order_no
 
 
@@ -140,23 +141,24 @@ class PhotoGallery(db.Model):
     def __init__(
                 self,
                 image_id,
-                description,
-                additional_description,
                 size,
                 copy,
                 mail_pickup,
-                contact_no,
                 personal_use_agreement,
-                comment,
-                sub_order_no
+                sub_order_no,
+                description='N/A',
+                additional_description='N/A',
+                contact_no='N/A',
+                comment='N/A'
+
     ):
         self.image_id = image_id
-        self.description = description or 'N/A'
-        self.additional_description = additional_description or 'N/A'
+        self.description = description
+        self.additional_description = additional_description
         self.size = size
         self.copy = copy
         self.mail_pickup = mail_pickup
-        self.contact_no = contact_no or 'N/A'
+        self.contact_no = contact_no
         self.personal_use_agreement = personal_use_agreement
-        self.comment = comment or 'N/A'
+        self.comment = comment
         self.sub_order_no = sub_order_no

@@ -65,40 +65,41 @@ class BirthSearch(db.Model):
 
     def __init__(
                 self,
-                first_name,
                 last_name,
-                mid_name,
                 gender_type,
-                father_name,
-                mother_name,
-                relationship,
                 purpose,
                 additional_copy,
-                month,
-                day,
                 years,
-                birth_place,
                 borough,
-                letter,
-                comment,
-                sub_order_no
+                sub_order_no,
+                first_name=None,
+                mid_name=None,
+                father_name=None,
+                mother_name=None,
+                relationship=None,
+                month=None,
+                day=None,
+                birth_place=None,
+                letter=None,
+                comment=None
+
     ):
-        self.first_name = first_name or None
+        self.first_name = first_name
         self.last_name = last_name
-        self.mid_name = mid_name or None
+        self.mid_name = mid_name
         self.gender_type = gender_type
-        self.father_name = father_name or None
-        self.mother_name = mother_name or None
-        self.relationship = relationship or None
+        self.father_name = father_name
+        self.mother_name = mother_name
+        self.relationship = relationship
         self.purpose = purpose
         self.additional_copy = additional_copy
-        self.month = month or None
-        self.day = day or None
+        self.month = month
+        self.day = day
         self.years = years
-        self.birth_place = birth_place or None
+        self.birth_place = birth_place
         self.borough = borough
-        self.letter = letter or None
-        self.comment = comment or None
+        self.letter = letter
+        self.comment = comment
         self.sub_order_no = sub_order_no
 
 
@@ -166,40 +167,41 @@ class BirthCertificate(db.Model):
     def __init__(
             self,
             certificate_no,
-            first_name,
             last_name,
-            mid_name,
-            gender_type,
-            father_name,
-            mother_name,
-            relationship,
             purpose,
             additional_copy,
-            month,
-            day,
             years,
-            birth_place,
             borough,
-            letter,
-            comment,
-            sub_order_no
+            sub_order_no,
+            first_name=None,
+            mid_name=None,
+            gender_type=None,
+            father_name=None,
+            mother_name=None,
+            relationship=None,
+            month=None,
+            day=None,
+            birth_place=None,
+            letter=None,
+            comment=None
+
     ):
         self.certificate_no = certificate_no
-        self.first_name = first_name or None
+        self.first_name = first_name
         self.last_name = last_name
-        self.mid_name = mid_name or None
-        self.gender_type = gender_type or None
-        self.father_name = father_name or None
-        self.mother_name = mother_name or None
-        self.relationship = relationship or None
+        self.mid_name = mid_name
+        self.gender_type = gender_type
+        self.father_name = father_name
+        self.mother_name = mother_name
+        self.relationship = relationship
         self.purpose = purpose
         self.additional_copy = additional_copy
-        self.month = month or None
-        self.day = day or None
+        self.month = month
+        self.day = day
         self.years = years
-        self.birth_place = birth_place or None
+        self.birth_place = birth_place
         self.borough = borough
-        self.letter = letter or None
-        self.comment = comment or None
+        self.letter = letter
+        self.comment = comment
         self.sub_order_no = sub_order_no
 

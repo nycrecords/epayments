@@ -33,22 +33,22 @@ class Customer(db.Model):
     def __init__(
                 self,
                 name,
-                address_line_1,
-                address_line_2,
                 city,
-                state,
                 zip_code,
                 country,
-                phone,
-                instructions
+                address_line_1=None,
+                address_line_2=None,
+                state=None,
+                phone=None,
+                instructions=None
 
     ):
         self.name = name
-        self.address_line_1 = address_line_1 or None
-        self.address_line_2 = address_line_2 or None
+        self.address_line_1 = address_line_1
+        self.address_line_2 = address_line_2
         self.city = city
         self.state = state
         self.zip_code = zip_code
         self.country = country
-        self.phone = phone or None
-        self.instructions = instructions or None
+        self.phone = phone
+        self.instructions = instructions

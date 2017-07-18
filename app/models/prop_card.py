@@ -37,23 +37,24 @@ class PropertyCard(db.Model):
     def __init__(
                 self,
                 borough,
-                block,
-                lot,
                 building_no,
                 street,
-                description,
                 certified,
                 mail_pickup,
-                contact_info,
-                sub_order_no
+                sub_order_no,
+                block=None,
+                lot=None,
+                description=None,
+                contact_info=None
+
     ):
         self.borough = borough
-        self.block = block or None
-        self.lot = lot or None
+        self.block = block
+        self.lot = lot
         self.building_no = building_no
         self.street = street
-        self.description = description or None
+        self.description = description
         self.certified = certified
         self.mail_pickup = mail_pickup
-        self.contact_info = contact_info or None
+        self.contact_info = contact_info
         self.sub_order_no = sub_order_no
