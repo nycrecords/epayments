@@ -13,10 +13,14 @@ class StatusModal extends React.Component {
         modalOpen: false,
     });
 
-    statuses=[
+    statuses = [
         {
-            text:'open',
-            value:'test'
+            text: 'open',
+            value: 'test',
+        },
+        {
+            text: 'testing again',
+            value: 'testing again',
         }
     ];
 
@@ -33,7 +37,7 @@ class StatusModal extends React.Component {
                             <Header>
                                 <p> - Current Status - </p>
                                 <Form>
-                                <Dropdown placeholder="Status" selection options={this.statuses}/>
+                                    <Dropdown placeholder="Status" selection options={this.statuses}/>
                                 </Form>
                             </Header>
                             <Form>

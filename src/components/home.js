@@ -4,9 +4,6 @@ import OrderForm from "./order_form";
 import Order from "./order";
 import "../data/orders.json";
 
-//Separates the page into three columns: The search form, divider, and orders list.
-var order = [];
-
 class Home extends React.Component {
     state = {
         all_orders: []
