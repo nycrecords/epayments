@@ -73,9 +73,9 @@ class OrderForm extends React.Component {
                          Date Received Start and End are input fields that call the React Datepicker component
                          */}
 
-                        <Form.Input label="Order Number" placeholder="Order Number" maxLength="64" required
+                        <Form.Input label="Order Number" placeholder="Order Number" maxLength="64"
                                     onChange={(e, {value}) => {
-                                        if (/^[0-9]+$/.test(value.slice(-1)) || value === 'e') {
+                                        if (/^[0-9]+$/.test(value.slice(-1)) || value === '') {
                                             this.setState({ordernumber: value})
                                         }
                                     }}
