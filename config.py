@@ -35,7 +35,8 @@ class DevelopmentConfig(Config):
 
 class TestingConfig(Config):
     TESTING = True
-    SQLALCHEMY_DATABASE_URI = 'postgresql://developer:@localhost:5432/epayments'
+    SQLALCHEMY_DATABASE_URI = (os.environ.get('TEST_DATABASE_URL') or 'postgresql://developer@127.0.0.1:5432/epayments_test')
+    WTF_CSRF_ENABLED = False
 
 
 class ProductionConfig(Config):
