@@ -1,0 +1,26 @@
+{
+  "name": "epayments",
+  "version": "0.1.0",
+  "private": true,
+  "dependencies": {
+    "moment": "^2.18.1",
+    "react": "^15.5.4",
+    "react-datepicker": "^0.46.0",
+    "react-dom": "^15.5.4",
+    "react-text-mask": "^5.0.1",
+    "semantic-ui-css": "^2.2.10",
+    "semantic-ui-react": "^0.68.0",
+    "whatwg-fetch": "^2.0.3",
+    "json-server":"0.11.2"
+  },
+  "devDependencies": {
+    "react-scripts": "0.9.5"
+  },
+  "scripts": {
+    "start": "react-scripts start",
+    "build": "react-scripts build",
+    "test": "react-scripts test --env=jsdom",
+    "eject": "react-scripts eject"
+  },
+  "proxy": "http://127.0.0.1:3000"
+}

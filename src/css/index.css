@@ -1,0 +1,29 @@
+.react-datepicker__input-container {
+    width: 100%;
+}
+
+input, label {
+    display: block;
+}
+
+.ui.selection.dropdown{
+    min-width: 10%;
+}
+
+.ui.container {
+    /*max-height: calc(100vh - 50px); !*set back to 40 to test *!*/
+    height:100%;
+}
+.eleven.wide.column {
+    max-height: calc(80vh); /*set back to 40 to test */
+    overflow: scroll;
+}
+.field{
+    width: 100%;
+}
+
+html, body {
+    margin: 0;
+    height: 100%;
+    overflow: hidden
+}
