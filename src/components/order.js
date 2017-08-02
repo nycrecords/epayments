@@ -15,7 +15,7 @@ class Order extends React.Component {
                 <Button compact size='mini' floated='right' color="green">Status</Button>
                 <br/>
                 Suborder #: {this.props.suborder_no} <br/>
-                Order Type: {this.props.order_type} <Button basic color="green" compact size='mini' content='History' icon='chevron down'
+                Order Type: {this.props.client_agency_name} <Button basic color="green" compact size='mini' content='History' icon='chevron down'
                                     labelPosition='right' floated='right'/><br/>
                 Billing Name: {this.props.billing_name} <br/>
                 Date Received: {this.props.date_received} <br/>

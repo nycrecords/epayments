@@ -61,16 +61,16 @@ class Orders(db.Model):
     def serialize(self):
         """Return object data in easily serializeable format"""
         return {
-            'orderno': self.order_no,
-            'suborderno': self.sub_order_no,
-            'datesubmitted': self.date_submitted,
-            'datereceived': str(self.date_received),
-            'billingname': self.billing_name,
-            'customeremail': self.customer_email,
-            'confirmationmessage': self.confirmation_message,
-            'clientdata': self.client_data,
-            'clientid': self.client_id,
-            'clientagencyname': self.client_agency_name
+            'order_no': self.order_no,
+            'suborder_no': self.sub_order_no,
+            'date_submitted': self.date_submitted,
+            'date_received': str(self.date_received),
+            'billing_name': self.billing_name,
+            'customer_email': self.customer_email,
+            'confirmation_message': self.confirmation_message,
+            'client_data': self.client_data,
+            'client_id': self.client_id,
+            'client_agency_name': self.client_agency_name
         }
 
 
@@ -135,11 +135,11 @@ class StatusTracker(db.Model):
 
     @property
     def serialize(self):
-        """Return object data in easily serializeable format"""
+        """Return object data in easily serializable format"""
         return {
-            'suborderno': self.sub_order_no,
-            'currentstatus': self.current_status,
+            'suborder_no': self.sub_order_no,
+            'current_status': self.current_status,
             'comment': self.comment,
             'timestamp': self.timestamp,
-            'previousvalue': self.previous_value,
+            'previous_value': self.previous_value,
         }

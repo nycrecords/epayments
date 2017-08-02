@@ -63,7 +63,7 @@ def get_orders():
         # orders = [order.serialize for order in Orders.query.filter_by(date_received=yesterday).all()]
         orders = [order.serialize for order in Orders.query.filter_by().all()]
         print("Here")
-        return jsonify(orders=orders)
+        return jsonify(all_orders=orders)
 
 
 @api.route('/status/<int:sub_order_no>', methods=['GET'])
