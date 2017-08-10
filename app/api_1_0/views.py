@@ -11,12 +11,13 @@ from app import db
 import json
 from .utils import update_status, get_orders_by_fields
 
+
 @api.route('/', methods=['GET'])
 def info():
     return jsonify({'version': 'v1.0'})
 
 
-@api.route('/orders', methods=['GET'])
+@api.route('/orders', methods=['GET', 'POST'])
 def get_orders():
     """
     Retrieves the data for orders to be displayed.
@@ -47,8 +48,13 @@ def get_orders():
         "suborderno": 9127848504
 
     """
+    # get_json()
+
+    order_number = request.args.get('ordernumber', '')
+    print(order_number)
     if request.form:
-        order_number = str(request.form["order_number"])
+        order_number = str(request.args.get('ordernumber', ''))
+        # order_number = str(request.form["order_number"])
         suborder_number = str(request.form["suborder_number"])
         order_type = request.form["order_type"]
         billing_name = str(request.form["billing_name"])
@@ -62,7 +68,7 @@ def get_orders():
         yesterday = datetime.strptime(date.today().strftime("%Y-%m-%d %H:%M:%S"), "%Y-%m-%d %H:%M:%S")
         # orders = [order.serialize for order in Orders.query.filter_by(date_received=yesterday).all()]
         orders = [order.serialize for order in Orders.query.filter_by().all()]
-        print("Here")
+        print ("Hello")
         return jsonify(all_orders=orders)
 
 

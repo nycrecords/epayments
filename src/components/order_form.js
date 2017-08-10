@@ -45,11 +45,11 @@ class OrderForm extends React.Component {
         };
         // TODO: Implement CSRF token
         this.onSubmitTaskForm = () => {
-            fetch('todo/api/v1.0/tasks', {
+            fetch('api/v1.0/orders', {
                 method: "POST",
                 body: JSON.stringify({
-                    title: this.form.state.title,
-                    description: this.form.state.description
+                    order_no: this.state.ordernumber,
+                    suborder_no: this.state.subordernumber
                 })
             }).then((response) => {
                 return response.json()
@@ -60,6 +60,11 @@ class OrderForm extends React.Component {
             });
         };
     }
+
+    handleSubmit(event) {
+        event.preventDefault()
+    }
+
     render() {
         return (
             <Container>
@@ -89,6 +94,7 @@ class OrderForm extends React.Component {
                                         }
                                     }}
                                     value={this.state.subordernumber}
+
                         />
                         <Form.Select label="Order Type"
                                      defaultValue="all"
@@ -103,7 +109,7 @@ class OrderForm extends React.Component {
                             <Date />
                         </Form.Field>
                         <Button type="reset" content="Clear"/>
-                        <Button type='submit' positive floated="right" content="Apply">
+                        <Button type='submit' positive floated="right" onSubmit={this.handleSubmit()} onClick={this.onSubmitTaskForm} content="Apply">
                         </Button>
                     </Form>
             </Container>
