@@ -40,7 +40,11 @@ class OrderForm extends React.Component {
 
         this.state = {
             ordernumber: '',
-            subordernumber: ''
+            subordernumber: '',
+            order_type: '',
+            billing_name: '',
+            date_received: '',
+            date_submitted: ''
 
         };
         // TODO: Implement CSRF token
@@ -50,7 +54,11 @@ class OrderForm extends React.Component {
                 method: "POST",
                 body: JSON.stringify({
                     order_no: this.state.ordernumber,
-                    suborder_no: this.state.subordernumber
+                    suborder_no: this.state.subordernumber,
+                    order_type: this.state.order_type,
+                    billing_name: this.state.billing_name,
+                    date_received: this.state.date_received,
+                    date_submitted: this.state.date_received
                 })
             }).then((response) => {
                 return response.json()
@@ -92,10 +100,23 @@ class OrderForm extends React.Component {
                                     value={this.state.subordernumber}
 
                         />
-                        <Form.Select label="Order Type"
-                                     defaultValue="all"
-                                     options={options}/>
-                        <Form.Field label="Billing Name" placeholder="Billing Name" maxLength="64" control="input"/>
+                        <Form.Select label="Order Type" defaultValue="all" options={options}
+                                     // onchange={(e,{value}) => {
+                                     //     this.setState({order_type: value})
+                                     // }
+                                     //
+                                     // }
+                                     // value={this.state.order_type}
+                        />
+                        {/*<Form.Field label="Billing Name" placeholder="Billing Name" maxLength="64" control="input"/>*/}
+                        <Form.Input label="Billing Name" placeholder="Billing Name" maxLength="64"
+                                    onChange={(e, {value}) => {
+                                        if (/^[a-z,A-Z]+$/.test(value.slice(-1)) || value === ''){
+                                            this.setState({billing_name: value})
+                                        }
+                                    }}
+                                    value={this.state.billing_name}
+                        />
                         <Form.Field onKeyPress={this.handleKeyPress}>
                             <label>Date Received Start</label>
                             <Date />

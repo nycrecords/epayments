@@ -52,18 +52,24 @@ def get_orders():
 
     order_number = request.args.get('ordernumber', '')
     print(order_number)
-    if request.method == 'POST':  # makes it so we get a post method to recieve the info put in on the form
+    if request.method == 'POST':  # makes it so we get a post method to receive the info put in on the form
     # if request.form:
-        order_number = str(request.args.get('ordernumber', ''))
-        # order_number = str(request.form["order_number"])
-        suborder_number = str(request.form["suborder_number"])
-        order_type = request.form["order_type"]
-        billing_name = str(request.form["billing_name"])
-        user = str(request.form["user"])
-        date_received = request.form["date_received"]
-        date_submitted = request.form["date_submitted"]
+    #     order_number = str(request.args.get('ordernumber', ''))
+        json = request.get_json(force=True)
+        order_number = json.get("order_no")
+        suborder_number = json.get("suborder_no")
+        print('hellodsds')
+        order_type = json.get("order_type")
+        billing_name = json.get("billing_name")
+        # user = str(request.form["user"])
+        user = ''
+        date_received = json.get("date_deceived")
+        date_submitted = json.get("date_submitted")
+
         orders = get_orders_by_fields(order_number, suborder_number, order_type, billing_name, user, date_received,
                                       date_submitted)
+        print("hello")
+        print(orders)
         return jsonify(orders=orders)
     else:
         yesterday = datetime.strptime(date.today().strftime("%Y-%m-%d %H:%M:%S"), "%Y-%m-%d %H:%M:%S")
