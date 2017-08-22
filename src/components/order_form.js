@@ -44,7 +44,8 @@ class OrderForm extends React.Component {
 
         };
         // TODO: Implement CSRF token
-        this.onSubmitTaskForm = () => {
+        this.handleSubmit = (e) => {
+            e.preventDefault();
             fetch('api/v1.0/orders', {
                 method: "POST",
                 body: JSON.stringify({
@@ -61,15 +62,10 @@ class OrderForm extends React.Component {
         };
     }
 
-    handleSubmit(event) {
-        event.preventDefault()
-    }
-
     render() {
         return (
             <Container>
-                    <Form>
-
+                    <Form onSubmit={this.handleSubmit}>
                         {/*This component defines the form fields required for the search form:
 
                          The Order Number, Suborder Number, Order Type, Billing Name, Date Received Start and End.
@@ -109,7 +105,7 @@ class OrderForm extends React.Component {
                             <Date />
                         </Form.Field>
                         <Button type="reset" content="Clear"/>
-                        <Button type='submit' positive floated="right" onSubmit={this.handleSubmit()} onClick={this.onSubmitTaskForm} content="Apply">
+                        <Button type='submit' positive floated="right" content="Apply">
                         </Button>
                     </Form>
             </Container>

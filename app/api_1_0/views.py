@@ -52,7 +52,8 @@ def get_orders():
 
     order_number = request.args.get('ordernumber', '')
     print(order_number)
-    if request.form:
+    if request.method == 'POST':  # makes it so we get a post method to recieve the info put in on the form
+    # if request.form:
         order_number = str(request.args.get('ordernumber', ''))
         # order_number = str(request.form["order_number"])
         suborder_number = str(request.form["suborder_number"])
@@ -68,7 +69,6 @@ def get_orders():
         yesterday = datetime.strptime(date.today().strftime("%Y-%m-%d %H:%M:%S"), "%Y-%m-%d %H:%M:%S")
         # orders = [order.serialize for order in Orders.query.filter_by(date_received=yesterday).all()]
         orders = [order.serialize for order in Orders.query.filter_by().all()]
-        print ("Hello")
         return jsonify(all_orders=orders)
 
 
