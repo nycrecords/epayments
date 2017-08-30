@@ -11,25 +11,47 @@ class Date extends React.Component {
     constructor (props) {
         super(props);
         this.state = {
-            startDate: moment()
+            date_received: moment(),
+            date_submitted: moment()
         };
         this.handleChange = this.handleChange.bind(this);
+        fetch('api/v1.0/orders', {
+            method: 'POST',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                date_received: this.state.date_received,
+                date_submitted: this.state.date_submitted,
+            })
+        })
     }
 
     handleChange(date) {
         this.setState({
-            startDate: date
+            date_received: date,
+            date_submitted: date
         });
+
+        console.log(date);
     }
+    handleDate(date) {
+        this.setState({date: date._d})
+    };
+
 
     render() {
         return <DatePicker
-            placeholderText={this.state.startDate}
+            placeholderText={this.state.date_received}
             todayButton="Today"
-            selected={this.state.startDate}
+            selected={this.state.date_submitted}
+            // selected={}
             onChange={this.handleChange}
+
         />;
     }
+
 }
 
 export default Date

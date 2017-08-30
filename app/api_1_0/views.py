@@ -58,19 +58,21 @@ def get_orders():
         json = request.get_json(force=True)
         order_number = json.get("order_no")
         suborder_number = json.get("suborder_no")
-        print('hellodsds')
         order_type = json.get("order_type")
         billing_name = json.get("billing_name")
         # user = str(request.form["user"])
         user = ''
-        date_received = json.get("date_deceived")
+        date_received = json.get("date_received")
         date_submitted = json.get("date_submitted")
-
+        print("date_received")
+        print(date_received)
+        print("date_submitted")
+        print(date_submitted)
         orders = get_orders_by_fields(order_number, suborder_number, order_type, billing_name, user, date_received,
                                       date_submitted)
-        print("hello")
         print(orders)
         return jsonify(orders=orders)
+
     else:
         yesterday = datetime.strptime(date.today().strftime("%Y-%m-%d %H:%M:%S"), "%Y-%m-%d %H:%M:%S")
         # orders = [order.serialize for order in Orders.query.filter_by(date_received=yesterday).all()]
@@ -81,7 +83,7 @@ def get_orders():
 @api.route('/status/<int:sub_order_no>', methods=['GET'])
 def status_lookup(sub_order_no):
     """
-    :param sub_order_no:
+    :param sub_order_no:re
     :return: the status of all records with this sub_order_no that was passed in
     """
     status = [status.serialize for status in StatusTracker.query.filter_by(sub_order_no=sub_order_no).all()]

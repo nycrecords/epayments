@@ -11,12 +11,12 @@ import 'semantic-ui-css/semantic.min.css';
 const options = [
     {key: 'all', text: 'All', value: 'all'},
     {key: 'vitalrecords', text: '--Vital Records--', value: 'vital records'},
-    {key: 'birthsearch', text: 'Birth Search', value: 'birth search'},
-    {key: 'marriagesearch', text: 'Marriage Search', value: 'marriage search'},
-    {key: 'deathsearch', text: 'Death Search', value: 'death search'},
-    {key: 'birthcert', text: 'Birth Certificate', value: 'birth certificate'},
-    {key: 'marriagecert', text: 'Marriage Certificate', value: 'marriage certificate'},
-    {key: 'deathcert', text: 'Death Certificate', value: 'death certificate'},
+    {key: 'birthsearch', text: 'Birth Search', value: 'Birth search'},
+    {key: 'marriagesearch', text: 'Marriage Search', value: 'Marriage search'},
+    {key: 'deathsearch', text: 'Death Search', value: 'Death search'},
+    {key: 'birthcert', text: 'Birth Certificate', value: 'Birth cert'},
+    {key: 'marriagecert', text: 'Marriage Certificate', value: 'Marriage cert'},
+    {key: 'deathcert', text: 'Death Certificate', value: 'Death cert'},
     {key: 'photos', text: '--Photos--', value: 'photos'},
     {key: 'propertytax', text: 'Property Tax', value: 'property tax'},
     {key: 'phototax', text: 'Photo Tax', value: 'photo tax'},
@@ -42,9 +42,7 @@ class OrderForm extends React.Component {
             ordernumber: '',
             subordernumber: '',
             order_type: '',
-            billing_name: '',
-            date_received: '',
-            date_submitted: ''
+            billing_name: ''
 
         };
         // TODO: Implement CSRF token
@@ -56,9 +54,7 @@ class OrderForm extends React.Component {
                     order_no: this.state.ordernumber,
                     suborder_no: this.state.subordernumber,
                     order_type: this.state.order_type,
-                    billing_name: this.state.billing_name,
-                    date_received: this.state.date_received,
-                    date_submitted: this.state.date_received
+                    billing_name: this.state.billing_name
                 })
             }).then((response) => {
                 return response.json()
@@ -100,13 +96,13 @@ class OrderForm extends React.Component {
                                     value={this.state.subordernumber}
 
                         />
-                        <Form.Select label="Order Type" defaultValue="all" options={options}
-                                     // onchange={(e,{value}) => {
-                                     //     this.setState({order_type: value})
-                                     // }
-                                     //
-                                     // }
-                                     // value={this.state.order_type}
+                        <Form.Select label="Order Type" placeholder="Order Type" options={options} defaultValue=''
+                                     onChange={(e, {value}) => {
+                                         this.setState({order_type: value})
+                                     }
+
+                                     }
+                                     value={this.state.order_type}
                         />
                         {/*<Form.Field label="Billing Name" placeholder="Billing Name" maxLength="64" control="input"/>*/}
                         <Form.Input label="Billing Name" placeholder="Billing Name" maxLength="64"
@@ -118,9 +114,12 @@ class OrderForm extends React.Component {
                                     value={this.state.billing_name}
                         />
                         <Form.Field onKeyPress={this.handleKeyPress}>
+
                             <label>Date Received Start</label>
-                            <Date />
+                            {/* this will call the date picker calender drop down in datepicker.js*/}
+                            <Date/>
                         </Form.Field>
+
                         <Form.Field onKeyPress={this.handleKeyPress}>
                             <label>Date Received End</label>
                             <Date />

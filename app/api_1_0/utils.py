@@ -48,27 +48,39 @@ def get_orders_by_fields(order_number, suborder_number, order_type, billing_name
     :return:
     """
     vitalrecordslist = {'Birth search', 'Birth cert', 'Marriage search', 'Marriage cert', 'Death search', 'Death cert'}
-    photolist = {'tax photo', 'online gallery', 'prop card'}
+    photolist = {'photo tax', 'photo gallery', 'property tax'}
+    other = {'multiple items in cart', 'vital records and photos in cart'}
+
     yesterday = datetime.strptime(date.today().strftime("%Y-%m-%d %H:%M:%S"), "%Y-%m-%d %H:%M:%S")
-    orders = Orders.query.filter(Orders.date_received >= date_received, Orders.date_received <= date_submitted)
-    if len(date_received) < 1:
-        date_received_start = yesterday  # set the date received start to yesterday if nothing passed in form
-    if len(date_submitted) < 1:
-        date_received_end = yesterday  # set the date received end to yesterday if nothing passed in form
-    orders = Orders.query.filter(Orders.date_received >= date_received, Orders.date_received <= date_submitted)
-    if len(order_number) != 0:
-        orders = orders.filter(Orders.client_id == order_number)
-    if len(suborder_number) != 0:
-        orders = orders.filter(Orders.suborderno == suborder_number)
-    if len(billing_name) != 0:
+    # orders = Orders.query.filter(Orders.date_received >= date_received, Orders.date_received <= date_submitted)
+    if date_received is None:
+        date_received = yesterday  # set the date received start to yesterday if nothing passed in form
+    if date_submitted is None:
+        date_submitted = yesterday  # set the date received end to yesterday if nothing passed in form
+    orders = Orders.query.filter(Orders.date_received >= date_received, Orders.date_submitted <= date_submitted)
+    """ 
+    2017-07-28 00:00:00.000000 - Orders.date_submitted >= 
+    2017-04-04 04:06:15.000000 - Orders.date_received 
+    2017-08-30 11:39:22.3922   - date_received 
+    2017-08-30 11:39:22.3922   - date_submitted
+    
+    2017-04-04 04:06:15.000000 >= 2017-08-30 11:39:22.3922, 2017-04-04 04:06:15.000000 <= 2017-08-30 11:39:22.3922
+    
+    """
+    if order_number is not '':
+        orders = orders.filter(Orders.order_no == order_number)
+    if suborder_number is not '':
+        orders = orders.filter(Orders.sub_order_no == suborder_number)
+    if billing_name is not '':
         orders = orders.filter(func.lower(Orders.billing_name).contains(func.lower(billing_name)))
-    if len(order_type) != 4 and order_type not in ['All', 'multipleitems', 'vitalrecordsphotos']:
+    # print(orders)
+    if order_type not in ['All', 'multipleitems', 'vitalrecordsphotos']:
         orders = orders.filter(Orders.client_agency_name == order_type)
-    elif order_type == 'multipleitems':
-        orders = [order for order in orders if len(order.ordertypes.split(',')) > 1]
-    elif order_type == 'vitalrecordsphotos':
-        orders = [order for order in orders if
-                  not set(order.ordertypes.split(',')).isdisjoint(vitalrecordslist) and not set(order.ordertypes.split(
-                      ',')).isdisjoint(photolist)]
+    # elif order_type == 'multipleitems':
+    #     orders = [order for order in orders if len(order.ordertypes.split(',')) > 1]
+    # elif order_type == 'vitalrecordsphotos':
+    #     orders = [order for order in orders if
+    #               not set(order.ordertypes.split(',')).isdisjoint(vitalrecordslist) and not set(order.ordertypes.split(
+    #                   ',')).isdisjoint(photolist)]
     order_list = [order.serialize for order in orders]
     return order_list
