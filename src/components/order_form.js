@@ -38,6 +38,16 @@ class OrderForm extends React.Component {
             }
         };
 
+        this.clearSelection = () => {
+            console.log("Cleared");
+            this.setState({
+                ordernumber: '',
+                subordernumber: '',
+                order_type: '',
+                billing_name: ''
+            })
+        };
+
         this.state = {
             ordernumber: '',
             subordernumber: '',
@@ -124,7 +134,7 @@ class OrderForm extends React.Component {
                             <label>Date Received End</label>
                             <Date />
                         </Form.Field>
-                        <Button type="reset" content="Clear"/>
+                        <Button type="reset" onClick={this.clearSelection} content="Clear"/>
                         <Button type='submit' positive floated="right" content="Apply">
                         </Button>
                     </Form>
