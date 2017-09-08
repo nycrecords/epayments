@@ -6,6 +6,8 @@ import {Form, Button, Container} from 'semantic-ui-react';
 import Date from './datepicker'
 import 'react-datepicker/dist/react-datepicker.css'
 import 'semantic-ui-css/semantic.min.css';
+import moment from 'moment';
+// import ReactTooltip from 'react-tooltip'
 
 //Creates the options for the Order Type dropdown.
 const options = [
@@ -55,16 +57,24 @@ class OrderForm extends React.Component {
             billing_name: ''
 
         };
+         const formatDate = (dateRef) => (
+            dateRef && dateRef.state.date ? dateRef.state.date.format('MM/DD/YYYY') : ''
+         );
+
         // TODO: Implement CSRF token
         this.handleSubmit = (e) => {
             e.preventDefault();
+            console.log(this.date)
+            console.log(this.date_2)
             fetch('api/v1.0/orders', {
                 method: "POST",
                 body: JSON.stringify({
                     order_no: this.state.ordernumber,
                     suborder_no: this.state.subordernumber,
                     order_type: this.state.order_type,
-                    billing_name: this.state.billing_name
+                    billing_name: this.state.billing_name,
+                    date_received: formatDate(this.date),
+                    date_submitted: formatDate(this.date_2)
                 })
             }).then((response) => {
                 return response.json()
@@ -79,8 +89,8 @@ class OrderForm extends React.Component {
     render() {
         return (
             <Container>
-                    <Form onSubmit={this.handleSubmit}>
-                        {/*This component defines the form fields required for the search form:
+                <Form onSubmit={this.handleSubmit}>
+                    {/*This component defines the form fields required for the search form:
 
                          The Order Number, Suborder Number, Order Type, Billing Name, Date Received Start and End.
                          Order Number, Suborder Number, and Billing Name are input fields.
@@ -88,61 +98,70 @@ class OrderForm extends React.Component {
                          Date Received Start and End are input fields that call the React Datepicker component
                          */}
 
-                        <Form.Input label="Order Number" placeholder="Order Number" maxLength="64"
-                                    onChange={(e, {value}) => {
-                                        if (/^[0-9]+$/.test(value.slice(-1)) || value === '') {
-                                            this.setState({ordernumber: value})
-                                        }
-                                    }}
-                                    value={this.state.ordernumber}
-                        />
+                    <Form.Input label="Order Number" placeholder="Order Number" maxLength="64"
+                                onChange={(e, {value}) => {
+                                    if (/^[0-9]+$/.test(value.slice(-1)) || value === '') {
+                                        this.setState({ordernumber: value})
+                                    }
+                                }}
+                                value={this.state.ordernumber}
+                    />
 
-                        <Form.Input label="Suborder Number" placeholder='Suborder Number' maxLength="64"
-                                    onChange={(e, {value}) => {
-                                        if (/^[0-9]+$/.test(value.slice(-1)) || value === '') {
-                                            this.setState({subordernumber: value})
-                                        }
-                                    }}
-                                    value={this.state.subordernumber}
+                    <Form.Input label="Suborder Number" placeholder='Suborder Number' maxLength="64"
+                                onChange={(e, {value}) => {
+                                    if (/^[0-9]+$/.test(value.slice(-1)) || value === '') {
+                                        this.setState({subordernumber: value})
+                                    }
+                                }}
+                                value={this.state.subordernumber}
 
-                        />
-                        <Form.Select label="Order Type" placeholder="Order Type" options={options} defaultValue=''
-                                     onChange={(e, {value}) => {
-                                         this.setState({order_type: value})
-                                     }
+                    />
+                    <Form.Select label="Order Type" placeholder="Order Type" options={options}
+                                 onChange={(e, {value}) => {
+                                     this.setState({order_type: value})
+                                 }
 
-                                     }
-                                     value={this.state.order_type}
-                        />
-                        {/*<Form.Field label="Billing Name" placeholder="Billing Name" maxLength="64" control="input"/>*/}
-                        <Form.Input label="Billing Name" placeholder="Billing Name" maxLength="64"
-                                    onChange={(e, {value}) => {
-                                        if (/^[a-z,A-Z]+$/.test(value.slice(-1)) || value === ''){
-                                            this.setState({billing_name: value})
-                                        }
-                                    }}
-                                    value={this.state.billing_name}
-                        />
-                        <Form.Field onKeyPress={this.handleKeyPress}>
+                                 }
+                                 value={this.state.order_type}
+                    />
+                    {/*<Form.Field label="Billing Name" placeholder="Billing Name" maxLength="64" control="input"/>*/}
+                    <Form.Input label="Billing Name" placeholder="Billing Name" maxLength="64"
+                                onChange={(e, {value}) => {
+                                    if (/^[a-z,A-Z]+$/.test(value.slice(-1)) || value === '') {
+                                        this.setState({billing_name: value})
+                                    }
+                                }}
+                                value={this.state.billing_name}
+                    />
 
-                            <label>Date Received Start</label>
-                            {/* this will call the date picker calender drop down in datepicker.js*/}
-                            <Date/>
+                    <Form.Group>
+                        <Form.Field width="16">
+                            <Date
+                                label="date 1"
+                                name="date_1"
+                                maxDate={moment().startOf('day')}
+                                ref={(date) => this.date = date}
+                            />
+
                         </Form.Field>
-
-                        <Form.Field onKeyPress={this.handleKeyPress}>
-                            <label>Date Received End</label>
-                            <Date />
+                    </Form.Group>
+                    <Form.Group>
+                        <Form.Field width="16">
+                            <Date
+                                label="date 2"
+                                name="date_2"
+                                maxDate={moment().startOf('day')}
+                                ref={(date_2) => this.date_2 = date_2}
+                            />
                         </Form.Field>
-                        <Button type="reset" onClick={this.clearSelection} content="Clear"/>
-                        <Button type='submit' positive floated="right" content="Apply">
-                        </Button>
-                    </Form>
+                    </Form.Group>
+                    <Button type="reset" onClick={this.clearSelection} content="Clear"/>
+                    <Button type='submit' positive floated="right" content="Apply"/>
+                </Form>
             </Container>
         )
     }
 }
-
 
 export default OrderForm
 

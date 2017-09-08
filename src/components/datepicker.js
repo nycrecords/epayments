@@ -5,52 +5,79 @@ import React from 'react';
 import DatePicker from 'react-datepicker';
 import moment from 'moment';
 import 'react-datepicker/dist/react-datepicker.css';
+import MaskedInput from 'react-text-mask';
+import {Form} from 'semantic-ui-react';
+import PropTypes from 'prop-types';
 
+class Input extends React.Component {  // !!! Must be a class; DatePicker gives its customInput prop a ref
+  render() {
+    const {onChange, onClick, value, label, inputName} = this.props;
 
+    return (
+      <Form.Input
+        required
+        label={label}
+        name={name}
+        children={
+          <MaskedInput
+            mask={[/\d/, /\d/, '/', /\d/, /\d/, '/', /\d/, /\d/, /\d/, /\d/]}
+            placeholder="MM/DD/YYYY"
+            name={inputName}
+            required
+            pattern="(0[1-9]|1[012])[- /.](0[1-9]|[12][0-9]|3[01])[- /.]\d\d\d\d"
+            value={value}
+            onChange={onChange}
+            onClick={onClick}
+          />
+        }
+      />
+    )
+  }
+}
 class Date extends React.Component {
-    constructor (props) {
-        super(props);
-        this.state = {
-            date_received: moment(),
-            date_submitted: moment()
-        };
-        this.handleChange = this.handleChange.bind(this);
-        fetch('api/v1.0/orders', {
-            method: 'POST',
-            headers: {
-                'Accept': 'application/json',
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({
-                date_received: this.state.date_received,
-                date_submitted: this.state.date_submitted,
-            })
-        })
-    }
+    static propTypes = {
+    label: PropTypes.string.isRequired,
+    name: PropTypes.string.isRequired,
+    maxDate: PropTypes.object
+  };
 
-    handleChange(date) {
-        this.setState({
-            date_received: date,
-            date_submitted: date
-        });
+  state = {
+    date: undefined,
+    moment: this.props.maxDate || null,
+  };
 
-        console.log(date);
-    }
-    handleDate(date) {
-        this.setState({date: date._d})
-    };
+  handleChange = (date) => {
+    this.setState({
+      date: date,
+    });
+  };
 
+  handleChangeRaw = (e) => {
+    const value = e.target.value;
+    // update the date value if the format is valid, even though the date itself might be wrong
+      this.setState({
+        date: moment(value, "MM/DD/YYYY")
+      })
+  };
 
-    render() {
-        return <DatePicker
-            placeholderText={this.state.date_received}
-            todayButton="Today"
-            selected={this.state.date_submitted}
-            // selected={}
-            onChange={this.handleChange}
+  render() {
+    const {date, moment} = this.state;
+    const {label, name} = this.props;
 
-        />;
-    }
+    return <DatePicker
+      maxDate={moment}
+      selected={date}
+      customInput={
+        <Input
+          onChange={this.handleChange}
+          label={label}
+          inputName={name}
+        />
+      }
+      onChange={this.handleChange}
+      onChangeRaw={this.handleChangeRaw}
+    />;
+  }
 
 }
 
