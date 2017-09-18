@@ -41,13 +41,17 @@ class OrderForm extends React.Component {
         };
 
         this.clearSelection = () => {
-            console.log("Cleared");
             this.setState({
                 ordernumber: '',
                 subordernumber: '',
                 order_type: '',
-                billing_name: ''
-            })
+                billing_name: '',
+            });
+
+            this.date.setState({
+                date: ''
+            });
+
         };
 
         this.state = {
@@ -64,8 +68,6 @@ class OrderForm extends React.Component {
         // TODO: Implement CSRF token
         this.handleSubmit = (e) => {
             e.preventDefault();
-            console.log(this.date)
-            console.log(this.date_2)
             fetch('api/v1.0/orders', {
                 method: "POST",
                 body: JSON.stringify({
@@ -137,8 +139,8 @@ class OrderForm extends React.Component {
                     <Form.Group>
                         <Form.Field width="16">
                             <Date
-                                label="date 1"
-                                name="date_1"
+                                label="Date Received - Start"
+                                name="Date Received - Start"
                                 maxDate={moment().startOf('day')}
                                 ref={(date) => this.date = date}
                             />
@@ -148,8 +150,8 @@ class OrderForm extends React.Component {
                     <Form.Group>
                         <Form.Field width="16">
                             <Date
-                                label="date 2"
-                                name="date_2"
+                                label="Date Received - End"
+                                name="Date Received - End"
                                 maxDate={moment().startOf('day')}
                                 ref={(date_2) => this.date_2 = date_2}
                             />
