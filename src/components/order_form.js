@@ -47,11 +47,10 @@ class OrderForm extends React.Component {
                 order_type: '',
                 billing_name: '',
             });
-
+""
             this.date.setState({
-                date: ''
+                date: '',
             });
-
         };
 
         this.state = {
