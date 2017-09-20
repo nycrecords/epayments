@@ -70,8 +70,9 @@ def get_orders():
         print(date_submitted)
         orders = get_orders_by_fields(order_number, suborder_number, order_type, billing_name, user, date_received,
                                       date_submitted)
+        orders = [orders.serialize for order in Orders.query.filter_by().first()]
         print(orders)
-        return jsonify(orders=orders)
+        return jsonify(all_orders=orders)
 
     else:
         yesterday = datetime.strptime(date.today().strftime("%Y-%m-%d %H:%M:%S"), "%Y-%m-%d %H:%M:%S")
