@@ -48,13 +48,12 @@ class OrderForm extends React.Component {
                 billing_name: '',
             });
 
-            this.date.setState({
+            this.dateReceivedStart.setState({
                 date: '',
             });
 
-            console.log(this.date_2);
 
-            this.date_2.setState({
+            this.dateReceivedEnd.setState({
                 date: '',
             });
         };
@@ -147,7 +146,7 @@ class OrderForm extends React.Component {
                                 label="Date Received - Start"
                                 name="Date Received - Start"
                                 maxDate={moment().startOf('day')}
-                                ref={(date) => this.date = date}
+                                ref={(date) => this.dateReceivedStart = date}
                             />
 
                         </Form.Field>
@@ -158,7 +157,7 @@ class OrderForm extends React.Component {
                                 label="Date Received - End"
                                 name="Date Received - End"
                                 maxDate={moment().startOf('day')}
-                                ref={(date_2) => this.date_2 = date_2}
+                                ref={(date) => this.dateReceivedEnd = date}
                             />
                         </Form.Field>
                     </Form.Group>
