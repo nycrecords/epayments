@@ -85,9 +85,7 @@ class OrderForm extends React.Component {
             }).then((response) => {
                 return response.json()
             }).then((json) => {
-                this.setState({
-                    tasks: [json.task, ...this.state.tasks]
-                })
+                this.props.addOrder();
             });
         };
     }
