@@ -46,6 +46,7 @@ class Date extends React.Component {
     moment: this.props.maxDate || null,
   };
 
+
   handleChange = (date) => {
     this.setState({
       date: date,
