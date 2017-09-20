@@ -19,6 +19,12 @@ class Home extends React.Component {
             })
         };
 
+    addOrder() {
+        this.setState({
+            all_orders: []
+        });
+    };
+
     render() {
         const orderRows = this.state.all_orders.map((order, index) =>
             <Order
@@ -38,7 +44,7 @@ class Home extends React.Component {
                         <Header as="h1" textAlign="center">Epayments
                             <Container className="sub header">Department of Records</Container>
                         </Header>
-                        <OrderForm/>
+                        <OrderForm addOrder={this.addOrder}/>
                     </Grid.Column>
                     <Grid.Column width={1}/>
                     <Grid.Column width={11}>
