@@ -15,7 +15,6 @@ class Input extends React.Component {  // !!! Must be a class; DatePicker gives 
 
     return (
       <Form.Input
-        required
         label={label}
         name={name}
         children={
@@ -23,7 +22,6 @@ class Input extends React.Component {  // !!! Must be a class; DatePicker gives 
             mask={[/\d/, /\d/, '/', /\d/, /\d/, '/', /\d/, /\d/, /\d/, /\d/]}
             placeholder="MM/DD/YYYY"
             name={inputName}
-            required
             pattern="(0[1-9]|1[012])[- /.](0[1-9]|[12][0-9]|3[01])[- /.]\d\d\d\d"
             value={value}
             onChange={onChange}
@@ -42,7 +40,7 @@ class Date extends React.Component {
   };
 
   state = {
-    date: undefined,
+    date: moment(),
     moment: this.props.maxDate || null,
   };
 
