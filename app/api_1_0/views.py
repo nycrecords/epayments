@@ -81,14 +81,13 @@ def get_orders():
         return jsonify(all_orders=orders)
 
 
-@api.route('/status/<int:sub_order_no>', methods=['GET'])
+@api.route('/status/<sub_order_no>', methods=['GET'])
 def status_lookup(sub_order_no):
     """
     :param sub_order_no:re
     :return: the status of all records with this sub_order_no that was passed in
     """
-    status = [status.serialize for status in StatusTracker.query.filter_by(sub_order_no=sub_order_no).all()]
-
+    status = [status.serialize for status in StatusTracker.query.filter_by(sub_order_no=int(sub_order_no)).all()]
     return jsonify(status=status)
 
 

@@ -68,36 +68,28 @@ def get_orders_by_fields(order_number, suborder_number, order_type, billing_name
 
     # date_received = datetime.strftime(date_received, "%Y-%m-%d %H:%M:%S")
 
-    """ 
-    2017-07-28 00:00:00.000000 - Orders.date_submitted >= 
-    2017-04-04 04:06:15.000000 - Orders.date_received 
-    2017-08-30 11:39:22.3922   - date_received 
-    2017-08-30 11:39:22.3922   - date_submitted
-    
-    2017-04-04 04:06:15.000000 >= 2017-08-30 11:39:22.3922, 2017-04-04 04:06:15.000000 <= 2017-08-30 11:39:22.3922
-    
-    """
     # orders = [order.serialize for order in Orders.query.filter_by().all()]
     print("testing")
     print(orders)
-
     print("Length of Order Numbers")
     print (len(order_number))
     if len(order_number) != 0:
-        print("djskdjskLength of Order Nudsdsmdkdsjkdjskjdksjdksjmbers")
         orders = orders.filter(Orders.order_no == order_number)
-    # if suborder_number is not '':
-    #     orders = orders.filter(Orders.sub_order_no == suborder_number)
-    # if billing_name is not '':
-    #     orders = orders.filter(func.lower(Orders.billing_name).contains(func.lower(billing_name)))
-    # print(orders)
-    # if order_type not in ['all', 'multiple_items', 'vital_records_and_photos']:
-    #     orders = orders.filter(Orders.client_agency_name == order_type)
-    # elif order_type == 'multipleitems':
-    #     orders = [order for order in orders if len(order.ordertypes.split(',')) > 1]
-    # elif order_type == 'vitalrecordsphotos':
-    #     orders = [order for order in orders if
-    #               not set(order.ordertypes.split(',')).isdisjoint(vitalrecordslist) and not set(order.ordertypes.split(
-    #                   ',')).isdisjoint(photolist)]
+    if len(suborder_number) != 0:
+        orders = orders.filter(Orders.sub_order_no == suborder_number)
+    if len(billing_name) != 0:
+        orders = orders.filter(func.lower(Orders.billing_name).contains(func.lower(billing_name)))
+
+    print("The length of order type")
+    print(len(order_type))
+    if order_type != '' and order_type not in ['all', 'multiple_items', 'vital_records_and_photos']:
+        orders = orders.filter(Orders.client_agency_name == order_type)
+    elif order_type == 'multiple_items':
+        orders = [order for order in orders if len(order.ordertypes.split(',')) > 1]
+    elif order_type == 'vital_records_and_photos':
+        print("does it hit here_2")
+        orders = [order for order in orders if
+                  not set(order.ordertypes.split(',')).isdisjoint(vitalrecordslist) and not set(order.ordertypes.split(
+                      ',')).isdisjoint(photolist)]
     order_list = [order.serialize for order in orders]
     return order_list

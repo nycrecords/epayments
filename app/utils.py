@@ -64,6 +64,9 @@ def import_file(file_name):
         :return: Bool
     """
 
+    ordertypelist = ['tax photo', 'online gallery', 'Birth search', 'Birth cert', 'Marriage search',
+                     'Marriage cert', 'Death search', 'Death cert']
+
     # 1 - Populate the XML Parser
     tree = ET.parse(file_name)
     root = tree.getroot()
@@ -95,6 +98,14 @@ def import_file(file_name):
         if duplicate:
             print("Order %s already exists in the database." % order_no)
             continue
+
+        ordertypes = []
+        itemdescription = root.findall(".//ItemDescription")
+        for item in itemdescription:
+            for ordertype in ordertypelist:
+                if ordertype in item.text:
+                    ordertypes.append(ordertype)
+        ordertypes = ','.join(ordertypes)
 
         # Get Customer Information
         # Name for Billing Information
@@ -130,13 +141,14 @@ def import_file(file_name):
         insert_order = Orders(order_no=order_no,
                               sub_order_no=sub_order_no,
                               date_submitted=date_received,
-                              date_receivied=date_last_modified,
+                              date_received=date_last_modified,
                               billing_name=billing_name,
                               customer_email=customer_email,
                               confirmation_message=confirmation_message,
                               client_data=clients_data,
                               client_id=client_id,
-                              client_agency_name=client_agency_name)
+                              client_agency_name=client_agency_name,
+                              ordertypes=ordertypes)
 
         db.session.add(insert_order)
         db.session.commit()

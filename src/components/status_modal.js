@@ -12,16 +12,40 @@ class StatusModal extends React.Component {
     handleClose = (e) => this.setState({
         modalOpen: false,
     });
-
     statuses = [
         {
-            text: 'open',
-            value: 'test',
+            text: 'Received',
+            value: 'Received',
         },
         {
-            text: 'testing again',
-            value: 'testing again',
+            text: 'Processing',
+            value: 'Processing',
+        },
+        {
+            text: 'Found',
+            value: 'Found',
+        },
+        {
+            text: 'Mailed/Pickup',
+            value: 'Mailed/Pickup',
+        },
+        {
+            text: 'Not Found',
+            value: 'Not_found',
+        },
+        {
+            text: 'Letter Generated',
+            value: 'Letter_Generated',
+        },
+        {
+            text: 'Undeliverable',
+            value: 'Undeliverable',
+        },
+        {
+            text: 'Done',
+            value: 'Done',
         }
+
     ];
 
 
@@ -37,7 +61,7 @@ class StatusModal extends React.Component {
                             <Header>
                                 <p> - Current Status - </p>
                                 <Form>
-                                    <Dropdown placeholder="Status" selection options={this.statuses}/>
+                                    <Dropdown placeholder="Status" fluid selection options={this.statuses}/>
                                 </Form>
                             </Header>
                             <Form>

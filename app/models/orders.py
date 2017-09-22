@@ -31,31 +31,34 @@ class Orders(db.Model):
     client_data = db.Column(db.Text, nullable=False)
     client_id = db.Column(db.Integer, nullable=False)
     client_agency_name = db.Column(db.String(64), nullable=False)
+    ordertypes = db.Column(db.String(255), nullable=True)
 
     def __init__(
             self,
             order_no,
             sub_order_no,
             date_submitted,
-            date_receivied,
+            date_received,
             billing_name,
             customer_email,
             confirmation_message,
             client_data,
             client_id,
-            client_agency_name
+            client_agency_name,
+            ordertypes
 
     ):
         self.order_no = order_no
         self.sub_order_no = sub_order_no
         self.date_submitted = date_submitted
-        self.date_received = date_receivied or None
+        self.date_received = date_received or None
         self.billing_name = billing_name
         self.customer_email = customer_email
         self.confirmation_message = confirmation_message
         self.client_data = client_data
         self.client_id = client_id
         self.client_agency_name = client_agency_name
+        self.ordertypes = ordertypes
 
     @property
     def serialize(self):
@@ -70,7 +73,8 @@ class Orders(db.Model):
             'confirmation_message': self.confirmation_message,
             'client_data': self.client_data,
             'client_id': self.client_id,
-            'client_agency_name': self.client_agency_name
+            'client_agency_name': self.client_agency_name,
+            'ordertype': self.ordertypes
         }
 
 

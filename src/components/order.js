@@ -7,6 +7,24 @@ import 'semantic-ui-css/semantic.min.css';
 import StatusModal from './status_modal';
 
 class Order extends React.Component {
+    constructor(){
+        super();
+
+        this.state = {
+            status: []
+        };
+
+    }
+
+    componentWillMount() {
+        fetch('api/v1.0/status/' + this.props.suborder_no).then((response) => (
+            response.json()
+        )).then((json) => {
+            this.setState({status: json.status});
+            console.log(json[status]);
+        })
+    };
+
     render() {
         return (
             <div>
