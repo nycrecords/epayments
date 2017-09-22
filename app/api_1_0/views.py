@@ -11,7 +11,6 @@ from app import db
 import json
 from .utils import update_status, get_orders_by_fields
 
-
 @api.route('/', methods=['GET'])
 def info():
     return jsonify({'version': 'v1.0'})
@@ -70,7 +69,8 @@ def get_orders():
         print(date_submitted)
         orders = get_orders_by_fields(order_number, suborder_number, order_type, billing_name, user, date_received,
                                       date_submitted)
-        orders = [orders.serialize for order in Orders.query.filter_by().first()]
+        # orders = [order.serialize for order in Orders.query.filter_by(order_no='000592026').all()]
+
         print(orders)
         return jsonify(all_orders=orders)
 

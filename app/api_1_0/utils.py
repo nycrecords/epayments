@@ -52,12 +52,22 @@ def get_orders_by_fields(order_number, suborder_number, order_type, billing_name
     other = {'multiple items in cart', 'vital records and photos in cart'}
 
     yesterday = datetime.strptime(date.today().strftime("%Y-%m-%d %H:%M:%S"), "%Y-%m-%d %H:%M:%S")
+    print("yesterday")
+    print(yesterday)
     # orders = Orders.query.filter(Orders.date_received >= date_received, Orders.date_received <= date_submitted)
-    if date_received is None:
+    if len(date_received) < 1:
         date_received = yesterday  # set the date received start to yesterday if nothing passed in form
-    if date_submitted is None:
+    if len(date_submitted) < 1:
         date_submitted = yesterday  # set the date received end to yesterday if nothing passed in form
+    date_received = datetime.strptime(date_received, "%m/%d/%Y")
+    date_submitted = datetime.strptime(date_submitted, "%m/%d/%Y")
+    print("These should be date time objects")
+    print(date_received)
+    print(date_submitted)
     orders = Orders.query.filter(Orders.date_received >= date_received, Orders.date_submitted <= date_submitted)
+
+    # date_received = datetime.strftime(date_received, "%Y-%m-%d %H:%M:%S")
+
     """ 
     2017-07-28 00:00:00.000000 - Orders.date_submitted >= 
     2017-04-04 04:06:15.000000 - Orders.date_received 
@@ -67,15 +77,22 @@ def get_orders_by_fields(order_number, suborder_number, order_type, billing_name
     2017-04-04 04:06:15.000000 >= 2017-08-30 11:39:22.3922, 2017-04-04 04:06:15.000000 <= 2017-08-30 11:39:22.3922
     
     """
-    if order_number is not '':
+    # orders = [order.serialize for order in Orders.query.filter_by().all()]
+    print("testing")
+    print(orders)
+
+    print("Length of Order Numbers")
+    print (len(order_number))
+    if len(order_number) != 0:
+        print("djskdjskLength of Order Nudsdsmdkdsjkdjskjdksjdksjmbers")
         orders = orders.filter(Orders.order_no == order_number)
-    if suborder_number is not '':
-        orders = orders.filter(Orders.sub_order_no == suborder_number)
-    if billing_name is not '':
-        orders = orders.filter(func.lower(Orders.billing_name).contains(func.lower(billing_name)))
+    # if suborder_number is not '':
+    #     orders = orders.filter(Orders.sub_order_no == suborder_number)
+    # if billing_name is not '':
+    #     orders = orders.filter(func.lower(Orders.billing_name).contains(func.lower(billing_name)))
     # print(orders)
-    if order_type not in ['All', 'multipleitems', 'vitalrecordsphotos']:
-        orders = orders.filter(Orders.client_agency_name == order_type)
+    # if order_type not in ['all', 'multiple_items', 'vital_records_and_photos']:
+    #     orders = orders.filter(Orders.client_agency_name == order_type)
     # elif order_type == 'multipleitems':
     #     orders = [order for order in orders if len(order.ordertypes.split(',')) > 1]
     # elif order_type == 'vitalrecordsphotos':
