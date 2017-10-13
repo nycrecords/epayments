@@ -133,7 +133,6 @@ def import_file(file_name):
         ship_to_country = shipping_add.find("ShipToCountry").text
         ship_to_phone = shipping_add.find("ShipToPhone").text
 
-
         shipping_instructions = shipping_add.find("ShippingInstructions").text
 
 

@@ -3,6 +3,7 @@ from datetime import date, datetime, timedelta
 from ..models import StatusTracker, Orders
 from sqlalchemy import func, databases, update, desc
 
+
 def update_status(sub_order_no, comment, new_status):
     """
         POST: {sub_order_no, new_status, comment};
@@ -52,8 +53,6 @@ def get_orders_by_fields(order_number, suborder_number, order_type, billing_name
     other = {'multiple items in cart', 'vital records and photos in cart'}
 
     yesterday = datetime.strptime(date.today().strftime("%Y-%m-%d %H:%M:%S"), "%Y-%m-%d %H:%M:%S")
-    print("yesterday")
-    print(yesterday)
     # orders = Orders.query.filter(Orders.date_received >= date_received, Orders.date_received <= date_submitted)
     if len(date_received) < 1:
         date_received = yesterday  # set the date received start to yesterday if nothing passed in form
@@ -61,18 +60,9 @@ def get_orders_by_fields(order_number, suborder_number, order_type, billing_name
         date_submitted = yesterday  # set the date received end to yesterday if nothing passed in form
     date_received = datetime.strptime(date_received, "%m/%d/%Y")
     date_submitted = datetime.strptime(date_submitted, "%m/%d/%Y")
-    print("These should be date time objects")
-    print(date_received)
-    print(date_submitted)
     orders = Orders.query.filter(Orders.date_received >= date_received, Orders.date_submitted <= date_submitted)
 
-    # date_received = datetime.strftime(date_received, "%Y-%m-%d %H:%M:%S")
-
     # orders = [order.serialize for order in Orders.query.filter_by().all()]
-    print("testing")
-    print(orders)
-    print("Length of Order Numbers")
-    print (len(order_number))
     if len(order_number) != 0:
         orders = orders.filter(Orders.order_no == order_number)
     if len(suborder_number) != 0:
@@ -91,5 +81,8 @@ def get_orders_by_fields(order_number, suborder_number, order_type, billing_name
         orders = [order for order in orders if
                   not set(order.ordertypes.split(',')).isdisjoint(vitalrecordslist) and not set(order.ordertypes.split(
                       ',')).isdisjoint(photolist)]
+
     order_list = [order.serialize for order in orders]
+    # need to
+
     return order_list

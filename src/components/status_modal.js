@@ -3,51 +3,87 @@ import {Button, Header, Modal, Form, TextArea, Dropdown} from 'semantic-ui-react
 import 'semantic-ui-css/semantic.min.css';
 
 class StatusModal extends React.Component {
-    state = {modalOpen: false};
+    constructor() {
+        super();
 
-    handleOpen = (e) => this.setState({
-        modalOpen: true,
-    });
+        this.state = {
+            modalOpen: false,
+            comment: '',
+            new_status: ''
+        };
 
-    handleClose = (e) => this.setState({
-        modalOpen: false,
-    });
-    statuses = [
-        {
-            text: 'Received',
-            value: 'Received',
-        },
-        {
-            text: 'Processing',
-            value: 'Processing',
-        },
-        {
-            text: 'Found',
-            value: 'Found',
-        },
-        {
-            text: 'Mailed/Pickup',
-            value: 'Mailed/Pickup',
-        },
-        {
-            text: 'Not Found',
-            value: 'Not_found',
-        },
-        {
-            text: 'Letter Generated',
-            value: 'Letter_Generated',
-        },
-        {
-            text: 'Undeliverable',
-            value: 'Undeliverable',
-        },
-        {
-            text: 'Done',
-            value: 'Done',
-        }
+        this.handleOpen = (e) => this.setState({
+            modalOpen: true,
+        });
 
-    ];
+        this.handleClose = (e) => this.setState({
+            modalOpen: false,
+        });
+        this.statuses = [
+            {
+                text: 'Received',
+                value: 'Received',
+            },
+            {
+                text: 'Processing',
+                value: 'Processing',
+            },
+            {
+                text: 'Found',
+                value: 'Found',
+            },
+            {
+                text: 'Mailed/Pickup',
+                value: 'Mailed/Pickup',
+            },
+            {
+                text: 'Not Found',
+                value: 'Not_Found',
+            },
+            {
+                text: 'Letter Generated',
+                value: 'Letter_Generated',
+            },
+            {
+                text: 'Undeliverable',
+                value: 'Undeliverable',
+            },
+            {
+                text: 'Done',
+                value: 'Done',
+            }
 
+        ];
+        //TODO: put this into a constructor maybe??
+
+        this.componentWillReceiveProps = (e) => {
+            this.setState({current_status: this.state.new_status});
+            console.log(this.props.current_status);
+            console.log(this.state.new_status);
+            console.log(this.state.current_status);
+
+
+        };
+
+        this.handleSubmit = (e) => {
+            e.preventDefault();
+            fetch('api/v1.0/status/' + this.props.suborder_no + '/update', {
+                method: "POST",
+                body: JSON.stringify({
+                    suborder_no: this.props.suborder_no,
+                    comment: this.state.comment,
+                    new_status: this.state.new_status
+                })
+            }).then((response) => {
+                return response.json()
+            }).then((json) => {
+
+            });
+            this.componentWillReceiveProps();
+
+            this.handleClose();
+        };
+    }
 
     render() {
         return (
@@ -59,20 +95,33 @@ class StatusModal extends React.Component {
                     <Modal.Content>
                         <Modal.Description>
                             <Header>
-                                <p> - Current Status - </p>
-                                <Form>
-                                    <Dropdown placeholder="Status" fluid selection options={this.statuses}/>
+                                <p> Current Status - {this.props.current_status}</p>
+                                <Form onSubmit={this.handleSubmit}>
+                                    <Form.Select fluid selection options={this.statuses} placeholder={this.props.current_status}
+                                                 onChange={(e, {value}) => {
+                                                     this.setState({new_status: value})
+                                                 }
+
+                                                 }
+                                                 value={this.state.new_status}
+                                    />
+                                    <Form.Field id='form-textarea-control-opinion' control={TextArea}
+                                                label='Leave an Additional Comment' placeholder='Comment'
+                                                onChange={(e, {value}) => {
+                                                    this.setState({comment: value})
+                                                }
+
+                                                }
+                                                value={this.state.comment}
+                                    />
                                 </Form>
                             </Header>
-                            <Form>
-                                <TextArea fluid placeholder='Tell us more'/>
-                            </Form>
                         </Modal.Description>
                     </Modal.Content>
                 </Modal.Header>
                 <Modal.Actions>
                     <Button negative onClick={this.handleClose}>Cancel</Button>
-                    <Button positive onClick={this.handleClose}>Confirm</Button>
+                    <Button type='submit' positive onClick={this.handleSubmit} content="Confirm"/>
                 </Modal.Actions>
             </Modal>
         )

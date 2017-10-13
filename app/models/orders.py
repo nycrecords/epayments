@@ -32,7 +32,8 @@ class Orders(db.Model):
     client_id = db.Column(db.Integer, nullable=False)
     client_agency_name = db.Column(db.String(64), nullable=False)
     ordertypes = db.Column(db.String(255), nullable=True)
-
+    status = db.relationship('StatusTracker', lazy='dynamic', backref=db.backref('orders', lazy='joined'))
+    # uselist = false backref='orders' -- old way I had it
     def __init__(
             self,
             order_no,
@@ -45,7 +46,7 @@ class Orders(db.Model):
             client_data,
             client_id,
             client_agency_name,
-            ordertypes
+            ordertypes,
 
     ):
         self.order_no = order_no
@@ -74,7 +75,8 @@ class Orders(db.Model):
             'client_data': self.client_data,
             'client_id': self.client_id,
             'client_agency_name': self.client_agency_name,
-            'ordertype': self.ordertypes
+            'current_status': self.status.filter_by(sub_order_no=self.sub_order_no)
+                                         .order_by(StatusTracker.id.desc()).first().current_status
         }
 
 
@@ -106,7 +108,8 @@ class StatusTracker(db.Model):
 
     __tablename__ = 'status'
     id = db.Column(db.Integer, primary_key=True)
-    sub_order_no = db.Column(db.BigInteger, db.ForeignKey('orders.sub_order_no'))
+    sub_order_no = db.Column(db.BigInteger, db.ForeignKey('orders.sub_order_no'),
+                             nullable=False)
     current_status = db.Column(
         db.Enum(
             status.RECEIVED,
