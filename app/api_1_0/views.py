@@ -81,17 +81,17 @@ def get_orders():
         return jsonify(all_orders=orders)
 
 
-@api.route('/status/<sub_order_no>', methods=['GET'])
-def status_lookup(sub_order_no):
-    """
-    :param sub_order_no:re
-    :return: the status of all records with this sub_order_no that was passed in
-    """
-    status = [status.serialize for status in StatusTracker.query.filter_by(sub_order_no=int(sub_order_no)).all()]
-    return jsonify(status=status)
+# @api.route('/status/<sub_order_no>', methods=['GET'])
+# def status_lookup(sub_order_no):
+#     """
+#     :param sub_order_no:re
+#     :return: the status of all records with this sub_order_no that was passed in
+#     """
+#     status = [status.serialize for status in StatusTracker.query.filter_by(sub_order_no=int(sub_order_no)).all()]
+#     return jsonify(status=status)
 
 
-@api.route('/status/<int:sub_order_no>/update', methods=['GET', 'POST'])
+@api.route('/status/<sub_order_no>', methods=['GET', 'POST'])
 def status_change(sub_order_no):
     """
         GET: {sub_order_no}; returns {sub_order_no, current_status}, 200
@@ -113,20 +113,9 @@ def status_change(sub_order_no):
     """
 
     # session = StatusTracker.query.filter_by(sub_order_no=sub_order_no).first_or_404()
-    session = StatusTracker.query.order_by(StatusTracker.sub_order_no.desc()).first()
-    curr_status = session.current_status
-    status_id = session.id
-
-    # This will update the status of the sub_order_no
-    # session.current_status = 'Processing'
-    # db.session.commit()
-
-    # status = {'Received', 'Processing', 'Found', 'Printed' 'Mailed/Pickup', 'Not_Found', 'Letter_generated',
-    #           'Undeliverable', 'Done'}
-
-    # comment = "The Record is Done."
-    # new_status = 'Done'
-    # sub_order_no = 9128144811
+    # session = StatusTracker.query.order_by(StatusTracker.sub_order_no.desc()).first()
+    # curr_status = session.current_status
+    # status_id = session.id
 
     if request.method == 'POST':  # Means that something was passed from the front
         # curr_status = str(request.form["status"])
@@ -138,10 +127,11 @@ def status_change(sub_order_no):
             POST: {sub_order_no, new_status, comment}; 
             returns: {status_id, sub_order_no, status, comment}, 201 
         """
-
         update_status(sub_order_no, comment, new_status)
 
-    return jsonify(current_status=curr_status, sub_order_no=sub_order_no, comment=comment, status_id=status_id)
+    # return jsonify(current_status=curr_status, sub_order_no=sub_order_no, comment=comment, status_id=status_id)
+    status = [status.serialize for status in StatusTracker.query.filter_by(sub_order_no=int(sub_order_no)).all()]
+    return jsonify(status=status)
 
 
 @api.route('/history/<int:sub_order_no>', methods=['GET'])
@@ -160,7 +150,7 @@ def history(sub_order_no):
     # print(history)
     # print(history_list)
 
-    history = [status.serialize for status in StatusTracker.query.filter_by(sub_order_no=sub_order_no).all()]
+    history = [status.serialize for status in StatusTracker.query.filter_by(sub_order_no=int(sub_order_no)).all()]
 
     return jsonify(history=history)
 

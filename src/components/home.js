@@ -21,11 +21,24 @@ class Home extends React.Component {
             });
         };
 
-        // this.update_status = (new_status) => {
-        //     this.setState({
-        //         current_status: new_status
-        //     })
-        // }
+        this.updateStatus = (suborder_no, new_status) => {
+            let status_obj = this.state.all_orders.find(obj => {return obj.suborder_no === suborder_no; });
+            let idx = this.state.all_orders.indexOf(status_obj);
+            let status ={"index": idx, "object": status_obj};
+            status.object.current_status = new_status;
+            let _all_orders = this.state.all_orders.slice();
+            _all_orders[status.index] = status.object;
+            this.setState({all_orders: _all_orders});
+        };
+
+
+        this.handleHistoryRequest = (suborder_no) => {
+            fetch('api/v1.0/history/' + suborder_no).then((response) => (
+                response.json()
+            )).then((json) => {
+
+            });
+        };
     };
 
     componentWillMount() {
@@ -46,6 +59,8 @@ class Home extends React.Component {
                 billing_name={order.billing_name}
                 date_received={order.date_received}
                 current_status={order.current_status}
+                updateStatus={this.updateStatus}
+                handleHistoryRequest={this.handleHistoryRequest}
             />
 
         );

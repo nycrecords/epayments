@@ -56,18 +56,9 @@ class StatusModal extends React.Component {
         ];
         //TODO: put this into a constructor maybe??
 
-        this.componentWillReceiveProps = (e) => {
-            this.setState({current_status: this.state.new_status});
-            console.log(this.props.current_status);
-            console.log(this.state.new_status);
-            console.log(this.state.current_status);
-
-
-        };
-
         this.handleSubmit = (e) => {
             e.preventDefault();
-            fetch('api/v1.0/status/' + this.props.suborder_no + '/update', {
+            fetch('api/v1.0/status/' + this.props.suborder_no, {
                 method: "POST",
                 body: JSON.stringify({
                     suborder_no: this.props.suborder_no,
@@ -77,9 +68,8 @@ class StatusModal extends React.Component {
             }).then((response) => {
                 return response.json()
             }).then((json) => {
-
+                this.props.updateStatus(this.props.suborder_no, this.state.new_status)
             });
-            this.componentWillReceiveProps();
 
             this.handleClose();
         };
