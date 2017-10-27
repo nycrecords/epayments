@@ -3,6 +3,7 @@ import {Grid, Container, Header, Button} from 'semantic-ui-react';
 import OrderForm from "./order_form";
 import Order from "./order";
 import StatusModal from "./status_modal";
+import History from "./history";
 
 // import "../data/orders.json";
 
@@ -13,7 +14,6 @@ class Home extends React.Component {
         this.state = {
             all_orders: []
         };
-
 
         this.addOrder = (orders) => {
             this.setState({
@@ -30,24 +30,16 @@ class Home extends React.Component {
             _all_orders[status.index] = status.object;
             this.setState({all_orders: _all_orders});
         };
-
-
-        this.handleHistoryRequest = (suborder_no) => {
-            fetch('api/v1.0/history/' + suborder_no).then((response) => (
-                response.json()
-            )).then((json) => {
-
-            });
-        };
     };
 
     componentWillMount() {
         fetch('api/v1.0/orders').then((response) => (
             response.json()
         )).then((json) => {
-            this.addOrder(json.all_orders)
+            this.addOrder(json.all_orders);
         })
     };
+
 
     render() {
         const orderRows = this.state.all_orders.map((order, index) =>
@@ -60,9 +52,7 @@ class Home extends React.Component {
                 date_received={order.date_received}
                 current_status={order.current_status}
                 updateStatus={this.updateStatus}
-                handleHistoryRequest={this.handleHistoryRequest}
             />
-
         );
 
         return (
@@ -79,11 +69,6 @@ class Home extends React.Component {
                         <Header as="h1" dividing textAlign="center">Orders</Header>
                         {orderRows}
                     </Grid.Column>
-                </Grid>
-                <Grid>
-                    <Container id="load-more" width={2}>
-                        <Button compact floated="right">Load More</Button>
-                    </Container>
                 </Grid>
             </Container>
 

@@ -1,7 +1,7 @@
 from flask import jsonify, abort, request
 import datetime
 from datetime import date, datetime, timedelta
-from sqlalchemy import func, databases, update, desc
+from sqlalchemy import func, databases, update, desc, asc
 from .import api_1_0 as api
 from app.constants.client_agency_names import CLIENT_AGENCY_NAMES
 from ..models import Orders, Customer, BirthSearch, BirthCertificate, MarriageSearch, MarriageCertificate, \
@@ -150,7 +150,7 @@ def history(sub_order_no):
     # print(history)
     # print(history_list)
 
-    history = [status.serialize for status in StatusTracker.query.filter_by(sub_order_no=int(sub_order_no)).all()]
+    history = [status.serialize for status in StatusTracker.query.filter_by(sub_order_no=int(sub_order_no)).order_by(desc(StatusTracker.timestamp)).all()]
 
     return jsonify(history=history)
 

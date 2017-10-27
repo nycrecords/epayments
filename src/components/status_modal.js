@@ -54,7 +54,6 @@ class StatusModal extends React.Component {
             }
 
         ];
-        //TODO: put this into a constructor maybe??
 
         this.handleSubmit = (e) => {
             e.preventDefault();
@@ -78,7 +77,7 @@ class StatusModal extends React.Component {
     render() {
         return (
             <Modal
-                trigger={<Button onClick={this.handleOpen} compact size='mini' floated='right'>Update Status</Button>}
+                trigger={<Button onClick={this.handleOpen} compact size='small' floated='right'>Update Status</Button>}
                 open={this.state.modalOpen}
                 onClose={this.state.handleClose}>
                 <Modal.Header>
