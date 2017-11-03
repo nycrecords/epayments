@@ -22,6 +22,7 @@ class Config:
     SFTP_USERNAME = os.environ.get('SFTP_USERNAME')
     SFTP_RSA_KEY_FILE = os.environ.get('SFTP_RSA_KEY_FILE')
     SFTP_UPLOAD_DIRECTORY = os.environ.get('SFTP_UPLOAD_DIRECTORY')
+    TIME_ZONE = os.environ.get('TIME_ZONE') or 'US/Eastern'
 
     @staticmethod
     def init_app(app):

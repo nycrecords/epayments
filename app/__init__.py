@@ -4,22 +4,25 @@
 #
 # from . import views, errors
 
-import atexit
-from flask import Flask
+import pytz
+from flask import Flask, current_app
 from flask.ext.sqlalchemy import SQLAlchemy
 from flask_bootstrap import Bootstrap
 from flask_apscheduler import APScheduler
 from flask.ext.cors import CORS
 from apscheduler.triggers.cron import CronTrigger
 
-from config import config
+from config import config, Config
 
 # Flask extensions
 bootstrap = Bootstrap()
 db = SQLAlchemy()
 scheduler = APScheduler()
 
+PYTZ_TIMEZONE = pytz.timezone(Config.TIME_ZONE)
+
 from app.models import orders, client_info, birth, marriage, death, photo, prop_card
+
 
 
 def create_app(config_name):

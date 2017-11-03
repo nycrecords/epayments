@@ -1,7 +1,7 @@
 from app import db
 from app .constants import status
-from sqlalchemy.dialects.postgresql import ARRAY, JSONB
 from datetime import datetime
+from pytz import timezone
 
 
 class Orders(db.Model):
@@ -34,6 +34,7 @@ class Orders(db.Model):
     ordertypes = db.Column(db.String(255), nullable=True)
     status = db.relationship('StatusTracker', lazy='dynamic', backref=db.backref('orders', lazy='joined'))
     # uselist = false backref='orders' -- old way I had it
+
     def __init__(
             self,
             order_no,
@@ -68,7 +69,7 @@ class Orders(db.Model):
             'order_no': self.order_no,
             'suborder_no': self.sub_order_no,
             'date_submitted': self.date_submitted,
-            'date_received': str(self.date_received),
+            'date_received': self.date_received.strftime("%x %I:%M %p"),
             'billing_name': self.billing_name,
             'customer_email': self.customer_email,
             'confirmation_message': self.confirmation_message,
@@ -104,8 +105,6 @@ class StatusTracker(db.Model):
     5. Done - End of status changes
 
     """
-
-
     __tablename__ = 'status'
     id = db.Column(db.Integer, primary_key=True)
     sub_order_no = db.Column(db.BigInteger, db.ForeignKey('orders.sub_order_no'),
@@ -122,7 +121,7 @@ class StatusTracker(db.Model):
             status.DONE,
             name='current_status'), nullable=True)
     comment = db.Column(db.String(64), nullable=True)
-    timestamp = db.Column(db.DateTime, default=datetime.utcnow())
+    timestamp = db.Column(db.DateTime)
     previous_value = db.Column(db.String(25), nullable=True)
 
     # Class Constructor to initialize the data
@@ -140,6 +139,11 @@ class StatusTracker(db.Model):
         self.timestamp = timestamp or datetime.utcnow()
         self.previous_value = previous_value or None,
 
+    @staticmethod
+    def utc_to_local(date):
+        """Offsets the UTC into EST Timezone """
+        return date + timezone('America/New_York').localize(date).utcoffset()
+
     @property
     def serialize(self):
         """Return object data in easily serializable format"""
@@ -147,6 +151,6 @@ class StatusTracker(db.Model):
             'suborder_no': self.sub_order_no,
             'current_status': self.current_status,
             'comment': self.comment,
-            'timestamp': self.timestamp,
+            'timestamp': self.utc_to_local(self.timestamp).strftime("%x %I:%M %p"),
             'previous_value': self.previous_value,
         }

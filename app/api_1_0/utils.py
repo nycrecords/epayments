@@ -18,11 +18,6 @@ def update_status(sub_order_no, comment, new_status):
      - 3) it will have the new status that was passed from the user
     """
 
-    current_time = datetime.utcnow()
-    # ten_weeks_ago = current_time - datetime.timedelta(weeks=10)
-
-    """ orders = Orders.query.filter(Orders.date_received >= date_received, Orders.date_received <= date_submitted) """
-
     object_ = StatusTracker.query.filter_by(sub_order_no=sub_order_no).order_by(StatusTracker.timestamp.desc()).first()
 
     if object_ is not None:
@@ -33,7 +28,7 @@ def update_status(sub_order_no, comment, new_status):
     insert_status = StatusTracker(sub_order_no=sub_order_no,
                                   current_status=new_status,
                                   comment=comment,
-                                  timestamp=current_time,
+                                  timestamp=datetime.utcnow(),
                                   previous_value=previous_value)
 
     db.session.add(insert_status)
@@ -62,7 +57,6 @@ def get_orders_by_fields(order_number, suborder_number, order_type, billing_name
     date_submitted = datetime.strptime(date_submitted, "%m/%d/%Y")
     orders = Orders.query.filter(Orders.date_received >= date_received, Orders.date_submitted <= date_submitted)
 
-    # orders = [order.serialize for order in Orders.query.filter_by().all()]
     if len(order_number) != 0:
         orders = orders.filter(Orders.order_no == order_number)
     if len(suborder_number) != 0:
@@ -83,6 +77,5 @@ def get_orders_by_fields(order_number, suborder_number, order_type, billing_name
                       ',')).isdisjoint(photolist)]
 
     order_list = [order.serialize for order in orders]
-    # need to
 
     return order_list

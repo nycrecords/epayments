@@ -2,6 +2,7 @@ import React from 'react';
 import {Accordion, Label, Icon, Table} from 'semantic-ui-react';
 import 'semantic-ui-css/semantic.min.css';
 import HistoryRow from './historyRow'
+import '../css/history_acord.css'
 
 class History extends React.Component {
 
@@ -9,15 +10,20 @@ class History extends React.Component {
         super();
 
         this.state = {
-            all_history: []
+            all_history: [],
+            activeIndex: false
         };
 
+
         this.handleClick = (e) => {
-            fetch('api/v1.0/history/' + this.props.suborder_no).then((response) => (
-                response.json()
-            )).then((json) => {
-                this.setState({all_history: json.history});
-            });
+            if (this.state.activeIndex === false){
+                this.setState({activeIndex: true});
+                fetch('api/v1.0/history/' + this.props.suborder_no).then((response) => (
+                    response.json()
+                )).then((json) => {
+                    this.setState({all_history: json.history});
+                });
+            }
         };
     }
 
@@ -34,7 +40,7 @@ class History extends React.Component {
 
         return(
             <Accordion>
-                <Accordion.Title onClick={this.handleClick }>
+                <Accordion.Title onClick={this.handleClick} >
                   <Icon name='dropdown' />
                     <Label color='blue' content={'History'}/>
                 </Accordion.Title>

@@ -11,6 +11,7 @@ from app import db
 import json
 from .utils import update_status, get_orders_by_fields
 
+
 @api.route('/', methods=['GET'])
 def info():
     return jsonify({'version': 'v1.0'})
@@ -52,8 +53,6 @@ def get_orders():
     order_number = request.args.get('ordernumber', '')
     print(order_number)
     if request.method == 'POST':  # makes it so we get a post method to receive the info put in on the form
-    # if request.form:
-    #     order_number = str(request.args.get('ordernumber', ''))
         json = request.get_json(force=True)
         order_number = json.get("order_no")
         suborder_number = json.get("suborder_no")
@@ -63,15 +62,9 @@ def get_orders():
         user = ''
         date_received = json.get("date_received")
         date_submitted = json.get("date_submitted")
-        print("date_received")
-        print(date_received)
-        print("date_submitted")
-        print(date_submitted)
+
         orders = get_orders_by_fields(order_number, suborder_number, order_type, billing_name, user, date_received,
                                       date_submitted)
-        # orders = [order.serialize for order in Orders.query.filter_by(order_no='000592026').all()]
-
-        print(orders)
         return jsonify(all_orders=orders)
 
     else:
@@ -144,11 +137,6 @@ def history(sub_order_no):
     Look for all the rows with this sub_order_no and list out the history for each one in Descending order
      also get the comment and date with these to send to the front
     """
-
-    # history = StatusTracker.query.order_by(StatusTracker.timestamp.desc())
-    # history_list = [i.serialize for i in history]  # loop through and use the serialize function
-    # print(history)
-    # print(history_list)
 
     history = [status.serialize for status in StatusTracker.query.filter_by(sub_order_no=int(sub_order_no)).order_by(desc(StatusTracker.timestamp)).all()]
 
