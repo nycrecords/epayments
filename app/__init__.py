@@ -6,11 +6,9 @@
 
 import pytz
 from flask import Flask, current_app
-from flask.ext.sqlalchemy import SQLAlchemy
+from flask_sqlalchemy import SQLAlchemy
 from flask_bootstrap import Bootstrap
 from flask_apscheduler import APScheduler
-from flask.ext.cors import CORS
-from apscheduler.triggers.cron import CronTrigger
 
 from config import config, Config
 
@@ -20,9 +18,6 @@ db = SQLAlchemy()
 scheduler = APScheduler()
 
 PYTZ_TIMEZONE = pytz.timezone(Config.TIME_ZONE)
-
-from app.models import orders, client_info, birth, marriage, death, photo, prop_card
-
 
 
 def create_app(config_name):
@@ -40,7 +35,6 @@ def create_app(config_name):
 
     bootstrap.init_app(app)
     db.init_app(app)
-    CORS(app)
 
     # Base template that uses React for frontend
     from .main import main as main_blueprint

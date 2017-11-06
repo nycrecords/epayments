@@ -25,15 +25,7 @@ mkdir /home/vagrant/.virtualenvs
 virtualenv --system-site-packages /home/vagrant/.virtualenvs/epayments
 chown -R vagrant:vagrant /home/vagrant
 source /home/vagrant/.virtualenvs/epayments/bin/activate
-pip install -r /vagrant/requirements/common.txt --no-binary :all:
-
-if [ "$1" -eq development ] || [ "$2" -eq development ]; then
-    pip install -r /vagrant/requirements/dev.txt --no-binary :all:
-fi
-
-if [ "$1" -eq rhel ] || [ "$2" -eq rhel ]; then
-    pip install -r /vagrant/requirements/rhel.txt --no-binary :all:
-fi
+pip install -r /vagrant/requirements.txt --no-binary :all:
 
 # 7. Install telnet-server
 yum -y install telnet-server

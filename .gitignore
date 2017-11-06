@@ -4,6 +4,9 @@ data
 .env
 .vagrant
 Vagrantfile
+*.pem
+*.crt
+*.key
 app/__init__.pyc
 =======
 # See https://help.github.com/ignore-files/ for more about ignoring files.
@@ -19,10 +22,7 @@ app/__init__.pyc
 
 # misc
 .DS_Store
-.env
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 x
-.idea
-
