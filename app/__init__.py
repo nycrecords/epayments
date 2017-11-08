@@ -1,11 +1,5 @@
-# from flask import Blueprint
-#
-# main = Blueprint('main', __name__)
-#
-# from . import views, errors
-
 import pytz
-from flask import Flask, current_app
+from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 from flask_bootstrap import Bootstrap
 from flask_apscheduler import APScheduler
@@ -43,8 +37,5 @@ def create_app(config_name):
     # API CALL GOES HERE
     from .api_1_0 import api_1_0 as api_1_0_blueprint
     app.register_blueprint(api_1_0_blueprint, url_prefix='/api/v1.0')
-
-    # Scheduler
-    # atexit.register(lambda: scheduler.shutdown())
 
     return app

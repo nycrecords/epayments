@@ -1,11 +1,7 @@
 import React from 'react';
-import {Grid, Container, Header, Button} from 'semantic-ui-react';
+import {Grid, Container, Header} from 'semantic-ui-react';
 import OrderForm from "./order_form";
 import Order from "./order";
-import StatusModal from "./status_modal";
-import History from "./history";
-
-// import "../data/orders.json";
 
 class Home extends React.Component {
     constructor() {

@@ -1,13 +1,7 @@
 from flask import jsonify, abort, request
-import datetime
-from datetime import date, datetime, timedelta
-from sqlalchemy import func, databases, update, desc, asc
+from sqlalchemy import desc
 from .import api_1_0 as api
-from ..models import Orders, Customer, BirthSearch, BirthCertificate, MarriageSearch, MarriageCertificate, \
-                     DeathSearch, DeathCertificate, PhotoGallery, PhotoTax, PropertyCard, StatusTracker
-from sqlalchemy.orm import sessionmaker, Query
-from app import db
-import json
+from ..models import Orders, Suborders, StatusTracker
 from .utils import update_status, get_orders_by_fields
 
 
@@ -65,20 +59,11 @@ def get_orders():
         return jsonify(all_orders=orders)
 
     else:
-        yesterday = datetime.strptime(date.today().strftime("%Y-%m-%d %H:%M:%S"), "%Y-%m-%d %H:%M:%S")
+        # TODO: On GET, Load Orders from yesterday date
+        # yesterday = datetime.strptime(date.today().strftime("%Y-%m-%d %H:%M:%S"), "%Y-%m-%d %H:%M:%S")
         # orders = [order.serialize for order in Orders.query.filter_by(date_received=yesterday).all()]
-        orders = [order.serialize for order in Orders.query.filter_by().all()]
+        orders = [suborder.serialize for suborder in Suborders.query.filter_by().all()]
         return jsonify(all_orders=orders)
-
-
-# @api.route('/status/<suborder_no>', methods=['GET'])
-# def status_lookup(suborder_no):
-#     """
-#     :param suborder_no:re
-#     :return: the status of all records with this suborder_no that was passed in
-#     """
-#     status = [status.serialize for status in StatusTracker.query.filter_by(suborder_no=int(suborder_no)).all()]
-#     return jsonify(status=status)
 
 
 @api.route('/status/<suborder_no>', methods=['GET', 'POST'])

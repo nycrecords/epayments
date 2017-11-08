@@ -22,64 +22,30 @@ class Orders(db.Model):
 
     __tablename__ = 'orders'
     id = db.Column(db.String(64), primary_key=True, nullable=False)
-    # suborder_no = db.Column(db.BigInteger, primary_key=True, nullable=False)
     date_submitted = db.Column(db.DateTime, nullable=False)
     date_received = db.Column(db.DateTime, nullable=True)
-    # billing_name = db.Column(db.String(64), nullable=False)
-    # customer_email = db.Column(db.String(64), nullable=False)
     confirmation_message = db.Column(db.Text, nullable=False)
     client_data = db.Column(db.Text, nullable=False)
-    # client_id = db.Column(db.Integer, nullable=False)
-    # client_agency_name = db.Column(db.String(64), nullable=False)
     ordertypes = db.Column(db.String(255), nullable=True)
     suborders = db.relationship('Suborders', backref='suborders', lazy=True)
-    customer = db.relationship('Customer', backref=db.backref('customer', uselist=False))
-    # uselist = false backref='orders' -- old way I had it
+    customer = db.relationship('Customer', backref='customer', uselist=False)
 
     def __init__(
             self,
             id,
-            # suborder_no,
             date_submitted,
             date_received,
-            # billing_name,
-            # customer_email,
             confirmation_message,
             client_data,
-            # client_id,
-            # client_agency_name,
             ordertypes,
 
     ):
         self.id = id
-        # self.suborder_no = suborder_no
         self.date_submitted = date_submitted
         self.date_received = date_received or None
-        # self.billing_name = billing_name
-        # self.customer_email = customer_email
         self.confirmation_message = confirmation_message
         self.client_data = client_data
-        # self.client_id = client_id
-        # self.client_agency_name = client_agency_name
         self.ordertypes = ordertypes
-
-    @property
-    def serialize(self):
-        """Return object data in easily serializable format"""
-        return {
-            'order_no': self.order_no,
-            'suborder_no': self.suborder_no,
-            'date_submitted': self.date_submitted,
-            'date_received': self.date_received.strftime("%x %I:%M %p"),
-            'billing_name': self.billing_name,
-            'customer_email': self.customer_email,
-            'confirmation_message': self.confirmation_message,
-            'client_data': self.client_data,
-            'client_id': self.client_id,
-            'client_agency_name': self.client_agency_name,
-            'current_status': self.status.filter_by(suborder_no=self.suborder_no)
-                                         .order_by(StatusTracker.id.desc()).first().current_status
-        }
 
 
 class Suborders(db.Model):
@@ -92,6 +58,7 @@ class Suborders(db.Model):
     client_agency_name = db.Column(db.String(64), nullable=False)
     order_no = db.Column(db.String(64), db.ForeignKey('orders.id'), nullable=False)
     status = db.relationship('StatusTracker', backref=db.backref('suborders'), lazy='dynamic')
+    order = db.relationship('Orders', backref='orders', uselist=False)
 
     def __init__(
             self,
@@ -104,6 +71,21 @@ class Suborders(db.Model):
         self.client_id = client_id
         self.client_agency_name = client_agency_name
         self.order_no = order_no
+
+    @property
+    def serialize(self):
+        """Return object data in easily serializable format"""
+        return {
+            'order_no': self.order_no,
+            'suborder_no': self.id,
+            'date_submitted': self.order.date_submitted,
+            'date_received': self.order.date_received.strftime("%x %I:%M %p"),
+            'billing_name': self.order.customer.billing_name,
+            'customer_email': self.order.customer.email,
+            'client_agency_name': self.client_agency_name,
+            'current_status': self.status.filter_by(suborder_no=self.id)
+                                         .order_by(StatusTracker.id.desc()).first().current_status
+        }
 
 
 class StatusTracker(db.Model):

@@ -16,14 +16,14 @@ class History extends React.Component {
 
 
         this.handleClick = (e) => {
-            if (this.state.activeIndex === false){
-                this.setState({activeIndex: true});
+            // if (this.state.activeIndex === false){
+            //     this.setState({activeIndex: true});
                 fetch('api/v1.0/history/' + this.props.suborder_no).then((response) => (
                     response.json()
                 )).then((json) => {
                     this.setState({all_history: json.history});
                 });
-            }
+            // }
         };
     }
 
@@ -39,14 +39,13 @@ class History extends React.Component {
          );
 
         return(
-            <Accordion>
-                <Accordion.Title onClick={this.handleClick} >
+            <Accordion onTitleClick={this.handleClick}>
+                <Accordion.Title>
                   <Icon name='dropdown' />
                     <Label color='blue' content={'History'}/>
                 </Accordion.Title>
                 <Accordion.Content>
-                  <p>
-                    <Table called selectable>
+                    <Table celled selectable>
                         <Table.Header>
                             <Table.Row>
                                 <Table.HeaderCell>Date/Time</Table.HeaderCell>
@@ -62,7 +61,6 @@ class History extends React.Component {
 
                     </Table>
 
-                  </p>
                 </Accordion.Content>
             </Accordion>
         )
