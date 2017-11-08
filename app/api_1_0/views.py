@@ -3,7 +3,6 @@ import datetime
 from datetime import date, datetime, timedelta
 from sqlalchemy import func, databases, update, desc, asc
 from .import api_1_0 as api
-from app.constants.client_agency_names import CLIENT_AGENCY_NAMES
 from ..models import Orders, Customer, BirthSearch, BirthCertificate, MarriageSearch, MarriageCertificate, \
                      DeathSearch, DeathCertificate, PhotoGallery, PhotoTax, PropertyCard, StatusTracker
 from sqlalchemy.orm import sessionmaker, Query
@@ -48,10 +47,8 @@ def get_orders():
         "suborderno": 9127848504
 
     """
-    # get_json()
 
     order_number = request.args.get('ordernumber', '')
-    print(order_number)
     if request.method == 'POST':  # makes it so we get a post method to receive the info put in on the form
         json = request.get_json(force=True)
         order_number = json.get("order_no")
@@ -104,11 +101,6 @@ def status_change(suborder_no):
             5. Done - End of status changes
         :return: {status_id, suborder_no, status, comment}, 201
     """
-
-    # session = StatusTracker.query.filter_by(suborder_no=suborder_no).first_or_404()
-    # session = StatusTracker.query.order_by(StatusTracker.suborder_no.desc()).first()
-    # curr_status = session.current_status
-    # status_id = session.id
 
     if request.method == 'POST':  # Means that something was passed from the front
         # curr_status = str(request.form["status"])

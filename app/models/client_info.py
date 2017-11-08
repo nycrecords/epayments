@@ -1,7 +1,6 @@
 from app import db
 from app.models.orders import Orders
 
-
 class Customer(db.Model):
 
     """

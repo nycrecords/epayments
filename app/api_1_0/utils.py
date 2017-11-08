@@ -64,14 +64,11 @@ def get_orders_by_fields(order_number, suborder_number, order_type, billing_name
     if len(billing_name) != 0:
         orders = orders.filter(func.lower(Orders.billing_name).contains(func.lower(billing_name)))
 
-    print("The length of order type")
-    print(len(order_type))
     if order_type != '' and order_type not in ['all', 'multiple_items', 'vital_records_and_photos']:
         orders = orders.filter(Orders.client_agency_name == order_type)
     elif order_type == 'multiple_items':
         orders = [order for order in orders if len(order.ordertypes.split(',')) > 1]
     elif order_type == 'vital_records_and_photos':
-        print("does it hit here_2")
         orders = [order for order in orders if
                   not set(order.ordertypes.split(',')).isdisjoint(vitalrecordslist) and not set(order.ordertypes.split(
                       ',')).isdisjoint(photolist)]
