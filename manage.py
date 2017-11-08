@@ -1,15 +1,16 @@
 import os
+from app import create_app, db
+from app.models import Orders, Suborders, StatusTracker, Customer, BirthSearch, \
+    MarriageSearch, DeathSearch, BirthCertificate, MarriageCertificate, \
+    DeathCertificate, PropertyCard, PhotoTax, PhotoGallery
+from flask_script import Manager, Shell
+from flask_migrate import Migrate, MigrateCommand
+
 COV = None
 if os.environ.get('FLASK_COVERAGE'):
     import coverage
     COV = coverage.coverage(branch=True, include='app/*')
     COV.start()
-from app import create_app, db
-from app.models import Orders, StatusTracker, Customer, BirthSearch, \
-    MarriageSearch, DeathSearch, BirthCertificate, MarriageCertificate, \
-    DeathCertificate, PropertyCard, PhotoTax, PhotoGallery
-from flask_script import Manager, Shell
-from flask_migrate import Migrate, MigrateCommand
 
 app = create_app(os.getenv('FLASK_CONFIG') or 'default')
 manager = Manager(app)
@@ -18,7 +19,7 @@ migrate = Migrate(app, db)
 
 def make_shell_context():
     """Create the shell context for the Flask application."""
-    return dict(app=app, db=db, Order=Orders, StatusTracker=StatusTracker,
+    return dict(app=app, db=db, Order=Orders, Suborder=Suborders, StatusTracker=StatusTracker,
                 Customer=Customer, BirthSearch=BirthSearch, MarriageSearch=MarriageSearch,
                 DeathSearch=DeathSearch, BirthCertificate=BirthCertificate,
                 MarriageCertificate=MarriageCertificate, DeathCertificate=DeathCertificate,

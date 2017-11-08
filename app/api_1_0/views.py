@@ -74,21 +74,21 @@ def get_orders():
         return jsonify(all_orders=orders)
 
 
-# @api.route('/status/<sub_order_no>', methods=['GET'])
-# def status_lookup(sub_order_no):
+# @api.route('/status/<suborder_no>', methods=['GET'])
+# def status_lookup(suborder_no):
 #     """
-#     :param sub_order_no:re
-#     :return: the status of all records with this sub_order_no that was passed in
+#     :param suborder_no:re
+#     :return: the status of all records with this suborder_no that was passed in
 #     """
-#     status = [status.serialize for status in StatusTracker.query.filter_by(sub_order_no=int(sub_order_no)).all()]
+#     status = [status.serialize for status in StatusTracker.query.filter_by(suborder_no=int(suborder_no)).all()]
 #     return jsonify(status=status)
 
 
-@api.route('/status/<sub_order_no>', methods=['GET', 'POST'])
-def status_change(sub_order_no):
+@api.route('/status/<suborder_no>', methods=['GET', 'POST'])
+def status_change(suborder_no):
     """
-        GET: {sub_order_no}; returns {sub_order_no, current_status}, 200
-        POST: {sub_order_no, new_status, comment}
+        GET: {suborder_no}; returns {suborder_no, current_status}, 200
+        POST: {suborder_no, new_status, comment}
 
         Status Table
         - ID - Integer
@@ -102,11 +102,11 @@ def status_change(sub_order_no):
                a)Letter_generated
                b)Undeliverable - Cant move down the line
             5. Done - End of status changes
-        :return: {status_id, sub_order_no, status, comment}, 201
+        :return: {status_id, suborder_no, status, comment}, 201
     """
 
-    # session = StatusTracker.query.filter_by(sub_order_no=sub_order_no).first_or_404()
-    # session = StatusTracker.query.order_by(StatusTracker.sub_order_no.desc()).first()
+    # session = StatusTracker.query.filter_by(suborder_no=suborder_no).first_or_404()
+    # session = StatusTracker.query.order_by(StatusTracker.suborder_no.desc()).first()
     # curr_status = session.current_status
     # status_id = session.id
 
@@ -117,28 +117,28 @@ def status_change(sub_order_no):
         new_status = json.get("new_status")
 
         """ 
-            POST: {sub_order_no, new_status, comment}; 
-            returns: {status_id, sub_order_no, status, comment}, 201 
+            POST: {suborder_no, new_status, comment}; 
+            returns: {status_id, suborder_no, status, comment}, 201 
         """
-        update_status(sub_order_no, comment, new_status)
+        update_status(suborder_no, comment, new_status)
 
-    # return jsonify(current_status=curr_status, sub_order_no=sub_order_no, comment=comment, status_id=status_id)
-    status = [status.serialize for status in StatusTracker.query.filter_by(sub_order_no=int(sub_order_no)).all()]
+    # return jsonify(current_status=curr_status, suborder_no=suborder_no, comment=comment, status_id=status_id)
+    status = [status.serialize for status in StatusTracker.query.filter_by(suborder_no=int(suborder_no)).all()]
     return jsonify(status=status)
 
 
-@api.route('/history/<int:sub_order_no>', methods=['GET'])
-def history(sub_order_no):
+@api.route('/history/<int:suborder_no>', methods=['GET'])
+def history(suborder_no):
     """
-    GET: {sub_order_no};
-    :param sub_order_no:
-    :return: {sub_order_no, previous value, new value, comment, date}, 200
+    GET: {suborder_no};
+    :param suborder_no:
+    :return: {suborder_no, previous value, new value, comment, date}, 200
 
-    Look for all the rows with this sub_order_no and list out the history for each one in Descending order
+    Look for all the rows with this suborder_no and list out the history for each one in Descending order
      also get the comment and date with these to send to the front
     """
 
-    history = [status.serialize for status in StatusTracker.query.filter_by(sub_order_no=int(sub_order_no)).order_by(desc(StatusTracker.timestamp)).all()]
+    history = [status.serialize for status in StatusTracker.query.filter_by(suborder_no=int(suborder_no)).order_by(desc(StatusTracker.timestamp)).all()]
 
     return jsonify(history=history)
 

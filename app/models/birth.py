@@ -24,7 +24,7 @@ class BirthSearch(db.Model):
     borough -- Column: array[5] 1-D
     letter -- Column: Bool
     comment -- Column: string(255)
-    sub_order_no -- Column: BigInteger, foreignKey
+    suborder_no -- Column: BigInteger, foreignKey
     """
     __tablename__ = 'birth_search'
     id = db.Column(db.Integer, primary_key=True)
@@ -60,8 +60,7 @@ class BirthSearch(db.Model):
     borough = db.Column(ARRAY(db.String(20), dimensions=1), nullable=False)
     letter = db.Column(db.Boolean, nullable=True)
     comment = db.Column(db.String(255), nullable=True)
-    sub_order_no = db.Column(db.BigInteger, db.ForeignKey('orders.sub_order_no'),
-                             nullable=False)
+    suborder_no = db.Column(db.BigInteger, db.ForeignKey('suborders.id'), nullable=False)
 
     def __init__(
                 self,
@@ -81,7 +80,7 @@ class BirthSearch(db.Model):
                 borough,
                 letter,
                 comment,
-                sub_order_no
+                suborder_no
     ):
         self.first_name = first_name or None
         self.last_name = last_name
@@ -99,7 +98,7 @@ class BirthSearch(db.Model):
         self.borough = borough
         self.letter = letter or None
         self.comment = comment or None
-        self.sub_order_no = sub_order_no
+        self.suborder_no = suborder_no
 
 
 class BirthCertificate(db.Model):
@@ -124,7 +123,7 @@ class BirthCertificate(db.Model):
     borough -- Column: array[]
     letter -- Column: Bool
     comment -- Column: string(255)
-    sub_order_no -- Column: BigInteger, foreignKey
+    suborder_no -- Column: BigInteger, foreignKey
 
     """
 
@@ -160,8 +159,7 @@ class BirthCertificate(db.Model):
     borough = db.Column(ARRAY(db.String(20), dimensions=1), nullable=False)
     letter = db.Column(db.Boolean, nullable=True)
     comment = db.Column(db.String(255), nullable=True)
-    sub_order_no = db.Column(db.BigInteger, db.ForeignKey('orders.sub_order_no'),
-                             nullable=False)
+    suborder_no = db.Column(db.BigInteger, db.ForeignKey('suborders.id'), nullable=False)
 
     def __init__(
             self,
@@ -182,7 +180,7 @@ class BirthCertificate(db.Model):
             borough,
             letter,
             comment,
-            sub_order_no
+            suborder_no
     ):
         self.certificate_no = certificate_no
         self.first_name = first_name or None
@@ -201,5 +199,5 @@ class BirthCertificate(db.Model):
         self.borough = borough
         self.letter = letter or None
         self.comment = comment or None
-        self.sub_order_no = sub_order_no
+        self.suborder_no = suborder_no
 

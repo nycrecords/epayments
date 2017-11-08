@@ -23,7 +23,7 @@ class DeathSearch(db.Model):
     borough -- Column: String/Array
     letter -- Column: bool
     comment -- Column: String(255)
-    sub_order_no -- Column: BigInteger, foreignKey
+    suborder_no -- Column: BigInteger, foreignKey
 
     """
 
@@ -53,8 +53,7 @@ class DeathSearch(db.Model):
     borough = db.Column(ARRAY(db.String(20), dimensions=1), nullable=False)
     letter = db.Column(db.Boolean, nullable=True)
     comment = db.Column(db.String(255), nullable=True)
-    sub_order_no = db.Column(db.BigInteger, db.ForeignKey('orders.sub_order_no'),
-                             nullable=False)
+    suborder_no = db.Column(db.BigInteger, db.ForeignKey('suborders.id'), nullable=False)
 
     def __init__(
                 self,
@@ -73,7 +72,7 @@ class DeathSearch(db.Model):
                 borough,
                 letter,
                 comment,
-                sub_order_no
+                suborder_no
     ):
         self.last_name = last_name
         self.first_name = first_name or None
@@ -90,7 +89,7 @@ class DeathSearch(db.Model):
         self.borough = borough
         self.letter = letter or None
         self.comment = comment or None
-        self.sub_order_no = sub_order_no
+        self.suborder_no = suborder_no
 
 
 class DeathCertificate(db.Model):
@@ -114,7 +113,7 @@ class DeathCertificate(db.Model):
     borough -- Column: String/Array
     letter -- Column: bool
     comment -- Column: String(255)
-    sub_order_no -- Column: BigInteger, foreignKey
+    suborder_no -- Column: BigInteger, foreignKey
 
     """
 
@@ -145,8 +144,7 @@ class DeathCertificate(db.Model):
     borough = db.Column(ARRAY(db.String(20), dimensions=1), nullable=False)
     letter = db.Column(db.Boolean, nullable=True)
     comment = db.Column(db.String(255), nullable=True)
-    sub_order_no = db.Column(db.BigInteger, db.ForeignKey('orders.sub_order_no'),
-                             nullable=False)
+    suborder_no = db.Column(db.BigInteger, db.ForeignKey('suborders.id'), nullable=False)
 
     def __init__(
             self,
@@ -166,7 +164,7 @@ class DeathCertificate(db.Model):
             borough,
             letter,
             comment,
-            sub_order_no
+            suborder_no
     ):
         self.certificate_no = certificate_no
         self.last_name = last_name
@@ -184,5 +182,4 @@ class DeathCertificate(db.Model):
         self.borough = borough
         self.letter = letter or None
         self.comment = comment or None
-        self.sub_order_no = sub_order_no
-
+        self.suborder_no = suborder_no

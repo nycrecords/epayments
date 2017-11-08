@@ -7,26 +7,26 @@ from app import db
 
 comment = "The Record is Done."
 new_status = 'Done'
-sub_order_no = 9128144811
+suborder_no = 9128144811
 
 
-def update_status(sub_order_no, comment, new_status):
+def update_status(suborder_no, comment, new_status):
     """
-        POST: {sub_order_no, new_status, comment};
-        returns: {status_id, sub_order_no, status, comment}, 201
+        POST: {suborder_no, new_status, comment};
+        returns: {status_id, suborder_no, status, comment}, 201
 
     Take in the info, this function only gets called if the form is filled
      - access the db to get the status_id for this particular order
      - now create a new row in the db in the status table with
      - this row should have a status_id + 1 then the highest status row
-     - 1) it will have the same sub_order_no
+     - 1) it will have the same suborder_no
      - 2) it will have the comment that was passed in or None
      - 3) it will have the new status that was passed from the user
     """
 
-    # session = StatusTracker.query.filter_by(sub_order_no=sub_order_no).first_or_404()
+    # session = StatusTracker.query.filter_by(suborder_no=suborder_no).first_or_404()
 
-    insert_status = StatusTracker(sub_order_no=sub_order_no)
+    insert_status = StatusTracker(suborder_no=suborder_no)
 
     db.session.add(insert_status)
     db.session.commit()
@@ -35,7 +35,7 @@ def update_status(sub_order_no, comment, new_status):
 
 
 
-# update_status(sub_order_no, comment, new_status)
+# update_status(suborder_no, comment, new_status)
 
 
 # def get_orders_by_fields_dict(order_number, suborder_number, order_type, billing_name, user, date_received,

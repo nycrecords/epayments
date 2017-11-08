@@ -52,8 +52,7 @@ class MarriageSearch(db.Model):
     borough = db.Column(ARRAY(db.String(20), dimensions=1), nullable=False)
     letter = db.Column(db.Boolean, nullable=True)
     comment = db.Column(db.String(255), nullable=True)
-    sub_order_no = db.Column(db.BigInteger, db.ForeignKey('orders.sub_order_no'),
-                             nullable=False)
+    suborder_no = db.Column(db.BigInteger, db.ForeignKey('suborders.id'), nullable=False)
 
     def __init__(
                 self,
@@ -71,7 +70,7 @@ class MarriageSearch(db.Model):
                 borough,
                 letter,
                 comment,
-                sub_order_no
+                suborder_no
     ):
         self.groom_last_name = groom_last_name
         self.groom_first_name = groom_first_name or None
@@ -87,7 +86,7 @@ class MarriageSearch(db.Model):
         self.borough = borough
         self.letter = letter or None
         self.comment = comment or None
-        self.sub_order_no = sub_order_no
+        self.suborder_no = suborder_no
 
 
 class MarriageCertificate(db.Model):
@@ -140,8 +139,7 @@ class MarriageCertificate(db.Model):
     borough = db.Column(ARRAY(db.String(20), dimensions=1), nullable=False)
     letter = db.Column(db.Boolean, nullable=True)
     comment = db.Column(db.String(255), nullable=True)
-    sub_order_no = db.Column(db.BigInteger, db.ForeignKey('orders.sub_order_no'),
-                             nullable=False)
+    suborder_no = db.Column(db.BigInteger, db.ForeignKey('suborders.id'), nullable=False)
 
     def __init__(
             self,
@@ -160,7 +158,7 @@ class MarriageCertificate(db.Model):
             borough,
             letter,
             comment,
-            sub_order_no
+            suborder_no
     ):
         self.certificate_no = certificate_no
         self.groom_last_name = groom_last_name
@@ -177,4 +175,4 @@ class MarriageCertificate(db.Model):
         self.borough = borough
         self.letter = letter or None
         self.comment = comment or None
-        self.sub_order_no = sub_order_no
+        self.suborder_no = suborder_no

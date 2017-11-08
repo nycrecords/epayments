@@ -3,10 +3,10 @@ import xml.etree.ElementTree as ET
 from datetime import datetime, date
 from flask import current_app
 from app import db, scheduler
-from app.models import Orders, StatusTracker, BirthSearch, BirthCertificate, MarriageCertificate,\
-    MarriageSearch, DeathCertificate, DeathSearch, PhotoGallery, PhotoTax, PropertyCard, Customer
+from app.models import Orders, StatusTracker, BirthSearch, BirthCertificate, MarriageCertificate, \
+    MarriageSearch, DeathCertificate, DeathSearch, PhotoGallery, PhotoTax, PropertyCard, Customer, Suborders
 from app.file_utils import sftp_ctx
-from app.constants import borough, collection, gender, purpose, size, status
+from app.constants import status
 from app.constants.client_agency_names import CLIENT_AGENCY_NAMES
 
 
@@ -78,9 +78,75 @@ def import_file(file_name):
     if "CPY" in order_no:
         order_no = order_no.strip('CPY')
 
-    # In the XML the type of order is keep up with the ClientID
+    # Message sent to customer
+    confirmation_message = root.find('ConfirmationMessage').text
 
+    # Get Order Date information
+    date_received = date.today()
+    date_last_modified = datetime.fromtimestamp(
+        os.path.getmtime(file_name)).strftime('%Y-%m-%d %H:%M:%S')
+
+    # Get Order Types information
+    ordertypes = []
+    itemdescription = root.findall(".//ItemDescription")
+    for item in itemdescription:
+        for ordertype in ordertypelist:
+            if ordertype in item.text:
+                ordertypes.append(ordertype)
+    ordertypes = ','.join(ordertypes)
+
+    # Get Client Data information
     clients_data = root.find('ClientsData').text
+
+    # Insert into the Orders Table
+    order = Orders(id=order_no,
+                   date_submitted=date_received,
+                   date_received=date_last_modified,
+                   confirmation_message=confirmation_message,
+                   client_data=clients_data,
+                   ordertypes=ordertypes)
+
+    db.session.add(order)
+    db.session.commit()
+
+    # Get Customer Information
+    # Name for Billing Information
+    billing_name = root.find("EPaymentRes").find("BillingInfo").find("BillingName").text
+
+    # Customer Email: Email for person who placed order
+    customer_email = root.find("EPaymentReq").find("CustomerEmail").text
+
+    # Get Shipping Information
+    shipping_add = root.find("EPaymentRes").find("ShippingAdd")
+    ship_to_name = shipping_add.find("ShipToName").text
+    ship_to_street_add = shipping_add.find("ShipToStreetAdd").text
+    ship_to_street_add_2 = shipping_add.find("ShipToStreetAdd2").text
+    ship_to_city = shipping_add.find("ShipToCity").text
+    ship_to_state = shipping_add.find("ShipToState").text
+    ship_to_zipcode = shipping_add.find("ShipToZipCode").text
+    ship_to_country = shipping_add.find("ShipToCountry").text
+    ship_to_phone = shipping_add.find("ShipToPhone").text
+    shipping_instructions = shipping_add.find("ShippingInstructions").text
+
+    # Insert into Customer table
+    customer = Customer(billing_name=billing_name,
+                        email=customer_email,
+                        shipping_name=ship_to_name,
+                        address_line_1=ship_to_street_add,
+                        address_line_2=ship_to_street_add_2,
+                        city=ship_to_city,
+                        state=ship_to_state,
+                        zip_code=ship_to_zipcode,
+                        country=ship_to_country,
+                        phone=ship_to_phone,
+                        instructions=shipping_instructions,
+                        order_no=order_no)
+
+    db.session.add(customer)
+    db.session.commit()
+
+    # In the XML the type of order is kept up with the ClientID
+
     clients_data_items = clients_data.split('ClientID')[1:]
     clients_data_items = ['ClientID' + client for client in clients_data_items]
 
@@ -89,91 +155,33 @@ def import_file(file_name):
         client_id = clients_data_list[clients_data_list.index("ClientID") + 1]
         client_agency_name = CLIENT_AGENCY_NAMES[client_id]
 
-        # Sub order Number used to identify multi-part orders
-        sub_order_no = clients_data_list[clients_data_list.index("OrderNo") + 1]
+        # Suborder Number used to identify multi-part orders
+        suborder_no = clients_data_list[clients_data_list.index("OrderNo") + 1]
 
         # Check for duplicate in database
-        duplicate = Orders.query.filter_by(sub_order_no=sub_order_no).first()
+        duplicate = Suborders.query.filter_by(id=suborder_no).first()
 
         if duplicate:
             print("Order %s already exists in the database." % order_no)
             continue
 
-        ordertypes = []
-        itemdescription = root.findall(".//ItemDescription")
-        for item in itemdescription:
-            for ordertype in ordertypelist:
-                if ordertype in item.text:
-                    ordertypes.append(ordertype)
-        ordertypes = ','.join(ordertypes)
+        # Insert into thr Suborders Table
+        suborder = Suborders(id=suborder_no,
+                             client_id=client_id,
+                             client_agency_name=client_agency_name,
+                             order_no=order_no)
 
-        # Get Customer Information
-        # Name for Billing Information
-        billing_name = root.find("EPaymentRes").find("BillingInfo").find("BillingName").text
-
-        # Customer Email: Email for person who placed order
-        customer_email = root.find("EPaymentReq").find("CustomerEmail").text
-
-        # Message sent to customer
-        confirmation_message = root.find('ConfirmationMessage').text
-
-        # Get Order Date Information
-        date_received = date.today()
-        date_last_modified = datetime.fromtimestamp(
-            os.path.getmtime(file_name)).strftime('%Y-%m-%d %H:%M:%S')
-
-        # Get Shipping Information
-        shipping_add = root.find("EPaymentRes").find("ShippingAdd")
-        ship_to_name = shipping_add.find("ShipToName").text
-        ship_to_street_add = shipping_add.find("ShipToStreetAdd").text
-        ship_to_street_add_2 = shipping_add.find("ShipToStreetAdd2").text
-        ship_to_city = shipping_add.find("ShipToCity").text
-        ship_to_state = shipping_add.find("ShipToState").text
-        ship_to_zipcode = shipping_add.find("ShipToZipCode").text
-        ship_to_country = shipping_add.find("ShipToCountry").text
-        ship_to_phone = shipping_add.find("ShipToPhone").text
-
-        shipping_instructions = shipping_add.find("ShippingInstructions").text
-
-
-        # Insert into the Orders Table
-        insert_order = Orders(order_no=order_no,
-                              sub_order_no=sub_order_no,
-                              date_submitted=date_received,
-                              date_received=date_last_modified,
-                              billing_name=billing_name,
-                              customer_email=customer_email,
-                              confirmation_message=confirmation_message,
-                              client_data=clients_data,
-                              client_id=client_id,
-                              client_agency_name=client_agency_name,
-                              ordertypes=ordertypes)
-
-        db.session.add(insert_order)
+        db.session.add(suborder)
         db.session.commit()
 
         # Insert into the StatusTracker Table
-        insert_status = StatusTracker(sub_order_no=sub_order_no,
-                                      current_status='Received',
+        insert_status = StatusTracker(suborder_no=suborder_no,
+                                      current_status=status.RECEIVED,
                                       comment=None,
                                       timestamp=None,
                                       previous_value=None)
 
         db.session.add(insert_status)
-        db.session.commit()
-
-        # Insert into the Shipping Table
-        insert_Customer = Customer(name=ship_to_name,
-                                   address_line_1=ship_to_street_add,
-                                   address_line_2=ship_to_street_add_2,
-                                   city=ship_to_city,
-                                   state=ship_to_state,
-                                   zip_code=ship_to_zipcode,
-                                   country=ship_to_country,
-                                   phone=ship_to_phone,
-                                   instructions=shipping_instructions)
-
-        db.session.add(insert_Customer)
         db.session.commit()
 
         # Insert into the BirthSearch Table
@@ -194,13 +202,10 @@ def import_file(file_name):
         #     "10000058": "Property Card"
         # }
 
-
         # Birth Search
         if client_id == '10000102':
-            # We are now in the a sub Order that is of type Birth Search
+            # We are now in the suborder that is of type Birth Search
             # Find all the necessary info for birth search
-
-            # sub_order_no = clients_data_list[clients_data_list.index("OrderNo") + 1]
 
             # Pull the name
             first_name = clients_data_list[
@@ -210,11 +215,11 @@ def import_file(file_name):
             mid_name = clients_data_list[
                 clients_data_list.index("MIDDLENAME") + 1] if "MIDDLENAME" in clients_data_list else None
 
-            # Pull the gender Type
+            # Pull the gender type
             gender_type = clients_data_list[
                 clients_data_list.index("GENDER") + 1] if "GENDER" in clients_data_list else None
 
-            # Get the Parent's names/relationship && purpose
+            # Get the Parent's names/relationship and purpose
             father_name = clients_data_list[
                 clients_data_list.index("FATHER_NAME") + 1] if "FATHER_NAME" in clients_data_list else None
             mother_name = clients_data_list[
@@ -224,7 +229,6 @@ def import_file(file_name):
             purpose = clients_data_list[
                 clients_data_list.index("PURPOSE") + 1] if "PURPOSE" in clients_data_list else None
 
-
             # Number of Copies
             additional_copy = clients_data_list[clients_data_list.index("ADDITIONAL_COPY") + 1]
 
@@ -233,7 +237,7 @@ def import_file(file_name):
             day = clients_data_list[clients_data_list.index("DAY") + 1] if "DAY" in clients_data_list else None
             years = clients_data_list[clients_data_list.index("YEAR_") + 1] if "YEAR_" in clients_data_list else None
 
-            # Indivdual Info
+            # Individual Info
             birth_place = clients_data_list[
                 clients_data_list.index("BIRTH_PLACE") + 1] if "BIRTH_PLACE" in clients_data_list else None
             borough = clients_data_list[clients_data_list.index("BOROUGH") + 1]
@@ -262,9 +266,8 @@ def import_file(file_name):
                                              borough=borough,
                                              letter=letter,
                                              comment=comment,
-                                             sub_order_no=sub_order_no)
+                                             suborder_no=suborder_no)
 
-            print("Let add this to the birthsearch table")
             db.session.add(insert_birthsearch)
             db.session.commit()
 
@@ -323,9 +326,8 @@ def import_file(file_name):
                                                    borough=borough,
                                                    letter=letter,
                                                    comment=comment,
-                                                   sub_order_no=sub_order_no)
+                                                   suborder_no=suborder_no)
 
-            print("Let add this to the marriagesearch table")
             db.session.add(insert_marriagesearch)
             db.session.commit()
 
@@ -391,9 +393,8 @@ def import_file(file_name):
                                              borough=borough,
                                              letter=letter,
                                              comment=comment,
-                                             sub_order_no=sub_order_no)
+                                             suborder_no=suborder_no)
 
-            print("Let add this to the deathsearch table")
             db.session.add(insert_deathsearch)
             db.session.commit()
 
@@ -465,9 +466,8 @@ def import_file(file_name):
                                                 borough=borough,
                                                 letter=letter,
                                                 comment=comment,
-                                                sub_order_no=sub_order_no)
+                                                suborder_no=suborder_no)
 
-            print("Let add this to the birthcert table")
             db.session.add(insert_birthcert)
             db.session.commit()
 
@@ -531,9 +531,8 @@ def import_file(file_name):
                                                       borough=borough,
                                                       letter=letter,
                                                       comment=comment,
-                                                      sub_order_no=sub_order_no)
+                                                      suborder_no=suborder_no)
 
-            print("Let add this to the marriagecert table")
             db.session.add(insert_marriagecert)
             db.session.commit()
 
@@ -607,9 +606,8 @@ def import_file(file_name):
                                                 borough=borough,
                                                 letter=letter,
                                                 comment=comment,
-                                                sub_order_no=sub_order_no)
+                                                suborder_no=suborder_no)
 
-            print("Let add this to the deathcert table")
             db.session.add(insert_deathcert)
             db.session.commit()
 
@@ -630,7 +628,7 @@ def import_file(file_name):
 
             # mailed/pickup
             if clients_data_list[
-                    clients_data_list.index("MAIL_PICKUP") + 1] if "MAIL_PICKUP" in clients_data_list else None:
+                        clients_data_list.index("MAIL_PICKUP") + 1] if "MAIL_PICKUP" in clients_data_list else None:
                 mail_pickup = True
             else:
                 mail_pickup = False
@@ -647,9 +645,8 @@ def import_file(file_name):
                                            certified=certified,
                                            mail_pickup=mail_pickup,
                                            contact_info=contact_info,
-                                           sub_order_no=sub_order_no)
+                                           suborder_no=suborder_no)
 
-            print("Let add this to the propcard table")
             db.session.add(insert_propcard)
             db.session.commit()
 
@@ -703,9 +700,8 @@ def import_file(file_name):
                                        mail_pickup=mail_pickup,
                                        contact_no=contact_no,
                                        comment=comment,
-                                       sub_order_no=sub_order_no)
+                                       suborder_no=suborder_no)
 
-            print("Let add this to the phototax table")
             db.session.add(insert_phototax)
             db.session.commit()
 
@@ -716,10 +712,10 @@ def import_file(file_name):
 
             # Get the description
             description = clients_data_list[
-                clients_data_list.index("IMAGE_DESCRIPTION") + 1]\
+                clients_data_list.index("IMAGE_DESCRIPTION") + 1] \
                 if "IMAGE_DESCRIPTION" in clients_data_list else None
             additional_description = clients_data_list[
-                clients_data_list.index("ADDITIONAL_DESCRIPTION") + 1]\
+                clients_data_list.index("ADDITIONAL_DESCRIPTION") + 1] \
                 if "ADDITIONAL_DESCRIPTION" in clients_data_list else None
 
             size = clients_data_list[clients_data_list.index("SIZE") + 1]
@@ -737,7 +733,7 @@ def import_file(file_name):
 
             # personal use agreement
             if clients_data_list[
-                    clients_data_list.index("PERSONAL_USE_AGREEMENT") + 1] \
+                        clients_data_list.index("PERSONAL_USE_AGREEMENT") + 1] \
                     if "PERSONAL_USE_AGREEMENT" in clients_data_list else None:
                 personal_use_agreement = True
             else:
@@ -755,31 +751,9 @@ def import_file(file_name):
                                                contact_no=contact_no,
                                                personal_use_agreement=personal_use_agreement,
                                                comment=comment,
-                                               sub_order_no=sub_order_no)
+                                               suborder_no=suborder_no)
 
-            print("Let add this to the photogallery table")
             db.session.add(insert_photogallery)
             db.session.commit()
 
     return True
-
-#
-# def make_public_order(order):
-#     """
-#     Create a JSON object with URI that references a specific order.
-#
-#     :param order: order as a JSON object
-#     :return: JSON object
-#     """
-#     new_order = {}
-#     for field in order:
-#         if field == 'SubOrderNo':
-#             new_order['uri'] = url_for(
-#                 'api_1_0.get_order',
-#                 order_id=order['SubOrderNo'],
-#                 _external=True
-#             )
-#         else:
-#             new_order[field] = order[field]
-#
-#     return new_order

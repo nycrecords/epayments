@@ -16,7 +16,7 @@ class PropertyCard(db.Model):
     certified -- Column: Bool
     mail_pickup -- Column: Bool
     contact_no -- Column: String(35)
-    sub_order_no -- Column: BigInteger, foreignKey
+    suborder_no -- Column: BigInteger, foreignKey
 
     """
 
@@ -31,8 +31,7 @@ class PropertyCard(db.Model):
     certified = db.Column(db.Boolean, nullable=False)
     mail_pickup = db.Column(db.Boolean, nullable=False)
     contact_info = db.Column(db.String(35), nullable=True)
-    sub_order_no = db.Column(db.BigInteger, db.ForeignKey('orders.sub_order_no'),
-                             nullable=False)
+    suborder_no = db.Column(db.BigInteger, db.ForeignKey('suborders.id'), nullable=False)
 
     def __init__(
                 self,
@@ -45,7 +44,7 @@ class PropertyCard(db.Model):
                 certified,
                 mail_pickup,
                 contact_info,
-                sub_order_no
+                suborder_no
     ):
         self.borough = borough
         self.block = block or None
@@ -56,4 +55,4 @@ class PropertyCard(db.Model):
         self.certified = certified
         self.mail_pickup = mail_pickup
         self.contact_info = contact_info or None
-        self.sub_order_no = sub_order_no
+        self.suborder_no = suborder_no

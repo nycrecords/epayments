@@ -1,4 +1,5 @@
 from app import db
+from app.models.orders import Orders
 
 
 class Customer(db.Model):
@@ -20,7 +21,9 @@ class Customer(db.Model):
     """
     __tablename__ = 'customer'
     id = db.Column(db.Integer, primary_key=True, nullable=False)
-    name = db.Column(db.String(64), nullable=False)
+    billing_name = db.Column(db.String(64), nullable=False)
+    email = db.Column(db.String(64), nullable=False)
+    shipping_name = db.Column(db.String(64), nullable=False)
     address_line_1 = db.Column(db.String(64), nullable=True)
     address_line_2 = db.Column(db.String(64), nullable=True)
     city = db.Column(db.String(64), nullable=False)
@@ -29,10 +32,13 @@ class Customer(db.Model):
     country = db.Column(db.String(64), nullable=False)
     phone = db.Column(db.String(64), nullable=True)
     instructions = db.Column(db.String(64), nullable=True)
+    order_no = db.Column(db.String(64), db.ForeignKey('orders.id'), nullable=False)
 
     def __init__(
                 self,
-                name,
+                billing_name,
+                email,
+                shipping_name,
                 address_line_1,
                 address_line_2,
                 city,
@@ -40,10 +46,13 @@ class Customer(db.Model):
                 zip_code,
                 country,
                 phone,
-                instructions
+                instructions,
+                order_no
 
     ):
-        self.name = name
+        self.billing_name = billing_name
+        self.email = email
+        self.shipping_name = shipping_name
         self.address_line_1 = address_line_1 or None
         self.address_line_2 = address_line_2 or None
         self.city = city
@@ -52,3 +61,4 @@ class Customer(db.Model):
         self.country = country
         self.phone = phone or None
         self.instructions = instructions or None
+        self.order_no = order_no

@@ -1,5 +1,5 @@
 from app import db
-from app .constants import status
+from app.constants import status
 from datetime import datetime
 from pytz import timezone
 
@@ -9,7 +9,7 @@ class Orders(db.Model):
     Define the new Order class with the following Columns & relationships
 
     order_number -- Column: String(64)
-    sub_order_no -- Column: BigInteger, PrimaryKey
+    suborder_no -- Column: BigInteger, PrimaryKey
     date_submitted -- Column: DateTime -- date order was submitted
     date_received -- Column: DateTime -- day we receive order
     billing_name -- Column: String(64)
@@ -21,53 +21,54 @@ class Orders(db.Model):
     """
 
     __tablename__ = 'orders'
-    order_no = db.Column(db.String(64))
-    sub_order_no = db.Column(db.BigInteger, primary_key=True, nullable=False)
+    id = db.Column(db.String(64), primary_key=True, nullable=False)
+    # suborder_no = db.Column(db.BigInteger, primary_key=True, nullable=False)
     date_submitted = db.Column(db.DateTime, nullable=False)
     date_received = db.Column(db.DateTime, nullable=True)
-    billing_name = db.Column(db.String(64), nullable=False)
-    customer_email = db.Column(db.String(64), nullable=False)
+    # billing_name = db.Column(db.String(64), nullable=False)
+    # customer_email = db.Column(db.String(64), nullable=False)
     confirmation_message = db.Column(db.Text, nullable=False)
     client_data = db.Column(db.Text, nullable=False)
-    client_id = db.Column(db.Integer, nullable=False)
-    client_agency_name = db.Column(db.String(64), nullable=False)
+    # client_id = db.Column(db.Integer, nullable=False)
+    # client_agency_name = db.Column(db.String(64), nullable=False)
     ordertypes = db.Column(db.String(255), nullable=True)
-    status = db.relationship('StatusTracker', lazy='dynamic', backref=db.backref('orders', lazy='joined'))
+    suborders = db.relationship('Suborders', backref='suborders', lazy=True)
+    customer = db.relationship('Customer', backref=db.backref('customer', uselist=False))
     # uselist = false backref='orders' -- old way I had it
 
     def __init__(
             self,
-            order_no,
-            sub_order_no,
+            id,
+            # suborder_no,
             date_submitted,
             date_received,
-            billing_name,
-            customer_email,
+            # billing_name,
+            # customer_email,
             confirmation_message,
             client_data,
-            client_id,
-            client_agency_name,
+            # client_id,
+            # client_agency_name,
             ordertypes,
 
     ):
-        self.order_no = order_no
-        self.sub_order_no = sub_order_no
+        self.id = id
+        # self.suborder_no = suborder_no
         self.date_submitted = date_submitted
         self.date_received = date_received or None
-        self.billing_name = billing_name
-        self.customer_email = customer_email
+        # self.billing_name = billing_name
+        # self.customer_email = customer_email
         self.confirmation_message = confirmation_message
         self.client_data = client_data
-        self.client_id = client_id
-        self.client_agency_name = client_agency_name
+        # self.client_id = client_id
+        # self.client_agency_name = client_agency_name
         self.ordertypes = ordertypes
 
     @property
     def serialize(self):
-        """Return object data in easily serializeable format"""
+        """Return object data in easily serializable format"""
         return {
             'order_no': self.order_no,
-            'suborder_no': self.sub_order_no,
+            'suborder_no': self.suborder_no,
             'date_submitted': self.date_submitted,
             'date_received': self.date_received.strftime("%x %I:%M %p"),
             'billing_name': self.billing_name,
@@ -76,9 +77,33 @@ class Orders(db.Model):
             'client_data': self.client_data,
             'client_id': self.client_id,
             'client_agency_name': self.client_agency_name,
-            'current_status': self.status.filter_by(sub_order_no=self.sub_order_no)
+            'current_status': self.status.filter_by(suborder_no=self.suborder_no)
                                          .order_by(StatusTracker.id.desc()).first().current_status
         }
+
+
+class Suborders(db.Model):
+    """
+
+    """
+    __tablename__ = 'suborders'
+    id = db.Column(db.BigInteger, primary_key=True, nullable=False)
+    client_id = db.Column(db.Integer, nullable=False)
+    client_agency_name = db.Column(db.String(64), nullable=False)
+    order_no = db.Column(db.String(64), db.ForeignKey('orders.id'), nullable=False)
+    status = db.relationship('StatusTracker', backref=db.backref('suborders'), lazy='dynamic')
+
+    def __init__(
+            self,
+            id,
+            client_id,
+            client_agency_name,
+            order_no
+    ):
+        self.id = id
+        self.client_id = client_id
+        self.client_agency_name = client_agency_name
+        self.order_no = order_no
 
 
 class StatusTracker(db.Model):
@@ -88,7 +113,7 @@ class StatusTracker(db.Model):
     process of the document
 
     id - db.Integer , primary key = true
-    sub_order_no - Column: BigInteger, Foreign Key - connects the sub_order# to the top of this database
+    suborder_no - Column: BigInteger, Foreign Key - connects the sub_order# to the top of this database
     status - Column: Enum - Tracks the status of the order can only be these set things
     comment - Column: db.String(64) - stores the comment that was passed in
     timestamp - Column: db.datetime - holds the time that the status was updated
@@ -107,8 +132,7 @@ class StatusTracker(db.Model):
     """
     __tablename__ = 'status'
     id = db.Column(db.Integer, primary_key=True)
-    sub_order_no = db.Column(db.BigInteger, db.ForeignKey('orders.sub_order_no'),
-                             nullable=False)
+    suborder_no = db.Column(db.BigInteger, db.ForeignKey('suborders.id'), nullable=False)
     current_status = db.Column(
         db.Enum(
             status.RECEIVED,
@@ -127,17 +151,17 @@ class StatusTracker(db.Model):
     # Class Constructor to initialize the data
     def __init__(
                 self,
-                sub_order_no,
+                suborder_no,
                 current_status,
                 comment,
                 timestamp,
                 previous_value,
     ):
-        self.sub_order_no = sub_order_no,
-        self.current_status = current_status,
-        self.comment = comment or None,
+        self.suborder_no = suborder_no
+        self.current_status = current_status
+        self.comment = comment or None
         self.timestamp = timestamp or datetime.utcnow()
-        self.previous_value = previous_value or None,
+        self.previous_value = previous_value or None
 
     @staticmethod
     def utc_to_local(date):
@@ -148,7 +172,7 @@ class StatusTracker(db.Model):
     def serialize(self):
         """Return object data in easily serializable format"""
         return {
-            'suborder_no': self.sub_order_no,
+            'suborder_no': self.suborder_no,
             'current_status': self.current_status,
             'comment': self.comment,
             'timestamp': self.utc_to_local(self.timestamp).strftime("%x %I:%M %p"),

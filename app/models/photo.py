@@ -21,7 +21,7 @@ class PhotoTax(db.Model):
     mail_pickup -- Column: Bool
     contact_no -- Column: String(10)
     comment -- Column: String()
-    sub_order_no -- Column: BigInteger, foreignKey
+    suborder_no -- Column: BigInteger, foreignKey
 
     """
 
@@ -62,8 +62,7 @@ class PhotoTax(db.Model):
     mail_pickup = db.Column(db.Boolean, nullable=True)
     contact_no = db.Column(db.String(10), nullable=True)
     comment = db.Column(db.String(255), nullable=True)
-    sub_order_no = db.Column(db.BigInteger, db.ForeignKey('orders.sub_order_no'),
-                             nullable=False)
+    suborder_no = db.Column(db.BigInteger, db.ForeignKey('suborders.id'), nullable=False)
 
     def __init__(
                 self,
@@ -81,7 +80,7 @@ class PhotoTax(db.Model):
                 mail_pickup,
                 contact_no,
                 comment,
-                sub_order_no
+                suborder_no
     ):
         self.borough = borough
         self.collection = collection
@@ -97,7 +96,7 @@ class PhotoTax(db.Model):
         self.mail_pickup = mail_pickup
         self.contact_no = contact_no or 'N/A'
         self.comment = comment or 'N/A'
-        self.sub_order_no = sub_order_no
+        self.suborder_no = suborder_no
 
 
 class PhotoGallery(db.Model):
@@ -114,7 +113,7 @@ class PhotoGallery(db.Model):
     contact_no -- Column: String(10)
     personal_use_agreement -- Column: Bool
     comment -- Column: String(255)
-    sub_order_no -- Column: BigInteger, foreignKey
+    suborder_no -- Column: BigInteger, foreignKey
 
     """
 
@@ -134,8 +133,7 @@ class PhotoGallery(db.Model):
     contact_no = db.Column(db.String(10), nullable=True)
     personal_use_agreement = db.Column(db.Boolean, nullable=True)
     comment = db.Column(db.String(255), nullable=True)
-    sub_order_no = db.Column(db.BigInteger, db.ForeignKey('orders.sub_order_no'),
-                             nullable=False)
+    suborder_no = db.Column(db.BigInteger, db.ForeignKey('suborders.id'), nullable=False)
 
     def __init__(
                 self,
@@ -148,7 +146,7 @@ class PhotoGallery(db.Model):
                 contact_no,
                 personal_use_agreement,
                 comment,
-                sub_order_no
+                suborder_no
     ):
         self.image_id = image_id
         self.description = description or 'N/A'
@@ -159,4 +157,4 @@ class PhotoGallery(db.Model):
         self.contact_no = contact_no or 'N/A'
         self.personal_use_agreement = personal_use_agreement
         self.comment = comment or 'N/A'
-        self.sub_order_no = sub_order_no
+        self.suborder_no = suborder_no
