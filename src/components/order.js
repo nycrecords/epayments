@@ -35,7 +35,7 @@ class Order extends React.Component {
                 {/*</Menu>*/}
                 <br/>
                 Billing Name: {this.props.billing_name} <br/>
-                Date Received: {this.props.date_received} <br/>
+                Date Submitted: {this.props.date_submitted} <br/>
                 <History suborder_no={this.props.suborder_no} />
                 <Divider/>
                 {/*<br/>*/}

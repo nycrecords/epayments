@@ -78,8 +78,8 @@ class Suborders(db.Model):
         return {
             'order_no': self.order_no,
             'suborder_no': self.id,
-            'date_submitted': self.order.date_submitted,
-            'date_received': self.order.date_received.strftime("%x %I:%M %p"),
+            'date_submitted': self.order.date_submitted.strftime("%x %I:%M %p"),
+            'date_received': self.order.date_received,
             'billing_name': self.order.customer.billing_name,
             'customer_email': self.order.customer.email,
             'client_agency_name': self.client_agency_name,
@@ -127,7 +127,7 @@ class StatusTracker(db.Model):
             status.DONE,
             name='current_status'), nullable=True)
     comment = db.Column(db.String(64), nullable=True)
-    timestamp = db.Column(db.DateTime)
+    timestamp = db.Column(db.DateTime, nullable=False)
     previous_value = db.Column(db.String(25), nullable=True)
 
     # Class Constructor to initialize the data
@@ -142,13 +142,8 @@ class StatusTracker(db.Model):
         self.suborder_no = suborder_no
         self.current_status = current_status
         self.comment = comment or None
-        self.timestamp = timestamp or datetime.utcnow()
+        self.timestamp = timestamp or datetime.now(timezone('US/Eastern'))
         self.previous_value = previous_value or None
-
-    @staticmethod
-    def utc_to_local(date):
-        """Offsets the UTC into EST Timezone """
-        return date + timezone('America/New_York').localize(date).utcoffset()
 
     @property
     def serialize(self):
@@ -157,6 +152,6 @@ class StatusTracker(db.Model):
             'suborder_no': self.suborder_no,
             'current_status': self.current_status,
             'comment': self.comment,
-            'timestamp': self.utc_to_local(self.timestamp).strftime("%x %I:%M %p"),
+            'timestamp': self.timestamp.strftime("%x %I:%M %p"),
             'previous_value': self.previous_value,
         }

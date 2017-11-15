@@ -45,7 +45,7 @@ class Home extends React.Component {
                 suborder_no={order.suborder_no}
                 client_agency_name={order.client_agency_name}
                 billing_name={order.billing_name}
-                date_received={order.date_received.slice(0,-9)}
+                date_submitted={order.date_submitted.slice(0,-9)}
                 current_status={order.current_status}
                 updateStatus={this.updateStatus}
             />

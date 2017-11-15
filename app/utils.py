@@ -5,6 +5,7 @@ from flask import current_app
 from app import db, scheduler
 from app.models import Orders, StatusTracker, BirthSearch, BirthCertificate, MarriageCertificate, \
     MarriageSearch, DeathCertificate, DeathSearch, PhotoGallery, PhotoTax, PropertyCard, Customer, Suborders
+from app.date_utils import utc_to_local
 from app.file_utils import sftp_ctx
 from app.constants import status
 from app.constants.client_agency_names import CLIENT_AGENCY_NAMES
@@ -84,7 +85,10 @@ def import_file(file_name):
     # Get Order Date information
     date_received = date.today()
     date_last_modified = datetime.fromtimestamp(
-        os.path.getmtime(file_name)).strftime('%Y-%m-%d %H:%M:%S')
+        os.path.getmtime(file_name))
+
+    # Convert date_last_modified from UTC to EST
+    date_submitted = utc_to_local(date_last_modified, 'US/Eastern')
 
     # Get Order Types information
     ordertypes = []
@@ -100,8 +104,8 @@ def import_file(file_name):
 
     # Insert into the Orders Table
     order = Orders(id=order_no,
-                   date_submitted=date_received,
-                   date_received=date_last_modified,
+                   date_submitted=date_submitted,
+                   date_received=date_received,
                    confirmation_message=confirmation_message,
                    client_data=clients_data,
                    ordertypes=ordertypes)

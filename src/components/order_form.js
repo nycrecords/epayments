@@ -48,12 +48,12 @@ class OrderForm extends React.Component {
                 billing_name: '',
             });
 
-            this.dateReceivedStart.setState({
+            this.dateSubmittedStart.setState({
                 date: '',
             });
 
 
-            this.dateReceivedEnd.setState({
+            this.dateSubmittedEnd.setState({
                 date: '',
             });
         };
@@ -79,8 +79,8 @@ class OrderForm extends React.Component {
                     suborder_no: this.state.subordernumber,
                     order_type: this.state.order_type,
                     billing_name: this.state.billing_name,
-                    date_received: formatDate(this.dateReceivedStart),
-                    date_submitted: formatDate(this.dateReceivedEnd)
+                    date_submitted_start: formatDate(this.dateSubmittedStart),
+                    date_submitted_end: formatDate(this.dateSubmittedEnd)
                 })
             }).then((response) => {
                 return response.json()
@@ -141,10 +141,10 @@ class OrderForm extends React.Component {
                     <Form.Group>
                         <Form.Field width="16">
                             <Date
-                                label="Date Received - Start"
-                                name="Date Received - Start"
+                                label="Date Submitted - Start"
+                                name="Date Submitted - Start"
                                 maxDate={moment().startOf('day')}
-                                ref={(date) => this.dateReceivedStart = date}
+                                ref={(date) => this.dateSubmittedStart = date}
                             />
 
                         </Form.Field>
@@ -152,10 +152,10 @@ class OrderForm extends React.Component {
                     <Form.Group>
                         <Form.Field width="16">
                             <Date
-                                label="Date Received - End"
-                                name="Date Received - End"
+                                label="Date Submitted - End"
+                                name="Date Submitted - End"
                                 maxDate={moment().startOf('day')}
-                                ref={(date) => this.dateReceivedEnd = date}
+                                ref={(date) => this.dateSubmittedEnd = date}
                             />
                         </Form.Field>
                     </Form.Group>

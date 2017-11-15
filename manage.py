@@ -40,8 +40,10 @@ manager.add_command('db', MigrateCommand)
 @manager.command
 def reset_db():
     """Empties the database and generates it again with db_setup"""
+    from flask_migrate import upgrade
     db.drop_all()
     db.create_all()
+    upgrade()
 
 
 @manager.command

@@ -18,6 +18,7 @@ class History extends React.Component {
         this.handleClick = (e) => {
             // if (this.state.activeIndex === false){
             //     this.setState({activeIndex: true});
+                console.log("CLICK");
                 fetch('api/v1.0/history/' + this.props.suborder_no).then((response) => (
                     response.json()
                 )).then((json) => {

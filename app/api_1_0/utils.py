@@ -72,7 +72,6 @@ def get_orders_by_fields(order_number, suborder_number, order_type, billing_name
         orders = [order for order in orders if
                   not set(order.ordertypes.split(',')).isdisjoint(vitalrecordslist) and not set(order.ordertypes.split(
                       ',')).isdisjoint(photolist)]
-
     order_list = [order.serialize for order in orders]
 
     return order_list

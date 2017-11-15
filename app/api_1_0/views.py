@@ -1,8 +1,9 @@
+from datetime import date, timedelta, datetime, time
 from flask import jsonify, abort, request
 from sqlalchemy import desc
-from .import api_1_0 as api
-from ..models import Orders, Suborders, StatusTracker
-from .utils import update_status, get_orders_by_fields
+from app.models import Orders, Suborders, StatusTracker
+from app.api_1_0 import api_1_0 as api
+from app.api_1_0.utils import update_status, get_orders_by_fields
 
 
 @api.route('/', methods=['GET'])
@@ -19,7 +20,7 @@ def get_orders():
     order_type, billing_name, date_received_start, and date_receieved_end will be retrieved
     from the form data and used in a function called get_orders_by_fields to filter orders.
 
-    Else, orders are filtered with the previous day's date.
+    Else, orders are filtered with today's date.
 
     As a user, I want to be able to search for specific orders.
 
@@ -41,28 +42,34 @@ def get_orders():
         "suborderno": 9127848504
 
     """
-
-    order_number = request.args.get('ordernumber', '')
     if request.method == 'POST':  # makes it so we get a post method to receive the info put in on the form
         json = request.get_json(force=True)
         order_number = json.get("order_no")
         suborder_number = json.get("suborder_no")
         order_type = json.get("order_type")
         billing_name = json.get("billing_name")
-        # user = str(request.form["user"])
         user = ''
         date_received = json.get("date_received")
         date_submitted = json.get("date_submitted")
 
-        orders = get_orders_by_fields(order_number, suborder_number, order_type, billing_name, user, date_received,
+        orders = get_orders_by_fields(order_number,
+                                      suborder_number,
+                                      order_type,
+                                      billing_name,
+                                      user,
+                                      date_received,
                                       date_submitted)
         return jsonify(all_orders=orders)
 
     else:
-        # TODO: On GET, Load Orders from yesterday date
-        # yesterday = datetime.strptime(date.today().strftime("%Y-%m-%d %H:%M:%S"), "%Y-%m-%d %H:%M:%S")
-        # orders = [order.serialize for order in Orders.query.filter_by(date_received=yesterday).all()]
-        orders = [suborder.serialize for suborder in Suborders.query.filter_by().all()]
+        yesterday = date.today() - timedelta(1)
+        # Add time to date object
+        yesterday_dt = datetime.combine(yesterday, time.min)
+
+        orders = []
+        for order in Orders.query.filter(Orders.date_submitted >= yesterday_dt):
+            for suborder in order.suborders:
+                orders.append(suborder.serialize)
         return jsonify(all_orders=orders)
 
 
