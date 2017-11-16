@@ -1,5 +1,5 @@
 import React from 'react';
-import {Button, Header, Modal, Form, TextArea, Dropdown} from 'semantic-ui-react';
+import {Button, Header, Modal, Form, TextArea} from 'semantic-ui-react';
 import 'semantic-ui-css/semantic.min.css';
 
 class StatusModal extends React.Component {

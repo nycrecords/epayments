@@ -12,7 +12,7 @@ import moment from 'moment';
 //Creates the options for the Order Type dropdown.
 const options = [
     {key: 'all', text: 'All', value: 'all'},
-    {key: 'vitalrecords', text: '--Vital Records--', value: 'vital records'},
+    {key: 'vitalrecords', text: '--Vital Records--', value: 'vital_records'},
     {key: 'birthsearch', text: 'Birth Search', value: 'Birth Search'},
     {key: 'marriagesearch', text: 'Marriage Search', value: 'Marriage Search'},
     {key: 'deathsearch', text: 'Death Search', value: 'Death Search'},
@@ -65,6 +65,9 @@ class OrderForm extends React.Component {
             billing_name: ''
 
         };
+
+        this.yesterday = moment().subtract(1, 'days');
+
          const formatDate = (dateRef) => (
             dateRef && dateRef.state.date ? dateRef.state.date.format('MM/DD/YYYY') : ''
          );
@@ -143,7 +146,8 @@ class OrderForm extends React.Component {
                             <Date
                                 label="Date Submitted - Start"
                                 name="Date Submitted - Start"
-                                maxDate={moment().startOf('day')}
+                                date={this.yesterday}
+                                maxDate={this.yesterday}
                                 ref={(date) => this.dateSubmittedStart = date}
                             />
 
@@ -154,7 +158,7 @@ class OrderForm extends React.Component {
                             <Date
                                 label="Date Submitted - End"
                                 name="Date Submitted - End"
-                                maxDate={moment().startOf('day')}
+                                maxDate={this.yesterday}
                                 ref={(date) => this.dateSubmittedEnd = date}
                             />
                         </Form.Field>

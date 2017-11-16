@@ -97,7 +97,7 @@ def import_file(file_name):
         for ordertype in ordertypelist:
             if ordertype in item.text:
                 ordertypes.append(ordertype)
-    ordertypes = ','.join(ordertypes)
+    # ordertypes = ','.join(ordertypes)
 
     # Get Client Data information
     clients_data = root.find('ClientsData').text

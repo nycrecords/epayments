@@ -36,11 +36,13 @@ class Date extends React.Component {
     static propTypes = {
     label: PropTypes.string.isRequired,
     name: PropTypes.string.isRequired,
+    date: PropTypes.object,
     maxDate: PropTypes.object
   };
 
   state = {
-    date: moment(),
+    date: this.props.date,
+    // date: moment().subtract(1, 'days'),
     moment: this.props.maxDate || null,
   };
 

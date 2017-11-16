@@ -1,7 +1,7 @@
 from app import db
 from datetime import date, datetime
+from sqlalchemy import or_
 from app.models import StatusTracker, Orders, Suborders, Customer
-from sqlalchemy import func
 
 
 def update_status(suborder_no, comment, new_status):
@@ -43,7 +43,7 @@ def get_orders_by_fields(order_no, suborder_no, order_type, billing_name, user, 
                          user??, date_received, date_submitted)
     :return:
     """
-    vitalrecordslist = {'Birth search', 'Birth cert', 'Marriage search', 'Marriage cert', 'Death search', 'Death cert'}
+    vital_records_list = ['Birth cert', 'Marriage cert', 'Death cert']
     photolist = {'photo tax', 'photo gallery', 'property tax'}
     other = {'multiple items in cart', 'vital records and photos in cart'}
 
@@ -58,13 +58,17 @@ def get_orders_by_fields(order_no, suborder_no, order_type, billing_name, user, 
     ]:
         if value:
             if name == 'order_type':
-                if value not in ['all', 'multiple_items', 'vital_records_and_photos']:
+                if value not in ['all', 'multiple_items', 'vital_records']:
                     filter_args.append(
                         col.__eq__(value)
                     )
                 elif value == 'multiple_items':
                     filter_args.append(
                         Orders.order_types.contains(',')
+                    )
+                elif value == 'vital_records':
+                    filter_args.append(
+                        or_(*[Orders.order_types.any(name) for name in vital_records_list])
                     )
             elif name == 'date_submitted_start':
                 filter_args.append(

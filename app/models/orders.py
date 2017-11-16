@@ -2,6 +2,7 @@ from app import db
 from app.constants import status
 from datetime import datetime
 from pytz import timezone
+from sqlalchemy.dialects.postgresql import ARRAY
 
 
 class Orders(db.Model):
@@ -26,7 +27,7 @@ class Orders(db.Model):
     date_received = db.Column(db.DateTime, nullable=True)
     confirmation_message = db.Column(db.Text, nullable=False)
     client_data = db.Column(db.Text, nullable=False)
-    order_types = db.Column(db.String(255), nullable=True)
+    order_types = db.Column(ARRAY(db.Text), nullable=True)
     suborders = db.relationship('Suborders', backref='suborders', lazy=True)
     customer = db.relationship('Customer', backref='customer', uselist=False)
 
