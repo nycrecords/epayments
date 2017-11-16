@@ -44,21 +44,21 @@ def get_orders():
     """
     if request.method == 'POST':  # makes it so we get a post method to receive the info put in on the form
         json = request.get_json(force=True)
-        order_number = json.get("order_no")
-        suborder_number = json.get("suborder_no")
+        order_no = json.get("order_no")
+        suborder_no = json.get("suborder_no")
         order_type = json.get("order_type")
         billing_name = json.get("billing_name")
         user = ''
-        date_received = json.get("date_received")
-        date_submitted = json.get("date_submitted")
+        date_submitted_start = json.get("date_submitted_start")
+        date_submitted_end = json.get("date_submitted_end")
 
-        orders = get_orders_by_fields(order_number,
-                                      suborder_number,
+        orders = get_orders_by_fields(order_no,
+                                      suborder_no,
                                       order_type,
                                       billing_name,
                                       user,
-                                      date_received,
-                                      date_submitted)
+                                      date_submitted_start,
+                                      date_submitted_end)
         return jsonify(all_orders=orders)
 
     else:

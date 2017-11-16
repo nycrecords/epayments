@@ -1,6 +1,6 @@
 from app import db
 from datetime import date, datetime
-from ..models import StatusTracker, Orders
+from app.models import StatusTracker, Orders, Suborders, Customer
 from sqlalchemy import func
 
 
@@ -35,8 +35,8 @@ def update_status(suborder_no, comment, new_status):
     db.session.commit()
 
 
-def get_orders_by_fields(order_number, suborder_number, order_type, billing_name, user, date_received,
-                         date_submitted):
+def get_orders_by_fields(order_no, suborder_no, order_type, billing_name, user, date_submitted_start,
+                         date_submitted_end):
     """
     Filter orders by fields received
     get_orders_by_fields(client_id, suborder_no, order_type(Death Search or Marriage Search), billing_name
@@ -47,31 +47,62 @@ def get_orders_by_fields(order_number, suborder_number, order_type, billing_name
     photolist = {'photo tax', 'photo gallery', 'property tax'}
     other = {'multiple items in cart', 'vital records and photos in cart'}
 
-    yesterday = datetime.strptime(date.today().strftime("%Y-%m-%d %H:%M:%S"), "%Y-%m-%d %H:%M:%S")
+    filter_args = []
+    for name, value, col in [
+        ("order_no", order_no, Orders.id),
+        ("suborder_no", suborder_no, Suborders.id),
+        ("order_type", order_type, Suborders.client_agency_name),
+        ("billing_name", billing_name, Customer.billing_name),
+        ("date_submitted_start", date_submitted_start, Orders.date_submitted),
+        ("date_submitted_end", date_submitted_end, Orders.date_submitted)
+    ]:
+        if value:
+            if name == 'order_type':
+                if value not in ['all', 'multiple_items', 'vital_records_and_photos']:
+                    filter_args.append(
+                        col.__eq__(value)
+                    )
+                elif value == 'multiple_items':
+                    filter_args.append(
+                        Orders.order_types.contains(',')
+                    )
+            elif name == 'date_submitted_start':
+                filter_args.append(
+                    col.__ge__(value)
+                )
+            elif name == 'date_submitted_end':
+                filter_args.append(
+                    col.__le__(value)
+                )
+            else:
+                filter_args.append(
+                    col.__eq__(value)
+                )
+
+    base_query = Suborders.query.join(Orders, Customer).filter(*filter_args)
+    return [suborder.serialize for suborder in base_query.all()]
+
     # orders = Orders.query.filter(Orders.date_received >= date_received, Orders.date_received <= date_submitted)
-    if len(date_received) < 1:
-        date_received = yesterday  # set the date received start to yesterday if nothing passed in form
-    if len(date_submitted) < 1:
-        date_submitted = yesterday  # set the date received end to yesterday if nothing passed in form
-    date_received = datetime.strptime(date_received, "%m/%d/%Y")
-    date_submitted = datetime.strptime(date_submitted, "%m/%d/%Y")
-    orders = Orders.query.filter(Orders.date_received >= date_received, Orders.date_submitted <= date_submitted)
+    # if date_submitted_start and date_submitted_end:
+    #     date_submitted_start = datetime.strptime(date_submitted_start, "%m/%d/%Y")
+    #     date_submitted_end = datetime.strptime(date_submitted_end, "%m/%d/%Y")
+    #     orders = Orders.query.filter(Orders.date_received >= date_submitted_start, Orders.date_submitted <= date_submitted_end)
 
-    if len(order_number) != 0:
-        orders = orders.filter(Orders.order_no == order_number)
-    if len(suborder_number) != 0:
-        orders = orders.filter(Orders.suborder_no == suborder_number)
-    if len(billing_name) != 0:
-        orders = orders.filter(func.lower(Orders.billing_name).contains(func.lower(billing_name)))
-
-    if order_type != '' and order_type not in ['all', 'multiple_items', 'vital_records_and_photos']:
-        orders = orders.filter(Orders.client_agency_name == order_type)
-    elif order_type == 'multiple_items':
-        orders = [order for order in orders if len(order.ordertypes.split(',')) > 1]
-    elif order_type == 'vital_records_and_photos':
-        orders = [order for order in orders if
-                  not set(order.ordertypes.split(',')).isdisjoint(vitalrecordslist) and not set(order.ordertypes.split(
-                      ',')).isdisjoint(photolist)]
-    order_list = [order.serialize for order in orders]
-
-    return order_list
+    # if len(order_number) != 0:
+    #     orders = orders.filter(Orders.order_no == order_number)
+    # if len(suborder_number) != 0:
+    #     orders = orders.filter(Orders.suborder_no == suborder_number)
+    # if len(billing_name) != 0:
+    #     orders = orders.filter(func.lower(Orders.billing_name).contains(func.lower(billing_name)))
+    #
+    # if order_type != '' and order_type not in ['all', 'multiple_items', 'vital_records_and_photos']:
+    #     orders = orders.filter(Orders.client_agency_name == order_type)
+    # elif order_type == 'multiple_items':
+    #     orders = [order for order in orders if len(order.ordertypes.split(',')) > 1]
+    # elif order_type == 'vital_records_and_photos':
+    #     orders = [order for order in orders if
+    #               not set(order.ordertypes.split(',')).isdisjoint(vitalrecordslist) and not set(order.ordertypes.split(
+    #                   ',')).isdisjoint(photolist)]
+    # order_list = [order.serialize for order in orders]
+    #
+    # return order_list

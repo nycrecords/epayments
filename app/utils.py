@@ -108,7 +108,7 @@ def import_file(file_name):
                    date_received=date_received,
                    confirmation_message=confirmation_message,
                    client_data=clients_data,
-                   ordertypes=ordertypes)
+                   order_types=ordertypes)
 
     db.session.add(order)
     db.session.commit()

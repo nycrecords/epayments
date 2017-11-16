@@ -1,8 +1,8 @@
 """Initial migration
 
-Revision ID: 94bcbd4cd254
+Revision ID: f16c5e03a7db
 Revises: 
-Create Date: 2017-11-15 17:35:52.850803
+Create Date: 2017-11-15 20:57:37.786386
 
 """
 from alembic import op
@@ -10,7 +10,7 @@ import sqlalchemy as sa
 from sqlalchemy.dialects import postgresql
 
 # revision identifiers, used by Alembic.
-revision = '94bcbd4cd254'
+revision = 'f16c5e03a7db'
 down_revision = None
 branch_labels = None
 depends_on = None
@@ -24,7 +24,7 @@ def upgrade():
     sa.Column('date_received', sa.DateTime(), nullable=True),
     sa.Column('confirmation_message', sa.Text(), nullable=False),
     sa.Column('client_data', sa.Text(), nullable=False),
-    sa.Column('ordertypes', sa.String(length=255), nullable=True),
+    sa.Column('order_types', sa.String(length=255), nullable=True),
     sa.PrimaryKeyConstraint('id')
     )
     op.create_table('customer',
@@ -235,7 +235,7 @@ def upgrade():
     sa.Column('suborder_no', sa.BigInteger(), nullable=False),
     sa.Column('current_status', sa.Enum('Received', 'Processing', 'Found', 'Mailed/Pickup', 'Not_Found', 'Letter_Generated', 'Undeliverable', 'Done', name='current_status'), nullable=True),
     sa.Column('comment', sa.String(length=64), nullable=True),
-    sa.Column('timestamp', sa.DateTime(), nullable=True),
+    sa.Column('timestamp', sa.DateTime(), nullable=False),
     sa.Column('previous_value', sa.String(length=25), nullable=True),
     sa.ForeignKeyConstraint(['suborder_no'], ['suborders.id'], ),
     sa.PrimaryKeyConstraint('id')
