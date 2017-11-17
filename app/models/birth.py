@@ -60,7 +60,7 @@ class BirthSearch(db.Model):
     borough = db.Column(ARRAY(db.String(20), dimensions=1), nullable=False)
     letter = db.Column(db.Boolean, nullable=True)
     comment = db.Column(db.String(255), nullable=True)
-    suborder_no = db.Column(db.BigInteger, db.ForeignKey('suborders.id'), nullable=False)
+    suborder_no = db.Column(db.BigInteger, db.ForeignKey('suborder.id'), nullable=False)
 
     def __init__(
                 self,
@@ -159,7 +159,7 @@ class BirthCertificate(db.Model):
     borough = db.Column(ARRAY(db.String(20), dimensions=1), nullable=False)
     letter = db.Column(db.Boolean, nullable=True)
     comment = db.Column(db.String(255), nullable=True)
-    suborder_no = db.Column(db.BigInteger, db.ForeignKey('suborders.id'), nullable=False)
+    suborder_no = db.Column(db.BigInteger, db.ForeignKey('suborder.id'), nullable=False)
 
     def __init__(
             self,

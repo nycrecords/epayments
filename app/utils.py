@@ -3,8 +3,8 @@ import xml.etree.ElementTree as ET
 from datetime import datetime, date
 from flask import current_app
 from app import db, scheduler
-from app.models import Orders, StatusTracker, BirthSearch, BirthCertificate, MarriageCertificate, \
-    MarriageSearch, DeathCertificate, DeathSearch, PhotoGallery, PhotoTax, PropertyCard, Customer, Suborders
+from app.models import Order, StatusTracker, BirthSearch, BirthCertificate, MarriageCertificate, \
+    MarriageSearch, DeathCertificate, DeathSearch, PhotoGallery, PhotoTax, PropertyCard, Customer, Suborder
 from app.date_utils import utc_to_local
 from app.file_utils import sftp_ctx
 from app.constants import status
@@ -102,8 +102,8 @@ def import_file(file_name):
     # Get Client Data information
     clients_data = root.find('ClientsData').text
 
-    # Insert into the Orders Table
-    order = Orders(id=order_no,
+    # Insert into the Order Table
+    order = Order(id=order_no,
                    date_submitted=date_submitted,
                    date_received=date_received,
                    confirmation_message=confirmation_message,
@@ -164,14 +164,14 @@ def import_file(file_name):
         suborder_no = clients_data_list[clients_data_list.index("OrderNo") + 1]
 
         # Check for duplicate in database
-        duplicate = Suborders.query.filter_by(id=suborder_no).first()
+        duplicate = Suborder.query.filter_by(id=suborder_no).first()
 
         if duplicate:
             print("Order %s already exists in the database." % order_no)
             continue
 
-        # Insert into thr Suborders Table
-        suborder = Suborders(id=suborder_no,
+        # Insert into thr Suborder Table
+        suborder = Suborder(id=suborder_no,
                              client_id=client_id,
                              client_agency_name=client_agency_name,
                              order_no=order_no)

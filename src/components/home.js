@@ -1,14 +1,17 @@
 import React from 'react';
-import {Grid, Container, Header} from 'semantic-ui-react';
+import {Grid, Container, Header, Button, Segment, Divider, Modal} from 'semantic-ui-react';
 import OrderForm from "./order_form";
 import Order from "./order";
+import LoginModal from "./login_modal"
 
 class Home extends React.Component {
     constructor() {
         super();
 
         this.state = {
-            all_orders: []
+            all_orders: [],
+            order_count: '67',
+            suborder_count: '1002',
         };
 
         this.addOrder = (orders) => {
@@ -25,6 +28,18 @@ class Home extends React.Component {
             let _all_orders = this.state.all_orders.slice();
             _all_orders[status.index] = status.object;
             this.setState({all_orders: _all_orders});
+        };
+
+        this.printLabelSheet = () => {
+        //    links to Label Sheet print
+        };
+
+        this.printBigLabels = () => {
+        //    links to Big Label print
+        };
+
+        this.printSmallLabels = () => {
+        //    links to Small Label print
         };
     };
 
@@ -58,11 +73,28 @@ class Home extends React.Component {
                         <Header as="h1" textAlign="center">Epayments
                             <Container className="sub header">Department of Records</Container>
                         </Header>
+                        <Segment padded>
+                            <LoginModal/>
+                        </Segment>
                         <OrderForm addOrder={this.addOrder}/>
                     </Grid.Column>
                     <Grid.Column width={1}/>
                     <Grid.Column width={11}>
-                        <Header as="h1" dividing textAlign="center">Orders</Header>
+                        <Header as="h1" dividing textAlign="center">Order</Header>
+                        <div>
+                            <Button.Group size = 'medium' floated='right'>
+                                <Button labelPosition='left' icon='print'
+                                        content='Label Sheet' onClick={this.printLabelSheet}/>
+                                <Button content='Big Labels' onClick={this.printBigLabels}/>
+                                <Button content='Small Labels' onClick={this.printSmallLabels}/>
+                            </Button.Group>
+                            <strong>Number of Items: {this.state.suborder_count}</strong>
+                            <br/>
+                            <strong>Number of Order: {this.state.order_count}</strong>
+                        </div>
+                        <div>
+                            <Divider clearing/>
+                        </div>
                         {orderRows}
                     </Grid.Column>
                 </Grid>

@@ -5,7 +5,7 @@ from pytz import timezone
 from sqlalchemy.dialects.postgresql import ARRAY
 
 
-class Orders(db.Model):
+class Order(db.Model):
     """
     Define the new Order class with the following Columns & relationships
 
@@ -21,7 +21,7 @@ class Orders(db.Model):
     client_agency_name -- Column: String(64)
     """
 
-    __tablename__ = 'orders'
+    __tablename__ = 'order'
     id = db.Column(db.String(64), primary_key=True, nullable=False)
     date_submitted = db.Column(db.DateTime, nullable=False)
     date_received = db.Column(db.DateTime, nullable=True)
@@ -29,7 +29,7 @@ class Orders(db.Model):
     client_data = db.Column(db.Text, nullable=False)
     order_types = db.Column(ARRAY(db.Text), nullable=True)
     multiple_items = db.Column(db.Boolean, nullable=False)
-    suborders = db.relationship('Suborders', backref='suborders', lazy=True)
+    suborder = db.relationship('Suborder', backref='suborder', lazy=True)
     customer = db.relationship('Customer', backref='customer', uselist=False)
 
     def __init__(
@@ -52,17 +52,17 @@ class Orders(db.Model):
         self.multiple_items = multiple_items
 
 
-class Suborders(db.Model):
+class Suborder(db.Model):
     """
 
     """
-    __tablename__ = 'suborders'
+    __tablename__ = 'suborder'
     id = db.Column(db.BigInteger, primary_key=True, nullable=False)
     client_id = db.Column(db.Integer, nullable=False)
     client_agency_name = db.Column(db.String(64), nullable=False)
-    order_no = db.Column(db.String(64), db.ForeignKey('orders.id'), nullable=False)
-    status = db.relationship('StatusTracker', backref=db.backref('suborders'), lazy='dynamic')
-    order = db.relationship('Orders', backref='orders', uselist=False)
+    order_no = db.Column(db.String(64), db.ForeignKey('order.id'), nullable=False)
+    status = db.relationship('StatusTracker', backref=db.backref('suborder'), lazy='dynamic')
+    order = db.relationship('Order', backref='orders', uselist=False)
 
     def __init__(
             self,
@@ -118,7 +118,7 @@ class StatusTracker(db.Model):
     """
     __tablename__ = 'status'
     id = db.Column(db.Integer, primary_key=True)
-    suborder_no = db.Column(db.BigInteger, db.ForeignKey('suborders.id'), nullable=False)
+    suborder_no = db.Column(db.BigInteger, db.ForeignKey('suborder.id'), nullable=False)
     current_status = db.Column(
         db.Enum(
             status.RECEIVED,

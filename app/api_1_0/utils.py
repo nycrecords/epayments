@@ -1,7 +1,7 @@
 from app import db
 from datetime import date, datetime
 from sqlalchemy import or_
-from app.models import StatusTracker, Orders, Suborders, Customer
+from app.models import StatusTracker, Order, Suborder, Customer
 
 
 def update_status(suborder_no, comment, new_status):
@@ -48,12 +48,12 @@ def get_orders_by_fields(order_no, suborder_no, order_type, billing_name, user, 
 
     filter_args = []
     for name, value, col in [
-        ("order_no", order_no, Orders.id),
-        ("suborder_no", suborder_no, Suborders.id),
-        ("order_type", order_type, Suborders.client_agency_name),
+        ("order_no", order_no, Order.id),
+        ("suborder_no", suborder_no, Suborder.id),
+        ("order_type", order_type, Suborder.client_agency_name),
         ("billing_name", billing_name, Customer.billing_name),
-        ("date_submitted_start", date_submitted_start, Orders.date_submitted),
-        ("date_submitted_end", date_submitted_end, Orders.date_submitted)
+        ("date_submitted_start", date_submitted_start, Order.date_submitted),
+        ("date_submitted_end", date_submitted_end, Order.date_submitted)
     ]:
         if value:
             if name == 'order_type':
@@ -63,20 +63,20 @@ def get_orders_by_fields(order_no, suborder_no, order_type, billing_name, user, 
                     )
                 elif value == 'multiple_items':
                     filter_args.append(
-                        Orders.multiple_items.__eq__(True)
+                        Order.multiple_items.__eq__(True)
                     )
                 elif value == 'vital_records':
                     filter_args.append(
-                        or_(*[Orders.order_types.any(name) for name in vital_records_list])
+                        or_(*[Order.order_types.any(name) for name in vital_records_list])
                     )
                 elif value == 'photos':
                     filter_args.append(
-                        or_(*[Orders.order_types.any(name) for name in photo_list])
+                        or_(*[Order.order_types.any(name) for name in photo_list])
                     )
                 elif value == 'vital_records_and_photos':
                     vital_records_list.extend(photo_list)
                     filter_args.append(
-                        or_(*[Orders.order_types.any(name) for name in vital_records_list])
+                        or_(*[Order.order_types.any(name) for name in vital_records_list])
                     )
             elif name == 'date_submitted_start':
                 filter_args.append(
@@ -90,8 +90,8 @@ def get_orders_by_fields(order_no, suborder_no, order_type, billing_name, user, 
                 filter_args.append(
                     col.__eq__(value)
                 )
-    base_query = Suborders.query.join(Orders, Customer).filter(*filter_args)
-    order_count = base_query.distinct(Suborders.order_no).group_by(Suborders.order_no, Suborders.id).count()
+    base_query = Suborder.query.join(Order, Customer).filter(*filter_args)
+    order_count = base_query.distinct(Suborder.order_no).group_by(Suborder.order_no, Suborder.id).count()
     suborder_list = base_query.all()
     suborder_count = len(suborder_list)
     return order_count, suborder_count, [suborder.serialize for suborder in suborder_list]

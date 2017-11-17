@@ -31,7 +31,7 @@ class PropertyCard(db.Model):
     certified = db.Column(db.Boolean, nullable=False)
     mail_pickup = db.Column(db.Boolean, nullable=False)
     contact_info = db.Column(db.String(35), nullable=True)
-    suborder_no = db.Column(db.BigInteger, db.ForeignKey('suborders.id'), nullable=False)
+    suborder_no = db.Column(db.BigInteger, db.ForeignKey('suborder.id'), nullable=False)
 
     def __init__(
                 self,

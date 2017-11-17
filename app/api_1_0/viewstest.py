@@ -2,7 +2,7 @@ import datetime
 from datetime import date, timedelta
 from app.constants.client_agency_names import CLIENT_AGENCY_NAMES
 
-from app.models import StatusTracker, Orders
+from app.models import StatusTracker, Order
 from app import db
 
 comment = "The Record is Done."

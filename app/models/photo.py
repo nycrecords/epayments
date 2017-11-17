@@ -62,7 +62,7 @@ class PhotoTax(db.Model):
     mail_pickup = db.Column(db.Boolean, nullable=True)
     contact_no = db.Column(db.String(10), nullable=True)
     comment = db.Column(db.String(255), nullable=True)
-    suborder_no = db.Column(db.BigInteger, db.ForeignKey('suborders.id'), nullable=False)
+    suborder_no = db.Column(db.BigInteger, db.ForeignKey('suborder.id'), nullable=False)
 
     def __init__(
                 self,
@@ -133,7 +133,7 @@ class PhotoGallery(db.Model):
     contact_no = db.Column(db.String(10), nullable=True)
     personal_use_agreement = db.Column(db.Boolean, nullable=True)
     comment = db.Column(db.String(255), nullable=True)
-    suborder_no = db.Column(db.BigInteger, db.ForeignKey('suborders.id'), nullable=False)
+    suborder_no = db.Column(db.BigInteger, db.ForeignKey('suborder.id'), nullable=False)
 
     def __init__(
                 self,

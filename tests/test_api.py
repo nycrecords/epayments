@@ -4,7 +4,7 @@ import re
 from base64 import b64encode
 from flask import url_for, current_app
 from app import create_app, db
-from app.models import Orders, Customer, BirthSearch, BirthCertificate, MarriageSearch, MarriageCertificate, \
+from app.models import Order, Customer, BirthSearch, BirthCertificate, MarriageSearch, MarriageCertificate, \
                      DeathSearch, DeathCertificate, PhotoGallery, PhotoTax, PropertyCard, StatusTracker
 from datetime import datetime
 
@@ -16,7 +16,7 @@ class APITestCase(unittest.TestCase):
         self.app_context = self.app.app_context()
         self.app_context.push()
         db.create_all()
-        # Orders.suborder_no()
+        # Order.suborder_no()
         self.client = self.app.test_client()
 
     def tearDown(self):
@@ -28,11 +28,11 @@ class APITestCase(unittest.TestCase):
     # Need to test that if a correct XML file came in, and it was ripped of correctly
     # that everything will get inputed into the tables
     def importFile(self):
-        r = Orders.query.filter_by(suborder_no=2000000).first()
+        r = Order.query.filter_by(suborder_no=2000000).first()
         self.assertIsNotNone(r)
         current_time = datetime.utcnow()
 
-        order_1 = Orders(order_no='1',
+        order_1 = Order(order_no='1',
                          suborder_no=1,
                          date_submitted=current_time,
                          date_received=current_time,
@@ -43,7 +43,7 @@ class APITestCase(unittest.TestCase):
                          client_id='1',
                          client_agency_name='Death Search')
 
-        order_2 = Orders(order_no='2',
+        order_2 = Order(order_no='2',
                          suborder_no=2,
                          date_submitted=current_time,
                          date_received=current_time,
@@ -56,7 +56,7 @@ class APITestCase(unittest.TestCase):
 
         db.session.add([order_1, order_2])
         db.session.commit()
-        r = Orders.query.filter_by(suborder_no=1).first()
+        r = Order.query.filter_by(suborder_no=1).first()
 
         raise KeyboardInterrupt
 

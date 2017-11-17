@@ -1,7 +1,7 @@
 from datetime import date, timedelta, datetime, time
 from flask import jsonify, abort, request
 from sqlalchemy import desc
-from app.models import Orders, Suborders, StatusTracker
+from app.models import Order, Suborder, StatusTracker
 from app.api_1_0 import api_1_0 as api
 from app.api_1_0.utils import update_status, get_orders_by_fields
 
@@ -67,8 +67,8 @@ def get_orders():
         yesterday_dt = datetime.combine(yesterday, time.min)
 
         orders = []
-        for order in Orders.query.filter(Orders.date_submitted >= yesterday_dt):
-            for suborder in order.suborders:
+        for order in Order.query.filter(Order.date_submitted >= yesterday_dt):
+            for suborder in order.suborder:
                 orders.append(suborder.serialize)
         return jsonify(all_orders=orders)
 
@@ -133,7 +133,7 @@ def get_single_order(order_id):
     :param order_id:
     :return: the orders with that specific client id that was passed
     """
-    orders = [order.serialize for order in Orders.query.filter_by(client_id=order_id).all()]
+    orders = [order.serialize for order in Order.query.filter_by(client_id=order_id).all()]
 
     if len(orders) == 0:
         abort(404)

@@ -14,7 +14,7 @@ def index():
 
 @main.route('/import', methods=['GET', 'POST'])
 def import_xml():
-    """Import Orders into the database."""
+    """Import Order into the database."""
     if request.method == 'POST':
         file_ = request.files['file']
         if file_ and allowed_file(file_.filename):

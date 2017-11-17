@@ -1,5 +1,6 @@
 from app import db
-from app.models.orders import Orders
+from app.models.orders import Order
+
 
 class Customer(db.Model):
 
@@ -31,7 +32,7 @@ class Customer(db.Model):
     country = db.Column(db.String(64), nullable=False)
     phone = db.Column(db.String(64), nullable=True)
     instructions = db.Column(db.String(64), nullable=True)
-    order_no = db.Column(db.String(64), db.ForeignKey('orders.id'), nullable=False)
+    order_no = db.Column(db.String(64), db.ForeignKey('order.id'), nullable=False)
 
     def __init__(
                 self,

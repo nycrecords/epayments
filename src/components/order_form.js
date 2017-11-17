@@ -20,9 +20,9 @@ const options = [
     {key: 'marriagecert', text: 'Marriage Certificate', value: 'Marriage Cert'},
     {key: 'deathcert', text: 'Death Certificate', value: 'Death Cert'},
     {key: 'photos', text: '--Photos--', value: 'photos'},
-    {key: 'propertytax', text: 'Property Tax', value: 'property tax'},
-    {key: 'phototax', text: 'Photo Tax', value: 'photo tax'},
-    {key: 'photogallery', text: 'Photo Gallery', value: 'photo gallery'},
+    {key: 'propertycard', text: 'Property Card', value: 'Property Card'},
+    {key: 'phototax', text: 'Photo Tax', value: 'Photo Tax'},
+    {key: 'photogallery', text: 'Photo Gallery', value: 'Photo Gallery'},
     {key: 'other', text: '--Other--', value: 'other'},
     {key: 'multipleincart', text: 'Multiple Items In Cart', value: 'multiple_items'},
     {key: 'vitalincart', text: 'Vital Records And Photos In Cart', value: 'vital_records_and_photos'}
