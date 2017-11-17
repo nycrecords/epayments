@@ -1,5 +1,5 @@
 import React from 'react';
-import {Grid, Container, Header} from 'semantic-ui-react';
+import {Grid, Container, Header, Button, Segment, Divider} from 'semantic-ui-react';
 import OrderForm from "./order_form";
 import Order from "./order";
 
@@ -58,11 +58,27 @@ class Home extends React.Component {
                         <Header as="h1" textAlign="center">Epayments
                             <Container className="sub header">Department of Records</Container>
                         </Header>
+                        <Segment padded>
+                            <Button primary fluid>Login</Button>
+                        </Segment>
                         <OrderForm addOrder={this.addOrder}/>
                     </Grid.Column>
                     <Grid.Column width={1}/>
                     <Grid.Column width={11}>
                         <Header as="h1" dividing textAlign="center">Orders</Header>
+                        <div>
+                            <Button.Group size = 'medium' floated='right'>
+                                <Button icon='print' content='Label Sheet'/>
+                                <Button icon='print' content='Big Labels'/>
+                                <Button icon='print' content='Small Labels'/>
+                            </Button.Group>
+                        </div>
+                        <div>
+                            <br/>
+                             <br/>
+
+                            <Divider clearing/>
+                        </div>
                         {orderRows}
                     </Grid.Column>
                 </Grid>
