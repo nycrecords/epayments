@@ -28,6 +28,7 @@ class Orders(db.Model):
     confirmation_message = db.Column(db.Text, nullable=False)
     client_data = db.Column(db.Text, nullable=False)
     order_types = db.Column(ARRAY(db.Text), nullable=True)
+    multiple_items = db.Column(db.Boolean, nullable=False)
     suborders = db.relationship('Suborders', backref='suborders', lazy=True)
     customer = db.relationship('Customer', backref='customer', uselist=False)
 
@@ -39,6 +40,7 @@ class Orders(db.Model):
             confirmation_message,
             client_data,
             order_types,
+            multiple_items
 
     ):
         self.id = id
@@ -47,6 +49,7 @@ class Orders(db.Model):
         self.confirmation_message = confirmation_message
         self.client_data = client_data
         self.order_types = order_types
+        self.multiple_items = multiple_items
 
 
 class Suborders(db.Model):

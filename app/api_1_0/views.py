@@ -52,13 +52,13 @@ def get_orders():
         date_submitted_start = json.get("date_submitted_start")
         date_submitted_end = json.get("date_submitted_end")
 
-        orders = get_orders_by_fields(order_no,
-                                      suborder_no,
-                                      order_type,
-                                      billing_name,
-                                      user,
-                                      date_submitted_start,
-                                      date_submitted_end)
+        order_count, suborder_count, orders = get_orders_by_fields(order_no,
+                                                                   suborder_no,
+                                                                   order_type,
+                                                                   billing_name,
+                                                                   user,
+                                                                   date_submitted_start,
+                                                                   date_submitted_end)
         return jsonify(all_orders=orders)
 
     else:

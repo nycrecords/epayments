@@ -44,8 +44,7 @@ def get_orders_by_fields(order_no, suborder_no, order_type, billing_name, user, 
     :return:
     """
     vital_records_list = ['Birth cert', 'Marriage cert', 'Death cert']
-    photolist = {'photo tax', 'photo gallery', 'property tax'}
-    other = {'multiple items in cart', 'vital records and photos in cart'}
+    photo_list = ['photo tax', 'photo gallery', 'property card']
 
     filter_args = []
     for name, value, col in [
@@ -58,15 +57,24 @@ def get_orders_by_fields(order_no, suborder_no, order_type, billing_name, user, 
     ]:
         if value:
             if name == 'order_type':
-                if value not in ['all', 'multiple_items', 'vital_records']:
+                if value not in ['all', 'multiple_items', 'vital_records', 'vital_records_and_photos']:
                     filter_args.append(
                         col.__eq__(value)
                     )
                 elif value == 'multiple_items':
                     filter_args.append(
-                        Orders.order_types.contains(',')
+                        Orders.multiple_items.__eq__(True)
                     )
                 elif value == 'vital_records':
+                    filter_args.append(
+                        or_(*[Orders.order_types.any(name) for name in vital_records_list])
+                    )
+                elif value == 'photos':
+                    filter_args.append(
+                        or_(*[Orders.order_types.any(name) for name in photo_list])
+                    )
+                elif value == 'vital_records_and_photos':
+                    vital_records_list.extend(photo_list)
                     filter_args.append(
                         or_(*[Orders.order_types.any(name) for name in vital_records_list])
                     )
@@ -82,31 +90,8 @@ def get_orders_by_fields(order_no, suborder_no, order_type, billing_name, user, 
                 filter_args.append(
                     col.__eq__(value)
                 )
-
     base_query = Suborders.query.join(Orders, Customer).filter(*filter_args)
-    return [suborder.serialize for suborder in base_query.all()]
-
-    # orders = Orders.query.filter(Orders.date_received >= date_received, Orders.date_received <= date_submitted)
-    # if date_submitted_start and date_submitted_end:
-    #     date_submitted_start = datetime.strptime(date_submitted_start, "%m/%d/%Y")
-    #     date_submitted_end = datetime.strptime(date_submitted_end, "%m/%d/%Y")
-    #     orders = Orders.query.filter(Orders.date_received >= date_submitted_start, Orders.date_submitted <= date_submitted_end)
-
-    # if len(order_number) != 0:
-    #     orders = orders.filter(Orders.order_no == order_number)
-    # if len(suborder_number) != 0:
-    #     orders = orders.filter(Orders.suborder_no == suborder_number)
-    # if len(billing_name) != 0:
-    #     orders = orders.filter(func.lower(Orders.billing_name).contains(func.lower(billing_name)))
-    #
-    # if order_type != '' and order_type not in ['all', 'multiple_items', 'vital_records_and_photos']:
-    #     orders = orders.filter(Orders.client_agency_name == order_type)
-    # elif order_type == 'multiple_items':
-    #     orders = [order for order in orders if len(order.ordertypes.split(',')) > 1]
-    # elif order_type == 'vital_records_and_photos':
-    #     orders = [order for order in orders if
-    #               not set(order.ordertypes.split(',')).isdisjoint(vitalrecordslist) and not set(order.ordertypes.split(
-    #                   ',')).isdisjoint(photolist)]
-    # order_list = [order.serialize for order in orders]
-    #
-    # return order_list
+    order_count = base_query.distinct(Suborders.order_no).group_by(Suborders.order_no, Suborders.id).count()
+    suborder_list = base_query.all()
+    suborder_count = len(suborder_list)
+    return order_count, suborder_count, [suborder.serialize for suborder in suborder_list]

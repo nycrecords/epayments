@@ -97,7 +97,7 @@ def import_file(file_name):
         for ordertype in ordertypelist:
             if ordertype in item.text:
                 ordertypes.append(ordertype)
-    # ordertypes = ','.join(ordertypes)
+    multiple_items = True if len(ordertypes) > 1 else False
 
     # Get Client Data information
     clients_data = root.find('ClientsData').text
@@ -108,7 +108,8 @@ def import_file(file_name):
                    date_received=date_received,
                    confirmation_message=confirmation_message,
                    client_data=clients_data,
-                   order_types=ordertypes)
+                   order_types=ordertypes,
+                   multiple_items=multiple_items)
 
     db.session.add(order)
     db.session.commit()
