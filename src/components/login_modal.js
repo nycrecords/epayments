@@ -21,7 +21,7 @@ class LoginModal extends React.Component {
 
         this.handleSubmit = (e) => {
             e.preventDefault();
-            fetch('auth/login', {
+            fetch('api/v1.0/login', {
                 method: "POST",
                 body: JSON.stringify({
                     email: this.state.email,
@@ -63,7 +63,5 @@ class LoginModal extends React.Component {
         )
     }
 }
-
-
 
 export default LoginModal

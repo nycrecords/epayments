@@ -1,7 +1,12 @@
 from app import db
 from datetime import date, datetime
 from sqlalchemy import or_
-from app.models import StatusTracker, Order, Suborder, Customer
+from app.models import (
+    StatusTracker,
+    Order,
+    Suborder,
+    Customer
+)
 
 
 def update_status(suborder_no, comment, new_status):
@@ -95,3 +100,50 @@ def get_orders_by_fields(order_no, suborder_no, order_type, billing_name, user, 
     suborder_list = base_query.all()
     suborder_count = len(suborder_list)
     return order_count, suborder_count, [suborder.serialize for suborder in suborder_list]
+
+def _print_orders(search_params):
+    """
+    Generate PDF order sheets.
+
+    :param search_params: JSON Fields from the search form
+    :type search_params: JSON
+
+    :return: PDF
+    """
+    order_number = search_params.get("order_no")
+    suborder_number = search_params.get("suborder_no")
+    order_type = search_params.get("order_type")
+    billing_name = search_params.get("billing_name")
+    # user = str(request.form["user"])
+    user = ''
+    date_received = search_params.get("date_received")
+    date_submitted = search_params.get("date_submitted")
+
+    orders = get_orders_by_fields(order_number, suborder_number, order_type, billing_name, user, date_received,
+                                  date_submitted)
+
+    order_type_template_handler = {
+        order_type.BIRTH_SEARCH: 'birth_search.html',
+        order_type.BIRTH_CERT: 'birth_certificate.html',
+        order_type.MARRIAGE_SEARCH: 'marriage_search.html',
+        order_type.MARRIAGE_CERT: 'marriage_certificate.html',
+        order_type.DEATH_SEARCH: 'death_search.html',
+        order_type.DEATH_CERT: 'death_certificate.html',
+        order_type.PHOTO_TAX: 'photo_tax.html',
+        order_type.PHOTO_GALLERY: 'photo_gallery.html',
+        order_type.PROPERTY_CARD: 'property_card.html',
+    }
+
+
+
+def _print_small_labels():
+    pass
+
+def _print_large_labels():
+    pass
+
+def generate_csv():
+    pass
+
+def login_user(username, password):
+    pass

@@ -3,7 +3,14 @@ from flask import jsonify, abort, request
 from sqlalchemy import desc
 from app.models import Order, Suborder, StatusTracker
 from app.api_1_0 import api_1_0 as api
-from app.api_1_0.utils import update_status, get_orders_by_fields
+from app.api_1_0.utils import (
+    update_status,
+    get_orders_by_fields,
+    login_user,
+    _print_orders,
+    _print_large_labels,
+    _print_small_labels
+)
 
 
 @api.route('/', methods=['GET'])
@@ -76,22 +83,22 @@ def get_orders():
 @api.route('/status/<suborder_no>', methods=['GET', 'POST'])
 def status_change(suborder_no):
     """
-        GET: {suborder_no}; returns {suborder_no, current_status}, 200
-        POST: {suborder_no, new_status, comment}
+    GET: {suborder_no}; returns {suborder_no, current_status}, 200
+    POST: {suborder_no, new_status, comment}
 
-        Status Table
-        - ID - Integer
-        - Status - ENUM
-            1. Received || Set to this by default
-            2. Processing
-                a)Found
-                b)Printed
-            3. Mailed/Pickup
-            4. Not_Found
-               a)Letter_generated
-               b)Undeliverable - Cant move down the line
-            5. Done - End of status changes
-        :return: {status_id, suborder_no, status, comment}, 201
+    Status Table
+    - ID - Integer
+    - Status - ENUM
+        1. Received || Set to this by default
+        2. Processing
+            a)Found
+            b)Printed
+        3. Mailed/Pickup
+        4. Not_Found
+           a)Letter_generated
+           b)Undeliverable - Cant move down the line
+        5. Done - End of status changes
+    :return: {status_id, suborder_no, status, comment}, 201
     """
 
     if request.method == 'POST':  # Means that something was passed from the front
@@ -100,9 +107,9 @@ def status_change(suborder_no):
         comment = json.get("comment")
         new_status = json.get("new_status")
 
-        """ 
-            POST: {suborder_no, new_status, comment}; 
-            returns: {status_id, suborder_no, status, comment}, 201 
+        """
+            POST: {suborder_no, new_status, comment};
+            returns: {status_id, suborder_no, status, comment}, 201
         """
         update_status(suborder_no, comment, new_status)
 
@@ -139,3 +146,36 @@ def get_single_order(order_id):
         abort(404)
 
     return jsonify(orders=orders)
+
+@api.route('/print/<string:print_type>', methods=['POST'])
+def print_order(type_):
+    """
+    Generate a PDF for a print operation.
+
+    :param print_type: ('orders', 'small_labels', 'large_labels')
+    """
+    search_params = request.get_json(force=True)
+
+    handler_for_type = {
+        print_type.ORDERS: _print_orders,
+        print_type.SMALL_LABELS: _print_small_labels,
+        print_type.LARGE_LABELS: _print_large_labels
+    }
+    return handler_for_type[type_](search_params)
+
+
+@api.route('/login', methods=['POST'])
+def login():
+    """
+    Login a user through the API.
+
+    :return: {user_id}, 200
+    """
+    user_info = request.get_json(force=True)
+
+    successful_login = login_user(user_info['username'], user_info['password'])
+
+    if successful_login:
+        return jsonify(user_id="jocastillo@records.nyc.gov"), 200
+    else:
+        return jsonify(error="Invalid email or password for user account {}".format(user_info['username'])), 401

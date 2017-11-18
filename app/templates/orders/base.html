@@ -1,0 +1,5 @@
+{% if order.multiple_items %}
+<b>This item was ordered with multiple items in the cart: </b>
+{% for item in order.order_types %}
+{% endfor %}
+{% endif %}
