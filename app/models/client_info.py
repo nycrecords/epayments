@@ -62,3 +62,5 @@ class Customer(db.Model):
         self.phone = phone or None
         self.instructions = instructions or None
         self.order_no = order_no
+
+    def

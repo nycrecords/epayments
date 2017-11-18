@@ -1,5 +1,12 @@
 {% if order.multiple_items %}
-<b>This item was ordered with multiple items in the cart: </b>
-{% for item in order.order_types %}
-{% endfor %}
+    <b>This item was ordered with multiple items in the cart: </b>
+    {% for item in order.order_types %}
+        {{ item | title }}
+    {% endfor %}
 {% endif %}
+<br/>
+
+{{ customer_info | safe }}
+
+{% block content %}
+{% endblock %}

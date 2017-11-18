@@ -1,7 +1,8 @@
 from datetime import date, timedelta, datetime, time
+
 from flask import jsonify, abort, request
 from sqlalchemy import desc
-from app.models import Order, Suborder, StatusTracker
+
 from app.api_1_0 import api_1_0 as api
 from app.api_1_0.utils import (
     update_status,
@@ -10,6 +11,11 @@ from app.api_1_0.utils import (
     _print_orders,
     _print_large_labels,
     _print_small_labels
+)
+from app.constants import print_types
+from app.models import (
+    Order,
+    StatusTracker
 )
 
 
@@ -36,18 +42,6 @@ def get_orders():
     Search functionality should be in utils.py
 
     :return {orders, 200}
-
-        "billingname": "Jeffrey Kobacker",
-        "clientagencyname": "Death Search",
-        "clientdata": "ClientID|10000103|ClientAgencyName|Department of Record|OrderNo|9127848504|LASTNAME|Bloch|FIRSTNAME|Isaac|MIDDLENAME|S|RELATIONSHIP|Great Grandson|PURPOSE|Genealogical/Historical|COPY_REQ|1|MONTH|December|DAY|7|DEATH_PLACE|Manhattan, New York|AGEOFDEATH|78|YEAR_|1918,|BOROUGH|MANHATTAN,|",
-        "clientid": 10000103,
-        "confirmationmessage": "\nLast name:               Bloch\nFirst name:              Isaac\nMiddle name:             S\n\nMonth:                   December\nDay:                     7\nYear:                    1918\n\n--------------------------------------------------------------------------------\nCemetery:                (Left Blank)\nPlace of Death:          Manhattan, New York\nAge at Death:            78\n\nAdditional Comments:     (Left Blank)\n\nBorough(s):              MANHATTAN\n\n--------------------------------------------------------------------------------\nRelationship to person:  Great Grandson\nPurpose:                 Genealogical/Historical\nLetter:                  (Left Blank)\nNumber of Copies:        1\n\n--------------------------------------------------------------------------------\n\n",
-        "customeremail": "jkobacker@gmail.com",
-        "datereceived": "2017-04-04 04:06:15",
-        "datesubmitted": "Wed, 14 Jun 2017 00:00:00 GMT",
-        "orderno": "000592000",
-        "suborderno": 9127848504
-
     """
     if request.method == 'POST':  # makes it so we get a post method to receive the info put in on the form
         json = request.get_json(force=True)
@@ -129,7 +123,8 @@ def history(suborder_no):
      also get the comment and date with these to send to the front
     """
 
-    history = [status.serialize for status in StatusTracker.query.filter_by(suborder_no=int(suborder_no)).order_by(desc(StatusTracker.timestamp)).all()]
+    history = [status.serialize for status in StatusTracker.query.filter_by(suborder_no=int(suborder_no)).order_by(
+        desc(StatusTracker.timestamp)).all()]
 
     return jsonify(history=history)
 
@@ -147,6 +142,7 @@ def get_single_order(order_id):
 
     return jsonify(orders=orders)
 
+
 @api.route('/print/<string:print_type>', methods=['POST'])
 def print_order(type_):
     """
@@ -157,9 +153,9 @@ def print_order(type_):
     search_params = request.get_json(force=True)
 
     handler_for_type = {
-        print_type.ORDERS: _print_orders,
-        print_type.SMALL_LABELS: _print_small_labels,
-        print_type.LARGE_LABELS: _print_large_labels
+        print_types.ORDERS: _print_orders,
+        print_types.SMALL_LABELS: _print_small_labels,
+        print_types.LARGE_LABELS: _print_large_labels
     }
     return handler_for_type[type_](search_params)
 
