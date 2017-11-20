@@ -101,6 +101,7 @@ def get_orders_by_fields(order_no, suborder_no, order_type, billing_name, user, 
     suborder_count = len(suborder_list)
     return order_count, suborder_count, [suborder.serialize for suborder in suborder_list]
 
+
 def _print_orders(search_params):
     """
     Generate PDF order sheets.
@@ -136,14 +137,18 @@ def _print_orders(search_params):
 
 
 
+
 def _print_small_labels():
     pass
+
 
 def _print_large_labels():
     pass
 
+
 def generate_csv():
     pass
+
 
 def login_user(username, password):
     pass

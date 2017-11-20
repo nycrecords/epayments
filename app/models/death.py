@@ -1,5 +1,5 @@
 from app import db
-from app .constants import purpose
+from app.constants import purpose
 from sqlalchemy.dialects.postgresql import ARRAY
 
 
@@ -47,32 +47,32 @@ class DeathSearch(db.Model):
     cemetery = db.Column(db.String(40), nullable=True)
     month = db.Column(db.String(20), nullable=True)
     day = db.Column(db.String(2), nullable=True)
-    years = db.Column(ARRAY(db.String(4), dimensions=1), nullable=True)
+    _years = db.Column(ARRAY(db.String(4), dimensions=1), nullable=True)
     death_place = db.Column(db.String(40), nullable=True)
     age_of_death = db.Column(db.String(3), nullable=True)
-    borough = db.Column(ARRAY(db.String(20), dimensions=1), nullable=False)
+    _borough = db.Column(ARRAY(db.String(20), dimensions=1), nullable=False)
     letter = db.Column(db.Boolean, nullable=True)
     comment = db.Column(db.String(255), nullable=True)
     suborder_no = db.Column(db.BigInteger, db.ForeignKey('suborder.id'), nullable=False)
 
     def __init__(
-                self,
-                last_name,
-                first_name,
-                mid_name,
-                relationship,
-                purpose,
-                copy_req,
-                cemetery,
-                month,
-                day,
-                years,
-                death_place,
-                age_of_death,
-                borough,
-                letter,
-                comment,
-                suborder_no
+            self,
+            last_name,
+            first_name,
+            mid_name,
+            relationship,
+            purpose,
+            copy_req,
+            cemetery,
+            month,
+            day,
+            years,
+            death_place,
+            age_of_death,
+            borough,
+            letter,
+            comment,
+            suborder_no
     ):
         self.last_name = last_name
         self.first_name = first_name or None
@@ -83,13 +83,61 @@ class DeathSearch(db.Model):
         self.cemetery = cemetery or None
         self.month = month or None
         self.day = day or None
-        self.years = years or None
+        self._years = years or None
         self.death_place = death_place or None
         self.age_of_death = age_of_death or None
-        self.borough = borough
+        self._borough = borough
         self.letter = letter or None
         self.comment = comment or None
         self.suborder_no = suborder_no
+
+    @property
+    def years(self):
+        if len(self._years) > 1:
+            _ = ''
+            for year in self._years:
+                _ = "{}, {}".format(year, _)
+        else:
+            return self._years[0]
+
+    @years.setter
+    def years(self, value):
+        self._years = value
+
+    @property
+    def borough(self):
+        if len(self._borough) > 1:
+            _ = ''
+            for year in self._borough:
+                _ = "{}, {}".format(year, _)
+        else:
+            return self._borough[0]
+
+    @borough.setter
+    def borough(self, value):
+        self._borough = value
+
+    @property
+    def serialize(self):
+        """Return object data in easily serializable format"""
+        return {
+            'first_name': self.first_name,
+            'last_name': self.last_name,
+            'mid_name': self.mid_name,
+            'relationship': self.relationship,
+            'copy_req': self.copy_req,
+            'purpose': self.purpose,
+            'cemetery': self.cemetery,
+            'month': self.month,
+            'day': self.day,
+            'years': str(self.years),
+            'death_place': self.death_place,
+            'age_of_death': self.age_of_death,
+            'borough': self.borough,
+            'letter': self.letter,
+            'comment': self.comment,
+            'suborder_no': self.suborder_no
+        }
 
 
 class DeathCertificate(db.Model):
@@ -138,10 +186,10 @@ class DeathCertificate(db.Model):
     cemetery = db.Column(db.String(40), nullable=True)
     month = db.Column(db.String(20), nullable=True)
     day = db.Column(db.String(2), nullable=True)
-    years = db.Column(ARRAY(db.String(4), dimensions=1), nullable=True)
+    _years = db.Column(ARRAY(db.String(4), dimensions=1), nullable=True)
     death_place = db.Column(db.String(40), nullable=True)
     age_of_death = db.Column(db.String(3), nullable=True)
-    borough = db.Column(ARRAY(db.String(20), dimensions=1), nullable=False)
+    _borough = db.Column(ARRAY(db.String(20), dimensions=1), nullable=False)
     letter = db.Column(db.Boolean, nullable=True)
     comment = db.Column(db.String(255), nullable=True)
     suborder_no = db.Column(db.BigInteger, db.ForeignKey('suborder.id'), nullable=False)
@@ -176,10 +224,59 @@ class DeathCertificate(db.Model):
         self.cemetery = cemetery or None
         self.month = month or None
         self.day = day or None
-        self.years = years
+        self._years = years
         self.death_place = death_place or None
         self.age_of_death = age_of_death or None
-        self.borough = borough
+        self._borough = borough
         self.letter = letter or None
         self.comment = comment or None
         self.suborder_no = suborder_no
+
+    @property
+    def years(self):
+        if len(self._years) > 1:
+            _ = ''
+            for year in self._years:
+                _ = "{}, {}".format(year, _)
+        else:
+            return self._years[0]
+
+    @years.setter
+    def years(self, value):
+        self._years = value
+
+    @property
+    def borough(self):
+        if len(self._borough) > 1:
+            _ = ''
+            for year in self._borough:
+                _ = "{}, {}".format(year, _)
+        else:
+            return self._borough[0]
+
+    @borough.setter
+    def borough(self, value):
+        self._borough = value
+
+    @property
+    def serialize(self):
+        """Return object data in easily serializable format"""
+        return {
+            'certificate_no': self.certificate_no,
+            'first_name': self.first_name,
+            'last_name': self.last_name,
+            'mid_name': self.mid_name,
+            'relationship': self.relationship,
+            'copy_req': self.copy_req,
+            'purpose': self.purpose,
+            'cemetery': self.cemetery,
+            'month': self.month,
+            'day': self.day,
+            'years': str(self.years),
+            'death_place': self.death_place,
+            'age_of_death': self.age_of_death,
+            'borough': self.borough,
+            'letter': self.letter,
+            'comment': self.comment,
+            'suborder_no': self.suborder_no
+        }

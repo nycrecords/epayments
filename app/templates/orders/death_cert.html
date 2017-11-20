@@ -1,33 +1,38 @@
 {% extends "orders/base.html" %}
 
-<b>LAST_NAME: </b>
+{% block content %}
+    <b>CERTIFICATE_NUMBER: {{ order_info["certificate_no"] }}</b>
 
-<b>MIDDLE_NAME: </b>
+    <b>LAST_NAME: {{ order_info["last_name"] }}</b>
 
-<b>FIRST_NAME: </b>
+    <b>MIDDLE_NAME: {{ order_info["mid_name"] }}</b>
 
-<b>RELATIONSHIP: </b>
+    <b>FIRST_NAME: {{ order_info["first_name"] }}</b>
 
-<b>PURPOSE: </b>
+    <b>RELATIONSHIP: {{ order_info["relationship"] }}</b>
 
-<b>COPY_REQ: </b>
+    <b>PURPOSE: {{ order_info["purpose"] }}</b>
 
-<b>CEMETERY: </b>
+    <b>ADDITIONAL_COPY: {{ order_info["additional_copy"] }}</b>
 
-<b>MONTH: </b>
+    <b>CEMETERY: {{ order_info["cemetery"] }}</b>
 
-<b>DAY: </b>
+    <b>MONTH: {{ order_info["month"] }}</b>
 
-<b>YEAR: </b>
+    <b>DAY: {{ order_info["day"] }}</b>
 
-<b>DEATH_PLACE: </b>
+    <b>YEARS: {{ order_info["year"] }}</b>
 
-<b>AGE_OF_DEATH: </b>
+    <b>DEATH_PLACE: {{ order_info["death_place"] }}</b>
 
-<b>CERTIFICATE_NUMBER: </b>
+    <b>AGE_OF_DEATH: {{ order_info["age_of_death"] }}</b>
 
-<b>BOROUGH: </b>
+    <b>BOROUGH: {{ order_info["borough"] }}</b>
 
-<b>LETTER: </b>
+    <b>LETTER: {{ order_info["letter"] }} </b>
 
-<b>COMMENT: </b>
+    <b>COMMENT: {{ order_info["comment"] }}</b>
+
+{% endblock %}
+
+

@@ -1,5 +1,5 @@
 from app import db
-from app .constants import purpose
+from app.constants import purpose
 from sqlalchemy.dialects.postgresql import ARRAY
 
 
@@ -47,30 +47,30 @@ class MarriageSearch(db.Model):
     copy_req = db.Column(db.String(40), nullable=False)
     month = db.Column(db.String(20), nullable=True)
     day = db.Column(db.String(2), nullable=True)
-    years = db.Column(ARRAY(db.String(4), dimensions=1), nullable=False)
+    _years = db.Column(ARRAY(db.String(4), dimensions=1), nullable=False)
     marriage_place = db.Column(db.String(40), nullable=True)
-    borough = db.Column(ARRAY(db.String(20), dimensions=1), nullable=False)
+    _borough = db.Column(ARRAY(db.String(20), dimensions=1), nullable=False)
     letter = db.Column(db.Boolean, nullable=True)
     comment = db.Column(db.String(255), nullable=True)
     suborder_no = db.Column(db.BigInteger, db.ForeignKey('suborder.id'), nullable=False)
 
     def __init__(
-                self,
-                groom_last_name,
-                groom_first_name,
-                bride_last_name,
-                bride_first_name,
-                relationship,
-                purpose,
-                copy_req,
-                month,
-                day,
-                years,
-                marriage_place,
-                borough,
-                letter,
-                comment,
-                suborder_no
+            self,
+            groom_last_name,
+            groom_first_name,
+            bride_last_name,
+            bride_first_name,
+            relationship,
+            purpose,
+            copy_req,
+            month,
+            day,
+            years,
+            marriage_place,
+            borough,
+            letter,
+            comment,
+            suborder_no
     ):
         self.groom_last_name = groom_last_name
         self.groom_first_name = groom_first_name or None
@@ -81,12 +81,60 @@ class MarriageSearch(db.Model):
         self.copy_req = copy_req
         self.month = month or None
         self.day = day or None
-        self.years = years
+        self._years = years
         self.marriage_place = marriage_place or None
-        self.borough = borough
+        self._borough = borough
         self.letter = letter or None
         self.comment = comment or None
         self.suborder_no = suborder_no
+
+    @property
+    def years(self):
+        if len(self._years) > 1:
+            _ = ''
+            for year in self._years:
+                _ = "{}, {}".format(year, _)
+        else:
+            return self._years[0]
+
+    @years.setter
+    def years(self, value):
+        self._years = value
+
+    @property
+    def borough(self):
+        if len(self._borough) > 1:
+            _ = ''
+            for year in self._borough:
+                _ = "{}, {}".format(year, _)
+        else:
+            return self._borough[0]
+
+    @borough.setter
+    def borough(self, value):
+        self._borough = value
+
+    @property
+    def serialize(self):
+        """Return object data in easily serializable format"""
+        return {
+            'certificate_no': self.certificate_no,
+            'groom_last_name': self.groom_last_name,
+            'groom_first_name': self.groom_first_name,
+            'bride_last_name': self.groom_last_name,
+            'bride_first_name': self.groom_first_name,
+            'relationship': self.relationship,
+            'purpose': self.purpose,
+            'copy_req': self.copy_req,
+            'month': self.month,
+            'day': self.day,
+            'years': str(self.years),
+            'marriage_place': self.marriage_place,
+            'borough': str(self.borough),
+            'letter': self.letter,
+            'comment': self.comment,
+            'suborder_no': self.suborder_no
+        }
 
 
 class MarriageCertificate(db.Model):
@@ -134,9 +182,9 @@ class MarriageCertificate(db.Model):
     copy_req = db.Column(db.String(40), nullable=False)
     month = db.Column(db.String(20), nullable=True)
     day = db.Column(db.String(2), nullable=True)
-    years = db.Column(ARRAY(db.String(4), dimensions=1), nullable=True)
+    _years = db.Column(ARRAY(db.String(4), dimensions=1), nullable=True)
     marriage_place = db.Column(db.String(40), nullable=True)
-    borough = db.Column(ARRAY(db.String(20), dimensions=1), nullable=False)
+    _borough = db.Column(ARRAY(db.String(20), dimensions=1), nullable=False)
     letter = db.Column(db.Boolean, nullable=True)
     comment = db.Column(db.String(255), nullable=True)
     suborder_no = db.Column(db.BigInteger, db.ForeignKey('suborder.id'), nullable=False)
@@ -170,9 +218,56 @@ class MarriageCertificate(db.Model):
         self.copy_req = copy_req
         self.month = month or None
         self.day = day or None
-        self.years = years or None
+        self._years = years or None
         self.marriage_place = marriage_place or None
-        self.borough = borough
+        self._borough = borough
         self.letter = letter or None
         self.comment = comment or None
         self.suborder_no = suborder_no
+
+    @property
+    def years(self):
+        if len(self._years) > 1:
+            _ = ''
+            for year in self._years:
+                _ = "{}, {}".format(year, _)
+        else:
+            return self._years[0]
+
+    @years.setter
+    def years(self, value):
+        self._years = value
+
+    @property
+    def borough(self):
+        if len(self._borough) > 1:
+            _ = ''
+            for year in self._borough:
+                _ = "{}, {}".format(year, _)
+        else:
+            return self._borough[0]
+
+    @borough.setter
+    def borough(self, value):
+        self._borough = value
+
+    @property
+    def serialize(self):
+        """Return object data in easily serializable format"""
+        return {
+            'groom_last_name': self.groom_last_name,
+            'groom_first_name': self.groom_first_name,
+            'bride_last_name': self.groom_last_name,
+            'bride_first_name': self.groom_first_name,
+            'relationship': self.relationship,
+            'purpose': self.purpose,
+            'copy_req': self.copy_req,
+            'month': self.month,
+            'day': self.day,
+            'years': str(self.years),
+            'marriage_place': self.marriage_place,
+            'borough': str(self.borough),
+            'letter': self.letter,
+            'comment': self.comment,
+            'suborder_no': self.suborder_no
+        }

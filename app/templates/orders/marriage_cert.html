@@ -1,31 +1,37 @@
 {% extends "orders/base.html" %}
 
-<b>LAST_NAME_GROOM: </b>
+{% block content %}
 
-<b>FIRST_NAME_GROOM: </b>
+    <b>CERTIFICATE_NUMBER: {{ order_info["certificate_no"] }} </b>
 
-<b>LAST_NAME_BRIDE: </b>
+    <b>LAST_NAME_GROOM: {{ order_info["groom_last_name"] }}</b>
 
-<b>FIRST_NAME_BRIDE: </b>
+    <b>FIRST_NAME_GROOM: {{ order_info["groom_first_name"] }}</b>
 
-<b>RELATIONSHIP: </b>
+    <b>LAST_NAME_BRIDE: {{ order_info["bride_last_name"] }}</b>
 
-<b>PURPOSE: </b>
+    <b>FIRST_NAME_BRIDE: {{ order_info["bride_first_name"] }}</b>
 
-<b>COPY_REQ: </b>
+    <b>RELATIONSHIP: {{ order_info["relationship"] }}</b>
 
-<b>MONTH: </b>
+    <b>PURPOSE: {{ order_info["purpose"] }}</b>
 
-<b>DAY: </b>
+    <b>COPY_REQ: {{ order_info["copy_req"] }}</b>
 
-<b>YEAR: </b>
+    <b>MONTH: {{ order_info["month"] }}</b>
 
-<b>MARRIAGE_PLACE: </b>
+    <b>DAY: {{ order_info["day"] }} </b>
 
-<b>CERTIFICATE_NUMBER: </b>
+    <b>YEARS: {{ order_info["year"] }} </b>
 
-<b>BOROUGH: </b>
+    <b>MARRIAGE_PLACE: {{ order_info["marriage_place"] }}</b>
 
-<b>LETTER: </b>
+    <b>BOROUGH: {{ order_info["borough"] }}</b>
 
-<b>COMMENT: </b>
+    <b>LETTER: {{ order_info["letter"] }}</b>
+
+    <b>COMMENT: {{ order_info["comment"] }}</b>
+
+{% endblock %}
+
+
