@@ -16,7 +16,7 @@ class BirthSearch(db.Model):
     mother_name -- Column: string(40)
     relationship -- Column: string(string)
     purpose -- Column: enum[]
-    additional_copy -- Column: string // put as 40 new one is 40
+    num_copies -- Column: string // put as 40 new one is 40
     month -- Column: string
     day -- Column: string
     years -- Column: array[5 max years can be put here]
@@ -24,7 +24,7 @@ class BirthSearch(db.Model):
     borough -- Column: array[5] 1-D
     letter -- Column: Bool
     comment -- Column: string(255)
-    suborder_no -- Column: BigInteger, foreignKey
+    suborder_number -- Column: BigInteger, foreignKey
     """
     __tablename__ = 'birth_search'
     id = db.Column(db.Integer, primary_key=True)
@@ -52,7 +52,7 @@ class BirthSearch(db.Model):
             purpose.OTHER,
             name='purpose'),
         default=purpose.OTHER, nullable=False)
-    additional_copy = db.Column(db.String(4), nullable=True)
+    num_copies = db.Column(db.String(4), nullable=True)
     month = db.Column(db.String(20), nullable=True)
     day = db.Column(db.String(2), nullable=True)
     _years = db.Column(ARRAY(db.String(4), dimensions=1), name='years')
@@ -60,7 +60,7 @@ class BirthSearch(db.Model):
     _borough = db.Column(ARRAY(db.String(20), dimensions=1), nullable=False, name='borough')
     letter = db.Column(db.Boolean, nullable=True)
     comment = db.Column(db.String(255), nullable=True)
-    suborder_no = db.Column(db.BigInteger, db.ForeignKey('suborder.id'), nullable=False)
+    suborder_number = db.Column(db.String(32), db.ForeignKey('suborder.id'), nullable=False)
 
     def __init__(
             self,
@@ -72,7 +72,7 @@ class BirthSearch(db.Model):
             mother_name,
             relationship,
             purpose,
-            additional_copy,
+            num_copies,
             month,
             day,
             years,
@@ -80,7 +80,7 @@ class BirthSearch(db.Model):
             borough,
             letter,
             comment,
-            suborder_no
+            suborder_number
     ):
         self.first_name = first_name or None
         self.last_name = last_name
@@ -90,7 +90,7 @@ class BirthSearch(db.Model):
         self.mother_name = mother_name or None
         self.relationship = relationship or None
         self.purpose = purpose
-        self.additional_copy = additional_copy
+        self.num_copies = num_copies
         self.month = month or None
         self.day = day or None
         self._years = years
@@ -98,7 +98,7 @@ class BirthSearch(db.Model):
         self._borough = borough
         self.letter = letter or None
         self.comment = comment or None
-        self.suborder_no = suborder_no
+        self.suborder_number = suborder_number
 
     @property
     def years(self):
@@ -138,7 +138,7 @@ class BirthSearch(db.Model):
             'mother_name': self.mother_name,
             'relationship': self.relationship,
             'purpose': self.purpose,
-            'additional_copy': self.additional_copy,
+            'num_copies': self.num_copies,
             'month': self.month,
             'day': self.day,
             'years': str(self.years),
@@ -146,7 +146,7 @@ class BirthSearch(db.Model):
             'borough': self.borough,
             'letter': self.letter,
             'comment': self.comment,
-            'suborder_no': self.suborder_no
+            'suborder_number': self.suborder_number
         }
 
 
@@ -164,7 +164,7 @@ class BirthCertificate(db.Model):
     mother_name -- Column: string(40)
     relationship -- Column: string(string)
     purpose -- Column: enum[]
-    additional_copy -- Column: String(40)
+    num_copies -- Column: String(40)
     month -- Column: string
     day -- Column: string
     years -- Column: array[5 max years can be put here]
@@ -172,7 +172,7 @@ class BirthCertificate(db.Model):
     borough -- Column: array[]
     letter -- Column: Bool
     comment -- Column: string(255)
-    suborder_no -- Column: BigInteger, foreignKey
+    suborder_number -- Column: BigInteger, foreignKey
 
     """
 
@@ -201,7 +201,7 @@ class BirthCertificate(db.Model):
             purpose.HEALTH,
             purpose.OTHER,
             name='purpose'), default=purpose.OTHER, nullable=False)
-    additional_copy = db.Column(db.String(4), nullable=True)
+    num_copies = db.Column(db.String(4), nullable=True)
     month = db.Column(db.String(20), nullable=True)
     day = db.Column(db.String(2), nullable=True)
     _years = db.Column(ARRAY(db.String(4), dimensions=1), name='years')
@@ -209,7 +209,7 @@ class BirthCertificate(db.Model):
     _borough = db.Column(ARRAY(db.String(20), dimensions=1), nullable=False, name='borough')
     letter = db.Column(db.Boolean, nullable=True)
     comment = db.Column(db.String(255), nullable=True)
-    suborder_no = db.Column(db.BigInteger, db.ForeignKey('suborder.id'), nullable=False)
+    suborder_number = db.Column(db.String(32), db.ForeignKey('suborder.id'), nullable=False)
 
     def __init__(
             self,
@@ -222,7 +222,7 @@ class BirthCertificate(db.Model):
             mother_name,
             relationship,
             purpose,
-            additional_copy,
+            num_copies,
             month,
             day,
             years,
@@ -230,7 +230,7 @@ class BirthCertificate(db.Model):
             borough,
             letter,
             comment,
-            suborder_no
+            suborder_number
     ):
         self.certificate_no = certificate_no
         self.first_name = first_name or None
@@ -241,15 +241,15 @@ class BirthCertificate(db.Model):
         self.mother_name = mother_name or None
         self.relationship = relationship or None
         self.purpose = purpose
-        self.additional_copy = additional_copy
+        self.num_copies = num_copies
         self.month = month or None
         self.day = day or None
         self._years = years
         self.birth_place = birth_place or None
-        self._borough = borough
+        self._borough = [borough]
         self.letter = letter or None
         self.comment = comment or None
-        self.suborder_no = suborder_no
+        self.suborder_number = suborder_number
 
     @property
     def years(self):
@@ -290,7 +290,7 @@ class BirthCertificate(db.Model):
             'mother_name': self.mother_name,
             'relationship': self.relationship,
             'purpose': self.purpose,
-            'additional_copy': self.additional_copy,
+            'num_copies': self.num_copies,
             'month': self.month,
             'day': self.day,
             'years': str(self.years),
@@ -298,5 +298,5 @@ class BirthCertificate(db.Model):
             'borough': self.borough,
             'letter': self.letter,
             'comment': self.comment,
-            'suborder_no': self.suborder_no
+            'suborder_number': self.suborder_number
         }

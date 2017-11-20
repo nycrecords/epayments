@@ -57,17 +57,17 @@ class StatusModal extends React.Component {
 
         this.handleSubmit = (e) => {
             e.preventDefault();
-            fetch('api/v1.0/status/' + this.props.suborder_no, {
+            fetch('api/v1.0/status/' + this.props.suborder_number, {
                 method: "POST",
                 body: JSON.stringify({
-                    suborder_no: this.props.suborder_no,
+                    suborder_number: this.props.suborder_number,
                     comment: this.state.comment,
                     new_status: this.state.new_status
                 })
             }).then((response) => {
                 return response.json()
             }).then((json) => {
-                this.props.updateStatus(this.props.suborder_no, this.state.new_status)
+                this.props.updateStatus(this.props.suborder_number, this.state.new_status)
             });
 
             this.handleClose();

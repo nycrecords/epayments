@@ -16,7 +16,7 @@ class Customer(db.Model):
     country -- Column: String(64)
     phone -- Column: String(64)
     instructions -- Column: String(64)
-    order_no -- Column: String(64), foreignKey
+    order_number -- Column: String(64), foreignKey
 
     """
     __tablename__ = 'customer'
@@ -32,7 +32,7 @@ class Customer(db.Model):
     country = db.Column(db.String(64), nullable=False)
     phone = db.Column(db.String(64), nullable=True)
     instructions = db.Column(db.String(64), nullable=True)
-    order_no = db.Column(db.String(64), db.ForeignKey('order.id'), nullable=False)
+    order_number = db.Column(db.String(64), db.ForeignKey('order.id'), nullable=False)
 
     def __init__(
                 self,
@@ -47,7 +47,7 @@ class Customer(db.Model):
                 country,
                 phone,
                 instructions,
-                order_no
+                order_number
 
     ):
         self.billing_name = billing_name
@@ -61,7 +61,7 @@ class Customer(db.Model):
         self.country = country
         self.phone = phone or None
         self.instructions = instructions or None
-        self.order_no = order_no
+        self.order_number = order_number
 
     @property
     def serialize(self):
@@ -78,5 +78,5 @@ class Customer(db.Model):
             'country': self.country,
             'phone': self.phone,
             'instructions': self.instructions,
-            'order_no': self.order_no,
+            'order_number': self.order_number,
         }

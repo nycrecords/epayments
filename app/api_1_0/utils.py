@@ -24,7 +24,7 @@ from app.models import (
 )
 
 
-def _order_query_filters(order_no, suborder_no, order_type, billing_name, user, date_submitted_start,
+def _order_query_filters(order_no, suborder_number, order_type, billing_name, user, date_submitted_start,
                          date_submitted_end):
     # TODO: Need to refactor get_order_by_fields so that it performs a single function for code reuse.
     vital_records_list = ['Birth cert', 'Marriage cert', 'Death cert']  # TODO: Searches are missing from here. @gzhou??
@@ -32,8 +32,8 @@ def _order_query_filters(order_no, suborder_no, order_type, billing_name, user, 
 
     filter_args = []
     for name, value, col in [
-        ("order_no", order_no, Order.id),
-        ("suborder_no", suborder_no, Suborder.id),
+        ("order_number", order_no, Order.id),
+        ("suborder_number", suborder_number, Suborder.id),
         ("order_type", order_type, Suborder.client_agency_name),
         ("billing_name", billing_name, Customer.billing_name),
         ("date_submitted_start", date_submitted_start, Order.date_submitted),
@@ -78,28 +78,28 @@ def _order_query_filters(order_no, suborder_no, order_type, billing_name, user, 
     return filter_args
 
 
-def update_status(suborder_no, comment, new_status):
+def update_status(suborder_number, comment, new_status):
     """
-        POST: {suborder_no, new_status, comment};
-        returns: {status_id, suborder_no, status, comment}, 201
+        POST: {suborder_number, new_status, comment};
+        returns: {status_id, suborder_number, status, comment}, 201
 
     Take in the info, this function only gets called if the form is filled
      - access the db to get the status_id for this particular order
      - now create a new row in the db in the status table with
      - this row should have a status_id + 1 then the highest status row
-     - 1) it will have the same suborder_no
+     - 1) it will have the same suborder_number
      - 2) it will have the comment that was passed in or None
      - 3) it will have the new status that was passed from the user
     """
 
-    object_ = StatusTracker.query.filter_by(suborder_no=suborder_no).order_by(StatusTracker.timestamp.desc()).first()
+    object_ = StatusTracker.query.filter_by(suborder_number=suborder_number).order_by(StatusTracker.timestamp.desc()).first()
 
     if object_ is not None:
         previous_value = object_.current_status
     else:
         previous_value = object_.current_status
 
-    insert_status = StatusTracker(suborder_no=suborder_no,
+    insert_status = StatusTracker(suborder_number=suborder_number,
                                   current_status=new_status,
                                   comment=comment,
                                   timestamp=datetime.utcnow(),
@@ -109,20 +109,21 @@ def update_status(suborder_no, comment, new_status):
     db.session.commit()
 
 
-def get_orders_by_fields(order_no, suborder_no, order_type, billing_name, user, date_submitted_start,
+def get_orders_by_fields(order_no, suborder_number, order_type, billing_name, user, date_submitted_start,
                          date_submitted_end):
     """
     Filter orders by fields received
-    get_orders_by_fields(client_id, suborder_no, order_type(Death Search or Marriage Search), billing_name
+    get_orders_by_fields(client_id, suborder_number, order_type(Death Search or Marriage Search), billing_name
                          user??, date_received, date_submitted)
     :return:
     """
-    filter_args = _order_query_filters(order_no, suborder_no, order_type, billing_name, user, date_submitted_start,
+    filter_args = _order_query_filters(order_no, suborder_number, order_type, billing_name, user, date_submitted_start,
                                        date_submitted_end)
     base_query = Suborder.query.join(Order, Customer).filter(*filter_args)
-    order_count = base_query.distinct(Suborder.order_no).group_by(Suborder.order_no, Suborder.id).count()
+    order_count = base_query.distinct(Suborder.order_number).group_by(Suborder.order_number, Suborder.id).count()
     suborder_list = base_query.all()
     suborder_count = len(suborder_list)
+
     return order_count, suborder_count, [suborder.serialize for suborder in suborder_list]
 
 
@@ -135,8 +136,8 @@ def _print_orders(search_params):
 
     :return: PDF
     """
-    order_number = search_params.get("order_no")
-    suborder_number = search_params.get("suborder_no")
+    order_number = search_params.get("order_number")
+    suborder_number = search_params.get("suborder_number")
     order_type = search_params.get("order_type")
     billing_name = search_params.get("billing_name")
     # user = str(request.form["user"])
@@ -177,10 +178,9 @@ def _print_orders(search_params):
     html = ''
     for item in suborders:
         order_info = order_type_models_handler[item.client_agency_name].query.filter_by(
-            suborder_no=item.id).one().serialize
+            suborder_number=item.id).one().serialize
         order_info['customer'] = item.order.customer.serialize
         order_info['order'] = item.order.serialize
-
         html += render_template("orders/{}".format(order_type_template_handler[item.client_agency_name]),
                                 order_info=order_info)
 

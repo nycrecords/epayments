@@ -20,8 +20,8 @@ class Home extends React.Component {
             });
         };
 
-        this.updateStatus = (suborder_no, new_status) => {
-            let status_obj = this.state.all_orders.find(obj => {return obj.suborder_no === suborder_no; });
+        this.updateStatus = (suborder_number, new_status) => {
+            let status_obj = this.state.all_orders.find(obj => {return obj.suborder_number === suborder_number; });
             let idx = this.state.all_orders.indexOf(status_obj);
             let status ={"index": idx, "object": status_obj};
             status.object.current_status = new_status;
@@ -55,9 +55,9 @@ class Home extends React.Component {
     render() {
         const orderRows = this.state.all_orders.map((order, index) =>
             <Order
-                key={order.suborder_no}
+                key={order.suborder_number}
                 order_no={order.order_no}
-                suborder_no={order.suborder_no}
+                suborder_number={order.suborder_number}
                 client_agency_name={order.client_agency_name}
                 billing_name={order.billing_name}
                 date_submitted={order.date_submitted.slice(0,-9)}

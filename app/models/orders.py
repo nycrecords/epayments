@@ -10,7 +10,7 @@ class Order(db.Model):
     Define the new Order class with the following Columns & relationships
 
     order_number -- Column: String(64)
-    suborder_no -- Column: BigInteger, PrimaryKey
+    suborder_number -- Column: BigInteger, PrimaryKey
     date_submitted -- Column: DateTime -- date order was submitted
     date_received -- Column: DateTime -- day we receive order
     billing_name -- Column: String(64)
@@ -55,7 +55,7 @@ class Order(db.Model):
     def serialize(self):
         """Return object data in easily serializable format"""
         return {
-            'order_no': self.id,
+            'order_number': self.id,
             'date_submitted': self.date_submitted.strftime("%x %I:%M %p"),
             'date_received': self.date_received.strftime("%x %I:%m %p"),
             'confirmation_message': self.confirmation_message,
@@ -70,10 +70,10 @@ class Suborder(db.Model):
 
     """
     __tablename__ = 'suborder'
-    id = db.Column(db.BigInteger, primary_key=True, nullable=False)
+    id = db.Column(db.String(32), primary_key=True, nullable=False)
     client_id = db.Column(db.Integer, nullable=False)
     client_agency_name = db.Column(db.String(64), nullable=False)
-    order_no = db.Column(db.String(64), db.ForeignKey('order.id'), nullable=False)
+    order_number = db.Column(db.String(64), db.ForeignKey('order.id'), nullable=False)
     status = db.relationship('StatusTracker', backref=db.backref('suborder'), lazy='dynamic')
     order = db.relationship('Order', backref='orders', uselist=False)
 
@@ -82,25 +82,25 @@ class Suborder(db.Model):
             id,
             client_id,
             client_agency_name,
-            order_no
+            order_number
     ):
         self.id = id
         self.client_id = client_id
         self.client_agency_name = client_agency_name
-        self.order_no = order_no
+        self.order_number = order_number
 
     @property
     def serialize(self):
         """Return object data in easily serializable format"""
         return {
-            'order_no': self.order_no,
-            'suborder_no': self.id,
+            'order_number': self.order_number,
+            'suborder_number': self.id,
             'date_submitted': self.order.date_submitted.strftime("%x %I:%M %p"),
             'date_received': self.order.date_received,
             'billing_name': self.order.customer.billing_name,
             'customer_email': self.order.customer.email,
             'client_agency_name': self.client_agency_name,
-            'current_status': self.status.filter_by(suborder_no=self.id)
+            'current_status': self.status.filter_by(suborder_number=self.id)
                                          .order_by(StatusTracker.id.desc()).first().current_status
         }
 
@@ -112,7 +112,7 @@ class StatusTracker(db.Model):
     process of the document
 
     id - db.Integer , primary key = true
-    suborder_no - Column: BigInteger, Foreign Key - connects the sub_order# to the top of this database
+    suborder_number - Column: BigInteger, Foreign Key - connects the sub_order# to the top of this database
     status - Column: Enum - Tracks the status of the order can only be these set things
     comment - Column: db.String(64) - stores the comment that was passed in
     timestamp - Column: db.datetime - holds the time that the status was updated
@@ -131,7 +131,7 @@ class StatusTracker(db.Model):
     """
     __tablename__ = 'status'
     id = db.Column(db.Integer, primary_key=True)
-    suborder_no = db.Column(db.BigInteger, db.ForeignKey('suborder.id'), nullable=False)
+    suborder_number = db.Column(db.String(32), db.ForeignKey('suborder.id'), nullable=False)
     current_status = db.Column(
         db.Enum(
             status.RECEIVED,
@@ -150,13 +150,13 @@ class StatusTracker(db.Model):
     # Class Constructor to initialize the data
     def __init__(
                 self,
-                suborder_no,
+                suborder_number,
                 current_status,
                 comment,
                 timestamp,
                 previous_value,
     ):
-        self.suborder_no = suborder_no
+        self.suborder_number = suborder_number
         self.current_status = current_status
         self.comment = comment or None
         self.timestamp = timestamp or datetime.now(timezone('US/Eastern'))
@@ -166,7 +166,7 @@ class StatusTracker(db.Model):
     def serialize(self):
         """Return object data in easily serializable format"""
         return {
-            'suborder_no': self.suborder_no,
+            'suborder_number': self.suborder_number,
             'current_status': self.current_status,
             'comment': self.comment,
             'timestamp': self.timestamp.strftime("%x %I:%M %p"),

@@ -17,11 +17,11 @@ class PhotoTax(db.Model):
     description -- Column: String(35)
     type -- Column: enum -- size of the photo
     size -- Column: newform -- enum
-    copies -- Column: String(2)
+    num_copies -- Column: String(2)
     mail_pickup -- Column: Bool
     contact_no -- Column: String(10)
     comment -- Column: String()
-    suborder_no -- Column: BigInteger, foreignKey
+    suborder_number -- Column: BigInteger, foreignKey
 
     """
 
@@ -58,11 +58,11 @@ class PhotoTax(db.Model):
             size.ELEVEN_BY_FOURTEEN,
             size.SIXTEEN_BY_TWENTY,
             name='size'), default=size.EIGHT_BY_TEN, nullable=True)
-    copies = db.Column(db.String(2), nullable=False)
+    num_copies = db.Column(db.String(2), nullable=False)
     mail_pickup = db.Column(db.Boolean, nullable=True)
     contact_no = db.Column(db.String(10), nullable=True)
     comment = db.Column(db.String(255), nullable=True)
-    suborder_no = db.Column(db.BigInteger, db.ForeignKey('suborder.id'), nullable=False)
+    suborder_number = db.Column(db.String(32), db.ForeignKey('suborder.id'), nullable=False)
 
     def __init__(
                 self,
@@ -76,11 +76,11 @@ class PhotoTax(db.Model):
                 description,
                 type,
                 size,
-                copies,
+                num_copies,
                 mail_pickup,
                 contact_no,
                 comment,
-                suborder_no
+                suborder_number
     ):
         self.borough = borough
         self.collection = collection
@@ -92,11 +92,11 @@ class PhotoTax(db.Model):
         self.description = description or 'N/A'
         self.type = type
         self.size = size
-        self.copies = copies
+        self.num_copies = num_copies
         self.mail_pickup = mail_pickup
         self.contact_no = contact_no or 'N/A'
         self.comment = comment or 'N/A'
-        self.suborder_no = suborder_no
+        self.suborder_number = suborder_number
 
 
 class PhotoGallery(db.Model):
@@ -113,7 +113,7 @@ class PhotoGallery(db.Model):
     contact_no -- Column: String(10)
     personal_use_agreement -- Column: Bool
     comment -- Column: String(255)
-    suborder_no -- Column: BigInteger, foreignKey
+    suborder_number -- Column: BigInteger, foreignKey
 
     """
 
@@ -133,7 +133,7 @@ class PhotoGallery(db.Model):
     contact_no = db.Column(db.String(10), nullable=True)
     personal_use_agreement = db.Column(db.Boolean, nullable=True)
     comment = db.Column(db.String(255), nullable=True)
-    suborder_no = db.Column(db.BigInteger, db.ForeignKey('suborder.id'), nullable=False)
+    suborder_number = db.Column(db.String(32), db.ForeignKey('suborder.id'), nullable=False)
 
     def __init__(
                 self,
@@ -146,7 +146,7 @@ class PhotoGallery(db.Model):
                 contact_no,
                 personal_use_agreement,
                 comment,
-                suborder_no
+                suborder_number
     ):
         self.image_id = image_id
         self.description = description or 'N/A'
@@ -157,4 +157,4 @@ class PhotoGallery(db.Model):
         self.contact_no = contact_no or 'N/A'
         self.personal_use_agreement = personal_use_agreement
         self.comment = comment or 'N/A'
-        self.suborder_no = suborder_no
+        self.suborder_number = suborder_number

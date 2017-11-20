@@ -37,7 +37,7 @@ def get_orders():
 
     As a user, I want to be able to search for specific orders.
 
-    GET {order_no, suborder_no, order_type, billing_name, user, date_received_start, date_received_end},
+    GET {order_number, suborder_number, order_type, billing_name, user, date_received_start, date_received_end},
 
     Search functionality should be in utils.py
 
@@ -45,8 +45,8 @@ def get_orders():
     """
     if request.method == 'POST':  # makes it so we get a post method to receive the info put in on the form
         json = request.get_json(force=True)
-        order_no = json.get("order_no")
-        suborder_no = json.get("suborder_no")
+        order_no = json.get("order_number")
+        suborder_number = json.get("suborder_number")
         order_type = json.get("order_type")
         billing_name = json.get("billing_name")
         user = ''
@@ -54,7 +54,7 @@ def get_orders():
         date_submitted_end = json.get("date_submitted_end")
 
         order_count, suborder_count, orders = get_orders_by_fields(order_no,
-                                                                   suborder_no,
+                                                                   suborder_number,
                                                                    order_type,
                                                                    billing_name,
                                                                    user,
@@ -74,11 +74,11 @@ def get_orders():
         return jsonify(all_orders=orders)
 
 
-@api.route('/status/<suborder_no>', methods=['GET', 'POST'])
-def status_change(suborder_no):
+@api.route('/status/<suborder_number>', methods=['GET', 'POST'])
+def status_change(suborder_number):
     """
-    GET: {suborder_no}; returns {suborder_no, current_status}, 200
-    POST: {suborder_no, new_status, comment}
+    GET: {suborder_number}; returns {suborder_number, current_status}, 200
+    POST: {suborder_number, new_status, comment}
 
     Status Table
     - ID - Integer
@@ -92,7 +92,7 @@ def status_change(suborder_no):
            a)Letter_generated
            b)Undeliverable - Cant move down the line
         5. Done - End of status changes
-    :return: {status_id, suborder_no, status, comment}, 201
+    :return: {status_id, suborder_number, status, comment}, 201
     """
 
     if request.method == 'POST':  # Means that something was passed from the front
@@ -102,28 +102,28 @@ def status_change(suborder_no):
         new_status = json.get("new_status")
 
         """
-            POST: {suborder_no, new_status, comment};
-            returns: {status_id, suborder_no, status, comment}, 201
+            POST: {suborder_number, new_status, comment};
+            returns: {status_id, suborder_number, status, comment}, 201
         """
-        update_status(suborder_no, comment, new_status)
+        update_status(suborder_number, comment, new_status)
 
-    # return jsonify(current_status=curr_status, suborder_no=suborder_no, comment=comment, status_id=status_id)
-    status = [status.serialize for status in StatusTracker.query.filter_by(suborder_no=int(suborder_no)).all()]
+    # return jsonify(current_status=curr_status, suborder_number=suborder_number, comment=comment, status_id=status_id)
+    status = [status.serialize for status in StatusTracker.query.filter_by(suborder_number=int(suborder_number)).all()]
     return jsonify(status=status)
 
 
-@api.route('/history/<int:suborder_no>', methods=['GET'])
-def history(suborder_no):
+@api.route('/history/<int:suborder_number>', methods=['GET'])
+def history(suborder_number):
     """
-    GET: {suborder_no};
-    :param suborder_no:
-    :return: {suborder_no, previous value, new value, comment, date}, 200
+    GET: {suborder_number};
+    :param suborder_number:
+    :return: {suborder_number, previous value, new value, comment, date}, 200
 
-    Look for all the rows with this suborder_no and list out the history for each one in Descending order
+    Look for all the rows with this suborder_number and list out the history for each one in Descending order
      also get the comment and date with these to send to the front
     """
 
-    history = [status.serialize for status in StatusTracker.query.filter_by(suborder_no=int(suborder_no)).order_by(
+    history = [status.serialize for status in StatusTracker.query.filter_by(suborder_number=int(suborder_number)).order_by(
         desc(StatusTracker.timestamp)).all()]
 
     return jsonify(history=history)
