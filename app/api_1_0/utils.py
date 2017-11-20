@@ -5,7 +5,16 @@ from app.models import (
     StatusTracker,
     Order,
     Suborder,
-    Customer
+    Customer,
+    BirthSearch,
+    BirthCertificate,
+    DeathSearch,
+    DeathCertificate,
+    MarriageSearch,
+    MarriageCertificate,
+    PhotoGallery,
+    PhotoTax,
+    PropertyCard
 )
 
 
@@ -101,6 +110,9 @@ def get_orders_by_fields(order_no, suborder_no, order_type, billing_name, user, 
     suborder_count = len(suborder_list)
     return order_count, suborder_count, [suborder.serialize for suborder in suborder_list]
 
+def _order_query():
+    # TODO: Need to refactor get_order_by_fields so that it performs a single function for code reuse.
+    pass
 
 def _print_orders(search_params):
     """
@@ -120,7 +132,7 @@ def _print_orders(search_params):
     date_received = search_params.get("date_received")
     date_submitted = search_params.get("date_submitted")
 
-    orders = get_orders_by_fields(order_number, suborder_number, order_type, billing_name, user, date_received,
+    order_count, suborder_count, items = get_orders_by_fields(order_number, suborder_number, order_type, billing_name, user, date_received,
                                   date_submitted)
 
     order_type_template_handler = {
@@ -135,7 +147,20 @@ def _print_orders(search_params):
         order_type.PROPERTY_CARD: 'property_card.html',
     }
 
+    order_type_models_handler = {
+        order_type.BIRTH_SEARCH: BirthSearch,
+        order_type.BIRTH_CERT: BirthCertificate,
+        order_type.MARRIAGE_SEARCH: MarriageSearch,
+        order_type.MARRIAGE_CERT: MarriageCertificate,
+        order_type.DEATH_SEARCH: DeathSearch,
+        order_type.DEATH_CERT: DeathCertificate,
+        order_type.PHOTO_TAX: PhotoTax,
+        order_type.PHOTO_GALLERY: PhotoGallery,
+        order_type.PROPERTY_CARD: PropertyCard,
+    }
 
+    for item in items:
+        order_info = order_type_models_handler[item.]
 
 
 def _print_small_labels():
