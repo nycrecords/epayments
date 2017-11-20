@@ -144,7 +144,7 @@ def get_single_order(order_id):
 
 
 @api.route('/print/<string:print_type>', methods=['POST'])
-def print_order(type_):
+def print_order(print_type):
     """
     Generate a PDF for a print operation.
 
@@ -157,7 +157,7 @@ def print_order(type_):
         print_types.SMALL_LABELS: _print_small_labels,
         print_types.LARGE_LABELS: _print_large_labels
     }
-    return handler_for_type[type_](search_params)
+    return jsonify(handler_for_type[print_type](search_params))
 
 
 @api.route('/login', methods=['POST'])

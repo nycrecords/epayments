@@ -1,37 +1,53 @@
 {% extends "orders/base.html" %}
 
 {% block content %}
-    <b>CERTIFICATE_NUMBER: {{ order_info["certificate_no"] }}</b>
+<br /><b>CERTIFICATE_NUMBER:</b> <br />
+{{ order_info["certificate_no"] }}
 
-    <b>LAST_NAME: {{ order_info["last_name"] }}</b>
+<br /><b>LAST_NAME:</b> <br />
+{{ order_info["last_name"] }}
 
-    <b>MIDDLE_NAME: {{ order_info["mid_name"] }}</b>
+<br /><b>MIDDLE_NAME:</b> <br />
+{{ order_info["mid_name"] }}
 
-    <b>FIRST_NAME: {{ order_info["first_name"] }}</b>
+<br /><b>FIRST_NAME:</b> <br />
+{{ order_info["first_name"] }}
 
-    <b>RELATIONSHIP: {{ order_info["relationship"] }}</b>
+<br /><b>RELATIONSHIP:</b> <br />
+{{ order_info["relationship"] }}
 
-    <b>PURPOSE: {{ order_info["purpose"] }}</b>
+<br /><b>PURPOSE:</b> <br />
+{{ order_info["purpose"] }}
 
-    <b>ADDITIONAL_COPY: {{ order_info["additional_copy"] }}</b>
+<br /><b>ADDITIONAL_COPY:</b> <br />
+{{ order_info["additional_copy"] }}
 
-    <b>CEMETERY: {{ order_info["cemetery"] }}</b>
+<br /><b>CEMETERY:</b> <br />
+{{ order_info["cemetery"] }}
 
-    <b>MONTH: {{ order_info["month"] }}</b>
+<br /><b>MONTH:</b> <br />
+{{ order_info["month"] }}
 
-    <b>DAY: {{ order_info["day"] }}</b>
+<br /><b>DAY:</b> <br />
+{{ order_info["day"] }}
 
-    <b>YEARS: {{ order_info["year"] }}</b>
+<br /><b>YEARS:</b> <br />
+{{ order_info["year"] }}
 
-    <b>DEATH_PLACE: {{ order_info["death_place"] }}</b>
+<br /><b>DEATH_PLACE:</b> <br />
+{{ order_info["death_place"] }}
 
-    <b>AGE_OF_DEATH: {{ order_info["age_of_death"] }}</b>
+<br /><b>AGE_OF_DEATH:</b> <br />
+{{ order_info["age_of_death"] }}
 
-    <b>BOROUGH: {{ order_info["borough"] }}</b>
+<br /><b>BOROUGH:</b> <br />
+{{ order_info["borough"] }}
 
-    <b>LETTER: {{ order_info["letter"] }} </b>
+<br /><b>LETTER:</b> <br />
+{{ order_info["letter"] }} </b>
 
-    <b>COMMENT: {{ order_info["comment"] }}</b>
+<br /><b>COMMENT:</b> <br />
+{{ order_info["comment"] }}
 
 {% endblock %}
 

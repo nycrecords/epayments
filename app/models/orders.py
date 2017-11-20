@@ -51,6 +51,19 @@ class Order(db.Model):
         self.order_types = order_types
         self.multiple_items = multiple_items
 
+    @property
+    def serialize(self):
+        """Return object data in easily serializable format"""
+        return {
+            'order_no': self.id,
+            'date_submitted': self.date_submitted.strftime("%x %I:%M %p"),
+            'date_received': self.date_received.strftime("%x %I:%m %p"),
+            'confirmation_message': self.confirmation_message,
+            'client_data': self.client_data,
+            'order_types': self.order_types,
+            'multiple_items': self.multiple_items,
+        }
+
 
 class Suborder(db.Model):
     """

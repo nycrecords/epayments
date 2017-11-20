@@ -1,6 +1,12 @@
-from app import db
 from datetime import date, datetime
+from flask import render_template
 from sqlalchemy import or_
+from xhtml2pdf.pisa import CreatePDF
+
+from app import db
+from app.constants import (
+    order_types
+)
 from app.models import (
     StatusTracker,
     Order,
@@ -16,15 +22,12 @@ from app.models import (
     PhotoTax,
     PropertyCard
 )
-from app.constants import (
-    order_types
-)
 
 
 def _order_query_filters(order_no, suborder_no, order_type, billing_name, user, date_submitted_start,
                          date_submitted_end):
     # TODO: Need to refactor get_order_by_fields so that it performs a single function for code reuse.
-    vital_records_list = ['Birth cert', 'Marriage cert', 'Death cert'] # TODO: Searches are missing from here. @gzhou??
+    vital_records_list = ['Birth cert', 'Marriage cert', 'Death cert']  # TODO: Searches are missing from here. @gzhou??
     photo_list = ['photo tax', 'photo gallery', 'property card']
 
     filter_args = []
@@ -115,7 +118,7 @@ def get_orders_by_fields(order_no, suborder_no, order_type, billing_name, user, 
     :return:
     """
     filter_args = _order_query_filters(order_no, suborder_no, order_type, billing_name, user, date_submitted_start,
-                         date_submitted_end)
+                                       date_submitted_end)
     base_query = Suborder.query.join(Order, Customer).filter(*filter_args)
     order_count = base_query.distinct(Suborder.order_no).group_by(Suborder.order_no, Suborder.id).count()
     suborder_list = base_query.all()
@@ -141,18 +144,19 @@ def _print_orders(search_params):
     date_submitted_start = search_params.get("date_submitted_start")
     date_submitted_end = search_params.get("date_submitted_end")
 
-    filter_args = _order_query_filters(order_number, suborder_number, order_type, billing_name, user, date_submitted_start,
-                         date_submitted_end)
+    filter_args = _order_query_filters(order_number, suborder_number, order_type, billing_name, user,
+                                       date_submitted_start,
+                                       date_submitted_end)
 
-    suborders = Suborder.join(Customer, Order).filter(*filter_args).all()
+    suborders = Suborder.query.join(Order, Customer).filter(*filter_args).all()
 
     order_type_template_handler = {
         order_types.BIRTH_SEARCH: 'birth_search.html',
-        order_types.BIRTH_CERT: 'birth_certificate.html',
+        order_types.BIRTH_CERT: 'birth_cert.html',
         order_types.MARRIAGE_SEARCH: 'marriage_search.html',
-        order_types.MARRIAGE_CERT: 'marriage_certificate.html',
+        order_types.MARRIAGE_CERT: 'marriage_cert.html',
         order_types.DEATH_SEARCH: 'death_search.html',
-        order_types.DEATH_CERT: 'death_certificate.html',
+        order_types.DEATH_CERT: 'death_cert.html',
         order_types.PHOTO_TAX: 'photo_tax.html',
         order_types.PHOTO_GALLERY: 'photo_gallery.html',
         order_types.PROPERTY_CARD: 'property_card.html',
@@ -170,8 +174,22 @@ def _print_orders(search_params):
         order_types.PROPERTY_CARD: PropertyCard,
     }
 
+    html = ''
     for item in suborders:
-        suborder_info = order_type_models_handler[item.client_agency_name].query.filter_by(suborder_no=item.id).one()
+        order_info = order_type_models_handler[item.client_agency_name].query.filter_by(
+            suborder_no=item.id).one().serialize
+        order_info['customer'] = item.order.customer.serialize
+        order_info['order'] = item.order.serialize
+
+        html += render_template("orders/{}".format(order_type_template_handler[item.client_agency_name]),
+                                order_info=order_info)
+
+    test = open('/Users/jocastillo/Dropbox/Work/DORIS/Archives/epayments/epayments/test.pdf', 'w+b')
+    pdf = CreatePDF(src=html, dest=test)
+
+    test.close()
+
+    return bool(pdf.err)
 
 
 def _print_small_labels():

@@ -104,12 +104,12 @@ def import_file(file_name):
 
     # Insert into the Order Table
     order = Order(id=order_no,
-                   date_submitted=date_submitted,
-                   date_received=date_received,
-                   confirmation_message=confirmation_message,
-                   client_data=clients_data,
-                   order_types=ordertypes,
-                   multiple_items=multiple_items)
+                  date_submitted=date_submitted,
+                  date_received=date_received,
+                  confirmation_message=confirmation_message,
+                  client_data=clients_data,
+                  order_types=ordertypes,
+                  multiple_items=multiple_items)
 
     db.session.add(order)
     db.session.commit()
@@ -172,9 +172,9 @@ def import_file(file_name):
 
         # Insert into thr Suborder Table
         suborder = Suborder(id=suborder_no,
-                             client_id=client_id,
-                             client_agency_name=client_agency_name,
-                             order_no=order_no)
+                            client_id=client_id,
+                            client_agency_name=client_agency_name,
+                            order_no=order_no)
 
         db.session.add(suborder)
         db.session.commit()

@@ -1,4 +1,4 @@
-{% if order.multiple_items %}
+{% if order_info['order']['multiple_items'] %}
     <b>This item was ordered with multiple items in the cart: </b>
     {% for item in order.order_types %}
         {{ item | title }}
@@ -6,9 +6,10 @@
 {% endif %}
 <br/>
 
-{{ customer_info | safe }}
+{% include 'orders/customer_info.html' %}
 
 {% block content %}
 
 {% endblock %}
 
+<pdf:nextpage/>

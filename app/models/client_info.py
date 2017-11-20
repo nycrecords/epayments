@@ -62,3 +62,21 @@ class Customer(db.Model):
         self.phone = phone or None
         self.instructions = instructions or None
         self.order_no = order_no
+
+    @property
+    def serialize(self):
+        """Return object data in easily serializable format"""
+        return {
+            'billing_name': self.billing_name,
+            'email': self.email,
+            'shipping_name': self.shipping_name,
+            'address_line_one': self.address_line_1,
+            'address_line_two': self.address_line_2,
+            'city': self.city,
+            'state': self.state,
+            'zip_code': self.zip_code,
+            'country': self.country,
+            'phone': self.phone,
+            'instructions': self.instructions,
+            'order_no': self.order_no,
+        }

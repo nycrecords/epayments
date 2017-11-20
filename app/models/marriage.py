@@ -118,7 +118,6 @@ class MarriageSearch(db.Model):
     def serialize(self):
         """Return object data in easily serializable format"""
         return {
-            'certificate_no': self.certificate_no,
             'groom_last_name': self.groom_last_name,
             'groom_first_name': self.groom_first_name,
             'bride_last_name': self.groom_last_name,
