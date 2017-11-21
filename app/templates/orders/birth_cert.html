@@ -1,0 +1,58 @@
+{% extends "orders/base.html" %}
+
+{% block content %}
+<br /><b>CERTIFICATE_NUMBER:</b> <br />
+{{ order_info["certificate_no"] }}<br />
+
+<br /><b>GENDER:</b> <br />
+{{ order_info["gender_type"] }}<br />
+
+<br /><b>LAST_NAME:</b> <br />
+{{ order_info["last_name"] }}<br />
+
+<br /><b>MIDDLE_NAME:</b> <br />
+{{ order_info["mid_name"] }}<br />
+
+<br /><b>FIRST_NAME:</b> <br />
+{{ order_info["first_name"] }}<br />
+
+<br /><b>FATHER_NAME:</b> <br />
+{{ order_info["father_name"] }} <br />
+
+<br /><b>MOTHER_NAME:</b> <br />
+{{ order_info["mother_name"] }} <br />
+
+<br /><b>RELATIONSHIP:</b> <br />
+{{ order_info["relationship"] }}<br />
+
+<br /><b>PURPOSE:</b> <br />
+{{ order_info["purpose"] }}<br />
+
+<br /><b>ADDITIONAL_COPY:</b> <br />
+{{ order_info["additional_copy"] }}<br />
+
+<br /><b>MONTH:</b> <br />
+{{ order_info["month"] }}<br />
+
+<br /><b>DAY:</b> <br />
+{{ order_info["day"] }}<br />
+
+<br /><b>BIRTH_PLACE:</b> <br />
+{{ order_info["birth_place"] }}<br />
+
+<br /><b>YEARS:</b> <br />
+{{ order_info["years"] }} <br />
+
+<br /><b>BOROUGH:</b> <br />
+{{ order_info["borough"] }}<br />
+
+<br /><b>LETTER:</b> <br />
+{{ order_info["letter"] }}<br />
+
+<br /><b>COMMENT:</b> <br />
+{{ order_info["comment"] }}<br />
+
+{% endblock %}
+
+
+

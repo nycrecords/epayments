@@ -78,8 +78,8 @@ class OrderForm extends React.Component {
             fetch('api/v1.0/orders', {
                 method: "POST",
                 body: JSON.stringify({
-                    order_no: this.state.ordernumber,
-                    suborder_no: this.state.subordernumber,
+                    order_number: this.state.ordernumber,
+                    suborder_number: this.state.subordernumber,
                     order_type: this.state.order_type,
                     billing_name: this.state.billing_name,
                     date_submitted_start: formatDate(this.dateSubmittedStart),

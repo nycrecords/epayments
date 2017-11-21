@@ -13,19 +13,19 @@ class Order extends React.Component {
         return (
             <div>
                 <StatusModal current_status={this.props.current_status}
-                             suborder_no={this.props.suborder_no}
+                             suborder_number={this.props.suborder_number}
                              updateStatus={this.props.updateStatus}
                 />
-                Order #: {this.props.order_no}
+                Order #: {this.props.order_number}
                 <Button color="green" compact size='small' content={this.props.current_status} floated='right'/>
                 <br/>
-                Suborder #: {this.props.suborder_no} <br/>
+                Suborder #: {this.props.suborder_number} <br/>
                 Order Type: {this.props.client_agency_name}
-                { this.props.client_agency_name === 'Photo Tax' && <PhotoTaxModal suborder_no={this.props.suborder_no}/> }
+                { this.props.client_agency_name === 'Photo Tax' && <PhotoTaxModal suborder_number={this.props.suborder_number}/> }
                 <br/>
                 Billing Name: {this.props.billing_name} <br/>
                 Date Submitted: {this.props.date_submitted} <br/>
-                <History suborder_no={this.props.suborder_no} />
+                <History suborder_number={this.props.suborder_number} />
                 <Divider/>
             </div>
         )

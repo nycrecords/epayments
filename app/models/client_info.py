@@ -16,7 +16,7 @@ class Customer(db.Model):
     country -- Column: String(64)
     phone -- Column: String(64)
     instructions -- Column: String(64)
-    order_no -- Column: String(64), foreignKey
+    order_number -- Column: String(64), foreignKey
 
     """
     __tablename__ = 'customer'
@@ -32,7 +32,7 @@ class Customer(db.Model):
     country = db.Column(db.String(64), nullable=False)
     phone = db.Column(db.String(64), nullable=True)
     instructions = db.Column(db.String(64), nullable=True)
-    order_no = db.Column(db.String(64), db.ForeignKey('order.id'), nullable=False)
+    order_number = db.Column(db.String(64), db.ForeignKey('order.id'), nullable=False)
 
     def __init__(
                 self,
@@ -47,7 +47,7 @@ class Customer(db.Model):
                 country,
                 phone,
                 instructions,
-                order_no
+                order_number
 
     ):
         self.billing_name = billing_name
@@ -61,4 +61,47 @@ class Customer(db.Model):
         self.country = country
         self.phone = phone or None
         self.instructions = instructions or None
-        self.order_no = order_no
+        self.order_number = order_number
+
+    @property
+    def address(self):
+        address = ''
+        if self.address_line_2 is not None:
+            address = "{address_line_one}, {address_line_two}, {city}, {state}, {zip}".format(
+                address_line_one=self.address_line_1,
+                address_line_two=self.address_line_2,
+                city=self.city,
+                state=self.state,
+                zip=self.zip_code
+            )
+        else:
+            address = "{address_line_one}, {city}, {state}, {zip}".format(
+                address_line_one=self.address_line_1,
+                city=self.city,
+                state=self.state,
+                zip=self.zip_code
+            )
+
+        if self.country not in ['United States']:
+            address += self.country
+
+        return address
+
+    @property
+    def serialize(self):
+        """Return object data in easily serializable format"""
+        return {
+            'billing_name': self.billing_name,
+            'email': self.email,
+            'shipping_name': self.shipping_name,
+            'address_line_one': self.address_line_1,
+            'address_line_two': self.address_line_2,
+            'city': self.city,
+            'state': self.state,
+            'zip_code': self.zip_code,
+            'country': self.country,
+            'phone': self.phone,
+            'instructions': self.instructions,
+            'order_number': self.order_number,
+            'address': self.address
+        }

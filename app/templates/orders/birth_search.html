@@ -1,0 +1,53 @@
+{"% extends "orders/base.html" %}
+
+{% block content %}
+<br /><b>GENDER:</b> <br />
+{{ order_info["gender_type"] }}
+
+<br /><b>LAST_NAME:</b> <br />
+{{ order_info["last_name"] }}
+
+<br /><b>MIDDLE_NAME:</b> <br />
+{{ order_info["mid_name"] }}
+
+<br /><b>FIRST_NAME:</b> <br />
+{{ order_info["first_name"] }}
+
+<br /><b>FATHER_NAME:</b> <br />
+{{ order_info["father_name"] }}
+
+<br /><b>MOTHER_NAME:</b> <br />
+{{ order_info["mother_name"] }}
+
+<br /><b>RELATIONSHIP:</b> <br />
+{{ order_info["relationship"] }}
+
+<br /><b>PURPOSE:</b> <br />
+{{ order_info["purpose"] }}
+
+<br /><b>ADDITIONAL_COPY:</b> <br />
+{{ order_info["additional_copy"] }}
+
+<br /><b>MONTH:</b> <br />
+{{ order_info["month"] }}
+
+<br /><b>DAY:</b> <br />
+{{ order_info["day"] }}
+
+<br /><b>BIRTH_PLACE:</b> <br />
+{{ order_info["birth_place"] }}
+
+<br /><b>YEARS:</b> <br />
+{{ order_info["years"] }}
+
+<br /><b>BOROUGH:</b> <br />
+{{ order_info["borough"] }}
+
+<br /><b>LETTER:</b> <br />
+{{ order_info["letter"] }}
+
+<br /><b>COMMENT:</b> <br />
+{{ order_info["comment"] }}
+
+{% endblock %}
+

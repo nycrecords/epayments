@@ -14,7 +14,7 @@ class PhotoTaxModal extends React.Component {
         };
 
         this.handleOpen = (e) => {
-            fetch('api/v1.0/photo_tax/' + this.props.suborder_no).then((response) => (
+            fetch('api/v1.0/photo_tax/' + this.props.suborder_number).then((response) => (
                 response.json()
             )).then((json) => {
                 this.setState({
@@ -32,10 +32,10 @@ class PhotoTaxModal extends React.Component {
 
         this.handleSubmit = (e) => {
             e.preventDefault();
-            fetch('api/v1.0/photo_tax/' + this.props.suborder_no, {
+            fetch('api/v1.0/photo_tax/' + this.props.suborder_number, {
                 method: "POST",
                 body: JSON.stringify({
-                    suborder_no: this.props.suborder_no,
+                    suborder_number: this.props.suborder_number,
                     block_no: this.state.block_no,
                     lot_no: this.state.lot_no,
                     roll_no: this.state.roll_no

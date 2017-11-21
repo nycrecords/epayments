@@ -1,8 +1,8 @@
-"""Initial migration
+"""Initial Migration
 
-Revision ID: 57177d9e4818
+Revision ID: 1400dcedbd2f
 Revises: 
-Create Date: 2017-11-17 22:13:55.746964
+Create Date: 2017-11-21 09:27:57.295456
 
 """
 from alembic import op
@@ -10,7 +10,7 @@ import sqlalchemy as sa
 from sqlalchemy.dialects import postgresql
 
 # revision identifiers, used by Alembic.
-revision = '57177d9e4818'
+revision = '1400dcedbd2f'
 down_revision = None
 branch_labels = None
 depends_on = None
@@ -41,20 +41,21 @@ def upgrade():
     sa.Column('country', sa.String(length=64), nullable=False),
     sa.Column('phone', sa.String(length=64), nullable=True),
     sa.Column('instructions', sa.String(length=64), nullable=True),
-    sa.Column('order_no', sa.String(length=64), nullable=False),
-    sa.ForeignKeyConstraint(['order_no'], ['order.id'], ),
+    sa.Column('order_number', sa.String(length=64), nullable=False),
+    sa.ForeignKeyConstraint(['order_number'], ['order.id'], ),
     sa.PrimaryKeyConstraint('id')
     )
     op.create_table('suborder',
-    sa.Column('id', sa.BigInteger(), nullable=False),
+    sa.Column('id', sa.String(length=32), nullable=False),
     sa.Column('client_id', sa.Integer(), nullable=False),
     sa.Column('client_agency_name', sa.String(length=64), nullable=False),
-    sa.Column('order_no', sa.String(length=64), nullable=False),
-    sa.ForeignKeyConstraint(['order_no'], ['order.id'], ),
+    sa.Column('order_number', sa.String(length=64), nullable=False),
+    sa.ForeignKeyConstraint(['order_number'], ['order.id'], ),
     sa.PrimaryKeyConstraint('id')
     )
     op.create_table('birth_cert',
     sa.Column('id', sa.Integer(), nullable=False),
+    sa.Column('certificate_no', sa.String(length=40), nullable=False),
     sa.Column('first_name', sa.String(length=40), nullable=True),
     sa.Column('last_name', sa.String(length=25), nullable=False),
     sa.Column('mid_name', sa.String(length=40), nullable=True),
@@ -63,7 +64,7 @@ def upgrade():
     sa.Column('mother_name', sa.String(length=40), nullable=True),
     sa.Column('relationship', sa.String(length=30), nullable=True),
     sa.Column('purpose', sa.Enum('Genealogical/Historical', 'Personal Use', 'Legal', 'Immigration', 'Medicaid/Social Security', 'Health', 'Other', name='purpose'), nullable=False),
-    sa.Column('additional_copy', sa.String(length=4), nullable=True),
+    sa.Column('num_copies', sa.String(length=4), nullable=True),
     sa.Column('month', sa.String(length=20), nullable=True),
     sa.Column('day', sa.String(length=2), nullable=True),
     sa.Column('years', postgresql.ARRAY(sa.String(length=4), dimensions=1), nullable=True),
@@ -71,8 +72,8 @@ def upgrade():
     sa.Column('borough', postgresql.ARRAY(sa.String(length=20), dimensions=1), nullable=False),
     sa.Column('letter', sa.Boolean(), nullable=True),
     sa.Column('comment', sa.String(length=255), nullable=True),
-    sa.Column('suborder_no', sa.BigInteger(), nullable=False),
-    sa.ForeignKeyConstraint(['suborder_no'], ['suborder.id'], ),
+    sa.Column('suborder_number', sa.String(length=32), nullable=False),
+    sa.ForeignKeyConstraint(['suborder_number'], ['suborder.id'], ),
     sa.PrimaryKeyConstraint('id')
     )
     op.create_table('birth_search',
@@ -85,7 +86,7 @@ def upgrade():
     sa.Column('mother_name', sa.String(length=40), nullable=True),
     sa.Column('relationship', sa.String(length=30), nullable=True),
     sa.Column('purpose', sa.Enum('Genealogical/Historical', 'Personal Use', 'Legal', 'Immigration', 'Medicaid/Social Security', 'Health', 'Other', name='purpose'), nullable=False),
-    sa.Column('additional_copy', sa.String(length=4), nullable=True),
+    sa.Column('num_copies', sa.String(length=4), nullable=True),
     sa.Column('month', sa.String(length=20), nullable=True),
     sa.Column('day', sa.String(length=2), nullable=True),
     sa.Column('years', postgresql.ARRAY(sa.String(length=4), dimensions=1), nullable=True),
@@ -93,8 +94,8 @@ def upgrade():
     sa.Column('borough', postgresql.ARRAY(sa.String(length=20), dimensions=1), nullable=False),
     sa.Column('letter', sa.Boolean(), nullable=True),
     sa.Column('comment', sa.String(length=255), nullable=True),
-    sa.Column('suborder_no', sa.BigInteger(), nullable=False),
-    sa.ForeignKeyConstraint(['suborder_no'], ['suborder.id'], ),
+    sa.Column('suborder_number', sa.String(length=32), nullable=False),
+    sa.ForeignKeyConstraint(['suborder_number'], ['suborder.id'], ),
     sa.PrimaryKeyConstraint('id')
     )
     op.create_table('death_cert',
@@ -105,7 +106,7 @@ def upgrade():
     sa.Column('mid_name', sa.String(length=40), nullable=True),
     sa.Column('relationship', sa.String(length=30), nullable=True),
     sa.Column('purpose', sa.Enum('Genealogical/Historical', 'Personal Use', 'Legal', 'Immigration', 'Medicaid/Social Security', 'Health', 'Other', name='purpose'), nullable=False),
-    sa.Column('copy_req', sa.String(length=40), nullable=True),
+    sa.Column('num_copies', sa.String(length=40), nullable=True),
     sa.Column('cemetery', sa.String(length=40), nullable=True),
     sa.Column('month', sa.String(length=20), nullable=True),
     sa.Column('day', sa.String(length=2), nullable=True),
@@ -115,8 +116,8 @@ def upgrade():
     sa.Column('borough', postgresql.ARRAY(sa.String(length=20), dimensions=1), nullable=False),
     sa.Column('letter', sa.Boolean(), nullable=True),
     sa.Column('comment', sa.String(length=255), nullable=True),
-    sa.Column('suborder_no', sa.BigInteger(), nullable=False),
-    sa.ForeignKeyConstraint(['suborder_no'], ['suborder.id'], ),
+    sa.Column('suborder_number', sa.String(length=32), nullable=False),
+    sa.ForeignKeyConstraint(['suborder_number'], ['suborder.id'], ),
     sa.PrimaryKeyConstraint('id')
     )
     op.create_table('death_search',
@@ -126,7 +127,7 @@ def upgrade():
     sa.Column('mid_name', sa.String(length=40), nullable=True),
     sa.Column('relationship', sa.String(length=30), nullable=True),
     sa.Column('purpose', sa.Enum('Genealogical/Historical', 'Personal Use', 'Legal', 'Immigration', 'Medicaid/Social Security', 'Health', 'Other', name='purpose'), nullable=False),
-    sa.Column('copy_req', sa.String(length=40), nullable=True),
+    sa.Column('num_copies', sa.String(length=40), nullable=True),
     sa.Column('cemetery', sa.String(length=40), nullable=True),
     sa.Column('month', sa.String(length=20), nullable=True),
     sa.Column('day', sa.String(length=2), nullable=True),
@@ -136,8 +137,8 @@ def upgrade():
     sa.Column('borough', postgresql.ARRAY(sa.String(length=20), dimensions=1), nullable=False),
     sa.Column('letter', sa.Boolean(), nullable=True),
     sa.Column('comment', sa.String(length=255), nullable=True),
-    sa.Column('suborder_no', sa.BigInteger(), nullable=False),
-    sa.ForeignKeyConstraint(['suborder_no'], ['suborder.id'], ),
+    sa.Column('suborder_number', sa.String(length=32), nullable=False),
+    sa.ForeignKeyConstraint(['suborder_number'], ['suborder.id'], ),
     sa.PrimaryKeyConstraint('id')
     )
     op.create_table('marriage_cert',
@@ -149,7 +150,7 @@ def upgrade():
     sa.Column('bride_first_name', sa.String(length=40), nullable=True),
     sa.Column('relationship', sa.String(length=30), nullable=True),
     sa.Column('purpose', sa.Enum('Genealogical/Historical', 'Personal Use', 'Legal', 'Immigration', 'Medicaid/Social Security', 'Health', 'Other', name='purpose'), nullable=False),
-    sa.Column('copy_req', sa.String(length=40), nullable=False),
+    sa.Column('num_copies', sa.String(length=40), nullable=False),
     sa.Column('month', sa.String(length=20), nullable=True),
     sa.Column('day', sa.String(length=2), nullable=True),
     sa.Column('years', postgresql.ARRAY(sa.String(length=4), dimensions=1), nullable=True),
@@ -157,8 +158,8 @@ def upgrade():
     sa.Column('borough', postgresql.ARRAY(sa.String(length=20), dimensions=1), nullable=False),
     sa.Column('letter', sa.Boolean(), nullable=True),
     sa.Column('comment', sa.String(length=255), nullable=True),
-    sa.Column('suborder_no', sa.BigInteger(), nullable=False),
-    sa.ForeignKeyConstraint(['suborder_no'], ['suborder.id'], ),
+    sa.Column('suborder_number', sa.String(length=32), nullable=False),
+    sa.ForeignKeyConstraint(['suborder_number'], ['suborder.id'], ),
     sa.PrimaryKeyConstraint('id')
     )
     op.create_table('marriage_search',
@@ -169,7 +170,7 @@ def upgrade():
     sa.Column('bride_first_name', sa.String(length=40), nullable=True),
     sa.Column('relationship', sa.String(length=30), nullable=True),
     sa.Column('purpose', sa.Enum('Genealogical/Historical', 'Personal Use', 'Legal', 'Immigration', 'Medicaid/Social Security', 'Health', 'Other', name='purpose'), nullable=False),
-    sa.Column('copy_req', sa.String(length=40), nullable=False),
+    sa.Column('num_copies', sa.String(length=40), nullable=False),
     sa.Column('month', sa.String(length=20), nullable=True),
     sa.Column('day', sa.String(length=2), nullable=True),
     sa.Column('years', postgresql.ARRAY(sa.String(length=4), dimensions=1), nullable=False),
@@ -177,8 +178,8 @@ def upgrade():
     sa.Column('borough', postgresql.ARRAY(sa.String(length=20), dimensions=1), nullable=False),
     sa.Column('letter', sa.Boolean(), nullable=True),
     sa.Column('comment', sa.String(length=255), nullable=True),
-    sa.Column('suborder_no', sa.BigInteger(), nullable=False),
-    sa.ForeignKeyConstraint(['suborder_no'], ['suborder.id'], ),
+    sa.Column('suborder_number', sa.String(length=32), nullable=False),
+    sa.ForeignKeyConstraint(['suborder_number'], ['suborder.id'], ),
     sa.PrimaryKeyConstraint('id')
     )
     op.create_table('photo_gallery',
@@ -187,13 +188,13 @@ def upgrade():
     sa.Column('description', sa.String(length=50), nullable=True),
     sa.Column('additional_description', sa.String(length=50), nullable=True),
     sa.Column('size', sa.Enum('8x10', '11x14', '16x20', name='size'), nullable=False),
-    sa.Column('copy', sa.String(length=2), nullable=False),
+    sa.Column('num_copies', sa.String(length=2), nullable=False),
     sa.Column('mail_pickup', sa.Boolean(), nullable=False),
     sa.Column('contact_no', sa.String(length=10), nullable=True),
     sa.Column('personal_use_agreement', sa.Boolean(), nullable=True),
     sa.Column('comment', sa.String(length=255), nullable=True),
-    sa.Column('suborder_no', sa.BigInteger(), nullable=False),
-    sa.ForeignKeyConstraint(['suborder_no'], ['suborder.id'], ),
+    sa.Column('suborder_number', sa.String(length=32), nullable=False),
+    sa.ForeignKeyConstraint(['suborder_number'], ['suborder.id'], ),
     sa.PrimaryKeyConstraint('id')
     )
     op.create_table('photo_tax',
@@ -208,12 +209,12 @@ def upgrade():
     sa.Column('description', sa.String(length=35), nullable=True),
     sa.Column('type', sa.Enum('8x10', '11x14', name='type'), nullable=False),
     sa.Column('size', sa.Enum('8x10', '11x14', '16x20', name='size'), nullable=True),
-    sa.Column('copies', sa.String(length=2), nullable=False),
+    sa.Column('num_copies', sa.String(length=2), nullable=False),
     sa.Column('mail_pickup', sa.Boolean(), nullable=True),
     sa.Column('contact_no', sa.String(length=10), nullable=True),
     sa.Column('comment', sa.String(length=255), nullable=True),
-    sa.Column('suborder_no', sa.BigInteger(), nullable=False),
-    sa.ForeignKeyConstraint(['suborder_no'], ['suborder.id'], ),
+    sa.Column('suborder_number', sa.String(length=32), nullable=False),
+    sa.ForeignKeyConstraint(['suborder_number'], ['suborder.id'], ),
     sa.PrimaryKeyConstraint('id')
     )
     op.create_table('prop_card',
@@ -227,18 +228,18 @@ def upgrade():
     sa.Column('certified', sa.Boolean(), nullable=False),
     sa.Column('mail_pickup', sa.Boolean(), nullable=False),
     sa.Column('contact_info', sa.String(length=35), nullable=True),
-    sa.Column('suborder_no', sa.BigInteger(), nullable=False),
-    sa.ForeignKeyConstraint(['suborder_no'], ['suborder.id'], ),
+    sa.Column('suborder_number', sa.String(length=32), nullable=False),
+    sa.ForeignKeyConstraint(['suborder_number'], ['suborder.id'], ),
     sa.PrimaryKeyConstraint('id')
     )
     op.create_table('status',
     sa.Column('id', sa.Integer(), nullable=False),
-    sa.Column('suborder_no', sa.BigInteger(), nullable=False),
+    sa.Column('suborder_number', sa.String(length=32), nullable=False),
     sa.Column('current_status', sa.Enum('Received', 'Processing', 'Found', 'Mailed/Pickup', 'Not_Found', 'Letter_Generated', 'Undeliverable', 'Done', name='current_status'), nullable=True),
     sa.Column('comment', sa.String(length=64), nullable=True),
     sa.Column('timestamp', sa.DateTime(), nullable=False),
     sa.Column('previous_value', sa.String(length=25), nullable=True),
-    sa.ForeignKeyConstraint(['suborder_no'], ['suborder.id'], ),
+    sa.ForeignKeyConstraint(['suborder_number'], ['suborder.id'], ),
     sa.PrimaryKeyConstraint('id')
     )
     # ### end Alembic commands ###

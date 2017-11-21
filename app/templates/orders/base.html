@@ -1,0 +1,17 @@
+{{ order_info['customer']['billing_name'] }}<br/>
+Address: {{ order_info['customer']['address'] }}
+<h1>{{ order_info['client_agency_name'] }}</h1>
+
+{% if order_info['order']['multiple_items'] %}
+    <b>This item was ordered with multiple items in the cart: </b>
+    {{ ', '.join(order_info['order']['order_types']) }}
+    <br />
+{% endif %}
+
+{% include 'orders/customer_info.html' %}
+
+{% block content %}
+
+{% endblock %}
+
+<pdf:nextpage/>

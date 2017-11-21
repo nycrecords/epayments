@@ -1,0 +1,74 @@
+{% extends "orders/base.html" %}
+
+{% block content %}
+    <br/>
+    <b>LAST NAME - GROOM:</b>
+    <br />
+    {{ order_info["groom_last_name"] }}
+
+    <br/>
+    <b>FIRST NAME - GROOM:</b>
+    <br />
+    {{ order_info["groom_first_name"] }}
+
+    <br/>
+    <b>LAST NAME - BRIDE:</b>
+    <br />
+    {{ order_info["bride_last_name"] }}
+
+    <br/>
+    <b>FIRST NAME - BRIDE:</b>
+    <br />
+    {{ order_info["bride_first_name"] }}
+
+    <br/>
+    <b>RELATIONSHIP:</b>
+    <br />
+    {{ order_info["relationship"] or "Not Provided" }}
+
+    <br/>
+    <b>PURPOSE:</b>
+    <br />
+    {{ order_info["purpose"] }}
+
+    <br/>
+    <b>NUMBER OF COPIES:</b>
+    <br />
+    {{ order_info["num_copies"] }}
+
+    <br/>
+    <b>MONTH:</b>
+    <br />
+    {{ order_info["month"] }}
+
+    <br/>
+    <b>DAY:</b>
+    <br />
+    {{ order_info["day"] }}
+
+    <br/>
+    <b>YEARS:</b>
+    <br />
+    {{ order_info["years"] }}
+
+    <br/>
+    <b>MARRIAGE_PLACE:</b>
+    <br />
+    {{ order_info["marriage_place"] or "Not Provided"}}
+
+    <br/>
+    <b>BOROUGH:</b>
+    <br />
+    {{ order_info["borough"] }}
+
+    <br/>
+    <b>LETTER:</b>
+    <br />
+    {{ order_info["letter"] or "N/A" }}
+
+    <br/>
+    <b>COMMENT:</b>
+    <br />
+    {{ order_info["comment"] or "N/A" }}
+
+{% endblock %}
