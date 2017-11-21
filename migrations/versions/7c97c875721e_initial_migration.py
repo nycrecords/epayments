@@ -1,8 +1,8 @@
 """Initial Migration
 
-Revision ID: 24b040dd0b8f
+Revision ID: 7c97c875721e
 Revises: 
-Create Date: 2017-11-20 16:47:25.382624
+Create Date: 2017-11-21 00:19:25.462128
 
 """
 from alembic import op
@@ -10,7 +10,7 @@ import sqlalchemy as sa
 from sqlalchemy.dialects import postgresql
 
 # revision identifiers, used by Alembic.
-revision = '24b040dd0b8f'
+revision = '7c97c875721e'
 down_revision = None
 branch_labels = None
 depends_on = None
@@ -188,7 +188,7 @@ def upgrade():
     sa.Column('description', sa.String(length=50), nullable=True),
     sa.Column('additional_description', sa.String(length=50), nullable=True),
     sa.Column('size', sa.Enum('8x10', '11x14', '16x20', name='size'), nullable=False),
-    sa.Column('copy', sa.String(length=2), nullable=False),
+    sa.Column('num_copies', sa.String(length=2), nullable=False),
     sa.Column('mail_pickup', sa.Boolean(), nullable=False),
     sa.Column('contact_no', sa.String(length=10), nullable=True),
     sa.Column('personal_use_agreement', sa.Boolean(), nullable=True),

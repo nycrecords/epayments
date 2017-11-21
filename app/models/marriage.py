@@ -83,17 +83,20 @@ class MarriageSearch(db.Model):
         self.day = day or None
         self._years = years
         self.marriage_place = marriage_place or None
-        self._borough = [borough]
+        self._borough = borough
         self.letter = letter or None
         self.comment = comment or None
         self.suborder_number = suborder_number
 
     @property
     def years(self):
-        if len(self._years) > 1:
-            return ",".join(self._years)
+        if isinstance(self._years, list):
+            if len(self._years) > 1:
+                return ", ".join(self._years)
+            else:
+                return self._years[0]
         else:
-            return self._years[0]
+            return None
 
     @years.setter
     def years(self, value):
@@ -101,10 +104,13 @@ class MarriageSearch(db.Model):
 
     @property
     def borough(self):
-        if len(self._borough) > 1:
-            return ",".join(self._borough)
+        if isinstance(self._borough, list):
+            if len(self._borough) > 1:
+                return ", ".join(self._borough)
+            else:
+                return self._borough[0]
         else:
-            return self._borough[0]
+            return None
 
     @borough.setter
     def borough(self, value):
@@ -125,7 +131,7 @@ class MarriageSearch(db.Model):
             'day': self.day,
             'years': self.years if self.years is not None else "",
             'marriage_place': self.marriage_place,
-            'borough': str(self.borough),
+            'borough': self.borough if self.borough is not None else "",
             'letter': self.letter,
             'comment': self.comment,
             'suborder_number': self.suborder_number
@@ -215,20 +221,20 @@ class MarriageCertificate(db.Model):
         self.day = day or None
         self._years = years or None
         self.marriage_place = marriage_place or None
-        self._borough = [borough]
+        self._borough = borough or None
         self.letter = letter or None
         self.comment = comment or None
         self.suborder_number = suborder_number
 
     @property
     def years(self):
-        if len(self._years) > 1:
-            _ = ''
-            for year in self._years:
-                _ = "{}, {}".format(year, _)
-            return _
+        if isinstance(self._years, list):
+            if len(self._years) > 1:
+                return ", ".join(self._years)
+            else:
+                return self._years[0]
         else:
-            return self._years[0]
+            return None
 
     @years.setter
     def years(self, value):
@@ -236,12 +242,13 @@ class MarriageCertificate(db.Model):
 
     @property
     def borough(self):
-        if len(self._borough) > 1:
-            _ = ''
-            for year in self._borough:
-                _ = "{}, {}".format(year, _)
+        if isinstance(self._borough, list):
+            if len(self._borough) > 1:
+                return ", ".join(self._borough)
+            else:
+                return self._borough[0]
         else:
-            return self._borough[0]
+            return None
 
     @borough.setter
     def borough(self, value):
@@ -251,6 +258,7 @@ class MarriageCertificate(db.Model):
     def serialize(self):
         """Return object data in easily serializable format"""
         return {
+            'certificate_no': self.certificate_no,
             'groom_last_name': self.groom_last_name,
             'groom_first_name': self.groom_first_name,
             'bride_last_name': self.bride_last_name,
@@ -262,7 +270,7 @@ class MarriageCertificate(db.Model):
             'day': self.day,
             'years': self.years if self.years is not None else "",
             'marriage_place': self.marriage_place,
-            'borough': str(self.borough),
+            'borough': self.borough if self.borough is not None else "",
             'letter': self.letter,
             'comment': self.comment,
             'suborder_number': self.suborder_number

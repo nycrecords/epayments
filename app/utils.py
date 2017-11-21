@@ -572,7 +572,7 @@ def import_file(file_name):
         # Retrieve the Marriage Date (Month, Day, Years)
         month = clients_data_list[clients_data_list.index("MONTH") + 1] if "MONTH" in clients_data_list else None
         day = clients_data_list[clients_data_list.index("DAY") + 1] if "DAY" in clients_data_list else None
-        years = clients_data_list[clients_data_list.index("YEAR_") + 1] if "YEAR_" in clients_data_list else None
+        years = clients_data_list[clients_data_list.index("YEAR") + 1] if "YEAR" in clients_data_list else None
         if years:
             years = years.split(',')
             years = list(filter(bool, years))
@@ -767,7 +767,7 @@ def import_file(file_name):
             clients_data_list.index("DESCRIPTION") + 1] if "DESCRIPTION" in clients_data_list else None
 
         # Retrieve Print Size
-        type = clients_data_list[clients_data_list.index("TYPE") + 1]
+        type_ = clients_data_list[clients_data_list.index("TYPE") + 1]
         size = clients_data_list[clients_data_list.index("SIZE") + 1] if "SIZE" in clients_data_list else None
 
         # Retrieve Number of Copies
@@ -789,7 +789,10 @@ def import_file(file_name):
 
         if collection == 'Both':
             # Remove old Suborder
-            db.session.expunge(suborder)
+            StatusTracker.query.filter_by(suborder_number=suborder_number).delete()
+            db.session.commit()
+            Suborder.query.filter_by(id=suborder_number).delete()
+            db.session.commit()
 
             # Create Suborder for 1940 Request
             suborder_1940 = Suborder(
@@ -841,7 +844,7 @@ def import_file(file_name):
                 street_no=street_no,
                 street=street,
                 description=description,
-                type=type,
+                type=type_,
                 size=size,
                 num_copies=num_copies,
                 mail_pickup=mail_pickup,
@@ -861,7 +864,7 @@ def import_file(file_name):
                 street_no=street_no,
                 street=street,
                 description=description,
-                type=type,
+                type=type_,
                 size=size,
                 num_copies=num_copies,
                 mail_pickup=mail_pickup,
@@ -880,7 +883,7 @@ def import_file(file_name):
                 street_no=street_no,
                 street=street,
                 description=description,
-                type=type,
+                type=type_,
                 size=size,
                 num_copies=num_copies,
                 mail_pickup=mail_pickup,
@@ -907,6 +910,9 @@ def import_file(file_name):
 
         # Retrieve Print size
         size = clients_data_list[clients_data_list.index("SIZE") + 1]
+
+        # Retrieve Number of Copies
+        num_copies = clients_data_list[clients_data_list.index("COPIES") + 1] if "COPIES" in clients_data_list else 1
 
         # Retrieve Mail / Pickup Status
         if clients_data_list[

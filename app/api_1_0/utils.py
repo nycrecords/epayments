@@ -92,7 +92,8 @@ def update_status(suborder_number, comment, new_status):
      - 3) it will have the new status that was passed from the user
     """
 
-    object_ = StatusTracker.query.filter_by(suborder_number=suborder_number).order_by(StatusTracker.timestamp.desc()).first()
+    object_ = StatusTracker.query.filter_by(suborder_number=suborder_number).order_by(
+        StatusTracker.timestamp.desc()).first()
 
     if object_ is not None:
         previous_value = object_.current_status
@@ -181,6 +182,8 @@ def _print_orders(search_params):
             suborder_number=item.id).one().serialize
         order_info['customer'] = item.order.customer.serialize
         order_info['order'] = item.order.serialize
+
+        order_info['client_agency_name'] = item.client_agency_name
         html += render_template("orders/{}".format(order_type_template_handler[item.client_agency_name]),
                                 order_info=order_info)
 

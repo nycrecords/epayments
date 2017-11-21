@@ -24,7 +24,7 @@
     <br/>
     <b>RELATIONSHIP:</b>
     <br />
-    {{ order_info["relationship"] }}
+    {{ order_info["relationship"] or "Not Provided" }}
 
     <br/>
     <b>PURPOSE:</b>
@@ -32,9 +32,9 @@
     {{ order_info["purpose"] }}
 
     <br/>
-    <b>COPY_REQ:</b>
+    <b>NUMBER OF COPIES:</b>
     <br />
-    {{ order_info["copy_req"] }}
+    {{ order_info["num_copies"] }}
 
     <br/>
     <b>MONTH:</b>
@@ -54,7 +54,7 @@
     <br/>
     <b>MARRIAGE_PLACE:</b>
     <br />
-    {{ order_info["marriage_place"] }}
+    {{ order_info["marriage_place"] or "Not Provided"}}
 
     <br/>
     <b>BOROUGH:</b>
@@ -64,11 +64,11 @@
     <br/>
     <b>LETTER:</b>
     <br />
-    {{ order_info["letter"] }}
+    {{ order_info["letter"] or "N/A" }}
 
     <br/>
     <b>COMMENT:</b>
     <br />
-    {{ order_info["comment"] }}
+    {{ order_info["comment"] or "N/A" }}
 
 {% endblock %}

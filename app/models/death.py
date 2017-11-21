@@ -93,12 +93,13 @@ class DeathSearch(db.Model):
 
     @property
     def years(self):
-        if len(self._years) > 1:
-            _ = ''
-            for year in self._years:
-                _ = "{}, {}".format(year, _)
+        if isinstance(self._years, list):
+            if len(self._years) > 1:
+                return ",".join(self._years)
+            else:
+                return self._years[0]
         else:
-            return self._years[0]
+            return None
 
     @years.setter
     def years(self, value):
@@ -234,12 +235,13 @@ class DeathCertificate(db.Model):
 
     @property
     def years(self):
-        if len(self._years) > 1:
-            _ = ''
-            for year in self._years:
-                _ = "{}, {}".format(year, _)
+        if isinstance(self._years, list):
+            if len(self._years) > 1:
+                return ",".join(self._years)
+            else:
+                return self._years[0]
         else:
-            return self._years[0]
+            return None
 
     @years.setter
     def years(self, value):

@@ -1,53 +1,80 @@
 {% extends "orders/base.html" %}
 
 {% block content %}
-
     <br/>
-    <b>CERTIFICATE_NUMBER:</b>
-    <br/>
+    <b>CERTIFICATE NUMBER:</b>
+    <br />
     {{ order_info["certificate_no"] }}
 
-    <br/><b>LAST_NAME_GROOM:</b> <br/>
+    <br/>
+    <b>LAST NAME - GROOM:</b>
+    <br />
     {{ order_info["groom_last_name"] }}
 
-    <br/><b>FIRST_NAME_GROOM:</b> <br/>
+    <br/>
+    <b>FIRST NAME - GROOM:</b>
+    <br />
     {{ order_info["groom_first_name"] }}
 
-    <br/><b>LAST_NAME_BRIDE:</b> <br/>
+    <br/>
+    <b>LAST NAME - BRIDE:</b>
+    <br />
     {{ order_info["bride_last_name"] }}
 
-    <br/><b>FIRST_NAME_BRIDE:</b> <br/>
+    <br/>
+    <b>FIRST NAME - BRIDE:</b>
+    <br />
     {{ order_info["bride_first_name"] }}
 
-    <br/><b>RELATIONSHIP:</b> <br/>
-    {{ order_info["relationship"] }}
+    <br/>
+    <b>RELATIONSHIP:</b>
+    <br />
+    {{ order_info["relationship"] or "Not Provided" }}
 
-    <br/><b>PURPOSE:</b> <br/>
+    <br/>
+    <b>PURPOSE:</b>
+    <br />
     {{ order_info["purpose"] }}
 
-    <br/><b>COPY_REQ:</b> <br/>
-    {{ order_info["copy_req"] }}
+    <br/>
+    <b>NUMBER OF COPIES:</b>
+    <br />
+    {{ order_info["num_copies"] }}
 
-    <br/><b>MONTH:</b> <br/>
+    <br/>
+    <b>MONTH:</b>
+    <br />
     {{ order_info["month"] }}
 
-    <br/><b>DAY:</b> <br/>
+    <br/>
+    <b>DAY:</b>
+    <br />
     {{ order_info["day"] }}
 
-    <br/><b>YEARS:</b> <br/>
-    {{ order_info["year"] }}
+    <br/>
+    <b>YEARS:</b>
+    <br />
+    {{ order_info["years"] }}
 
-    <br/><b>MARRIAGE_PLACE:</b> <br/>
-    {{ order_info["marriage_place"] }}
+    <br/>
+    <b>MARRIAGE_PLACE:</b>
+    <br />
+    {{ order_info["marriage_place"] or "Not Provided"}}
 
-    <br/><b>BOROUGH:</b> <br/>
+    <br/>
+    <b>BOROUGH:</b>
+    <br />
     {{ order_info["borough"] }}
 
-    <br/><b>LETTER:</b> <br/>
-    {{ order_info["letter"] }}
+    <br/>
+    <b>LETTER:</b>
+    <br />
+    {{ order_info["letter"] or "N/A" }}
 
-    <br/><b>COMMENT:</b> <br/>
-    {{ order_info["comment"] }}
+    <br/>
+    <b>COMMENT:</b>
+    <br />
+    {{ order_info["comment"] or "N/A" }}
 
 {% endblock %}
 

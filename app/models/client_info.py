@@ -64,6 +64,30 @@ class Customer(db.Model):
         self.order_number = order_number
 
     @property
+    def address(self):
+        address = ''
+        if self.address_line_2 is not None:
+            address = "{address_line_one}, {address_line_two}, {city}, {state}, {zip}".format(
+                address_line_one=self.address_line_1,
+                address_line_two=self.address_line_2,
+                city=self.city,
+                state=self.state,
+                zip=self.zip_code
+            )
+        else:
+            address = "{address_line_one}, {city}, {state}, {zip}".format(
+                address_line_one=self.address_line_1,
+                city=self.city,
+                state=self.state,
+                zip=self.zip_code
+            )
+
+        if self.country not in ['United States']:
+            address += self.country
+
+        return address
+
+    @property
     def serialize(self):
         """Return object data in easily serializable format"""
         return {
@@ -79,4 +103,5 @@ class Customer(db.Model):
             'phone': self.phone,
             'instructions': self.instructions,
             'order_number': self.order_number,
+            'address': self.address
         }
