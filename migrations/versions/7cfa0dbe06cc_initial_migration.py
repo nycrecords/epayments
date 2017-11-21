@@ -1,8 +1,8 @@
 """Initial Migration
 
-Revision ID: 1400dcedbd2f
+Revision ID: 7cfa0dbe06cc
 Revises: 
-Create Date: 2017-11-21 09:27:57.295456
+Create Date: 2017-11-21 16:14:34.357457
 
 """
 from alembic import op
@@ -10,7 +10,7 @@ import sqlalchemy as sa
 from sqlalchemy.dialects import postgresql
 
 # revision identifiers, used by Alembic.
-revision = '1400dcedbd2f'
+revision = '7cfa0dbe06cc'
 down_revision = None
 branch_labels = None
 depends_on = None
@@ -27,6 +27,14 @@ def upgrade():
     sa.Column('order_types', postgresql.ARRAY(sa.Text()), nullable=True),
     sa.Column('multiple_items', sa.Boolean(), nullable=False),
     sa.PrimaryKeyConstraint('id')
+    )
+    op.create_table('users',
+    sa.Column('email', sa.String(length=100), nullable=False),
+    sa.Column('created_at', sa.DateTime(), nullable=False),
+    sa.Column('updated_at', sa.DateTime(), nullable=False),
+    sa.Column('password_hash', sa.String(length=128), nullable=True),
+    sa.PrimaryKeyConstraint('email'),
+    sa.UniqueConstraint('email')
     )
     op.create_table('customer',
     sa.Column('id', sa.Integer(), nullable=False),
@@ -259,5 +267,6 @@ def downgrade():
     op.drop_table('birth_cert')
     op.drop_table('suborder')
     op.drop_table('customer')
+    op.drop_table('users')
     op.drop_table('order')
     # ### end Alembic commands ###

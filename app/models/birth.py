@@ -295,7 +295,7 @@ class BirthCertificate(db.Model):
             'num_copies': self.num_copies,
             'month': self.month,
             'day': self.day,
-            'years': str(self.years),
+            'years': self.years,
             'birth_place': self.birth_place,
             'borough': self.borough,
             'letter': self.letter,

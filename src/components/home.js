@@ -12,6 +12,7 @@ class Home extends React.Component {
             all_orders: [],
             order_count: 0,
             suborder_count: 0,
+            authenticated: false
         };
 
         this.addOrder = (order_count, suborder_count, orders) => {
@@ -42,6 +43,17 @@ class Home extends React.Component {
 
         this.printSmallLabels = () => {
         //    links to Small Label print
+        };
+
+        this.logOut = () => {
+            fetch('api/v1.0/logout', {
+                method: "DELETE",
+            }).then((response) => (
+                response.json()
+            )).then((json) => {
+                alert("Logged Out")
+            });
+
         };
     };
 
@@ -76,8 +88,9 @@ class Home extends React.Component {
                             <Container className="sub header">Department of Records</Container>
                         </Header>
                         <Segment padded>
-                            <LoginModal/>
+                            <LoginModal this.props.authenticated />
                         </Segment>
+                        <Button content='Logout' onClick={this.logOut} />
                         <OrderForm addOrder={this.addOrder}/>
                     </Grid.Column>
                     <Grid.Column width={1}/>

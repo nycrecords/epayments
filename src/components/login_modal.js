@@ -45,14 +45,19 @@ class LoginModal extends React.Component {
                   <Header icon='user' content='Enter your Credentials' />
                   <Modal.Content>
                       <Form>
-                        <Form.Field>
-                          <label>Email</label>
-                          <input placeholder='Email' />
-                        </Form.Field>
-                        <Form.Field>
-                          <label>Password</label>
-                          <input type='password' placeholder='Password' />
-                        </Form.Field>
+                          <Form.Input label="Email" placeholder="Email" maxLength="64"
+                                onChange={(e, {value}) => {
+                                        this.setState({email: value})
+                                }}
+                                value={this.state.email}
+                          />
+                          <Form.Input label="Password" placeholder="Password" maxLength="64"
+                                      type='password'
+                                onChange={(e, {value}) => {
+                                        this.setState({password: value})
+                                }}
+                                value={this.state.password}
+                          />
                           <Button type='submit' positive onClick={this.handleSubmit} floated='right'>Submit</Button>
                           <Button negative onClick={this.handleClose} floated='right'>Cancel</Button>
                           <br/>

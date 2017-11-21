@@ -1,13 +1,13 @@
 from datetime import date, timedelta, datetime, time
 
 from flask import jsonify, abort, request
+from flask_login import login_user, logout_user, current_user, login_required
 from sqlalchemy import desc
 from app.api_1_0 import api_1_0 as api
 
 from app.api_1_0.utils import (
     update_status,
     get_orders_by_fields,
-    login_user,
     _print_orders,
     _print_large_labels,
     _print_small_labels
@@ -16,7 +16,8 @@ from app.constants import print_types
 from app.models import (
     Order,
     StatusTracker,
-    PhotoTax
+    PhotoTax,
+    Users,
 )
 
 
@@ -128,8 +129,9 @@ def history(suborder_number):
      also get the comment and date with these to send to the front
     """
 
-    history = [status.serialize for status in StatusTracker.query.filter_by(suborder_number=int(suborder_number)).order_by(
-        desc(StatusTracker.timestamp)).all()]
+    history = [status.serialize for status in
+               StatusTracker.query.filter_by(suborder_number=int(suborder_number)).order_by(
+                   desc(StatusTracker.timestamp)).all()]
 
     return jsonify(history=history)
 
@@ -183,9 +185,24 @@ def login():
     """
     user_info = request.get_json(force=True)
 
-    successful_login = login_user(user_info['username'], user_info['password'])
+    user = Users.query.filter_by(email=user_info['email']).one_or_none()
 
-    if successful_login:
-        return jsonify(user_id="jocastillo@records.nyc.gov"), 200
-    else:
-        return jsonify(error="Invalid email or password for user account {}".format(user_info['username'])), 401
+    if user is None:
+        return jsonify("Invalid username or password entered"), 401
+
+    valid_password = user.verify_password(user_info['password'])
+
+    if not valid_password:
+        return jsonify("Invalid username or password entered"), 401
+
+    login_user(user)
+
+    print(current_user.email)
+
+    return jsonify({"authenticated": True}), 200
+
+
+@api.route('/logout', methods=['DELETE'])
+def logout():
+    logout_user()
+    return jsonify({"authenticated": False}), 200

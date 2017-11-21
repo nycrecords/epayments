@@ -2,46 +2,46 @@
 
 {% block content %}
 <br /><b>LAST_NAME:</b> <br />
-{{ order_info["last_name"] }}
+{{ order_info["last_name"] or "Not Provided" }}
 
 <br /><b>MIDDLE_NAME:</b> <br />
-{{ order_info["mid_name"] }}
+{{ order_info["mid_name"] or "Not Provided" }}
 
 <br /><b>FIRST_NAME:</b> <br />
-{{ order_info["first_name"] }}
+{{ order_info["first_name"] or "Not Provided" }}
 
 <br /><b>RELATIONSHIP:</b> <br />
-{{ order_info["relationship"] }}
+{{ order_info["relationship"] or "Not Provided" }}
 
 <br /><b>PURPOSE:</b> <br />
 {{ order_info["purpose"] }}
 
 <br /><b>ADDITIONAL_COPY:</b> <br />
-{{ order_info["additional_copy"] }}
+{{ "Yes" if order_info["additional_copy"] else "No" }}
 
 <br /><b>CEMETERY:</b> <br />
-{{ order_info["cemetery"] }}
+{{ order_info["cemetery"] or "Not Provided" }}
 
 <br /><b>MONTH:</b> <br />
-{{ order_info["month"] }}
+{{ order_info["month"] or "Not Provided" }}
 
 <br /><b>DAY:</b> <br />
-{{ order_info["day"] }}
+{{ order_info["day"] or "Not Provided" }}
 
 <br /><b>YEARS:</b> <br />
-{{ order_info["year"] }}
+{{ order_info["years"] or "Not Provided" }}
 
 <br /><b>DEATH_PLACE:</b> <br />
-{{ order_info["death_place"] }}
+{{ order_info["death_place"] or "Not Provided" }}
 
 <br /><b>AGE_OF_DEATH:</b> <br />
-{{ order_info["age_of_death"] }}
+{{ order_info["age_of_death"] or "Not Provided" }}
 
 <br /><b>BOROUGH:</b> <br />
 {{ order_info["borough"] }}
 
 <br /><b>LETTER:</b> <br />
-{{ order_info["letter"] }} </b>
+{{ "Yes" if order_info["letter"] else "No" }}
 
 <br /><b>COMMENT:</b> <br />
 {{ order_info["comment"] }}

@@ -1,7 +1,7 @@
 from datetime import date, datetime
 from flask import render_template
 from sqlalchemy import or_
-# from xhtml2pdf.pisa import CreatePDF
+from xhtml2pdf.pisa import CreatePDF
 
 from app import db
 from app.constants import (
@@ -20,8 +20,10 @@ from app.models import (
     MarriageCertificate,
     PhotoGallery,
     PhotoTax,
-    PropertyCard
+    PropertyCard,
+    Users
 )
+
 
 
 def _order_query_filters(order_number, suborder_number, order_type, billing_name, user, date_submitted_start,
@@ -188,7 +190,7 @@ def _print_orders(search_params):
                                 order_info=order_info)
 
     test = open('/Users/jocastillo/Dropbox/Work/DORIS/Archives/epayments/epayments/test.pdf', 'w+b')
-    # pdf = CreatePDF(src=html, dest=test)
+    pdf = CreatePDF(src=html, dest=test)
 
     test.close()
 
@@ -207,5 +209,3 @@ def generate_csv():
     pass
 
 
-def login_user(username, password):
-    pass

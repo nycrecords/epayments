@@ -274,7 +274,7 @@ class DeathCertificate(db.Model):
             'cemetery': self.cemetery,
             'month': self.month,
             'day': self.day,
-            'years': str(self.years),
+            'years': self.years,
             'death_place': self.death_place,
             'age_of_death': self.age_of_death,
             'borough': self.borough,
