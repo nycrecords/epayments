@@ -86,7 +86,7 @@ class DeathSearch(db.Model):
         self._years = years or None
         self.death_place = death_place or None
         self.age_of_death = age_of_death or None
-        self._borough = [borough]
+        self._borough = borough
         self.letter = letter or None
         self.comment = comment or None
         self.suborder_number = suborder_number

@@ -247,7 +247,7 @@ class BirthCertificate(db.Model):
         self.day = day or None
         self._years = years
         self.birth_place = birth_place or None
-        self._borough = [borough]
+        self._borough = borough
         self.letter = letter or None
         self.comment = comment or None
         self.suborder_number = suborder_number

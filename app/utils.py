@@ -170,786 +170,787 @@ def import_file(file_name):
 
     clients_data_items = clients_data.split('ClientID')[1:]
     clients_data_items = ['ClientID' + client for client in clients_data_items]
+    for clients_data_item in clients_data_items:
+        clients_data_list = clients_data_item.split('|')
+        client_id = clients_data_list[clients_data_list.index("ClientID") + 1]
+        client_agency_name = CLIENT_AGENCY_NAMES[client_id]
 
-    clients_data_list = [item.split('|') for item in clients_data_items][0]
-    client_id = clients_data_list[clients_data_list.index("ClientID") + 1]
-    client_agency_name = CLIENT_AGENCY_NAMES[client_id]
+        # Suborder Number used to identify multi-part orders
+        suborder_number = clients_data_list[clients_data_list.index("OrderNo") + 1]
 
-    # Suborder Number used to identify multi-part orders
-    suborder_number = clients_data_list[clients_data_list.index("OrderNo") + 1]
+        # Check for duplicate in database
+        duplicate = Suborder.query.filter_by(id=suborder_number).first()
 
-    # Check for duplicate in database
-    duplicate = Suborder.query.filter_by(id=suborder_number).first()
+        if duplicate:
+            print("Order %s already exists in the database." % order_number)
+            return
 
-    if duplicate:
-        print("Order %s already exists in the database." % order_number)
-        return
+        suborder = Suborder(id=suborder_number,
+                            client_id=client_id,
+                            client_agency_name=client_agency_name,
+                            order_number=order_number)
 
-    suborder = Suborder(id=suborder_number,
-                        client_id=client_id,
-                        client_agency_name=client_agency_name,
-                        order_number=order_number)
+        db.session.add(suborder)
 
-    db.session.add(suborder)
+        # Insert into the StatusTracker Table
+        insert_status = StatusTracker(suborder_number=suborder_number,
+                                      current_status=status.RECEIVED,
+                                      comment=None,
+                                      timestamp=None,
+                                      previous_value=None)
 
-    # Insert into the StatusTracker Table
-    insert_status = StatusTracker(suborder_number=suborder_number,
-                                  current_status=status.RECEIVED,
-                                  comment=None,
-                                  timestamp=None,
-                                  previous_value=None)
-
-    db.session.add(insert_status)
-    db.session.commit()
-
-    # Insert into the BirthSearch Table
-    # For all the other table check the Client Agency Names
-    # Use their ID's to know which table to insert into
-
-    # Do this from ClientID
-
-    # CLIENT_AGENCY_NAMES = {
-    #     "10000048": "Photo Tax",
-    #     "10000060": "Photo Gallery",
-    #     "10000102": "Birth Search",
-    #     "10000147": "Birth Cert",
-    #     "10000104": "Marriage Search",
-    #     "10000181": "Marriage Cert",
-    #     "10000103": "Death Search",
-    #     "10000182": "Death Cert",
-    #     "10000058": "Property Card"
-    # }
-
-    # Birth Search
-    if client_id == '10000102':
-        # Retrieve the Certificate Name (First Name, Last Name, Middle Name)
-        first_name = clients_data_list[
-            clients_data_list.index("FIRSTNAME") + 1] if "FIRSTNAME" in clients_data_list else None
-        last_name = clients_data_list[
-            clients_data_list.index("LASTNAME") + 1] if "LASTNAME" in clients_data_list else None
-        mid_name = clients_data_list[
-            clients_data_list.index("MIDDLENAME") + 1] if "MIDDLENAME" in clients_data_list else None
-
-        # Pull the gender type
-        gender_type = clients_data_list[
-            clients_data_list.index("GENDER") + 1] if "GENDER" in clients_data_list else None
-
-        # Retrieve Fathers Name
-        father_name = clients_data_list[
-            clients_data_list.index("FATHER_NAME") + 1] if "FATHER_NAME" in clients_data_list else None
-
-        # Retrieve Mother's Name
-        mother_name = clients_data_list[
-            clients_data_list.index("MOTHER_NAME") + 1] if "MOTHER_NAME" in clients_data_list else None
-
-        # Retrieve the Customer's Relationship to Certificate Person
-        relationship = clients_data_list[
-            clients_data_list.index("RELATIONSHIP") + 1] if "RELATIONSHIP" in clients_data_list else None
-
-        # Retrieve Research Purpose
-        purpose = clients_data_list[
-            clients_data_list.index("PURPOSE") + 1] if "PURPOSE" in clients_data_list else None
-
-        # Retrieve Number of Copies
-        num_copies = clients_data_list[
-            clients_data_list.index("ADDITIONAL_COPY") + 1] if "ADDITIONAL_COPY" in clients_data_list else 1
-
-        # Retrieve the Birth Date (Month, Day, Years)
-        month = clients_data_list[clients_data_list.index("MONTH") + 1] if "MONTH" in clients_data_list else None
-        day = clients_data_list[clients_data_list.index("DAY") + 1] if "DAY" in clients_data_list else None
-        years = clients_data_list[clients_data_list.index("YEAR_") + 1] if "YEAR_" in clients_data_list else None
-        if years:
-            years = years.split(',')
-            years = list(filter(bool, years))
-
-        # Retrieve Birth Place
-        birth_place = clients_data_list[
-            clients_data_list.index("BIRTH_PLACE") + 1] if "BIRTH_PLACE" in clients_data_list else None
-
-        # Retrieve Birth Borough
-        borough = clients_data_list[clients_data_list.index("BOROUGH") + 1]
-        borough = borough.split(',')
-        borough = list(filter(bool, borough))
-
-        # Retrieve Comments
-        comment = clients_data_list[
-            clients_data_list.index("ADD_COMMENT") + 1] if "ADD_COMMENT" in clients_data_list else None
-
-        # Retrieve Exemplification Letter Requested
-        if clients_data_list[clients_data_list.index("LETTER") + 1] if "LETTER" in clients_data_list else None:
-            letter = True
-        else:
-            letter = False
-
-        customer_order = BirthSearch(
-            first_name=first_name,
-            last_name=last_name,
-            mid_name=mid_name,
-            gender_type=gender_type,
-            father_name=father_name,
-            mother_name=mother_name,
-            relationship=relationship,
-            purpose=purpose,
-            num_copies=num_copies,
-            month=month,
-            day=day,
-            years=years,
-            birth_place=birth_place,
-            borough=borough,
-            letter=letter,
-            comment=comment,
-            suborder_number=suborder_number
-        )
-
-        db.session.add(customer_order)
+        db.session.add(insert_status)
         db.session.commit()
 
-    # Marriage Search
-    if client_id == '10000104':
-        # Retrieve the Groom's Information (First and Last Name)
-        groom_last_name = clients_data_list[clients_data_list.index("LASTNAME_G") + 1]
-        groom_first_name = clients_data_list[
-            clients_data_list.index("FIRSTNAME_G") + 1] if "FIRSTNAME_G" in clients_data_list else None
-
-        # Retreive the Bride's Information (First and Last Name
-        bride_last_name = clients_data_list[clients_data_list.index("LASTNAME_B") + 1]
-        bride_first_name = clients_data_list[
-            clients_data_list.index("FIRSTNAME_B") + 1] if "FIRSTNAME_B" in clients_data_list else None
-
-        # Retrieve the Customer's Relationship to Certificate Person
-        relationship = clients_data_list[
-            clients_data_list.index("RELATIONSHIP") + 1] if "RELATIONSHIP" in clients_data_list else None
-
-        # Retrieve Research Purpose
-        purpose = clients_data_list[
-            clients_data_list.index("PURPOSE") + 1] if "PURPOSE" in clients_data_list else None
-
-        # Retrieve Number of Copies
-        num_copies = clients_data_list[
-            clients_data_list.index("ADDITIONAL_COPY") + 1] if "ADDITIONAL_COPY" in clients_data_list else 1
-
-        # Retrieve the Marriage Date (Month, Day, Years)
-        month = clients_data_list[clients_data_list.index("MONTH") + 1] if "MONTH" in clients_data_list else None
-        day = clients_data_list[clients_data_list.index("DAY") + 1] if "DAY" in clients_data_list else None
-        years = clients_data_list[clients_data_list.index("YEAR_") + 1] if "YEAR_" in clients_data_list else None
-        if years:
-            years = years.split(',')
-            years = list(filter(bool, years))
-
-        # Retrieve Marriage Location
-        marriage_place = clients_data_list[
-            clients_data_list.index("MARRIAGE_PLACE") + 1] if "MARRIAGE_PLACE" in clients_data_list else None
-
-        # Retrieve Marriage Borough
-        borough = clients_data_list[clients_data_list.index("BOROUGH") + 1]
-        borough = borough.split(',')
-        borough = list(filter(bool, borough))
-
-        # Retrieve Comments
-        comment = clients_data_list[
-            clients_data_list.index("ADD_COMMENT") + 1] if "ADD_COMMENT" in clients_data_list else None
-
-        # Retrieve Exemplification Letter Requested
-        if clients_data_list[clients_data_list.index("LETTER") + 1] if "LETTER" in clients_data_list else None:
-            letter = True
-        else:
-            letter = False
-
-        customer_order = MarriageSearch(
-            groom_last_name=groom_last_name,
-            groom_first_name=groom_first_name,
-            bride_last_name=bride_last_name,
-            bride_first_name=bride_first_name,
-            relationship=relationship,
-            purpose=purpose,
-            num_copies=num_copies,
-            month=month,
-            day=day,
-            years=years,
-            marriage_place=marriage_place,
-            borough=borough,
-            letter=letter,
-            comment=comment,
-            suborder_number=suborder_number
-        )
-
-        db.session.add(customer_order)
-        db.session.commit()
-
-    # Death Search
-    if client_id == '10000103':
-        # Retrieve the decedents name (First Name, Last Name)
-        first_name = clients_data_list[
-            clients_data_list.index("FIRSTNAME") + 1] if "FIRSTNAME" in clients_data_list else None
-        last_name = clients_data_list[clients_data_list.index("LASTNAME") + 1]
-        mid_name = clients_data_list[
-            clients_data_list.index("MIDDLENAME") + 1] if "MIDDLENAME" in clients_data_list else None
-
-        # Retrieve the Customer's Relationship to Certificate Person
-        relationship = clients_data_list[
-            clients_data_list.index("RELATIONSHIP") + 1] if "RELATIONSHIP" in clients_data_list else None
-
-        # Retrieve Research Purpose
-        purpose = clients_data_list[
-            clients_data_list.index("PURPOSE") + 1] if "PURPOSE" in clients_data_list else None
-
-        # Retrieve Number of Copies
-        num_copies = clients_data_list[
-            clients_data_list.index("ADDITIONAL_COPY") + 1] if "ADDITIONAL_COPY" in clients_data_list else 1
-
-        # Retrieve the Marriage Date (Month, Day, Years)
-        month = clients_data_list[clients_data_list.index("MONTH") + 1] if "MONTH" in clients_data_list else None
-        day = clients_data_list[clients_data_list.index("DAY") + 1] if "DAY" in clients_data_list else None
-        years = clients_data_list[clients_data_list.index("YEAR_") + 1] if "YEAR_" in clients_data_list else None
-        if years:
-            years = years.split(',')
-            years = list(filter(bool, years))
-
-        # Retrieve the Cemetery
-        cemetery = clients_data_list[
-            clients_data_list.index("CEMETERY") + 1] if "CEMETERY" in clients_data_list else None
-
-        # Retrieve the Place of Death
-        death_place = clients_data_list[
-            clients_data_list.index("DEATH_PLACE") + 1] if "DEATH_PLACE" in clients_data_list else None
-
-        # Retrieve the Age of Death
-        age_of_death = clients_data_list[
-            clients_data_list.index("AGEOFDEATH") + 1] if "AGEOFDEATH" in clients_data_list else None
-
-        # Retrieve Marriage Borough
-        borough = clients_data_list[clients_data_list.index("BOROUGH") + 1]
-        borough = borough.split(',')
-        borough = list(filter(bool, borough))
-
-        # Retrieve Comments
-        comment = clients_data_list[
-            clients_data_list.index("ADD_COMMENT") + 1] if "ADD_COMMENT" in clients_data_list else None
-
-        # Retrieve Exemplification Letter Requested
-        if clients_data_list[clients_data_list.index("LETTER") + 1] if "LETTER" in clients_data_list else None:
-            letter = True
-        else:
-            letter = False
-
-        customer_order = DeathSearch(
-            last_name=last_name,
-            first_name=first_name,
-            mid_name=mid_name,
-            relationship=relationship,
-            purpose=purpose,
-            num_copies=num_copies,
-            cemetery=cemetery,
-            month=month,
-            day=day,
-            years=years,
-            death_place=death_place,
-            age_of_death=age_of_death,
-            borough=borough,
-            letter=letter,
-            comment=comment,
-            suborder_number=suborder_number
-        )
-
-        db.session.add(customer_order)
-        db.session.commit()
-
-    # Birth Certificate
-    if client_id == '10000147':
-        # Retrieve the Certificate Number
-        certificate_no = clients_data_list[clients_data_list.index("CERTIFICATE_NUMBER") + 1]
-
-        # Retrieve the Certificate Name (First Name, Last Name, Middle Name)
-        first_name = clients_data_list[
-            clients_data_list.index("FIRSTNAME") + 1] if "FIRSTNAME" in clients_data_list else None
-        last_name = clients_data_list[
-            clients_data_list.index("LASTNAME") + 1] if "LASTNAME" in clients_data_list else None
-        mid_name = clients_data_list[
-            clients_data_list.index("MIDDLENAME") + 1] if "MIDDLENAME" in clients_data_list else None
-
-        # Pull the gender type
-        gender_type = clients_data_list[
-            clients_data_list.index("GENDER") + 1] if "GENDER" in clients_data_list else None
-
-        # Retrieve Fathers Name
-        father_name = clients_data_list[
-            clients_data_list.index("FATHER_NAME") + 1] if "FATHER_NAME" in clients_data_list else None
-
-        # Retrieve Mother's Name
-        mother_name = clients_data_list[
-            clients_data_list.index("MOTHER_NAME") + 1] if "MOTHER_NAME" in clients_data_list else None
-
-        # Retrieve the Customer's Relationship to Certificate Person
-        relationship = clients_data_list[
-            clients_data_list.index("RELATIONSHIP") + 1] if "RELATIONSHIP" in clients_data_list else None
-
-        # Retrieve Research Purpose
-        purpose = clients_data_list[
-            clients_data_list.index("PURPOSE") + 1] if "PURPOSE" in clients_data_list else None
-
-        # Retrieve Number of Copies
-        num_copies = clients_data_list[
-            clients_data_list.index("ADDITIONAL_COPY") + 1] if "ADDITIONAL_COPY" in clients_data_list else 1
-
-        # Retrieve the Birth Date (Month, Day, Years)
-        month = clients_data_list[clients_data_list.index("MONTH") + 1] if "MONTH" in clients_data_list else None
-        day = clients_data_list[clients_data_list.index("DAY") + 1] if "DAY" in clients_data_list else None
-        years = clients_data_list[clients_data_list.index("YEAR_") + 1] if "YEAR_" in clients_data_list else None
-        if years:
-            years = years.split(',')
-            years = list(filter(bool, years))
-
-        # Retrieve Birth Place
-        birth_place = clients_data_list[
-            clients_data_list.index("BIRTH_PLACE") + 1] if "BIRTH_PLACE" in clients_data_list else None
-
-        # Retrieve Birth Borough
-        borough = clients_data_list[clients_data_list.index("BOROUGH") + 1]
-        borough = borough.split(',')
-        borough = list(filter(bool, borough))
-
-        # Retrieve Comments
-        comment = clients_data_list[
-            clients_data_list.index("ADD_COMMENT") + 1] if "ADD_COMMENT" in clients_data_list else None
-
-        # Retrieve Exemplification Letter Requested
-        if clients_data_list[clients_data_list.index("LETTER") + 1] if "LETTER" in clients_data_list else None:
-            letter = True
-        else:
-            letter = False
-
-        customer_order = BirthCertificate(
-            certificate_no=certificate_no,
-            first_name=first_name,
-            last_name=last_name,
-            mid_name=mid_name,
-            gender_type=gender_type,
-            father_name=father_name,
-            mother_name=mother_name,
-            relationship=relationship,
-            purpose=purpose,
-            num_copies=num_copies,
-            month=month,
-            day=day,
-            years=years,
-            birth_place=birth_place,
-            borough=borough,
-            letter=letter,
-            comment=comment,
-            suborder_number=suborder_number
-        )
-
-        db.session.add(customer_order)
-        db.session.commit()
-
-    # Marriage Certificate
-    if client_id == '10000181':
-        # Retreive the Certificate Number
-        certificate_no = clients_data_list[clients_data_list.index("CERTIFICATE_NUMBER") + 1]
-
-        # Retrieve the Groom's Information (First and Last Name)
-        groom_last_name = clients_data_list[clients_data_list.index("LASTNAME_G") + 1]
-        groom_first_name = clients_data_list[
-            clients_data_list.index("FIRSTNAME_G") + 1] if "FIRSTNAME_G" in clients_data_list else None
-
-        # Retreive the Bride's Information (First and Last Name
-        bride_last_name = clients_data_list[clients_data_list.index("LASTNAME_B") + 1]
-        bride_first_name = clients_data_list[
-            clients_data_list.index("FIRSTNAME_B") + 1] if "FIRSTNAME_B" in clients_data_list else None
-
-        # Retrieve the Customer's Relationship to Certificate Person
-        relationship = clients_data_list[
-            clients_data_list.index("RELATIONSHIP") + 1] if "RELATIONSHIP" in clients_data_list else None
-
-        # Retrieve Research Purpose
-        purpose = clients_data_list[
-            clients_data_list.index("PURPOSE") + 1] if "PURPOSE" in clients_data_list else None
-
-        # Retrieve Number of Copies
-        num_copies = clients_data_list[
-            clients_data_list.index("ADDITIONAL_COPY") + 1] if "ADDITIONAL_COPY" in clients_data_list else 1
-
-        # Retrieve the Marriage Date (Month, Day, Years)
-        month = clients_data_list[clients_data_list.index("MONTH") + 1] if "MONTH" in clients_data_list else None
-        day = clients_data_list[clients_data_list.index("DAY") + 1] if "DAY" in clients_data_list else None
-        years = clients_data_list[clients_data_list.index("YEAR") + 1] if "YEAR" in clients_data_list else None
-        if years:
-            years = years.split(',')
-            years = list(filter(bool, years))
-
-        # Retrieve Marriage Location
-        marriage_place = clients_data_list[
-            clients_data_list.index("MARRIAGE_PLACE") + 1] if "MARRIAGE_PLACE" in clients_data_list else None
-
-        # Retrieve Marriage Borough
-        borough = clients_data_list[clients_data_list.index("BOROUGH") + 1]
-        borough = borough.split(',')
-        borough = list(filter(bool, borough))
-
-        # Retrieve Comments
-        comment = clients_data_list[
-            clients_data_list.index("ADD_COMMENT") + 1] if "ADD_COMMENT" in clients_data_list else None
-
-        # Retrieve Exemplification Letter Requested
-        if clients_data_list[clients_data_list.index("LETTER") + 1] if "LETTER" in clients_data_list else None:
-            letter = True
-        else:
-            letter = False
-
-        customer_order = MarriageCertificate(
-            certificate_no=certificate_no,
-            groom_last_name=groom_last_name,
-            groom_first_name=groom_first_name,
-            bride_last_name=bride_last_name,
-            bride_first_name=bride_first_name,
-            relationship=relationship,
-            purpose=purpose,
-            num_copies=num_copies,
-            month=month,
-            day=day,
-            years=years,
-            marriage_place=marriage_place,
-            borough=borough,
-            letter=letter,
-            comment=comment,
-            suborder_number=suborder_number
-        )
-
-        db.session.add(customer_order)
-        db.session.commit()
-
-    # Death Certificate
-    if client_id == '10000182':
-        # Retrieve the Certificate Number
-        certificate_no = clients_data_list[clients_data_list.index("CERTIFICATE_NUMBER") + 1]
-
-        # Retrieve the decedents name (First Name, Last Name)
-        first_name = clients_data_list[
-            clients_data_list.index("FIRSTNAME") + 1] if "FIRSTNAME" in clients_data_list else None
-        last_name = clients_data_list[clients_data_list.index("LASTNAME") + 1]
-        mid_name = clients_data_list[
-            clients_data_list.index("MIDDLENAME") + 1] if "MIDDLENAME" in clients_data_list else None
-
-        # Retrieve the Customer's Relationship to Certificate Person
-        relationship = clients_data_list[
-            clients_data_list.index("RELATIONSHIP") + 1] if "RELATIONSHIP" in clients_data_list else None
-
-        # Retrieve Research Purpose
-        purpose = clients_data_list[
-            clients_data_list.index("PURPOSE") + 1] if "PURPOSE" in clients_data_list else None
-
-        # Retrieve Number of Copies
-        num_copies = clients_data_list[
-            clients_data_list.index("ADDITIONAL_COPY") + 1] if "ADDITIONAL_COPY" in clients_data_list else 1
-
-        # Retrieve the Marriage Date (Month, Day, Years)
-        month = clients_data_list[clients_data_list.index("MONTH") + 1] if "MONTH" in clients_data_list else None
-        day = clients_data_list[clients_data_list.index("DAY") + 1] if "DAY" in clients_data_list else None
-        years = clients_data_list[clients_data_list.index("YEAR_") + 1] if "YEAR_" in clients_data_list else None
-        if years:
-            years = years.split(',')
-            years = list(filter(bool, years))
-
-        # Retrieve the Cemetery
-        cemetery = clients_data_list[
-            clients_data_list.index("CEMETERY") + 1] if "CEMETERY" in clients_data_list else None
-
-        # Retrieve the Place of Death
-        death_place = clients_data_list[
-            clients_data_list.index("DEATH_PLACE") + 1] if "DEATH_PLACE" in clients_data_list else None
-
-        # Retrieve the Age of Death
-        age_of_death = clients_data_list[
-            clients_data_list.index("AGEOFDEATH") + 1] if "AGEOFDEATH" in clients_data_list else None
-
-        # Retrieve Marriage Borough
-        borough = clients_data_list[clients_data_list.index("BOROUGH") + 1]
-        borough = borough.split(',')
-        borough = list(filter(bool, borough))
-
-        # Retrieve Comments
-        comment = clients_data_list[
-            clients_data_list.index("ADD_COMMENT") + 1] if "ADD_COMMENT" in clients_data_list else None
-
-        # Retrieve Exemplification Letter Requested
-        if clients_data_list[clients_data_list.index("LETTER") + 1] if "LETTER" in clients_data_list else None:
-            letter = True
-        else:
-            letter = False
-
-        customer_order = DeathCertificate(
-            certificate_no=certificate_no,
-            last_name=last_name,
-            first_name=first_name,
-            mid_name=mid_name,
-            relationship=relationship,
-            purpose=purpose,
-            num_copies=num_copies,
-            cemetery=cemetery,
-            month=month,
-            day=day,
-            years=years,
-            death_place=death_place,
-            age_of_death=age_of_death,
-            borough=borough,
-            letter=letter,
-            comment=comment,
-            suborder_number=suborder_number
-        )
-
-        db.session.add(customer_order)
-        db.session.commit()
-
-    # Property Card
-    if client_id == '10000058':
-        # Retrieve Building Address
-        borough = clients_data_list[clients_data_list.index("BOROUGH") + 1]
-        block = clients_data_list[clients_data_list.index("BLOCK") + 1] if "BLOCK" in clients_data_list else None
-        lot = clients_data_list[clients_data_list.index("LOT") + 1] if "LOT" in clients_data_list else None
-        building_no = clients_data_list[clients_data_list.index("BUILDING_NO") + 1]
-        street = clients_data_list[clients_data_list.index("STREET") + 1]
-
-        # Retrieve Building Description
-        description = clients_data_list[clients_data_list.index("DESCRIPTION") + 1] if "DESCRIPTION" in \
-                                                                                       clients_data_list else None
-
-        # Retrieve Certification Value (True or False)
-        certified = clients_data_list[clients_data_list.index("CERTIFIED") + 1]
-
-        # Retrieve Mail / Pickup Status
-        if clients_data_list[
-                    clients_data_list.index("MAIL_PICKUP") + 1] if "MAIL_PICKUP" in clients_data_list else None:
-            mail_pickup = True
-        else:
-            mail_pickup = False
-
-        # Retrieve Pickup Contact Information
-        contact_info = clients_data_list[
-            clients_data_list.index("EMAIL") + 1] if "EMAIL" in clients_data_list else None
-
-        customer_order = PropertyCard(
-            borough=borough,
-            block=block,
-            lot=lot,
-            building_no=building_no,
-            street=street,
-            description=description,
-            certified=certified,
-            mail_pickup=mail_pickup,
-            contact_info=contact_info,
-            suborder_number=suborder_number
-        )
-
-        db.session.add(customer_order)
-        db.session.commit()
-
-    # Tax Photo
-    if client_id == '10000048':
-        # Retrieve Collection Information (1940's, 1980's, Both)
-        collection = clients_data_list[clients_data_list.index("Collection") + 1]
-
-        # Retrieve Borough Information
-        borough = clients_data_list[clients_data_list.index("BOROUGH") + 1]
-
-        # Retrieve Roll Information
-        roll = clients_data_list[clients_data_list.index("ROLL") + 1] if "ROLL" in clients_data_list else None
-
-        # Retrieve Block and Lot of Building
-        block = clients_data_list[clients_data_list.index("BLOCK") + 1] if "BLOCK" in clients_data_list else None
-        lot = clients_data_list[clients_data_list.index("LOT") + 1] if "LOT" in clients_data_list else None
-
-        # Retrieve Street Address
-        street_no = clients_data_list[clients_data_list.index("STREET_NUMBER") + 1]
-        street = clients_data_list[clients_data_list.index("STREET") + 1]
-
-        # Retrieve Building  Description
-        description = clients_data_list[
-            clients_data_list.index("DESCRIPTION") + 1] if "DESCRIPTION" in clients_data_list else None
-
-        # Retrieve Print Size
-        type_ = clients_data_list[clients_data_list.index("TYPE") + 1]
-        size = clients_data_list[clients_data_list.index("SIZE") + 1] if "SIZE" in clients_data_list else None
-
-        # Retrieve Number of Copies
-        num_copies = clients_data_list[clients_data_list.index("COPIES") + 1] if "COPIES" in clients_data_list else 1
-
-        # Retrieve Mail / Pickup Status
-        if clients_data_list[
-                    clients_data_list.index("MAIL_PICKUP") + 1] if "MAIL_PICKUP" in clients_data_list else None:
-            mail_pickup = True
-        else:
-            mail_pickup = False
-
-        # Retrieve Pickup Contact Information
-        contact_no = clients_data_list[
-            clients_data_list.index("CONTACT_NUMBER") + 1] if "CONTACT_NUMBER" in clients_data_list else None
-
-        comment = clients_data_list[
-            clients_data_list.index("ADD_COMMENT") + 1] if "ADD_COMMENT" in clients_data_list else None
-
-        if collection == 'Both':
-            # Remove old Suborder
-            StatusTracker.query.filter_by(suborder_number=suborder_number).delete()
-            db.session.commit()
-            Suborder.query.filter_by(id=suborder_number).delete()
-            db.session.commit()
-
-            # Create Suborder for 1940 Request
-            suborder_1940 = Suborder(
-                id="{}-1940".format(suborder_number),
-                client_id=client_id,
-                client_agency_name=client_agency_name,
-                order_number=order_number
-            )
-            db.session.add(suborder_1940)
-
-            status_1940 = StatusTracker(
-                suborder_number=suborder_1940.id,
-                current_status=status.RECEIVED,
-                comment=None,
-                timestamp=None,
-                previous_value=None
-            )
-
-            db.session.add(status_1940)
-
-            # Create Suborder for 1980 Request
-            suborder_1980 = Suborder(
-                id="{}-1980".format(suborder_number),
-                client_id=client_id,
-                client_agency_name=client_agency_name,
-                order_number=order_number
-            )
-            db.session.add(suborder_1980)
-
-            status_1980 = StatusTracker(
-                suborder_number=suborder_1980.id,
-                current_status=status.RECEIVED,
-                comment=None,
-                timestamp=None,
-                previous_value=None
-            )
-
-            db.session.add(status_1980)
-
-            db.session.commit()
-
-            # Create PhotoTax entry for 1940 print
-            customer_order_1940 = PhotoTax(
-                borough=borough,
-                collection=collection,
-                roll=roll,
-                block=block,
-                lot=lot,
-                street_no=street_no,
-                street=street,
-                description=description,
-                type=type_,
-                size=size,
+        # Insert into the BirthSearch Table
+        # For all the other table check the Client Agency Names
+        # Use their ID's to know which table to insert into
+
+        # Do this from ClientID
+
+        # CLIENT_AGENCY_NAMES = {
+        #     "10000048": "Photo Tax",
+        #     "10000060": "Photo Gallery",
+        #     "10000102": "Birth Search",
+        #     "10000147": "Birth Cert",
+        #     "10000104": "Marriage Search",
+        #     "10000181": "Marriage Cert",
+        #     "10000103": "Death Search",
+        #     "10000182": "Death Cert",
+        #     "10000058": "Property Card"
+        # }
+
+        # Birth Search
+        if client_id == '10000102':
+            # Retrieve the Certificate Name (First Name, Last Name, Middle Name)
+            first_name = clients_data_list[
+                clients_data_list.index("FIRSTNAME") + 1] if "FIRSTNAME" in clients_data_list else None
+            last_name = clients_data_list[
+                clients_data_list.index("LASTNAME") + 1] if "LASTNAME" in clients_data_list else None
+            mid_name = clients_data_list[
+                clients_data_list.index("MIDDLENAME") + 1] if "MIDDLENAME" in clients_data_list else None
+
+            # Pull the gender type
+            gender_type = clients_data_list[
+                clients_data_list.index("GENDER") + 1] if "GENDER" in clients_data_list else None
+
+            # Retrieve Fathers Name
+            father_name = clients_data_list[
+                clients_data_list.index("FATHER_NAME") + 1] if "FATHER_NAME" in clients_data_list else None
+
+            # Retrieve Mother's Name
+            mother_name = clients_data_list[
+                clients_data_list.index("MOTHER_NAME") + 1] if "MOTHER_NAME" in clients_data_list else None
+
+            # Retrieve the Customer's Relationship to Certificate Person
+            relationship = clients_data_list[
+                clients_data_list.index("RELATIONSHIP") + 1] if "RELATIONSHIP" in clients_data_list else None
+
+            # Retrieve Research Purpose
+            purpose = clients_data_list[
+                clients_data_list.index("PURPOSE") + 1] if "PURPOSE" in clients_data_list else None
+
+            # Retrieve Number of Copies
+            num_copies = clients_data_list[
+                clients_data_list.index("ADDITIONAL_COPY") + 1] if "ADDITIONAL_COPY" in clients_data_list else 1
+
+            # Retrieve the Birth Date (Month, Day, Years)
+            month = clients_data_list[clients_data_list.index("MONTH") + 1] if "MONTH" in clients_data_list else None
+            day = clients_data_list[clients_data_list.index("DAY") + 1] if "DAY" in clients_data_list else None
+            years = clients_data_list[clients_data_list.index("YEAR_") + 1] if "YEAR_" in clients_data_list else None
+            if years:
+                years = years.split(',')
+                years = list(filter(bool, years))
+
+            # Retrieve Birth Place
+            birth_place = clients_data_list[
+                clients_data_list.index("BIRTH_PLACE") + 1] if "BIRTH_PLACE" in clients_data_list else None
+
+            # Retrieve Birth Borough
+            borough = clients_data_list[clients_data_list.index("BOROUGH") + 1]
+            borough = borough.split(',')
+            borough = list(filter(bool, borough))
+
+            # Retrieve Comments
+            comment = clients_data_list[
+                clients_data_list.index("ADD_COMMENT") + 1] if "ADD_COMMENT" in clients_data_list else None
+
+            # Retrieve Exemplification Letter Requested
+            if clients_data_list[clients_data_list.index("LETTER") + 1] if "LETTER" in clients_data_list else None:
+                letter = True
+            else:
+                letter = False
+
+            customer_order = BirthSearch(
+                first_name=first_name,
+                last_name=last_name,
+                mid_name=mid_name,
+                gender_type=gender_type,
+                father_name=father_name,
+                mother_name=mother_name,
+                relationship=relationship,
+                purpose=purpose,
                 num_copies=num_copies,
-                mail_pickup=mail_pickup,
-                contact_no=contact_no,
+                month=month,
+                day=day,
+                years=years,
+                birth_place=birth_place,
+                borough=borough,
+                letter=letter,
                 comment=comment,
-                suborder_number="{}-1940".format(suborder_number)
+                suborder_number=suborder_number
             )
-            db.session.add(customer_order_1940)
 
-            # Create PhotoTax entry for 1980 print
-            customer_order_1980 = PhotoTax(
-                borough=borough,
-                collection=collection,
-                roll=roll,
-                block=block,
-                lot=lot,
-                street_no=street_no,
-                street=street,
-                description=description,
-                type=type_,
-                size=size,
+            db.session.add(customer_order)
+            db.session.commit()
+
+        # Marriage Search
+        if client_id == '10000104':
+            # Retrieve the Groom's Information (First and Last Name)
+            groom_last_name = clients_data_list[clients_data_list.index("LASTNAME_G") + 1]
+            groom_first_name = clients_data_list[
+                clients_data_list.index("FIRSTNAME_G") + 1] if "FIRSTNAME_G" in clients_data_list else None
+
+            # Retreive the Bride's Information (First and Last Name
+            bride_last_name = clients_data_list[clients_data_list.index("LASTNAME_B") + 1]
+            bride_first_name = clients_data_list[
+                clients_data_list.index("FIRSTNAME_B") + 1] if "FIRSTNAME_B" in clients_data_list else None
+
+            # Retrieve the Customer's Relationship to Certificate Person
+            relationship = clients_data_list[
+                clients_data_list.index("RELATIONSHIP") + 1] if "RELATIONSHIP" in clients_data_list else None
+
+            # Retrieve Research Purpose
+            purpose = clients_data_list[
+                clients_data_list.index("PURPOSE") + 1] if "PURPOSE" in clients_data_list else None
+
+            # Retrieve Number of Copies
+            num_copies = clients_data_list[
+                clients_data_list.index("ADDITIONAL_COPY") + 1] if "ADDITIONAL_COPY" in clients_data_list else 1
+
+            # Retrieve the Marriage Date (Month, Day, Years)
+            month = clients_data_list[clients_data_list.index("MONTH") + 1] if "MONTH" in clients_data_list else None
+            day = clients_data_list[clients_data_list.index("DAY") + 1] if "DAY" in clients_data_list else None
+            years = clients_data_list[clients_data_list.index("YEAR_") + 1] if "YEAR_" in clients_data_list else None
+            if years:
+                years = years.split(',')
+                years = list(filter(bool, years))
+
+            # Retrieve Marriage Location
+            marriage_place = clients_data_list[
+                clients_data_list.index("MARRIAGE_PLACE") + 1] if "MARRIAGE_PLACE" in clients_data_list else None
+
+            # Retrieve Marriage Borough
+            borough = clients_data_list[clients_data_list.index("BOROUGH") + 1]
+            borough = borough.split(',')
+            borough = list(filter(bool, borough))
+
+            # Retrieve Comments
+            comment = clients_data_list[
+                clients_data_list.index("ADD_COMMENT") + 1] if "ADD_COMMENT" in clients_data_list else None
+
+            # Retrieve Exemplification Letter Requested
+            if clients_data_list[clients_data_list.index("LETTER") + 1] if "LETTER" in clients_data_list else None:
+                letter = True
+            else:
+                letter = False
+
+            customer_order = MarriageSearch(
+                groom_last_name=groom_last_name,
+                groom_first_name=groom_first_name,
+                bride_last_name=bride_last_name,
+                bride_first_name=bride_first_name,
+                relationship=relationship,
+                purpose=purpose,
                 num_copies=num_copies,
-                mail_pickup=mail_pickup,
-                contact_no=contact_no,
+                month=month,
+                day=day,
+                years=years,
+                marriage_place=marriage_place,
+                borough=borough,
+                letter=letter,
                 comment=comment,
-                suborder_number="{}-1980".format(suborder_number)
+                suborder_number=suborder_number
             )
-            db.session.add(customer_order_1980)
-        else:
-            customer_order = PhotoTax(
+
+            db.session.add(customer_order)
+            db.session.commit()
+
+        # Death Search
+        if client_id == '10000103':
+            # Retrieve the decedents name (First Name, Last Name)
+            first_name = clients_data_list[
+                clients_data_list.index("FIRSTNAME") + 1] if "FIRSTNAME" in clients_data_list else None
+            last_name = clients_data_list[clients_data_list.index("LASTNAME") + 1]
+            mid_name = clients_data_list[
+                clients_data_list.index("MIDDLENAME") + 1] if "MIDDLENAME" in clients_data_list else None
+
+            # Retrieve the Customer's Relationship to Certificate Person
+            relationship = clients_data_list[
+                clients_data_list.index("RELATIONSHIP") + 1] if "RELATIONSHIP" in clients_data_list else None
+
+            # Retrieve Research Purpose
+            purpose = clients_data_list[
+                clients_data_list.index("PURPOSE") + 1] if "PURPOSE" in clients_data_list else None
+
+            # Retrieve Number of Copies
+            num_copies = clients_data_list[
+                clients_data_list.index("ADDITIONAL_COPY") + 1] if "ADDITIONAL_COPY" in clients_data_list else 1
+
+            # Retrieve the Marriage Date (Month, Day, Years)
+            month = clients_data_list[clients_data_list.index("MONTH") + 1] if "MONTH" in clients_data_list else None
+            day = clients_data_list[clients_data_list.index("DAY") + 1] if "DAY" in clients_data_list else None
+            years = clients_data_list[clients_data_list.index("YEAR_") + 1] if "YEAR_" in clients_data_list else None
+            if years:
+                years = years.split(',')
+                years = list(filter(bool, years))
+
+            # Retrieve the Cemetery
+            cemetery = clients_data_list[
+                clients_data_list.index("CEMETERY") + 1] if "CEMETERY" in clients_data_list else None
+
+            # Retrieve the Place of Death
+            death_place = clients_data_list[
+                clients_data_list.index("DEATH_PLACE") + 1] if "DEATH_PLACE" in clients_data_list else None
+
+            # Retrieve the Age of Death
+            age_of_death = clients_data_list[
+                clients_data_list.index("AGEOFDEATH") + 1] if "AGEOFDEATH" in clients_data_list else None
+
+            # Retrieve Marriage Borough
+            borough = clients_data_list[clients_data_list.index("BOROUGH") + 1]
+            borough = borough.split(',')
+            borough = list(filter(bool, borough))
+
+            # Retrieve Comments
+            comment = clients_data_list[
+                clients_data_list.index("ADD_COMMENT") + 1] if "ADD_COMMENT" in clients_data_list else None
+
+            # Retrieve Exemplification Letter Requested
+            if clients_data_list[clients_data_list.index("LETTER") + 1] if "LETTER" in clients_data_list else None:
+                letter = True
+            else:
+                letter = False
+
+            customer_order = DeathSearch(
+                last_name=last_name,
+                first_name=first_name,
+                mid_name=mid_name,
+                relationship=relationship,
+                purpose=purpose,
+                num_copies=num_copies,
+                cemetery=cemetery,
+                month=month,
+                day=day,
+                years=years,
+                death_place=death_place,
+                age_of_death=age_of_death,
                 borough=borough,
-                collection=collection,
-                roll=roll,
+                letter=letter,
+                comment=comment,
+                suborder_number=suborder_number
+            )
+
+            db.session.add(customer_order)
+            db.session.commit()
+
+        # Birth Certificate
+        if client_id == '10000147':
+            # Retrieve the Certificate Number
+            certificate_no = clients_data_list[clients_data_list.index("CERTIFICATE_NUMBER") + 1]
+
+            # Retrieve the Certificate Name (First Name, Last Name, Middle Name)
+            first_name = clients_data_list[
+                clients_data_list.index("FIRSTNAME") + 1] if "FIRSTNAME" in clients_data_list else None
+            last_name = clients_data_list[
+                clients_data_list.index("LASTNAME") + 1] if "LASTNAME" in clients_data_list else None
+            mid_name = clients_data_list[
+                clients_data_list.index("MIDDLENAME") + 1] if "MIDDLENAME" in clients_data_list else None
+
+            # Pull the gender type
+            gender_type = clients_data_list[
+                clients_data_list.index("GENDER") + 1] if "GENDER" in clients_data_list else None
+
+            # Retrieve Fathers Name
+            father_name = clients_data_list[
+                clients_data_list.index("FATHER_NAME") + 1] if "FATHER_NAME" in clients_data_list else None
+
+            # Retrieve Mother's Name
+            mother_name = clients_data_list[
+                clients_data_list.index("MOTHER_NAME") + 1] if "MOTHER_NAME" in clients_data_list else None
+
+            # Retrieve the Customer's Relationship to Certificate Person
+            relationship = clients_data_list[
+                clients_data_list.index("RELATIONSHIP") + 1] if "RELATIONSHIP" in clients_data_list else None
+
+            # Retrieve Research Purpose
+            purpose = clients_data_list[
+                clients_data_list.index("PURPOSE") + 1] if "PURPOSE" in clients_data_list else None
+
+            # Retrieve Number of Copies
+            num_copies = clients_data_list[
+                clients_data_list.index("ADDITIONAL_COPY") + 1] if "ADDITIONAL_COPY" in clients_data_list else 1
+
+            # Retrieve the Birth Date (Month, Day, Years)
+            month = clients_data_list[clients_data_list.index("MONTH") + 1] if "MONTH" in clients_data_list else None
+            day = clients_data_list[clients_data_list.index("DAY") + 1] if "DAY" in clients_data_list else None
+            years = clients_data_list[clients_data_list.index("YEAR") + 1] if "YEAR" in clients_data_list else None
+            if years:
+                years = years.split(',')
+                years = list(filter(bool, years))
+
+            # Retrieve Birth Place
+            birth_place = clients_data_list[
+                clients_data_list.index("BIRTH_PLACE") + 1] if "BIRTH_PLACE" in clients_data_list else None
+
+            # Retrieve Birth Borough
+            borough = clients_data_list[clients_data_list.index("BOROUGH") + 1]
+            borough = borough.split(',')
+            borough = list(filter(bool, borough))
+
+            # Retrieve Comments
+            comment = clients_data_list[
+                clients_data_list.index("ADD_COMMENT") + 1] if "ADD_COMMENT" in clients_data_list else None
+
+            # Retrieve Exemplification Letter Requested
+            if clients_data_list[clients_data_list.index("LETTER") + 1] if "LETTER" in clients_data_list else None:
+                letter = True
+            else:
+                letter = False
+
+            customer_order = BirthCertificate(
+                certificate_no=certificate_no,
+                first_name=first_name,
+                last_name=last_name,
+                mid_name=mid_name,
+                gender_type=gender_type,
+                father_name=father_name,
+                mother_name=mother_name,
+                relationship=relationship,
+                purpose=purpose,
+                num_copies=num_copies,
+                month=month,
+                day=day,
+                years=years,
+                birth_place=birth_place,
+                borough=borough,
+                letter=letter,
+                comment=comment,
+                suborder_number=suborder_number
+            )
+
+            db.session.add(customer_order)
+            db.session.commit()
+
+        # Marriage Certificate
+        if client_id == '10000181':
+            # Retreive the Certificate Number
+            certificate_no = clients_data_list[clients_data_list.index("CERTIFICATE_NUMBER") + 1]
+
+            # Retrieve the Groom's Information (First and Last Name)
+            groom_last_name = clients_data_list[clients_data_list.index("LASTNAME_G") + 1]
+            groom_first_name = clients_data_list[
+                clients_data_list.index("FIRSTNAME_G") + 1] if "FIRSTNAME_G" in clients_data_list else None
+
+            # Retreive the Bride's Information (First and Last Name
+            bride_last_name = clients_data_list[clients_data_list.index("LASTNAME_B") + 1]
+            bride_first_name = clients_data_list[
+                clients_data_list.index("FIRSTNAME_B") + 1] if "FIRSTNAME_B" in clients_data_list else None
+
+            # Retrieve the Customer's Relationship to Certificate Person
+            relationship = clients_data_list[
+                clients_data_list.index("RELATIONSHIP") + 1] if "RELATIONSHIP" in clients_data_list else None
+
+            # Retrieve Research Purpose
+            purpose = clients_data_list[
+                clients_data_list.index("PURPOSE") + 1] if "PURPOSE" in clients_data_list else None
+
+            # Retrieve Number of Copies
+            num_copies = clients_data_list[
+                clients_data_list.index("ADDITIONAL_COPY") + 1] if "ADDITIONAL_COPY" in clients_data_list else 1
+
+            # Retrieve the Marriage Date (Month, Day, Years)
+            month = clients_data_list[clients_data_list.index("MONTH") + 1] if "MONTH" in clients_data_list else None
+            day = clients_data_list[clients_data_list.index("DAY") + 1] if "DAY" in clients_data_list else None
+            years = clients_data_list[clients_data_list.index("YEAR") + 1] if "YEAR" in clients_data_list else None
+            if years:
+                years = years.split(',')
+                years = list(filter(bool, years))
+
+            # Retrieve Marriage Location
+            marriage_place = clients_data_list[
+                clients_data_list.index("MARRIAGE_PLACE") + 1] if "MARRIAGE_PLACE" in clients_data_list else None
+
+            # Retrieve Marriage Borough
+            borough = clients_data_list[clients_data_list.index("BOROUGH") + 1]
+            borough = borough.split(',')
+            borough = list(filter(bool, borough))
+
+            # Retrieve Comments
+            comment = clients_data_list[
+                clients_data_list.index("ADD_COMMENT") + 1] if "ADD_COMMENT" in clients_data_list else None
+
+            # Retrieve Exemplification Letter Requested
+            if clients_data_list[clients_data_list.index("LETTER") + 1] if "LETTER" in clients_data_list else None:
+                letter = True
+            else:
+                letter = False
+
+            customer_order = MarriageCertificate(
+                certificate_no=certificate_no,
+                groom_last_name=groom_last_name,
+                groom_first_name=groom_first_name,
+                bride_last_name=bride_last_name,
+                bride_first_name=bride_first_name,
+                relationship=relationship,
+                purpose=purpose,
+                num_copies=num_copies,
+                month=month,
+                day=day,
+                years=years,
+                marriage_place=marriage_place,
+                borough=borough,
+                letter=letter,
+                comment=comment,
+                suborder_number=suborder_number
+            )
+
+            db.session.add(customer_order)
+            db.session.commit()
+
+        # Death Certificate
+        if client_id == '10000182':
+            # Retrieve the Certificate Number
+            certificate_no = clients_data_list[clients_data_list.index("CERTIFICATE_NUMBER") + 1]
+
+            # Retrieve the decedents name (First Name, Last Name)
+            first_name = clients_data_list[
+                clients_data_list.index("FIRSTNAME") + 1] if "FIRSTNAME" in clients_data_list else None
+            last_name = clients_data_list[clients_data_list.index("LASTNAME") + 1]
+            mid_name = clients_data_list[
+                clients_data_list.index("MIDDLENAME") + 1] if "MIDDLENAME" in clients_data_list else None
+
+            # Retrieve the Customer's Relationship to Certificate Person
+            relationship = clients_data_list[
+                clients_data_list.index("RELATIONSHIP") + 1] if "RELATIONSHIP" in clients_data_list else None
+
+            # Retrieve Research Purpose
+            purpose = clients_data_list[
+                clients_data_list.index("PURPOSE") + 1] if "PURPOSE" in clients_data_list else None
+
+            # Retrieve Number of Copies
+            num_copies = clients_data_list[
+                clients_data_list.index("ADDITIONAL_COPY") + 1] if "ADDITIONAL_COPY" in clients_data_list else 1
+
+            # Retrieve the Marriage Date (Month, Day, Years)
+            month = clients_data_list[clients_data_list.index("MONTH") + 1] if "MONTH" in clients_data_list else None
+            day = clients_data_list[clients_data_list.index("DAY") + 1] if "DAY" in clients_data_list else None
+            years = clients_data_list[clients_data_list.index("YEAR_") + 1] if "YEAR_" in clients_data_list else None
+            if years:
+                years = years.split(',')
+                years = list(filter(bool, years))
+
+            # Retrieve the Cemetery
+            cemetery = clients_data_list[
+                clients_data_list.index("CEMETERY") + 1] if "CEMETERY" in clients_data_list else None
+
+            # Retrieve the Place of Death
+            death_place = clients_data_list[
+                clients_data_list.index("DEATH_PLACE") + 1] if "DEATH_PLACE" in clients_data_list else None
+
+            # Retrieve the Age of Death
+            age_of_death = clients_data_list[
+                clients_data_list.index("AGEOFDEATH") + 1] if "AGEOFDEATH" in clients_data_list else None
+
+            # Retrieve Marriage Borough
+            borough = clients_data_list[clients_data_list.index("BOROUGH") + 1]
+            borough = borough.split(',')
+            borough = list(filter(bool, borough))
+
+            # Retrieve Comments
+            comment = clients_data_list[
+                clients_data_list.index("ADD_COMMENT") + 1] if "ADD_COMMENT" in clients_data_list else None
+
+            # Retrieve Exemplification Letter Requested
+            if clients_data_list[clients_data_list.index("LETTER") + 1] if "LETTER" in clients_data_list else None:
+                letter = True
+            else:
+                letter = False
+
+            customer_order = DeathCertificate(
+                certificate_no=certificate_no,
+                last_name=last_name,
+                first_name=first_name,
+                mid_name=mid_name,
+                relationship=relationship,
+                purpose=purpose,
+                num_copies=num_copies,
+                cemetery=cemetery,
+                month=month,
+                day=day,
+                years=years,
+                death_place=death_place,
+                age_of_death=age_of_death,
+                borough=borough,
+                letter=letter,
+                comment=comment,
+                suborder_number=suborder_number
+            )
+
+            db.session.add(customer_order)
+            db.session.commit()
+
+        # Property Card
+        if client_id == '10000058':
+            # Retrieve Building Address
+            borough = clients_data_list[clients_data_list.index("BOROUGH") + 1]
+            block = clients_data_list[clients_data_list.index("BLOCK") + 1] if "BLOCK" in clients_data_list else None
+            lot = clients_data_list[clients_data_list.index("LOT") + 1] if "LOT" in clients_data_list else None
+            building_no = clients_data_list[clients_data_list.index("BUILDING_NO") + 1]
+            street = clients_data_list[clients_data_list.index("STREET") + 1]
+
+            # Retrieve Building Description
+            description = clients_data_list[clients_data_list.index("DESCRIPTION") + 1] if "DESCRIPTION" in \
+                                                                                           clients_data_list else None
+
+            # Retrieve Certification Value (True or False)
+            certified = clients_data_list[clients_data_list.index("CERTIFIED") + 1]
+
+            # Retrieve Mail / Pickup Status
+            if clients_data_list[
+                        clients_data_list.index("MAIL_PICKUP") + 1] if "MAIL_PICKUP" in clients_data_list else None:
+                mail_pickup = True
+            else:
+                mail_pickup = False
+
+            # Retrieve Pickup Contact Information
+            contact_info = clients_data_list[
+                clients_data_list.index("EMAIL") + 1] if "EMAIL" in clients_data_list else None
+
+            customer_order = PropertyCard(
+                borough=borough,
                 block=block,
                 lot=lot,
-                street_no=street_no,
+                building_no=building_no,
                 street=street,
                 description=description,
-                type=type_,
+                certified=certified,
+                mail_pickup=mail_pickup,
+                contact_info=contact_info,
+                suborder_number=suborder_number
+            )
+
+            db.session.add(customer_order)
+            db.session.commit()
+
+        # Tax Photo
+        if client_id == '10000048':
+            # Retrieve Collection Information (1940's, 1980's, Both)
+            collection = clients_data_list[clients_data_list.index("Collection") + 1]
+
+            # Retrieve Borough Information
+            borough = clients_data_list[clients_data_list.index("BOROUGH") + 1]
+
+            # Retrieve Roll Information
+            roll = clients_data_list[clients_data_list.index("ROLL") + 1] if "ROLL" in clients_data_list else None
+
+            # Retrieve Block and Lot of Building
+            block = clients_data_list[clients_data_list.index("BLOCK") + 1] if "BLOCK" in clients_data_list else None
+            lot = clients_data_list[clients_data_list.index("LOT") + 1] if "LOT" in clients_data_list else None
+
+            # Retrieve Street Address
+            street_no = clients_data_list[clients_data_list.index("STREET_NUMBER") + 1]
+            street = clients_data_list[clients_data_list.index("STREET") + 1]
+
+            # Retrieve Building  Description
+            description = clients_data_list[
+                clients_data_list.index("DESCRIPTION") + 1] if "DESCRIPTION" in clients_data_list else None
+
+            # Retrieve Print Size
+            type_ = clients_data_list[clients_data_list.index("TYPE") + 1]
+            size = clients_data_list[clients_data_list.index("SIZE") + 1] if "SIZE" in clients_data_list else None
+
+            # Retrieve Number of Copies
+            num_copies = clients_data_list[clients_data_list.index("COPIES") + 1] if "COPIES" in clients_data_list else 1
+
+            # Retrieve Mail / Pickup Status
+            if clients_data_list[
+                        clients_data_list.index("MAIL_PICKUP") + 1] if "MAIL_PICKUP" in clients_data_list else None:
+                mail_pickup = True
+            else:
+                mail_pickup = False
+
+            # Retrieve Pickup Contact Information
+            contact_no = clients_data_list[
+                clients_data_list.index("CONTACT_NUMBER") + 1] if "CONTACT_NUMBER" in clients_data_list else None
+
+            comment = clients_data_list[
+                clients_data_list.index("ADD_COMMENT") + 1] if "ADD_COMMENT" in clients_data_list else None
+
+            if collection == 'Both':
+                # Remove old Suborder
+                StatusTracker.query.filter_by(suborder_number=suborder_number).delete()
+                db.session.commit()
+                Suborder.query.filter_by(id=suborder_number).delete()
+                db.session.commit()
+
+                # Create Suborder for 1940 Request
+                suborder_1940 = Suborder(
+                    id="{}-1940".format(suborder_number),
+                    client_id=client_id,
+                    client_agency_name=client_agency_name,
+                    order_number=order_number
+                )
+                db.session.add(suborder_1940)
+
+                status_1940 = StatusTracker(
+                    suborder_number=suborder_1940.id,
+                    current_status=status.RECEIVED,
+                    comment=None,
+                    timestamp=None,
+                    previous_value=None
+                )
+
+                db.session.add(status_1940)
+
+                # Create Suborder for 1980 Request
+                suborder_1980 = Suborder(
+                    id="{}-1980".format(suborder_number),
+                    client_id=client_id,
+                    client_agency_name=client_agency_name,
+                    order_number=order_number
+                )
+                db.session.add(suborder_1980)
+
+                status_1980 = StatusTracker(
+                    suborder_number=suborder_1980.id,
+                    current_status=status.RECEIVED,
+                    comment=None,
+                    timestamp=None,
+                    previous_value=None
+                )
+
+                db.session.add(status_1980)
+
+                db.session.commit()
+
+                # Create PhotoTax entry for 1940 print
+                customer_order_1940 = PhotoTax(
+                    borough=borough,
+                    collection=collection,
+                    roll=roll,
+                    block=block,
+                    lot=lot,
+                    street_no=street_no,
+                    street=street,
+                    description=description,
+                    type=type_,
+                    size=size,
+                    num_copies=num_copies,
+                    mail_pickup=mail_pickup,
+                    contact_no=contact_no,
+                    comment=comment,
+                    suborder_number="{}-1940".format(suborder_number)
+                )
+                db.session.add(customer_order_1940)
+
+                # Create PhotoTax entry for 1980 print
+                customer_order_1980 = PhotoTax(
+                    borough=borough,
+                    collection=collection,
+                    roll=roll,
+                    block=block,
+                    lot=lot,
+                    street_no=street_no,
+                    street=street,
+                    description=description,
+                    type=type_,
+                    size=size,
+                    num_copies=num_copies,
+                    mail_pickup=mail_pickup,
+                    contact_no=contact_no,
+                    comment=comment,
+                    suborder_number="{}-1980".format(suborder_number)
+                )
+                db.session.add(customer_order_1980)
+            else:
+                customer_order = PhotoTax(
+                    borough=borough,
+                    collection=collection,
+                    roll=roll,
+                    block=block,
+                    lot=lot,
+                    street_no=street_no,
+                    street=street,
+                    description=description,
+                    type=type_,
+                    size=size,
+                    num_copies=num_copies,
+                    mail_pickup=mail_pickup,
+                    contact_no=contact_no,
+                    comment=comment,
+                    suborder_number=suborder_number)
+                db.session.add(customer_order)
+            db.session.commit()
+
+        # Insert into the PhotoGallery table
+        if client_id == '10000060':
+            # Retrieve Photo ID
+            image_id = clients_data_list[clients_data_list.index("IMAGE_IDENTIFIER") + 1]
+
+            # Retrieve Photo Description
+            description = clients_data_list[
+                clients_data_list.index("IMAGE_DESCRIPTION") + 1] \
+                if "IMAGE_DESCRIPTION" in clients_data_list else None
+
+            # Retrieve Additional Description
+            additional_description = clients_data_list[
+                clients_data_list.index("ADDITIONAL_DESCRIPTION") + 1] \
+                if "ADDITIONAL_DESCRIPTION" in clients_data_list else None
+
+            # Retrieve Print size
+            size = clients_data_list[clients_data_list.index("SIZE") + 1]
+
+            # Retrieve Number of Copies
+            num_copies = clients_data_list[clients_data_list.index("COPIES") + 1] if "COPIES" in clients_data_list else 1
+
+            # Retrieve Mail / Pickup Status
+            if clients_data_list[
+                        clients_data_list.index("MAIL_PICKUP") + 1] if "MAIL_PICKUP" in clients_data_list else None:
+                mail_pickup = True
+            else:
+                mail_pickup = False
+
+            # Retrieve Pickup Contact Information
+            contact_no = clients_data_list[
+                clients_data_list.index("CONTACT_NUMBER") + 1] if "CONTACT_NUMBER" in clients_data_list else None
+
+            # Retrieve Comment
+            comment = clients_data_list[
+                clients_data_list.index("ADD_COMMENT") + 1] if "ADD_COMMENT" in clients_data_list else None
+
+            # Retrieve Personal Use Agreement
+            if clients_data_list[
+                        clients_data_list.index("PERSONAL_USE_AGREEMENT") + 1] \
+                    if "PERSONAL_USE_AGREEMENT" in clients_data_list else None:
+                personal_use_agreement = True
+            else:
+                personal_use_agreement = False
+
+            customer_order = PhotoGallery(
+                image_id=image_id,
+                description=description,
+                additional_description=additional_description,
                 size=size,
                 num_copies=num_copies,
                 mail_pickup=mail_pickup,
                 contact_no=contact_no,
+                personal_use_agreement=personal_use_agreement,
                 comment=comment,
                 suborder_number=suborder_number)
+
             db.session.add(customer_order)
-        db.session.commit()
+            db.session.commit()
 
-    # Insert into the PhotoGallery table
-    if client_id == '10000060':
-        # Retrieve Photo ID
-        image_id = clients_data_list[clients_data_list.index("IMAGE_IDENTIFIER") + 1]
-
-        # Retrieve Photo Description
-        description = clients_data_list[
-            clients_data_list.index("IMAGE_DESCRIPTION") + 1] \
-            if "IMAGE_DESCRIPTION" in clients_data_list else None
-
-        # Retrieve Additional Description
-        additional_description = clients_data_list[
-            clients_data_list.index("ADDITIONAL_DESCRIPTION") + 1] \
-            if "ADDITIONAL_DESCRIPTION" in clients_data_list else None
-
-        # Retrieve Print size
-        size = clients_data_list[clients_data_list.index("SIZE") + 1]
-
-        # Retrieve Number of Copies
-        num_copies = clients_data_list[clients_data_list.index("COPIES") + 1] if "COPIES" in clients_data_list else 1
-
-        # Retrieve Mail / Pickup Status
-        if clients_data_list[
-                    clients_data_list.index("MAIL_PICKUP") + 1] if "MAIL_PICKUP" in clients_data_list else None:
-            mail_pickup = True
-        else:
-            mail_pickup = False
-
-        # Retrieve Pickup Contact Information
-        contact_no = clients_data_list[
-            clients_data_list.index("CONTACT_NUMBER") + 1] if "CONTACT_NUMBER" in clients_data_list else None
-
-        # Retrieve Comment
-        comment = clients_data_list[
-            clients_data_list.index("ADD_COMMENT") + 1] if "ADD_COMMENT" in clients_data_list else None
-
-        # Retrieve Personal Use Agreement
-        if clients_data_list[
-                    clients_data_list.index("PERSONAL_USE_AGREEMENT") + 1] \
-                if "PERSONAL_USE_AGREEMENT" in clients_data_list else None:
-            personal_use_agreement = True
-        else:
-            personal_use_agreement = False
-
-        customer_order = PhotoGallery(
-            image_id=image_id,
-            description=description,
-            additional_description=additional_description,
-            size=size,
-            num_copies=num_copies,
-            mail_pickup=mail_pickup,
-            contact_no=contact_no,
-            personal_use_agreement=personal_use_agreement,
-            comment=comment,
-            suborder_number=suborder_number)
-
-        db.session.add(customer_order)
-        db.session.commit()
-
-    return True
+        return True
+    return False
