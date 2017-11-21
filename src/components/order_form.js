@@ -131,10 +131,9 @@ class OrderForm extends React.Component {
                                  }
                                  value={this.state.order_type}
                     />
-                    {/*<Form.Field label="Billing Name" placeholder="Billing Name" maxLength="64" control="input"git />*/}
                     <Form.Input label="Billing Name" placeholder="Billing Name" maxLength="64"
                                 onChange={(e, {value}) => {
-                                    if (/^[a-z,A-Z]+$/.test(value.slice(-1)) || value === '') {
+                                    if (/^[a-zA-Z\s]*$/.test(value.slice(-1)) || value === '') {
                                         this.setState({billing_name: value})
                                     }
                                 }}

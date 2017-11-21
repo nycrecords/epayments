@@ -1,7 +1,7 @@
 from datetime import date, timedelta, datetime, time
 
 from flask import jsonify, abort, request
-from flask_login import login_user, logout_user, current_user, login_required
+from flask_login import login_user, logout_user, current_user
 from sqlalchemy import desc
 from app.api_1_0 import api_1_0 as api
 
@@ -12,12 +12,15 @@ from app.api_1_0.utils import (
     _print_large_labels,
     _print_small_labels
 )
+from app.constants import (
+    event_type
+)
 from app.constants import print_types
 from app.models import (
     Order,
-    StatusTracker,
     PhotoTax,
     Users,
+    Event
 )
 
 
@@ -100,9 +103,7 @@ def status_change(suborder_number):
         5. Done - End of status changes
     :return: {status_id, suborder_number, status, comment}, 201
     """
-
-    if request.method == 'POST':  # Means that something was passed from the front
-        # curr_status = str(request.form["status"])
+    if request.method == 'POST':
         json = request.get_json(force=True)
         comment = json.get("comment")
         new_status = json.get("new_status")
@@ -111,7 +112,8 @@ def status_change(suborder_number):
             POST: {suborder_number, new_status, comment};
             returns: {status_id, suborder_number, status, comment}, 201
         """
-        update_status(suborder_number, comment, new_status)
+        status_code = update_status(suborder_number, comment, new_status)
+        return jsonify(status_code=status_code)
 
     # return jsonify(current_status=curr_status, suborder_number=suborder_number, comment=comment, status_id=status_id)
     status = [status.serialize for status in StatusTracker.query.filter_by(suborder_number=int(suborder_number)).all()]
@@ -128,12 +130,17 @@ def history(suborder_number):
     Look for all the rows with this suborder_number and list out the history for each one in Descending order
      also get the comment and date with these to send to the front
     """
+    status_history = [event.status_history for event in
+                      Event.query.filter(Event.suborder_number == suborder_number,
+                                         Event.type.in_(
+                                             [event_type.UPDATE_STATUS, event_type.INITIAL_IMPORT])
+                                         ).order_by(desc(Event.timestamp)).all()]
 
     history = [status.serialize for status in
                StatusTracker.query.filter_by(suborder_number=int(suborder_number)).order_by(
                    desc(StatusTracker.timestamp)).all()]
 
-    return jsonify(history=history)
+    return jsonify(history=status_history)
 
 
 @api.route('/orders/<int:order_id>', methods=['GET'])

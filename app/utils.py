@@ -3,13 +3,13 @@ import xml.etree.ElementTree as ET
 from datetime import datetime, date
 from flask import current_app
 from app import db, scheduler
-from app.models import Order, StatusTracker, BirthSearch, BirthCertificate, MarriageCertificate, \
+from app.models import Order, Event, BirthSearch, BirthCertificate, MarriageCertificate, \
     MarriageSearch, DeathCertificate, DeathSearch, PhotoGallery, PhotoTax, PropertyCard, Customer, Suborder
 from app.date_utils import utc_to_local
 from app.file_utils import sftp_ctx
 from app.constants import status
 from app.constants.client_agency_names import CLIENT_AGENCY_NAMES
-from app.constants import order_types
+from app.constants import order_types, event_type
 
 
 def import_xml_folder(scheduled=False, path=None):
@@ -188,19 +188,21 @@ def import_file(file_name):
         suborder = Suborder(id=suborder_number,
                             client_id=client_id,
                             client_agency_name=client_agency_name,
-                            order_number=order_number)
+                            order_number=order_number,
+                            status=status.RECEIVED)
 
         db.session.add(suborder)
+        db.session.commit()
 
         # Insert into the StatusTracker Table
-        insert_status = StatusTracker(suborder_number=suborder_number,
-                                      current_status=status.RECEIVED,
-                                      comment=None,
-                                      timestamp=None,
-                                      previous_value=None)
+        insert_event = Event(suborder_number=suborder_number,
+                             type_=event_type.INITIAL_IMPORT,
+                             previous_value=None,
+                             new_value={
+                                 'status': status.RECEIVED,
+                             })
 
-        db.session.add(insert_status)
-        db.session.commit()
+        db.session.add(insert_event)
 
         # Insert into the BirthSearch Table
         # For all the other table check the Client Agency Names
@@ -771,7 +773,8 @@ def import_file(file_name):
             size = clients_data_list[clients_data_list.index("SIZE") + 1] if "SIZE" in clients_data_list else None
 
             # Retrieve Number of Copies
-            num_copies = clients_data_list[clients_data_list.index("COPIES") + 1] if "COPIES" in clients_data_list else 1
+            num_copies = clients_data_list[
+                clients_data_list.index("COPIES") + 1] if "COPIES" in clients_data_list else 1
 
             # Retrieve Mail / Pickup Status
             if clients_data_list[
@@ -789,8 +792,6 @@ def import_file(file_name):
 
             if collection == 'Both':
                 # Remove old Suborder
-                StatusTracker.query.filter_by(suborder_number=suborder_number).delete()
-                db.session.commit()
                 Suborder.query.filter_by(id=suborder_number).delete()
                 db.session.commit()
 
@@ -799,38 +800,20 @@ def import_file(file_name):
                     id="{}-1940".format(suborder_number),
                     client_id=client_id,
                     client_agency_name=client_agency_name,
-                    order_number=order_number
+                    order_number=order_number,
+                    status=status.RECEIVED
                 )
                 db.session.add(suborder_1940)
-
-                status_1940 = StatusTracker(
-                    suborder_number=suborder_1940.id,
-                    current_status=status.RECEIVED,
-                    comment=None,
-                    timestamp=None,
-                    previous_value=None
-                )
-
-                db.session.add(status_1940)
 
                 # Create Suborder for 1980 Request
                 suborder_1980 = Suborder(
                     id="{}-1980".format(suborder_number),
                     client_id=client_id,
                     client_agency_name=client_agency_name,
-                    order_number=order_number
+                    order_number=order_number,
+                    status=status.RECEIVED
                 )
                 db.session.add(suborder_1980)
-
-                status_1980 = StatusTracker(
-                    suborder_number=suborder_1980.id,
-                    current_status=status.RECEIVED,
-                    comment=None,
-                    timestamp=None,
-                    previous_value=None
-                )
-
-                db.session.add(status_1980)
 
                 db.session.commit()
 
@@ -912,7 +895,8 @@ def import_file(file_name):
             size = clients_data_list[clients_data_list.index("SIZE") + 1]
 
             # Retrieve Number of Copies
-            num_copies = clients_data_list[clients_data_list.index("COPIES") + 1] if "COPIES" in clients_data_list else 1
+            num_copies = clients_data_list[
+                clients_data_list.index("COPIES") + 1] if "COPIES" in clients_data_list else 1
 
             # Retrieve Mail / Pickup Status
             if clients_data_list[
@@ -951,6 +935,4 @@ def import_file(file_name):
 
             db.session.add(customer_order)
             db.session.commit()
-
-        return True
-    return False
+    return True
