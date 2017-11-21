@@ -5,7 +5,7 @@ from base64 import b64encode
 from flask import url_for, current_app
 from app import create_app, db
 from app.models import Order, Customer, BirthSearch, BirthCertificate, MarriageSearch, MarriageCertificate, \
-                     DeathSearch, DeathCertificate, PhotoGallery, PhotoTax, PropertyCard, StatusTracker
+                     DeathSearch, DeathCertificate, PhotoGallery, PhotoTax, PropertyCard
 from datetime import datetime
 
 

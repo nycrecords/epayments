@@ -30,10 +30,10 @@ class History extends React.Component {
     render() {
          const HistoryRows = this.state.all_history.map((history, index) =>
             <HistoryRow
-                key={this.props.suborder_number}
+                key={history.id}
                 comment={history.comment}
-                previous_value={history.previous_value}
-                current_status={history.current_status}
+                previous_value={history.previous_status}
+                current_status={history.new_status}
                 timestamp={history.timestamp}
             />
 

@@ -1,14 +1,14 @@
-from datetime import date, datetime
+from datetime import datetime
 from flask import render_template
 from sqlalchemy import or_
 # from xhtml2pdf.pisa import CreatePDF
 
 from app import db
 from app.constants import (
-    order_types
+    order_types,
+    event_type
 )
 from app.models import (
-    StatusTracker,
     Order,
     Suborder,
     Customer,
@@ -20,7 +20,8 @@ from app.models import (
     MarriageCertificate,
     PhotoGallery,
     PhotoTax,
-    PropertyCard
+    PropertyCard,
+    Event
 )
 
 
@@ -91,23 +92,37 @@ def update_status(suborder_number, comment, new_status):
      - 2) it will have the comment that was passed in or None
      - 3) it will have the new status that was passed from the user
     """
+    suborder = Suborder.query.filter_by(id=suborder_number).one()
+    if new_status != suborder.status:
+        prev_event = Event.query.filter(Event.suborder_number == suborder_number,
+                                        Event.new_value['status'].astext == suborder.status).order_by(
+            Event.timestamp.desc()).first()
 
-    object_ = StatusTracker.query.filter_by(suborder_number=suborder_number).order_by(
-        StatusTracker.timestamp.desc()).first()
+        previous_value = {}
+        new_value = {}
 
-    if object_ is not None:
-        previous_value = object_.current_status
+        previous_value['status'] = suborder.status
+        if 'comment' in prev_event.new_value:
+            previous_value['comment'] = prev_event.new_value['comment']
+
+        new_value['status'] = new_status
+        if comment:
+            new_value['comment'] = comment
+
+        suborder.status = new_status
+
+        event = Event(suborder_number,
+                      event_type.UPDATE_STATUS,
+                      previous_value,
+                      new_value)
+
+        db.session.add(event)
+        db.session.commit()
+
+        return 201
     else:
-        previous_value = object_.current_status
-
-    insert_status = StatusTracker(suborder_number=suborder_number,
-                                  current_status=new_status,
-                                  comment=comment,
-                                  timestamp=datetime.utcnow(),
-                                  previous_value=previous_value)
-
-    db.session.add(insert_status)
-    db.session.commit()
+        return 400
+    # TODO: Raise error because new_status can't be the current status
 
 
 def get_orders_by_fields(order_number, suborder_number, order_type, billing_name, user, date_submitted_start,
