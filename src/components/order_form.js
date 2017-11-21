@@ -88,7 +88,7 @@ class OrderForm extends React.Component {
             }).then((response) => {
                 return response.json()
             }).then((json) => {
-                this.props.addOrder(json.all_orders);
+                this.props.addOrder(json.order_count, json.suborder_count, json.all_orders);
             });
         };
     }

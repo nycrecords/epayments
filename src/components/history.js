@@ -16,21 +16,21 @@ class History extends React.Component {
 
 
         this.handleClick = (e) => {
-            // if (this.state.activeIndex === false){
-            //     this.setState({activeIndex: true});
-                console.log("CLICK");
+            if (this.state.activeIndex === false){
+                this.setState({activeIndex: true});
                 fetch('api/v1.0/history/' + this.props.suborder_no).then((response) => (
                     response.json()
                 )).then((json) => {
                     this.setState({all_history: json.history});
                 });
-            // }
-        };
-    }
+            }
+        }
+    };
 
     render() {
          const HistoryRows = this.state.all_history.map((history, index) =>
             <HistoryRow
+                key={this.props.suborder_no}
                 comment={history.comment}
                 previous_value={history.previous_value}
                 current_status={history.current_status}

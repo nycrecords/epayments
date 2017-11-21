@@ -10,13 +10,15 @@ class Home extends React.Component {
 
         this.state = {
             all_orders: [],
-            order_count: '67',
-            suborder_count: '1002',
+            order_count: 0,
+            suborder_count: 0,
         };
 
-        this.addOrder = (orders) => {
+        this.addOrder = (order_count, suborder_count, orders) => {
             this.setState({
-                all_orders: orders
+                all_orders: orders,
+                order_count: order_count,
+                suborder_count: suborder_count
             });
         };
 
@@ -47,7 +49,7 @@ class Home extends React.Component {
         fetch('api/v1.0/orders').then((response) => (
             response.json()
         )).then((json) => {
-            this.addOrder(json.all_orders);
+            this.addOrder(json.order_count, json.suborder_count, json.all_orders);
         })
     };
 
@@ -90,7 +92,7 @@ class Home extends React.Component {
                             </Button.Group>
                             <strong>Number of Items: {this.state.suborder_count}</strong>
                             <br/>
-                            <strong>Number of Order: {this.state.order_count}</strong>
+                            <strong>Number of Orders: {this.state.order_count}</strong>
                         </div>
                         <div>
                             <Divider clearing/>

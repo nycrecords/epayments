@@ -1,7 +1,7 @@
 from datetime import date, timedelta, datetime, time
 from flask import jsonify, abort, request
 from sqlalchemy import desc
-from app.models import Order, Suborder, StatusTracker
+from app.models import Order, Suborder, StatusTracker, PhotoTax
 from app.api_1_0 import api_1_0 as api
 from app.api_1_0.utils import update_status, get_orders_by_fields
 
@@ -59,7 +59,9 @@ def get_orders():
                                                                    user,
                                                                    date_submitted_start,
                                                                    date_submitted_end)
-        return jsonify(all_orders=orders)
+        return jsonify(order_count=order_count,
+                       suborder_count=suborder_count,
+                       all_orders=orders)
 
     else:
         yesterday = date.today() - timedelta(1)
@@ -67,10 +69,12 @@ def get_orders():
         yesterday_dt = datetime.combine(yesterday, time.min)
 
         orders = []
+        order_count = 0
         for order in Order.query.filter(Order.date_submitted >= yesterday_dt):
+            order_count += 1
             for suborder in order.suborder:
                 orders.append(suborder.serialize)
-        return jsonify(all_orders=orders)
+        return jsonify(order_count=order_count, suborder_count=len(orders), all_orders=orders)
 
 
 @api.route('/status/<suborder_no>', methods=['GET', 'POST'])
@@ -139,3 +143,12 @@ def get_single_order(order_id):
         abort(404)
 
     return jsonify(orders=orders)
+
+
+@api.route('/photo_tax/<int:suborder_no>', methods=['GET', 'POST'])
+def photo_tax(suborder_no):
+    p_tax = PhotoTax.query.filter_by(suborder_no=suborder_no).one()
+    if request.method == 'GET':
+        return jsonify(block_no=p_tax.block,
+                       lot_no=p_tax.lot,
+                       roll_no=p_tax.roll)
