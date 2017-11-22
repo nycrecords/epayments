@@ -2,7 +2,7 @@ import os
 from app import create_app, db
 from app.models import Order, Suborder, Customer, BirthSearch, \
     MarriageSearch, DeathSearch, BirthCertificate, MarriageCertificate, \
-    DeathCertificate, PropertyCard, PhotoTax, PhotoGallery, Event
+    DeathCertificate, PropertyCard, PhotoTax, PhotoGallery, Event, Users
 from flask_script import Manager, Shell
 from flask_migrate import Migrate, MigrateCommand
 
@@ -23,7 +23,7 @@ def make_shell_context():
                 Customer=Customer, BirthSearch=BirthSearch, MarriageSearch=MarriageSearch,
                 DeathSearch=DeathSearch, BirthCertificate=BirthCertificate,
                 MarriageCertificate=MarriageCertificate, DeathCertificate=DeathCertificate,
-                PropertyCard=PropertyCard, PhotoTax=PhotoTax, PhotoGallery=PhotoGallery)
+                PropertyCard=PropertyCard, PhotoTax=PhotoTax, PhotoGallery=PhotoGallery, Users=Users)
 
 
 manager.add_command('shell', Shell(make_context=make_shell_context))

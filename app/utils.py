@@ -10,6 +10,7 @@ from app.file_utils import sftp_ctx
 from app.constants import status
 from app.constants.client_agency_names import CLIENT_AGENCY_NAMES
 from app.constants import order_types, event_type
+from flask_login import current_user
 
 
 def import_xml_folder(scheduled=False, path=None):
@@ -197,6 +198,7 @@ def import_file(file_name):
         # Insert into the StatusTracker Table
         insert_event = Event(suborder_number=suborder_number,
                              type_=event_type.INITIAL_IMPORT,
+                             user_email=current_user.email,
                              previous_value=None,
                              new_value={
                                  'status': status.RECEIVED,

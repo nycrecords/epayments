@@ -1,4 +1,5 @@
 from flask import render_template
+from flask_login import current_user
 from sqlalchemy import or_
 from xhtml2pdf.pisa import CreatePDF
 
@@ -115,6 +116,7 @@ def update_status(suborder_number, comment, new_status):
 
         event = Event(suborder_number,
                       event_type.UPDATE_STATUS,
+                      current_user.email,
                       previous_value,
                       new_value)
 
@@ -161,6 +163,7 @@ def update_tax_photo(suborder_number, block_no, lot_no, roll_no):
 
     event = Event(suborder_number,
                   event_type.UPDATE_PHOTO_TAX,
+                  current_user.email,
                   previous_value,
                   new_value)
 

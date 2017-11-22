@@ -5,7 +5,6 @@ from app import db
 from app.constants import event_type
 from flask_login import current_user
 
-
 class Event(db.Model):
     """
     Define the Event class with the following columns and relationships:
@@ -35,15 +34,13 @@ class Event(db.Model):
     suborder = db.relationship("Suborder", backref="event")
     user = db.relationship(
         "Users",
-        primaryjoin="and_(Event.user_guid == Users.guid, "
-                    "Event.auth_user_type == Users.auth_user_type)",
         backref="events"
     )
 
     def __init__(self,
                  suborder_number,
                  type_,
-                 user_email=current_user.email,
+                 user_email=None,
                  previous_value=None,
                  new_value=None,
                  timestamp=None):
