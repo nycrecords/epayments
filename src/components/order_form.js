@@ -7,7 +7,8 @@ import Date from './datepicker'
 import 'react-datepicker/dist/react-datepicker.css'
 import 'semantic-ui-css/semantic.min.css';
 import moment from 'moment';
-// import ReactTooltip from 'react-tooltip'
+import {csrfFetch} from "../utils/fetch"
+
 
 //Creates the options for the Order Type dropdown.
 const options = [
@@ -75,7 +76,7 @@ class OrderForm extends React.Component {
         // TODO: Implement CSRF token
         this.handleSubmit = (e) => {
             e.preventDefault();
-            fetch('api/v1.0/orders', {
+            csrfFetch('api/v1.0/orders', {
                 method: "POST",
                 body: JSON.stringify({
                     order_number: this.state.ordernumber,

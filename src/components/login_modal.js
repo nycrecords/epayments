@@ -1,5 +1,10 @@
 import React from 'react'
-import { Button, Header, Icon, Modal, Form} from 'semantic-ui-react'
+import {Button, Header, Modal, Form} from 'semantic-ui-react'
+import {connect} from 'react-redux'
+import {mapStateToProps, mapDispatchToProps} from "../utils/reduxMappers";
+import {csrfFetch} from "../utils/fetch"
+
+
 class LoginModal extends React.Component {
 
     constructor() {
@@ -21,8 +26,8 @@ class LoginModal extends React.Component {
 
         this.handleSubmit = (e) => {
             e.preventDefault();
-            fetch('api/v1.0/login', {
-                method: "POST",
+            csrfFetch('api/v1.0/login', {
+                method: 'post',
                 body: JSON.stringify({
                     email: this.state.email,
                     password: this.state.password
@@ -30,8 +35,22 @@ class LoginModal extends React.Component {
             }).then((response) => (
                 response.json()
             )).then((json) => {
-
+                if (json.authenticated === true) {
+                    this.props.login()
+                }
             });
+
+            // fetch('api/v1.0/login', {
+            //     method: "POST",
+            //     body: JSON.stringify({
+            //         email: this.state.email,
+            //         password: this.state.password
+            //     })
+            // }).then((response) => (
+            //     response.json()
+            // )).then((json) => {
+            //     this.props.login();
+            // });
 
             this.handleClose();
         };
@@ -42,6 +61,7 @@ class LoginModal extends React.Component {
                 <Modal trigger={<Button primary fluid onClick={this.handleOpen}>Login</Button>}
                        open={this.state.modalOpen}
                        onClose={this.state.handleClose}>
+                    {this.props.authenticated && <Header>Logged In</Header>}
                   <Header icon='user' content='Enter your Credentials' />
                   <Modal.Content>
                       <Form>
@@ -69,4 +89,4 @@ class LoginModal extends React.Component {
     }
 }
 
-export default LoginModal
+export default connect(mapStateToProps, mapDispatchToProps)(LoginModal)

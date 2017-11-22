@@ -1,6 +1,8 @@
 import React from 'react';
-import {Button, Header, Modal, Form, TextArea} from 'semantic-ui-react';
+import {Button, Header, Modal, Form} from 'semantic-ui-react';
 import 'semantic-ui-css/semantic.min.css';
+import {csrfFetch} from "../utils/fetch"
+
 
 class PhotoTaxModal extends React.Component {
     constructor() {
@@ -32,7 +34,7 @@ class PhotoTaxModal extends React.Component {
 
         this.handleSubmit = (e) => {
             e.preventDefault();
-            fetch('api/v1.0/photo_tax/' + this.props.suborder_number, {
+            csrfFetch('api/v1.0/photo_tax/' + this.props.suborder_number, {
                 method: "POST",
                 body: JSON.stringify({
                     suborder_number: this.props.suborder_number,
