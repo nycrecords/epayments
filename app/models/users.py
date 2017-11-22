@@ -46,4 +46,4 @@ class Users(UserMixin, db.Model):
 
 @login_manager.user_loader
 def load_user(username):
-    return Users.query.get(username).first()
+    return Users.query.get(username)

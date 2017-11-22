@@ -1,8 +1,12 @@
 import React from 'react';
-import {Grid, Container, Header, Button, Segment, Divider, Modal} from 'semantic-ui-react';
+import {Grid, Container, Header, Button, Segment, Divider} from 'semantic-ui-react';
+import {connect} from 'react-redux';
+import {mapDispatchToProps, mapStateToProps} from "../utils/reduxMappers";
 import OrderForm from "./order_form";
 import Order from "./order";
 import LoginModal from "./login_modal"
+import {csrfFetch} from "../utils/fetch"
+
 
 class Home extends React.Component {
     constructor() {
@@ -12,7 +16,7 @@ class Home extends React.Component {
             all_orders: [],
             order_count: 0,
             suborder_count: 0,
-            authenticated: false
+            // authenticated: false
         };
 
         this.addOrder = (order_count, suborder_count, orders) => {
@@ -61,13 +65,24 @@ class Home extends React.Component {
         };
 
         this.logOut = () => {
-            fetch('api/v1.0/logout', {
+            this.props.logout();
+            csrfFetch('api/v1.0/logout', {
                 method: "DELETE",
             }).then((response) => (
                 response.json()
             )).then((json) => {
-                alert("Logged Out")
+                if (json.authenticated === false) {
+                    this.props.logout()
+                }
             });
+            // fetch('api/v1.0/logout', {
+            //     method: "DELETE",
+            // }).then((response) => (
+            //     response.json()
+            // )).then((json) => {
+            //     alert("Logged Out");
+            //     this.props.logout()
+            // });
 
         };
     };
@@ -104,9 +119,9 @@ class Home extends React.Component {
                             <Container className="sub header">Department of Records</Container>
                         </Header>
                         <Segment padded>
-                            <LoginModal />
+                            { this.props.authenticated && <div>Hi </div> }
+                            { this.props.authenticated ? <Button fluid content='Logout' onClick={this.logOut}/> : <LoginModal /> }
                         </Segment>
-                        <Button content='Logout' onClick={this.logOut}/>
                         <OrderForm addOrder={this.addOrder}/>
                     </Grid.Column>
                     <Grid.Column width={1}/>
@@ -136,4 +151,4 @@ class Home extends React.Component {
 }
 
 
-export default Home
+export default connect(mapStateToProps, mapDispatchToProps)(Home);
