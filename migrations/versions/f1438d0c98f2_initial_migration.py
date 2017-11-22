@@ -1,8 +1,8 @@
-"""Initial Migration
+"""Initial migration
 
-Revision ID: cfe134adf04d
+Revision ID: f1438d0c98f2
 Revises: 
-Create Date: 2017-11-22 02:19:52.340920
+Create Date: 2017-11-22 16:00:45.865402
 
 """
 from alembic import op
@@ -10,7 +10,7 @@ import sqlalchemy as sa
 from sqlalchemy.dialects import postgresql
 
 # revision identifiers, used by Alembic.
-revision = 'cfe134adf04d'
+revision = 'f1438d0c98f2'
 down_revision = None
 branch_labels = None
 depends_on = None
@@ -153,11 +153,13 @@ def upgrade():
     op.create_table('event',
     sa.Column('id', sa.Integer(), nullable=False),
     sa.Column('suborder_number', sa.String(length=32), nullable=True),
+    sa.Column('user_email', sa.String(length=100), nullable=True),
     sa.Column('type', sa.Enum('update_status', 'update_photo_tax', 'initial_import', name='event_type'), nullable=True),
     sa.Column('timestamp', sa.DateTime(), nullable=True),
     sa.Column('previous_value', postgresql.JSONB(astext_type=sa.Text()), nullable=True),
     sa.Column('new_value', postgresql.JSONB(astext_type=sa.Text()), nullable=True),
     sa.ForeignKeyConstraint(['suborder_number'], ['suborder.id'], ondelete='CASCADE'),
+    sa.ForeignKeyConstraint(['user_email'], ['users.email'], ),
     sa.PrimaryKeyConstraint('id')
     )
     op.create_table('marriage_cert',

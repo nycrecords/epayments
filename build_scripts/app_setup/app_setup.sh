@@ -26,6 +26,8 @@ mkdir /home/vagrant/.virtualenvs
 virtualenv --system-site-packages /home/vagrant/.virtualenvs/epayments
 chown -R vagrant:vagrant /home/vagrant
 source /home/vagrant/.virtualenvs/epayments/bin/activate
+pip install --upgrade pip
+pip install --upgrade setuptools
 pip install -r /vagrant/requirements.txt --no-binary :all:
 
 # 7. Install telnet-server

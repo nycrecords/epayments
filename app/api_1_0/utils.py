@@ -127,6 +127,27 @@ def update_status(suborder_number, comment, new_status):
         # TODO: Raise error because new_status can't be the current status
 
 
+def update_tax_photo(suborder_number, block_no, lot_no, roll_no):
+    """
+    This function is used for the Tax Photo API POST method,
+    will update these fields from JSON sent back
+
+    :param suborder_number:
+    :param block_no:
+    :param lot_no:
+    :param roll_no:
+    :return: {}
+    """
+
+    p_tax = PhotoTax.query.filter_by(suborder_number=suborder_number).one()
+    p_tax.block = block_no
+    p_tax.lot = lot_no
+    p_tax.roll = roll_no
+
+    db.session.add(p_tax)
+    db.session.commit()
+
+
 def get_orders_by_fields(order_number, suborder_number, order_type, billing_name, user, date_submitted_start,
                          date_submitted_end):
     """
