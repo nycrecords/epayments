@@ -15,7 +15,7 @@ from app.api_1_0.utils import (
 from app.constants import (
     event_type
 )
-from app.constants import print_types
+from app.constants import printing
 from app.models import (
     Order,
     PhotoTax,
@@ -176,11 +176,11 @@ def print_order(print_type):
     search_params = request.get_json(force=True)
 
     handler_for_type = {
-        print_types.ORDERS: _print_orders,
-        print_types.SMALL_LABELS: _print_small_labels,
-        print_types.LARGE_LABELS: _print_large_labels
+        printing.ORDERS: _print_orders,
+        printing.SMALL_LABELS: _print_small_labels,
+        printing.LARGE_LABELS: _print_large_labels
     }
-    return send_file(handler_for_type[print_type](search_params), as_attachment=True, attachment_filename='order.pdf')
+    return send_file(handler_for_type[print_type](search_params), as_attachment=True, attachment_filename='order.pdf'), 200
 
 
 @api.route('/login', methods=['POST'])
