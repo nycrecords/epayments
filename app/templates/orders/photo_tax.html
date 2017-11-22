@@ -2,45 +2,71 @@
 
 {% block content %}
     <br/>
-    <b>COLLECTION: </b><br/>
+    <p>
+        <b>COLLECTION: </b><br/>
     {{ order_info['collection'] or "Not Provided" }}
     <br/>
-    <b>BOROUGH: </b><br/>
+</p>
+    <p>
+        <b>BOROUGH: </b><br/>
     {{ order_info['borough'] or "Not Provided" }}
     <br/>
-    <b>ROLL: </b><br/>
+</p>
+    <p>
+        <b>ROLL: </b><br/>
     {{ order_info['roll'] or "Not Provided" }}
     <br/>
-    <b>BLOCK: </b><br/>
+</p>
+    <p>
+        <b>BLOCK: </b><br/>
     {{ order_info['block'] or "Not Provided" }}
     <br/>
-    <b>LOT: </b><br/>
+</p>
+    <p>
+        <b>LOT: </b><br/>
     {{ order_info['lot'] or "Not Provided" }}
     <br/>
-    <b>BUILDING_NUMBER: </b><br/>
+</p>
+    <p>
+        <b>BUILDING_NUMBER: </b><br/>
     {{ order_info['street_no'] or "Not Provided" }}
     <br/>
-    <b>STREET: </b><br/>
+</p>
+    <p>
+        <b>STREET: </b><br/>
     {{ order_info['street'] or "Not Provided" }}
     <br/>
-    <b>DESCRIPTION: </b><br/>
+</p>
+    <p>
+        <b>DESCRIPTION: </b><br/>
     {{ order_info['description'] or "Not Provided" }}
     <br/>
-    <b>SIZE: </b><br/>
+</p>
+    <p>
+        <b>SIZE: </b><br/>
     {{ order_info['size'] or "Not Provided" }}
     <br/>
-    <b>COPY: </b><br/>
+</p>
+    <p>
+        <b>COPY: </b><br/>
     {{ order_info['num_copies'] or "Not Provided" }}
     <br/>
-    <b>MAIL_PICKUP: </b><br/>
+</p>
+    <p>
+        <b>MAIL_PICKUP: </b><br/>
     {{ "Mail" if order_info['mail_pickup'] else "Pickup" }}
     <br/>
-    <b>CONTACT_NUMBER: </b><br/>
+</p>
+    <p>
+        <b>CONTACT_NUMBER: </b><br/>
     {{ order_info['contact_no'] or "Not Provided" }}
     <br/>
-    <b>COMMENT: </b><br/>
+</p>
+    <p>
+        <b>COMMENT: </b><br/>
     {{ order_info['comment'] }}
 
-{% endblock %}
+
+</p>{% endblock %}
 
 

@@ -2,73 +2,87 @@
 
 {% block content %}
     <br/>
-    <b>LAST NAME - GROOM:</b>
+    <p>
+        <b>LAST NAME - GROOM:</b>
     <br />
     {{ order_info["groom_last_name"] }}
-
+</p>
     <br/>
-    <b>FIRST NAME - GROOM:</b>
+    <p>
+        <b>FIRST NAME - GROOM:</b>
     <br />
     {{ order_info["groom_first_name"] }}
-
+</p>
     <br/>
-    <b>LAST NAME - BRIDE:</b>
+    <p>
+        <b>LAST NAME - BRIDE:</b>
     <br />
     {{ order_info["bride_last_name"] }}
-
+</p>
     <br/>
-    <b>FIRST NAME - BRIDE:</b>
+    <p>
+        <b>FIRST NAME - BRIDE:</b>
     <br />
     {{ order_info["bride_first_name"] }}
-
+</p>
     <br/>
-    <b>RELATIONSHIP:</b>
+    <p>
+        <b>RELATIONSHIP:</b>
     <br />
     {{ order_info["relationship"] or "Not Provided" }}
-
+</p>
     <br/>
-    <b>PURPOSE:</b>
+    <p>
+        <b>PURPOSE:</b>
     <br />
     {{ order_info["purpose"] }}
-
+</p>
     <br/>
-    <b>NUMBER OF COPIES:</b>
+    <p>
+        <b>NUMBER OF COPIES:</b>
     <br />
     {{ order_info["num_copies"] }}
-
+</p>
     <br/>
-    <b>MONTH:</b>
+    <p>
+        <b>MONTH:</b>
     <br />
     {{ order_info["month"] }}
-
+</p>
     <br/>
-    <b>DAY:</b>
+    <p>
+        <b>DAY:</b>
     <br />
     {{ order_info["day"] }}
-
+</p>
     <br/>
-    <b>YEARS:</b>
+    <p>
+        <b>YEARS:</b>
     <br />
     {{ order_info["years"] }}
-
+</p>
     <br/>
-    <b>MARRIAGE_PLACE:</b>
+    <p>
+        <b>MARRIAGE_PLACE:</b>
     <br />
     {{ order_info["marriage_place"] or "Not Provided"}}
-
+</p>
     <br/>
-    <b>BOROUGH:</b>
+    <p>
+        <b>BOROUGH:</b>
     <br />
     {{ order_info["borough"] }}
-
+</p>
     <br/>
-    <b>LETTER:</b>
+    <p>
+        <b>LETTER:</b>
     <br />
     {{ order_info["letter"] or "N/A" }}
-
+</p>
     <br/>
-    <b>COMMENT:</b>
+    <p>
+        <b>COMMENT:</b>
     <br />
     {{ order_info["comment"] or "N/A" }}
-
+</p>
 {% endblock %}
