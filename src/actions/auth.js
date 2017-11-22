@@ -4,9 +4,10 @@ import {
 } from '../constants/index'
 
 
-export function loginUser() {
+export function loginUser(email) {
   return {
-    type: LOGIN_USER
+    type: LOGIN_USER,
+    user: email
   };
 }
 

@@ -36,21 +36,11 @@ class LoginModal extends React.Component {
                 response.json()
             )).then((json) => {
                 if (json.authenticated === true) {
-                    this.props.login()
+                    this.props.login(json.email);
+                    alert("Hi "+ json.email);
                 }
+                json.authenticated ? this.props.login(json.email) : alert(json.message);
             });
-
-            // fetch('api/v1.0/login', {
-            //     method: "POST",
-            //     body: JSON.stringify({
-            //         email: this.state.email,
-            //         password: this.state.password
-            //     })
-            // }).then((response) => (
-            //     response.json()
-            // )).then((json) => {
-            //     this.props.login();
-            // });
 
             this.handleClose();
         };

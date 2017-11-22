@@ -6,12 +6,13 @@ import {
 
 const defaultState = {
   authenticated: false,
+  user: ''
 };
 
 
 export function auth(state = defaultState, action) {
   switch (action.type) {
-    case LOGIN_USER:
+      case LOGIN_USER:
       return {...state, authenticated: true};
     case LOGOUT_USER:
       return {...state, authenticated: false};

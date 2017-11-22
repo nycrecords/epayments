@@ -11,8 +11,8 @@ export const mapStateToProps = (state) => {
 
 export const mapDispatchToProps = (dispatch) => {
   return {
-    login: () => {
-      dispatch(loginUser())
+    login: (email) => {
+      dispatch(loginUser(email))
     },
     logout: () => {
       dispatch(logoutUser())

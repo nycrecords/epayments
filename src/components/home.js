@@ -16,7 +16,6 @@ class Home extends React.Component {
             all_orders: [],
             order_count: 0,
             suborder_count: 0,
-            // authenticated: false
         };
 
         this.addOrder = (order_count, suborder_count, orders) => {
@@ -65,25 +64,16 @@ class Home extends React.Component {
         };
 
         this.logOut = () => {
-            this.props.logout();
             csrfFetch('api/v1.0/logout', {
                 method: "DELETE",
             }).then((response) => (
                 response.json()
             )).then((json) => {
                 if (json.authenticated === false) {
-                    this.props.logout()
+                    this.props.logout();
+                    alert("Logged Out");
                 }
             });
-            // fetch('api/v1.0/logout', {
-            //     method: "DELETE",
-            // }).then((response) => (
-            //     response.json()
-            // )).then((json) => {
-            //     alert("Logged Out");
-            //     this.props.logout()
-            // });
-
         };
     };
 
@@ -115,11 +105,11 @@ class Home extends React.Component {
             <Container>
                 <Grid padded columns={3}>
                     <Grid.Column width={4}>
-                        <Header as="h1" textAlign="center">Epayments
+                        <Header as="h1" textAlign="center">ePayments
                             <Container className="sub header">Department of Records</Container>
                         </Header>
                         <Segment padded>
-                            { this.props.authenticated && <div>Hi </div> }
+                            {/* TODO: { this.props.authenticated && <div>Hi {this.props.user}</div> }*/}
                             { this.props.authenticated ? <Button fluid content='Logout' onClick={this.logOut}/> : <LoginModal /> }
                         </Segment>
                         <OrderForm addOrder={this.addOrder}/>
@@ -130,7 +120,7 @@ class Home extends React.Component {
                         <div>
                             <Button.Group size='medium' floated='right'>
                                 <Button labelPosition='left' icon='print'
-                                        content='Order Sheet' onClick={this.printOrderSheet}/>
+                                        content='Order Sheets' onClick={this.printOrderSheet}/>
                                 <Button content='Big Labels' onClick={this.printBigLabels}/>
                                 <Button content='Small Labels' onClick={this.printSmallLabels}/>
                             </Button.Group>
