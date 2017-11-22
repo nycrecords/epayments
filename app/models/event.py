@@ -3,7 +3,6 @@ from pytz import timezone
 from sqlalchemy.dialects.postgresql import JSONB
 from app import db
 from app.constants import event_type
-from app.models import Suborder
 
 
 class Event(db.Model):
@@ -22,12 +21,12 @@ class Event(db.Model):
     __tablename__ = 'event'
     id = db.Column(db.Integer, primary_key=True)
     suborder_number = db.Column(db.String(32), db.ForeignKey('suborder.id', ondelete='CASCADE'))
-    # user_guid = db.Column(db.String(64))  # who did the action
+    user_email = db.Column(db.String(100), db.ForeignKey('users.email'))  # who did the action
     type = db.Column(db.Enum(
         event_type.UPDATE_STATUS,
         event_type.UPDATE_PHOTO_TAX,
         event_type.INITIAL_IMPORT,
-        name='event_type')
+        name='event_type'), nullable=False
     )
     timestamp = db.Column(db.DateTime)
     previous_value = db.Column(JSONB)
@@ -42,13 +41,13 @@ class Event(db.Model):
 
     def __init__(self,
                  suborder_number,
-                 # user_guid,
                  type_,
+                 user_email=None,
                  previous_value=None,
                  new_value=None,
                  timestamp=None):
         self.suborder_number = suborder_number
-        # self.user_guid = user_guid
+        self.user_email = user_email
         self.type = type_
         self.previous_value = previous_value
         self.new_value = new_value
@@ -58,6 +57,7 @@ class Event(db.Model):
     def status_history(self):
             return {
                 'id': self.id,
+                'user': self.user_email,
                 'suborder_number': self.suborder_number,
                 'previous_status': self.previous_value.get('status', '') if self.previous_value else '',
                 'new_status': self.new_value.get('status', ''),
