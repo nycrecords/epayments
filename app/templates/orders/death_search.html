@@ -14,10 +14,10 @@
 {{ order_info["relationship"] or "Not Provided" }}
 
 <br /><b>PURPOSE:</b> <br />
-{{ order_info["purpose"] }}
+{{ order_info["purpose"] or "Not Provided" }}
 
 <br /><b>ADDITIONAL_COPY:</b> <br />
-{{ "Yes" if order_info["additional_copy"] else "No" }}
+{{ order_info["additional_copy"] or "Not Provided" }}
 
 <br /><b>CEMETERY:</b> <br />
 {{ order_info["cemetery"] or "Not Provided" }}
@@ -38,16 +38,14 @@
 {{ order_info["age_of_death"] or "Not Provided" }}
 
 <br /><b>BOROUGH:</b> <br />
-{{ order_info["borough"] }}
+{{ order_info["borough"] or "Not Provided" }}
 
 <br /><b>LETTER:</b> <br />
-{{ "Yes" if order_info["letter"] else "No" }}
+{{ order_info["letter"] or "Not Provided" }} </b>
 
 <br /><b>COMMENT:</b> <br />
 {{ order_info["comment"] }}
 
 {% endblock %}
-
-
 
 

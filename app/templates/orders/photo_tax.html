@@ -1,31 +1,45 @@
 {% extends "orders/base.html" %}
 
 {% block content %}
-<b>COLLECTION: </b>
-
-<b>BOROUGH: </b>
-
-<b>ROLL: </b>
-
-<b>BLOCK: </b>
-
-<b>LOT: </b>
-
-<b>BUILDING_NUMBER: </b>
-
-<b>STREET: </b>
-
-<b>DESCRIPTION: </b>
-
-<b>SIZE: </b>
-
-<b>COPY: </b>
-
-<b>MAIL_PICKUP: </b>
-
-<b>CONTACT_NUMBER: </b>
-
-<b>COMMENT: </b>
+    <br/>
+    <b>COLLECTION: </b><br/>
+    {{ order_info['collection'] or "Not Provided" }}
+    <br/>
+    <b>BOROUGH: </b><br/>
+    {{ order_info['borough'] or "Not Provided" }}
+    <br/>
+    <b>ROLL: </b><br/>
+    {{ order_info['roll'] or "Not Provided" }}
+    <br/>
+    <b>BLOCK: </b><br/>
+    {{ order_info['block'] or "Not Provided" }}
+    <br/>
+    <b>LOT: </b><br/>
+    {{ order_info['lot'] or "Not Provided" }}
+    <br/>
+    <b>BUILDING_NUMBER: </b><br/>
+    {{ order_info['street_no'] or "Not Provided" }}
+    <br/>
+    <b>STREET: </b><br/>
+    {{ order_info['street'] or "Not Provided" }}
+    <br/>
+    <b>DESCRIPTION: </b><br/>
+    {{ order_info['description'] or "Not Provided" }}
+    <br/>
+    <b>SIZE: </b><br/>
+    {{ order_info['size'] or "Not Provided" }}
+    <br/>
+    <b>COPY: </b><br/>
+    {{ order_info['num_copies'] or "Not Provided" }}
+    <br/>
+    <b>MAIL_PICKUP: </b><br/>
+    {{ "Mail" if order_info['mail_pickup'] else "Pickup" }}
+    <br/>
+    <b>CONTACT_NUMBER: </b><br/>
+    {{ order_info['contact_no'] or "Not Provided" }}
+    <br/>
+    <b>COMMENT: </b><br/>
+    {{ order_info['comment'] }}
 
 {% endblock %}
 

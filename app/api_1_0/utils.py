@@ -1,4 +1,3 @@
-from datetime import datetime
 from flask import render_template
 from sqlalchemy import or_
 from xhtml2pdf.pisa import CreatePDF
@@ -123,7 +122,7 @@ def update_status(suborder_number, comment, new_status):
         return 201
     else:
         return 400
-    # TODO: Raise error because new_status can't be the current status
+        # TODO: Raise error because new_status can't be the current status
 
 
 def get_orders_by_fields(order_number, suborder_number, order_type, billing_name, user, date_submitted_start,
@@ -134,7 +133,8 @@ def get_orders_by_fields(order_number, suborder_number, order_type, billing_name
                          user??, date_received, date_submitted)
     :return:
     """
-    filter_args = _order_query_filters(order_number, suborder_number, order_type, billing_name, user, date_submitted_start,
+    filter_args = _order_query_filters(order_number, suborder_number, order_type, billing_name, user,
+                                       date_submitted_start,
                                        date_submitted_end)
     base_query = Suborder.query.join(Order, Customer).filter(*filter_args)
     order_count = base_query.distinct(Suborder.order_number).group_by(Suborder.order_number, Suborder.id).count()
@@ -203,23 +203,60 @@ def _print_orders(search_params):
         html += render_template("orders/{}".format(order_type_template_handler[item.client_agency_name]),
                                 order_info=order_info)
 
-    test = open('/Users/jocastillo/Dropbox/Work/DORIS/Archives/epayments/epayments/test.pdf', 'w+b')
-    pdf = CreatePDF(src=html, dest=test)
+    from tempfile import NamedTemporaryFile
 
-    test.close()
+    tempFileObj = NamedTemporaryFile(mode='w+b', suffix='jpg')
+    pdf = CreatePDF(src=html, dest=tempFileObj)
+    tempFileObj.seek(0, 0)
 
-    # return bool(pdf.err)
+    return tempFileObj
 
 
 def _print_small_labels():
     pass
 
 
-def _print_large_labels():
-    pass
+def _print_large_labels(search_params):
+    import labels
+    from reportlab.graphics import shapes
+
+    # Create an A4 portrait (210mm x 297mm) sheets with 2 columns and 8 rows of
+    # labels. Each label is 90mm x 25mm with a 2mm rounded corner. The margins are
+    # automatically calculated.
+    specs = labels.Specification(
+        sheet_width=215.9,
+        sheet_height=279.4,
+        columns=2,
+        rows=5,
+        label_width=101.6,
+        label_height=50.8,
+        left_margin=6.2,
+        column_gap=4.8,
+        row_gap=0,
+    )
+
+    # Create a function to draw each label. This will be given the ReportLab drawing
+    # object to draw on, the dimensions (NB. these will be in points, the unit
+    # ReportLab uses) of the label, and the object to render.
+    def draw_label(label, width, height, obj):
+        # Just convert the object to a string and print this at the bottom left of
+        # the label.
+        label.add(
+            shapes.String(width / 2.0, height / 2.0, str(obj), fontName="Helvetica", fontSize=40, textAnchor='middle'))
+
+    # Create the sheet.
+    sheet = labels.Sheet(specs, draw_label, border=False)
+
+    # We can also add each item from an iterable.
+    sheet.add_labels(range(1, 10))
+
+    # Note that any oversize label is automatically trimmed to prevent it messing up
+    # other labels.
+
+    # Save the file and we are done.
+    sheet.save('basic.pdf')
+    print("{0:d} label(s) output on {1:d} page(s).".format(sheet.label_count, sheet.page_count))
 
 
 def generate_csv():
     pass
-
-

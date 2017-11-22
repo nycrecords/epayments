@@ -36,20 +36,20 @@ class Home extends React.Component {
         };
 
         this.printOrderSheet = () => {
-            e.preventDefault();
-            fetch('api/v1.0/print/orders', {
-                method: "POST",
-                body: JSON.stringify({
-                    order_number: this.state.ordernumber,
-                    suborder_number: this.state.subordernumber,
-                    order_type: this.state.order_type,
-                    billing_name: this.state.billing_name,
-                    date_submitted_start: formatDate(this.dateSubmittedStart),
-                    date_submitted_end: formatDate(this.dateSubmittedEnd)
-                })
-            }).then((response) => {
-                return response.json()
-            });
+            // e.preventDefault();
+            // fetch('api/v1.0/print/orders', {
+            //     method: "POST",
+            //     body: JSON.stringify({
+            //         order_number: this.state.ordernumber,
+            //         suborder_number: this.state.subordernumber,
+            //         order_type: this.state.order_type,
+            //         billing_name: this.state.billing_name,
+            //         date_submitted_start: formatDate(this.dateSubmittedStart),
+            //         date_submitted_end: formatDate(this.dateSubmittedEnd)
+            //     })
+            // }).then((response) => {
+            //     return response.json()
+            // });
         };
 
         this.printBigLabels = () => {
@@ -115,7 +115,7 @@ class Home extends React.Component {
                         <div>
                             <Button.Group size='medium' floated='right'>
                                 <Button labelPosition='left' icon='print'
-                                        content='Order Sheet' onClick={this.printLabelSheet}/>
+                                        content='Order Sheet' onClick={this.printOrderSheet}/>
                                 <Button content='Big Labels' onClick={this.printBigLabels}/>
                                 <Button content='Small Labels' onClick={this.printSmallLabels}/>
                             </Button.Group>

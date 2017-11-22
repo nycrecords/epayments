@@ -1,6 +1,6 @@
 from datetime import date, timedelta, datetime, time
 
-from flask import jsonify, abort, request
+from flask import jsonify, abort, request, send_file
 from flask_login import login_user, logout_user, current_user
 from sqlalchemy import desc
 from app.api_1_0 import api_1_0 as api
@@ -180,7 +180,7 @@ def print_order(print_type):
         print_types.SMALL_LABELS: _print_small_labels,
         print_types.LARGE_LABELS: _print_large_labels
     }
-    return jsonify(handler_for_type[print_type](search_params))
+    return send_file(handler_for_type[print_type](search_params), as_attachment=True, attachment_filename='order.pdf')
 
 
 @api.route('/login', methods=['POST'])

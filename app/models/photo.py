@@ -12,14 +12,14 @@ class PhotoTax(db.Model):
     roll -- Column: String(9)
     block -- Column: String(9)
     lot -- Column: String(9)
-    street_no -- Column: String(10)
+    street_number -- Column: String(10)
     street -- Column: String(40)
     description -- Column: String(35)
     type -- Column: enum -- size of the photo
     size -- Column: newform -- enum
     num_copies -- Column: String(2)
     mail_pickup -- Column: Bool
-    contact_no -- Column: String(10)
+    contact_number -- Column: String(10)
     comment -- Column: String()
     suborder_number -- Column: BigInteger, foreignKey
 
@@ -44,7 +44,7 @@ class PhotoTax(db.Model):
     roll = db.Column(db.String(9), nullable=True)
     block = db.Column(db.String(9), nullable=True)
     lot = db.Column(db.String(9), nullable=True)
-    street_no = db.Column(db.String(10), nullable=False)
+    street_number = db.Column(db.String(10), nullable=False)
     street = db.Column(db.String(40), nullable=False)
     description = db.Column(db.String(35), nullable=True)
     type = db.Column(
@@ -60,7 +60,7 @@ class PhotoTax(db.Model):
             name='size'), default=size.EIGHT_BY_TEN, nullable=True)
     num_copies = db.Column(db.String(2), nullable=False)
     mail_pickup = db.Column(db.Boolean, nullable=True)
-    contact_no = db.Column(db.String(10), nullable=True)
+    contact_number = db.Column(db.String(10), nullable=True)
     comment = db.Column(db.String(255), nullable=True)
     suborder_number = db.Column(db.String(32), db.ForeignKey('suborder.id'), nullable=False)
 
@@ -71,31 +71,31 @@ class PhotoTax(db.Model):
             roll,
             block,
             lot,
-            street_no,
+            street_number,
             street,
             description,
             type,
             size,
             num_copies,
             mail_pickup,
-            contact_no,
+            contact_number,
             comment,
             suborder_number
     ):
         self.borough = borough
         self.collection = collection
-        self.roll = roll or 'N/A'
-        self.block = block or 'N/A'
-        self.lot = lot or 'N/A'
-        self.street_no = street_no
+        self.roll = roll
+        self.block = block
+        self.lot = lot
+        self.street_number = street_number
         self.street = street
-        self.description = description or 'N/A'
+        self.description = description
         self.type = type
         self.size = size
         self.num_copies = num_copies
         self.mail_pickup = mail_pickup
-        self.contact_no = contact_no or 'N/A'
-        self.comment = comment or 'N/A'
+        self.contact_number = contact_number
+        self.comment = comment
         self.suborder_number = suborder_number
 
     @property
@@ -107,14 +107,14 @@ class PhotoTax(db.Model):
             'roll': self.roll,
             'block': self.block,
             'lot': self.lot,
-            'street_no': self.street_no,
+            'street_number': self.street_number,
             'street': self.street,
             'description': self.description,
             'type': self.type,
             'size': self.size,
             'num_copies': self.num_copies,
             'mail_pickup': self.mail_pickup,
-            'contact_no': self.contact_no,
+            'contact_number': self.contact_number,
             'comment': self.comment,
             'suborder_number': self.suborder_number,
         }
@@ -131,7 +131,7 @@ class PhotoGallery(db.Model):
     size -- Column: enum[]
     copy -- Column: String(2)
     mail_pickup -- Column: Bool
-    contact_no -- Column: String(10)
+    contact_number -- Column: String(10)
     personal_use_agreement -- Column: Bool
     comment -- Column: String(255)
     suborder_number -- Column: BigInteger, foreignKey
@@ -151,7 +151,7 @@ class PhotoGallery(db.Model):
             name='size'), default=size.EIGHT_BY_TEN, nullable=False)
     num_copies = db.Column(db.String(2), nullable=False)
     mail_pickup = db.Column(db.Boolean, nullable=False)
-    contact_no = db.Column(db.String(10), nullable=True)
+    contact_number = db.Column(db.String(10), nullable=True)
     personal_use_agreement = db.Column(db.Boolean, nullable=True)
     comment = db.Column(db.String(255), nullable=True)
     suborder_number = db.Column(db.String(32), db.ForeignKey('suborder.id'), nullable=False)
@@ -164,7 +164,7 @@ class PhotoGallery(db.Model):
             size,
             num_copies,
             mail_pickup,
-            contact_no,
+            contact_number,
             personal_use_agreement,
             comment,
             suborder_number
@@ -175,7 +175,7 @@ class PhotoGallery(db.Model):
         self.size = size
         self.num_copies = num_copies
         self.mail_pickup = mail_pickup
-        self.contact_no = contact_no or 'N/A'
+        self.contact_number = contact_number or 'N/A'
         self.personal_use_agreement = personal_use_agreement
         self.comment = comment or 'N/A'
         self.suborder_number = suborder_number
@@ -190,7 +190,7 @@ class PhotoGallery(db.Model):
             "size": self.size,
             "num_copies": self.num_copies,
             "mail_pickup": self.mail_pickup,
-            "contact_no": self.contact_no,
+            "contact_number": self.contact_number,
             "personal_use_agreement": self.personal_use_agreement,
             "comment": self.comment,
             "suborder_number": self.suborder_number,

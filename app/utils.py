@@ -647,7 +647,7 @@ def import_file(file_name):
             # Retrieve the Marriage Date (Month, Day, Years)
             month = clients_data_list[clients_data_list.index("MONTH") + 1] if "MONTH" in clients_data_list else None
             day = clients_data_list[clients_data_list.index("DAY") + 1] if "DAY" in clients_data_list else None
-            years = clients_data_list[clients_data_list.index("YEAR_") + 1] if "YEAR_" in clients_data_list else None
+            years = clients_data_list[clients_data_list.index("YEAR") + 1] if "YEAR" in clients_data_list else None
             if years:
                 years = years.split(',')
                 years = list(filter(bool, years))
@@ -761,7 +761,7 @@ def import_file(file_name):
             lot = clients_data_list[clients_data_list.index("LOT") + 1] if "LOT" in clients_data_list else None
 
             # Retrieve Street Address
-            street_no = clients_data_list[clients_data_list.index("STREET_NUMBER") + 1]
+            street_number = clients_data_list[clients_data_list.index("STREET_NUMBER") + 1]
             street = clients_data_list[clients_data_list.index("STREET") + 1]
 
             # Retrieve Building  Description
@@ -784,7 +784,7 @@ def import_file(file_name):
                 mail_pickup = False
 
             # Retrieve Pickup Contact Information
-            contact_no = clients_data_list[
+            contact_number = clients_data_list[
                 clients_data_list.index("CONTACT_NUMBER") + 1] if "CONTACT_NUMBER" in clients_data_list else None
 
             comment = clients_data_list[
@@ -820,18 +820,18 @@ def import_file(file_name):
                 # Create PhotoTax entry for 1940 print
                 customer_order_1940 = PhotoTax(
                     borough=borough,
-                    collection=collection,
+                    collection="1940",
                     roll=roll,
                     block=block,
                     lot=lot,
-                    street_no=street_no,
+                    street_number=street_number,
                     street=street,
                     description=description,
                     type=type_,
                     size=size,
                     num_copies=num_copies,
                     mail_pickup=mail_pickup,
-                    contact_no=contact_no,
+                    contact_number=contact_number,
                     comment=comment,
                     suborder_number="{}-1940".format(suborder_number)
                 )
@@ -840,18 +840,18 @@ def import_file(file_name):
                 # Create PhotoTax entry for 1980 print
                 customer_order_1980 = PhotoTax(
                     borough=borough,
-                    collection=collection,
-                    roll=roll,
+                    collection="1980",
+                    roll="N/A",
                     block=block,
                     lot=lot,
-                    street_no=street_no,
+                    street_number=street_number,
                     street=street,
                     description=description,
                     type=type_,
                     size=size,
                     num_copies=num_copies,
                     mail_pickup=mail_pickup,
-                    contact_no=contact_no,
+                    contact_number=contact_number,
                     comment=comment,
                     suborder_number="{}-1980".format(suborder_number)
                 )
@@ -863,14 +863,14 @@ def import_file(file_name):
                     roll=roll,
                     block=block,
                     lot=lot,
-                    street_no=street_no,
+                    street_number=street_number,
                     street=street,
                     description=description,
                     type=type_,
                     size=size,
                     num_copies=num_copies,
                     mail_pickup=mail_pickup,
-                    contact_no=contact_no,
+                    contact_number=contact_number,
                     comment=comment,
                     suborder_number=suborder_number)
                 db.session.add(customer_order)
@@ -906,7 +906,7 @@ def import_file(file_name):
                 mail_pickup = False
 
             # Retrieve Pickup Contact Information
-            contact_no = clients_data_list[
+            contact_number = clients_data_list[
                 clients_data_list.index("CONTACT_NUMBER") + 1] if "CONTACT_NUMBER" in clients_data_list else None
 
             # Retrieve Comment
@@ -928,7 +928,7 @@ def import_file(file_name):
                 size=size,
                 num_copies=num_copies,
                 mail_pickup=mail_pickup,
-                contact_no=contact_no,
+                contact_number=contact_number,
                 personal_use_agreement=personal_use_agreement,
                 comment=comment,
                 suborder_number=suborder_number)

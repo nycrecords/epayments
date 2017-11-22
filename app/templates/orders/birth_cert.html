@@ -3,49 +3,49 @@
 {% block content %}
     <br/>
     <b>CERTIFICATE_NUMBER:</b> <br/>
-    {{ order_info["certificate_no"] }}<br/>
+    {{ order_info["certificate_no"] or "Not Provided"}}<br/>
 
     <b>GENDER:</b> <br/>
-    {{ order_info["gender_type"] }}<br/>
+    {{ order_info["gender_type"] or "Not Provided"}}<br/>
 
     <b>LAST_NAME:</b> <br/>
-    {{ order_info["last_name"] }}<br/>
+    {{ order_info["last_name"] or "Not Provided"}}<br/>
 
     <b>MIDDLE_NAME:</b> <br/>
-    {{ order_info["mid_name"] }}<br/>
+    {{ order_info["mid_name"] or "Not Provided"}}<br/>
 
     <b>FIRST_NAME:</b> <br/>
-    {{ order_info["first_name"] }}<br/>
+    {{ order_info["first_name"] or "Not Provided"}}<br/>
 
     <b>FATHER_NAME:</b> <br/>
-    {{ order_info["father_name"] }} <br/>
+    {{ order_info["father_name"] or "Not Provided"}} <br/>
 
     <b>MOTHER_NAME:</b> <br/>
-    {{ order_info["mother_name"] }} <br/>
+    {{ order_info["mother_name"] or "Not Provided"}} <br/>
 
     <b>RELATIONSHIP:</b> <br/>
     {{ order_info["relationship"] or "Not Provided" }}<br/>
 
     <b>PURPOSE:</b> <br/>
-    {{ order_info["purpose"] }}<br/>
+    {{ order_info["purpose"] or "Not Provided"}}<br/>
 
     <b>ADDITIONAL_COPY:</b> <br/>
     {{ order_info["additional_copy"] or "N/A" }}<br/>
 
     <b>MONTH:</b> <br/>
-    {{ order_info["month"] }}<br/>
+    {{ order_info["month"] or "Not Provided"}}<br/>
 
     <b>DAY:</b> <br/>
-    {{ order_info["day"] }}<br/>
+    {{ order_info["day"] or "Not Provided"}}<br/>
 
     <b>BIRTH_PLACE:</b> <br/>
-    {{ order_info["birth_place"] }}<br/>
+    {{ order_info["birth_place"] or "Not Provided"}}<br/>
 
     <b>YEARS:</b> <br/>
-    {{ order_info["years"] }} <br/>
+    {{ order_info["years"] or "Not Provided"}} <br/>
 
     <b>BOROUGH:</b> <br/>
-    {{ order_info["borough"] }}<br/>
+    {{ order_info["borough"] or "Not Provided"}}<br/>
 
     <b>LETTER:</b> <br/>
     {{ "Yes" if order_info["letter"] else "No" }}<br/>
