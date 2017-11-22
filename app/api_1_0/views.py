@@ -116,7 +116,7 @@ def status_change(suborder_number):
         return jsonify(status_code=status_code)
 
     # return jsonify(current_status=curr_status, suborder_number=suborder_number, comment=comment, status_id=status_id)
-    status = [status.serialize for status in StatusTracker.query.filter_by(suborder_number=int(suborder_number)).all()]
+    status = [status.serialize for status in Event.query.filter_by(suborder_number=int(suborder_number)).all()]
     return jsonify(status=status)
 
 
@@ -137,8 +137,8 @@ def history(suborder_number):
                                          ).order_by(desc(Event.timestamp)).all()]
 
     history = [status.serialize for status in
-               StatusTracker.query.filter_by(suborder_number=int(suborder_number)).order_by(
-                   desc(StatusTracker.timestamp)).all()]
+               Event.query.filter_by(suborder_number=int(suborder_number)).order_by(
+                   desc(Event.timestamp)).all()]
 
     return jsonify(history=status_history)
 

@@ -14,6 +14,7 @@ yum -y install rh-postgresql95-postgresql-devel
 yum -y install rh-python35-python-psycopg2
 yum -y install openssl-devel
 yum -y install libffi-devel
+yum -y install libjpeg-devel
 
 # 5. Install Developer Tools "Development Tools"
 yum -y groupinstall "Development Tools"
