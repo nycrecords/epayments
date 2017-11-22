@@ -2,56 +2,90 @@
 
 {% block content %}
     <br/>
-    <b>CERTIFICATE_NUMBER:</b> <br/>
-    {{ order_info["certificate_no"] or "Not Provided"}}<br/>
+    <p>
+        <b>CERTIFICATE_NUMBER:</b> <br/>
+        {{ order_info["certificate_no"] or "Not Provided"}}
+    </p>
 
-    <b>GENDER:</b> <br/>
-    {{ order_info["gender_type"] or "Not Provided"}}<br/>
+    <p>
+        <b>GENDER:</b> <br/>
+        {{ order_info["gender_type"] or "Not Provided"}}
+    </p>
 
-    <b>LAST_NAME:</b> <br/>
-    {{ order_info["last_name"] or "Not Provided"}}<br/>
+    <p>
+        <b>LAST_NAME:</b> <br/>
+        {{ order_info["last_name"] or "Not Provided"}}
+    </p>
 
-    <b>MIDDLE_NAME:</b> <br/>
-    {{ order_info["mid_name"] or "Not Provided"}}<br/>
+    <p>
+        <b>MIDDLE_NAME:</b> <br/>
+        {{ order_info["mid_name"] or "Not Provided"}}
+    </p>
 
-    <b>FIRST_NAME:</b> <br/>
-    {{ order_info["first_name"] or "Not Provided"}}<br/>
+    <p>
+        <b>FIRST_NAME:</b> <br/>
+        {{ order_info["first_name"] or "Not Provided"}}
+    </p>
 
-    <b>FATHER_NAME:</b> <br/>
-    {{ order_info["father_name"] or "Not Provided"}} <br/>
+    <p>
+        <b>FATHER_NAME:</b> <br/>
+        {{ order_info["father_name"] or "Not Provided"}} 
+    </p>
 
-    <b>MOTHER_NAME:</b> <br/>
-    {{ order_info["mother_name"] or "Not Provided"}} <br/>
+    <p>
+        <b>MOTHER_NAME:</b> <br/>
+        {{ order_info["mother_name"] or "Not Provided"}} 
+    </p>
 
-    <b>RELATIONSHIP:</b> <br/>
-    {{ order_info["relationship"] or "Not Provided" }}<br/>
+    <p>
+        <b>RELATIONSHIP:</b> <br/>
+        {{ order_info["relationship"] or "Not Provided" }}
+    </p>
 
-    <b>PURPOSE:</b> <br/>
-    {{ order_info["purpose"] or "Not Provided"}}<br/>
+    <p>
+        <b>PURPOSE:</b> <br/>
+        {{ order_info["purpose"] or "Not Provided"}}
+    </p>
 
-    <b>ADDITIONAL_COPY:</b> <br/>
-    {{ order_info["additional_copy"] or "N/A" }}<br/>
+    <p>
+        <b>ADDITIONAL_COPY:</b> <br/>
+        {{ order_info["additional_copy"] or "N/A" }}
+    </p>
 
-    <b>MONTH:</b> <br/>
-    {{ order_info["month"] or "Not Provided"}}<br/>
+    <p>
+        <b>MONTH:</b> <br/>
+        {{ order_info["month"] or "Not Provided"}}
+    </p>
 
-    <b>DAY:</b> <br/>
-    {{ order_info["day"] or "Not Provided"}}<br/>
+    <p>
+        <b>DAY:</b> <br/>
+        {{ order_info["day"] or "Not Provided"}}
+    </p>
 
-    <b>BIRTH_PLACE:</b> <br/>
-    {{ order_info["birth_place"] or "Not Provided"}}<br/>
+    <p>
+        <b>BIRTH_PLACE:</b> <br/>
+        {{ order_info["birth_place"] or "Not Provided"}}
+    </p>
 
-    <b>YEARS:</b> <br/>
-    {{ order_info["years"] or "Not Provided"}} <br/>
+    <p>
+        <b>YEARS:</b> <br/>
+        {{ order_info["years"] or "Not Provided"}} 
+    </p>
 
-    <b>BOROUGH:</b> <br/>
-    {{ order_info["borough"] or "Not Provided"}}<br/>
+    <p>
+        <b>BOROUGH:</b> <br/>
+        {{ order_info["borough"] or "Not Provided"}}
+    </p>
 
-    <b>LETTER:</b> <br/>
-    {{ "Yes" if order_info["letter"] else "No" }}<br/>
+    <p>
+        <b>LETTER:</b> <br/>
+        {{ "Yes" if order_info["letter"] else "No" }}
+    </p>
 
-    <b>COMMENT:</b> <br/>
-    {{ order_info["comment"] }}<br/>
+    <p>
+        <b>COMMENT:</b> <br/>
+        {{ order_info["comment"] }}
+    </p>
 
 {% endblock %}
 

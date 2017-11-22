@@ -1,11 +1,31 @@
+<html>
+<head>
+    <style type="text/css">
+        p {
+            font-size: 14px !important;
+            line-height: 14px !important;
+        }
+        b {
+        	font-size: 16px !important;
+        }
+
+        h1 {
+            font-size: 24px;
+        }
+    </style>
+</head>
+<body>
+<p>
 {{ order_info['customer']['billing_name'] }}<br/>
 Address: {{ order_info['customer']['address'] }}
+</p>
 <h1>{{ order_info['client_agency_name'] }}</h1>
 
 {% if order_info['order']['multiple_items'] %}
+    <p>
     <b>This item was ordered with multiple items in the cart: </b>
     {{ ', '.join(order_info['order']['order_types']) }}
-    <br />
+    </p>
 {% endif %}
 
 {% include 'orders/customer_info.html' %}
@@ -13,5 +33,6 @@ Address: {{ order_info['customer']['address'] }}
 {% block content %}
 
 {% endblock %}
+</body>
 
 <pdf:nextpage/>
