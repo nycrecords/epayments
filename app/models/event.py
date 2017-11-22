@@ -3,6 +3,7 @@ from pytz import timezone
 from sqlalchemy.dialects.postgresql import JSONB
 from app import db
 from app.constants import event_type
+from flask_login import current_user
 
 
 class Event(db.Model):
@@ -32,17 +33,17 @@ class Event(db.Model):
     previous_value = db.Column(JSONB)
     new_value = db.Column(JSONB)
     suborder = db.relationship("Suborder", backref="event")
-    # user = db.relationship(
-    #     "Users",
-    #     primaryjoin="and_(Event.user_guid == Users.guid, "
-    #                 "Event.auth_user_type == Users.auth_user_type)",
-    #     backref="events"
-    # )
+    user = db.relationship(
+        "Users",
+        primaryjoin="and_(Event.user_guid == Users.guid, "
+                    "Event.auth_user_type == Users.auth_user_type)",
+        backref="events"
+    )
 
     def __init__(self,
                  suborder_number,
                  type_,
-                 user_email=None,
+                 user_email=current_user.email,
                  previous_value=None,
                  new_value=None,
                  timestamp=None):
