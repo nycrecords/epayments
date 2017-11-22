@@ -222,9 +222,8 @@ def login():
                 "message": "Invalid username or password entered"
             }
         ), 401
-    login_user(user)
 
-    print(current_user.email)
+    login_user(user)
 
     return jsonify(
         {
