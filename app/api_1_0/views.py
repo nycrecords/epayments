@@ -190,7 +190,8 @@ def print_order(print_type):
         printing.SMALL_LABELS: _print_small_labels,
         printing.LARGE_LABELS: _print_large_labels
     }
-    return send_file(handler_for_type[print_type](search_params), as_attachment=True, attachment_filename='order.pdf'), 200
+    return send_file(handler_for_type[print_type](search_params), as_attachment=True,
+                     attachment_filename='order.pdf'), 200
 
 
 @api.route('/login', methods=['POST'])
@@ -205,22 +206,35 @@ def login():
     user = Users.query.filter_by(email=user_info['email']).one_or_none()
 
     if user is None:
-        return jsonify("Invalid username or password entered"), 401
+        return jsonify(
+            {
+                "authenticated": False,
+                "message": "Invalid username or password entered"
+            }
+        ), 401
 
     valid_password = user.verify_password(user_info['password'])
 
     if not valid_password:
-        return jsonify("Invalid username or password entered"), 401
-
+        return jsonify(
+            {
+                "authenticated": False,
+                "message": "Invalid username or password entered"
+            }
+        ), 401
     login_user(user)
 
     print(current_user.email)
 
-    return jsonify({"authenticated": True}), 200
+    return jsonify(
+        {
+            "authenticated": True,
+            "email": current_user.email
+        }
+    ), 200
 
 
 @api.route('/logout', methods=['DELETE'])
 def logout():
     logout_user()
     return jsonify({"authenticated": False}), 200
-

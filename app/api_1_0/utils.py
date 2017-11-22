@@ -138,14 +138,35 @@ def update_tax_photo(suborder_number, block_no, lot_no, roll_no):
     :param roll_no:
     :return: {}
     """
-
     p_tax = PhotoTax.query.filter_by(suborder_number=suborder_number).one()
+
+    previous_value = {
+        'block': p_tax.block,
+        'lot': p_tax.lot,
+        'roll': p_tax.roll
+    }
+
     p_tax.block = block_no
     p_tax.lot = lot_no
     p_tax.roll = roll_no
 
     db.session.add(p_tax)
     db.session.commit()
+
+    new_value = {
+        'block': p_tax.block,
+        'lot': p_tax.lot,
+        'roll': p_tax.roll
+    }
+
+    event = Event(suborder_number,
+                  event_type.UPDATE_PHOTO_TAX,
+                  previous_value,
+                  new_value)
+
+    db.session.add(event)
+    db.session.commit()
+
 
 
 def get_orders_by_fields(order_number, suborder_number, order_type, billing_name, user, date_submitted_start,
