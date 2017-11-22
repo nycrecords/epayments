@@ -5,8 +5,10 @@ from xhtml2pdf.pisa import CreatePDF
 from app import db
 from app.constants import (
     order_types,
-    event_type
+    event_type,
+    printing
 )
+from app.constants.customer import EMPTY_CUSTOMER
 from app.models import (
     Order,
     Suborder,
@@ -125,6 +127,27 @@ def update_status(suborder_number, comment, new_status):
         # TODO: Raise error because new_status can't be the current status
 
 
+def update_tax_photo(suborder_number, block_no, lot_no, roll_no):
+    """
+    This function is used for the Tax Photo API POST method,
+    will update these fields from JSON sent back
+
+    :param suborder_number:
+    :param block_no:
+    :param lot_no:
+    :param roll_no:
+    :return: {}
+    """
+
+    p_tax = PhotoTax.query.filter_by(suborder_number=suborder_number).one()
+    p_tax.block = block_no
+    p_tax.lot = lot_no
+    p_tax.roll = roll_no
+
+    db.session.add(p_tax)
+    db.session.commit()
+
+
 def get_orders_by_fields(order_number, suborder_number, order_type, billing_name, user, date_submitted_start,
                          date_submitted_end):
     """
@@ -212,50 +235,92 @@ def _print_orders(search_params):
     return tempFileObj
 
 
-def _print_small_labels():
-    pass
+def _print_small_labels(search_params):
+    """
+
+    :param search_params:
+    :return:
+    """
+    order_number = search_params.get("order_number")
+    suborder_number = search_params.get("suborder_number")
+    order_type = search_params.get("order_type")
+    billing_name = search_params.get("billing_name")
+    # user = str(request.form["user"])
+    user = ''
+    date_submitted_start = search_params.get("date_submitted_start")
+    date_submitted_end = search_params.get("date_submitted_end")
+
+    filter_args = _order_query_filters(order_number, suborder_number, order_type, billing_name, user,
+                                       date_submitted_start,
+                                       date_submitted_end)
+
+    suborders = Suborder.query.join(Order, Customer).filter(*filter_args).all()
+
+    customers = [suborder.order.customer.serialize for suborder in suborders]
+
+    customers = sorted(customers, key=lambda customer: customer['billing_name'])
+
+    labels = [customers[i:i + printing.SMALL_LABEL_COUNT] for i in range(0, len(customers), printing.SMALL_LABEL_COUNT)]
+    html = ''
+
+    for page in labels:
+        if len(page) < printing.SMALL_LABEL_COUNT:
+            for i in range(printing.SMALL_LABEL_COUNT - len(page)):
+                page.append(EMPTY_CUSTOMER)
+
+        html += render_template('orders/small_labels.html', labels=page)
+
+    from tempfile import NamedTemporaryFile
+
+    tempFileObj = NamedTemporaryFile(mode='w+b', suffix='pdf')
+    pdf = CreatePDF(src=html, dest=tempFileObj)
+    tempFileObj.seek(0, 0)
+
+    return tempFileObj
 
 
 def _print_large_labels(search_params):
-    import labels
-    from reportlab.graphics import shapes
+    """
 
-    # Create an A4 portrait (210mm x 297mm) sheets with 2 columns and 8 rows of
-    # labels. Each label is 90mm x 25mm with a 2mm rounded corner. The margins are
-    # automatically calculated.
-    specs = labels.Specification(
-        sheet_width=215.9,
-        sheet_height=279.4,
-        columns=2,
-        rows=5,
-        label_width=101.6,
-        label_height=50.8,
-        left_margin=6.2,
-        column_gap=4.8,
-        row_gap=0,
-    )
+    :param search_params:
+    :return:
+    """
+    order_number = search_params.get("order_number")
+    suborder_number = search_params.get("suborder_number")
+    order_type = search_params.get("order_type")
+    billing_name = search_params.get("billing_name")
+    # user = str(request.form["user"])
+    user = ''
+    date_submitted_start = search_params.get("date_submitted_start")
+    date_submitted_end = search_params.get("date_submitted_end")
 
-    # Create a function to draw each label. This will be given the ReportLab drawing
-    # object to draw on, the dimensions (NB. these will be in points, the unit
-    # ReportLab uses) of the label, and the object to render.
-    def draw_label(label, width, height, obj):
-        # Just convert the object to a string and print this at the bottom left of
-        # the label.
-        label.add(
-            shapes.String(width / 2.0, height / 2.0, str(obj), fontName="Helvetica", fontSize=40, textAnchor='middle'))
+    filter_args = _order_query_filters(order_number, suborder_number, order_type, billing_name, user,
+                                       date_submitted_start,
+                                       date_submitted_end)
 
-    # Create the sheet.
-    sheet = labels.Sheet(specs, draw_label, border=False)
+    suborders = Suborder.query.join(Order, Customer).filter(*filter_args).all()
 
-    # We can also add each item from an iterable.
-    sheet.add_labels(range(1, 10))
+    customers = [suborder.order.customer.serialize for suborder in suborders]
 
-    # Note that any oversize label is automatically trimmed to prevent it messing up
-    # other labels.
+    customers = sorted(customers, key=lambda customer: customer['billing_name'])
 
-    # Save the file and we are done.
-    sheet.save('basic.pdf')
-    print("{0:d} label(s) output on {1:d} page(s).".format(sheet.label_count, sheet.page_count))
+    labels = [customers[i:i + printing.LARGE_LABEL_COUNT] for i in range(0, len(customers), printing.LARGE_LABEL_COUNT)]
+    html = ''
+
+    for page in labels:
+        if len(page) < printing.LARGE_LABEL_COUNT:
+            for i in range(printing.LARGE_LABEL_COUNT - len(page)):
+                page.append(EMPTY_CUSTOMER)
+
+        html += render_template('orders/large_labels.html', labels=page)
+
+    from tempfile import NamedTemporaryFile
+
+    tempFileObj = NamedTemporaryFile(mode='w+b', suffix='pdf')
+    pdf = CreatePDF(src=html, dest=tempFileObj)
+    tempFileObj.seek(0, 0)
+
+    return tempFileObj
 
 
 def generate_csv():

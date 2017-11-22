@@ -10,12 +10,13 @@ from app.api_1_0.utils import (
     get_orders_by_fields,
     _print_orders,
     _print_large_labels,
-    _print_small_labels
+    _print_small_labels,
+    update_tax_photo
 )
 from app.constants import (
     event_type
 )
-from app.constants import print_types
+from app.constants import printing
 from app.models import (
     Order,
     PhotoTax,
@@ -159,11 +160,20 @@ def get_single_order(order_id):
 
 @api.route('/photo_tax/<string:suborder_number>', methods=['GET', 'POST'])
 def photo_tax(suborder_number):
-    p_tax = PhotoTax.query.filter_by(suborder_number=suborder_number).one()
     if request.method == 'GET':
+        p_tax = PhotoTax.query.filter_by(suborder_number=suborder_number).one()
         return jsonify(block_no=p_tax.block,
                        lot_no=p_tax.lot,
                        roll_no=p_tax.roll)
+
+    else:
+        json = request.get_json(force=True)
+        block_no = json.get("block_no")
+        lot_no = json.get("lot_no")
+        roll_no = json.get("roll_no")
+
+        updated_p_tax = update_tax_photo(suborder_number, block_no, lot_no, roll_no)
+        return jsonify(updated_p_tax=updated_p_tax)
 
 
 @api.route('/print/<string:print_type>', methods=['POST'])
@@ -176,11 +186,11 @@ def print_order(print_type):
     search_params = request.get_json(force=True)
 
     handler_for_type = {
-        print_types.ORDERS: _print_orders,
-        print_types.SMALL_LABELS: _print_small_labels,
-        print_types.LARGE_LABELS: _print_large_labels
+        printing.ORDERS: _print_orders,
+        printing.SMALL_LABELS: _print_small_labels,
+        printing.LARGE_LABELS: _print_large_labels
     }
-    return send_file(handler_for_type[print_type](search_params), as_attachment=True, attachment_filename='order.pdf')
+    return send_file(handler_for_type[print_type](search_params), as_attachment=True, attachment_filename='order.pdf'), 200
 
 
 @api.route('/login', methods=['POST'])
@@ -213,3 +223,4 @@ def login():
 def logout():
     logout_user()
     return jsonify({"authenticated": False}), 200
+
