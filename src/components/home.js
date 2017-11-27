@@ -40,28 +40,14 @@ class Home extends React.Component {
 
         this.printOrderSheet = (e) => {
             this.orderForm.submitFormData(e, 'orders')
-            // e.preventDefault();
-            // fetch('api/v1.0/print/orders', {
-            //     method: "POST",
-            //     body: JSON.stringify({
-            //         order_number: this.state.ordernumber,
-            //         suborder_number: this.state.subordernumber,
-            //         order_type: this.state.order_type,
-            //         billing_name: this.state.billing_name,
-            //         date_submitted_start: formatDate(this.dateSubmittedStart),
-            //         date_submitted_end: formatDate(this.dateSubmittedEnd)
-            //     })
-            // }).then((response) => {
-            //     return response.json()
-            // });
         };
 
-        this.printBigLabels = () => {
-            //    links to Big Label print
+        this.printBigLabels = (e) => {
+            this.orderForm.submitFormData(e, 'large_labels')
         };
 
-        this.printSmallLabels = () => {
-            //    links to Small Label print
+        this.printSmallLabels = (e) => {
+            this.orderForm.submitFormData(e, 'small_labels')
         };
 
         this.logOut = () => {

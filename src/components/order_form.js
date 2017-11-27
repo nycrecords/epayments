@@ -87,7 +87,7 @@ class OrderForm extends React.Component {
                         date_submitted_end: formatDate(this.dateSubmittedEnd)
                     })
                 }).then((response) => {
-                    return response.json()
+                    return response.json();
                 }).then((json) => {
                     this.props.addOrder(json.order_count, json.suborder_count, json.all_orders);
                 });
