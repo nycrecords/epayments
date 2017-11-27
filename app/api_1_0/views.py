@@ -190,9 +190,10 @@ def print_order(print_type):
         printing.SMALL_LABELS: _print_small_labels,
         printing.LARGE_LABELS: _print_large_labels
     }
-    return jsonify({"url": url_for("main.import_xml", _external=True)})
-    # return send_file(handler_for_type[print_type](search_params), as_attachment=True,
-    #                  attachment_filename='order.pdf'), 200
+
+    url = handler_for_type[print_type](search_params)
+
+    return jsonify({"url": url})
 
 
 @api.route('/login', methods=['POST'])

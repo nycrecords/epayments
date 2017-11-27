@@ -1,7 +1,9 @@
-from flask import render_template
+from flask import render_template, current_app, url_for
 from flask_login import current_user
 from sqlalchemy import or_
 from xhtml2pdf.pisa import CreatePDF
+from datetime import datetime
+from os.path import join
 
 from app import db
 from app.constants import (
@@ -337,13 +339,11 @@ def _print_large_labels(search_params):
 
         html += render_template('orders/large_labels.html', labels=page)
 
-    from tempfile import NamedTemporaryFile
+    filename = 'large_labels_{}.pdf'.format(datetime.now().strftime("%Y%m%d-%H%M%S"))
+    with open(join(current_app.static_folder, 'files', filename), 'w+b') as file_:
+        CreatePDF(src=html, dest=file_)
 
-    tempFileObj = NamedTemporaryFile(mode='w+b', suffix='pdf')
-    pdf = CreatePDF(src=html, dest=tempFileObj)
-    tempFileObj.seek(0, 0)
-
-    return tempFileObj
+    return url_for('static', filename='files/{}'.format(filename), _external=True)
 
 
 def generate_csv():
