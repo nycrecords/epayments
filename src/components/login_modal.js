@@ -69,7 +69,7 @@ class LoginModal extends React.Component {
                                 value={this.state.password}
                           />
                           <Button type='submit' positive onClick={this.handleSubmit} floated='right'>Submit</Button>
-                          <Button negative onClick={this.handleClose} floated='right'>Cancel</Button>
+                          <Button type='button' negative onClick={this.handleClose} floated='right'>Cancel</Button>
                           <br/>
                       </Form>
                       <br/>

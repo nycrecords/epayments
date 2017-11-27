@@ -34,13 +34,6 @@ class OrderForm extends React.Component {
     constructor() {
         super();
 
-        this.handleKeyPress = (event) => {
-            if (event.key) {
-                event.preventDefault();
-                return false;
-            }
-        };
-
         this.clearSelection = () => {
             this.setState({
                 ordernumber: '',

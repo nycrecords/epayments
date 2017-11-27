@@ -23,6 +23,7 @@ from app.models import (
     Users,
     Event
 )
+from app.date_utils import get_yesterday_dt
 
 
 @api.route('/', methods=['GET'])
@@ -56,7 +57,7 @@ def get_orders():
         order_type = json.get("order_type")
         billing_name = json.get("billing_name")
         user = ''
-        date_submitted_start = json.get("date_submitted_start")
+        date_submitted_start = json.get("date_submitted_start") if json.get("date_submitted_start") else get_yesterday_dt()
         date_submitted_end = json.get("date_submitted_end")
 
         order_count, suborder_count, orders = get_orders_by_fields(order_number,
@@ -71,10 +72,7 @@ def get_orders():
                        all_orders=orders)
 
     else:
-        yesterday = date.today() - timedelta(1)
-        # Add time to date object
-        yesterday_dt = datetime.combine(yesterday, time.min)
-
+        yesterday_dt = get_yesterday_dt()
         orders = []
         order_count = 0
         for order in Order.query.filter(Order.date_submitted >= yesterday_dt):

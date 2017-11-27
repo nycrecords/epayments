@@ -114,7 +114,7 @@ class Home extends React.Component {
                         <Segment padded textAlign='center'>
                             {this.renderAuthSegment()}
                         </Segment>
-                        <OrderForm addOrder={this.addOrder} ref={instance => this.orderForm = instance}/>
+                        <OrderForm addOrder={this.addOrder} ref={orderForm => this.orderForm = orderForm}/>
                     </Grid.Column>
                     <Grid.Column width={1}/>
                     <Grid.Column width={11}>
@@ -122,7 +122,6 @@ class Home extends React.Component {
                         <div>
                             <Button.Group size='medium' floated='right'>
                                 <Button labelPosition='left' icon='print'
-                                        // content='Order Sheets' onClick={this.orderForm}/>
                                         content='Order Sheets' onClick={this.printOrderSheet}/>
                                 <Button content='Big Labels' onClick={this.printBigLabels}/>
                                 <Button content='Small Labels' onClick={this.printSmallLabels}/>
