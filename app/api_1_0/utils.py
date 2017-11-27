@@ -251,13 +251,11 @@ def _print_orders(search_params):
         html += render_template("orders/{}".format(order_type_template_handler[item.client_agency_name]),
                                 order_info=order_info)
 
-    from tempfile import NamedTemporaryFile
+    filename = 'order_sheets_{username}_{time}.pdf'.format(username=current_user.username, time=datetime.now().strftime("%Y%m%d-%H%M%S"))
+    with open(join(current_app.static_folder, 'files', filename), 'w+b') as file_:
+        CreatePDF(src=html, dest=file_)
 
-    tempFileObj = NamedTemporaryFile(mode='w+b', suffix='jpg')
-    pdf = CreatePDF(src=html, dest=tempFileObj)
-    tempFileObj.seek(0, 0)
-
-    return tempFileObj
+    return url_for('static', filename='files/{}'.format(filename), _external=True)
 
 
 def _print_small_labels(search_params):
@@ -295,13 +293,11 @@ def _print_small_labels(search_params):
 
         html += render_template('orders/small_labels.html', labels=page)
 
-    from tempfile import NamedTemporaryFile
+    filename = 'small_labels_{username}_{time}.pdf'.format(username=current_user.username, time=datetime.now().strftime("%Y%m%d-%H%M%S"))
+    with open(join(current_app.static_folder, 'files', filename), 'w+b') as file_:
+        CreatePDF(src=html, dest=file_)
 
-    tempFileObj = NamedTemporaryFile(mode='w+b', suffix='pdf')
-    pdf = CreatePDF(src=html, dest=tempFileObj)
-    tempFileObj.seek(0, 0)
-
-    return tempFileObj
+    return url_for('static', filename='files/{}'.format(filename), _external=True)
 
 
 def _print_large_labels(search_params):
@@ -339,7 +335,7 @@ def _print_large_labels(search_params):
 
         html += render_template('orders/large_labels.html', labels=page)
 
-    filename = 'large_labels_{}.pdf'.format(datetime.now().strftime("%Y%m%d-%H%M%S"))
+    filename = 'large_labels_{username}_{time}.pdf'.format(username=current_user.username, time=datetime.now().strftime("%Y%m%d-%H%M%S"))
     with open(join(current_app.static_folder, 'files', filename), 'w+b') as file_:
         CreatePDF(src=html, dest=file_)
 
