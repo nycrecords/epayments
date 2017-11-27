@@ -38,7 +38,8 @@ class Home extends React.Component {
             this.setState({all_orders: _all_orders});
         };
 
-        this.printOrderSheet = () => {
+        this.printOrderSheet = (e) => {
+            this.orderForm.submitFormData(e, 'orders')
             // e.preventDefault();
             // fetch('api/v1.0/print/orders', {
             //     method: "POST",
@@ -77,14 +78,30 @@ class Home extends React.Component {
         };
     };
 
+    renderAuthSegment() {
+        if (this.props.authenticated) {
+            return (
+                <div>
+                    <div>Hi {this.props.user}</div>
+                    <br/>
+                    <Button fluid content='Logout' onClick={this.logOut}/>
+                </div>
+            )
+        }
+        else {
+            return (
+                <LoginModal/>
+            )
+        }
+    }
+
     componentWillMount() {
         fetch('api/v1.0/orders').then((response) => (
             response.json()
         )).then((json) => {
             this.addOrder(json.order_count, json.suborder_count, json.all_orders);
         })
-    }
-    ;
+    };
 
 
     render() {
@@ -108,11 +125,10 @@ class Home extends React.Component {
                         <Header as="h1" textAlign="center">ePayments
                             <Container className="sub header">Department of Records</Container>
                         </Header>
-                        <Segment padded>
-                            {/* TODO: { this.props.authenticated && <div>Hi {this.props.user}</div> }*/}
-                            { this.props.authenticated ? <Button fluid content='Logout' onClick={this.logOut}/> : <LoginModal /> }
+                        <Segment padded textAlign='center'>
+                            {this.renderAuthSegment()}
                         </Segment>
-                        <OrderForm addOrder={this.addOrder}/>
+                        <OrderForm addOrder={this.addOrder} ref={instance => this.orderForm = instance}/>
                     </Grid.Column>
                     <Grid.Column width={1}/>
                     <Grid.Column width={11}>
@@ -120,6 +136,7 @@ class Home extends React.Component {
                         <div>
                             <Button.Group size='medium' floated='right'>
                                 <Button labelPosition='left' icon='print'
+                                        // content='Order Sheets' onClick={this.orderForm}/>
                                         content='Order Sheets' onClick={this.printOrderSheet}/>
                                 <Button content='Big Labels' onClick={this.printBigLabels}/>
                                 <Button content='Small Labels' onClick={this.printSmallLabels}/>

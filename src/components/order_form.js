@@ -69,35 +69,53 @@ class OrderForm extends React.Component {
 
         this.yesterday = moment().subtract(1, 'days');
 
-         const formatDate = (dateRef) => (
+        const formatDate = (dateRef) => (
             dateRef && dateRef.state.date ? dateRef.state.date.format('MM/DD/YYYY') : ''
-         );
+        );
 
-        // TODO: Implement CSRF token
-        this.handleSubmit = (e) => {
+        this.submitFormData = (e, print) => {
             e.preventDefault();
-            csrfFetch('api/v1.0/orders', {
-                method: "POST",
-                body: JSON.stringify({
-                    order_number: this.state.ordernumber,
-                    suborder_number: this.state.subordernumber,
-                    order_type: this.state.order_type,
-                    billing_name: this.state.billing_name,
-                    date_submitted_start: formatDate(this.dateSubmittedStart),
-                    date_submitted_end: formatDate(this.dateSubmittedEnd)
+            if (print === undefined) {
+                csrfFetch('api/v1.0/orders', {
+                    method: "POST",
+                    body: JSON.stringify({
+                        order_number: this.state.ordernumber,
+                        suborder_number: this.state.subordernumber,
+                        order_type: this.state.order_type,
+                        billing_name: this.state.billing_name,
+                        date_submitted_start: formatDate(this.dateSubmittedStart),
+                        date_submitted_end: formatDate(this.dateSubmittedEnd)
+                    })
+                }).then((response) => {
+                    return response.json()
+                }).then((json) => {
+                    this.props.addOrder(json.order_count, json.suborder_count, json.all_orders);
+                });
+            }
+            else {
+                csrfFetch('api/v1.0/print/' + print, {
+                    method: "POST",
+                    body: JSON.stringify({
+                        order_number: this.state.ordernumber,
+                        suborder_number: this.state.subordernumber,
+                        order_type: this.state.order_type,
+                        billing_name: this.state.billing_name,
+                        date_submitted_start: formatDate(this.dateSubmittedStart),
+                        date_submitted_end: formatDate(this.dateSubmittedEnd)
+                    })
+                }).then((response) => {
+                    return response.json();
+                }).then((json) => {
+                    window.open(json.url);
                 })
-            }).then((response) => {
-                return response.json()
-            }).then((json) => {
-                this.props.addOrder(json.order_count, json.suborder_count, json.all_orders);
-            });
+            }
         };
     }
 
     render() {
         return (
             <Container>
-                <Form onSubmit={this.handleSubmit}>
+                <Form onSubmit={this.submitFormData}>
                     {/*This component defines the form fields required for the search form:
 
                          The Order Number, Suborder Number, Order Type, Billing Name, Date Received Start and End.

@@ -1,6 +1,6 @@
 from datetime import date, timedelta, datetime, time
 
-from flask import jsonify, abort, request, send_file
+from flask import jsonify, abort, request, send_file, redirect, url_for
 from flask_login import login_user, logout_user, current_user
 from sqlalchemy import desc
 from app.api_1_0 import api_1_0 as api
@@ -190,8 +190,9 @@ def print_order(print_type):
         printing.SMALL_LABELS: _print_small_labels,
         printing.LARGE_LABELS: _print_large_labels
     }
-    return send_file(handler_for_type[print_type](search_params), as_attachment=True,
-                     attachment_filename='order.pdf'), 200
+    return jsonify({"url": url_for("main.import_xml", _external=True)})
+    # return send_file(handler_for_type[print_type](search_params), as_attachment=True,
+    #                  attachment_filename='order.pdf'), 200
 
 
 @api.route('/login', methods=['POST'])

@@ -13,9 +13,9 @@ const defaultState = {
 export function auth(state = defaultState, action) {
   switch (action.type) {
       case LOGIN_USER:
-      return {...state, authenticated: true};
+      return {...state, authenticated: true, user: action.user};
     case LOGOUT_USER:
-      return {...state, authenticated: false};
+      return {...state, authenticated: false, user: ''};
     default:
       return state;
   }

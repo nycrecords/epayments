@@ -5,7 +5,8 @@ import {
 
 export const mapStateToProps = (state) => {
   return {
-    authenticated: state.authenticated
+    authenticated: state.authenticated,
+    user: state.user
   }
 };
 

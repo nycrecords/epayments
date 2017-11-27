@@ -171,7 +171,6 @@ def update_tax_photo(suborder_number, block_no, lot_no, roll_no):
     db.session.commit()
 
 
-
 def get_orders_by_fields(order_number, suborder_number, order_type, billing_name, user, date_submitted_start,
                          date_submitted_end):
     """
