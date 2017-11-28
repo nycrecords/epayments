@@ -145,33 +145,33 @@ def update_tax_photo(suborder_number, block_no, lot_no, roll_no):
     """
     p_tax = PhotoTax.query.filter_by(suborder_number=suborder_number).one()
 
-    previous_value = {
-        'block': p_tax.block,
-        'lot': p_tax.lot,
-        'roll': p_tax.roll
-    }
+    message = "No changes were made"
+    new_value = {}
+    previous_value = {}
 
-    p_tax.block = block_no
-    p_tax.lot = lot_no
-    p_tax.roll = roll_no
+    for name, value, col_value in [
+        ('block', block_no, p_tax.block),
+        ('lot', lot_no, p_tax.lot),
+        ('roll', roll_no, p_tax.roll)
+    ]:
+        if value and value != col_value:
+            setattr(p_tax, name, value)
+            new_value[name] = value
+            previous_value[name] = col_value
 
-    db.session.add(p_tax)
-    db.session.commit()
+    if new_value:
+        db.session.add(p_tax)
 
-    new_value = {
-        'block': p_tax.block,
-        'lot': p_tax.lot,
-        'roll': p_tax.roll
-    }
+        event = Event(suborder_number,
+                      event_type.UPDATE_PHOTO_TAX,
+                      current_user.email,
+                      previous_value,
+                      new_value)
 
-    event = Event(suborder_number,
-                  event_type.UPDATE_PHOTO_TAX,
-                  current_user.email,
-                  previous_value,
-                  new_value)
-
-    db.session.add(event)
-    db.session.commit()
+        db.session.add(event)
+        db.session.commit()
+        message = "Photo Tax Info Updated"
+    return message
 
 
 def get_orders_by_fields(order_number, suborder_number, order_type, status, billing_name, user, date_submitted_start,

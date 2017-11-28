@@ -5,6 +5,7 @@ from app import db
 from app.constants import event_type
 from flask_login import current_user
 
+
 class Event(db.Model):
     """
     Define the Event class with the following columns and relationships:
@@ -53,15 +54,36 @@ class Event(db.Model):
 
     @property
     def status_history(self):
-            return {
-                'id': self.id,
-                'user': self.user_email,
-                'suborder_number': self.suborder_number,
-                'previous_status': self.previous_value.get('status', '') if self.previous_value else '',
-                'new_status': self.new_value.get('status', ''),
-                'comment': self.new_value.get('comment', ''),
-                'timestamp': self.timestamp.strftime("%x %I:%M %p")
-            }
+        # previous_value = ''
+        # new_value = ''
+        # TODO: Show history for event_type.UPDATE_PHOTO_TAX
+        # if self.type in (event_type.UPDATE_STATUS, event_type.INITIAL_IMPORT):
+        #     previous_value = self.previous_value.get('status', '') if self.previous_value else ''
+        #     new_value = self.new_value.get('status', '')
+        # elif self.type == event_type.UPDATE_PHOTO_TAX:
+        #     for name, value, in [
+        #         ('block: ', self.previous_value.get('block')),
+        #         ('lot: ', self.previous_value.get('lot')),
+        #         ('roll: ', self.previous_value.get('roll'))
+        #     ]:
+        #         if value:
+        #             previous_value += ''.join((name, value, ' '))
+        #     for name, value, in [
+        #         ('block: ', self.new_value.get('block')),
+        #         ('lot: ', self.new_value.get('lot')),
+        #         ('roll: ', self.new_value.get('roll'))
+        #     ]:
+        #         if value:
+        #             new_value += ''.join((name, value, ' '))
+        return {
+            'id': self.id,
+            'user': self.user_email,
+            'suborder_number': self.suborder_number,
+            'previous_status': self.previous_value.get('status', '') if self.previous_value else '',
+            'new_status': self.new_value.get('status', '') if self.new_value else '',
+            'comment': self.new_value.get('comment', ''),
+            'timestamp': self.timestamp.strftime("%x %I:%M %p")
+        }
 
     def __repr__(self):
         return '<Events %r>' % self.id

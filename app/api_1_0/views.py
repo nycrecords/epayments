@@ -131,6 +131,7 @@ def history(suborder_number):
     Look for all the rows with this suborder_number and list out the history for each one in Descending order
      also get the comment and date with these to send to the front
     """
+    # TODO: Event.type.in(..., event_type.UPDATE_PHOTO_TAX)
     status_history = [event.status_history for event in
                       Event.query.filter(Event.suborder_number == suborder_number,
                                          Event.type.in_(
@@ -170,8 +171,8 @@ def photo_tax(suborder_number):
         lot_no = json.get("lot_no")
         roll_no = json.get("roll_no")
 
-        updated_p_tax = update_tax_photo(suborder_number, block_no, lot_no, roll_no)
-        return jsonify(updated_p_tax=updated_p_tax)
+        message = update_tax_photo(suborder_number, block_no, lot_no, roll_no)
+        return jsonify(message=message)
 
 
 @api.route('/print/<string:print_type>', methods=['POST'])

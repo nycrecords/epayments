@@ -45,6 +45,7 @@ class PhotoTaxModal extends React.Component {
             }).then((response) => {
                 return response.json()
             }).then((json) => {
+                alert(json.message)
                 // this.props.updateStatus(this.props.suborder_number, this.state.new_status)
             });
 

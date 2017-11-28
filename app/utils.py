@@ -858,6 +858,14 @@ def import_file(file_name):
                     suborder_number="{}-1980".format(suborder_number)
                 )
                 db.session.add(customer_order_1980)
+
+                insert_event = Event(suborder_number=suborder_1940.id,
+                                     type_=event_type.INITIAL_IMPORT,
+                                     # user_email=current_user.email,
+                                     previous_value=None,
+                                     new_value={
+                                         'status': status.RECEIVED,
+                                     })
             else:
                 customer_order = PhotoTax(
                     borough=borough,
@@ -876,6 +884,16 @@ def import_file(file_name):
                     comment=comment,
                     suborder_number=suborder_number)
                 db.session.add(customer_order)
+
+                insert_event = Event(suborder_number=suborder_number,
+                                     type_=event_type.INITIAL_IMPORT,
+                                     # user_email=current_user.email,
+                                     previous_value=None,
+                                     new_value={
+                                         'status': status.RECEIVED,
+                                     })
+
+            db.session.add(insert_event)
             db.session.commit()
 
         # Insert into the PhotoGallery table

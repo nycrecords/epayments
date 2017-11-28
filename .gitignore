@@ -25,4 +25,4 @@ app/__init__.pyc
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
-x
+app/static/files/*
