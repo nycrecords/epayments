@@ -16,7 +16,7 @@ class PhotoTaxModal extends React.Component {
         };
 
         this.handleOpen = (e) => {
-            fetch('api/v1.0/photo_tax/' + this.props.suborder_number).then((response) => (
+            csrfFetch('api/v1.0/photo_tax/' + this.props.suborder_number).then((response) => (
                 response.json()
             )).then((json) => {
                 this.setState({

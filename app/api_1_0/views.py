@@ -1,7 +1,5 @@
-from datetime import date, timedelta, datetime, time
-
-from flask import jsonify, abort, request, send_file, redirect, url_for
-from flask_login import login_user, logout_user, current_user
+from flask import jsonify, abort, request
+from flask_login import login_user, logout_user, current_user, login_required
 from sqlalchemy import desc
 from app.api_1_0 import api_1_0 as api
 
@@ -32,6 +30,7 @@ def info():
 
 
 @api.route('/orders', methods=['GET', 'POST'])
+@login_required
 def get_orders():
     """
     Retrieves the data for orders to be displayed.
@@ -55,6 +54,7 @@ def get_orders():
         order_number = json.get("order_number")
         suborder_number = json.get("suborder_number")
         order_type = json.get("order_type")
+        status = json.get("status")
         billing_name = json.get("billing_name")
         user = ''
         date_submitted_start = json.get("date_submitted_start") if json.get("date_submitted_start") else get_yesterday_dt()
@@ -63,6 +63,7 @@ def get_orders():
         order_count, suborder_count, orders = get_orders_by_fields(order_number,
                                                                    suborder_number,
                                                                    order_type,
+                                                                   status,
                                                                    billing_name,
                                                                    user,
                                                                    date_submitted_start,
@@ -72,10 +73,9 @@ def get_orders():
                        all_orders=orders)
 
     else:
-        yesterday_dt = get_yesterday_dt()
         orders = []
         order_count = 0
-        for order in Order.query.filter(Order.date_submitted >= yesterday_dt):
+        for order in Order.query.filter(Order.date_submitted >= get_yesterday_dt()):
             order_count += 1
             for suborder in order.suborder:
                 orders.append(suborder.serialize)
@@ -83,6 +83,7 @@ def get_orders():
 
 
 @api.route('/status/<string:suborder_number>', methods=['GET', 'POST'])
+@login_required
 def status_change(suborder_number):
     """
     GET: {suborder_number}; returns {suborder_number, current_status}, 200
@@ -120,6 +121,7 @@ def status_change(suborder_number):
 
 
 @api.route('/history/<string:suborder_number>', methods=['GET'])
+@login_required
 def history(suborder_number):
     """
     GET: {suborder_number};
@@ -135,14 +137,11 @@ def history(suborder_number):
                                              [event_type.UPDATE_STATUS, event_type.INITIAL_IMPORT])
                                          ).order_by(desc(Event.timestamp)).all()]
 
-    history = [status.serialize for status in
-               Event.query.filter_by(suborder_number=int(suborder_number)).order_by(
-                   desc(Event.timestamp)).all()]
-
     return jsonify(history=status_history)
 
 
 @api.route('/orders/<int:order_id>', methods=['GET'])
+@login_required
 def get_single_order(order_id):
     """
     :param order_id:
@@ -157,6 +156,7 @@ def get_single_order(order_id):
 
 
 @api.route('/photo_tax/<string:suborder_number>', methods=['GET', 'POST'])
+@login_required
 def photo_tax(suborder_number):
     if request.method == 'GET':
         p_tax = PhotoTax.query.filter_by(suborder_number=suborder_number).one()
@@ -175,6 +175,7 @@ def photo_tax(suborder_number):
 
 
 @api.route('/print/<string:print_type>', methods=['POST'])
+@login_required
 def print_order(print_type):
     """
     Generate a PDF for a print operation.
@@ -234,6 +235,7 @@ def login():
 
 
 @api.route('/logout', methods=['DELETE'])
+@login_required
 def logout():
     logout_user()
     return jsonify({"authenticated": False}), 200

@@ -77,6 +77,7 @@ class Suborder(db.Model):
             status.RECEIVED,
             status.PROCESSING,
             status.FOUND,
+            status.PRINTED,
             status.MAILED_PICKUP,
             status.NOT_FOUND,
             status.LETTER_GENERATED,
@@ -112,72 +113,3 @@ class Suborder(db.Model):
             'client_agency_name': self.client_agency_name,
             'current_status': self.status
         }
-
-
-# class StatusTracker(db.Model):
-#
-#     """
-#     Need to make a model that will change the status of the
-#     process of the document
-#
-#     id - db.Integer , primary key = true
-#     suborder_number - Column: BigInteger, Foreign Key - connects the sub_order# to the top of this database
-#     status - Column: Enum - Tracks the status of the order can only be these set things
-#     comment - Column: db.String(64) - stores the comment that was passed in
-#     timestamp - Column: db.datetime - holds the time that the status was updated
-#     previous_value - Column: db.String(25) - Stores the previous status
-#
-#     1. Received || Set to this by default
-#     2. Processing
-#         a)found
-#         b)printed
-#     3. Mailed/Pickup
-#     4. Not_Found
-#         a)Letter_generated
-#         b)Undeliverable - Cant move down the line
-#     5. Done - End of status changes
-#
-#     """
-#     __tablename__ = 'status'
-#     id = db.Column(db.Integer, primary_key=True)
-#     suborder_number = db.Column(db.String(32), db.ForeignKey('suborder.id'), nullable=False)
-#     current_status = db.Column(
-#         db.Enum(
-#             status.RECEIVED,
-#             status.PROCESSING,
-#             status.FOUND,
-#             status.MAILED_PICKUP,
-#             status.NOT_FOUND,
-#             status.LETTER_GENERATED,
-#             status.UNDELIVERABLE,
-#             status.DONE,
-#             name='current_status'), nullable=True)
-#     comment = db.Column(db.String(64), nullable=True)
-#     timestamp = db.Column(db.DateTime, nullable=False)
-#     previous_value = db.Column(db.String(25), nullable=True)
-#
-#     # Class Constructor to initialize the data
-#     def __init__(
-#                 self,
-#                 suborder_number,
-#                 current_status,
-#                 comment,
-#                 timestamp,
-#                 previous_value,
-#     ):
-#         self.suborder_number = suborder_number
-#         self.current_status = current_status
-#         self.comment = comment or None
-#         self.timestamp = timestamp or datetime.now(timezone('US/Eastern'))
-#         self.previous_value = previous_value or None
-#
-#     @property
-#     def serialize(self):
-#         """Return object data in easily serializable format"""
-#         return {
-#             'suborder_number': self.suborder_number,
-#             'current_status': self.current_status,
-#             'comment': self.comment,
-#             'timestamp': self.timestamp.strftime("%x %I:%M %p"),
-#             'previous_value': self.previous_value,
-#         }

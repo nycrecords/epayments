@@ -198,7 +198,7 @@ def import_file(file_name):
         # Insert into the StatusTracker Table
         insert_event = Event(suborder_number=suborder_number,
                              type_=event_type.INITIAL_IMPORT,
-                             user_email=current_user.email,
+                             # user_email=current_user.email,
                              previous_value=None,
                              new_value={
                                  'status': status.RECEIVED,

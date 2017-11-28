@@ -11,7 +11,7 @@ import {csrfFetch} from "../utils/fetch"
 
 
 //Creates the options for the Order Type dropdown.
-const options = [
+const orderTypeOptions = [
     {key: 'all', text: 'All', value: 'all'},
     {key: 'vitalrecords', text: '--Vital Records--', value: 'vital_records'},
     {key: 'birthsearch', text: 'Birth Search', value: 'Birth Search'},
@@ -27,6 +27,18 @@ const options = [
     {key: 'other', text: '--Other--', value: 'other'},
     {key: 'multipleincart', text: 'Multiple Items In Cart', value: 'multiple_items'},
     {key: 'vitalincart', text: 'Vital Records And Photos In Cart', value: 'vital_records_and_photos'}
+];
+
+const statusOptions = [
+    {key: 'recieved', text: 'Received', value: 'Received'},
+    {key: 'processing', text: 'Processing', value: 'Processing'},
+    {key: 'found', text: 'Found', value: 'Found'},
+    {key: 'printed', text: 'Print', value: 'Printed'},
+    {key: 'mailed/pickup', text: 'Mailed/Pickup', value: 'Mailed/Pickup'},
+    {key: 'not_found', text: 'Not Found', value: 'Not_Found'},
+    {key: 'letter_generated', text: 'Letter Generated', value: 'Letter_Generated'},
+    {key: 'undeliverable', text: 'Undeliverable', value: 'Undeliverable'},
+    {key: 'done', text: 'Done', value: 'Done'}
 ];
 
 //Creates the Search Form for the left side of the website.
@@ -75,6 +87,7 @@ class OrderForm extends React.Component {
                         order_number: this.state.ordernumber,
                         suborder_number: this.state.subordernumber,
                         order_type: this.state.order_type,
+                        status: this.state.status,
                         billing_name: this.state.billing_name,
                         date_submitted_start: formatDate(this.dateSubmittedStart),
                         date_submitted_end: formatDate(this.dateSubmittedEnd)
@@ -135,13 +148,17 @@ class OrderForm extends React.Component {
                                 value={this.state.subordernumber}
 
                     />
-                    <Form.Select label="Order Type" placeholder="Order Type" options={options}
+                    <Form.Select label="Order Type" placeholder="Order Type" options={orderTypeOptions}
                                  onChange={(e, {value}) => {
                                      this.setState({order_type: value})
-                                 }
-
-                                 }
+                                 }}
                                  value={this.state.order_type}
+                    />
+                    <Form.Select label="Status" placeholder="Status" options={statusOptions}
+                                 onChange={(e, {value}) => {
+                                     this.setState({status: value})
+                                 }}
+                                 value={this.state.status}
                     />
                     <Form.Input label="Billing Name" placeholder="Billing Name" maxLength="64"
                                 onChange={(e, {value}) => {

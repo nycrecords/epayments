@@ -30,7 +30,7 @@ from app.models import (
 )
 
 
-def _order_query_filters(order_number, suborder_number, order_type, billing_name, user, date_submitted_start,
+def _order_query_filters(order_number, suborder_number, order_type, status, billing_name, user, date_submitted_start,
                          date_submitted_end):
     # TODO: Need to refactor get_order_by_fields so that it performs a single function for code reuse.
     vital_records_list = ['Birth cert', 'Marriage cert', 'Death cert']  # TODO: Searches are missing from here. @gzhou??
@@ -41,6 +41,7 @@ def _order_query_filters(order_number, suborder_number, order_type, billing_name
         ("order_number", order_number, Order.id),
         ("suborder_number", suborder_number, Suborder.id),
         ("order_type", order_type, Suborder.client_agency_name),
+        ("status", status, Suborder.status),
         ("billing_name", billing_name, Customer.billing_name),
         ("date_submitted_start", date_submitted_start, Order.date_submitted),
         ("date_submitted_end", date_submitted_end, Order.date_submitted)
@@ -173,7 +174,7 @@ def update_tax_photo(suborder_number, block_no, lot_no, roll_no):
     db.session.commit()
 
 
-def get_orders_by_fields(order_number, suborder_number, order_type, billing_name, user, date_submitted_start,
+def get_orders_by_fields(order_number, suborder_number, order_type, status, billing_name, user, date_submitted_start,
                          date_submitted_end):
     """
     Filter orders by fields received
@@ -181,7 +182,7 @@ def get_orders_by_fields(order_number, suborder_number, order_type, billing_name
                          user??, date_received, date_submitted)
     :return:
     """
-    filter_args = _order_query_filters(order_number, suborder_number, order_type, billing_name, user,
+    filter_args = _order_query_filters(order_number, suborder_number, order_type, status, billing_name, user,
                                        date_submitted_start,
                                        date_submitted_end)
     base_query = Suborder.query.join(Order, Customer).filter(*filter_args)
@@ -204,13 +205,14 @@ def _print_orders(search_params):
     order_number = search_params.get("order_number")
     suborder_number = search_params.get("suborder_number")
     order_type = search_params.get("order_type")
+    status = search_params.get("status")
     billing_name = search_params.get("billing_name")
     # user = str(request.form["user"])
     user = ''
     date_submitted_start = search_params.get("date_submitted_start")
     date_submitted_end = search_params.get("date_submitted_end")
 
-    filter_args = _order_query_filters(order_number, suborder_number, order_type, billing_name, user,
+    filter_args = _order_query_filters(order_number, suborder_number, order_type, status, billing_name, user,
                                        date_submitted_start,
                                        date_submitted_end)
 
@@ -251,7 +253,7 @@ def _print_orders(search_params):
         html += render_template("orders/{}".format(order_type_template_handler[item.client_agency_name]),
                                 order_info=order_info)
 
-    filename = 'order_sheets_{username}_{time}.pdf'.format(username=current_user.username, time=datetime.now().strftime("%Y%m%d-%H%M%S"))
+    filename = 'order_sheets_{username}_{time}.pdf'.format(username=current_user.email, time=datetime.now().strftime("%Y%m%d-%H%M%S"))
     with open(join(current_app.static_folder, 'files', filename), 'w+b') as file_:
         CreatePDF(src=html, dest=file_)
 

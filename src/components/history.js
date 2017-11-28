@@ -1,8 +1,10 @@
 import React from 'react';
 import {Accordion, Label, Icon, Table} from 'semantic-ui-react';
 import 'semantic-ui-css/semantic.min.css';
-import HistoryRow from './historyRow'
-import '../css/history_acord.css'
+import HistoryRow from './historyRow';
+import '../css/history_acord.css';
+import {csrfFetch} from "../utils/fetch";
+
 
 class History extends React.Component {
 
@@ -18,7 +20,7 @@ class History extends React.Component {
         this.handleClick = (e) => {
             if (this.state.activeIndex === false){
                 this.setState({activeIndex: true});
-                fetch('api/v1.0/history/' + this.props.suborder_number).then((response) => (
+                csrfFetch('api/v1.0/history/' + this.props.suborder_number).then((response) => (
                     response.json()
                 )).then((json) => {
                     this.setState({all_history: json.history});

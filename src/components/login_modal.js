@@ -35,7 +35,12 @@ class LoginModal extends React.Component {
             }).then((response) => (
                 response.json()
             )).then((json) => {
-                json.authenticated ? this.props.login(json.email) : alert(json.message);
+                if (json.authenticated) {
+                    this.props.login(json.email);
+                }
+                else {
+                    alert(json.message);
+                }
             });
 
             this.handleClose();

@@ -16,6 +16,7 @@ class Home extends React.Component {
             all_orders: [],
             order_count: 0,
             suborder_count: 0,
+            ready: false
         };
 
         this.addOrder = (order_count, suborder_count, orders) => {
@@ -64,30 +65,17 @@ class Home extends React.Component {
         };
     };
 
-    renderAuthSegment() {
-        if (this.props.authenticated) {
-            return (
-                <div>
-                    <div>Hi {this.props.user}</div>
-                    <br/>
-                    <Button fluid content='Logout' onClick={this.logOut}/>
-                </div>
-            )
-        }
-        else {
-            return (
-                <LoginModal/>
-            )
-        }
-    }
-
-    componentWillMount() {
-        fetch('api/v1.0/orders').then((response) => (
+    getOrders() {
+        csrfFetch('api/v1.0/orders').then((response) => (
             response.json()
         )).then((json) => {
             this.addOrder(json.order_count, json.suborder_count, json.all_orders);
-        })
+        });
     };
+
+    componentWillReceiveProps(nextProps) {
+        nextProps.authenticated && this.getOrders();
+    }
 
 
     render() {
@@ -106,41 +94,50 @@ class Home extends React.Component {
 
         return (
             <Container>
-                <Grid padded columns={3}>
-                    <Grid.Column width={4}>
+                {this.props.authenticated ? (
+                    <Grid padded columns={3}>
+                        <Grid.Column width={4}>
+                            <Header as="h1" textAlign="center">ePayments
+                                <Container className="sub header">Department of Records</Container>
+                            </Header>
+                            <Segment padded textAlign='center'>
+                                <div>Hi {this.props.user}</div>
+                                <br/>
+                                <Button fluid content='Logout' onClick={this.logOut}/>
+                            </Segment>
+                            <OrderForm addOrder={this.addOrder} ref={orderForm => this.orderForm = orderForm}/>
+                        </Grid.Column>
+                        <Grid.Column width={1}/>
+                        <Grid.Column width={11}>
+                            <Header as="h1" dividing textAlign="center">Order</Header>
+                            <div>
+                                <Button.Group size='medium' floated='right'>
+                                    <Button labelPosition='left' icon='print'
+                                            content='Order Sheets' onClick={this.printOrderSheet}/>
+                                    <Button content='Big Labels' onClick={this.printBigLabels}/>
+                                    <Button content='Small Labels' onClick={this.printSmallLabels}/>
+                                </Button.Group>
+                                <strong>Number of Items: {this.state.suborder_count}</strong>
+                                <br/>
+                                <strong>Number of Orders: {this.state.order_count}</strong>
+                            </div>
+                            <div>
+                                <Divider clearing/>
+                            </div>
+                            {orderRows}
+                        </Grid.Column>
+                    </Grid>
+                ) : (
+                    <Segment id="center">
                         <Header as="h1" textAlign="center">ePayments
                             <Container className="sub header">Department of Records</Container>
                         </Header>
-                        <Segment padded textAlign='center'>
-                            {this.renderAuthSegment()}
-                        </Segment>
-                        <OrderForm addOrder={this.addOrder} ref={orderForm => this.orderForm = orderForm}/>
-                    </Grid.Column>
-                    <Grid.Column width={1}/>
-                    <Grid.Column width={11}>
-                        <Header as="h1" dividing textAlign="center">Order</Header>
-                        <div>
-                            <Button.Group size='medium' floated='right'>
-                                <Button labelPosition='left' icon='print'
-                                        content='Order Sheets' onClick={this.printOrderSheet}/>
-                                <Button content='Big Labels' onClick={this.printBigLabels}/>
-                                <Button content='Small Labels' onClick={this.printSmallLabels}/>
-                            </Button.Group>
-                            <strong>Number of Items: {this.state.suborder_count}</strong>
-                            <br/>
-                            <strong>Number of Orders: {this.state.order_count}</strong>
-                        </div>
-                        <div>
-                            <Divider clearing/>
-                        </div>
-                        {orderRows}
-                    </Grid.Column>
-                </Grid>
+                        <LoginModal/>
+                    </Segment>
+                )}
             </Container>
-
         )
     }
 }
-
 
 export default connect(mapStateToProps, mapDispatchToProps)(Home);

@@ -1,8 +1,8 @@
-"""Initial Migration
+"""Initial migration
 
-Revision ID: b1b7b30f229a
+Revision ID: bcf911ebbb8c
 Revises: 
-Create Date: 2017-11-22 21:34:42.988036
+Create Date: 2017-11-28 01:39:24.264735
 
 """
 from alembic import op
@@ -10,7 +10,7 @@ import sqlalchemy as sa
 from sqlalchemy.dialects import postgresql
 
 # revision identifiers, used by Alembic.
-revision = 'b1b7b30f229a'
+revision = 'bcf911ebbb8c'
 down_revision = None
 branch_labels = None
 depends_on = None
@@ -58,7 +58,7 @@ def upgrade():
     sa.Column('client_id', sa.Integer(), nullable=False),
     sa.Column('client_agency_name', sa.String(length=64), nullable=False),
     sa.Column('order_number', sa.String(length=64), nullable=False),
-    sa.Column('status', sa.Enum('Received', 'Processing', 'Found', 'Mailed/Pickup', 'Not_Found', 'Letter_Generated', 'Undeliverable', 'Done', name='status'), nullable=True),
+    sa.Column('status', sa.Enum('Received', 'Processing', 'Found', 'Printed', 'Mailed/Pickup', 'Not_Found', 'Letter_Generated', 'Undeliverable', 'Done', name='status'), nullable=True),
     sa.ForeignKeyConstraint(['order_number'], ['order.id'], ),
     sa.PrimaryKeyConstraint('id')
     )
