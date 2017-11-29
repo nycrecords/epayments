@@ -269,13 +269,14 @@ def _print_small_labels(search_params):
     order_number = search_params.get("order_number")
     suborder_number = search_params.get("suborder_number")
     order_type = search_params.get("order_type")
+    status = search_params.get("status")
     billing_name = search_params.get("billing_name")
     # user = str(request.form["user"])
     user = ''
     date_submitted_start = search_params.get("date_submitted_start")
     date_submitted_end = search_params.get("date_submitted_end")
 
-    filter_args = _order_query_filters(order_number, suborder_number, order_type, billing_name, user,
+    filter_args = _order_query_filters(order_number, suborder_number, order_type, status, billing_name, user,
                                        date_submitted_start,
                                        date_submitted_end)
 
@@ -295,7 +296,7 @@ def _print_small_labels(search_params):
 
         html += render_template('orders/small_labels.html', labels=page)
 
-    filename = 'small_labels_{username}_{time}.pdf'.format(username=current_user.username, time=datetime.now().strftime("%Y%m%d-%H%M%S"))
+    filename = 'small_labels_{username}_{time}.pdf'.format(username=current_user.email, time=datetime.now().strftime("%Y%m%d-%H%M%S"))
     with open(join(current_app.static_folder, 'files', filename), 'w+b') as file_:
         CreatePDF(src=html, dest=file_)
 
@@ -311,13 +312,14 @@ def _print_large_labels(search_params):
     order_number = search_params.get("order_number")
     suborder_number = search_params.get("suborder_number")
     order_type = search_params.get("order_type")
+    status = search_params.get("status")
     billing_name = search_params.get("billing_name")
     # user = str(request.form["user"])
     user = ''
     date_submitted_start = search_params.get("date_submitted_start")
     date_submitted_end = search_params.get("date_submitted_end")
 
-    filter_args = _order_query_filters(order_number, suborder_number, order_type, billing_name, user,
+    filter_args = _order_query_filters(order_number, suborder_number, order_type, status, billing_name, user,
                                        date_submitted_start,
                                        date_submitted_end)
 
@@ -337,7 +339,7 @@ def _print_large_labels(search_params):
 
         html += render_template('orders/large_labels.html', labels=page)
 
-    filename = 'large_labels_{username}_{time}.pdf'.format(username=current_user.username, time=datetime.now().strftime("%Y%m%d-%H%M%S"))
+    filename = 'large_labels_{username}_{time}.pdf'.format(username=current_user.email, time=datetime.now().strftime("%Y%m%d-%H%M%S"))
     with open(join(current_app.static_folder, 'files', filename), 'w+b') as file_:
         CreatePDF(src=html, dest=file_)
 
