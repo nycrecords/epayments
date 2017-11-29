@@ -108,11 +108,18 @@ def import_file(file_name):
 
     # 4. Get Order Date Information in EST.
     date_received = date.today()
-    date_submitted = utc_to_local(
-        datetime.fromtimestamp(
-            os.path.getmtime(file_name)
-        ),
-        'US/Eastern'
+
+    # For DEV where vagrant RHEL environment is UTC
+    # date_submitted = utc_to_local(
+    #     datetime.fromtimestamp(
+    #         os.path.getmtime(file_name)
+    #     ),
+    #     'US/Eastern'
+    # )
+
+    # For servers where RHEL environment is EST
+    date_submitted = datetime.fromtimestamp(
+        os.path.getmtime(file_name)
     )
 
     # 5. Get Client Data information

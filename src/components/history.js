@@ -23,7 +23,6 @@ class History extends React.Component {
                 csrfFetch('api/v1.0/history/' + this.props.suborder_number).then((response) => (
                     response.json()
                 )).then((json) => {
-                    debugger;
                     this.setState({all_history: json.history});
                 });
             }

@@ -139,9 +139,9 @@ class OrderForm extends React.Component {
                                 value={this.state.ordernumber}
                     />
 
-                    <Form.Input label="Suborder Number" placeholder='Suborder Number' maxLength="64"
+                    <Form.Input label="Suborder Number" placeholder='Suborder Number' maxLength="32"
                                 onChange={(e, {value}) => {
-                                    if (/^[0-9]+$/.test(value.slice(-1)) || value === '') {
+                                    if (/^[\d -]+$/.test(value.slice(-1)) || value === '') {
                                         this.setState({subordernumber: value})
                                     }
                                 }}
