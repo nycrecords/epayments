@@ -1,0 +1,624 @@
+<html>
+<head>
+    <style>
+        @font-face {
+            font-family: "Cambria Math";
+            panose-1: 2 4 5 3 5 4 6 3 2 4;
+            mso-font-charset: 1;
+            mso-generic-font-family: roman;
+            mso-font-format: other;
+            mso-font-pitch: variable;
+            mso-font-signature: 0 0 0 0 0 0;
+        }
+
+        @font-face {
+            font-family: Calibri;
+            panose-1: 2 15 5 2 2 2 4 3 2 4;
+            mso-font-charset: 0;
+            mso-generic-font-family: auto;
+            mso-font-pitch: variable;
+            mso-font-signature: -536870145 1073786111 1 0 415 0;
+        }
+
+        /* Style Definitions */
+        p.MsoNormal, li.MsoNormal, div.MsoNormal {
+            mso-style-unhide: no;
+            mso-style-qformat: yes;
+            mso-style-parent: "";
+            margin: 0cm;
+            margin-bottom: .0001pt;
+            mso-pagination: widow-orphan;
+            font-size: 12.0pt;
+            font-family: Calibri;
+            mso-ascii-font-family: Calibri;
+            mso-ascii-theme-font: minor-latin;
+            mso-fareast-font-family: "Times New Roman";
+            mso-fareast-theme-font: minor-fareast;
+            mso-hansi-font-family: Calibri;
+            mso-hansi-theme-font: minor-latin;
+            mso-bidi-font-family: "Times New Roman";
+            mso-bidi-theme-font: minor-bidi;
+        }
+
+        p.AveryStyle1, li.AveryStyle1, div.AveryStyle1 {
+            mso-style-name: "Avery Style 1";
+            mso-style-priority: 99;
+            mso-style-unhide: no;
+            mso-style-parent: "";
+            margin-top: 0cm;
+            margin-right: 1.4pt;
+            margin-bottom: 0cm;
+            margin-left: 1.4pt;
+            margin-bottom: .0001pt;
+            mso-pagination: widow-orphan;
+            font-size: 10.0pt;
+            mso-bidi-font-size: 12.0pt;
+            font-family: Calibri;
+            mso-ascii-font-family: Calibri;
+            mso-ascii-theme-font: minor-latin;
+            mso-fareast-font-family: "Times New Roman";
+            mso-fareast-theme-font: minor-fareast;
+            mso-hansi-font-family: Calibri;
+            mso-hansi-theme-font: minor-latin;
+            mso-bidi-font-family: "Times New Roman";
+            mso-bidi-theme-font: minor-bidi;
+            color: black;
+            mso-bidi-font-weight: bold;
+            text-align: center;
+        }
+
+        .MsoChpDefault {
+            mso-style-type: export-only;
+            mso-default-props: yes;
+            mso-ascii-font-family: Calibri;
+            mso-ascii-theme-font: minor-latin;
+            mso-fareast-font-family: "Times New Roman";
+            mso-fareast-theme-font: minor-fareast;
+            mso-hansi-font-family: Calibri;
+            mso-hansi-theme-font: minor-latin;
+            mso-bidi-font-family: "Times New Roman";
+            mso-bidi-theme-font: minor-bidi;
+        }
+
+        @page WordSection1 {
+            size: 612.0pt 792.0pt;
+            margin: 36.0pt 22.3pt 30.0pt 19.75pt;
+            mso-header-margin: 0cm;
+            mso-footer-margin: 0cm;
+            mso-paper-source: 0;
+        }
+
+        div.WordSection1 {
+            page: WordSection1;
+        }
+    </style>
+</head>
+
+<body lang=EN-US style='tab-interval:36.0pt'>
+
+<div class=WordSection1>
+
+    <table class=MsoNormalTable border=0 cellspacing=0 cellpadding=0
+           style='border-collapse:collapse;mso-table-layout-alt:fixed;mso-padding-alt:
+ 0cm 5.75pt 0cm 5.75pt'>
+        <tr style='mso-yfti-irow:0;mso-yfti-firstrow:yes;height:72.0pt;mso-height-rule:
+  exactly'>
+            <td width=189 style='width:189.35pt;padding:7.2pt 5.75pt 0cm 5.75pt;
+  height:72.0pt;mso-height-rule:exactly'><a name="Blank_MP1_panel1"></a>
+                <p class=AveryStyle1>
+                    <o:p>
+                        {{ labels[0]['billing_name'] if labels[0]['billing_name'] else '' }}<br/>
+                        {{ labels[0]['address_line_one'] if labels[0]['address_line_one'] else '' }}<br/>
+                        {% if labels[0]['address_line_two'] %}
+                            {{ labels[0]['address_line_two'] if labels[0]['address_line_two'] else '' }}<br/>
+                        {% endif %}
+                        {{ labels[0]['city'] + "," if labels[0]['city'] else '' }} {{ labels[0]['state'] + "," if labels[0]['state'] else '' }} {{ labels[0]['zip_code'] if labels[0]['zip_code'] else '' }}
+                        {% if labels[0]['country'] != 'United States' %}
+                           {{ "," + labels[0]['cou0try'] if labels[0]['country'] }}
+                        {% endif %}
+                    </o:p>
+                </p>
+            </td>
+            <td width=9 rowspan=10 valign=top style='width:8.6pt;border-top:solid white 1.0pt;
+  border-left:none;border-bottom:solid white 1.0pt;border-right:none;
+  padding:7.2pt 0cm 0cm 0cm;height:72.0pt;mso-height-rule:exactly'>
+                <p class=MsoNormal>
+                    <o:p>&nbsp;</o:p>
+                </p>
+            </td>
+            <td width=189 style='width:189.35pt;padding:7.2pt 5.75pt 0cm 5.75pt;
+  height:72.0pt;mso-height-rule:exactly'><a name="Blank_MP1_panel2"></a>
+                <p class=AveryStyle1>
+                    <o:p>
+                        {{ labels[1]['billing_name'] if labels[1]['billing_name'] else '' }}<br/>
+                        {{ labels[0]['address_line_one'] if labels[0]['address_line_one'] else '' }}<br/>
+                        {% if labels[0]['address_line_two'] %}
+                            {{ labels[0]['address_line_two'] if labels[0]['address_line_two'] else '' }}<br/>
+                        {% endif %}
+                        {{ labels[0]['city'] + "," if labels[0]['city'] else '' }} {{ labels[0]['state'] + "," if labels[0]['state'] else '' }} {{ labels[0]['zip_code'] if labels[0]['zip_code'] else '' }}
+                        {% if labels[0]['country'] != 'United States' %}
+                           {{ "," + labels[0]['cou1try'] if labels[0]['country'] }}
+                        {% endif %}
+                    </o:p>
+                </p>
+            </td>
+            <td width=9 rowspan=10 valign=top style='width:8.6pt;border-top:solid white 1.0pt;
+  border-left:none;border-bottom:solid white 1.0pt;border-right:none;
+  padding:7.2pt 0cm 0cm 0cm;height:72.0pt;mso-height-rule:exactly'>
+                <p class=MsoNormal>
+                    <o:p>&nbsp;</o:p>
+                </p>
+            </td>
+            <td width=189 style='width:189.35pt;padding:7.2pt 5.75pt 0cm 5.75pt;
+  height:72.0pt;mso-height-rule:exactly'><a name="Blank_MP1_panel3"></a>
+                <p class=AveryStyle1>
+                    <o:p>
+                        {{ labels[2]['billing_name'] if labels[2]['billing_name'] else '' }}<br/>
+                        {{ labels[0]['address_line_one'] if labels[0]['address_line_one'] else '' }}<br/>
+                        {% if labels[0]['address_line_two'] %}
+                            {{ labels[0]['address_line_two'] if labels[0]['address_line_two'] else '' }}<br/>
+                        {% endif %}
+                        {{ labels[0]['city'] + "," if labels[0]['city'] else '' }} {{ labels[0]['state'] + "," if labels[0]['state'] else '' }} {{ labels[0]['zip_code'] if labels[0]['zip_code'] else '' }}
+                        {% if labels[0]['country'] != 'United States' %}
+                           {{ "," + labels[0]['cou2try'] if labels[0]['country'] }}
+                        {% endif %}
+                    </o:p>
+                </p>
+            </td>
+        </tr>
+        <tr style='mso-yfti-irow:1;height:72.0pt;mso-height-rule:exactly'>
+            <td width=189 style='width:189.35pt;padding:7.2pt 5.75pt 0cm 5.75pt;
+  height:72.0pt;mso-height-rule:exactly'><a name="Blank_MP1_panel4"></a>
+                <p class=AveryStyle1>
+                    <o:p>
+                        {{ labels[3]['billing_name'] if labels[3]['billing_name'] else '' }}<br/>
+                        {{ labels[0]['address_line_one'] if labels[0]['address_line_one'] else '' }}<br/>
+                        {% if labels[0]['address_line_two'] %}
+                            {{ labels[0]['address_line_two'] if labels[0]['address_line_two'] else '' }}<br/>
+                        {% endif %}
+                        {{ labels[0]['city'] + "," if labels[0]['city'] else '' }} {{ labels[0]['state'] + "," if labels[0]['state'] else '' }} {{ labels[0]['zip_code'] if labels[0]['zip_code'] else '' }}
+                        {% if labels[0]['country'] != 'United States' %}
+                           {{ "," + labels[0]['cou3try'] if labels[0]['country'] }}
+                        {% endif %}
+                    </o:p>
+                </p>
+            </td>
+            <td width=189 style='width:189.35pt;padding:7.2pt 5.75pt 0cm 5.75pt;
+  height:72.0pt;mso-height-rule:exactly'><a name="Blank_MP1_panel5"></a>
+                <p class=AveryStyle1>
+                    <o:p>
+                        {{ labels[4]['billing_name'] if labels[4]['billing_name'] else '' }}<br/>
+                        {{ labels[0]['address_line_one'] if labels[0]['address_line_one'] else '' }}<br/>
+                        {% if labels[0]['address_line_two'] %}
+                            {{ labels[0]['address_line_two'] if labels[0]['address_line_two'] else '' }}<br/>
+                        {% endif %}
+                        {{ labels[0]['city'] + "," if labels[0]['city'] else '' }} {{ labels[0]['state'] + "," if labels[0]['state'] else '' }} {{ labels[0]['zip_code'] if labels[0]['zip_code'] else '' }}
+                        {% if labels[0]['country'] != 'United States' %}
+                           {{ "," + labels[0]['cou4try'] if labels[0]['country'] }}
+                        {% endif %}
+                    </o:p>
+                </p>
+            </td>
+            <td width=189 style='width:189.35pt;padding:7.2pt 5.75pt 0cm 5.75pt;
+  height:72.0pt;mso-height-rule:exactly'><a name="Blank_MP1_panel6"></a>
+                <p class=AveryStyle1>
+                    <o:p>
+                        {{ labels[5]['billing_name'] if labels[5]['billing_name'] else '' }}<br/>
+                        {{ labels[0]['address_line_one'] if labels[0]['address_line_one'] else '' }}<br/>
+                        {% if labels[0]['address_line_two'] %}
+                            {{ labels[0]['address_line_two'] if labels[0]['address_line_two'] else '' }}<br/>
+                        {% endif %}
+                        {{ labels[0]['city'] + "," if labels[0]['city'] else '' }} {{ labels[0]['state'] + "," if labels[0]['state'] else '' }} {{ labels[0]['zip_code'] if labels[0]['zip_code'] else '' }}
+                        {% if labels[0]['country'] != 'United States' %}
+                           {{ "," + labels[0]['cou5try'] if labels[0]['country'] }}
+                        {% endif %}
+                    </o:p>
+                </p>
+            </td>
+        </tr>
+        <tr style='mso-yfti-irow:2;height:72.0pt;mso-height-rule:exactly'>
+            <td width=189 style='width:189.35pt;padding:7.2pt 5.75pt 0cm 5.75pt;
+  height:72.0pt;mso-height-rule:exactly'><a name="Blank_MP1_panel7"></a>
+                <p class=AveryStyle1>
+                    <o:p>
+                        {{ labels[6]['billing_name'] if labels[6]['billing_name'] else '' }}<br/>
+                        {{ labels[0]['address_line_one'] if labels[0]['address_line_one'] else '' }}<br/>
+                        {% if labels[0]['address_line_two'] %}
+                            {{ labels[0]['address_line_two'] if labels[0]['address_line_two'] else '' }}<br/>
+                        {% endif %}
+                        {{ labels[0]['city'] + "," if labels[0]['city'] else '' }} {{ labels[0]['state'] + "," if labels[0]['state'] else '' }} {{ labels[0]['zip_code'] if labels[0]['zip_code'] else '' }}
+                        {% if labels[0]['country'] != 'United States' %}
+                           {{ "," + labels[0]['cou6try'] if labels[0]['country'] }}
+                        {% endif %}
+                    </o:p>
+                </p>
+            </td>
+            <td width=189 style='width:189.35pt;padding:7.2pt 5.75pt 0cm 5.75pt;
+  height:72.0pt;mso-height-rule:exactly'><a name="Blank_MP1_panel8"></a>
+                <p class=AveryStyle1>
+                    <o:p>
+                        {{ labels[7]['billing_name'] if labels[7]['billing_name'] else '' }}<br/>
+                        {{ labels[0]['address_line_one'] if labels[0]['address_line_one'] else '' }}<br/>
+                        {% if labels[0]['address_line_two'] %}
+                            {{ labels[0]['address_line_two'] if labels[0]['address_line_two'] else '' }}<br/>
+                        {% endif %}
+                        {{ labels[0]['city'] + "," if labels[0]['city'] else '' }} {{ labels[0]['state'] + "," if labels[0]['state'] else '' }} {{ labels[0]['zip_code'] if labels[0]['zip_code'] else '' }}
+                        {% if labels[0]['country'] != 'United States' %}
+                           {{ "," + labels[0]['cou7try'] if labels[0]['country'] }}
+                        {% endif %}
+                    </o:p>
+                </p>
+            </td>
+            <td width=189 style='width:189.35pt;padding:7.2pt 5.75pt 0cm 5.75pt;
+  height:72.0pt;mso-height-rule:exactly'><a name="Blank_MP1_panel9"></a>
+                <p class=AveryStyle1>
+                    <o:p>
+                        {{ labels[8]['billing_name'] if labels[8]['billing_name'] else '' }}<br/>
+                        {{ labels[0]['address_line_one'] if labels[0]['address_line_one'] else '' }}<br/>
+                        {% if labels[0]['address_line_two'] %}
+                            {{ labels[0]['address_line_two'] if labels[0]['address_line_two'] else '' }}<br/>
+                        {% endif %}
+                        {{ labels[0]['city'] + "," if labels[0]['city'] else '' }} {{ labels[0]['state'] + "," if labels[0]['state'] else '' }} {{ labels[0]['zip_code'] if labels[0]['zip_code'] else '' }}
+                        {% if labels[0]['country'] != 'United States' %}
+                           {{ "," + labels[0]['cou8try'] if labels[0]['country'] }}
+                        {% endif %}
+                    </o:p>
+                </p>
+            </td>
+        </tr>
+        <tr style='mso-yfti-irow:3;height:72.0pt;mso-height-rule:exactly'>
+            <td width=189 style='width:189.35pt;padding:7.2pt 5.75pt 0cm 5.75pt;
+  height:72.0pt;mso-height-rule:exactly'><a name="Blank_MP1_panel10"></a>
+                <p class=AveryStyle1>
+                    <o:p>
+                        {{ labels[9]['billing_name'] if labels[9]['billing_name'] else '' }}<br/>
+                        {{ labels[0]['address_line_one'] if labels[0]['address_line_one'] else '' }}<br/>
+                        {% if labels[0]['address_line_two'] %}
+                            {{ labels[0]['address_line_two'] if labels[0]['address_line_two'] else '' }}<br/>
+                        {% endif %}
+                        {{ labels[0]['city'] + "," if labels[0]['city'] else '' }} {{ labels[0]['state'] + "," if labels[0]['state'] else '' }} {{ labels[0]['zip_code'] if labels[0]['zip_code'] else '' }}
+                        {% if labels[0]['country'] != 'United States' %}
+                           {{ "," + labels[0]['cou9try'] if labels[0]['country'] }}
+                        {% endif %}
+                    </o:p>
+                </p>
+            </td>
+            <td width=189 style='width:189.35pt;padding:7.2pt 5.75pt 0cm 5.75pt;
+  height:72.0pt;mso-height-rule:exactly'><a name="Blank_MP1_panel11"></a>
+                <p class=AveryStyle1>
+                    <o:p>
+                        {{ labels[10]['billing_name'] if labels[10]['billing_name'] else '' }}<br/>
+                        {{ labels[10]['address_line_one'] if labels[10]['address_line_one'] else '' }}<br/>
+                        {% if labels[10]['address_line_two'] %}
+                            {{ labels[10]['address_line_two'] if labels[10]['address_line_two'] else '' }}<br/>
+                        {% endif %}
+                        {{ labels[10]['city'] + "," if labels[10]['city'] else '' }} {{ labels[10]['state'] + "," if labels[10]['state'] else '' }} {{ labels[10]['zip_code'] if labels[10]['zip_code'] else '' }}
+                        {% if labels[10]['country'] != 'United States' %}
+                            {{ "," + labels[10]['country'] if labels[10]['country'] }}
+                        {% endif %}
+                    </o:p>
+                </p>
+            </td>
+            <td width=189 style='width:189.35pt;padding:7.2pt 5.75pt 0cm 5.75pt;
+  height:72.0pt;mso-height-rule:exactly'><a name="Blank_MP1_panel12"></a>
+                <p class=AveryStyle1>
+                    <o:p>
+                        {{ labels[11]['billing_name'] if labels[11]['billing_name'] else '' }}<br/>
+                        {{ labels[11]['address_line_one'] if labels[11]['address_line_one'] else '' }}<br/>
+                        {% if labels[11]['address_line_two'] %}
+                            {{ labels[11]['address_line_two'] if labels[11]['address_line_two'] else '' }}<br/>
+                        {% endif %}
+                        {{ labels[11]['city'] + "," if labels[11]['city'] else '' }} {{ labels[11]['state'] + "," if labels[11]['state'] else '' }} {{ labels[11]['zip_code'] if labels[11]['zip_code'] else '' }}
+                        {% if labels[11]['country'] != 'United States' %}
+                            {{ "," + labels[11]['country'] if labels[11]['country'] }}
+                        {% endif %}
+                    </o:p>
+                </p>
+            </td>
+        </tr>
+        <tr style='mso-yfti-irow:4;height:72.0pt;mso-height-rule:exactly'>
+            <td width=189 style='width:189.35pt;padding:7.2pt 5.75pt 0cm 5.75pt;
+  height:72.0pt;mso-height-rule:exactly'><a name="Blank_MP1_panel13"></a>
+                <p class=AveryStyle1>
+                    <o:p>
+                        {{ labels[12]['billing_name'] if labels[12]['billing_name'] else '' }}<br/>
+                        {{ labels[12]['address_line_one'] if labels[12]['address_line_one'] else '' }}<br/>
+                        {% if labels[12]['address_line_two'] %}
+                            {{ labels[12]['address_line_two'] if labels[12]['address_line_two'] else '' }}<br/>
+                        {% endif %}
+                        {{ labels[12]['city'] + "," if labels[12]['city'] else '' }} {{ labels[12]['state'] + "," if labels[12]['state'] else '' }} {{ labels[12]['zip_code'] if labels[12]['zip_code'] else '' }}
+                        {% if labels[12]['country'] != 'United States' %}
+                            {{ "," + labels[12]['country'] if labels[12]['country'] }}
+                        {% endif %}
+                    </o:p>
+                </p>
+            </td>
+            <td width=189 style='width:189.35pt;padding:7.2pt 5.75pt 0cm 5.75pt;
+  height:72.0pt;mso-height-rule:exactly'><a name="Blank_MP1_panel14"></a>
+                <p class=AveryStyle1>
+                    <o:p>
+                        {{ labels[13]['billing_name'] if labels[13]['billing_name'] else '' }}<br/>
+                        {{ labels[13]['address_line_one'] if labels[13]['address_line_one'] else '' }}<br/>
+                        {% if labels[13]['address_line_two'] %}
+                            {{ labels[13]['address_line_two'] if labels[13]['address_line_two'] else '' }}<br/>
+                        {% endif %}
+                        {{ labels[13]['city'] + "," if labels[13]['city'] else '' }} {{ labels[13]['state'] + "," if labels[13]['state'] else '' }} {{ labels[13]['zip_code'] if labels[13]['zip_code'] else '' }}
+                        {% if labels[13]['country'] != 'United States' %}
+                            {{ "," + labels[13]['country'] if labels[13]['country'] }}
+                        {% endif %}
+                    </o:p>
+                </p>
+            </td>
+            <td width=189 style='width:189.35pt;padding:7.2pt 5.75pt 0cm 5.75pt;
+  height:72.0pt;mso-height-rule:exactly'><a name="Blank_MP1_panel15"></a>
+                <p class=AveryStyle1>
+                    <o:p>
+                        {{ labels[14]['billing_name'] if labels[14]['billing_name'] else '' }}<br/>
+                        {{ labels[14]['address_line_one'] if labels[14]['address_line_one'] else '' }}<br/>
+                        {% if labels[14]['address_line_two'] %}
+                            {{ labels[14]['address_line_two'] if labels[14]['address_line_two'] else '' }}<br/>
+                        {% endif %}
+                        {{ labels[14]['city'] + "," if labels[14]['city'] else '' }} {{ labels[14]['state'] + "," if labels[14]['state'] else '' }} {{ labels[14]['zip_code'] if labels[14]['zip_code'] else '' }}
+                        {% if labels[14]['country'] != 'United States' %}
+                            {{ "," + labels[14]['country'] if labels[14]['country'] }}
+                        {% endif %}
+                    </o:p>
+                </p>
+            </td>
+        </tr>
+        <tr style='mso-yfti-irow:5;height:72.0pt;mso-height-rule:exactly'>
+            <td width=189 style='width:189.35pt;padding:7.2pt 5.75pt 0cm 5.75pt;
+  height:72.0pt;mso-height-rule:exactly'><a name="Blank_MP1_panel16"></a>
+                <p class=AveryStyle1>
+                    <o:p>
+                        {{ labels[15]['billing_name'] if labels[15]['billing_name'] else '' }}<br/>
+                        {{ labels[15]['address_line_one'] if labels[15]['address_line_one'] else '' }}<br/>
+                        {% if labels[15]['address_line_two'] %}
+                            {{ labels[15]['address_line_two'] if labels[15]['address_line_two'] else '' }}<br/>
+                        {% endif %}
+                        {{ labels[15]['city'] + "," if labels[15]['city'] else '' }} {{ labels[15]['state'] + "," if labels[15]['state'] else '' }} {{ labels[15]['zip_code'] if labels[15]['zip_code'] else '' }}
+                        {% if labels[15]['country'] != 'United States' %}
+                            {{ "," + labels[15]['country'] if labels[15]['country'] }}
+                        {% endif %}
+                    </o:p>
+                </p>
+            </td>
+            <td width=189 style='width:189.35pt;padding:7.2pt 5.75pt 0cm 5.75pt;
+  height:72.0pt;mso-height-rule:exactly'><a name="Blank_MP1_panel17"></a>
+                <p class=AveryStyle1>
+                    <o:p>
+                        {{ labels[16]['billing_name'] if labels[16]['billing_name'] else '' }}<br/>
+                        {{ labels[16]['address_line_one'] if labels[16]['address_line_one'] else '' }}<br/>
+                        {% if labels[16]['address_line_two'] %}
+                            {{ labels[16]['address_line_two'] if labels[16]['address_line_two'] else '' }}<br/>
+                        {% endif %}
+                        {{ labels[16]['city'] + "," if labels[16]['city'] else '' }} {{ labels[16]['state'] + "," if labels[16]['state'] else '' }} {{ labels[16]['zip_code'] if labels[16]['zip_code'] else '' }}
+                        {% if labels[16]['country'] != 'United States' %}
+                            {{ "," + labels[16]['country'] if labels[16]['country'] }}
+                        {% endif %}
+                    </o:p>
+                </p>
+            </td>
+            <td width=189 style='width:189.35pt;padding:7.2pt 5.75pt 0cm 5.75pt;
+  height:72.0pt;mso-height-rule:exactly'><a name="Blank_MP1_panel18"></a>
+                <p class=AveryStyle1>
+                    <o:p>
+                        {{ labels[17]['billing_name'] if labels[17]['billing_name'] else '' }}<br/>
+                        {{ labels[17]['address_line_one'] if labels[17]['address_line_one'] else '' }}<br/>
+                        {% if labels[17]['address_line_two'] %}
+                            {{ labels[17]['address_line_two'] if labels[17]['address_line_two'] else '' }}<br/>
+                        {% endif %}
+                        {{ labels[17]['city'] + "," if labels[17]['city'] else '' }} {{ labels[17]['state'] + "," if labels[17]['state'] else '' }} {{ labels[17]['zip_code'] if labels[17]['zip_code'] else '' }}
+                        {% if labels[17]['country'] != 'United States' %}
+                            {{ "," + labels[17]['country'] if labels[17]['country'] }}
+                        {% endif %}
+                    </o:p>
+                </p>
+            </td>
+        </tr>
+        <tr style='mso-yfti-irow:6;height:72.0pt;mso-height-rule:exactly'>
+            <td width=189 style='width:189.35pt;padding:7.2pt 5.75pt 0cm 5.75pt;
+  height:72.0pt;mso-height-rule:exactly'><a name="Blank_MP1_panel19"></a>
+                <p class=AveryStyle1>
+                    <o:p>
+                        {{ labels[18]['billing_name'] if labels[18]['billing_name'] else '' }}<br/>
+                        {{ labels[18]['address_line_one'] if labels[18]['address_line_one'] else '' }}<br/>
+                        {% if labels[18]['address_line_two'] %}
+                            {{ labels[18]['address_line_two'] if labels[18]['address_line_two'] else '' }}<br/>
+                        {% endif %}
+                        {{ labels[18]['city'] + "," if labels[18]['city'] else '' }} {{ labels[18]['state'] + "," if labels[18]['state'] else '' }} {{ labels[18]['zip_code'] if labels[18]['zip_code'] else '' }}
+                        {% if labels[18]['country'] != 'United States' %}
+                            {{ "," + labels[18]['country'] if labels[18]['country'] }}
+                        {% endif %}
+                    </o:p>
+                </p>
+            </td>
+            <td width=189 style='width:189.35pt;padding:7.2pt 5.75pt 0cm 5.75pt;
+  height:72.0pt;mso-height-rule:exactly'><a name="Blank_MP1_panel20"></a>
+                <p class=AveryStyle1>
+                    <o:p>
+                        {{ labels[19]['billing_name'] if labels[19]['billing_name'] else '' }}<br/>
+                        {{ labels[19]['address_line_one'] if labels[19]['address_line_one'] else '' }}<br/>
+                        {% if labels[19]['address_line_two'] %}
+                            {{ labels[19]['address_line_two'] if labels[19]['address_line_two'] else '' }}<br/>
+                        {% endif %}
+                        {{ labels[19]['city'] + "," if labels[19]['city'] else '' }} {{ labels[19]['state'] + "," if labels[19]['state'] else '' }} {{ labels[19]['zip_code'] if labels[19]['zip_code'] else '' }}
+                        {% if labels[19]['country'] != 'United States' %}
+                            {{ "," + labels[19]['country'] if labels[19]['country'] }}
+                        {% endif %}
+                    </o:p>
+                </p>
+            </td>
+            <td width=189 style='width:189.35pt;padding:7.2pt 5.75pt 0cm 5.75pt;
+  height:72.0pt;mso-height-rule:exactly'><a name="Blank_MP1_panel21"></a>
+                <p class=AveryStyle1>
+                    <o:p>
+                        {{ labels[20]['billing_name'] if labels[20]['billing_name'] else '' }}<br/>
+                        {{ labels[20]['address_line_one'] if labels[20]['address_line_one'] else '' }}<br/>
+                        {% if labels[20]['address_line_two'] %}
+                            {{ labels[20]['address_line_two'] if labels[20]['address_line_two'] else '' }}<br/>
+                        {% endif %}
+                        {{ labels[20]['city'] + "," if labels[20]['city'] else '' }} {{ labels[20]['state'] + "," if labels[20]['state'] else '' }} {{ labels[20]['zip_code'] if labels[20]['zip_code'] else '' }}
+                        {% if labels[20]['country'] != 'United States' %}
+                            {{ "," + labels[20]['country'] if labels[20]['country'] }}
+                        {% endif %}
+                    </o:p>
+                </p>
+            </td>
+        </tr>
+        <tr style='mso-yfti-irow:7;height:72.0pt;mso-height-rule:exactly'>
+            <td width=189 style='width:189.35pt;padding:7.2pt 5.75pt 0cm 5.75pt;
+  height:72.0pt;mso-height-rule:exactly'><a name="Blank_MP1_panel22"></a>
+                <p class=AveryStyle1>
+                    <o:p>
+                        {{ labels[21]['billing_name'] if labels[21]['billing_name'] else '' }}<br/>
+                        {{ labels[21]['address_line_one'] if labels[21]['address_line_one'] else '' }}<br/>
+                        {% if labels[21]['address_line_two'] %}
+                            {{ labels[21]['address_line_two'] if labels[21]['address_line_two'] else '' }}<br/>
+                        {% endif %}
+                        {{ labels[21]['city'] + "," if labels[21]['city'] else '' }} {{ labels[21]['state'] + "," if labels[21]['state'] else '' }} {{ labels[21]['zip_code'] if labels[21]['zip_code'] else '' }}
+                        {% if labels[21]['country'] != 'United States' %}
+                            {{ "," + labels[21]['country'] if labels[21]['country'] }}
+                        {% endif %}
+                    </o:p>
+                </p>
+            </td>
+            <td width=189 style='width:189.35pt;padding:7.2pt 5.75pt 0cm 5.75pt;
+  height:72.0pt;mso-height-rule:exactly'><a name="Blank_MP1_panel23"></a>
+                <p class=AveryStyle1>
+                    <o:p>
+                        {{ labels[22]['billing_name'] if labels[22]['billing_name'] else '' }}<br/>
+                        {{ labels[22]['address_line_one'] if labels[22]['address_line_one'] else '' }}<br/>
+                        {% if labels[22]['address_line_two'] %}
+                            {{ labels[22]['address_line_two'] if labels[22]['address_line_two'] else '' }}<br/>
+                        {% endif %}
+                        {{ labels[22]['city'] + "," if labels[22]['city'] else '' }} {{ labels[22]['state'] + "," if labels[22]['state'] else '' }} {{ labels[22]['zip_code'] if labels[22]['zip_code'] else '' }}
+                        {% if labels[22]['country'] != 'United States' %}
+                            {{ "," + labels[22]['country'] if labels[22]['country'] }}
+                        {% endif %}
+                    </o:p>
+                </p>
+            </td>
+            <td width=189 style='width:189.35pt;padding:7.2pt 5.75pt 0cm 5.75pt;
+  height:72.0pt;mso-height-rule:exactly'><a name="Blank_MP1_panel24"></a>
+                <p class=AveryStyle1>
+                    <o:p>
+                        {{ labels[23]['billing_name'] if labels[23]['billing_name'] else '' }}<br/>
+                        {{ labels[23]['address_line_one'] if labels[23]['address_line_one'] else '' }}<br/>
+                        {% if labels[23]['address_line_two'] %}
+                            {{ labels[23]['address_line_two'] if labels[23]['address_line_two'] else '' }}<br/>
+                        {% endif %}
+                        {{ labels[23]['city'] + "," if labels[23]['city'] else '' }} {{ labels[23]['state'] + "," if labels[23]['state'] else '' }} {{ labels[23]['zip_code'] if labels[23]['zip_code'] else '' }}
+                        {% if labels[23]['country'] != 'United States' %}
+                            {{ "," + labels[23]['country'] if labels[23]['country'] }}
+                        {% endif %}
+                    </o:p>
+                </p>
+            </td>
+        </tr>
+        <tr style='mso-yfti-irow:8;height:72.0pt;mso-height-rule:exactly'>
+            <td width=189 style='width:189.35pt;padding:7.2pt 5.75pt 0cm 5.75pt;
+  height:72.0pt;mso-height-rule:exactly'><a name="Blank_MP1_panel25"></a>
+                <p class=AveryStyle1>
+                    <o:p>
+                        {{ labels[24]['billing_name'] if labels[24]['billing_name'] else '' }}<br/>
+                        {{ labels[24]['address_line_one'] if labels[24]['address_line_one'] else '' }}<br/>
+                        {% if labels[24]['address_line_two'] %}
+                            {{ labels[24]['address_line_two'] if labels[24]['address_line_two'] else '' }}<br/>
+                        {% endif %}
+                        {{ labels[24]['city'] + "," if labels[24]['city'] else '' }} {{ labels[24]['state'] + "," if labels[24]['state'] else '' }} {{ labels[24]['zip_code'] if labels[24]['zip_code'] else '' }}
+                        {% if labels[24]['country'] != 'United States' %}
+                            {{ "," + labels[24]['country'] if labels[24]['country'] }}
+                        {% endif %}
+                    </o:p>
+                </p>
+            </td>
+            <td width=189 style='width:189.35pt;padding:7.2pt 5.75pt 0cm 5.75pt;
+  height:72.0pt;mso-height-rule:exactly'><a name="Blank_MP1_panel26"></a>
+                <p class=AveryStyle1>
+                    <o:p>
+                        {{ labels[25]['billing_name'] if labels[25]['billing_name'] else '' }}<br/>
+                        {{ labels[25]['address_line_one'] if labels[25]['address_line_one'] else '' }}<br/>
+                        {% if labels[25]['address_line_two'] %}
+                            {{ labels[25]['address_line_two'] if labels[25]['address_line_two'] else '' }}<br/>
+                        {% endif %}
+                        {{ labels[25]['city'] + "," if labels[25]['city'] else '' }} {{ labels[25]['state'] + "," if labels[25]['state'] else '' }} {{ labels[25]['zip_code'] if labels[25]['zip_code'] else '' }}
+                        {% if labels[25]['country'] != 'United States' %}
+                            {{ "," + labels[25]['country'] if labels[25]['country'] }}
+                        {% endif %}
+                    </o:p>
+                </p>
+            </td>
+            <td width=189 style='width:189.35pt;padding:7.2pt 5.75pt 0cm 5.75pt;
+  height:72.0pt;mso-height-rule:exactly'><a name="Blank_MP1_panel27"></a>
+                <p class=AveryStyle1>
+                    <o:p>
+                        {{ labels[26]['billing_name'] if labels[26]['billing_name'] else '' }}<br/>
+                        {{ labels[26]['address_line_one'] if labels[26]['address_line_one'] else '' }}<br/>
+                        {% if labels[26]['address_line_two'] %}
+                            {{ labels[26]['address_line_two'] if labels[26]['address_line_two'] else '' }}<br/>
+                        {% endif %}
+                        {{ labels[26]['city'] + "," if labels[26]['city'] else '' }} {{ labels[26]['state'] + "," if labels[26]['state'] else '' }} {{ labels[26]['zip_code'] if labels[26]['zip_code'] else '' }}
+                        {% if labels[26]['country'] != 'United States' %}
+                            {{ "," + labels[26]['country'] if labels[26]['country'] }}
+                        {% endif %}
+                    </o:p>
+                </p>
+            </td>
+        </tr>
+        <tr style='mso-yfti-irow:9;mso-yfti-lastrow:yes;height:72.0pt;mso-height-rule:
+  exactly'>
+            <td width=189 style='width:189.35pt;padding:7.2pt 5.75pt 0cm 5.75pt;
+  height:72.0pt;mso-height-rule:exactly'><a name="Blank_MP1_panel28"></a>
+                <p class=AveryStyle1>
+                    <o:p>
+                        {{ labels[27]['billing_name'] if labels[27]['billing_name'] else '' }}<br/>
+                        {{ labels[27]['address_line_one'] if labels[27]['address_line_one'] else '' }}<br/>
+                        {% if labels[27]['address_line_two'] %}
+                            {{ labels[27]['address_line_two'] if labels[27]['address_line_two'] else '' }}<br/>
+                        {% endif %}
+                        {{ labels[27]['city'] + "," if labels[27]['city'] else '' }} {{ labels[27]['state'] + "," if labels[27]['state'] else '' }} {{ labels[27]['zip_code'] if labels[27]['zip_code'] else '' }}
+                        {% if labels[27]['country'] != 'United States' %}
+                            {{ "," + labels[27]['country'] if labels[27]['country'] }}
+                        {% endif %}
+                    </o:p>
+                </p>
+            </td>
+            <td width=189 style='width:189.35pt;padding:7.2pt 5.75pt 0cm 5.75pt;
+  height:72.0pt;mso-height-rule:exactly'><a name="Blank_MP1_panel29"></a>
+                <p class=AveryStyle1>
+                    <o:p>
+                        {{ labels[28]['billing_name'] if labels[28]['billing_name'] else '' }}<br/>
+                        {{ labels[28]['address_line_one'] if labels[28]['address_line_one'] else '' }}<br/>
+                        {% if labels[28]['address_line_two'] %}
+                            {{ labels[28]['address_line_two'] if labels[28]['address_line_two'] else '' }}<br/>
+                        {% endif %}
+                        {{ labels[28]['city'] + "," if labels[28]['city'] else '' }} {{ labels[28]['state'] + "," if labels[28]['state'] else '' }} {{ labels[28]['zip_code'] if labels[28]['zip_code'] else '' }}
+                        {% if labels[28]['country'] != 'United States' %}
+                            {{ "," + labels[28]['country'] if labels[28]['country'] }}
+                        {% endif %}
+                    </o:p>
+                </p>
+            </td>
+            <td width=189 style='width:189.35pt;padding:7.2pt 5.75pt 0cm 5.75pt;
+  height:72.0pt;mso-height-rule:exactly'><a name="Blank_MP1_panel30"></a>
+                <p class=AveryStyle1>
+                    <o:p>
+                        {{ labels[29]['billing_name'] if labels[29]['billing_name'] else '' }}<br/>
+                        {{ labels[29]['address_line_one'] if labels[29]['address_line_one'] else '' }}<br/>
+                        {% if labels[29]['address_line_two'] %}
+                            {{ labels[29]['address_line_two'] if labels[29]['address_line_two'] else '' }}<br/>
+                        {% endif %}
+                        {{ labels[29]['city'] + "," if labels[29]['city'] else '' }} {{ labels[29]['state'] + "," if labels[29]['state'] else '' }} {{ labels[29]['zip_code'] if labels[29]['zip_code'] else '' }}
+                        {% if labels[29]['country'] != 'United States' %}
+                            {{ "," + labels[29]['country'] if labels[29]['country'] }}
+                        {% endif %}
+                    </o:p>
+                </p>
+            </td>
+        </tr>
+    </table>
+</div>
+</body>
+
+</html>

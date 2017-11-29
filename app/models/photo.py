@@ -1,5 +1,5 @@
 from app import db
-from app .constants import borough, collection, size
+from app.constants import borough, collection, size
 
 
 class PhotoTax(db.Model):
@@ -12,16 +12,16 @@ class PhotoTax(db.Model):
     roll -- Column: String(9)
     block -- Column: String(9)
     lot -- Column: String(9)
-    street_no -- Column: String(10)
+    street_number -- Column: String(10)
     street -- Column: String(40)
     description -- Column: String(35)
     type -- Column: enum -- size of the photo
     size -- Column: newform -- enum
-    copies -- Column: String(2)
+    num_copies -- Column: String(2)
     mail_pickup -- Column: Bool
-    contact_no -- Column: String(10)
+    contact_number -- Column: String(10)
     comment -- Column: String()
-    sub_order_no -- Column: BigInteger, foreignKey
+    suborder_number -- Column: BigInteger, foreignKey
 
     """
 
@@ -44,7 +44,7 @@ class PhotoTax(db.Model):
     roll = db.Column(db.String(9), nullable=True)
     block = db.Column(db.String(9), nullable=True)
     lot = db.Column(db.String(9), nullable=True)
-    street_no = db.Column(db.String(10), nullable=False)
+    street_number = db.Column(db.String(10), nullable=False)
     street = db.Column(db.String(40), nullable=False)
     description = db.Column(db.String(35), nullable=True)
     type = db.Column(
@@ -58,47 +58,66 @@ class PhotoTax(db.Model):
             size.ELEVEN_BY_FOURTEEN,
             size.SIXTEEN_BY_TWENTY,
             name='size'), default=size.EIGHT_BY_TEN, nullable=True)
-    copies = db.Column(db.String(2), nullable=False)
+    num_copies = db.Column(db.String(2), nullable=False)
     mail_pickup = db.Column(db.Boolean, nullable=True)
-    contact_no = db.Column(db.String(10), nullable=True)
+    contact_number = db.Column(db.String(10), nullable=True)
     comment = db.Column(db.String(255), nullable=True)
-    sub_order_no = db.Column(db.BigInteger, db.ForeignKey('orders.sub_order_no'),
-                             nullable=False)
+    suborder_number = db.Column(db.String(32), db.ForeignKey('suborder.id'), nullable=False)
 
     def __init__(
-                self,
-                borough,
-                collection,
-                street_no,
-                street,
-                type,
-                size,
-                copies,
-                mail_pickup,
-                sub_order_no,
-                roll='N/A',
-                block='N/A',
-                lot='N/A',
-                description='N/A',
-                contact_no='N/A',
-                comment='N/A'
-
+            self,
+            borough,
+            collection,
+            roll,
+            block,
+            lot,
+            street_number,
+            street,
+            description,
+            type,
+            size,
+            num_copies,
+            mail_pickup,
+            contact_number,
+            comment,
+            suborder_number
     ):
         self.borough = borough
         self.collection = collection
         self.roll = roll
         self.block = block
         self.lot = lot
-        self.street_no = street_no
+        self.street_number = street_number
         self.street = street
         self.description = description
         self.type = type
         self.size = size
-        self.copies = copies
+        self.num_copies = num_copies
         self.mail_pickup = mail_pickup
-        self.contact_no = contact_no
+        self.contact_number = contact_number
         self.comment = comment
-        self.sub_order_no = sub_order_no
+        self.suborder_number = suborder_number
+
+    @property
+    def serialize(self):
+        """Return object data in easily serializable format"""
+        return {
+            'borough': self.borough,
+            'collection': self.collection,
+            'roll': self.roll,
+            'block': self.block,
+            'lot': self.lot,
+            'street_number': self.street_number,
+            'street': self.street,
+            'description': self.description,
+            'type': self.type,
+            'size': self.size,
+            'num_copies': self.num_copies,
+            'mail_pickup': self.mail_pickup,
+            'contact_number': self.contact_number,
+            'comment': self.comment,
+            'suborder_number': self.suborder_number,
+        }
 
 
 class PhotoGallery(db.Model):
@@ -112,10 +131,10 @@ class PhotoGallery(db.Model):
     size -- Column: enum[]
     copy -- Column: String(2)
     mail_pickup -- Column: Bool
-    contact_no -- Column: String(10)
+    contact_number -- Column: String(10)
     personal_use_agreement -- Column: Bool
     comment -- Column: String(255)
-    sub_order_no -- Column: BigInteger, foreignKey
+    suborder_number -- Column: BigInteger, foreignKey
 
     """
 
@@ -130,35 +149,49 @@ class PhotoGallery(db.Model):
             size.ELEVEN_BY_FOURTEEN,
             size.SIXTEEN_BY_TWENTY,
             name='size'), default=size.EIGHT_BY_TEN, nullable=False)
-    copy = db.Column(db.String(2), nullable=False)
+    num_copies = db.Column(db.String(2), nullable=False)
     mail_pickup = db.Column(db.Boolean, nullable=False)
-    contact_no = db.Column(db.String(10), nullable=True)
+    contact_number = db.Column(db.String(10), nullable=True)
     personal_use_agreement = db.Column(db.Boolean, nullable=True)
     comment = db.Column(db.String(255), nullable=True)
-    sub_order_no = db.Column(db.BigInteger, db.ForeignKey('orders.sub_order_no'),
-                             nullable=False)
+    suborder_number = db.Column(db.String(32), db.ForeignKey('suborder.id'), nullable=False)
 
     def __init__(
-                self,
-                image_id,
-                size,
-                copy,
-                mail_pickup,
-                personal_use_agreement,
-                sub_order_no,
-                description='N/A',
-                additional_description='N/A',
-                contact_no='N/A',
-                comment='N/A'
-
+            self,
+            image_id,
+            description,
+            additional_description,
+            size,
+            num_copies,
+            mail_pickup,
+            contact_number,
+            personal_use_agreement,
+            comment,
+            suborder_number
     ):
         self.image_id = image_id
         self.description = description
         self.additional_description = additional_description
         self.size = size
-        self.copy = copy
+        self.num_copies = num_copies
         self.mail_pickup = mail_pickup
-        self.contact_no = contact_no
+        self.contact_number = contact_number or 'N/A'
         self.personal_use_agreement = personal_use_agreement
-        self.comment = comment
-        self.sub_order_no = sub_order_no
+        self.comment = comment or 'N/A'
+        self.suborder_number = suborder_number
+
+    @property
+    def serialize(self):
+        """Return object data in easily serializable format"""
+        return {
+            "image_id": self.image_id,
+            "description": self.description,
+            "additional_description": self.additional_description,
+            "size": self.size,
+            "num_copies": self.num_copies,
+            "mail_pickup": self.mail_pickup,
+            "contact_number": self.contact_number,
+            "personal_use_agreement": self.personal_use_agreement,
+            "comment": self.comment,
+            "suborder_number": self.suborder_number,
+        }

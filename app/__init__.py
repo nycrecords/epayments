@@ -1,24 +1,20 @@
-# from flask import Blueprint
-#
-# main = Blueprint('main', __name__)
-#
-# from . import views, errors
-
-
+import pytz
 from flask import Flask
-from flask.ext.sqlalchemy import SQLAlchemy
+from flask_sqlalchemy import SQLAlchemy
 from flask_bootstrap import Bootstrap
 from flask_apscheduler import APScheduler
-from flask.ext.cors import CORS
+from flask_login import LoginManager
 
-from config import config
+from config import config, Config
 
 # Flask extensions
 bootstrap = Bootstrap()
 db = SQLAlchemy()
 scheduler = APScheduler()
 
-from app.models import orders, client_info, birth, marriage, death, photo, prop_card
+login_manager = LoginManager()
+
+PYTZ_TIMEZONE = pytz.timezone(Config.TIME_ZONE)
 
 
 def create_app(config_name):
@@ -36,12 +32,14 @@ def create_app(config_name):
 
     bootstrap.init_app(app)
     db.init_app(app)
-    CORS(app)
+    login_manager.init_app(app)
 
     # Base template that uses React for frontend
     from .main import main as main_blueprint
     app.register_blueprint(main_blueprint)
 
     # API CALL GOES HERE
+    from .api_1_0 import api_1_0 as api_1_0_blueprint
+    app.register_blueprint(api_1_0_blueprint, url_prefix='/api/v1.0')
 
     return app

@@ -10,7 +10,7 @@ load_dotenv(dotenv_path)
 
 class Config:
     SQLALCHEMY_TRACK_MODIFICATIONS = True
-
+    SECRET_KEY = 'HELLO ARNIS'
     SQLALCHEMY_DATABASE_URI = os.environ.get('DATABASE_URL') or 'postgresql://developer@127.0.0.1:5432/epayments'
     REMOTE_FILE_PATH = os.environ.get('REMOTE_FILE_PATH')
     LOCAL_FILE_PATH = (os.environ.get('LOCAL_FILE_PATH') or
@@ -22,6 +22,7 @@ class Config:
     SFTP_USERNAME = os.environ.get('SFTP_USERNAME')
     SFTP_RSA_KEY_FILE = os.environ.get('SFTP_RSA_KEY_FILE')
     SFTP_UPLOAD_DIRECTORY = os.environ.get('SFTP_UPLOAD_DIRECTORY')
+    TIME_ZONE = os.environ.get('TIME_ZONE') or 'US/Eastern'
 
     @staticmethod
     def init_app(app):

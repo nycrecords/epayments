@@ -1,0 +1,71 @@
+{% extends "orders/base.html" %}
+
+{% block content %}
+
+    <p>
+        <b>CERTIFICATE_NUMBER:</b> <br/>
+        {{ order_info["certificate_no"] or "Not Provided" }}
+    </p>
+    <p>
+        <b>LAST_NAME:</b> <br/>
+        {{ order_info["last_name"] or "Not Provided" }}
+    </p>
+    <p>
+        <b>MIDDLE_NAME:</b> <br/>
+        {{ order_info["mid_name"] or "Not Provided" }}
+    </p>
+    <p>
+        <b>FIRST_NAME:</b> <br/>
+        {{ order_info["first_name"] or "Not Provided" }}
+    </p>
+    <p>
+        <b>RELATIONSHIP:</b> <br/>
+        {{ order_info["relationship"] or "Not Provided" }}
+    </p>
+    <p>
+        <b>PURPOSE:</b> <br/>
+        {{ order_info["purpose"] or "Not Provided" }}
+    </p>
+    <p>
+        <b>ADDITIONAL_COPY:</b> <br/>
+        {{ order_info["additional_copy"] or "Not Provided" }}
+    </p>
+    <p>
+        <b>CEMETERY:</b> <br/>
+        {{ order_info["cemetery"] or "Not Provided" }}
+    </p>
+    <p>
+        <b>MONTH:</b> <br/>
+        {{ order_info["month"] or "Not Provided" }}
+    </p>
+    <p>
+        <b>DAY:</b> <br/>
+        {{ order_info["day"] or "Not Provided" }}
+    </p>
+    <p>
+        <b>YEARS:</b> <br/>
+        {{ order_info["year"] or "Not Provided" }}
+    </p>
+    <p>
+        <b>DEATH_PLACE:</b> <br/>
+        {{ order_info["death_place"] or "Not Provided" }}
+    </p>
+    <p>
+        <b>AGE_OF_DEATH:</b> <br/>
+        {{ order_info["age_of_death"] or "Not Provided" }}
+    </p>
+    <p>
+        <b>BOROUGH:</b> <br/>
+        {{ order_info["borough"] or "Not Provided" }}
+    </p>
+    <p>
+        <b>LETTER:</b> <br/>
+        {{ order_info["letter"] or "Not Provided" }} </b>
+    </p>
+    <p>
+        <b>COMMENT:</b> <br/>
+        {{ order_info["comment"] }}
+    </p>
+{% endblock %}
+
+
