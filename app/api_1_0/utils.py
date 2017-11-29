@@ -70,6 +70,11 @@ def _order_query_filters(order_number, suborder_number, order_type, status, bill
                     filter_args.append(
                         or_(*[Order.order_types.any(name) for name in vital_records_list])
                     )
+            elif name == 'status':
+                if value != 'all':
+                    filter_args.append(
+                        col.__eq__(value)
+                    )
             elif name == 'date_submitted_start':
                 filter_args.append(
                     col.__ge__(value)

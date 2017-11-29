@@ -1,58 +1,55 @@
- {% extends "orders/base.html" %}
+{% extends "orders/base.html" %}
 
 {% block content %}
     <br/>
     <p>
         <b>IMAGE_IDENTIFIER:</b>
-    <br/>
-    {{ order_info['image_id'] or "Not Provided" }}
-    <br/>
+        <br/>
+        {{ order_info['image_id'] or "Not Provided" }}
+        <br/>
     <p>
 
-</p>        <b>DESCRIPTION:</b>
+    </p>        <b>DESCRIPTION:</b>
     <br/>
     {{ order_info['description'] or "Not Provided" }}
     <br/>
     <p>
 
-</p>        <b>ADDITIONAL_DESCRIPTION:</b>
+    </p>        <b>ADDITIONAL_DESCRIPTION:</b>
     <br/>
     {{ order_info['additional_description'] or "Not Provided" }}
     <br/>
     <p>
-
-</p>        <b>SIZE:</b>
-    <br/>
-
-    {{ order_info['size'] or "Not Provided" }}
-    <br/>
-</p>
+        <b>SIZE:</b>
+        <br/>
+        {{ order_info['size'] or "Not Provided" }}
+        <br/>
+    </p>
     <p>
         <b>COPY:</b>
-    <br/>
-    {{ order_info['num_copies'] or "Not Provided" }}
-    <br/>
+        <br/>
+        {{ order_info['num_copies'] or "Not Provided" }}
+        <br/>
+    <p>
+        <b>MAIL_PICKUP:</b>
+        <br/>
+        {{ "Mail" if order_info['image_id'] else "Pickup" }}
+    </p>
+    <p>
+        <b>CONTACT_NUMBER:</b>
+        <br/>
+        {{ order_info['contact_number'] or "Not Provided" }}
+        <br/>
+    </p>
     <p>
 
-</p>        <b>MAIL_PICKUP:</b>
-    <br/>
-    {{ "Mail" if order_info['image_id'] else "Pickup" }}
-    <br/>
-    <p>
-
-</p>        <b>CONTACT_NUMBER:</b>
-    <br/>
-    {{ order_info['contact_number'] or "Not Provided" }}
-    <br/>
-    <p>
-
-</p>        <b>PERSONAL_USE_AGREEMENT:</b>
+    </p>        <b>PERSONAL_USE_AGREEMENT:</b>
     <br/>
     {{ order_info['personal_use_agreement'] or "Not Provided" }}
     <br/>
     <p>
 
-</p>        <b>COMMENT:</b>
+    </p>        <b>COMMENT:</b>
     <br/>
     {{ order_info['comment'] }}
 {% endblock %}
