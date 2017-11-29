@@ -12,6 +12,7 @@ from app.constants import (
     printing
 )
 from app.constants.customer import EMPTY_CUSTOMER
+from app.constants.order_types import VITAL_RECORDS
 from app.models import (
     Order,
     Suborder,
@@ -33,7 +34,7 @@ from app.models import (
 def _order_query_filters(order_number, suborder_number, order_type, status, billing_name, user, date_submitted_start,
                          date_submitted_end):
     # TODO: Need to refactor get_order_by_fields so that it performs a single function for code reuse.
-    vital_records_list = ['Birth cert', 'Marriage cert', 'Death cert']  # TODO: Searches are missing from here. @gzhou??
+    vital_records_list = VITAL_RECORDS  # TODO: Searches are missing from here. @gzhou??
     photo_list = ['photo tax', 'photo gallery', 'property card']
 
     filter_args = []
@@ -83,7 +84,6 @@ def _order_query_filters(order_number, suborder_number, order_type, status, bill
                 )
 
     return filter_args
-
 
 def update_status(suborder_number, comment, new_status):
     """

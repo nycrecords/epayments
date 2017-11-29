@@ -57,8 +57,11 @@ def get_orders():
         status = json.get("status")
         billing_name = json.get("billing_name")
         user = ''
-        date_submitted_start = json.get("date_submitted_start") if json.get("date_submitted_start") else get_yesterday_dt()
+        date_submitted_start = json.get("date_submitted_start")
         date_submitted_end = json.get("date_submitted_end")
+
+        if not (order_number or suborder_number or order_type or status or billing_name) and not date_submitted_start:
+            date_submitted_end = get_yesterday_dt()
 
         order_count, suborder_count, orders = get_orders_by_fields(order_number,
                                                                    suborder_number,
