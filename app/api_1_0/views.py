@@ -62,7 +62,7 @@ def get_orders():
 
         if not (order_number or suborder_number or billing_name) and not date_submitted_start:
             date_submitted_start = get_yesterday_dt()
-
+        print(date_submitted_start)
         order_count, suborder_count, orders = get_orders_by_fields(order_number,
                                                                    suborder_number,
                                                                    order_type,

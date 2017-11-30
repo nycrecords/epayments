@@ -1,5 +1,5 @@
 import React from 'react';
-import {Grid, Container, Header, Button, Segment, Divider} from 'semantic-ui-react';
+import {Grid, Container, Header, Button, Segment, Divider, Dimmer, Loader} from 'semantic-ui-react';
 import {connect} from 'react-redux';
 import {mapDispatchToProps, mapStateToProps} from "../utils/reduxMappers";
 import OrderForm from "./order_form";
@@ -16,7 +16,7 @@ class Home extends React.Component {
             all_orders: [],
             order_count: 0,
             suborder_count: 0,
-            ready: false
+            loading: true
         };
 
         this.addOrder = (order_count, suborder_count, orders) => {
@@ -39,15 +39,24 @@ class Home extends React.Component {
             this.setState({all_orders: _all_orders});
         };
 
+        this.setLoadingState = (loading) => {
+            this.setState({
+              loading: loading
+            });
+        };
+
         this.printOrderSheet = (e) => {
+            this.setLoadingState(true);
             this.orderForm.submitFormData(e, 'orders')
         };
 
         this.printBigLabels = (e) => {
+            this.setLoadingState(true);
             this.orderForm.submitFormData(e, 'large_labels')
         };
 
         this.printSmallLabels = (e) => {
+            this.setLoadingState(true);
             this.orderForm.submitFormData(e, 'small_labels')
         };
 
@@ -70,6 +79,7 @@ class Home extends React.Component {
             response.json()
         )).then((json) => {
             this.addOrder(json.order_count, json.suborder_count, json.all_orders);
+            this.setLoadingState(false)
         });
     };
 
@@ -105,10 +115,13 @@ class Home extends React.Component {
                                 <br/>
                                 <Button fluid content='Logout' onClick={this.logOut}/>
                             </Segment>
-                            <OrderForm addOrder={this.addOrder} ref={orderForm => this.orderForm = orderForm}/>
+                            <OrderForm addOrder={this.addOrder} setLoadingState={this.setLoadingState} ref={orderForm => this.orderForm = orderForm}/>
                         </Grid.Column>
                         <Grid.Column width={1}/>
-                        <Grid.Column width={11}>
+                        <Dimmer inverted active={this.state.loading}>
+                            <Loader content='Loading'/>
+                        </Dimmer>
+                        <Grid.Column width={11} id="grid-column-order">
                             <Header as="h1" dividing textAlign="center">Order</Header>
                             <div>
                                 <Button.Group size='medium' floated='right'>

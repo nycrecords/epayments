@@ -90,6 +90,7 @@ def _order_query_filters(order_number, suborder_number, order_type, status, bill
 
     return filter_args
 
+
 def update_status(suborder_number, comment, new_status):
     """
         POST: {suborder_number, new_status, comment};
