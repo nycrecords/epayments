@@ -69,7 +69,7 @@ class StatusModal extends React.Component {
             }).then((response) => {
                 return response.json()
             }).then((json) => {
-                json.status_code === 201 && this.props.updateStatus(this.props.suborder_number, this.state.new_status)
+                this.props.updateStatus(this.props.suborder_number, this.state.new_status)
             });
 
             this.handleClose();
