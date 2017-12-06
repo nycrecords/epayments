@@ -83,6 +83,10 @@ def _order_query_filters(order_number, suborder_number, order_type, status, bill
                 filter_args.append(
                     col.__le__(value)
                 )
+            elif name == 'billing_name':
+                filter_args.append(
+                    col.ilike(value)
+                )
             else:
                 filter_args.append(
                     col.__eq__(value)

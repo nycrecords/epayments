@@ -30,7 +30,7 @@ const orderTypeOptions = [
 ];
 
 const statusOptions = [
-    {key: 'all', text: 'All', value: 'All'},
+    {key: 'all', text: 'All', value: 'all'},
     {key: 'received', text: 'Received', value: 'Received'},
     {key: 'processing', text: 'Processing', value: 'Processing'},
     {key: 'found', text: 'Found', value: 'Found'},
@@ -70,7 +70,7 @@ class OrderForm extends React.Component {
             ordernumber: '',
             subordernumber: '',
             order_type: '',
-            status: '',
+            status: 'all',
             billing_name: ''
 
         };
