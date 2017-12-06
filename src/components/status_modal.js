@@ -69,7 +69,8 @@ class StatusModal extends React.Component {
             }).then((response) => {
                 return response.json()
             }).then((json) => {
-                json.status_code === 201 && this.props.updateStatus(this.props.suborder_number, this.state.new_status)
+                this.props.updateStatus(this.props.suborder_number, this.state.new_status);
+                this.setState({comment: '', new_status: this.state.new_status});
             });
 
             this.handleClose();
@@ -86,7 +87,7 @@ class StatusModal extends React.Component {
                     <Modal.Content>
                         <Modal.Description>
                             <Header>
-                                <p> Current Status - {this.props.current_status}</p>
+                                <p>Current Status - {this.props.current_status}</p>
                                 <Form onSubmit={this.handleSubmit}>
                                     <Form.Select fluid selection options={this.statuses} placeholder={this.props.current_status}
                                                  onChange={(e, {value}) => {
@@ -97,7 +98,7 @@ class StatusModal extends React.Component {
                                                  value={this.state.new_status}
                                     />
                                     <Form.Field id='form-textarea-control-opinion' control={TextArea}
-                                                label='Leave an Additional Comment' placeholder='Comment'
+                                                label='Leave an Additional Comment' placeholder='Comment' maxLength="200"
                                                 onChange={(e, {value}) => {
                                                     this.setState({comment: value})
                                                 }

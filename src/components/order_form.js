@@ -30,7 +30,7 @@ const orderTypeOptions = [
 ];
 
 const statusOptions = [
-    {key: 'all', text: 'All', value: 'All'},
+    {key: 'all', text: 'All', value: 'all'},
     {key: 'received', text: 'Received', value: 'Received'},
     {key: 'processing', text: 'Processing', value: 'Processing'},
     {key: 'found', text: 'Found', value: 'Found'},
@@ -70,7 +70,7 @@ class OrderForm extends React.Component {
             ordernumber: '',
             subordernumber: '',
             order_type: '',
-            status: '',
+            status: 'all',
             billing_name: ''
 
         };
@@ -84,6 +84,7 @@ class OrderForm extends React.Component {
         this.submitFormData = (e, print) => {
             e.preventDefault();
             if (print === undefined) {
+                this.props.setLoadingState(true);
                 csrfFetch('api/v1.0/orders', {
                     method: "POST",
                     body: JSON.stringify({
@@ -99,6 +100,7 @@ class OrderForm extends React.Component {
                     return response.json();
                 }).then((json) => {
                     this.props.addOrder(json.order_count, json.suborder_count, json.all_orders);
+                    this.props.setLoadingState(false);
                 });
             }
             else {
@@ -115,6 +117,7 @@ class OrderForm extends React.Component {
                 }).then((response) => {
                     return response.json();
                 }).then((json) => {
+                    this.props.setLoadingState(false);
                     window.open(json.url);
                 })
             }

@@ -18,13 +18,16 @@ class History extends React.Component {
 
 
         this.handleClick = (e) => {
-            if (this.state.activeIndex === false){
+            if (this.state.activeIndex === false) {
                 this.setState({activeIndex: true});
                 csrfFetch('api/v1.0/history/' + this.props.suborder_number).then((response) => (
                     response.json()
                 )).then((json) => {
                     this.setState({all_history: json.history});
                 });
+            }
+            else {
+                this.setState({activeIndex: false});
             }
         }
     };
