@@ -110,6 +110,7 @@ class OrderForm extends React.Component {
                         order_number: this.state.ordernumber,
                         suborder_number: this.state.subordernumber,
                         order_type: this.state.order_type,
+                        status: this.state.status,
                         billing_name: this.state.billing_name,
                         date_submitted_start: formatDate(this.dateSubmittedStart),
                         date_submitted_end: formatDate(this.dateSubmittedEnd)
