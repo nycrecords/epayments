@@ -42,6 +42,7 @@ class Customer(db.Model):
                 address_line_1,
                 address_line_2,
                 city,
+                state,
                 zip_code,
                 country,
                 phone,
