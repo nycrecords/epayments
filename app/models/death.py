@@ -197,6 +197,7 @@ class DeathCertificate(db.Model):
 
     def __init__(
             self,
+            certificate_no,
             last_name,
             first_name,
             mid_name,
