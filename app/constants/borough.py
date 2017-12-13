@@ -8,6 +8,6 @@
 
 BRONX = 'Bronx'
 MANHATTAN = 'Manhattan'
-SATAN_ISLAND = 'Satan Island'
+STATEN_ISLAND = 'Staten Island'
 BROOKLYN = 'Brooklyn'
 QUEENS = 'Queens'

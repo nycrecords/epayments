@@ -37,7 +37,7 @@ class PhotoTax(db.Model):
         db.Enum(
             borough.BRONX,
             borough.MANHATTAN,
-            borough.SATAN_ISLAND,
+            borough.STATEN_ISLAND,
             borough.BROOKLYN,
             borough.QUEENS,
             name='borough'), default=borough.MANHATTAN, nullable=False)

@@ -1,7 +1,7 @@
 """Initial migration
 
 Revision ID: bcf911ebbb8c
-Revises: 
+Revises:
 Create Date: 2017-11-28 01:39:24.264735
 
 """
@@ -221,7 +221,7 @@ def upgrade():
     op.create_table('photo_tax',
     sa.Column('id', sa.Integer(), nullable=False),
     sa.Column('collection', sa.Enum('1940', '1980', 'Both', name='collection'), nullable=False),
-    sa.Column('borough', sa.Enum('Bronx', 'Manhattan', 'Satan Island', 'Brooklyn', 'Queens', name='borough'), nullable=False),
+    sa.Column('borough', sa.Enum('Bronx', 'Manhattan', 'Staten Island', 'Brooklyn', 'Queens', name='borough'), nullable=False),
     sa.Column('roll', sa.String(length=9), nullable=True),
     sa.Column('block', sa.String(length=9), nullable=True),
     sa.Column('lot', sa.String(length=9), nullable=True),
