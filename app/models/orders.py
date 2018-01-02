@@ -19,7 +19,7 @@ class Order(db.Model):
     client_agency_name -- Column: String(64)
     """
 
-    __tablename__ = 'order'
+    __tablename__ = 'orders'
     id = db.Column(db.String(64), primary_key=True, nullable=False)
     date_submitted = db.Column(db.DateTime, nullable=False)
     date_received = db.Column(db.DateTime, nullable=True)
