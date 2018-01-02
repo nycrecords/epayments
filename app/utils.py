@@ -714,29 +714,32 @@ def import_file(file_name):
         # Property Card
         if client_id == '10000058':
             # Retrieve Building Address
-            borough = clients_data_list[clients_data_list.index("BOROUGH") + 1]
+            borough = clients_data_list[
+                clients_data_list.index("BOROUGH") + 1] if "BOROUGH" in clients_data_list else None
             block = clients_data_list[clients_data_list.index("BLOCK") + 1] if "BLOCK" in clients_data_list else None
             lot = clients_data_list[clients_data_list.index("LOT") + 1] if "LOT" in clients_data_list else None
-            building_no = clients_data_list[clients_data_list.index("BUILDING_NO") + 1]
-            street = clients_data_list[clients_data_list.index("STREET") + 1]
+            building_no = clients_data_list[
+                clients_data_list.index("STREET_NUMBER") + 1] if "STREET_NUMBER" in clients_data_list else None
+            street = clients_data_list[clients_data_list.index("STREET") + 1] if "STREET" in clients_data_list else None
 
             # Retrieve Building Description
             description = clients_data_list[clients_data_list.index("DESCRIPTION") + 1] if "DESCRIPTION" in \
                                                                                            clients_data_list else None
 
             # Retrieve Certification Value (True or False)
-            certified = clients_data_list[clients_data_list.index("CERTIFIED") + 1]
+            certified = clients_data_list[
+                clients_data_list.index("COPY_OPTIONS") + 1] if "COPY_OPTIONS" in clients_data_list else None
 
             # Retrieve Mail / Pickup Status
             if clients_data_list[
-                        clients_data_list.index("MAIL_PICKUP") + 1] if "MAIL_PICKUP" in clients_data_list else None:
+                    clients_data_list.index("MAIL_PICKUP") + 1] if "MAIL_PICKUP" in clients_data_list else None:
                 mail_pickup = True
             else:
                 mail_pickup = False
 
             # Retrieve Pickup Contact Information
             contact_info = clients_data_list[
-                clients_data_list.index("EMAIL") + 1] if "EMAIL" in clients_data_list else None
+                clients_data_list.index("CONTACT_EMAIL") + 1] if "CONTACT_EMAIL" in clients_data_list else None
 
             customer_order = PropertyCard(
                 borough=borough,
@@ -787,7 +790,7 @@ def import_file(file_name):
 
             # Retrieve Mail / Pickup Status
             if clients_data_list[
-                        clients_data_list.index("MAIL_PICKUP") + 1] if "MAIL_PICKUP" in clients_data_list else None:
+                clients_data_list.index("MAIL_PICKUP") + 1] if "MAIL_PICKUP" in clients_data_list else None:
                 mail_pickup = True
             else:
                 mail_pickup = False
@@ -927,7 +930,7 @@ def import_file(file_name):
 
             # Retrieve Mail / Pickup Status
             if clients_data_list[
-                        clients_data_list.index("MAIL_PICKUP") + 1] if "MAIL_PICKUP" in clients_data_list else None:
+                clients_data_list.index("MAIL_PICKUP") + 1] if "MAIL_PICKUP" in clients_data_list else None:
                 mail_pickup = True
             else:
                 mail_pickup = False
@@ -942,7 +945,7 @@ def import_file(file_name):
 
             # Retrieve Personal Use Agreement
             if clients_data_list[
-                        clients_data_list.index("PERSONAL_USE_AGREEMENT") + 1] \
+                clients_data_list.index("PERSONAL_USE_AGREEMENT") + 1] \
                     if "PERSONAL_USE_AGREEMENT" in clients_data_list else None:
                 personal_use_agreement = True
             else:

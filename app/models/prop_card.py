@@ -22,22 +22,25 @@ class PropertyCard(db.Model):
 
     __tablename__ = 'prop_card'
     id = db.Column(db.Integer, primary_key=True)
-    borough = db.Column(ARRAY(db.String(20), dimensions=1), nullable=False)
+    borough = db.Column(ARRAY(db.String(20), dimensions=1), nullable=True)
     block = db.Column(db.String(9), nullable=True)
     lot = db.Column(db.String(9), nullable=True)
-    building_no = db.Column(db.String(10), nullable=False)
-    street = db.Column(db.String(40), nullable=False)
+    building_no = db.Column(db.String(10), nullable=True)
+    street = db.Column(db.String(40), nullable=True)
     description = db.Column(db.String(40), nullable=True)
-    certified = db.Column(db.Boolean, nullable=False)
-    mail_pickup = db.Column(db.Boolean, nullable=False)
+    certified = db.Column(db.Boolean, nullable=True)
+    mail_pickup = db.Column(db.Boolean, nullable=True)
     contact_info = db.Column(db.String(35), nullable=True)
     suborder_number = db.Column(db.String(32), db.ForeignKey('suborder.id'), nullable=False)
 
     def __init__(
                 self,
                 borough,
+                block,
+                lot,
                 building_no,
                 street,
+                description,
                 certified,
                 mail_pickup,
                 contact_info,
@@ -53,3 +56,18 @@ class PropertyCard(db.Model):
         self.mail_pickup = mail_pickup
         self.contact_info = contact_info or None
         self.suborder_number = suborder_number
+
+    def serialize(self):
+        """Return object data in easily serializable format"""
+        return {
+            "borough": self.borough,
+            "block": self.block,
+            "lot": self.lot,
+            "building_no": self.building_no,
+            "street": self.street,
+            "description": self.description,
+            "certified": self.certified,
+            "maill_pickup": self.mail_pickup,
+            "contact_info": self.contact_info,
+            'suborder_number': self.suborder_number
+        }
