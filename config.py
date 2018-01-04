@@ -40,12 +40,12 @@ class TestingConfig(Config):
 
 
 class ProductionConfig(Config):
-    SQLALCHEMY_DATABASE_URI = 'postgresql://developer:@localhost:5432/epayments'
+    SQLALCHEMY_DATABASE_URI = 'postgresql://epayments_v2:@localhost:5432/epayments_v2'
 
 
 config = {
     'development': DevelopmentConfig,
     'testing': TestingConfig,
     'production': ProductionConfig,
-    'default': DevelopmentConfig
+    'default': ProductionConfig
 }

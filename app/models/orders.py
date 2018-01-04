@@ -67,11 +67,11 @@ class Suborder(db.Model):
     """
 
     """
-    __tablename__ = 'suborder'
+    __tablename__ = 'suborders'
     id = db.Column(db.String(32), primary_key=True, nullable=False)
     client_id = db.Column(db.Integer, nullable=False)
     client_agency_name = db.Column(db.String(64), nullable=False)
-    order_number = db.Column(db.String(64), db.ForeignKey('order.id'), nullable=False)
+    order_number = db.Column(db.String(64), db.ForeignKey('orders.id'), nullable=False)
     status = db.Column(
         db.Enum(
             status.RECEIVED,

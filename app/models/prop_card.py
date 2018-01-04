@@ -1,5 +1,6 @@
 from app import db
 from sqlalchemy.dialects.postgresql import ARRAY
+from app.constants import borough
 
 
 class PropertyCard(db.Model):
@@ -22,16 +23,23 @@ class PropertyCard(db.Model):
 
     __tablename__ = 'prop_card'
     id = db.Column(db.Integer, primary_key=True)
-    borough = db.Column(ARRAY(db.String(20), dimensions=1), nullable=True)
+    borough = db.Column(
+        db.Enum(
+            borough.BRONX,
+            borough.MANHATTAN,
+            borough.STATEN_ISLAND,
+            borough.BROOKLYN,
+            borough.QUEENS,
+            name='borough'), default=None, nullable=True)
     block = db.Column(db.String(9), nullable=True)
     lot = db.Column(db.String(9), nullable=True)
     building_no = db.Column(db.String(10), nullable=True)
     street = db.Column(db.String(40), nullable=True)
     description = db.Column(db.String(40), nullable=True)
-    certified = db.Column(db.Boolean, nullable=True)
+    certified = db.Column(db.String(40), nullable=True)
     mail_pickup = db.Column(db.Boolean, nullable=True)
     contact_info = db.Column(db.String(35), nullable=True)
-    suborder_number = db.Column(db.String(32), db.ForeignKey('suborder.id'), nullable=False)
+    suborder_number = db.Column(db.String(32), db.ForeignKey('suborders.id'), nullable=False)
 
     def __init__(
                 self,
@@ -57,6 +65,7 @@ class PropertyCard(db.Model):
         self.contact_info = contact_info or None
         self.suborder_number = suborder_number
 
+    @property
     def serialize(self):
         """Return object data in easily serializable format"""
         return {

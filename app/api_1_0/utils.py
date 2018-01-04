@@ -44,8 +44,8 @@ def _order_query_filters(order_number, suborder_number, order_type, status, bill
         ("order_type", order_type, Suborder.client_agency_name),
         ("status", status, Suborder.status),
         ("billing_name", billing_name, Customer.billing_name),
-        ("date_submitted_start", date_submitted_start, Order.date_submitted),
-        ("date_submitted_end", date_submitted_end, Order.date_submitted)
+        ("date_submitted_start", date_submitted_start, Order.date_received),
+        ("date_submitted_end", date_submitted_end, Order.date_received)
     ]:
         if value:
             if name == 'order_type':
@@ -293,8 +293,6 @@ def _print_small_labels(search_params):
     suborders = Suborder.query.join(Order, Customer).filter(*filter_args).all()
 
     customers = [suborder.order.customer.serialize for suborder in suborders]
-
-    customers = sorted(customers, key=lambda customer: customer['billing_name'])
 
     labels = [customers[i:i + printing.SMALL_LABEL_COUNT] for i in range(0, len(customers), printing.SMALL_LABEL_COUNT)]
     html = ''

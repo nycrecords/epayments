@@ -1,8 +1,8 @@
-"""Initial migration
+"""Initial Migration
 
-Revision ID: bcf911ebbb8c
-Revises:
-Create Date: 2017-11-28 01:39:24.264735
+Revision ID: aba4346b655b
+Revises: 
+Create Date: 2018-01-03 15:03:41.320370
 
 """
 from alembic import op
@@ -10,7 +10,7 @@ import sqlalchemy as sa
 from sqlalchemy.dialects import postgresql
 
 # revision identifiers, used by Alembic.
-revision = 'bcf911ebbb8c'
+revision = 'aba4346b655b'
 down_revision = None
 branch_labels = None
 depends_on = None
@@ -50,16 +50,16 @@ def upgrade():
     sa.Column('phone', sa.String(length=64), nullable=True),
     sa.Column('instructions', sa.String(length=64), nullable=True),
     sa.Column('order_number', sa.String(length=64), nullable=False),
-    sa.ForeignKeyConstraint(['order_number'], ['order.id'], ),
+    sa.ForeignKeyConstraint(['order_number'], ['orders.id'], ),
     sa.PrimaryKeyConstraint('id')
     )
-    op.create_table('suborder',
+    op.create_table('suborders',
     sa.Column('id', sa.String(length=32), nullable=False),
     sa.Column('client_id', sa.Integer(), nullable=False),
     sa.Column('client_agency_name', sa.String(length=64), nullable=False),
     sa.Column('order_number', sa.String(length=64), nullable=False),
     sa.Column('status', sa.Enum('Received', 'Processing', 'Found', 'Printed', 'Mailed/Pickup', 'Not_Found', 'Letter_Generated', 'Undeliverable', 'Done', name='status'), nullable=True),
-    sa.ForeignKeyConstraint(['order_number'], ['order.id'], ),
+    sa.ForeignKeyConstraint(['order_number'], ['orders.id'], ),
     sa.PrimaryKeyConstraint('id')
     )
     op.create_table('birth_cert',
@@ -82,7 +82,7 @@ def upgrade():
     sa.Column('letter', sa.Boolean(), nullable=True),
     sa.Column('comment', sa.String(length=255), nullable=True),
     sa.Column('suborder_number', sa.String(length=32), nullable=False),
-    sa.ForeignKeyConstraint(['suborder_number'], ['suborder.id'], ),
+    sa.ForeignKeyConstraint(['suborder_number'], ['suborders.id'], ),
     sa.PrimaryKeyConstraint('id')
     )
     op.create_table('birth_search',
@@ -104,7 +104,7 @@ def upgrade():
     sa.Column('letter', sa.Boolean(), nullable=True),
     sa.Column('comment', sa.String(length=255), nullable=True),
     sa.Column('suborder_number', sa.String(length=32), nullable=False),
-    sa.ForeignKeyConstraint(['suborder_number'], ['suborder.id'], ),
+    sa.ForeignKeyConstraint(['suborder_number'], ['suborders.id'], ),
     sa.PrimaryKeyConstraint('id')
     )
     op.create_table('death_cert',
@@ -126,7 +126,7 @@ def upgrade():
     sa.Column('letter', sa.Boolean(), nullable=True),
     sa.Column('comment', sa.String(length=255), nullable=True),
     sa.Column('suborder_number', sa.String(length=32), nullable=False),
-    sa.ForeignKeyConstraint(['suborder_number'], ['suborder.id'], ),
+    sa.ForeignKeyConstraint(['suborder_number'], ['suborders.id'], ),
     sa.PrimaryKeyConstraint('id')
     )
     op.create_table('death_search',
@@ -147,7 +147,7 @@ def upgrade():
     sa.Column('letter', sa.Boolean(), nullable=True),
     sa.Column('comment', sa.String(length=255), nullable=True),
     sa.Column('suborder_number', sa.String(length=32), nullable=False),
-    sa.ForeignKeyConstraint(['suborder_number'], ['suborder.id'], ),
+    sa.ForeignKeyConstraint(['suborder_number'], ['suborders.id'], ),
     sa.PrimaryKeyConstraint('id')
     )
     op.create_table('event',
@@ -158,7 +158,7 @@ def upgrade():
     sa.Column('timestamp', sa.DateTime(), nullable=True),
     sa.Column('previous_value', postgresql.JSONB(astext_type=sa.Text()), nullable=True),
     sa.Column('new_value', postgresql.JSONB(astext_type=sa.Text()), nullable=True),
-    sa.ForeignKeyConstraint(['suborder_number'], ['suborder.id'], ondelete='CASCADE'),
+    sa.ForeignKeyConstraint(['suborder_number'], ['suborders.id'], ondelete='CASCADE'),
     sa.ForeignKeyConstraint(['user_email'], ['users.email'], ),
     sa.PrimaryKeyConstraint('id')
     )
@@ -180,7 +180,7 @@ def upgrade():
     sa.Column('letter', sa.Boolean(), nullable=True),
     sa.Column('comment', sa.String(length=255), nullable=True),
     sa.Column('suborder_number', sa.String(length=32), nullable=False),
-    sa.ForeignKeyConstraint(['suborder_number'], ['suborder.id'], ),
+    sa.ForeignKeyConstraint(['suborder_number'], ['suborders.id'], ),
     sa.PrimaryKeyConstraint('id')
     )
     op.create_table('marriage_search',
@@ -200,14 +200,14 @@ def upgrade():
     sa.Column('letter', sa.Boolean(), nullable=True),
     sa.Column('comment', sa.String(length=255), nullable=True),
     sa.Column('suborder_number', sa.String(length=32), nullable=False),
-    sa.ForeignKeyConstraint(['suborder_number'], ['suborder.id'], ),
+    sa.ForeignKeyConstraint(['suborder_number'], ['suborders.id'], ),
     sa.PrimaryKeyConstraint('id')
     )
     op.create_table('photo_gallery',
     sa.Column('id', sa.Integer(), nullable=False),
     sa.Column('image_id', sa.String(length=20), nullable=False),
-    sa.Column('description', sa.String(length=50), nullable=True),
-    sa.Column('additional_description', sa.String(length=50), nullable=True),
+    sa.Column('description', sa.String(length=500), nullable=True),
+    sa.Column('additional_description', sa.String(length=500), nullable=True),
     sa.Column('size', sa.Enum('8x10', '11x14', '16x20', name='size'), nullable=False),
     sa.Column('num_copies', sa.String(length=2), nullable=False),
     sa.Column('mail_pickup', sa.Boolean(), nullable=False),
@@ -215,7 +215,7 @@ def upgrade():
     sa.Column('personal_use_agreement', sa.Boolean(), nullable=True),
     sa.Column('comment', sa.String(length=255), nullable=True),
     sa.Column('suborder_number', sa.String(length=32), nullable=False),
-    sa.ForeignKeyConstraint(['suborder_number'], ['suborder.id'], ),
+    sa.ForeignKeyConstraint(['suborder_number'], ['suborders.id'], ),
     sa.PrimaryKeyConstraint('id')
     )
     op.create_table('photo_tax',
@@ -235,22 +235,22 @@ def upgrade():
     sa.Column('contact_number', sa.String(length=10), nullable=True),
     sa.Column('comment', sa.String(length=255), nullable=True),
     sa.Column('suborder_number', sa.String(length=32), nullable=False),
-    sa.ForeignKeyConstraint(['suborder_number'], ['suborder.id'], ),
+    sa.ForeignKeyConstraint(['suborder_number'], ['suborders.id'], ),
     sa.PrimaryKeyConstraint('id')
     )
     op.create_table('prop_card',
     sa.Column('id', sa.Integer(), nullable=False),
-    sa.Column('borough', postgresql.ARRAY(sa.String(length=20), dimensions=1), nullable=True),
+    sa.Column('borough', sa.Enum('Bronx', 'Manhattan', 'Staten Island', 'Brooklyn', 'Queens', name='borough'), nullable=True),
     sa.Column('block', sa.String(length=9), nullable=True),
     sa.Column('lot', sa.String(length=9), nullable=True),
     sa.Column('building_no', sa.String(length=10), nullable=True),
     sa.Column('street', sa.String(length=40), nullable=True),
     sa.Column('description', sa.String(length=40), nullable=True),
-    sa.Column('certified', sa.Boolean(), nullable=True),
+    sa.Column('certified', sa.String(length=40), nullable=True),
     sa.Column('mail_pickup', sa.Boolean(), nullable=True),
     sa.Column('contact_info', sa.String(length=35), nullable=True),
     sa.Column('suborder_number', sa.String(length=32), nullable=False),
-    sa.ForeignKeyConstraint(['suborder_number'], ['suborder.id'], ),
+    sa.ForeignKeyConstraint(['suborder_number'], ['suborders.id'], ),
     sa.PrimaryKeyConstraint('id')
     )
     # ### end Alembic commands ###
@@ -268,8 +268,8 @@ def downgrade():
     op.drop_table('death_cert')
     op.drop_table('birth_search')
     op.drop_table('birth_cert')
-    op.drop_table('suborder')
+    op.drop_table('suborders')
     op.drop_table('customer')
     op.drop_table('users')
-    op.drop_table('order')
+    op.drop_table('orders')
     # ### end Alembic commands ###

@@ -76,6 +76,7 @@ class OrderForm extends React.Component {
         };
 
         this.yesterday = moment().subtract(1, 'days');
+        this.today = moment()
 
         const formatDate = (dateRef) => (
             dateRef && dateRef.state.date ? dateRef.state.date.format('MM/DD/YYYY') : ''
@@ -181,8 +182,8 @@ class OrderForm extends React.Component {
                             <Date
                                 label="Date Submitted - Start"
                                 name="Date Submitted - Start"
-                                date={this.yesterday}
-                                maxDate={this.yesterday}
+                                date={this.today}
+                                maxDate={this.today}
                                 ref={(date) => this.dateSubmittedStart = date}
                             />
 
@@ -193,7 +194,7 @@ class OrderForm extends React.Component {
                             <Date
                                 label="Date Submitted - End"
                                 name="Date Submitted - End"
-                                maxDate={this.yesterday}
+                                maxDate={this.today}
                                 ref={(date) => this.dateSubmittedEnd = date}
                             />
                         </Form.Field>

@@ -21,7 +21,7 @@ class Event(db.Model):
     """
     __tablename__ = 'event'
     id = db.Column(db.Integer, primary_key=True)
-    suborder_number = db.Column(db.String(32), db.ForeignKey('suborder.id', ondelete='CASCADE'))
+    suborder_number = db.Column(db.String(32), db.ForeignKey('suborders.id', ondelete='CASCADE'))
     user_email = db.Column(db.String(100), db.ForeignKey('users.email'))  # who did the action
     type = db.Column(db.Enum(
         event_type.UPDATE_STATUS,

@@ -62,7 +62,7 @@ class PhotoTax(db.Model):
     mail_pickup = db.Column(db.Boolean, nullable=True)
     contact_number = db.Column(db.String(10), nullable=True)
     comment = db.Column(db.String(255), nullable=True)
-    suborder_number = db.Column(db.String(32), db.ForeignKey('suborder.id'), nullable=False)
+    suborder_number = db.Column(db.String(32), db.ForeignKey('suborders.id'), nullable=False)
 
     def __init__(
             self,
@@ -141,8 +141,8 @@ class PhotoGallery(db.Model):
     __tablename = 'photo_gallery'
     id = db.Column(db.Integer, primary_key=True)
     image_id = db.Column(db.String(20), nullable=False)
-    description = db.Column(db.String(50), nullable=True)
-    additional_description = db.Column(db.String(50), nullable=True)
+    description = db.Column(db.String(500), nullable=True)
+    additional_description = db.Column(db.String(500), nullable=True)
     size = db.Column(
         db.Enum(
             size.EIGHT_BY_TEN,
@@ -154,7 +154,7 @@ class PhotoGallery(db.Model):
     contact_number = db.Column(db.String(10), nullable=True)
     personal_use_agreement = db.Column(db.Boolean, nullable=True)
     comment = db.Column(db.String(255), nullable=True)
-    suborder_number = db.Column(db.String(32), db.ForeignKey('suborder.id'), nullable=False)
+    suborder_number = db.Column(db.String(32), db.ForeignKey('suborders.id'), nullable=False)
 
     def __init__(
             self,
