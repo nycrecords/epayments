@@ -29,7 +29,7 @@ class Customer(db.Model):
     city = db.Column(db.String(64), nullable=False)
     state = db.Column(db.String(64), nullable=True)
     zip_code = db.Column(db.String(64), nullable=False)
-    country = db.Column(db.String(64), nullable=False)
+    country = db.Column(db.String(64), nullable=True)
     phone = db.Column(db.String(64), nullable=True)
     instructions = db.Column(db.String(64), nullable=True)
     order_number = db.Column(db.String(64), db.ForeignKey('orders.id'), nullable=False)
@@ -44,10 +44,10 @@ class Customer(db.Model):
                 city,
                 state,
                 zip_code,
-                country,
                 phone,
                 instructions,
-                order_number
+                order_number,
+                country=None
 
     ):
         self.billing_name = billing_name

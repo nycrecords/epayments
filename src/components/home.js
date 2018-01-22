@@ -106,7 +106,7 @@ class Home extends React.Component {
             <Container>
                 {this.props.authenticated ? (
                     <Grid padded columns={3}>
-                        <Grid.Column width={4}>
+                        <Grid.Column width={4} id="grid-column-search">
                             <Header as="h1" textAlign="center">ePayments
                                 <Container className="sub header">Department of Records</Container>
                             </Header>

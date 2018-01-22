@@ -1,8 +1,8 @@
-"""Initial Migration
+"""initial migration
 
-Revision ID: aba4346b655b
+Revision ID: 68a035d08482
 Revises: 
-Create Date: 2018-01-03 15:03:41.320370
+Create Date: 2018-01-22 20:14:33.933120
 
 """
 from alembic import op
@@ -10,7 +10,7 @@ import sqlalchemy as sa
 from sqlalchemy.dialects import postgresql
 
 # revision identifiers, used by Alembic.
-revision = 'aba4346b655b'
+revision = '68a035d08482'
 down_revision = None
 branch_labels = None
 depends_on = None
@@ -46,7 +46,7 @@ def upgrade():
     sa.Column('city', sa.String(length=64), nullable=False),
     sa.Column('state', sa.String(length=64), nullable=True),
     sa.Column('zip_code', sa.String(length=64), nullable=False),
-    sa.Column('country', sa.String(length=64), nullable=False),
+    sa.Column('country', sa.String(length=64), nullable=True),
     sa.Column('phone', sa.String(length=64), nullable=True),
     sa.Column('instructions', sa.String(length=64), nullable=True),
     sa.Column('order_number', sa.String(length=64), nullable=False),

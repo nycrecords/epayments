@@ -28,7 +28,7 @@ chown -R vagrant:vagrant /home/vagrant
 source /home/vagrant/.virtualenvs/epayments/bin/activate
 pip install --upgrade pip
 pip install --upgrade setuptools
-pip install -r /vagrant/requirements.txt --no-binary :all:
+pip install -r /vagrant/requirements/requirements.txt --no-binary :all:
 
 # 7. Install telnet-server
 yum -y install telnet-server

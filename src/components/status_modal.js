@@ -35,6 +35,10 @@ class StatusModal extends React.Component {
                 value: 'Found',
             },
             {
+                text: 'Printed',
+                value: 'Printed',
+            },
+            {
                 text: 'Mailed/Pickup',
                 value: 'Mailed/Pickup',
             },

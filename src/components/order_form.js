@@ -34,7 +34,7 @@ const statusOptions = [
     {key: 'received', text: 'Received', value: 'Received'},
     {key: 'processing', text: 'Processing', value: 'Processing'},
     {key: 'found', text: 'Found', value: 'Found'},
-    {key: 'printed', text: 'Print', value: 'Printed'},
+    {key: 'printed', text: 'Printed', value: 'Printed'},
     {key: 'mailed/pickup', text: 'Mailed/Pickup', value: 'Mailed/Pickup'},
     {key: 'not_found', text: 'Not Found', value: 'Not_Found'},
     {key: 'letter_generated', text: 'Letter Generated', value: 'Letter_Generated'},
