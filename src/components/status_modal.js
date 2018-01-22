@@ -55,6 +55,10 @@ class StatusModal extends React.Component {
                 value: 'Undeliverable',
             },
             {
+                text: 'Refunded',
+                value: 'Refunded',
+            },
+            {
                 text: 'Done',
                 value: 'Done',
             }

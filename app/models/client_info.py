@@ -82,7 +82,7 @@ class Customer(db.Model):
                 zip=self.zip_code
             )
 
-        if self.country not in ['United States']:
+        if self.country not in [None, 'United States']:
             address += self.country
 
         return address

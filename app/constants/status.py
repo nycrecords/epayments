@@ -25,5 +25,5 @@ MAILED_PICKUP = 'Mailed/Pickup'
 NOT_FOUND = 'Not_Found'
 LETTER_GENERATED = 'Letter_Generated'
 UNDELIVERABLE = 'Undeliverable'
+REFUNDED = 'Refunded'
 DONE = 'Done'
-

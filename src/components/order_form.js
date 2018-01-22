@@ -20,8 +20,8 @@ const orderTypeOptions = [
     {key: 'birthcert', text: 'Birth Certificate', value: 'Birth Cert'},
     {key: 'marriagecert', text: 'Marriage Certificate', value: 'Marriage Cert'},
     {key: 'deathcert', text: 'Death Certificate', value: 'Death Cert'},
-    {key: 'photos', text: '--Photos--', value: 'photos'},
     {key: 'propertycard', text: 'Property Card', value: 'Property Card'},
+    {key: 'photos', text: '--Photos--', value: 'photos'},
     {key: 'phototax', text: 'Photo Tax', value: 'Photo Tax'},
     {key: 'photogallery', text: 'Photo Gallery', value: 'Photo Gallery'},
     {key: 'other', text: '--Other--', value: 'other'},
@@ -39,6 +39,7 @@ const statusOptions = [
     {key: 'not_found', text: 'Not Found', value: 'Not_Found'},
     {key: 'letter_generated', text: 'Letter Generated', value: 'Letter_Generated'},
     {key: 'undeliverable', text: 'Undeliverable', value: 'Undeliverable'},
+    {key: 'refunded', text: 'Refunded', value: 'Refunded'},
     {key: 'done', text: 'Done', value: 'Done'}
 ];
 

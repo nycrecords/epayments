@@ -34,8 +34,8 @@ from app.models import (
 def _order_query_filters(order_number, suborder_number, order_type, status, billing_name, user, date_submitted_start,
                          date_submitted_end):
     # TODO: Need to refactor get_order_by_fields so that it performs a single function for code reuse.
-    vital_records_list = VITAL_RECORDS  # TODO: Searches are missing from here. @gzhou??
-    photo_list = ['photo tax', 'photo gallery', 'property card']
+    vital_records_list = VITAL_RECORDS
+    photo_list = ['Photo Tax', 'Photo Gallery']
 
     filter_args = []
     for name, value, col in [
@@ -49,7 +49,7 @@ def _order_query_filters(order_number, suborder_number, order_type, status, bill
     ]:
         if value:
             if name == 'order_type':
-                if value not in ['all', 'multiple_items', 'vital_records', 'vital_records_and_photos']:
+                if value not in ['all', 'multiple_items', 'vital_records', 'photos', 'vital_records_and_photos']:
                     filter_args.append(
                         col.__eq__(value)
                     )

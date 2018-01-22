@@ -82,6 +82,7 @@ class Suborder(db.Model):
             status.NOT_FOUND,
             status.LETTER_GENERATED,
             status.UNDELIVERABLE,
+            status.REFUNDED,
             status.DONE,
             name='status'), nullable=True)
     order = db.relationship('Order', backref='orders', uselist=False)
