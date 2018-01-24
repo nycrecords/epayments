@@ -1,5 +1,5 @@
 import React from 'react';
-import {Grid, Container, Header, Button, Segment, Divider, Dimmer, Loader} from 'semantic-ui-react';
+import {Grid, Container, Header, Button, Segment, Divider, Dimmer, Loader, Icon} from 'semantic-ui-react';
 import {connect} from 'react-redux';
 import {mapDispatchToProps, mapStateToProps} from "../utils/reduxMappers";
 import OrderForm from "./order_form";
@@ -43,6 +43,17 @@ class Home extends React.Component {
             this.setState({
               loading: loading
             });
+        };
+
+        this.generateCSV = (e) => {
+            this.setLoadingState(true);
+            this.orderForm.submitFormData(e, 'csv');
+            // csrfFetch('api/v1.0/orders/csv').then((response) => (
+            //     response.json()
+            // )).then((json) => {
+            //     this.setLoadingState(false);
+            //     window.open(json.url);
+            // });
         };
 
         this.printOrderSheet = (e) => {
@@ -89,7 +100,7 @@ class Home extends React.Component {
 
 
     render() {
-        const orderRows = this.state.all_orders.map((order, index) =>
+        const orderRows = this.state.all_orders.map((order) =>
             <Order
                 key={order.suborder_number}
                 order_number={order.order_number}
@@ -125,8 +136,11 @@ class Home extends React.Component {
                             <Header as="h1" dividing textAlign="center">Order</Header>
                             <div>
                                 <Button.Group size='medium' floated='right'>
-                                    <Button labelPosition='left' icon='print'
-                                            content='Order Sheets' onClick={this.printOrderSheet}/>
+                                    <Button icon active={true}>
+                                        <Icon name='print'/>
+                                    </Button>
+                                    <Button content='Generate CSV' onClick={this.generateCSV}/>
+                                    <Button content='Order Sheets' onClick={this.printOrderSheet}/>
                                     <Button content='Big Labels' onClick={this.printBigLabels}/>
                                     <Button content='Small Labels' onClick={this.printSmallLabels}/>
                                 </Button.Group>

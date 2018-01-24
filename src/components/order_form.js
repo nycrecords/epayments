@@ -77,7 +77,7 @@ class OrderForm extends React.Component {
         };
 
         this.yesterday = moment().subtract(1, 'days');
-        this.today = moment()
+        this.today = moment();
 
         const formatDate = (dateRef) => (
             dateRef && dateRef.state.date ? dateRef.state.date.format('MM/DD/YYYY') : ''
@@ -85,11 +85,30 @@ class OrderForm extends React.Component {
 
         this.submitFormData = (e, print) => {
             e.preventDefault();
-            if (print === undefined) {
-                this.props.setLoadingState(true);
-                csrfFetch('api/v1.0/orders', {
-                    method: "POST",
-                    body: JSON.stringify({
+            switch(print) {
+                case 'orders':
+                case 'large_labels':
+                case 'small_labels':
+                    csrfFetch('api/v1.0/print/' + print, {
+                        method: "POST",
+                        body: JSON.stringify({
+                            order_number: this.state.ordernumber,
+                            suborder_number: this.state.subordernumber,
+                            order_type: this.state.order_type,
+                            status: this.state.status,
+                            billing_name: this.state.billing_name,
+                            date_submitted_start: formatDate(this.dateSubmittedStart),
+                            date_submitted_end: formatDate(this.dateSubmittedEnd)
+                        })
+                    }).then((response) => {
+                        return response.json();
+                    }).then((json) => {
+                        this.props.setLoadingState(false);
+                        window.open(json.url);
+                    });
+                    break;
+                case 'csv':
+                    let params = {
                         order_number: this.state.ordernumber,
                         suborder_number: this.state.subordernumber,
                         order_type: this.state.order_type,
@@ -97,33 +116,81 @@ class OrderForm extends React.Component {
                         billing_name: this.state.billing_name,
                         date_submitted_start: formatDate(this.dateSubmittedStart),
                         date_submitted_end: formatDate(this.dateSubmittedEnd)
-                    })
-                }).then((response) => {
-                    return response.json();
-                }).then((json) => {
-                    this.props.addOrder(json.order_count, json.suborder_count, json.all_orders);
-                    this.props.setLoadingState(false);
-                });
+                    };
+
+                    let esc = encodeURIComponent;
+                    let query = Object.keys(params)
+                        .map(k => esc(k) + '=' + esc(params[k]))
+                        .join('&');
+                    csrfFetch('api/v1.0/orders/csv?' + query)
+                        .then((response) => (
+                            response.json()
+                        )).then((json) => {
+                        this.props.setLoadingState(false);
+                        window.open(json.url);
+                    });
+                    break;
+                case undefined:
+                    csrfFetch('api/v1.0/orders', {
+                        method: "POST",
+                        body: JSON.stringify({
+                            order_number: this.state.ordernumber,
+                            suborder_number: this.state.subordernumber,
+                            order_type: this.state.order_type,
+                            status: this.state.status,
+                            billing_name: this.state.billing_name,
+                            date_submitted_start: formatDate(this.dateSubmittedStart),
+                            date_submitted_end: formatDate(this.dateSubmittedEnd)
+                        })
+                    }).then((response) => {
+                        return response.json();
+                    }).then((json) => {
+                        this.props.addOrder(json.order_count, json.suborder_count, json.all_orders);
+                        this.props.setLoadingState(false);
+                    });
+                    break;
+                // no default
+
             }
-            else {
-                csrfFetch('api/v1.0/print/' + print, {
-                    method: "POST",
-                    body: JSON.stringify({
-                        order_number: this.state.ordernumber,
-                        suborder_number: this.state.subordernumber,
-                        order_type: this.state.order_type,
-                        status: this.state.status,
-                        billing_name: this.state.billing_name,
-                        date_submitted_start: formatDate(this.dateSubmittedStart),
-                        date_submitted_end: formatDate(this.dateSubmittedEnd)
-                    })
-                }).then((response) => {
-                    return response.json();
-                }).then((json) => {
-                    this.props.setLoadingState(false);
-                    window.open(json.url);
-                })
-            }
+            // if (print === undefined) {
+            //     this.props.setLoadingState(true);
+            //     csrfFetch('api/v1.0/orders', {
+            //         method: "POST",
+            //         body: JSON.stringify({
+            //             order_number: this.state.ordernumber,
+            //             suborder_number: this.state.subordernumber,
+            //             order_type: this.state.order_type,
+            //             status: this.state.status,
+            //             billing_name: this.state.billing_name,
+            //             date_submitted_start: formatDate(this.dateSubmittedStart),
+            //             date_submitted_end: formatDate(this.dateSubmittedEnd)
+            //         })
+            //     }).then((response) => {
+            //         return response.json();
+            //     }).then((json) => {
+            //         this.props.addOrder(json.order_count, json.suborder_count, json.all_orders);
+            //         this.props.setLoadingState(false);
+            //     });
+            // }
+            // else {
+            //     csrfFetch('api/v1.0/print/' + print, {
+            //         method: "POST",
+            //         body: JSON.stringify({
+            //             order_number: this.state.ordernumber,
+            //             suborder_number: this.state.subordernumber,
+            //             order_type: this.state.order_type,
+            //             status: this.state.status,
+            //             billing_name: this.state.billing_name,
+            //             date_submitted_start: formatDate(this.dateSubmittedStart),
+            //             date_submitted_end: formatDate(this.dateSubmittedEnd)
+            //         })
+            //     }).then((response) => {
+            //         return response.json();
+            //     }).then((json) => {
+            //         this.props.setLoadingState(false);
+            //         window.open(json.url);
+            //     })
+            // }
         };
     }
 

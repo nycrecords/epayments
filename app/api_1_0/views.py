@@ -1,5 +1,8 @@
-from flask import jsonify, abort, request
+import csv
+from datetime import datetime
+from flask import current_app, jsonify, abort, request, url_for
 from flask_login import login_user, logout_user, current_user, login_required
+from os.path import join
 from sqlalchemy import desc
 from app.api_1_0 import api_1_0 as api
 
@@ -9,7 +12,8 @@ from app.api_1_0.utils import (
     _print_orders,
     _print_large_labels,
     _print_small_labels,
-    update_tax_photo
+    update_tax_photo,
+    generate_csv
 )
 from app.constants import (
     event_type
@@ -82,6 +86,52 @@ def get_orders():
             for suborder in order.suborder:
                 orders.append(suborder.serialize)
         return jsonify(order_count=order_count, suborder_count=len(orders), all_orders=orders)
+
+
+@api.route('/orders/<doc_type>', methods=['GET'])
+@login_required
+def orders_doc(doc_type):
+    """
+    Document name format:
+
+    :param doc_type: document type ('csv' only)
+    :return:
+    """
+    if doc_type.lower() == 'csv':
+        generate_csv(request.args)
+        # _, _, orders = get_orders_by_fields(
+        #     request.args['order_number'],
+        #     request.args['suborder_number'],
+        #     request.args['order_type'],
+        #     request.args['status'],
+        #     request.args['billing_name'],
+        #     '',
+        #     request.args['date_submitted_start'],
+        #     request.args['date_submitted_end']
+        # )
+        filename = "orders_{}.csv".format(datetime.now().strftime("%m_%d_%Y_at_%I_%M_%p"))
+        with open(join(current_app.static_folder, 'files', filename), 'w') as doc_file:
+            writer = csv.writer(doc_file)
+            writer.writerow(["Order Number",
+                             "Sub Order Number",
+                             "Order Date",
+                             "Customer Name",
+                             "Phone",
+                             "Email",
+                             "Customer Address",
+                             "Mail or Pickup",
+                             "Size",
+                             "Copy",
+                             "Image Identifier",
+                             "Building Number",
+                             "Street",
+                             "Collection",
+                             "Borough",
+                             "Block",
+                             "Lot",
+                             "Roll"])
+
+        return jsonify(url=(url_for('static', filename='files/{}'.format(filename), _external=True)))
 
 
 @api.route('/status/<string:suborder_number>', methods=['GET', 'POST'])

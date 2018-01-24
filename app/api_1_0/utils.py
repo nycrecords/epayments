@@ -354,5 +354,13 @@ def _print_large_labels(search_params):
     return url_for('static', filename='files/{}'.format(filename), _external=True)
 
 
-def generate_csv():
+def generate_csv(search_params):
+    filter_args = _order_query_filters(search_params.get('order_number'),
+                                       search_params.get('suborder_number'),
+                                       search_params.get('order_type'),
+                                       search_params.get('status'),
+                                       search_params.get('billing_name'),
+                                       '',
+                                       search_params.get('date_submitted_start'),
+                                       search_params.get('date_submitted_end'))
     pass
