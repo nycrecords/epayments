@@ -731,11 +731,14 @@ def import_file(file_name):
                 clients_data_list.index("COPY_OPTIONS") + 1] if "COPY_OPTIONS" in clients_data_list else None
 
             # Retrieve Mail / Pickup Status
-            if clients_data_list[
-                    clients_data_list.index("MAIL_PICKUP") + 1] if "MAIL_PICKUP" in clients_data_list else None:
-                mail_pickup = True
+            if "MAIL_PICKUP" in clients_data_list:
+                if clients_data_list[clients_data_list.index("MAIL_PICKUP") + 1] == 'Mail':
+                    mail_pickup = True
+                else:
+                    mail_pickup = False
             else:
-                mail_pickup = False
+                # TODO: Fix this. mail_pickup column is BOOLEAN
+                mail_pickup = None
 
             # Retrieve Pickup Contact Information
             contact_info = clients_data_list[
@@ -789,11 +792,14 @@ def import_file(file_name):
                 clients_data_list.index("COPIES") + 1] if "COPIES" in clients_data_list else 1
 
             # Retrieve Mail / Pickup Status
-            if clients_data_list[
-                clients_data_list.index("MAIL_PICKUP") + 1] if "MAIL_PICKUP" in clients_data_list else None:
-                mail_pickup = True
+            if "MAIL_PICKUP" in clients_data_list:
+                if clients_data_list[clients_data_list.index("MAIL_PICKUP") + 1] == 'Mail':
+                    mail_pickup = True
+                else:
+                    mail_pickup = False
             else:
-                mail_pickup = False
+                # TODO: Fix this. mail_pickup column is BOOLEAN
+                mail_pickup = None
 
             # Retrieve Pickup Contact Information
             contact_number = clients_data_list[
@@ -869,13 +875,24 @@ def import_file(file_name):
                 )
                 db.session.add(customer_order_1980)
 
-                insert_event = Event(suborder_number=suborder_1940.id,
-                                     type_=event_type.INITIAL_IMPORT,
-                                     # user_email=current_user.email,
-                                     previous_value=None,
-                                     new_value={
-                                         'status': status.RECEIVED,
-                                     })
+                insert_event = [
+                    Event(suborder_number=suborder_1940.id,
+                          type_=event_type.INITIAL_IMPORT,
+                          # user_email=current_user.email,
+                          previous_value=None,
+                          new_value={
+                              'status': status.RECEIVED,
+                          }),
+                    Event(suborder_number=suborder_1980.id,
+                          type_=event_type.INITIAL_IMPORT,
+                          # user_email=current_user.email,
+                          previous_value=None,
+                          new_value={
+                              'status': status.RECEIVED,
+                          })
+                ]
+                db.session.bulk_save_objects(insert_event)
+
             else:
                 customer_order = PhotoTax(
                     borough=borough,
@@ -895,15 +912,6 @@ def import_file(file_name):
                     suborder_number=suborder_number)
                 db.session.add(customer_order)
 
-                insert_event = Event(suborder_number=suborder_number,
-                                     type_=event_type.INITIAL_IMPORT,
-                                     # user_email=current_user.email,
-                                     previous_value=None,
-                                     new_value={
-                                         'status': status.RECEIVED,
-                                     })
-
-            db.session.add(insert_event)
             db.session.commit()
 
         # Insert into the PhotoGallery table
@@ -929,11 +937,14 @@ def import_file(file_name):
                 clients_data_list.index("COPIES") + 1] if "COPIES" in clients_data_list else 1
 
             # Retrieve Mail / Pickup Status
-            if clients_data_list[
-                clients_data_list.index("MAIL_PICKUP") + 1] if "MAIL_PICKUP" in clients_data_list else None:
-                mail_pickup = True
+            if "MAIL_PICKUP" in clients_data_list:
+                if clients_data_list[clients_data_list.index("MAIL_PICKUP") + 1] == 'Mail':
+                    mail_pickup = True
+                else:
+                    mail_pickup = False
             else:
-                mail_pickup = False
+                # TODO: Fix this. mail_pickup column is BOOLEAN
+                mail_pickup = None
 
             # Retrieve Pickup Contact Information
             contact_number = clients_data_list[

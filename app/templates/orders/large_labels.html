@@ -402,7 +402,8 @@
                     {% endif %}
                     {{ labels[9]['city'] + "," if labels[9]['city'] else '' }} {{ labels[9]['state'] + "," if labels[9]['state'] else '' }} {{ labels[9]['zip_code'] if labels[9]['zip_code'] else '' }}
                     {% if labels[9]['country'] != 'United States' %}
-                        {{ "," + labels[9]['country'] if labels[9]['country'] }}
+                        <br/>
+                        {{ labels[9]['country'] if labels[9]['country'] }}
                     {% endif %}
                 </p>
                 </o:p>

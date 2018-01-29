@@ -1,6 +1,6 @@
 from flask import render_template, current_app, url_for
 from flask_login import current_user
-from sqlalchemy import or_
+from sqlalchemy import or_, and_
 from xhtml2pdf.pisa import CreatePDF
 from datetime import datetime
 from os.path import join
@@ -12,7 +12,7 @@ from app.constants import (
     printing
 )
 from app.constants.customer import EMPTY_CUSTOMER
-from app.constants.order_types import VITAL_RECORDS
+from app.constants.order_types import VITAL_RECORDS_LIST, PHOTOS_LIST
 from app.models import (
     Order,
     Suborder,
@@ -31,12 +31,9 @@ from app.models import (
 )
 
 
-def _order_query_filters(order_number, suborder_number, order_type, status, billing_name, user, date_submitted_start,
-                         date_submitted_end):
+def _order_query_filters(order_number, suborder_number, order_type, status, billing_name, user, date_received_start,
+                         date_received_end):
     # TODO: Need to refactor get_order_by_fields so that it performs a single function for code reuse.
-    vital_records_list = VITAL_RECORDS
-    photo_list = ['Photo Tax', 'Photo Gallery']
-
     filter_args = []
     for name, value, col in [
         ("order_number", order_number, Order.id),
@@ -44,8 +41,8 @@ def _order_query_filters(order_number, suborder_number, order_type, status, bill
         ("order_type", order_type, Suborder.client_agency_name),
         ("status", status, Suborder.status),
         ("billing_name", billing_name, Customer.billing_name),
-        ("date_submitted_start", date_submitted_start, Order.date_received),
-        ("date_submitted_end", date_submitted_end, Order.date_received)
+        ("date_received_start", date_received_start, Order.date_received),
+        ("date_received_end", date_received_end, Order.date_received)
     ]:
         if value:
             if name == 'order_type':
@@ -59,27 +56,27 @@ def _order_query_filters(order_number, suborder_number, order_type, status, bill
                     )
                 elif value == 'vital_records':
                     filter_args.append(
-                        or_(*[Order.order_types.any(name) for name in vital_records_list])
+                        or_(*[Order.order_types.any(name) for name in VITAL_RECORDS_LIST])
                     )
                 elif value == 'photos':
                     filter_args.append(
-                        or_(*[Order.order_types.any(name) for name in photo_list])
+                        or_(*[Order.order_types.any(name) for name in PHOTOS_LIST])
                     )
                 elif value == 'vital_records_and_photos':
-                    vital_records_list.extend(photo_list)
                     filter_args.append(
-                        or_(*[Order.order_types.any(name) for name in vital_records_list])
+                        # and_(or_(*[Order.order_types.any(name) for name in VITAL_RECORDS_LIST]),
+                        #      or_(*[Order.order_types.any(name) for name in PHOTOS_LIST]))
                     )
             elif name == 'status':
                 if value != 'all':
                     filter_args.append(
                         col.__eq__(value)
                     )
-            elif name == 'date_submitted_start':
+            elif name == 'date_received_start':
                 filter_args.append(
                     col.__ge__(value)
                 )
-            elif name == 'date_submitted_end':
+            elif name == 'date_received_end':
                 filter_args.append(
                     col.__le__(value)
                 )
@@ -184,17 +181,17 @@ def update_tax_photo(suborder_number, block_no, lot_no, roll_no):
     return message
 
 
-def get_orders_by_fields(order_number, suborder_number, order_type, status, billing_name, user, date_submitted_start,
-                         date_submitted_end):
+def get_orders_by_fields(order_number, suborder_number, order_type, status, billing_name, user, date_received_start,
+                         date_received_end):
     """
     Filter orders by fields received
     get_orders_by_fields(client_id, suborder_number, order_type(Death Search or Marriage Search), billing_name
-                         user??, date_received, date_submitted)
+                         user??, date_received, date_received)
     :return:
     """
     filter_args = _order_query_filters(order_number, suborder_number, order_type, status, billing_name, user,
-                                       date_submitted_start,
-                                       date_submitted_end)
+                                       date_received_start,
+                                       date_received_end)
     base_query = Suborder.query.join(Order, Customer).filter(*filter_args)
     order_count = base_query.distinct(Suborder.order_number).group_by(Suborder.order_number, Suborder.id).count()
     suborder_list = base_query.all()
@@ -219,12 +216,12 @@ def _print_orders(search_params):
     billing_name = search_params.get("billing_name")
     # user = str(request.form["user"])
     user = ''
-    date_submitted_start = search_params.get("date_submitted_start")
-    date_submitted_end = search_params.get("date_submitted_end")
+    date_received_start = search_params.get("date_received_start")
+    date_received_end = search_params.get("date_received_end")
 
     filter_args = _order_query_filters(order_number, suborder_number, order_type, status, billing_name, user,
-                                       date_submitted_start,
-                                       date_submitted_end)
+                                       date_received_start,
+                                       date_received_end)
 
     suborders = Suborder.query.join(Order, Customer).filter(*filter_args).all()
 
@@ -283,12 +280,12 @@ def _print_small_labels(search_params):
     billing_name = search_params.get("billing_name")
     # user = str(request.form["user"])
     user = ''
-    date_submitted_start = search_params.get("date_submitted_start")
-    date_submitted_end = search_params.get("date_submitted_end")
+    date_received_start = search_params.get("date_received_start")
+    date_received_end = search_params.get("date_received_end")
 
     filter_args = _order_query_filters(order_number, suborder_number, order_type, status, billing_name, user,
-                                       date_submitted_start,
-                                       date_submitted_end)
+                                       date_received_start,
+                                       date_received_end)
 
     suborders = Suborder.query.join(Order, Customer).filter(*filter_args).all()
 
@@ -324,12 +321,12 @@ def _print_large_labels(search_params):
     billing_name = search_params.get("billing_name")
     # user = str(request.form["user"])
     user = ''
-    date_submitted_start = search_params.get("date_submitted_start")
-    date_submitted_end = search_params.get("date_submitted_end")
+    date_received_start = search_params.get("date_received_start")
+    date_received_end = search_params.get("date_received_end")
 
     filter_args = _order_query_filters(order_number, suborder_number, order_type, status, billing_name, user,
-                                       date_submitted_start,
-                                       date_submitted_end)
+                                       date_received_start,
+                                       date_received_end)
 
     suborders = Suborder.query.join(Order, Customer).filter(*filter_args).all()
 
@@ -361,6 +358,6 @@ def generate_csv(search_params):
                                        search_params.get('status'),
                                        search_params.get('billing_name'),
                                        '',
-                                       search_params.get('date_submitted_start'),
-                                       search_params.get('date_submitted_end'))
+                                       search_params.get('date_received_start'),
+                                       search_params.get('date_received_end'))
     pass

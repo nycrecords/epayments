@@ -108,7 +108,7 @@ class Suborder(db.Model):
             'order_number': self.order_number,
             'suborder_number': self.id,
             'date_submitted': self.order.date_submitted.strftime("%x %I:%M %p"),
-            'date_received': self.order.date_received,
+            'date_received': self.order.date_received.strftime("%x %I:%M %p"),
             'billing_name': self.order.customer.billing_name,
             'customer_email': self.order.customer.email,
             'client_agency_name': self.client_agency_name,

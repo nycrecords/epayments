@@ -24,7 +24,7 @@ class Order extends React.Component {
                 { this.props.client_agency_name === 'Photo Tax' && <PhotoTaxModal suborder_number={this.props.suborder_number}/> }
                 <br/>
                 Billing Name: {this.props.billing_name} <br/>
-                Date Submitted: {this.props.date_submitted} <br/>
+                Date Received: {this.props.date_received} <br/>
                 <History suborder_number={this.props.suborder_number} />
                 <Divider/>
             </div>

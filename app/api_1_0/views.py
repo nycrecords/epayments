@@ -61,19 +61,19 @@ def get_orders():
         status = json.get("status")
         billing_name = json.get("billing_name")
         user = ''
-        date_submitted_start = json.get("date_submitted_start")
-        date_submitted_end = json.get("date_submitted_end")
+        date_received_start = json.get("date_received_start")
+        date_received_end = json.get("date_received_end")
 
-        if not (order_number or suborder_number or billing_name) and not date_submitted_start:
-            date_submitted_start = get_yesterday_dt()
+        if not (order_number or suborder_number or billing_name) and not date_received_start:
+            date_received_start = get_yesterday_dt()
         order_count, suborder_count, orders = get_orders_by_fields(order_number,
                                                                    suborder_number,
                                                                    order_type,
                                                                    status,
                                                                    billing_name,
                                                                    user,
-                                                                   date_submitted_start,
-                                                                   date_submitted_end)
+                                                                   date_received_start,
+                                                                   date_received_end)
         return jsonify(order_count=order_count,
                        suborder_count=suborder_count,
                        all_orders=orders)
@@ -81,7 +81,7 @@ def get_orders():
     else:
         orders = []
         order_count = 0
-        for order in Order.query.filter(Order.date_submitted >= get_yesterday_dt()):
+        for order in Order.query.filter(Order.date_received >= get_yesterday_dt()):
             order_count += 1
             for suborder in order.suborder:
                 orders.append(suborder.serialize)
@@ -106,8 +106,8 @@ def orders_doc(doc_type):
         #     request.args['status'],
         #     request.args['billing_name'],
         #     '',
-        #     request.args['date_submitted_start'],
-        #     request.args['date_submitted_end']
+        #     request.args['date_received_start'],
+        #     request.args['date_received_end']
         # )
         filename = "orders_{}.csv".format(datetime.now().strftime("%m_%d_%Y_at_%I_%M_%p"))
         with open(join(current_app.static_folder, 'files', filename), 'w') as doc_file:

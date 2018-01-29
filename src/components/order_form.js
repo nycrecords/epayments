@@ -24,7 +24,7 @@ const orderTypeOptions = [
     {key: 'photos', text: '--Photos--', value: 'photos'},
     {key: 'phototax', text: 'Photo Tax', value: 'Photo Tax'},
     {key: 'photogallery', text: 'Photo Gallery', value: 'Photo Gallery'},
-    {key: 'other', text: '--Other--', value: 'other'},
+    {key: 'other', text: '--Other--', value: 'other', disabled: true},
     {key: 'multipleincart', text: 'Multiple Items In Cart', value: 'multiple_items'},
     {key: 'vitalincart', text: 'Vital Records And Photos In Cart', value: 'vital_records_and_photos'}
 ];
@@ -57,12 +57,12 @@ class OrderForm extends React.Component {
                 billing_name: '',
             });
 
-            this.dateSubmittedStart.setState({
+            this.dateReceivedStart.setState({
                 date: '',
             });
 
 
-            this.dateSubmittedEnd.setState({
+            this.dateReceivedEnd.setState({
                 date: '',
             });
         };
@@ -97,8 +97,8 @@ class OrderForm extends React.Component {
                             order_type: this.state.order_type,
                             status: this.state.status,
                             billing_name: this.state.billing_name,
-                            date_submitted_start: formatDate(this.dateSubmittedStart),
-                            date_submitted_end: formatDate(this.dateSubmittedEnd)
+                            date_received_start: formatDate(this.dateReceivedStart),
+                            date_received_end: formatDate(this.dateReceivedEnd)
                         })
                     }).then((response) => {
                         return response.json();
@@ -114,8 +114,8 @@ class OrderForm extends React.Component {
                         order_type: this.state.order_type,
                         status: this.state.status,
                         billing_name: this.state.billing_name,
-                        date_submitted_start: formatDate(this.dateSubmittedStart),
-                        date_submitted_end: formatDate(this.dateSubmittedEnd)
+                        date_received_start: formatDate(this.dateReceivedStart),
+                        date_received_end: formatDate(this.dateReceivedEnd)
                     };
 
                     let esc = encodeURIComponent;
@@ -131,6 +131,7 @@ class OrderForm extends React.Component {
                     });
                     break;
                 case undefined:
+                    this.props.setLoadingState(true);
                     csrfFetch('api/v1.0/orders', {
                         method: "POST",
                         body: JSON.stringify({
@@ -139,8 +140,8 @@ class OrderForm extends React.Component {
                             order_type: this.state.order_type,
                             status: this.state.status,
                             billing_name: this.state.billing_name,
-                            date_submitted_start: formatDate(this.dateSubmittedStart),
-                            date_submitted_end: formatDate(this.dateSubmittedEnd)
+                            date_received_start: formatDate(this.dateReceivedStart),
+                            date_received_end: formatDate(this.dateReceivedEnd)
                         })
                     }).then((response) => {
                         return response.json();
@@ -248,11 +249,11 @@ class OrderForm extends React.Component {
                     <Form.Group>
                         <Form.Field width="16">
                             <Date
-                                label="Date Submitted - Start"
-                                name="Date Submitted - Start"
+                                label="Date Received - Start"
+                                name="Date Received - Start"
                                 date={this.today}
                                 maxDate={this.today}
-                                ref={(date) => this.dateSubmittedStart = date}
+                                ref={(date) => this.dateReceivedStart = date}
                             />
 
                         </Form.Field>
@@ -260,10 +261,10 @@ class OrderForm extends React.Component {
                     <Form.Group>
                         <Form.Field width="16">
                             <Date
-                                label="Date Submitted - End"
-                                name="Date Submitted - End"
+                                label="Date Received - End"
+                                name="Date Received - End"
                                 maxDate={this.today}
-                                ref={(date) => this.dateSubmittedEnd = date}
+                                ref={(date) => this.dateReceivedEnd = date}
                             />
                         </Form.Field>
                     </Form.Group>

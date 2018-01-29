@@ -67,7 +67,7 @@ class Customer(db.Model):
     def address(self):
         address = ''
         if self.address_line_2 is not None:
-            address = "{address_line_one}, {address_line_two}, {city}, {state}, {zip}".format(
+            address = "{address_line_one}, {address_line_two}, {city}, {state} {zip}".format(
                 address_line_one=self.address_line_1,
                 address_line_two=self.address_line_2,
                 city=self.city,
@@ -75,7 +75,7 @@ class Customer(db.Model):
                 zip=self.zip_code
             )
         else:
-            address = "{address_line_one}, {city}, {state}, {zip}".format(
+            address = "{address_line_one}, {city}, {state} {zip}".format(
                 address_line_one=self.address_line_1,
                 city=self.city,
                 state=self.state,
@@ -83,7 +83,7 @@ class Customer(db.Model):
             )
 
         if self.country not in [None, 'United States']:
-            address += self.country
+            address = address + " " + self.country
 
         return address
 
