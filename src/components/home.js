@@ -5,7 +5,7 @@ import {mapDispatchToProps, mapStateToProps} from "../utils/reduxMappers";
 import OrderForm from "./order_form";
 import Order from "./order";
 import LoginModal from "./login_modal"
-import {csrfFetch} from "../utils/fetch"
+import {csrfFetch, handleFetchErrors} from "../utils/fetch"
 
 
 class Home extends React.Component {
@@ -86,11 +86,13 @@ class Home extends React.Component {
     };
 
     getOrders() {
-        csrfFetch('api/v1.0/orders').then((response) => (
-            response.json()
-        )).then((json) => {
-            this.addOrder(json.order_count, json.suborder_count, json.all_orders);
-            this.setLoadingState(false)
+        csrfFetch('api/v1.0/orders')
+            .then(handleFetchErrors)
+            .then((json) => {
+                this.addOrder(json.order_count, json.suborder_count, json.all_orders);
+                this.setLoadingState(false)
+            }).catch((error) => {
+                console.log(error);
         });
     };
 

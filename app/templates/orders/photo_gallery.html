@@ -50,7 +50,7 @@
     <p>
         <b>COMMENT:</b>
         <br/>
-        {{ order_info['comment'] }}
+        {{ order_info['comment'] or "Not Provided" }}
     </p>
 {% endblock %}
 

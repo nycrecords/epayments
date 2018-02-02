@@ -175,9 +175,9 @@ class PhotoGallery(db.Model):
         self.size = size
         self.num_copies = num_copies
         self.mail = mail
-        self.contact_number = contact_number or 'N/A'
+        self.contact_number = contact_number
         self.personal_use_agreement = personal_use_agreement
-        self.comment = comment or 'N/A'
+        self.comment = comment
         self.suborder_number = suborder_number
 
     @property
