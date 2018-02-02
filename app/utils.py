@@ -733,12 +733,12 @@ def import_file(file_name):
             # Retrieve Mail / Pickup Status
             if "MAIL_PICKUP" in clients_data_list:
                 if clients_data_list[clients_data_list.index("MAIL_PICKUP") + 1] == 'Mail':
-                    mail_pickup = True
+                    mail = True
                 else:
-                    mail_pickup = False
+                    mail = False
             else:
-                # TODO: Fix this. mail_pickup column is BOOLEAN
-                mail_pickup = None
+                # TODO: Fix this. mail column is BOOLEAN
+                mail = None
 
             # Retrieve Pickup Contact Information
             contact_info = clients_data_list[
@@ -752,7 +752,7 @@ def import_file(file_name):
                 street=street,
                 description=description,
                 certified=certified,
-                mail_pickup=mail_pickup,
+                mail=mail,
                 contact_info=contact_info,
                 suborder_number=suborder_number
             )
@@ -794,12 +794,12 @@ def import_file(file_name):
             # Retrieve Mail / Pickup Status
             if "MAIL_PICKUP" in clients_data_list:
                 if clients_data_list[clients_data_list.index("MAIL_PICKUP") + 1] == 'Mail':
-                    mail_pickup = True
+                    mail = True
                 else:
-                    mail_pickup = False
+                    mail = False
             else:
-                # TODO: Fix this. mail_pickup column is BOOLEAN
-                mail_pickup = None
+                # TODO: Fix this. mail column is BOOLEAN
+                mail = None
 
             # Retrieve Pickup Contact Information
             contact_number = clients_data_list[
@@ -848,7 +848,7 @@ def import_file(file_name):
                     type=type_,
                     size=size,
                     num_copies=num_copies,
-                    mail_pickup=mail_pickup,
+                    mail=mail,
                     contact_number=contact_number,
                     comment=comment,
                     suborder_number="{}-1940".format(suborder_number)
@@ -868,7 +868,7 @@ def import_file(file_name):
                     type=type_,
                     size=size,
                     num_copies=num_copies,
-                    mail_pickup=mail_pickup,
+                    mail=mail,
                     contact_number=contact_number,
                     comment=comment,
                     suborder_number="{}-1980".format(suborder_number)
@@ -906,7 +906,7 @@ def import_file(file_name):
                     type=type_,
                     size=size,
                     num_copies=num_copies,
-                    mail_pickup=mail_pickup,
+                    mail=mail,
                     contact_number=contact_number,
                     comment=comment,
                     suborder_number=suborder_number)
@@ -939,12 +939,12 @@ def import_file(file_name):
             # Retrieve Mail / Pickup Status
             if "MAIL_PICKUP" in clients_data_list:
                 if clients_data_list[clients_data_list.index("MAIL_PICKUP") + 1] == 'Mail':
-                    mail_pickup = True
+                    mail = True
                 else:
-                    mail_pickup = False
+                    mail = False
             else:
-                # TODO: Fix this. mail_pickup column is BOOLEAN
-                mail_pickup = None
+                # TODO: Fix this. mail column is BOOLEAN
+                mail = None
 
             # Retrieve Pickup Contact Information
             contact_number = clients_data_list[
@@ -968,7 +968,7 @@ def import_file(file_name):
                 additional_description=additional_description,
                 size=size,
                 num_copies=num_copies,
-                mail_pickup=mail_pickup,
+                mail=mail,
                 contact_number=contact_number,
                 personal_use_agreement=personal_use_agreement,
                 comment=comment,

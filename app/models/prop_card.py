@@ -15,7 +15,7 @@ class PropertyCard(db.Model):
     street -- Column: String(40)
     description -- Column: String(35)
     certified -- Column: Bool
-    mail_pickup -- Column: Bool
+    mail -- Column: Bool
     contact_no -- Column: String(35)
     suborder_number -- Column: BigInteger, foreignKey
 
@@ -37,7 +37,7 @@ class PropertyCard(db.Model):
     street = db.Column(db.String(40), nullable=True)
     description = db.Column(db.String(40), nullable=True)
     certified = db.Column(db.String(40), nullable=True)
-    mail_pickup = db.Column(db.Boolean, nullable=True)
+    mail = db.Column(db.Boolean, nullable=True)
     contact_info = db.Column(db.String(35), nullable=True)
     suborder_number = db.Column(db.String(32), db.ForeignKey('suborders.id'), nullable=False)
 
@@ -50,7 +50,7 @@ class PropertyCard(db.Model):
                 street,
                 description,
                 certified,
-                mail_pickup,
+                mail,
                 contact_info,
                 suborder_number
     ):
@@ -61,7 +61,7 @@ class PropertyCard(db.Model):
         self.street = street
         self.description = description
         self.certified = certified
-        self.mail_pickup = mail_pickup
+        self.mail = mail
         self.contact_info = contact_info or None
         self.suborder_number = suborder_number
 
@@ -76,7 +76,7 @@ class PropertyCard(db.Model):
             "street": self.street,
             "description": self.description,
             "certified": self.certified,
-            "maill_pickup": self.mail_pickup,
+            "mail": self.mail,
             "contact_info": self.contact_info,
             'suborder_number': self.suborder_number
         }

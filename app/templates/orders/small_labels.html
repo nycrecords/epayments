@@ -137,7 +137,7 @@
                         {% endif %}
                         {{ labels[1]['city'] + "," if labels[1]['city'] else '' }} {{ labels[1]['state'] + "," if labels[1]['state'] else '' }} {{ labels[1]['zip_code'] if labels[1]['zip_code'] else '' }}
                         {% if labels[1]['country'] != 'United States' %}
-                           {{ "," + labels[1]['cou1try'] if labels[1]['country'] }}
+                           {{ "," + labels[1]['country'] if labels[1]['country'] }}
                         {% endif %}
                     </o:p>
                 </p>
@@ -160,7 +160,7 @@
                         {% endif %}
                         {{ labels[2]['city'] + "," if labels[2]['city'] else '' }} {{ labels[2]['state'] + "," if labels[2]['state'] else '' }} {{ labels[2]['zip_code'] if labels[2]['zip_code'] else '' }}
                         {% if labels[2]['country'] != 'United States' %}
-                           {{ "," + labels[2]['cou2try'] if labels[2]['country'] }}
+                           {{ "," + labels[2]['country'] if labels[2]['country'] }}
                         {% endif %}
                     </o:p>
                 </p>

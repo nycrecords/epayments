@@ -1,5 +1,5 @@
 import csv
-from datetime import datetime
+from datetime import date, datetime
 from flask import current_app, jsonify, abort, request, url_for
 from flask_login import login_user, logout_user, current_user, login_required
 from os.path import join
@@ -25,7 +25,6 @@ from app.models import (
     Users,
     Event
 )
-from app.date_utils import get_yesterday_dt
 
 
 @api.route('/', methods=['GET'])
@@ -65,7 +64,7 @@ def get_orders():
         date_received_end = json.get("date_received_end")
 
         if not (order_number or suborder_number or billing_name) and not date_received_start:
-            date_received_start = get_yesterday_dt()
+            date_received_start = date.today()
         order_count, suborder_count, orders = get_orders_by_fields(order_number,
                                                                    suborder_number,
                                                                    order_type,
@@ -81,7 +80,7 @@ def get_orders():
     else:
         orders = []
         order_count = 0
-        for order in Order.query.filter(Order.date_received >= get_yesterday_dt()):
+        for order in Order.query.filter(Order.date_received == date.today()):
             order_count += 1
             for suborder in order.suborder:
                 orders.append(suborder.serialize)

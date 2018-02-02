@@ -1,8 +1,8 @@
 """initial migration
 
-Revision ID: 3dd511cc28de
+Revision ID: 265654db337a
 Revises: 
-Create Date: 2018-01-22 21:54:22.191887
+Create Date: 2018-02-01 20:46:00.641693
 
 """
 from alembic import op
@@ -10,7 +10,7 @@ import sqlalchemy as sa
 from sqlalchemy.dialects import postgresql
 
 # revision identifiers, used by Alembic.
-revision = '3dd511cc28de'
+revision = '265654db337a'
 down_revision = None
 branch_labels = None
 depends_on = None
@@ -210,7 +210,7 @@ def upgrade():
     sa.Column('additional_description', sa.String(length=500), nullable=True),
     sa.Column('size', sa.Enum('8x10', '11x14', '16x20', name='size'), nullable=False),
     sa.Column('num_copies', sa.String(length=2), nullable=False),
-    sa.Column('mail_pickup', sa.Boolean(), nullable=False),
+    sa.Column('mail', sa.Boolean(), nullable=False),
     sa.Column('contact_number', sa.String(length=10), nullable=True),
     sa.Column('personal_use_agreement', sa.Boolean(), nullable=True),
     sa.Column('comment', sa.String(length=255), nullable=True),
@@ -231,7 +231,7 @@ def upgrade():
     sa.Column('type', sa.Enum('8x10', '11x14', name='type'), nullable=False),
     sa.Column('size', sa.Enum('8x10', '11x14', '16x20', name='size'), nullable=True),
     sa.Column('num_copies', sa.String(length=2), nullable=False),
-    sa.Column('mail_pickup', sa.Boolean(), nullable=True),
+    sa.Column('mail', sa.Boolean(), nullable=False),
     sa.Column('contact_number', sa.String(length=10), nullable=True),
     sa.Column('comment', sa.String(length=255), nullable=True),
     sa.Column('suborder_number', sa.String(length=32), nullable=False),
@@ -247,7 +247,7 @@ def upgrade():
     sa.Column('street', sa.String(length=40), nullable=True),
     sa.Column('description', sa.String(length=40), nullable=True),
     sa.Column('certified', sa.String(length=40), nullable=True),
-    sa.Column('mail_pickup', sa.Boolean(), nullable=True),
+    sa.Column('mail', sa.Boolean(), nullable=True),
     sa.Column('contact_info', sa.String(length=35), nullable=True),
     sa.Column('suborder_number', sa.String(length=32), nullable=False),
     sa.ForeignKeyConstraint(['suborder_number'], ['suborders.id'], ),

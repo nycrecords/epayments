@@ -18,7 +18,7 @@ class PhotoTax(db.Model):
     type -- Column: enum -- size of the photo
     size -- Column: newform -- enum
     num_copies -- Column: String(2)
-    mail_pickup -- Column: Bool
+    mail -- Column: Bool
     contact_number -- Column: String(10)
     comment -- Column: String()
     suborder_number -- Column: BigInteger, foreignKey
@@ -59,7 +59,7 @@ class PhotoTax(db.Model):
             size.SIXTEEN_BY_TWENTY,
             name='size'), default=size.EIGHT_BY_TEN, nullable=True)
     num_copies = db.Column(db.String(2), nullable=False)
-    mail_pickup = db.Column(db.Boolean, nullable=True)
+    mail = db.Column(db.Boolean, nullable=False)
     contact_number = db.Column(db.String(10), nullable=True)
     comment = db.Column(db.String(255), nullable=True)
     suborder_number = db.Column(db.String(32), db.ForeignKey('suborders.id'), nullable=False)
@@ -77,7 +77,7 @@ class PhotoTax(db.Model):
             type,
             size,
             num_copies,
-            mail_pickup,
+            mail,
             contact_number,
             comment,
             suborder_number
@@ -93,7 +93,7 @@ class PhotoTax(db.Model):
         self.type = type
         self.size = size
         self.num_copies = num_copies
-        self.mail_pickup = mail_pickup
+        self.mail = mail
         self.contact_number = contact_number
         self.comment = comment
         self.suborder_number = suborder_number
@@ -113,7 +113,7 @@ class PhotoTax(db.Model):
             'type': self.type,
             'size': self.size,
             'num_copies': self.num_copies,
-            'mail_pickup': self.mail_pickup,
+            'mail': self.mail,
             'contact_number': self.contact_number,
             'comment': self.comment,
             'suborder_number': self.suborder_number,
@@ -130,7 +130,7 @@ class PhotoGallery(db.Model):
     additional_description -- Column: String(50)
     size -- Column: enum[]
     copy -- Column: String(2)
-    mail_pickup -- Column: Bool
+    mail -- Column: Bool
     contact_number -- Column: String(10)
     personal_use_agreement -- Column: Bool
     comment -- Column: String(255)
@@ -150,7 +150,7 @@ class PhotoGallery(db.Model):
             size.SIXTEEN_BY_TWENTY,
             name='size'), default=size.EIGHT_BY_TEN, nullable=False)
     num_copies = db.Column(db.String(2), nullable=False)
-    mail_pickup = db.Column(db.Boolean, nullable=False)
+    mail = db.Column(db.Boolean, nullable=False)
     contact_number = db.Column(db.String(10), nullable=True)
     personal_use_agreement = db.Column(db.Boolean, nullable=True)
     comment = db.Column(db.String(255), nullable=True)
@@ -163,7 +163,7 @@ class PhotoGallery(db.Model):
             additional_description,
             size,
             num_copies,
-            mail_pickup,
+            mail,
             contact_number,
             personal_use_agreement,
             comment,
@@ -174,7 +174,7 @@ class PhotoGallery(db.Model):
         self.additional_description = additional_description
         self.size = size
         self.num_copies = num_copies
-        self.mail_pickup = mail_pickup
+        self.mail = mail
         self.contact_number = contact_number or 'N/A'
         self.personal_use_agreement = personal_use_agreement
         self.comment = comment or 'N/A'
@@ -189,7 +189,7 @@ class PhotoGallery(db.Model):
             "additional_description": self.additional_description,
             "size": self.size,
             "num_copies": self.num_copies,
-            "mail_pickup": self.mail_pickup,
+            "mail": self.mail,
             "contact_number": self.contact_number,
             "personal_use_agreement": self.personal_use_agreement,
             "comment": self.comment,
