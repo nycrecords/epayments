@@ -47,6 +47,13 @@ def reset_db():
 
 
 @manager.command
+def create_test_user():
+    user = Users('test@email.com', '1234')
+    db.session.add(user)
+    db.session.commit()
+
+
+@manager.command
 def test(coverage=False):
     """Run the unit tests."""
     if coverage and not os.environ.get('FLASK_COVERAGE'):

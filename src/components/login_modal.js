@@ -49,7 +49,7 @@ class LoginModal extends React.Component {
 
     render() {
         return (
-                <Modal trigger={<Button primary fluid onClick={this.handleOpen}>Login</Button>}
+                <Modal trigger={<Button primary fluid onClick={this.handleOpen}>Log In</Button>}
                        open={this.state.modalOpen}
                        onClose={this.state.handleClose}>
                     {this.props.authenticated && <Header>Logged In</Header>}
@@ -69,7 +69,7 @@ class LoginModal extends React.Component {
                                 }}
                                 value={this.state.password}
                           />
-                          <Button type='submit' positive onClick={this.handleSubmit} floated='right'>Submit</Button>
+                          <Button type='submit' positive onClick={this.handleSubmit} floated='right'>Log In</Button>
                           <Button type='button' negative onClick={this.handleClose} floated='right'>Cancel</Button>
                           <br/>
                       </Form>

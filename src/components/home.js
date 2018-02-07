@@ -72,15 +72,19 @@ class Home extends React.Component {
         };
 
         this.logOut = () => {
+            this.setLoadingState(true);
             csrfFetch('api/v1.0/logout', {
                 method: "DELETE",
-            }).then((response) => (
-                response.json()
-            )).then((json) => {
-                if (json.authenticated === false) {
-                    this.props.logout();
-                    alert("Logged Out");
-                }
+            })
+                .then(handleFetchErrors)
+                .then((json) => {
+                    if (json.authenticated === false) {
+                        this.props.logout();
+                        alert("Logged Out");
+                    }
+                }).catch((error) => {
+                console.log(error);
+                this.setLoadingState(false);
             });
         };
     };
@@ -92,7 +96,8 @@ class Home extends React.Component {
                 this.addOrder(json.order_count, json.suborder_count, json.all_orders);
                 this.setLoadingState(false)
             }).catch((error) => {
-                console.log(error);
+            console.log(error);
+            this.setLoadingState(false);
         });
     };
 

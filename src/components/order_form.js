@@ -7,7 +7,7 @@ import Date from './datepicker'
 import 'react-datepicker/dist/react-datepicker.css'
 import 'semantic-ui-css/semantic.min.css';
 import moment from 'moment';
-import {csrfFetch} from "../utils/fetch"
+import {csrfFetch, handleFetchErrors} from "../utils/fetch"
 
 
 //Creates the options for the Order Type dropdown.
@@ -101,11 +101,14 @@ class OrderForm extends React.Component {
                             date_received_start: formatDate(this.dateReceivedStart),
                             date_received_end: formatDate(this.dateReceivedEnd)
                         })
-                    }).then((response) => {
-                        return response.json();
-                    }).then((json) => {
+                    })
+                        .then(handleFetchErrors)
+                        .then((json) => {
+                            this.props.setLoadingState(false);
+                            window.open(json.url);
+                        }).catch((error) => {
+                        console.log(error);
                         this.props.setLoadingState(false);
-                        window.open(json.url);
                     });
                     break;
 
@@ -125,11 +128,13 @@ class OrderForm extends React.Component {
                         .map(k => esc(k) + '=' + esc(params[k]))
                         .join('&');
                     csrfFetch('api/v1.0/orders/csv?' + query)
-                        .then((response) => (
-                            response.json()
-                        )).then((json) => {
+                        .then(handleFetchErrors)
+                        .then((json) => {
+                            this.props.setLoadingState(false);
+                            window.open(json.url);
+                        }).catch((error) => {
+                        console.log(error);
                         this.props.setLoadingState(false);
-                        window.open(json.url);
                     });
                     break;
 
@@ -147,10 +152,13 @@ class OrderForm extends React.Component {
                             date_received_start: formatDate(this.dateReceivedStart),
                             date_received_end: formatDate(this.dateReceivedEnd)
                         })
-                    }).then((response) => {
-                        return response.json();
-                    }).then((json) => {
-                        this.props.addOrder(json.order_count, json.suborder_count, json.all_orders);
+                    })
+                        .then(handleFetchErrors)
+                        .then((json) => {
+                            this.props.addOrder(json.order_count, json.suborder_count, json.all_orders);
+                            this.props.setLoadingState(false);
+                        }).catch((error) => {
+                        console.log(error);
                         this.props.setLoadingState(false);
                     });
                     break;
