@@ -3,12 +3,11 @@ from pytz import timezone
 from sqlalchemy.dialects.postgresql import JSONB
 from app import db
 from app.constants import event_type
-from flask_login import current_user
 
 
-class Event(db.Model):
+class Events(db.Model):
     """
-    Define the Event class with the following columns and relationships:
+    Define the Events class with the following columns and relationships:
     Events are any type of action that happened to a request after it was submitted
 
     id - an integer that is the primary key of an Events
@@ -19,20 +18,20 @@ class Event(db.Model):
     previous_value - a string containing the old value of the event
     new_value - a string containing the new value of the event
     """
-    __tablename__ = 'event'
+    __tablename__ = 'events'
     id = db.Column(db.Integer, primary_key=True)
     suborder_number = db.Column(db.String(32), db.ForeignKey('suborders.id', ondelete='CASCADE'))
     user_email = db.Column(db.String(100), db.ForeignKey('users.email'))  # who did the action
     type = db.Column(db.Enum(
         event_type.UPDATE_STATUS,
-        event_type.UPDATE_PHOTO_TAX,
+        event_type.UPDATE_TAX_PHOTO,
         event_type.INITIAL_IMPORT,
         name='event_type'), nullable=False
     )
     timestamp = db.Column(db.DateTime)
     previous_value = db.Column(JSONB)
     new_value = db.Column(JSONB)
-    suborder = db.relationship("Suborder", backref="event")
+    suborder = db.relationship("Suborders", backref="events")
     user = db.relationship(
         "Users",
         backref="events"
@@ -56,11 +55,11 @@ class Event(db.Model):
     def status_history(self):
         # previous_value = ''
         # new_value = ''
-        # TODO: Show history for event_type.UPDATE_PHOTO_TAX
+        # TODO: Show history for event_type.UPDATE_TAX_PHOTO
         # if self.type in (event_type.UPDATE_STATUS, event_type.INITIAL_IMPORT):
         #     previous_value = self.previous_value.get('status', '') if self.previous_value else ''
         #     new_value = self.new_value.get('status', '')
-        # elif self.type == event_type.UPDATE_PHOTO_TAX:
+        # elif self.type == event_type.UPDATE_TAX_PHOTO:
         #     for name, value, in [
         #         ('block: ', self.previous_value.get('block')),
         #         ('lot: ', self.previous_value.get('lot')),

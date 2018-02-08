@@ -1,8 +1,8 @@
 from app import db
-from app.models.orders import Order
+from app.models.orders import Orders
 
 
-class Customer(db.Model):
+class Customers(db.Model):
 
     """
     Define the Shipping class with the following columns and relationships:
@@ -19,7 +19,7 @@ class Customer(db.Model):
     order_number -- Column: String(64), foreignKey
 
     """
-    __tablename__ = 'customer'
+    __tablename__ = 'customers'
     id = db.Column(db.Integer, primary_key=True, nullable=False)
     billing_name = db.Column(db.String(64), nullable=False)
     email = db.Column(db.String(64), nullable=False)

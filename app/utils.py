@@ -3,14 +3,12 @@ import xml.etree.ElementTree as ET
 from datetime import datetime, date
 from flask import current_app
 from app import db, scheduler
-from app.models import Order, Event, BirthSearch, BirthCertificate, MarriageCertificate, \
-    MarriageSearch, DeathCertificate, DeathSearch, PhotoGallery, PhotoTax, PropertyCard, Customer, Suborder
-from app.date_utils import utc_to_local
+from app.models import Orders, Events, BirthSearch, BirthCertificate, MarriageCertificate, \
+    MarriageSearch, DeathCertificate, DeathSearch, PhotoGallery, TaxPhoto, PropertyCard, Customers, Suborders
 from app.file_utils import sftp_ctx
 from app.constants import status
-from app.constants.client_agency_names import CLIENT_AGENCY_NAMES
-from app.constants import order_types, event_type
-from flask_login import current_user
+from app.constants.order_types import CLIENT_ID_DICT
+from app.constants import event_type
 
 
 def import_xml_folder(scheduled=False, path=None):
@@ -87,7 +85,7 @@ def _get_order_types(clients_data):
     clients_data_suborders = list(filter(bool, clients_data.split('ClientID|')))
     clients_data_suborders = [item.split('|') for item in clients_data_suborders]
 
-    return [CLIENT_AGENCY_NAMES[suborder[0]] for suborder in clients_data_suborders]
+    return [CLIENT_ID_DICT[suborder[0]] for suborder in clients_data_suborders]
 
 
 def import_file(file_name):
@@ -129,7 +127,7 @@ def import_file(file_name):
     _order_types = _get_order_types(clients_data)
 
     # 7. Add Orders Object to DB Session
-    order = Order(
+    order = Orders(
         id=order_number,
         date_submitted=date_submitted,
         date_received=date_received,
@@ -160,18 +158,18 @@ def import_file(file_name):
     shipping_instructions = shipping_add.find("ShippingInstructions").text
 
     # Insert into Customer table
-    customer = Customer(billing_name=billing_name,
-                        email=customer_email,
-                        shipping_name=ship_to_name,
-                        address_line_1=ship_to_street_add,
-                        address_line_2=ship_to_street_add_2,
-                        city=ship_to_city,
-                        state=ship_to_state,
-                        zip_code=ship_to_zipcode,
-                        country=ship_to_country,
-                        phone=ship_to_phone,
-                        instructions=shipping_instructions,
-                        order_number=order_number)
+    customer = Customers(billing_name=billing_name,
+                         email=customer_email,
+                         shipping_name=ship_to_name,
+                         address_line_1=ship_to_street_add,
+                         address_line_2=ship_to_street_add_2,
+                         city=ship_to_city,
+                         state=ship_to_state,
+                         zip_code=ship_to_zipcode,
+                         country=ship_to_country,
+                         phone=ship_to_phone,
+                         instructions=shipping_instructions,
+                         order_number=order_number)
 
     db.session.add(customer)
     # In the XML the type of order is kept up with the ClientID
@@ -181,35 +179,35 @@ def import_file(file_name):
     for clients_data_item in clients_data_items:
         clients_data_list = clients_data_item.split('|')
         client_id = clients_data_list[clients_data_list.index("ClientID") + 1]
-        client_agency_name = CLIENT_AGENCY_NAMES[client_id]
+        order_type = CLIENT_ID_DICT[client_id]
 
         # Suborder Number used to identify multi-part orders
         suborder_number = clients_data_list[clients_data_list.index("OrderNo") + 1]
 
         # Check for duplicate in database
-        duplicate = Suborder.query.filter_by(id=suborder_number).first()
+        duplicate = Suborders.query.filter_by(id=suborder_number).first()
 
         if duplicate:
             print("Order %s already exists in the database." % order_number)
             return
 
-        suborder = Suborder(id=suborder_number,
-                            client_id=client_id,
-                            client_agency_name=client_agency_name,
-                            order_number=order_number,
-                            status=status.RECEIVED)
+        suborder = Suborders(id=suborder_number,
+                             client_id=client_id,
+                             order_type=order_type,
+                             order_number=order_number,
+                             _status=status.RECEIVED)
 
         db.session.add(suborder)
         db.session.commit()
 
         # Insert into the StatusTracker Table
-        insert_event = Event(suborder_number=suborder_number,
-                             type_=event_type.INITIAL_IMPORT,
-                             # user_email=current_user.email,
-                             previous_value=None,
-                             new_value={
-                                 'status': status.RECEIVED,
-                             })
+        insert_event = Events(suborder_number=suborder_number,
+                              type_=event_type.INITIAL_IMPORT,
+                              # user_email=current_user.email,
+                              previous_value=None,
+                              new_value={
+                                  'status': status.RECEIVED,
+                              })
 
         db.session.add(insert_event)
 
@@ -810,33 +808,33 @@ def import_file(file_name):
 
             if collection == 'Both':
                 # Remove old Suborder
-                Suborder.query.filter_by(id=suborder_number).delete()
+                Suborders.query.filter_by(id=suborder_number).delete()
                 db.session.commit()
 
                 # Create Suborder for 1940 Request
-                suborder_1940 = Suborder(
+                suborder_1940 = Suborders(
                     id="{}-1940".format(suborder_number),
                     client_id=client_id,
-                    client_agency_name=client_agency_name,
+                    order_type=order_type,
                     order_number=order_number,
-                    status=status.RECEIVED
+                    _status=status.RECEIVED
                 )
                 db.session.add(suborder_1940)
 
                 # Create Suborder for 1980 Request
-                suborder_1980 = Suborder(
+                suborder_1980 = Suborders(
                     id="{}-1980".format(suborder_number),
                     client_id=client_id,
-                    client_agency_name=client_agency_name,
+                    order_type=order_type,
                     order_number=order_number,
-                    status=status.RECEIVED
+                    _status=status.RECEIVED
                 )
                 db.session.add(suborder_1980)
 
                 db.session.commit()
 
-                # Create PhotoTax entry for 1940 print
-                customer_order_1940 = PhotoTax(
+                # Create TaxPhoto entry for 1940 print
+                customer_order_1940 = TaxPhoto(
                     borough=borough,
                     collection="1940",
                     roll=roll,
@@ -855,8 +853,8 @@ def import_file(file_name):
                 )
                 db.session.add(customer_order_1940)
 
-                # Create PhotoTax entry for 1980 print
-                customer_order_1980 = PhotoTax(
+                # Create TaxPhoto entry for 1980 print
+                customer_order_1980 = TaxPhoto(
                     borough=borough,
                     collection="1980",
                     roll="N/A",
@@ -876,25 +874,25 @@ def import_file(file_name):
                 db.session.add(customer_order_1980)
 
                 insert_event = [
-                    Event(suborder_number=suborder_1940.id,
-                          type_=event_type.INITIAL_IMPORT,
-                          # user_email=current_user.email,
-                          previous_value=None,
-                          new_value={
-                              'status': status.RECEIVED,
-                          }),
-                    Event(suborder_number=suborder_1980.id,
-                          type_=event_type.INITIAL_IMPORT,
-                          # user_email=current_user.email,
-                          previous_value=None,
-                          new_value={
-                              'status': status.RECEIVED,
-                          })
+                    Events(suborder_number=suborder_1940.id,
+                           type_=event_type.INITIAL_IMPORT,
+                           # user_email=current_user.email,
+                           previous_value=None,
+                           new_value={
+                               'status': status.RECEIVED,
+                           }),
+                    Events(suborder_number=suborder_1980.id,
+                           type_=event_type.INITIAL_IMPORT,
+                           # user_email=current_user.email,
+                           previous_value=None,
+                           new_value={
+                               'status': status.RECEIVED,
+                           })
                 ]
                 db.session.bulk_save_objects(insert_event)
 
             else:
-                customer_order = PhotoTax(
+                customer_order = TaxPhoto(
                     borough=borough,
                     collection=collection,
                     roll=roll,

@@ -21,7 +21,7 @@ class PropertyCard(db.Model):
 
     """
 
-    __tablename__ = 'prop_card'
+    __tablename__ = 'property_card'
     id = db.Column(db.Integer, primary_key=True)
     borough = db.Column(
         db.Enum(

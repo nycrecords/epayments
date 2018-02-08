@@ -16,7 +16,8 @@ class Home extends React.Component {
             all_orders: [],
             order_count: 0,
             suborder_count: 0,
-            loading: true
+            loading: true,
+            showCSVButton: false
         };
 
         this.addOrder = (order_count, suborder_count, orders) => {
@@ -89,6 +90,10 @@ class Home extends React.Component {
         };
     };
 
+    toggleCSV = (visible) => {
+        this.setState({showCSVButton: visible});
+    };
+
     getOrders() {
         csrfFetch('api/v1.0/orders')
             .then(handleFetchErrors)
@@ -112,7 +117,7 @@ class Home extends React.Component {
                 key={order.suborder_number}
                 order_number={order.order_number}
                 suborder_number={order.suborder_number}
-                client_agency_name={order.client_agency_name}
+                order_type={order.order_type}
                 billing_name={order.billing_name}
                 date_received={order.date_received.slice(0, -9)}
                 current_status={order.current_status}
@@ -133,7 +138,7 @@ class Home extends React.Component {
                                 <br/>
                                 <Button fluid content='Logout' onClick={this.logOut}/>
                             </Segment>
-                            <OrderForm addOrder={this.addOrder} setLoadingState={this.setLoadingState} ref={orderForm => this.orderForm = orderForm}/>
+                            <OrderForm addOrder={this.addOrder} setLoadingState={this.setLoadingState} toggleCSV={this.toggleCSV} ref={orderForm => this.orderForm = orderForm}/>
                         </Grid.Column>
                         <Grid.Column width={1}/>
                         <Dimmer inverted active={this.state.loading}>
@@ -146,7 +151,7 @@ class Home extends React.Component {
                                     <Button icon active={true}>
                                         <Icon name='print'/>
                                     </Button>
-                                    <Button content='Generate CSV' onClick={this.generateCSV}/>
+                                    {this.state.showCSVButton && <Button content='Generate CSV' onClick={this.generateCSV} />}
                                     <Button content='Order Sheets' onClick={this.printOrderSheet}/>
                                     <Button content='Big Labels' onClick={this.printBigLabels}/>
                                     <Button content='Small Labels' onClick={this.printSmallLabels}/>

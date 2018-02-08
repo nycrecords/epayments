@@ -1,5 +1,5 @@
 from app import db
-from app.constants import purpose, gender
+from app.constants import purpose, gender, order_types
 from sqlalchemy.dialects.postgresql import ARRAY
 
 

@@ -6,6 +6,4 @@
 """
 INITIAL_IMPORT = 'initial_import'
 UPDATE_STATUS = 'update_status'
-UPDATE_PHOTO_TAX = 'update_photo_tax'
-
-
+UPDATE_TAX_PHOTO = 'update_tax_photo'

@@ -1,7 +1,7 @@
 import unittest
 from flask import current_app
 from app import create_app, db
-from app.models import Order
+from app.models import Orders
 from _datetime import datetime
 
 

@@ -8,4 +8,3 @@
 NOT_KNOWN = 'Not_Known'
 MALE = 'Male'
 FEMALE = 'Female'
-

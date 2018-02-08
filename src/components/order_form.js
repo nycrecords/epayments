@@ -22,7 +22,7 @@ const orderTypeOptions = [
     {key: 'deathcert', text: 'Death Certificate', value: 'Death Cert'},
     {key: 'propertycard', text: 'Property Card', value: 'Property Card'},
     {key: 'photos', text: '--Photos--', value: 'photos'},
-    {key: 'phototax', text: 'Photo Tax', value: 'Photo Tax'},
+    {key: 'taxphoto', text: 'Tax Photo', value: 'Tax Photo'},
     {key: 'photogallery', text: 'Photo Gallery', value: 'Photo Gallery'},
     {key: 'other', text: '--Other--', value: 'other', disabled: true},
     {key: 'multipleincart', text: 'Multiple Items In Cart', value: 'multiple_items'},
@@ -75,6 +75,8 @@ class OrderForm extends React.Component {
             billing_name: ''
 
         };
+
+        this.photosValueList = ['photos', 'Tax Photo', 'Photo Gallery'];
 
         this.yesterday = moment().subtract(1, 'days');
         this.today = moment();
@@ -189,7 +191,7 @@ class OrderForm extends React.Component {
                                 value={this.state.ordernumber}
                     />
 
-                    <Form.Input label="Suborder Number" placeholder='Suborder Number' maxLength="32"
+                    <Form.Input label="Suborder Number" placeholder="Suborder Number" maxLength="32"
                                 onChange={(e, {value}) => {
                                     if (/^[\d -]+$/.test(value.slice(-1)) || value === '') {
                                         this.setState({subordernumber: value})
@@ -200,7 +202,10 @@ class OrderForm extends React.Component {
                     />
                     <Form.Select label="Order Type" placeholder="Order Type" options={orderTypeOptions}
                                  onChange={(e, {value}) => {
-                                     this.setState({order_type: value})
+                                     this.setState({order_type: value});
+
+                                     // Toggle visibility of "Generate CSV" button
+                                     (this.photosValueList.indexOf(value) > -1) ? this.props.toggleCSV(true) : this.props.toggleCSV(false);
                                  }}
                                  value={this.state.order_type}
                     />

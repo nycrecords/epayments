@@ -1,8 +1,8 @@
 import os
 from app import create_app, db
-from app.models import Order, Suborder, Customer, BirthSearch, \
+from app.models import Orders, Suborders, Customers, BirthSearch, \
     MarriageSearch, DeathSearch, BirthCertificate, MarriageCertificate, \
-    DeathCertificate, PropertyCard, PhotoTax, PhotoGallery, Event, Users
+    DeathCertificate, PropertyCard, TaxPhoto, PhotoGallery, Events, Users
 from flask_script import Manager, Shell
 from flask_migrate import Migrate, MigrateCommand
 
@@ -19,11 +19,11 @@ migrate = Migrate(app, db)
 
 def make_shell_context():
     """Create the shell context for the Flask application."""
-    return dict(app=app, db=db, Order=Order, Suborder=Suborder, Event=Event,
-                Customer=Customer, BirthSearch=BirthSearch, MarriageSearch=MarriageSearch,
+    return dict(app=app, db=db, Orders=Orders, Suborders=Suborders, Events=Events,
+                Customers=Customers, BirthSearch=BirthSearch, MarriageSearch=MarriageSearch,
                 DeathSearch=DeathSearch, BirthCertificate=BirthCertificate,
                 MarriageCertificate=MarriageCertificate, DeathCertificate=DeathCertificate,
-                PropertyCard=PropertyCard, PhotoTax=PhotoTax, PhotoGallery=PhotoGallery, Users=Users)
+                PropertyCard=PropertyCard, TaxPhoto=TaxPhoto, PhotoGallery=PhotoGallery, Users=Users)
 
 
 manager.add_command('shell', Shell(make_context=make_shell_context))
@@ -44,13 +44,6 @@ def reset_db():
     db.drop_all()
     db.create_all()
     upgrade()
-
-
-@manager.command
-def create_test_user():
-    user = Users('test@email.com', '1234')
-    db.session.add(user)
-    db.session.commit()
 
 
 @manager.command

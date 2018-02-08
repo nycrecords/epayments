@@ -1,8 +1,8 @@
 """initial migration
 
-Revision ID: 265654db337a
+Revision ID: b8738d2f2df3
 Revises: 
-Create Date: 2018-02-01 20:46:00.641693
+Create Date: 2018-02-08 21:37:04.433639
 
 """
 from alembic import op
@@ -10,7 +10,7 @@ import sqlalchemy as sa
 from sqlalchemy.dialects import postgresql
 
 # revision identifiers, used by Alembic.
-revision = '265654db337a'
+revision = 'b8738d2f2df3'
 down_revision = None
 branch_labels = None
 depends_on = None
@@ -36,7 +36,7 @@ def upgrade():
     sa.PrimaryKeyConstraint('email'),
     sa.UniqueConstraint('email')
     )
-    op.create_table('customer',
+    op.create_table('customers',
     sa.Column('id', sa.Integer(), nullable=False),
     sa.Column('billing_name', sa.String(length=64), nullable=False),
     sa.Column('email', sa.String(length=64), nullable=False),
@@ -56,7 +56,7 @@ def upgrade():
     op.create_table('suborders',
     sa.Column('id', sa.String(length=32), nullable=False),
     sa.Column('client_id', sa.Integer(), nullable=False),
-    sa.Column('client_agency_name', sa.String(length=64), nullable=False),
+    sa.Column('order_type', sa.Enum('Birth Search', 'Birth Cert', 'Marriage Search', 'Marriage Cert', 'Death Search', 'Death Cert', 'Tax Photo', 'Photo Gallery', 'Property Card', name='order_type'), nullable=False),
     sa.Column('order_number', sa.String(length=64), nullable=False),
     sa.Column('status', sa.Enum('Received', 'Processing', 'Found', 'Printed', 'Mailed/Pickup', 'Not_Found', 'Letter_Generated', 'Undeliverable', 'Refunded', 'Done', name='status'), nullable=True),
     sa.ForeignKeyConstraint(['order_number'], ['orders.id'], ),
@@ -150,11 +150,11 @@ def upgrade():
     sa.ForeignKeyConstraint(['suborder_number'], ['suborders.id'], ),
     sa.PrimaryKeyConstraint('id')
     )
-    op.create_table('event',
+    op.create_table('events',
     sa.Column('id', sa.Integer(), nullable=False),
     sa.Column('suborder_number', sa.String(length=32), nullable=True),
     sa.Column('user_email', sa.String(length=100), nullable=True),
-    sa.Column('type', sa.Enum('update_status', 'update_photo_tax', 'initial_import', name='event_type'), nullable=False),
+    sa.Column('type', sa.Enum('update_status', 'update_tax_photo', 'initial_import', name='event_type'), nullable=False),
     sa.Column('timestamp', sa.DateTime(), nullable=True),
     sa.Column('previous_value', postgresql.JSONB(astext_type=sa.Text()), nullable=True),
     sa.Column('new_value', postgresql.JSONB(astext_type=sa.Text()), nullable=True),
@@ -218,7 +218,22 @@ def upgrade():
     sa.ForeignKeyConstraint(['suborder_number'], ['suborders.id'], ),
     sa.PrimaryKeyConstraint('id')
     )
-    op.create_table('photo_tax',
+    op.create_table('property_card',
+    sa.Column('id', sa.Integer(), nullable=False),
+    sa.Column('borough', sa.Enum('Bronx', 'Manhattan', 'Staten Island', 'Brooklyn', 'Queens', name='borough'), nullable=True),
+    sa.Column('block', sa.String(length=9), nullable=True),
+    sa.Column('lot', sa.String(length=9), nullable=True),
+    sa.Column('building_no', sa.String(length=10), nullable=True),
+    sa.Column('street', sa.String(length=40), nullable=True),
+    sa.Column('description', sa.String(length=40), nullable=True),
+    sa.Column('certified', sa.String(length=40), nullable=True),
+    sa.Column('mail', sa.Boolean(), nullable=True),
+    sa.Column('contact_info', sa.String(length=35), nullable=True),
+    sa.Column('suborder_number', sa.String(length=32), nullable=False),
+    sa.ForeignKeyConstraint(['suborder_number'], ['suborders.id'], ),
+    sa.PrimaryKeyConstraint('id')
+    )
+    op.create_table('tax_photo',
     sa.Column('id', sa.Integer(), nullable=False),
     sa.Column('collection', sa.Enum('1940', '1980', 'Both', name='collection'), nullable=False),
     sa.Column('borough', sa.Enum('Bronx', 'Manhattan', 'Staten Island', 'Brooklyn', 'Queens', name='borough'), nullable=False),
@@ -238,38 +253,23 @@ def upgrade():
     sa.ForeignKeyConstraint(['suborder_number'], ['suborders.id'], ),
     sa.PrimaryKeyConstraint('id')
     )
-    op.create_table('prop_card',
-    sa.Column('id', sa.Integer(), nullable=False),
-    sa.Column('borough', sa.Enum('Bronx', 'Manhattan', 'Staten Island', 'Brooklyn', 'Queens', name='borough'), nullable=True),
-    sa.Column('block', sa.String(length=9), nullable=True),
-    sa.Column('lot', sa.String(length=9), nullable=True),
-    sa.Column('building_no', sa.String(length=10), nullable=True),
-    sa.Column('street', sa.String(length=40), nullable=True),
-    sa.Column('description', sa.String(length=40), nullable=True),
-    sa.Column('certified', sa.String(length=40), nullable=True),
-    sa.Column('mail', sa.Boolean(), nullable=True),
-    sa.Column('contact_info', sa.String(length=35), nullable=True),
-    sa.Column('suborder_number', sa.String(length=32), nullable=False),
-    sa.ForeignKeyConstraint(['suborder_number'], ['suborders.id'], ),
-    sa.PrimaryKeyConstraint('id')
-    )
     # ### end Alembic commands ###
 
 
 def downgrade():
     # ### commands auto generated by Alembic - please adjust! ###
-    op.drop_table('prop_card')
-    op.drop_table('photo_tax')
+    op.drop_table('tax_photo')
+    op.drop_table('property_card')
     op.drop_table('photo_gallery')
     op.drop_table('marriage_search')
     op.drop_table('marriage_cert')
-    op.drop_table('event')
+    op.drop_table('events')
     op.drop_table('death_search')
     op.drop_table('death_cert')
     op.drop_table('birth_search')
     op.drop_table('birth_cert')
     op.drop_table('suborders')
-    op.drop_table('customer')
+    op.drop_table('customers')
     op.drop_table('users')
     op.drop_table('orders')
     # ### end Alembic commands ###

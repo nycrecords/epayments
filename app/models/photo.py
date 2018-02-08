@@ -1,8 +1,8 @@
 from app import db
-from app.constants import borough, collection, size
+from app.constants import borough, collection, order_types, size
 
 
-class PhotoTax(db.Model):
+class TaxPhoto(db.Model):
     """
 
     Define the class with these following relationships
@@ -25,7 +25,7 @@ class PhotoTax(db.Model):
 
     """
 
-    __tablename__ = 'photo_tax'
+    __tablename__ = 'tax_photo'
     id = db.Column(db.Integer, primary_key=True)
     collection = db.Column(
         db.Enum(
@@ -155,6 +155,7 @@ class PhotoGallery(db.Model):
     personal_use_agreement = db.Column(db.Boolean, nullable=True)
     comment = db.Column(db.String(255), nullable=True)
     suborder_number = db.Column(db.String(32), db.ForeignKey('suborders.id'), nullable=False)
+    suborder = db.relationship('Suborders', backref='photo_gallery', uselist=False)
 
     def __init__(
             self,

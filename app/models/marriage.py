@@ -1,5 +1,5 @@
 from app import db
-from app.constants import purpose
+from app.constants import order_types, purpose
 from sqlalchemy.dialects.postgresql import ARRAY
 
 

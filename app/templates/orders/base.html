@@ -19,7 +19,7 @@
 {{ order_info['customer']['billing_name'] }}<br/>
 Address: {{ order_info['customer']['address'] }}
 </p>
-<h1>{{ order_info['client_agency_name'] }}</h1>
+<h1>{{ order_info['order_type'] }}</h1>
 
 {% if order_info['order']['multiple_items'] %}
     <p>

@@ -14,9 +14,9 @@ from app.constants import (
 from app.constants.customer import EMPTY_CUSTOMER
 from app.constants.order_types import VITAL_RECORDS_LIST, PHOTOS_LIST
 from app.models import (
-    Order,
-    Suborder,
-    Customer,
+    Orders,
+    Suborders,
+    Customers,
     BirthSearch,
     BirthCertificate,
     DeathSearch,
@@ -24,10 +24,10 @@ from app.models import (
     MarriageSearch,
     MarriageCertificate,
     PhotoGallery,
-    PhotoTax,
+    TaxPhoto,
     PropertyCard,
     Users,
-    Event
+    Events
 )
 
 
@@ -36,13 +36,13 @@ def _order_query_filters(order_number, suborder_number, order_type, status, bill
     # TODO: Need to refactor get_order_by_fields so that it performs a single function for code reuse.
     filter_args = []
     for name, value, col in [
-        ("order_number", order_number, Order.id),
-        ("suborder_number", suborder_number, Suborder.id),
-        ("order_type", order_type, Suborder.client_agency_name),
-        ("status", status, Suborder.status),
-        ("billing_name", billing_name, Customer.billing_name),
-        ("date_received_start", date_received_start, Order.date_received),
-        ("date_received_end", date_received_end, Order.date_received)
+        ("order_number", order_number, Orders.id),
+        ("suborder_number", suborder_number, Suborders.id),
+        ("order_type", order_type, Suborders.order_type),
+        ("status", status, Suborders.status),
+        ("billing_name", billing_name, Customers.billing_name),
+        ("date_received_start", date_received_start, Orders.date_received),
+        ("date_received_end", date_received_end, Orders.date_received)
     ]:
         if value:
             if name == 'order_type':
@@ -52,20 +52,20 @@ def _order_query_filters(order_number, suborder_number, order_type, status, bill
                     )
                 elif value == 'multiple_items':
                     filter_args.append(
-                        Order.multiple_items.__eq__(True)
+                        Orders.multiple_items.__eq__(True)
                     )
                 elif value == 'vital_records':
                     filter_args.append(
-                        or_(*[Order.order_types.any(name) for name in VITAL_RECORDS_LIST])
+                        or_(*[Orders.order_types.any(name) for name in VITAL_RECORDS_LIST])
                     )
                 elif value == 'photos':
                     filter_args.append(
-                        or_(*[Order.order_types.any(name) for name in PHOTOS_LIST])
+                        or_(*[Orders.order_types.any(name) for name in PHOTOS_LIST])
                     )
                 elif value == 'vital_records_and_photos':
                     filter_args.append(
-                        # and_(or_(*[Order.order_types.any(name) for name in VITAL_RECORDS_LIST]),
-                        #      or_(*[Order.order_types.any(name) for name in PHOTOS_LIST]))
+                        # and_(or_(*[Orders.order_types.any(name) for name in VITAL_RECORDS_LIST]),
+                        #      or_(*[Orders.order_types.any(name) for name in PHOTOS_LIST]))
                     )
             elif name == 'status':
                 if value != 'all':
@@ -105,11 +105,11 @@ def update_status(suborder_number, comment, new_status):
      - 2) it will have the comment that was passed in or None
      - 3) it will have the new status that was passed from the user
     """
-    suborder = Suborder.query.filter_by(id=suborder_number).one()
+    suborder = Suborders.query.filter_by(id=suborder_number).one()
     if new_status != suborder.status:
-        prev_event = Event.query.filter(Event.suborder_number == suborder_number,
-                                        Event.new_value['status'].astext == suborder.status).order_by(
-            Event.timestamp.desc()).first()
+        prev_event = Events.query.filter(Events.suborder_number == suborder_number,
+                                         Events.new_value['status'].astext == suborder.status).order_by(
+            Events.timestamp.desc()).first()
 
         previous_value = {}
         new_value = {}
@@ -124,11 +124,11 @@ def update_status(suborder_number, comment, new_status):
 
         suborder.status = new_status
 
-        event = Event(suborder_number,
-                      event_type.UPDATE_STATUS,
-                      current_user.email,
-                      previous_value,
-                      new_value)
+        event = Events(suborder_number,
+                       event_type.UPDATE_STATUS,
+                       current_user.email,
+                       previous_value,
+                       new_value)
 
         db.session.add(event)
         db.session.commit()
@@ -169,11 +169,11 @@ def update_tax_photo(suborder_number, block_no, lot_no, roll_no):
     if new_value:
         db.session.add(p_tax)
 
-        event = Event(suborder_number,
-                      event_type.UPDATE_PHOTO_TAX,
-                      current_user.email,
-                      previous_value,
-                      new_value)
+        event = Events(suborder_number,
+                       event_type.UPDATE_TAX_PHOTO,
+                       current_user.email,
+                       previous_value,
+                       new_value)
 
         db.session.add(event)
         db.session.commit()
@@ -192,8 +192,8 @@ def get_orders_by_fields(order_number, suborder_number, order_type, status, bill
     filter_args = _order_query_filters(order_number, suborder_number, order_type, status, billing_name, user,
                                        date_received_start,
                                        date_received_end)
-    base_query = Suborder.query.join(Order, Customer).filter(*filter_args)
-    order_count = base_query.distinct(Suborder.order_number).group_by(Suborder.order_number, Suborder.id).count()
+    base_query = Suborders.query.join(Orders, Customers).filter(*filter_args)
+    order_count = base_query.distinct(Suborders.order_number).group_by(Suborders.order_number, Suborders.id).count()
     suborder_list = base_query.all()
     suborder_count = len(suborder_list)
 
@@ -223,7 +223,7 @@ def _print_orders(search_params):
                                        date_received_start,
                                        date_received_end)
 
-    suborders = Suborder.query.join(Order, Customer).filter(*filter_args).all()
+    suborders = Suborders.query.join(Orders, Customers).filter(*filter_args).all()
 
     order_type_template_handler = {
         order_types.BIRTH_SEARCH: 'birth_search.html',
@@ -232,7 +232,7 @@ def _print_orders(search_params):
         order_types.MARRIAGE_CERT: 'marriage_cert.html',
         order_types.DEATH_SEARCH: 'death_search.html',
         order_types.DEATH_CERT: 'death_cert.html',
-        order_types.PHOTO_TAX: 'photo_tax.html',
+        order_types.TAX_PHOTO: 'tax_photo.html',
         order_types.PHOTO_GALLERY: 'photo_gallery.html',
         order_types.PROPERTY_CARD: 'property_card.html',
     }
@@ -244,20 +244,20 @@ def _print_orders(search_params):
         order_types.MARRIAGE_CERT: MarriageCertificate,
         order_types.DEATH_SEARCH: DeathSearch,
         order_types.DEATH_CERT: DeathCertificate,
-        order_types.PHOTO_TAX: PhotoTax,
+        order_types.TAX_PHOTO: TaxPhoto,
         order_types.PHOTO_GALLERY: PhotoGallery,
         order_types.PROPERTY_CARD: PropertyCard,
     }
 
     html = ''
     for item in suborders:
-        order_info = order_type_models_handler[item.client_agency_name].query.filter_by(
+        order_info = order_type_models_handler[item.order_type].query.filter_by(
             suborder_number=item.id).one().serialize
         order_info['customer'] = item.order.customer.serialize
         order_info['order'] = item.order.serialize
 
-        order_info['client_agency_name'] = item.client_agency_name
-        html += render_template("orders/{}".format(order_type_template_handler[item.client_agency_name]),
+        order_info['order_type'] = item.order_type
+        html += render_template("orders/{}".format(order_type_template_handler[item.order_type]),
                                 order_info=order_info)
 
     filename = 'order_sheets_{username}_{time}.pdf'.format(username=current_user.email, time=datetime.now().strftime("%Y%m%d-%H%M%S"))
@@ -287,7 +287,7 @@ def _print_small_labels(search_params):
                                        date_received_start,
                                        date_received_end)
 
-    suborders = Suborder.query.join(Order, Customer).filter(*filter_args).all()
+    suborders = Suborders.query.join(Orders, Customers).filter(*filter_args).all()
 
     customers = [suborder.order.customer.serialize for suborder in suborders]
 
@@ -328,7 +328,7 @@ def _print_large_labels(search_params):
                                        date_received_start,
                                        date_received_end)
 
-    suborders = Suborder.query.join(Order, Customer).filter(*filter_args).all()
+    suborders = Suborders.query.join(Orders, Customers).filter(*filter_args).all()
 
     customers = [suborder.order.customer.serialize for suborder in suborders]
 
@@ -360,4 +360,14 @@ def generate_csv(search_params):
                                        '',
                                        search_params.get('date_received_start'),
                                        search_params.get('date_received_end'))
+
+    suborders = Suborders.query.join(Orders, Customers).filter(*filter_args).all()
+
+    # order_type_models_handler = {
+    #     order_types.TAX_PHOTO: PhotoTax,
+    #     order_types.PHOTO_GALLERY: PhotoGallery
+    # }
+    #
+    # blah = order_type_models_handler[search_params.get('order_type')].query.filter()
+
     pass

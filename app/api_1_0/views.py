@@ -20,10 +20,10 @@ from app.constants import (
 )
 from app.constants import printing
 from app.models import (
-    Order,
-    PhotoTax,
+    Orders,
+    TaxPhoto,
     Users,
-    Event
+    Events
 )
 
 
@@ -80,7 +80,7 @@ def get_orders():
     else:
         orders = []
         order_count = 0
-        for order in Order.query.filter(Order.date_received == date.today()):
+        for order in Orders.query.filter(Orders.date_received == date.today()):
             order_count += 1
             for suborder in order.suborder:
                 orders.append(suborder.serialize)
@@ -167,7 +167,7 @@ def status_change(suborder_number):
         return jsonify(status_code=status_code)
 
     # return jsonify(current_status=curr_status, suborder_number=suborder_number, comment=comment, status_id=status_id)
-    status = [status.serialize for status in Event.query.filter_by(suborder_number=int(suborder_number)).all()]
+    status = [status.serialize for status in Events.query.filter_by(suborder_number=int(suborder_number)).all()]
     return jsonify(status=status)
 
 
@@ -182,12 +182,12 @@ def history(suborder_number):
     Look for all the rows with this suborder_number and list out the history for each one in Descending order
      also get the comment and date with these to send to the front
     """
-    # TODO: Event.type.in(..., event_type.UPDATE_PHOTO_TAX)
+    # TODO: Events.type.in(..., event_type.UPDATE_TAX_PHOTO)
     status_history = [event.status_history for event in
-                      Event.query.filter(Event.suborder_number == suborder_number,
-                                         Event.type.in_(
-                                             [event_type.UPDATE_STATUS, event_type.INITIAL_IMPORT])
-                                         ).order_by(desc(Event.timestamp)).all()]
+                      Events.query.filter(Events.suborder_number == suborder_number,
+                                          Events.type.in_(
+                                              [event_type.UPDATE_STATUS, event_type.INITIAL_IMPORT])
+                                          ).order_by(desc(Events.timestamp)).all()]
 
     return jsonify(history=status_history)
 
@@ -199,7 +199,7 @@ def get_single_order(order_id):
     :param order_id:
     :return: the orders with that specific client id that was passed
     """
-    orders = [order.serialize for order in Order.query.filter_by(client_id=order_id).all()]
+    orders = [order.serialize for order in Orders.query.filter_by(client_id=order_id).all()]
 
     if len(orders) == 0:
         abort(404)
@@ -207,11 +207,11 @@ def get_single_order(order_id):
     return jsonify(orders=orders)
 
 
-@api.route('/photo_tax/<string:suborder_number>', methods=['GET', 'POST'])
+@api.route('/tax_photo/<string:suborder_number>', methods=['GET', 'POST'])
 @login_required
-def photo_tax(suborder_number):
+def tax_photo(suborder_number):
     if request.method == 'GET':
-        p_tax = PhotoTax.query.filter_by(suborder_number=suborder_number).one()
+        p_tax = TaxPhoto.query.filter_by(suborder_number=suborder_number).one()
         return jsonify(block_no=p_tax.block,
                        lot_no=p_tax.lot,
                        roll_no=p_tax.roll)

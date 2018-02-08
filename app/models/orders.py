@@ -1,11 +1,11 @@
 from app import db
-from app.constants import status
+from app.constants import order_types, status
 from sqlalchemy.dialects.postgresql import ARRAY
 
 
-class Order(db.Model):
+class Orders(db.Model):
     """
-    Define the new Order class with the following Columns & relationships
+    Define the new Orders class with the following Columns & relationships
 
     order_number -- Column: String(64)
     suborder_number -- Column: BigInteger, PrimaryKey
@@ -27,8 +27,8 @@ class Order(db.Model):
     client_data = db.Column(db.Text, nullable=False)
     order_types = db.Column(ARRAY(db.Text), nullable=True)
     multiple_items = db.Column(db.Boolean, nullable=False)
-    suborder = db.relationship('Suborder', backref='suborder', lazy=True)
-    customer = db.relationship('Customer', backref='customer', uselist=False)
+    suborder = db.relationship('Suborders', backref='suborders', lazy=True)
+    customer = db.relationship('Customers', backref='customers', uselist=False)
 
     def __init__(
             self,
@@ -63,14 +63,25 @@ class Order(db.Model):
         }
 
 
-class Suborder(db.Model):
+class Suborders(db.Model):
     """
 
     """
     __tablename__ = 'suborders'
     id = db.Column(db.String(32), primary_key=True, nullable=False)
     client_id = db.Column(db.Integer, nullable=False)
-    client_agency_name = db.Column(db.String(64), nullable=False)
+    order_type = db.Column(
+        db.Enum(
+            order_types.BIRTH_SEARCH,
+            order_types.BIRTH_CERT,
+            order_types.MARRIAGE_SEARCH,
+            order_types.MARRIAGE_CERT,
+            order_types.DEATH_SEARCH,
+            order_types.DEATH_CERT,
+            order_types.TAX_PHOTO,
+            order_types.PHOTO_GALLERY,
+            order_types.PROPERTY_CARD,
+            name='order_type'), nullable=False)
     order_number = db.Column(db.String(64), db.ForeignKey('orders.id'), nullable=False)
     status = db.Column(
         db.Enum(
@@ -85,21 +96,21 @@ class Suborder(db.Model):
             status.REFUNDED,
             status.DONE,
             name='status'), nullable=True)
-    order = db.relationship('Order', backref='orders', uselist=False)
+    order = db.relationship('Orders', backref='orders', uselist=False)
 
     def __init__(
             self,
             id,
             client_id,
-            client_agency_name,
+            order_type,
             order_number,
-            status
+            _status
     ):
         self.id = id
         self.client_id = client_id
-        self.client_agency_name = client_agency_name
+        self.order_type = order_type
         self.order_number = order_number
-        self.status = status
+        self.status = _status
 
     @property
     def serialize(self):
@@ -111,6 +122,6 @@ class Suborder(db.Model):
             'date_received': self.order.date_received.strftime("%x %I:%M %p"),
             'billing_name': self.order.customer.billing_name,
             'customer_email': self.order.customer.email,
-            'client_agency_name': self.client_agency_name,
+            'order_type': self.order_type,
             'current_status': self.status
         }

@@ -4,9 +4,9 @@
 import React from 'react';
 import {Divider, Button} from 'semantic-ui-react';
 import 'semantic-ui-css/semantic.min.css';
-import StatusModal from './status_modal';
+import StatusModal from './statusModal';
 import History from './history';
-import PhotoTaxModal from './photo_tax_modal'
+import TaxPhotoModal from './taxPhotoModal';
 
 class Order extends React.Component {
     render() {
@@ -20,8 +20,8 @@ class Order extends React.Component {
                 <Button color="green" compact size='small' content={this.props.current_status} floated='right'/>
                 <br/>
                 Suborder #: {this.props.suborder_number}<br/>
-                Order Type: {this.props.client_agency_name}
-                { this.props.client_agency_name === 'Photo Tax' && <PhotoTaxModal suborder_number={this.props.suborder_number}/> }
+                Order Type: {this.props.order_type}
+                { this.props.order_type === 'Tax Photo' && <TaxPhotoModal suborder_number={this.props.suborder_number}/> }
                 <br/>
                 Billing Name: {this.props.billing_name} <br/>
                 Date Received: {this.props.date_received} <br/>

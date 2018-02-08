@@ -4,7 +4,7 @@ import 'semantic-ui-css/semantic.min.css';
 import {csrfFetch} from "../utils/fetch"
 
 
-class PhotoTaxModal extends React.Component {
+class TaxPhotoModal extends React.Component {
     constructor() {
         super();
 
@@ -16,7 +16,7 @@ class PhotoTaxModal extends React.Component {
         };
 
         this.handleOpen = (e) => {
-            csrfFetch('api/v1.0/photo_tax/' + this.props.suborder_number).then((response) => (
+            csrfFetch('api/v1.0/tax_photo/' + this.props.suborder_number).then((response) => (
                 response.json()
             )).then((json) => {
                 this.setState({
@@ -34,7 +34,7 @@ class PhotoTaxModal extends React.Component {
 
         this.handleSubmit = (e) => {
             e.preventDefault();
-            csrfFetch('api/v1.0/photo_tax/' + this.props.suborder_number, {
+            csrfFetch('api/v1.0/tax_photo/' + this.props.suborder_number, {
                 method: "POST",
                 body: JSON.stringify({
                     suborder_number: this.props.suborder_number,
@@ -98,4 +98,4 @@ class PhotoTaxModal extends React.Component {
     }
 }
 
-export default PhotoTaxModal
+export default TaxPhotoModal
