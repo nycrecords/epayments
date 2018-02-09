@@ -9,7 +9,7 @@ class DeathSearch(db.Model):
 
     last_name -- Column: String(25)
     first_name -- Column: String(40)
-    mid_name -- Column: String(40)
+    middle_name -- Column: String(40)
     num_copies -- Column: String(2) // put as 40 because new one is 40
     cemetery -- Column: String(40)
     month -- Column: string
@@ -27,7 +27,7 @@ class DeathSearch(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     last_name = db.Column(db.String(25), nullable=False)
     first_name = db.Column(db.String(40), nullable=True)
-    mid_name = db.Column(db.String(40), nullable=True)
+    middle_name = db.Column(db.String(40), nullable=True)
     num_copies = db.Column(db.String(40), nullable=False)
     cemetery = db.Column(db.String(40), nullable=True)
     month = db.Column(db.String(20), nullable=True)
@@ -43,7 +43,7 @@ class DeathSearch(db.Model):
             self,
             last_name,
             first_name,
-            mid_name,
+            middle_name,
             num_copies,
             cemetery,
             month,
@@ -57,7 +57,7 @@ class DeathSearch(db.Model):
     ):
         self.last_name = last_name
         self.first_name = first_name
-        self.mid_name = mid_name
+        self.middle_name = middle_name
         self.num_copies = num_copies or None
         self.cemetery = cemetery or None
         self.month = month or None
@@ -100,7 +100,7 @@ class DeathSearch(db.Model):
         return {
             'first_name': self.first_name,
             'last_name': self.last_name,
-            'mid_name': self.mid_name,
+            'middle_name': self.middle_name,
             'num_copies': self.num_copies,
             'cemetery': self.cemetery,
             'month': self.month,
@@ -122,7 +122,7 @@ class DeathCertificate(db.Model):
     certificate_num -- Column: String(40)
     last_name -- Column: String(25)
     first_name -- Column: String(40)
-    mid_name -- Column: String(40)
+    middle_name -- Column: String(40)
     num_copies -- Column: String(40)
     cemetery -- Column: String(40)
     month -- Column: string
@@ -141,7 +141,7 @@ class DeathCertificate(db.Model):
     certificate_number = db.Column(db.String(40), nullable=False)
     last_name = db.Column(db.String(25), nullable=False)
     first_name = db.Column(db.String(40), nullable=True)
-    mid_name = db.Column(db.String(40), nullable=True)
+    middle_name = db.Column(db.String(40), nullable=True)
     num_copies = db.Column(db.String(40), nullable=True)
     cemetery = db.Column(db.String(40), nullable=True)
     month = db.Column(db.String(20), nullable=True)
@@ -158,7 +158,7 @@ class DeathCertificate(db.Model):
             certificate_number,
             last_name,
             first_name,
-            mid_name,
+            middle_name,
             num_copies,
             cemetery,
             month,
@@ -173,7 +173,7 @@ class DeathCertificate(db.Model):
         self.certificate_number = certificate_number
         self.last_name = last_name
         self.first_name = first_name
-        self.mid_name = mid_name
+        self.middle_name = middle_name
         self.num_copies = num_copies or None
         self.cemetery = cemetery or None
         self.month = month or None
@@ -217,7 +217,7 @@ class DeathCertificate(db.Model):
             'certificate_number': self.certificate_number,
             'first_name': self.first_name,
             'last_name': self.last_name,
-            'mid_name': self.mid_name,
+            'middle_name': self.middle_name,
             'num_copies': self.num_copies,
             'cemetery': self.cemetery,
             'month': self.month,

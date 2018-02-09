@@ -236,11 +236,11 @@ def import_file(file_name):
                 clients_data_list.index("FIRSTNAME") + 1] if "FIRSTNAME" in clients_data_list else None
             last_name = clients_data_list[
                 clients_data_list.index("LASTNAME") + 1] if "LASTNAME" in clients_data_list else None
-            mid_name = clients_data_list[
+            middle_name = clients_data_list[
                 clients_data_list.index("MIDDLENAME") + 1] if "MIDDLENAME" in clients_data_list else None
 
             # Pull the gender type
-            gender_type = clients_data_list[
+            gender = clients_data_list[
                 clients_data_list.index("GENDER") + 1] if "GENDER" in clients_data_list else None
 
             # Retrieve Fathers Name
@@ -285,8 +285,8 @@ def import_file(file_name):
             customer_order = BirthSearch(
                 first_name=first_name,
                 last_name=last_name,
-                mid_name=mid_name,
-                gender_type=gender_type,
+                middle_name=middle_name,
+                gender=gender,
                 father_name=father_name,
                 mother_name=mother_name,
                 num_copies=num_copies,
@@ -371,7 +371,7 @@ def import_file(file_name):
             first_name = clients_data_list[
                 clients_data_list.index("FIRSTNAME") + 1] if "FIRSTNAME" in clients_data_list else None
             last_name = clients_data_list[clients_data_list.index("LASTNAME") + 1]
-            mid_name = clients_data_list[
+            middle_name = clients_data_list[
                 clients_data_list.index("MIDDLENAME") + 1] if "MIDDLENAME" in clients_data_list else None
 
             # Retrieve Number of Copies
@@ -412,7 +412,7 @@ def import_file(file_name):
             customer_order = DeathSearch(
                 last_name=last_name,
                 first_name=first_name,
-                mid_name=mid_name,
+                middle_name=middle_name,
                 num_copies=num_copies,
                 cemetery=cemetery,
                 month=month,
@@ -438,11 +438,11 @@ def import_file(file_name):
                 clients_data_list.index("FIRSTNAME") + 1] if "FIRSTNAME" in clients_data_list else None
             last_name = clients_data_list[
                 clients_data_list.index("LASTNAME") + 1] if "LASTNAME" in clients_data_list else None
-            mid_name = clients_data_list[
+            middle_name = clients_data_list[
                 clients_data_list.index("MIDDLENAME") + 1] if "MIDDLENAME" in clients_data_list else None
 
             # Pull the gender type
-            gender_type = clients_data_list[
+            gender = clients_data_list[
                 clients_data_list.index("GENDER") + 1] if "GENDER" in clients_data_list else None
 
             # Retrieve Fathers Name
@@ -488,8 +488,8 @@ def import_file(file_name):
                 certificate_number=certificate_number,
                 first_name=first_name,
                 last_name=last_name,
-                mid_name=mid_name,
-                gender_type=gender_type,
+                middle_name=middle_name,
+                gender=gender,
                 father_name=father_name,
                 mother_name=mother_name,
                 num_copies=num_copies,
@@ -581,7 +581,7 @@ def import_file(file_name):
             first_name = clients_data_list[
                 clients_data_list.index("FIRSTNAME") + 1] if "FIRSTNAME" in clients_data_list else None
             last_name = clients_data_list[clients_data_list.index("LASTNAME") + 1]
-            mid_name = clients_data_list[
+            middle_name = clients_data_list[
                 clients_data_list.index("MIDDLENAME") + 1] if "MIDDLENAME" in clients_data_list else None
 
             # Retrieve Number of Copies
@@ -623,7 +623,7 @@ def import_file(file_name):
                 certificate_number=certificate_number,
                 last_name=last_name,
                 first_name=first_name,
-                mid_name=mid_name,
+                middle_name=middle_name,
                 num_copies=num_copies,
                 cemetery=cemetery,
                 month=month,

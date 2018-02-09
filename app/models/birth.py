@@ -10,7 +10,7 @@ class BirthSearch(db.Model):
 
     first_name -- Column: String(40)
     last_name -- Column: String(25)
-    mid_name -- Column: String(40)
+    middle_name -- Column: String(40)
     gender -- Column: enum[M,F]
     father_name -- Column: string(40)
     mother_name -- Column: string(40)
@@ -29,14 +29,12 @@ class BirthSearch(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     first_name = db.Column(db.String(40), nullable=True)
     last_name = db.Column(db.String(25), nullable=False)
-    mid_name = db.Column(db.String(40), nullable=True)
-    gender_type = db.Column(
+    middle_name = db.Column(db.String(40), nullable=True)
+    gender = db.Column(
         db.Enum(
-            gender.NOT_KNOWN,
             gender.MALE,
             gender.FEMALE,
-            name='gender_type'),
-        default=gender.NOT_KNOWN)
+            name='gender_type'), nullable=True)
     father_name = db.Column(db.String(40), nullable=True)
     mother_name = db.Column(db.String(40), nullable=True)
     num_copies = db.Column(db.String(4), nullable=False)
@@ -53,8 +51,8 @@ class BirthSearch(db.Model):
             self,
             first_name,
             last_name,
-            mid_name,
-            gender_type,
+            middle_name,
+            gender,
             father_name,
             mother_name,
             num_copies,
@@ -69,8 +67,8 @@ class BirthSearch(db.Model):
     ):
         self.first_name = first_name
         self.last_name = last_name
-        self.mid_name = mid_name
-        self.gender_type = gender_type
+        self.middle_name = middle_name
+        self.gender = gender
         self.father_name = father_name
         self.mother_name = mother_name
         self.num_copies = num_copies
@@ -114,8 +112,8 @@ class BirthSearch(db.Model):
         return {
             'first_name': self.first_name,
             'last_name': self.last_name,
-            'mid_name': self.mid_name,
-            'gender_type': self.gender_type,
+            'middle_name': self.middle_name,
+            'gender': self.gender,
             'father_name': self.father_name,
             'mother_name': self.mother_name,
             'num_copies': self.num_copies,
@@ -135,10 +133,10 @@ class BirthCertificate(db.Model):
 
     Define the class with these following relationships
 
-    certificate_num -- Column: String(40)
+    certificate_number -- Column: String(40)
     first_name -- Column: String(40)
     last_name -- Column: String(25)
-    mid_name -- Column: String(40)
+    middle_name -- Column: String(40)
     gender -- Column: enum[M,F]
     father_name -- Column: string(40)
     mother_name -- Column: string(40)
@@ -159,13 +157,12 @@ class BirthCertificate(db.Model):
     certificate_number = db.Column(db.String(40), nullable=False)
     first_name = db.Column(db.String(40), nullable=True)
     last_name = db.Column(db.String(25), nullable=False)
-    mid_name = db.Column(db.String(40), nullable=True)
-    gender_type = db.Column(
+    middle_name = db.Column(db.String(40), nullable=True)
+    gender = db.Column(
         db.Enum(
-            gender.NOT_KNOWN,
             gender.MALE,
             gender.FEMALE,
-            name='gender_type'), default=gender.NOT_KNOWN, nullable=True)
+            name='gender_type'), nullable=True)
     father_name = db.Column(db.String(40), nullable=True)
     mother_name = db.Column(db.String(40), nullable=True)
     num_copies = db.Column(db.String(4), nullable=False)
@@ -183,8 +180,8 @@ class BirthCertificate(db.Model):
             certificate_number,
             first_name,
             last_name,
-            mid_name,
-            gender_type,
+            middle_name,
+            gender,
             father_name,
             mother_name,
             num_copies,
@@ -200,8 +197,8 @@ class BirthCertificate(db.Model):
         self.certificate_number = certificate_number
         self.first_name = first_name
         self.last_name = last_name
-        self.mid_name = mid_name
-        self.gender_type = gender_type
+        self.middle_name = middle_name
+        self.gender = gender
         self.father_name = father_name
         self.mother_name = mother_name
         self.num_copies = num_copies
@@ -246,8 +243,8 @@ class BirthCertificate(db.Model):
             'certificate_number': self.certificate_number,
             'first_name': self.first_name,
             'last_name': self.last_name,
-            'mid_name': self.mid_name,
-            'gender_type': self.gender_type,
+            'middle_name': self.middle_name,
+            'gender': self.gender,
             'father_name': self.father_name,
             'mother_name': self.mother_name,
             'num_copies': self.num_copies,

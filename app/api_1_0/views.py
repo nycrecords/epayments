@@ -1,8 +1,6 @@
-import csv
-from datetime import date, datetime
-from flask import current_app, jsonify, abort, request, url_for
+from datetime import date
+from flask import jsonify, abort, request
 from flask_login import login_user, logout_user, current_user, login_required
-from os.path import join
 from sqlalchemy import desc
 from app.api_1_0 import api_1_0 as api
 
@@ -91,45 +89,12 @@ def get_orders():
 @login_required
 def orders_doc(doc_type):
     """
-    Document name format:
 
     :param doc_type: document type ('csv' only)
     :return:
     """
     if doc_type.lower() == 'csv':
         url = generate_csv(request.args)
-        # _, _, orders = get_orders_by_fields(
-        #     request.args['order_number'],
-        #     request.args['suborder_number'],
-        #     request.args['order_type'],
-        #     request.args['status'],
-        #     request.args['billing_name'],
-        #     '',
-        #     request.args['date_received_start'],
-        #     request.args['date_received_end']
-        # )
-        # filename = "orders_{}.csv".format(datetime.now().strftime("%m_%d_%Y_at_%I_%M_%p"))
-        # with open(join(current_app.static_folder, 'files', filename), 'w') as doc_file:
-        #     writer = csv.writer(doc_file)
-        #     writer.writerow(["Order Number",
-        #                      "Sub Order Number",
-        #                      "Order Date",
-        #                      "Customer Name",
-        #                      "Phone",
-        #                      "Email",
-        #                      "Customer Address",
-        #                      "Mail or Pickup",
-        #                      "Size",
-        #                      "Copy",
-        #                      "Image Identifier",
-        #                      "Building Number",
-        #                      "Street",
-        #                      "Collection",
-        #                      "Borough",
-        #                      "Block",
-        #                      "Lot",
-        #                      "Roll"])
-
         return jsonify(url=url)
 
 
@@ -165,10 +130,6 @@ def status_change(suborder_number):
         """
         status_code = update_status(suborder_number, comment, new_status)
         return jsonify(status_code=status_code)
-
-    # return jsonify(current_status=curr_status, suborder_number=suborder_number, comment=comment, status_id=status_id)
-    status = [status.serialize for status in Events.query.filter_by(suborder_number=int(suborder_number)).all()]
-    return jsonify(status=status)
 
 
 @api.route('/history/<string:suborder_number>', methods=['GET'])

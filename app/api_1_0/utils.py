@@ -1,7 +1,7 @@
 import csv
 from flask import render_template, current_app, url_for
 from flask_login import current_user
-from sqlalchemy import or_, and_
+from sqlalchemy import asc, or_
 from xhtml2pdf.pisa import CreatePDF
 from datetime import datetime
 from os.path import join
@@ -364,14 +364,17 @@ def generate_csv(search_params):
                                        search_params.get('date_received_start'),
                                        search_params.get('date_received_end'))
 
-    suborders = Suborders.query.join(Orders, Customers).filter(*filter_args).all()
+    if order_type == 'photos':
+        suborders = Suborders.query.join(Orders, Customers).filter(*filter_args).order_by(asc(Suborders.order_type), asc(Orders.date_submitted)).all()
+    else:
+        suborders = Suborders.query.join(Orders, Customers).filter(*filter_args).all()
 
     filename = "orders_{}.csv".format(datetime.now().strftime("%m_%d_%Y_at_%I_%M_%p"))
     file = open(join(current_app.static_folder, 'files', filename), 'w')
     writer = csv.writer(file)
     writer.writerow(["Order Number",
-                     "Sub Order Number",
-                     "Order Date",
+                     "Suborder Number",
+                     "Date Received",
                      "Customer Name",
                      "Phone",
                      "Email",
@@ -386,58 +389,53 @@ def generate_csv(search_params):
                      "Borough",
                      "Block",
                      "Lot",
-                     "Roll"])
+                     "Roll",
+                     "Comment"])
 
-    if order_type in [order_types.TAX_PHOTO, 'photos']:
-        for suborder in suborders:
-            if suborder.tax_photo:
-                writer.writerow([suborder.order_number,
-                                 suborder.id,
-                                 suborder.order.date_submitted,
-                                 suborder.order.customer.billing_name,
-                                 suborder.order.customer.phone,
-                                 suborder.order.customer.email,
-                                 suborder.order.customer.address,
-                                 "Mail" if suborder.tax_photo.mail else "Pickup",
-                                 suborder.tax_photo.size,
-                                 suborder.tax_photo.num_copies,
-                                 '',
-                                 suborder.tax_photo.building_number,
-                                 suborder.tax_photo.street,
-                                 suborder.tax_photo.collection,
-                                 suborder.tax_photo.borough,
-                                 suborder.tax_photo.block,
-                                 suborder.tax_photo.lot,
-                                 suborder.tax_photo.roll
-                                 ])
-    if order_type in [order_types.PHOTO_GALLERY, 'photos']:
-        for suborder in suborders:
-            if suborder.photo_gallery:
-                writer.writerow([suborder.order_number,
-                                 suborder.id,
-                                 suborder.order.date_submitted,
-                                 suborder.order.customer.billing_name,
-                                 suborder.order.customer.phone,
-                                 suborder.order.customer.email,
-                                 suborder.order.customer.address,
-                                 "Mail" if suborder.photo_gallery.mail else "Pickup",
-                                 suborder.photo_gallery.size,
-                                 suborder.photo_gallery.num_copies,
-                                 suborder.photo_gallery.image_id,
-                                 '',
-                                 '',
-                                 '',
-                                 '',
-                                 '',
-                                 '',
-                                 ''
-                                 ])
+    for suborder in suborders:
+        if suborder.tax_photo:
+            writer.writerow([suborder.order_number,
+                             suborder.id,
+                             suborder.order.date_received.strftime('%m-%d-%Y'),
+                             suborder.order.customer.billing_name,
+                             suborder.tax_photo.contact_number if suborder.tax_photo.contact_number else suborder.order.customer.phone,
+                             suborder.order.customer.email,
+                             suborder.order.customer.address,
+                             "Mail" if suborder.tax_photo.mail else "Pickup",
+                             suborder.tax_photo.size,
+                             suborder.tax_photo.num_copies,
+                             '',
+                             suborder.tax_photo.building_number,
+                             suborder.tax_photo.street,
+                             suborder.tax_photo.collection,
+                             suborder.tax_photo.borough,
+                             suborder.tax_photo.block,
+                             suborder.tax_photo.lot,
+                             suborder.tax_photo.roll,
+                             '',
+                             ])
+        elif suborder.photo_gallery:
+            writer.writerow([suborder.order_number,
+                             suborder.id,
+                             suborder.order.date_received.strftime('%m-%d-%Y'),
+                             suborder.order.customer.billing_name,
+                             suborder.photo_gallery.contact_number if suborder.photo_gallery.contact_number else suborder.order.customer.phone,
+                             suborder.order.customer.email,
+                             suborder.order.customer.address,
+                             "Mail" if suborder.photo_gallery.mail else "Pickup",
+                             suborder.photo_gallery.size,
+                             suborder.photo_gallery.num_copies,
+                             suborder.photo_gallery.image_id,
+                             '',
+                             '',
+                             '',
+                             '',
+                             '',
+                             '',
+                             '',
+                             "Yes" if suborder.photo_gallery.comment else "No",
+                             ])
+
     file.close()
 
     return url_for('static', filename='files/{}'.format(filename), _external=True)
-    # order_type_models_handler = {
-    #     order_types.TAX_PHOTO: PhotoTax,
-    #     order_types.PHOTO_GALLERY: PhotoGallery
-    # }
-    #
-    # blah = order_type_models_handler[search_params.get('order_type')].query.filter()

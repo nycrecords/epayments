@@ -1,8 +1,8 @@
 """initial migration
 
-Revision ID: bbb1bff23ba6
+Revision ID: 0ce1cf864a34
 Revises: 
-Create Date: 2018-02-09 21:22:38.403830
+Create Date: 2018-02-09 22:03:18.716555
 
 """
 from alembic import op
@@ -10,7 +10,7 @@ import sqlalchemy as sa
 from sqlalchemy.dialects import postgresql
 
 # revision identifiers, used by Alembic.
-revision = 'bbb1bff23ba6'
+revision = '0ce1cf864a34'
 down_revision = None
 branch_labels = None
 depends_on = None
@@ -67,8 +67,8 @@ def upgrade():
     sa.Column('certificate_number', sa.String(length=40), nullable=False),
     sa.Column('first_name', sa.String(length=40), nullable=True),
     sa.Column('last_name', sa.String(length=25), nullable=False),
-    sa.Column('mid_name', sa.String(length=40), nullable=True),
-    sa.Column('gender_type', sa.Enum('Not_Known', 'Male', 'Female', name='gender_type'), nullable=True),
+    sa.Column('middle_name', sa.String(length=40), nullable=True),
+    sa.Column('gender', sa.Enum('Male', 'Female', name='gender_type'), nullable=True),
     sa.Column('father_name', sa.String(length=40), nullable=True),
     sa.Column('mother_name', sa.String(length=40), nullable=True),
     sa.Column('num_copies', sa.String(length=4), nullable=False),
@@ -87,8 +87,8 @@ def upgrade():
     sa.Column('id', sa.Integer(), nullable=False),
     sa.Column('first_name', sa.String(length=40), nullable=True),
     sa.Column('last_name', sa.String(length=25), nullable=False),
-    sa.Column('mid_name', sa.String(length=40), nullable=True),
-    sa.Column('gender_type', sa.Enum('Not_Known', 'Male', 'Female', name='gender_type'), nullable=True),
+    sa.Column('middle_name', sa.String(length=40), nullable=True),
+    sa.Column('gender', sa.Enum('Male', 'Female', name='gender_type'), nullable=True),
     sa.Column('father_name', sa.String(length=40), nullable=True),
     sa.Column('mother_name', sa.String(length=40), nullable=True),
     sa.Column('num_copies', sa.String(length=4), nullable=False),
@@ -108,7 +108,7 @@ def upgrade():
     sa.Column('certificate_number', sa.String(length=40), nullable=False),
     sa.Column('last_name', sa.String(length=25), nullable=False),
     sa.Column('first_name', sa.String(length=40), nullable=True),
-    sa.Column('mid_name', sa.String(length=40), nullable=True),
+    sa.Column('middle_name', sa.String(length=40), nullable=True),
     sa.Column('num_copies', sa.String(length=40), nullable=True),
     sa.Column('cemetery', sa.String(length=40), nullable=True),
     sa.Column('month', sa.String(length=20), nullable=True),
@@ -126,7 +126,7 @@ def upgrade():
     sa.Column('id', sa.Integer(), nullable=False),
     sa.Column('last_name', sa.String(length=25), nullable=False),
     sa.Column('first_name', sa.String(length=40), nullable=True),
-    sa.Column('mid_name', sa.String(length=40), nullable=True),
+    sa.Column('middle_name', sa.String(length=40), nullable=True),
     sa.Column('num_copies', sa.String(length=40), nullable=False),
     sa.Column('cemetery', sa.String(length=40), nullable=True),
     sa.Column('month', sa.String(length=20), nullable=True),
