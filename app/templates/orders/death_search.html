@@ -18,7 +18,7 @@
 
     <p>
         <b>NUMBER OF COPIES:</b> <br/>
-        {{ order_info["additional_copy"] or "" }}
+        {{ order_info["num_copies"] or "" }}
     </p>
 
     <p>
@@ -47,11 +47,6 @@
     </p>
 
     <p>
-        <b>AGE OF DEATH:</b> <br/>
-        {{ order_info["age_of_death"] or "" }}
-    </p>
-
-    <p>
         <b>BOROUGH:</b> <br/>
         {{ order_info["borough"] or "" }}
     </p>
@@ -61,10 +56,12 @@
         {{ "Yes" if order_info["letter"] else "No" }}
     </p>
 
-    <p>
-        <b>COMMENT:</b> <br/>
-        {{ order_info["comment"] }}
-    </p>
+    {% if order_info["comment"] %}
+        <p>
+            <b>COMMENT:</b> <br/>
+            {{ order_info["comment"] }}
+        </p>
+    {% endif %}
 {% endblock %}
 
 

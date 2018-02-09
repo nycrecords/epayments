@@ -4,7 +4,7 @@
     <br/>
     <p>
         <b>CERTIFICATE NUMBER:</b> <br/>
-        {{ order_info["certificate_no"] }}
+        {{ order_info["certificate_number"] }}
     </p>
 
     <p>
@@ -48,7 +48,7 @@
     </p>
 
     <p>
-        <b>MARRIAGE_PLACE:</b> <br/>
+        <b>MARRIAGE PLACE:</b> <br/>
         {{ order_info["marriage_place"] or "" }}
     </p>
 
@@ -62,10 +62,13 @@
         {{ "Yes" if order_info["letter"] else "No" }}
     </p>
 
-    <p>
-        <b>COMMENT:</b> <br/>
-        {{ order_info["comment"] or "N/A" }}
-    </p>
+    {% if order_info["comment"] %}
+        <p>
+            <b>COMMENT:</b> <br/>
+            {{ order_info["comment"] }}
+        </p>
+    {% endif %}
+
 {% endblock %}
 
 

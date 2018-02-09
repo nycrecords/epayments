@@ -67,10 +67,12 @@
         {{ "Yes" if order_info["letter"] else "No" }}
     </p>
 
-    <p>
-        <b>COMMENT:</b> <br/>
-        {{ order_info["comment"] }}
-    </p>
+    {% if order_info["comment"] %}
+        <p>
+            <b>COMMENT:</b> <br/>
+            {{ order_info["comment"] }}
+        </p>
+    {% endif %}
 
 {% endblock %}
 

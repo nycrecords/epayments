@@ -315,6 +315,10 @@ def import_file(file_name):
             bride_first_name = clients_data_list[
                 clients_data_list.index("FIRSTNAME_B") + 1] if "FIRSTNAME_B" in clients_data_list else None
 
+            # Retrieve Number of Copies
+            num_copies = clients_data_list[
+                clients_data_list.index("ADDITIONAL_COPY") + 1] if "ADDITIONAL_COPY" in clients_data_list else 1
+
             # Retrieve the Marriage Date (Month, Day, Years)
             month = clients_data_list[clients_data_list.index("MONTH") + 1] if "MONTH" in clients_data_list else None
             day = clients_data_list[clients_data_list.index("DAY") + 1] if "DAY" in clients_data_list else None
@@ -347,6 +351,7 @@ def import_file(file_name):
                 groom_first_name=groom_first_name,
                 bride_last_name=bride_last_name,
                 bride_first_name=bride_first_name,
+                num_copies=num_copies,
                 month=month,
                 day=day,
                 years=years,
@@ -369,6 +374,10 @@ def import_file(file_name):
             mid_name = clients_data_list[
                 clients_data_list.index("MIDDLENAME") + 1] if "MIDDLENAME" in clients_data_list else None
 
+            # Retrieve Number of Copies
+            num_copies = clients_data_list[
+                clients_data_list.index("ADDITIONAL_COPY") + 1] if "ADDITIONAL_COPY" in clients_data_list else 1
+
             # Retrieve the Marriage Date (Month, Day, Years)
             month = clients_data_list[clients_data_list.index("MONTH") + 1] if "MONTH" in clients_data_list else None
             day = clients_data_list[clients_data_list.index("DAY") + 1] if "DAY" in clients_data_list else None
@@ -384,10 +393,6 @@ def import_file(file_name):
             # Retrieve the Place of Death
             death_place = clients_data_list[
                 clients_data_list.index("DEATH_PLACE") + 1] if "DEATH_PLACE" in clients_data_list else None
-
-            # Retrieve the Age of Death
-            age_of_death = clients_data_list[
-                clients_data_list.index("AGEOFDEATH") + 1] if "AGEOFDEATH" in clients_data_list else None
 
             # Retrieve Marriage Borough
             borough = clients_data_list[clients_data_list.index("BOROUGH") + 1]
@@ -414,7 +419,6 @@ def import_file(file_name):
                 day=day,
                 years=years,
                 death_place=death_place,
-                age_of_death=age_of_death,
                 borough=borough,
                 letter=letter,
                 comment=comment,
@@ -427,7 +431,7 @@ def import_file(file_name):
         # Birth Certificate
         if client_id == '10000147':
             # Retrieve the Certificate Number
-            certificate_no = clients_data_list[clients_data_list.index("CERTIFICATE_NUMBER") + 1]
+            certificate_number = clients_data_list[clients_data_list.index("CERTIFICATE_NUMBER") + 1]
 
             # Retrieve the Certificate Name (First Name, Last Name, Middle Name)
             first_name = clients_data_list[
@@ -481,7 +485,7 @@ def import_file(file_name):
                 letter = False
 
             customer_order = BirthCertificate(
-                certificate_no=certificate_no,
+                certificate_number=certificate_number,
                 first_name=first_name,
                 last_name=last_name,
                 mid_name=mid_name,
@@ -505,7 +509,7 @@ def import_file(file_name):
         # Marriage Certificate
         if client_id == '10000181':
             # Retreive the Certificate Number
-            certificate_no = clients_data_list[clients_data_list.index("CERTIFICATE_NUMBER") + 1]
+            certificate_number = clients_data_list[clients_data_list.index("CERTIFICATE_NUMBER") + 1]
 
             # Retrieve the Groom's Information (First and Last Name)
             groom_last_name = clients_data_list[clients_data_list.index("LASTNAME_G") + 1]
@@ -516,6 +520,10 @@ def import_file(file_name):
             bride_last_name = clients_data_list[clients_data_list.index("LASTNAME_B") + 1]
             bride_first_name = clients_data_list[
                 clients_data_list.index("FIRSTNAME_B") + 1] if "FIRSTNAME_B" in clients_data_list else None
+
+            # Retrieve Number of Copies
+            num_copies = clients_data_list[
+                clients_data_list.index("ADDITIONAL_COPY") + 1] if "ADDITIONAL_COPY" in clients_data_list else 1
 
             # Retrieve the Marriage Date (Month, Day, Years)
             month = clients_data_list[clients_data_list.index("MONTH") + 1] if "MONTH" in clients_data_list else None
@@ -545,7 +553,7 @@ def import_file(file_name):
                 letter = False
 
             customer_order = MarriageCertificate(
-                certificate_no=certificate_no,
+                certificate_number=certificate_number,
                 groom_last_name=groom_last_name,
                 groom_first_name=groom_first_name,
                 bride_last_name=bride_last_name,
@@ -567,7 +575,7 @@ def import_file(file_name):
         # Death Certificate
         if client_id == '10000182':
             # Retrieve the Certificate Number
-            certificate_no = clients_data_list[clients_data_list.index("CERTIFICATE_NUMBER") + 1]
+            certificate_number = clients_data_list[clients_data_list.index("CERTIFICATE_NUMBER") + 1]
 
             # Retrieve the decedents name (First Name, Last Name)
             first_name = clients_data_list[
@@ -575,6 +583,10 @@ def import_file(file_name):
             last_name = clients_data_list[clients_data_list.index("LASTNAME") + 1]
             mid_name = clients_data_list[
                 clients_data_list.index("MIDDLENAME") + 1] if "MIDDLENAME" in clients_data_list else None
+
+            # Retrieve Number of Copies
+            num_copies = clients_data_list[
+                clients_data_list.index("ADDITIONAL_COPY") + 1] if "ADDITIONAL_COPY" in clients_data_list else 1
 
             # Retrieve the Marriage Date (Month, Day, Years)
             month = clients_data_list[clients_data_list.index("MONTH") + 1] if "MONTH" in clients_data_list else None
@@ -592,10 +604,6 @@ def import_file(file_name):
             death_place = clients_data_list[
                 clients_data_list.index("DEATH_PLACE") + 1] if "DEATH_PLACE" in clients_data_list else None
 
-            # Retrieve the Age of Death
-            age_of_death = clients_data_list[
-                clients_data_list.index("AGEOFDEATH") + 1] if "AGEOFDEATH" in clients_data_list else None
-
             # Retrieve Marriage Borough
             borough = clients_data_list[clients_data_list.index("BOROUGH") + 1]
             borough = borough.split(',')
@@ -612,7 +620,7 @@ def import_file(file_name):
                 letter = False
 
             customer_order = DeathCertificate(
-                certificate_no=certificate_no,
+                certificate_number=certificate_number,
                 last_name=last_name,
                 first_name=first_name,
                 mid_name=mid_name,
@@ -622,7 +630,6 @@ def import_file(file_name):
                 day=day,
                 years=years,
                 death_place=death_place,
-                age_of_death=age_of_death,
                 borough=borough,
                 letter=letter,
                 comment=comment,
@@ -725,9 +732,6 @@ def import_file(file_name):
             contact_number = clients_data_list[
                 clients_data_list.index("CONTACT_NUMBER") + 1] if "CONTACT_NUMBER" in clients_data_list else None
 
-            comment = clients_data_list[
-                clients_data_list.index("ADD_COMMENT") + 1] if "ADD_COMMENT" in clients_data_list else None
-
             if collection == 'Both':
                 # Remove old Suborder
                 Suborders.query.filter_by(id=suborder_number).delete()
@@ -777,7 +781,7 @@ def import_file(file_name):
                 customer_order_1980 = TaxPhoto(
                     borough=borough,
                     collection="1980",
-                    roll="N/A",
+                    roll=None,
                     block=block,
                     lot=lot,
                     building_number=building_number,

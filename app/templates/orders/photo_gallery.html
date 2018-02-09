@@ -5,53 +5,65 @@
     <p>
         <b>IMAGE_IDENTIFIER:</b>
         <br/>
-        {{ order_info['image_id'] or "Not Provided" }}
+        {{ order_info['image_id'] }}
         <br/>
+    </p>
+
     <p>
         <b>DESCRIPTION:</b>
         <br/>
         {{ order_info['description'] or "Not Provided" }}
         <br/>
     </p>
+
     <p>
-        <b>ADDITIONAL_DESCRIPTION:</b>
+        <b>ADDITIONAL DESCRIPTION:</b>
         <br/>
         {{ order_info['additional_description'] or "Not Provided" }}
         <br/>
     </p>
+
     <p>
         <b>SIZE:</b>
         <br/>
-        {{ order_info['size'] or "Not Provided" }}
+        {{ order_info['size'] }}
         <br/>
     </p>
+
     <p>
         <b>COPY:</b>
         <br/>
-        {{ order_info['num_copies'] or "Not Provided" }}
+        {{ order_info['num_copies'] }}
         <br/>
+    </p>
+
     <p>
         <b>MAIL_PICKUP:</b>
         <br/>
         {{ "Mail" if order_info['mail'] else "Pickup" }}
     </p>
-    <p>
-        <b>CONTACT_NUMBER:</b>
-        <br/>
-        {{ order_info['contact_number'] or "Not Provided" }}
-        <br/>
-    </p>
+
+    {% if order_info['contact_number'] %}
+        <p>
+            <b>CONTACT NUMBER:</b>
+            <br/>
+            {{ order_info['contact_number'] }}
+            <br/>
+        </p>
+    {% endif %}
+
     <p>
         <b>PERSONAL_USE_AGREEMENT:</b>
         <br/>
         {{ order_info['personal_use_agreement'] or "Not Provided" }}
         <br/>
     </p>
-    <p>
-        <b>COMMENT:</b>
-        <br/>
-        {{ order_info['comment'] or "Not Provided" }}
-    </p>
-{% endblock %}
 
-</p>
+    {% if order_info["comment"] %}
+        <p>
+            <b>COMMENT:</b>
+            <br/>
+            {{ order_info['comment'] }}
+        </p>
+    {% endif %}
+{% endblock %}

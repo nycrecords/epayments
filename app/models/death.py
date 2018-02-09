@@ -16,7 +16,6 @@ class DeathSearch(db.Model):
     day -- Column: string
     year -- Column: array[]
     death_place -- Column: String(40)
-    age_of_death -- Column: String(3)
     borough -- Column: String/Array
     letter -- Column: bool
     comment -- Column: String(255)
@@ -29,13 +28,12 @@ class DeathSearch(db.Model):
     last_name = db.Column(db.String(25), nullable=False)
     first_name = db.Column(db.String(40), nullable=True)
     mid_name = db.Column(db.String(40), nullable=True)
-    num_copies = db.Column(db.String(40), nullable=True)
+    num_copies = db.Column(db.String(40), nullable=False)
     cemetery = db.Column(db.String(40), nullable=True)
     month = db.Column(db.String(20), nullable=True)
     day = db.Column(db.String(2), nullable=True)
-    _years = db.Column(ARRAY(db.String(4), dimensions=1), nullable=True, name='years')
+    _years = db.Column(ARRAY(db.String(4), dimensions=1), nullable=False, name='years')
     death_place = db.Column(db.String(40), nullable=True)
-    age_of_death = db.Column(db.String(3), nullable=True)
     _borough = db.Column(ARRAY(db.String(20), dimensions=1), nullable=False, name='borough')
     letter = db.Column(db.Boolean, nullable=True)
     comment = db.Column(db.String(255), nullable=True)
@@ -52,7 +50,6 @@ class DeathSearch(db.Model):
             day,
             years,
             death_place,
-            age_of_death,
             borough,
             letter,
             comment,
@@ -67,7 +64,6 @@ class DeathSearch(db.Model):
         self.day = day or None
         self._years = years or None
         self.death_place = death_place or None
-        self.age_of_death = age_of_death or None
         self._borough = borough
         self.letter = letter or None
         self.comment = comment or None
@@ -90,9 +86,7 @@ class DeathSearch(db.Model):
     @property
     def borough(self):
         if len(self._borough) > 1:
-            _ = ''
-            for year in self._borough:
-                _ = "{}, {}".format(year, _)
+            return ", ".join(self._borough)
         else:
             return self._borough[0]
 
@@ -113,7 +107,6 @@ class DeathSearch(db.Model):
             'day': self.day,
             'years': self.years,
             'death_place': self.death_place,
-            'age_of_death': self.age_of_death,
             'borough': self.borough,
             'letter': self.letter,
             'comment': self.comment,
@@ -136,7 +129,6 @@ class DeathCertificate(db.Model):
     day -- Column: string
     year -- Column: array[]
     death_place -- Column: String(40)
-    age_of_death -- Column: String(3)
     borough -- Column: String/Array
     letter -- Column: bool
     comment -- Column: String(255)
@@ -146,7 +138,7 @@ class DeathCertificate(db.Model):
 
     __tablename__ = 'death_cert'
     id = db.Column(db.Integer, primary_key=True)
-    certificate_no = db.Column(db.String(40), nullable=False)
+    certificate_number = db.Column(db.String(40), nullable=False)
     last_name = db.Column(db.String(25), nullable=False)
     first_name = db.Column(db.String(40), nullable=True)
     mid_name = db.Column(db.String(40), nullable=True)
@@ -154,9 +146,8 @@ class DeathCertificate(db.Model):
     cemetery = db.Column(db.String(40), nullable=True)
     month = db.Column(db.String(20), nullable=True)
     day = db.Column(db.String(2), nullable=True)
-    _years = db.Column(ARRAY(db.String(4), dimensions=1), nullable=True, name='years')
+    _years = db.Column(ARRAY(db.String(4), dimensions=1), nullable=False, name='years')
     death_place = db.Column(db.String(40), nullable=True)
-    age_of_death = db.Column(db.String(3), nullable=True)
     _borough = db.Column(ARRAY(db.String(20), dimensions=1), nullable=False, name='borough')
     letter = db.Column(db.Boolean, nullable=True)
     comment = db.Column(db.String(255), nullable=True)
@@ -164,7 +155,7 @@ class DeathCertificate(db.Model):
 
     def __init__(
             self,
-            certificate_no,
+            certificate_number,
             last_name,
             first_name,
             mid_name,
@@ -174,13 +165,12 @@ class DeathCertificate(db.Model):
             day,
             years,
             death_place,
-            age_of_death,
             borough,
             letter,
             comment,
             suborder_number
     ):
-        self.certificate_no = certificate_no
+        self.certificate_number = certificate_number
         self.last_name = last_name
         self.first_name = first_name
         self.mid_name = mid_name
@@ -190,7 +180,6 @@ class DeathCertificate(db.Model):
         self.day = day or None
         self._years = years
         self.death_place = death_place or None
-        self.age_of_death = age_of_death or None
         self._borough = borough
         self.letter = letter or None
         self.comment = comment or None
@@ -213,9 +202,7 @@ class DeathCertificate(db.Model):
     @property
     def borough(self):
         if len(self._borough) > 1:
-            _ = ''
-            for year in self._borough:
-                _ = "{}, {}".format(year, _)
+            return ", ".join(self._borough)
         else:
             return self._borough[0]
 
@@ -227,7 +214,7 @@ class DeathCertificate(db.Model):
     def serialize(self):
         """Return object data in easily serializable format"""
         return {
-            'certificate_no': self.certificate_no,
+            'certificate_number': self.certificate_number,
             'first_name': self.first_name,
             'last_name': self.last_name,
             'mid_name': self.mid_name,
@@ -237,7 +224,6 @@ class DeathCertificate(db.Model):
             'day': self.day,
             'years': self.years,
             'death_place': self.death_place,
-            'age_of_death': self.age_of_death,
             'borough': self.borough,
             'letter': self.letter,
             'comment': self.comment,

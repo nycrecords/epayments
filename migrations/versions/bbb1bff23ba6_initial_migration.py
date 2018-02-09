@@ -1,8 +1,8 @@
 """initial migration
 
-Revision ID: 78bf8ac49f7c
+Revision ID: bbb1bff23ba6
 Revises: 
-Create Date: 2018-02-09 19:29:34.554421
+Create Date: 2018-02-09 21:22:38.403830
 
 """
 from alembic import op
@@ -10,7 +10,7 @@ import sqlalchemy as sa
 from sqlalchemy.dialects import postgresql
 
 # revision identifiers, used by Alembic.
-revision = '78bf8ac49f7c'
+revision = 'bbb1bff23ba6'
 down_revision = None
 branch_labels = None
 depends_on = None
@@ -64,17 +64,17 @@ def upgrade():
     )
     op.create_table('birth_cert',
     sa.Column('id', sa.Integer(), nullable=False),
-    sa.Column('certificate_no', sa.String(length=40), nullable=False),
+    sa.Column('certificate_number', sa.String(length=40), nullable=False),
     sa.Column('first_name', sa.String(length=40), nullable=True),
     sa.Column('last_name', sa.String(length=25), nullable=False),
     sa.Column('mid_name', sa.String(length=40), nullable=True),
     sa.Column('gender_type', sa.Enum('Not_Known', 'Male', 'Female', name='gender_type'), nullable=True),
     sa.Column('father_name', sa.String(length=40), nullable=True),
     sa.Column('mother_name', sa.String(length=40), nullable=True),
-    sa.Column('num_copies', sa.String(length=4), nullable=True),
+    sa.Column('num_copies', sa.String(length=4), nullable=False),
     sa.Column('month', sa.String(length=20), nullable=True),
     sa.Column('day', sa.String(length=2), nullable=True),
-    sa.Column('years', postgresql.ARRAY(sa.String(length=4), dimensions=1), nullable=True),
+    sa.Column('years', postgresql.ARRAY(sa.String(length=4), dimensions=1), nullable=False),
     sa.Column('birth_place', sa.String(length=40), nullable=True),
     sa.Column('borough', postgresql.ARRAY(sa.String(length=20), dimensions=1), nullable=False),
     sa.Column('letter', sa.Boolean(), nullable=True),
@@ -91,10 +91,10 @@ def upgrade():
     sa.Column('gender_type', sa.Enum('Not_Known', 'Male', 'Female', name='gender_type'), nullable=True),
     sa.Column('father_name', sa.String(length=40), nullable=True),
     sa.Column('mother_name', sa.String(length=40), nullable=True),
-    sa.Column('num_copies', sa.String(length=4), nullable=True),
+    sa.Column('num_copies', sa.String(length=4), nullable=False),
     sa.Column('month', sa.String(length=20), nullable=True),
     sa.Column('day', sa.String(length=2), nullable=True),
-    sa.Column('years', postgresql.ARRAY(sa.String(length=4), dimensions=1), nullable=True),
+    sa.Column('years', postgresql.ARRAY(sa.String(length=4), dimensions=1), nullable=False),
     sa.Column('birth_place', sa.String(length=40), nullable=True),
     sa.Column('borough', postgresql.ARRAY(sa.String(length=20), dimensions=1), nullable=False),
     sa.Column('letter', sa.Boolean(), nullable=True),
@@ -105,7 +105,7 @@ def upgrade():
     )
     op.create_table('death_cert',
     sa.Column('id', sa.Integer(), nullable=False),
-    sa.Column('certificate_no', sa.String(length=40), nullable=False),
+    sa.Column('certificate_number', sa.String(length=40), nullable=False),
     sa.Column('last_name', sa.String(length=25), nullable=False),
     sa.Column('first_name', sa.String(length=40), nullable=True),
     sa.Column('mid_name', sa.String(length=40), nullable=True),
@@ -113,9 +113,8 @@ def upgrade():
     sa.Column('cemetery', sa.String(length=40), nullable=True),
     sa.Column('month', sa.String(length=20), nullable=True),
     sa.Column('day', sa.String(length=2), nullable=True),
-    sa.Column('years', postgresql.ARRAY(sa.String(length=4), dimensions=1), nullable=True),
+    sa.Column('years', postgresql.ARRAY(sa.String(length=4), dimensions=1), nullable=False),
     sa.Column('death_place', sa.String(length=40), nullable=True),
-    sa.Column('age_of_death', sa.String(length=3), nullable=True),
     sa.Column('borough', postgresql.ARRAY(sa.String(length=20), dimensions=1), nullable=False),
     sa.Column('letter', sa.Boolean(), nullable=True),
     sa.Column('comment', sa.String(length=255), nullable=True),
@@ -128,13 +127,12 @@ def upgrade():
     sa.Column('last_name', sa.String(length=25), nullable=False),
     sa.Column('first_name', sa.String(length=40), nullable=True),
     sa.Column('mid_name', sa.String(length=40), nullable=True),
-    sa.Column('num_copies', sa.String(length=40), nullable=True),
+    sa.Column('num_copies', sa.String(length=40), nullable=False),
     sa.Column('cemetery', sa.String(length=40), nullable=True),
     sa.Column('month', sa.String(length=20), nullable=True),
     sa.Column('day', sa.String(length=2), nullable=True),
-    sa.Column('years', postgresql.ARRAY(sa.String(length=4), dimensions=1), nullable=True),
+    sa.Column('years', postgresql.ARRAY(sa.String(length=4), dimensions=1), nullable=False),
     sa.Column('death_place', sa.String(length=40), nullable=True),
-    sa.Column('age_of_death', sa.String(length=3), nullable=True),
     sa.Column('borough', postgresql.ARRAY(sa.String(length=20), dimensions=1), nullable=False),
     sa.Column('letter', sa.Boolean(), nullable=True),
     sa.Column('comment', sa.String(length=255), nullable=True),
@@ -156,7 +154,7 @@ def upgrade():
     )
     op.create_table('marriage_cert',
     sa.Column('id', sa.Integer(), nullable=False),
-    sa.Column('certificate_no', sa.String(length=40), nullable=True),
+    sa.Column('certificate_number', sa.String(length=40), nullable=True),
     sa.Column('groom_last_name', sa.String(length=25), nullable=False),
     sa.Column('groom_first_name', sa.String(length=40), nullable=True),
     sa.Column('bride_last_name', sa.String(length=25), nullable=False),

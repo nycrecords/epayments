@@ -39,10 +39,10 @@ class BirthSearch(db.Model):
         default=gender.NOT_KNOWN)
     father_name = db.Column(db.String(40), nullable=True)
     mother_name = db.Column(db.String(40), nullable=True)
-    num_copies = db.Column(db.String(4), nullable=True)
+    num_copies = db.Column(db.String(4), nullable=False)
     month = db.Column(db.String(20), nullable=True)
     day = db.Column(db.String(2), nullable=True)
-    _years = db.Column(ARRAY(db.String(4), dimensions=1), name='years')
+    _years = db.Column(ARRAY(db.String(4), dimensions=1), nullable=False, name='years')
     birth_place = db.Column(db.String(40), nullable=True)
     _borough = db.Column(ARRAY(db.String(20), dimensions=1), nullable=False, name='borough')
     letter = db.Column(db.Boolean, nullable=True)
@@ -67,7 +67,6 @@ class BirthSearch(db.Model):
             comment,
             suborder_number
     ):
-        super(BirthSearch, self).__init__()
         self.first_name = first_name
         self.last_name = last_name
         self.mid_name = mid_name
@@ -101,9 +100,7 @@ class BirthSearch(db.Model):
     @property
     def borough(self):
         if len(self._borough) > 1:
-            _ = ''
-            for year in self._borough:
-                _ = "{}, {}".format(year, _)
+            return ", ".join(self._borough)
         else:
             return self._borough[0]
 
@@ -159,7 +156,7 @@ class BirthCertificate(db.Model):
 
     __tablename__ = 'birth_cert'
     id = db.Column(db.Integer, primary_key=True)
-    certificate_no = db.Column(db.String(40), nullable=False)
+    certificate_number = db.Column(db.String(40), nullable=False)
     first_name = db.Column(db.String(40), nullable=True)
     last_name = db.Column(db.String(25), nullable=False)
     mid_name = db.Column(db.String(40), nullable=True)
@@ -171,10 +168,10 @@ class BirthCertificate(db.Model):
             name='gender_type'), default=gender.NOT_KNOWN, nullable=True)
     father_name = db.Column(db.String(40), nullable=True)
     mother_name = db.Column(db.String(40), nullable=True)
-    num_copies = db.Column(db.String(4), nullable=True)
+    num_copies = db.Column(db.String(4), nullable=False)
     month = db.Column(db.String(20), nullable=True)
     day = db.Column(db.String(2), nullable=True)
-    _years = db.Column(ARRAY(db.String(4), dimensions=1), name='years')
+    _years = db.Column(ARRAY(db.String(4), dimensions=1), nullable=False, name='years')
     birth_place = db.Column(db.String(40), nullable=True)
     _borough = db.Column(ARRAY(db.String(20), dimensions=1), nullable=False, name='borough')
     letter = db.Column(db.Boolean, nullable=True)
@@ -183,7 +180,7 @@ class BirthCertificate(db.Model):
 
     def __init__(
             self,
-            certificate_no,
+            certificate_number,
             first_name,
             last_name,
             mid_name,
@@ -200,7 +197,7 @@ class BirthCertificate(db.Model):
             comment,
             suborder_number
     ):
-        self.certificate_no = certificate_no
+        self.certificate_number = certificate_number
         self.first_name = first_name
         self.last_name = last_name
         self.mid_name = mid_name
@@ -234,9 +231,7 @@ class BirthCertificate(db.Model):
     @property
     def borough(self):
         if len(self._borough) > 1:
-            _ = ''
-            for year in self._borough:
-                _ = "{}, {}".format(year, _)
+            return ", ".join(self._borough)
         else:
             return self._borough[0]
 
@@ -248,7 +243,7 @@ class BirthCertificate(db.Model):
     def serialize(self):
         """Return object data in easily serializable format"""
         return {
-            'certificate_no': self.certificate_no,
+            'certificate_number': self.certificate_number,
             'first_name': self.first_name,
             'last_name': self.last_name,
             'mid_name': self.mid_name,

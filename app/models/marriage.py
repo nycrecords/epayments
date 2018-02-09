@@ -141,7 +141,7 @@ class MarriageCertificate(db.Model):
 
     __tablename__ = 'marriage_cert'
     id = db.Column(db.Integer, primary_key=True)
-    certificate_no = db.Column(db.String(40))
+    certificate_number = db.Column(db.String(40))
     groom_last_name = db.Column(db.String(25), nullable=False)
     groom_first_name = db.Column(db.String(40), nullable=True)
     bride_last_name = db.Column(db.String(25), nullable=False)
@@ -158,7 +158,7 @@ class MarriageCertificate(db.Model):
 
     def __init__(
             self,
-            certificate_no,
+            certificate_number,
             groom_last_name,
             groom_first_name,
             bride_last_name,
@@ -173,7 +173,7 @@ class MarriageCertificate(db.Model):
             comment,
             suborder_number
     ):
-        self.certificate_no = certificate_no
+        self.certificate_number = certificate_number
         self.groom_last_name = groom_last_name
         self.groom_first_name = groom_first_name
         self.bride_last_name = bride_last_name
@@ -220,7 +220,7 @@ class MarriageCertificate(db.Model):
     def serialize(self):
         """Return object data in easily serializable format"""
         return {
-            'certificate_no': self.certificate_no,
+            'certificate_number': self.certificate_number,
             'groom_last_name': self.groom_last_name,
             'groom_first_name': self.groom_first_name,
             'bride_last_name': self.bride_last_name,
