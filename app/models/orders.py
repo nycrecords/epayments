@@ -8,15 +8,12 @@ class Orders(db.Model):
     Define the new Orders class with the following Columns & relationships
 
     order_number -- Column: String(64)
-    suborder_number -- Column: BigInteger, PrimaryKey
     date_submitted -- Column: DateTime -- date order was submitted
     date_received -- Column: DateTime -- day we receive order
-    billing_name -- Column: String(64)
-    customer_email -- Column: String(64)
     confirmation_message -- Column: Text
     client_data -- Column: Text
-    client_id -- Column: Integer
-    client_agency_name -- Column: String(64)
+    order_types -- Column: Array -- type(s) of order(s)
+    multiple_items -- Column: Boolean -- whether an order has multiple items
     """
 
     __tablename__ = 'orders'
@@ -38,9 +35,7 @@ class Orders(db.Model):
             confirmation_message,
             client_data,
             order_types,
-            multiple_items
-
-    ):
+            multiple_items):
         self.id = id
         self.date_submitted = date_submitted
         self.date_received = date_received or None
@@ -96,7 +91,19 @@ class Suborders(db.Model):
             status.REFUNDED,
             status.DONE,
             name='status'), nullable=True)
+
     order = db.relationship('Orders', backref='orders', uselist=False)
+    # TODO: 'polymorphic_on': order_type
+    tax_photo = db.relationship(
+        'TaxPhoto',
+        primaryjoin='Suborders.id==TaxPhoto.suborder_number',
+        uselist=False
+    )
+    photo_gallery = db.relationship(
+        'PhotoGallery',
+        primaryjoin='Suborders.id==PhotoGallery.suborder_number',
+        uselist=False
+    )
 
     def __init__(
             self,
@@ -104,8 +111,7 @@ class Suborders(db.Model):
             client_id,
             order_type,
             order_number,
-            _status
-    ):
+            _status):
         self.id = id
         self.client_id = client_id
         self.order_type = order_type

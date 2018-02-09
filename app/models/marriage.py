@@ -1,5 +1,4 @@
 from app import db
-from app.constants import order_types, purpose
 from sqlalchemy.dialects.postgresql import ARRAY
 
 
@@ -12,9 +11,6 @@ class MarriageSearch(db.Model):
     groom_first_name -- Column: String(40)
     bride_last_name -- Column: String(25)
     bride_first_name -- Column: String(40)
-    relationship -- Column: String(30)
-    purpose -- Column: enum[Genealogical/Historical, Personal Use, Legal, Immigration, Medicaid/Social Security
-                            Health, Other] 7 Total different selection fields
     num_copies -- Column: string // put as 40 because new one is 40
     month -- Column: string
     day -- Column: string
@@ -33,17 +29,6 @@ class MarriageSearch(db.Model):
     groom_first_name = db.Column(db.String(40), nullable=True)
     bride_last_name = db.Column(db.String(25), nullable=False)
     bride_first_name = db.Column(db.String(40), nullable=True)
-    relationship = db.Column(db.String(30), nullable=True)
-    purpose = db.Column(
-        db.Enum(
-            purpose.GENEALOGICAL_HISTORICAL,
-            purpose.PERSONAL_USE,
-            purpose.LEGAL,
-            purpose.IMMIGRATION,
-            purpose.MEDICAID_SOCIAL_SECURITY,
-            purpose.HEALTH,
-            purpose.OTHER,
-            name='purpose'), default=purpose.OTHER, nullable=False)
     num_copies = db.Column(db.String(40), nullable=False)
     month = db.Column(db.String(20), nullable=True)
     day = db.Column(db.String(2), nullable=True)
@@ -60,8 +45,6 @@ class MarriageSearch(db.Model):
             groom_first_name,
             bride_last_name,
             bride_first_name,
-            relationship,
-            purpose,
             num_copies,
             month,
             day,
@@ -76,8 +59,6 @@ class MarriageSearch(db.Model):
         self.groom_first_name = groom_first_name
         self.bride_last_name = bride_last_name
         self.bride_first_name = bride_first_name
-        self.relationship = relationship
-        self.purpose = purpose
         self.num_copies = num_copies
         self.month = month or None
         self.day = day or None
@@ -124,8 +105,6 @@ class MarriageSearch(db.Model):
             'groom_first_name': self.groom_first_name,
             'bride_last_name': self.bride_last_name,
             'bride_first_name': self.bride_first_name,
-            'relationship': self.relationship,
-            'purpose': self.purpose,
             'num_copies': self.num_copies,
             'month': self.month,
             'day': self.day,
@@ -148,8 +127,6 @@ class MarriageCertificate(db.Model):
     groom_first_name -- Column: String(40)
     bride_last_name -- Column: String(25)
     bride_first_name -- Column: String(40)
-    relationship -- Column: String(30)
-    purpose -- Column: enum[]
     num_copies -- Column: String(40)
     month -- Column: string
     day -- Column: string
@@ -169,17 +146,6 @@ class MarriageCertificate(db.Model):
     groom_first_name = db.Column(db.String(40), nullable=True)
     bride_last_name = db.Column(db.String(25), nullable=False)
     bride_first_name = db.Column(db.String(40), nullable=True)
-    relationship = db.Column(db.String(30), nullable=True)
-    purpose = db.Column(
-        db.Enum(
-            purpose.GENEALOGICAL_HISTORICAL,
-            purpose.PERSONAL_USE,
-            purpose.LEGAL,
-            purpose.IMMIGRATION,
-            purpose.MEDICAID_SOCIAL_SECURITY,
-            purpose.HEALTH,
-            purpose.OTHER,
-            name='purpose'), default=purpose.OTHER, nullable=False)
     num_copies = db.Column(db.String(40), nullable=False)
     month = db.Column(db.String(20), nullable=True)
     day = db.Column(db.String(2), nullable=True)
@@ -197,8 +163,6 @@ class MarriageCertificate(db.Model):
             groom_first_name,
             bride_last_name,
             bride_first_name,
-            relationship,
-            purpose,
             num_copies,
             month,
             day,
@@ -214,8 +178,6 @@ class MarriageCertificate(db.Model):
         self.groom_first_name = groom_first_name
         self.bride_last_name = bride_last_name
         self.bride_first_name = bride_first_name
-        self.relationship = relationship
-        self.purpose = purpose
         self.num_copies = num_copies
         self.month = month or None
         self.day = day or None
@@ -263,8 +225,6 @@ class MarriageCertificate(db.Model):
             'groom_first_name': self.groom_first_name,
             'bride_last_name': self.bride_last_name,
             'bride_first_name': self.bride_first_name,
-            'relationship': self.relationship,
-            'purpose': self.purpose,
             'num_copies': self.num_copies,
             'month': self.month,
             'day': self.day,

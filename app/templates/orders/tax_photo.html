@@ -29,7 +29,7 @@
     </p>
     <p>
         <b>BUILDING_NUMBER: </b><br/>
-        {{ order_info['street_number'] or "Not Provided" }}
+        {{ order_info['building_number'] or "Not Provided" }}
         <br/>
     </p>
     <p>
@@ -54,7 +54,7 @@
     </p>
     <p>
         <b>MAIL_PICKUP: </b><br/>
-        {{ "Mail" if order_info['mail_pickup'] else "Pickup" }}
+        {{ "Mail" if order_info['mail'] else "Pickup" }}
         <br/>
     </p>
     <p>
@@ -62,11 +62,5 @@
         {{ order_info['contact_no'] or "Not Provided" }}
         <br/>
     </p>
-    <p>
-        <b>COMMENT: </b><br/>
-        {{ order_info['comment'] }}
 
-
-    </p>{% endblock %}
-
-
+{% endblock %}

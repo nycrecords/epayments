@@ -1,5 +1,5 @@
 from app import db
-from app.constants import purpose, gender, order_types
+from app.constants import gender, order_types
 from sqlalchemy.dialects.postgresql import ARRAY
 
 
@@ -14,8 +14,6 @@ class BirthSearch(db.Model):
     gender -- Column: enum[M,F]
     father_name -- Column: string(40)
     mother_name -- Column: string(40)
-    relationship -- Column: string(string)
-    purpose -- Column: enum[]
     num_copies -- Column: string // put as 40 new one is 40
     month -- Column: string
     day -- Column: string
@@ -27,6 +25,7 @@ class BirthSearch(db.Model):
     suborder_number -- Column: BigInteger, foreignKey
     """
     __tablename__ = 'birth_search'
+    __mapper_args__ = {'polymorphic_identity': order_types.BIRTH_SEARCH}
     id = db.Column(db.Integer, primary_key=True)
     first_name = db.Column(db.String(40), nullable=True)
     last_name = db.Column(db.String(25), nullable=False)
@@ -40,18 +39,6 @@ class BirthSearch(db.Model):
         default=gender.NOT_KNOWN)
     father_name = db.Column(db.String(40), nullable=True)
     mother_name = db.Column(db.String(40), nullable=True)
-    relationship = db.Column(db.String(30), nullable=True)
-    purpose = db.Column(
-        db.Enum(
-            purpose.GENEALOGICAL_HISTORICAL,
-            purpose.PERSONAL_USE,
-            purpose.LEGAL,
-            purpose.IMMIGRATION,
-            purpose.MEDICAID_SOCIAL_SECURITY,
-            purpose.HEALTH,
-            purpose.OTHER,
-            name='purpose'),
-        default=purpose.OTHER, nullable=False)
     num_copies = db.Column(db.String(4), nullable=True)
     month = db.Column(db.String(20), nullable=True)
     day = db.Column(db.String(2), nullable=True)
@@ -70,8 +57,6 @@ class BirthSearch(db.Model):
             gender_type,
             father_name,
             mother_name,
-            relationship,
-            purpose,
             num_copies,
             month,
             day,
@@ -82,14 +67,13 @@ class BirthSearch(db.Model):
             comment,
             suborder_number
     ):
+        super(BirthSearch, self).__init__()
         self.first_name = first_name
         self.last_name = last_name
         self.mid_name = mid_name
         self.gender_type = gender_type
         self.father_name = father_name
         self.mother_name = mother_name
-        self.relationship = relationship
-        self.purpose = purpose
         self.num_copies = num_copies
         self.month = month or None
         self.day = day or None
@@ -137,8 +121,6 @@ class BirthSearch(db.Model):
             'gender_type': self.gender_type,
             'father_name': self.father_name,
             'mother_name': self.mother_name,
-            'relationship': self.relationship,
-            'purpose': self.purpose,
             'num_copies': self.num_copies,
             'month': self.month,
             'day': self.day,
@@ -163,8 +145,6 @@ class BirthCertificate(db.Model):
     gender -- Column: enum[M,F]
     father_name -- Column: string(40)
     mother_name -- Column: string(40)
-    relationship -- Column: string(string)
-    purpose -- Column: enum[]
     num_copies -- Column: String(40)
     month -- Column: string
     day -- Column: string
@@ -191,17 +171,6 @@ class BirthCertificate(db.Model):
             name='gender_type'), default=gender.NOT_KNOWN, nullable=True)
     father_name = db.Column(db.String(40), nullable=True)
     mother_name = db.Column(db.String(40), nullable=True)
-    relationship = db.Column(db.String(30), nullable=True)
-    purpose = db.Column(
-        db.Enum(
-            purpose.GENEALOGICAL_HISTORICAL,
-            purpose.PERSONAL_USE,
-            purpose.LEGAL,
-            purpose.IMMIGRATION,
-            purpose.MEDICAID_SOCIAL_SECURITY,
-            purpose.HEALTH,
-            purpose.OTHER,
-            name='purpose'), default=purpose.OTHER, nullable=False)
     num_copies = db.Column(db.String(4), nullable=True)
     month = db.Column(db.String(20), nullable=True)
     day = db.Column(db.String(2), nullable=True)
@@ -221,8 +190,6 @@ class BirthCertificate(db.Model):
             gender_type,
             father_name,
             mother_name,
-            relationship,
-            purpose,
             num_copies,
             month,
             day,
@@ -240,8 +207,6 @@ class BirthCertificate(db.Model):
         self.gender_type = gender_type
         self.father_name = father_name
         self.mother_name = mother_name
-        self.relationship = relationship
-        self.purpose = purpose
         self.num_copies = num_copies
         self.month = month or None
         self.day = day or None
@@ -290,8 +255,6 @@ class BirthCertificate(db.Model):
             'gender_type': self.gender_type,
             'father_name': self.father_name,
             'mother_name': self.mother_name,
-            'relationship': self.relationship,
-            'purpose': self.purpose,
             'num_copies': self.num_copies,
             'month': self.month,
             'day': self.day,

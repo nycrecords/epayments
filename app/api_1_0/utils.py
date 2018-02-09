@@ -1,3 +1,4 @@
+import csv
 from flask import render_template, current_app, url_for
 from flask_login import current_user
 from sqlalchemy import or_, and_
@@ -150,24 +151,24 @@ def update_tax_photo(suborder_number, block_no, lot_no, roll_no):
     :param roll_no:
     :return: {}
     """
-    p_tax = PhotoTax.query.filter_by(suborder_number=suborder_number).one()
+    tax_photo = TaxPhoto.query.filter_by(suborder_number=suborder_number).one()
 
     message = "No changes were made"
     new_value = {}
     previous_value = {}
 
     for name, value, col_value in [
-        ('block', block_no, p_tax.block),
-        ('lot', lot_no, p_tax.lot),
-        ('roll', roll_no, p_tax.roll)
+        ('block', block_no, tax_photo.block),
+        ('lot', lot_no, tax_photo.lot),
+        ('roll', roll_no, tax_photo.roll)
     ]:
         if value and value != col_value:
-            setattr(p_tax, name, value)
+            setattr(tax_photo, name, value)
             new_value[name] = value
             previous_value[name] = col_value
 
     if new_value:
-        db.session.add(p_tax)
+        db.session.add(tax_photo)
 
         event = Events(suborder_number,
                        event_type.UPDATE_TAX_PHOTO,
@@ -177,7 +178,7 @@ def update_tax_photo(suborder_number, block_no, lot_no, roll_no):
 
         db.session.add(event)
         db.session.commit()
-        message = "Photo Tax Info Updated"
+        message = "Tax Photo Info Updated"
     return message
 
 
@@ -352,9 +353,11 @@ def _print_large_labels(search_params):
 
 
 def generate_csv(search_params):
+    order_type = search_params.get('order_type')
+
     filter_args = _order_query_filters(search_params.get('order_number'),
                                        search_params.get('suborder_number'),
-                                       search_params.get('order_type'),
+                                       order_type,
                                        search_params.get('status'),
                                        search_params.get('billing_name'),
                                        '',
@@ -363,11 +366,78 @@ def generate_csv(search_params):
 
     suborders = Suborders.query.join(Orders, Customers).filter(*filter_args).all()
 
+    filename = "orders_{}.csv".format(datetime.now().strftime("%m_%d_%Y_at_%I_%M_%p"))
+    file = open(join(current_app.static_folder, 'files', filename), 'w')
+    writer = csv.writer(file)
+    writer.writerow(["Order Number",
+                     "Sub Order Number",
+                     "Order Date",
+                     "Customer Name",
+                     "Phone",
+                     "Email",
+                     "Customer Address",
+                     "Mail or Pickup",
+                     "Size",
+                     "Copy",
+                     "Image Identifier",
+                     "Building Number",
+                     "Street",
+                     "Collection",
+                     "Borough",
+                     "Block",
+                     "Lot",
+                     "Roll"])
+
+    if order_type in [order_types.TAX_PHOTO, 'photos']:
+        for suborder in suborders:
+            if suborder.tax_photo:
+                writer.writerow([suborder.order_number,
+                                 suborder.id,
+                                 suborder.order.date_submitted,
+                                 suborder.order.customer.billing_name,
+                                 suborder.order.customer.phone,
+                                 suborder.order.customer.email,
+                                 suborder.order.customer.address,
+                                 "Mail" if suborder.tax_photo.mail else "Pickup",
+                                 suborder.tax_photo.size,
+                                 suborder.tax_photo.num_copies,
+                                 '',
+                                 suborder.tax_photo.building_number,
+                                 suborder.tax_photo.street,
+                                 suborder.tax_photo.collection,
+                                 suborder.tax_photo.borough,
+                                 suborder.tax_photo.block,
+                                 suborder.tax_photo.lot,
+                                 suborder.tax_photo.roll
+                                 ])
+    if order_type in [order_types.PHOTO_GALLERY, 'photos']:
+        for suborder in suborders:
+            if suborder.photo_gallery:
+                writer.writerow([suborder.order_number,
+                                 suborder.id,
+                                 suborder.order.date_submitted,
+                                 suborder.order.customer.billing_name,
+                                 suborder.order.customer.phone,
+                                 suborder.order.customer.email,
+                                 suborder.order.customer.address,
+                                 "Mail" if suborder.photo_gallery.mail else "Pickup",
+                                 suborder.photo_gallery.size,
+                                 suborder.photo_gallery.num_copies,
+                                 suborder.photo_gallery.image_id,
+                                 '',
+                                 '',
+                                 '',
+                                 '',
+                                 '',
+                                 '',
+                                 ''
+                                 ])
+    file.close()
+
+    return url_for('static', filename='files/{}'.format(filename), _external=True)
     # order_type_models_handler = {
     #     order_types.TAX_PHOTO: PhotoTax,
     #     order_types.PHOTO_GALLERY: PhotoGallery
     # }
     #
     # blah = order_type_models_handler[search_params.get('order_type')].query.filter()
-
-    pass

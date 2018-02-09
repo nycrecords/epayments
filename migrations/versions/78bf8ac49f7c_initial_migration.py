@@ -1,8 +1,8 @@
 """initial migration
 
-Revision ID: b8738d2f2df3
+Revision ID: 78bf8ac49f7c
 Revises: 
-Create Date: 2018-02-08 21:37:04.433639
+Create Date: 2018-02-09 19:29:34.554421
 
 """
 from alembic import op
@@ -10,7 +10,7 @@ import sqlalchemy as sa
 from sqlalchemy.dialects import postgresql
 
 # revision identifiers, used by Alembic.
-revision = 'b8738d2f2df3'
+revision = '78bf8ac49f7c'
 down_revision = None
 branch_labels = None
 depends_on = None
@@ -71,8 +71,6 @@ def upgrade():
     sa.Column('gender_type', sa.Enum('Not_Known', 'Male', 'Female', name='gender_type'), nullable=True),
     sa.Column('father_name', sa.String(length=40), nullable=True),
     sa.Column('mother_name', sa.String(length=40), nullable=True),
-    sa.Column('relationship', sa.String(length=30), nullable=True),
-    sa.Column('purpose', sa.Enum('Genealogical/Historical', 'Personal Use', 'Legal', 'Immigration', 'Medicaid/Social Security', 'Health', 'Other', name='purpose'), nullable=False),
     sa.Column('num_copies', sa.String(length=4), nullable=True),
     sa.Column('month', sa.String(length=20), nullable=True),
     sa.Column('day', sa.String(length=2), nullable=True),
@@ -93,8 +91,6 @@ def upgrade():
     sa.Column('gender_type', sa.Enum('Not_Known', 'Male', 'Female', name='gender_type'), nullable=True),
     sa.Column('father_name', sa.String(length=40), nullable=True),
     sa.Column('mother_name', sa.String(length=40), nullable=True),
-    sa.Column('relationship', sa.String(length=30), nullable=True),
-    sa.Column('purpose', sa.Enum('Genealogical/Historical', 'Personal Use', 'Legal', 'Immigration', 'Medicaid/Social Security', 'Health', 'Other', name='purpose'), nullable=False),
     sa.Column('num_copies', sa.String(length=4), nullable=True),
     sa.Column('month', sa.String(length=20), nullable=True),
     sa.Column('day', sa.String(length=2), nullable=True),
@@ -113,8 +109,6 @@ def upgrade():
     sa.Column('last_name', sa.String(length=25), nullable=False),
     sa.Column('first_name', sa.String(length=40), nullable=True),
     sa.Column('mid_name', sa.String(length=40), nullable=True),
-    sa.Column('relationship', sa.String(length=30), nullable=True),
-    sa.Column('purpose', sa.Enum('Genealogical/Historical', 'Personal Use', 'Legal', 'Immigration', 'Medicaid/Social Security', 'Health', 'Other', name='purpose'), nullable=False),
     sa.Column('num_copies', sa.String(length=40), nullable=True),
     sa.Column('cemetery', sa.String(length=40), nullable=True),
     sa.Column('month', sa.String(length=20), nullable=True),
@@ -134,8 +128,6 @@ def upgrade():
     sa.Column('last_name', sa.String(length=25), nullable=False),
     sa.Column('first_name', sa.String(length=40), nullable=True),
     sa.Column('mid_name', sa.String(length=40), nullable=True),
-    sa.Column('relationship', sa.String(length=30), nullable=True),
-    sa.Column('purpose', sa.Enum('Genealogical/Historical', 'Personal Use', 'Legal', 'Immigration', 'Medicaid/Social Security', 'Health', 'Other', name='purpose'), nullable=False),
     sa.Column('num_copies', sa.String(length=40), nullable=True),
     sa.Column('cemetery', sa.String(length=40), nullable=True),
     sa.Column('month', sa.String(length=20), nullable=True),
@@ -169,8 +161,6 @@ def upgrade():
     sa.Column('groom_first_name', sa.String(length=40), nullable=True),
     sa.Column('bride_last_name', sa.String(length=25), nullable=False),
     sa.Column('bride_first_name', sa.String(length=40), nullable=True),
-    sa.Column('relationship', sa.String(length=30), nullable=True),
-    sa.Column('purpose', sa.Enum('Genealogical/Historical', 'Personal Use', 'Legal', 'Immigration', 'Medicaid/Social Security', 'Health', 'Other', name='purpose'), nullable=False),
     sa.Column('num_copies', sa.String(length=40), nullable=False),
     sa.Column('month', sa.String(length=20), nullable=True),
     sa.Column('day', sa.String(length=2), nullable=True),
@@ -189,8 +179,6 @@ def upgrade():
     sa.Column('groom_first_name', sa.String(length=40), nullable=True),
     sa.Column('bride_last_name', sa.String(length=25), nullable=False),
     sa.Column('bride_first_name', sa.String(length=40), nullable=True),
-    sa.Column('relationship', sa.String(length=30), nullable=True),
-    sa.Column('purpose', sa.Enum('Genealogical/Historical', 'Personal Use', 'Legal', 'Immigration', 'Medicaid/Social Security', 'Health', 'Other', name='purpose'), nullable=False),
     sa.Column('num_copies', sa.String(length=40), nullable=False),
     sa.Column('month', sa.String(length=20), nullable=True),
     sa.Column('day', sa.String(length=2), nullable=True),
@@ -223,7 +211,7 @@ def upgrade():
     sa.Column('borough', sa.Enum('Bronx', 'Manhattan', 'Staten Island', 'Brooklyn', 'Queens', name='borough'), nullable=True),
     sa.Column('block', sa.String(length=9), nullable=True),
     sa.Column('lot', sa.String(length=9), nullable=True),
-    sa.Column('building_no', sa.String(length=10), nullable=True),
+    sa.Column('building_number', sa.String(length=10), nullable=True),
     sa.Column('street', sa.String(length=40), nullable=True),
     sa.Column('description', sa.String(length=40), nullable=True),
     sa.Column('certified', sa.String(length=40), nullable=True),
@@ -240,15 +228,13 @@ def upgrade():
     sa.Column('roll', sa.String(length=9), nullable=True),
     sa.Column('block', sa.String(length=9), nullable=True),
     sa.Column('lot', sa.String(length=9), nullable=True),
-    sa.Column('street_number', sa.String(length=10), nullable=False),
+    sa.Column('building_number', sa.String(length=10), nullable=False),
     sa.Column('street', sa.String(length=40), nullable=False),
     sa.Column('description', sa.String(length=35), nullable=True),
-    sa.Column('type', sa.Enum('8x10', '11x14', name='type'), nullable=False),
-    sa.Column('size', sa.Enum('8x10', '11x14', '16x20', name='size'), nullable=True),
+    sa.Column('size', sa.Enum('8x10', '11x14', name='size'), nullable=False),
     sa.Column('num_copies', sa.String(length=2), nullable=False),
     sa.Column('mail', sa.Boolean(), nullable=False),
     sa.Column('contact_number', sa.String(length=10), nullable=True),
-    sa.Column('comment', sa.String(length=255), nullable=True),
     sa.Column('suborder_number', sa.String(length=32), nullable=False),
     sa.ForeignKeyConstraint(['suborder_number'], ['suborders.id'], ),
     sa.PrimaryKeyConstraint('id')

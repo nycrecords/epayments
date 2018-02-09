@@ -97,7 +97,7 @@ def orders_doc(doc_type):
     :return:
     """
     if doc_type.lower() == 'csv':
-        generate_csv(request.args)
+        url = generate_csv(request.args)
         # _, _, orders = get_orders_by_fields(
         #     request.args['order_number'],
         #     request.args['suborder_number'],
@@ -108,29 +108,29 @@ def orders_doc(doc_type):
         #     request.args['date_received_start'],
         #     request.args['date_received_end']
         # )
-        filename = "orders_{}.csv".format(datetime.now().strftime("%m_%d_%Y_at_%I_%M_%p"))
-        with open(join(current_app.static_folder, 'files', filename), 'w') as doc_file:
-            writer = csv.writer(doc_file)
-            writer.writerow(["Order Number",
-                             "Sub Order Number",
-                             "Order Date",
-                             "Customer Name",
-                             "Phone",
-                             "Email",
-                             "Customer Address",
-                             "Mail or Pickup",
-                             "Size",
-                             "Copy",
-                             "Image Identifier",
-                             "Building Number",
-                             "Street",
-                             "Collection",
-                             "Borough",
-                             "Block",
-                             "Lot",
-                             "Roll"])
+        # filename = "orders_{}.csv".format(datetime.now().strftime("%m_%d_%Y_at_%I_%M_%p"))
+        # with open(join(current_app.static_folder, 'files', filename), 'w') as doc_file:
+        #     writer = csv.writer(doc_file)
+        #     writer.writerow(["Order Number",
+        #                      "Sub Order Number",
+        #                      "Order Date",
+        #                      "Customer Name",
+        #                      "Phone",
+        #                      "Email",
+        #                      "Customer Address",
+        #                      "Mail or Pickup",
+        #                      "Size",
+        #                      "Copy",
+        #                      "Image Identifier",
+        #                      "Building Number",
+        #                      "Street",
+        #                      "Collection",
+        #                      "Borough",
+        #                      "Block",
+        #                      "Lot",
+        #                      "Roll"])
 
-        return jsonify(url=(url_for('static', filename='files/{}'.format(filename), _external=True)))
+        return jsonify(url=url)
 
 
 @api.route('/status/<string:suborder_number>', methods=['GET', 'POST'])
@@ -211,10 +211,10 @@ def get_single_order(order_id):
 @login_required
 def tax_photo(suborder_number):
     if request.method == 'GET':
-        p_tax = TaxPhoto.query.filter_by(suborder_number=suborder_number).one()
-        return jsonify(block_no=p_tax.block,
-                       lot_no=p_tax.lot,
-                       roll_no=p_tax.roll)
+        t_photo = TaxPhoto.query.filter_by(suborder_number=suborder_number).one()
+        return jsonify(block_no=t_photo.block,
+                       lot_no=t_photo.lot,
+                       roll_no=t_photo.roll)
 
     else:
         json = request.get_json(force=True)

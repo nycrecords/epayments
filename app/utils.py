@@ -251,14 +251,6 @@ def import_file(file_name):
             mother_name = clients_data_list[
                 clients_data_list.index("MOTHER_NAME") + 1] if "MOTHER_NAME" in clients_data_list else None
 
-            # Retrieve the Customer's Relationship to Certificate Person
-            relationship = clients_data_list[
-                clients_data_list.index("RELATIONSHIP") + 1] if "RELATIONSHIP" in clients_data_list else None
-
-            # Retrieve Research Purpose
-            purpose = clients_data_list[
-                clients_data_list.index("PURPOSE") + 1] if "PURPOSE" in clients_data_list else None
-
             # Retrieve Number of Copies
             num_copies = clients_data_list[
                 clients_data_list.index("ADDITIONAL_COPY") + 1] if "ADDITIONAL_COPY" in clients_data_list else 1
@@ -297,8 +289,6 @@ def import_file(file_name):
                 gender_type=gender_type,
                 father_name=father_name,
                 mother_name=mother_name,
-                relationship=relationship,
-                purpose=purpose,
                 num_copies=num_copies,
                 month=month,
                 day=day,
@@ -324,18 +314,6 @@ def import_file(file_name):
             bride_last_name = clients_data_list[clients_data_list.index("LASTNAME_B") + 1]
             bride_first_name = clients_data_list[
                 clients_data_list.index("FIRSTNAME_B") + 1] if "FIRSTNAME_B" in clients_data_list else None
-
-            # Retrieve the Customer's Relationship to Certificate Person
-            relationship = clients_data_list[
-                clients_data_list.index("RELATIONSHIP") + 1] if "RELATIONSHIP" in clients_data_list else None
-
-            # Retrieve Research Purpose
-            purpose = clients_data_list[
-                clients_data_list.index("PURPOSE") + 1] if "PURPOSE" in clients_data_list else None
-
-            # Retrieve Number of Copies
-            num_copies = clients_data_list[
-                clients_data_list.index("ADDITIONAL_COPY") + 1] if "ADDITIONAL_COPY" in clients_data_list else 1
 
             # Retrieve the Marriage Date (Month, Day, Years)
             month = clients_data_list[clients_data_list.index("MONTH") + 1] if "MONTH" in clients_data_list else None
@@ -369,9 +347,6 @@ def import_file(file_name):
                 groom_first_name=groom_first_name,
                 bride_last_name=bride_last_name,
                 bride_first_name=bride_first_name,
-                relationship=relationship,
-                purpose=purpose,
-                num_copies=num_copies,
                 month=month,
                 day=day,
                 years=years,
@@ -393,18 +368,6 @@ def import_file(file_name):
             last_name = clients_data_list[clients_data_list.index("LASTNAME") + 1]
             mid_name = clients_data_list[
                 clients_data_list.index("MIDDLENAME") + 1] if "MIDDLENAME" in clients_data_list else None
-
-            # Retrieve the Customer's Relationship to Certificate Person
-            relationship = clients_data_list[
-                clients_data_list.index("RELATIONSHIP") + 1] if "RELATIONSHIP" in clients_data_list else None
-
-            # Retrieve Research Purpose
-            purpose = clients_data_list[
-                clients_data_list.index("PURPOSE") + 1] if "PURPOSE" in clients_data_list else None
-
-            # Retrieve Number of Copies
-            num_copies = clients_data_list[
-                clients_data_list.index("ADDITIONAL_COPY") + 1] if "ADDITIONAL_COPY" in clients_data_list else 1
 
             # Retrieve the Marriage Date (Month, Day, Years)
             month = clients_data_list[clients_data_list.index("MONTH") + 1] if "MONTH" in clients_data_list else None
@@ -445,8 +408,6 @@ def import_file(file_name):
                 last_name=last_name,
                 first_name=first_name,
                 mid_name=mid_name,
-                relationship=relationship,
-                purpose=purpose,
                 num_copies=num_copies,
                 cemetery=cemetery,
                 month=month,
@@ -488,14 +449,6 @@ def import_file(file_name):
             mother_name = clients_data_list[
                 clients_data_list.index("MOTHER_NAME") + 1] if "MOTHER_NAME" in clients_data_list else None
 
-            # Retrieve the Customer's Relationship to Certificate Person
-            relationship = clients_data_list[
-                clients_data_list.index("RELATIONSHIP") + 1] if "RELATIONSHIP" in clients_data_list else None
-
-            # Retrieve Research Purpose
-            purpose = clients_data_list[
-                clients_data_list.index("PURPOSE") + 1] if "PURPOSE" in clients_data_list else None
-
             # Retrieve Number of Copies
             num_copies = clients_data_list[
                 clients_data_list.index("ADDITIONAL_COPY") + 1] if "ADDITIONAL_COPY" in clients_data_list else 1
@@ -535,8 +488,6 @@ def import_file(file_name):
                 gender_type=gender_type,
                 father_name=father_name,
                 mother_name=mother_name,
-                relationship=relationship,
-                purpose=purpose,
                 num_copies=num_copies,
                 month=month,
                 day=day,
@@ -565,18 +516,6 @@ def import_file(file_name):
             bride_last_name = clients_data_list[clients_data_list.index("LASTNAME_B") + 1]
             bride_first_name = clients_data_list[
                 clients_data_list.index("FIRSTNAME_B") + 1] if "FIRSTNAME_B" in clients_data_list else None
-
-            # Retrieve the Customer's Relationship to Certificate Person
-            relationship = clients_data_list[
-                clients_data_list.index("RELATIONSHIP") + 1] if "RELATIONSHIP" in clients_data_list else None
-
-            # Retrieve Research Purpose
-            purpose = clients_data_list[
-                clients_data_list.index("PURPOSE") + 1] if "PURPOSE" in clients_data_list else None
-
-            # Retrieve Number of Copies
-            num_copies = clients_data_list[
-                clients_data_list.index("ADDITIONAL_COPY") + 1] if "ADDITIONAL_COPY" in clients_data_list else 1
 
             # Retrieve the Marriage Date (Month, Day, Years)
             month = clients_data_list[clients_data_list.index("MONTH") + 1] if "MONTH" in clients_data_list else None
@@ -611,8 +550,6 @@ def import_file(file_name):
                 groom_first_name=groom_first_name,
                 bride_last_name=bride_last_name,
                 bride_first_name=bride_first_name,
-                relationship=relationship,
-                purpose=purpose,
                 num_copies=num_copies,
                 month=month,
                 day=day,
@@ -638,18 +575,6 @@ def import_file(file_name):
             last_name = clients_data_list[clients_data_list.index("LASTNAME") + 1]
             mid_name = clients_data_list[
                 clients_data_list.index("MIDDLENAME") + 1] if "MIDDLENAME" in clients_data_list else None
-
-            # Retrieve the Customer's Relationship to Certificate Person
-            relationship = clients_data_list[
-                clients_data_list.index("RELATIONSHIP") + 1] if "RELATIONSHIP" in clients_data_list else None
-
-            # Retrieve Research Purpose
-            purpose = clients_data_list[
-                clients_data_list.index("PURPOSE") + 1] if "PURPOSE" in clients_data_list else None
-
-            # Retrieve Number of Copies
-            num_copies = clients_data_list[
-                clients_data_list.index("ADDITIONAL_COPY") + 1] if "ADDITIONAL_COPY" in clients_data_list else 1
 
             # Retrieve the Marriage Date (Month, Day, Years)
             month = clients_data_list[clients_data_list.index("MONTH") + 1] if "MONTH" in clients_data_list else None
@@ -691,8 +616,6 @@ def import_file(file_name):
                 last_name=last_name,
                 first_name=first_name,
                 mid_name=mid_name,
-                relationship=relationship,
-                purpose=purpose,
                 num_copies=num_copies,
                 cemetery=cemetery,
                 month=month,
@@ -716,7 +639,7 @@ def import_file(file_name):
                 clients_data_list.index("BOROUGH") + 1] if "BOROUGH" in clients_data_list else None
             block = clients_data_list[clients_data_list.index("BLOCK") + 1] if "BLOCK" in clients_data_list else None
             lot = clients_data_list[clients_data_list.index("LOT") + 1] if "LOT" in clients_data_list else None
-            building_no = clients_data_list[
+            building_number = clients_data_list[
                 clients_data_list.index("STREET_NUMBER") + 1] if "STREET_NUMBER" in clients_data_list else None
             street = clients_data_list[clients_data_list.index("STREET") + 1] if "STREET" in clients_data_list else None
 
@@ -746,7 +669,7 @@ def import_file(file_name):
                 borough=borough,
                 block=block,
                 lot=lot,
-                building_no=building_no,
+                building_number=building_number,
                 street=street,
                 description=description,
                 certified=certified,
@@ -774,7 +697,7 @@ def import_file(file_name):
             lot = clients_data_list[clients_data_list.index("LOT") + 1] if "LOT" in clients_data_list else None
 
             # Retrieve Street Address
-            street_number = clients_data_list[clients_data_list.index("STREET_NUMBER") + 1]
+            building_number = clients_data_list[clients_data_list.index("STREET_NUMBER") + 1]
             street = clients_data_list[clients_data_list.index("STREET") + 1]
 
             # Retrieve Building  Description
@@ -782,8 +705,7 @@ def import_file(file_name):
                 clients_data_list.index("DESCRIPTION") + 1] if "DESCRIPTION" in clients_data_list else None
 
             # Retrieve Print Size
-            type_ = clients_data_list[clients_data_list.index("TYPE") + 1]
-            size = clients_data_list[clients_data_list.index("SIZE") + 1] if "SIZE" in clients_data_list else None
+            size = clients_data_list[clients_data_list.index("TYPE") + 1]
 
             # Retrieve Number of Copies
             num_copies = clients_data_list[
@@ -840,15 +762,13 @@ def import_file(file_name):
                     roll=roll,
                     block=block,
                     lot=lot,
-                    street_number=street_number,
+                    building_number=building_number,
                     street=street,
                     description=description,
-                    type=type_,
                     size=size,
                     num_copies=num_copies,
                     mail=mail,
                     contact_number=contact_number,
-                    comment=comment,
                     suborder_number="{}-1940".format(suborder_number)
                 )
                 db.session.add(customer_order_1940)
@@ -860,15 +780,13 @@ def import_file(file_name):
                     roll="N/A",
                     block=block,
                     lot=lot,
-                    street_number=street_number,
+                    building_number=building_number,
                     street=street,
                     description=description,
-                    type=type_,
                     size=size,
                     num_copies=num_copies,
                     mail=mail,
                     contact_number=contact_number,
-                    comment=comment,
                     suborder_number="{}-1980".format(suborder_number)
                 )
                 db.session.add(customer_order_1980)
@@ -898,21 +816,19 @@ def import_file(file_name):
                     roll=roll,
                     block=block,
                     lot=lot,
-                    street_number=street_number,
+                    building_number=building_number,
                     street=street,
                     description=description,
-                    type=type_,
                     size=size,
                     num_copies=num_copies,
                     mail=mail,
                     contact_number=contact_number,
-                    comment=comment,
                     suborder_number=suborder_number)
                 db.session.add(customer_order)
 
             db.session.commit()
 
-        # Insert into the PhotoGallery table
+        # Photo Gallery
         if client_id == '10000060':
             # Retrieve Photo ID
             image_id = clients_data_list[clients_data_list.index("IMAGE_IDENTIFIER") + 1]
@@ -950,7 +866,7 @@ def import_file(file_name):
 
             # Retrieve Comment
             comment = clients_data_list[
-                clients_data_list.index("ADD_COMMENT") + 1] if "ADD_COMMENT" in clients_data_list else None
+                clients_data_list.index("COMMENTS") + 1] if "COMMENTS" in clients_data_list else None
 
             # Retrieve Personal Use Agreement
             if clients_data_list[

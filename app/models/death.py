@@ -1,5 +1,4 @@
 from app import db
-from app.constants import order_types, purpose
 from sqlalchemy.dialects.postgresql import ARRAY
 
 
@@ -11,8 +10,6 @@ class DeathSearch(db.Model):
     last_name -- Column: String(25)
     first_name -- Column: String(40)
     mid_name -- Column: String(40)
-    relationship -- Column: String(30)
-    purpose -- Column: enum[]
     num_copies -- Column: String(2) // put as 40 because new one is 40
     cemetery -- Column: String(40)
     month -- Column: string
@@ -32,17 +29,6 @@ class DeathSearch(db.Model):
     last_name = db.Column(db.String(25), nullable=False)
     first_name = db.Column(db.String(40), nullable=True)
     mid_name = db.Column(db.String(40), nullable=True)
-    relationship = db.Column(db.String(30), nullable=True)
-    purpose = db.Column(
-        db.Enum(
-            purpose.GENEALOGICAL_HISTORICAL,
-            purpose.PERSONAL_USE,
-            purpose.LEGAL,
-            purpose.IMMIGRATION,
-            purpose.MEDICAID_SOCIAL_SECURITY,
-            purpose.HEALTH,
-            purpose.OTHER,
-            name='purpose'), default=purpose.OTHER, nullable=False)
     num_copies = db.Column(db.String(40), nullable=True)
     cemetery = db.Column(db.String(40), nullable=True)
     month = db.Column(db.String(20), nullable=True)
@@ -60,8 +46,6 @@ class DeathSearch(db.Model):
             last_name,
             first_name,
             mid_name,
-            relationship,
-            purpose,
             num_copies,
             cemetery,
             month,
@@ -77,8 +61,6 @@ class DeathSearch(db.Model):
         self.last_name = last_name
         self.first_name = first_name
         self.mid_name = mid_name
-        self.relationship = relationship
-        self.purpose = purpose
         self.num_copies = num_copies or None
         self.cemetery = cemetery or None
         self.month = month or None
@@ -125,9 +107,7 @@ class DeathSearch(db.Model):
             'first_name': self.first_name,
             'last_name': self.last_name,
             'mid_name': self.mid_name,
-            'relationship': self.relationship,
             'num_copies': self.num_copies,
-            'purpose': self.purpose,
             'cemetery': self.cemetery,
             'month': self.month,
             'day': self.day,
@@ -150,8 +130,6 @@ class DeathCertificate(db.Model):
     last_name -- Column: String(25)
     first_name -- Column: String(40)
     mid_name -- Column: String(40)
-    relationship -- Column: String(30)
-    purpose -- Column: enum[]
     num_copies -- Column: String(40)
     cemetery -- Column: String(40)
     month -- Column: string
@@ -172,17 +150,6 @@ class DeathCertificate(db.Model):
     last_name = db.Column(db.String(25), nullable=False)
     first_name = db.Column(db.String(40), nullable=True)
     mid_name = db.Column(db.String(40), nullable=True)
-    relationship = db.Column(db.String(30), nullable=True)
-    purpose = db.Column(
-        db.Enum(
-            purpose.GENEALOGICAL_HISTORICAL,
-            purpose.PERSONAL_USE,
-            purpose.LEGAL,
-            purpose.IMMIGRATION,
-            purpose.MEDICAID_SOCIAL_SECURITY,
-            purpose.HEALTH,
-            purpose.OTHER,
-            name='purpose'), default=purpose.OTHER, nullable=False)
     num_copies = db.Column(db.String(40), nullable=True)
     cemetery = db.Column(db.String(40), nullable=True)
     month = db.Column(db.String(20), nullable=True)
@@ -201,8 +168,6 @@ class DeathCertificate(db.Model):
             last_name,
             first_name,
             mid_name,
-            relationship,
-            purpose,
             num_copies,
             cemetery,
             month,
@@ -219,8 +184,6 @@ class DeathCertificate(db.Model):
         self.last_name = last_name
         self.first_name = first_name
         self.mid_name = mid_name
-        self.relationship = relationship
-        self.purpose = purpose
         self.num_copies = num_copies or None
         self.cemetery = cemetery or None
         self.month = month or None
@@ -268,9 +231,7 @@ class DeathCertificate(db.Model):
             'first_name': self.first_name,
             'last_name': self.last_name,
             'mid_name': self.mid_name,
-            'relationship': self.relationship,
             'num_copies': self.num_copies,
-            'purpose': self.purpose,
             'cemetery': self.cemetery,
             'month': self.month,
             'day': self.day,
