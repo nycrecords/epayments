@@ -1,7 +1,7 @@
 import csv
 from flask import render_template, current_app, url_for
 from flask_login import current_user
-from sqlalchemy import asc, or_
+from sqlalchemy import asc, or_, and_
 from xhtml2pdf.pisa import CreatePDF
 from datetime import datetime
 from os.path import join
@@ -57,11 +57,11 @@ def _order_query_filters(order_number, suborder_number, order_type, status, bill
                     )
                 elif value == 'vital_records':
                     filter_args.append(
-                        or_(*[Orders.order_types.any(name) for name in VITAL_RECORDS_LIST])
+                        Suborders.order_type.in_(VITAL_RECORDS_LIST)
                     )
                 elif value == 'photos':
                     filter_args.append(
-                        or_(*[Orders.order_types.any(name) for name in PHOTOS_LIST])
+                        Suborders.order_type.in_(PHOTOS_LIST)
                     )
                 elif value == 'vital_records_and_photos':
                     filter_args.append(
