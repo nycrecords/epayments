@@ -65,20 +65,19 @@ class Customers(db.Model):
 
     @property
     def address(self):
-        address = ''
         if self.address_line_2 is not None:
             address = "{address_line_one}, {address_line_two}, {city}, {state} {zip}".format(
                 address_line_one=self.address_line_1,
                 address_line_two=self.address_line_2,
                 city=self.city,
-                state=self.state,
+                state=self.state if self.state else '',
                 zip=self.zip_code
             )
         else:
             address = "{address_line_one}, {city}, {state} {zip}".format(
                 address_line_one=self.address_line_1,
                 city=self.city,
-                state=self.state,
+                state=self.state if self.state else '',
                 zip=self.zip_code
             )
 
