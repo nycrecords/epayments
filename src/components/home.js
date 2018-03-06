@@ -49,12 +49,6 @@ class Home extends React.Component {
         this.generateCSV = (e) => {
             this.setLoadingState(true);
             this.orderForm.submitFormData(e, 'csv');
-            // csrfFetch('api/v1.0/orders/csv').then((response) => (
-            //     response.json()
-            // )).then((json) => {
-            //     this.setLoadingState(false);
-            //     window.open(json.url);
-            // });
         };
 
         this.printOrderSheet = (e) => {
@@ -85,6 +79,7 @@ class Home extends React.Component {
                     }
                 }).catch((error) => {
                 console.log(error);
+                this.props.authenticated && this.props.logout();
                 this.setLoadingState(false);
             });
         };

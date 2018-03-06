@@ -317,7 +317,7 @@ def import_file(file_name):
 
             # Retrieve Number of Copies
             num_copies = clients_data_list[
-                clients_data_list.index("ADDITIONAL_COPY") + 1] if "ADDITIONAL_COPY" in clients_data_list else 1
+                clients_data_list.index("COPY_REQ") + 1] if "COPY_REQ" in clients_data_list else 1
 
             # Retrieve the Marriage Date (Month, Day, Years)
             month = clients_data_list[clients_data_list.index("MONTH") + 1] if "MONTH" in clients_data_list else None
@@ -376,7 +376,7 @@ def import_file(file_name):
 
             # Retrieve Number of Copies
             num_copies = clients_data_list[
-                clients_data_list.index("ADDITIONAL_COPY") + 1] if "ADDITIONAL_COPY" in clients_data_list else 1
+                clients_data_list.index("COPY_REQ") + 1] if "COPY_REQ" in clients_data_list else 1
 
             # Retrieve the Marriage Date (Month, Day, Years)
             month = clients_data_list[clients_data_list.index("MONTH") + 1] if "MONTH" in clients_data_list else None
@@ -523,7 +523,7 @@ def import_file(file_name):
 
             # Retrieve Number of Copies
             num_copies = clients_data_list[
-                clients_data_list.index("ADDITIONAL_COPY") + 1] if "ADDITIONAL_COPY" in clients_data_list else 1
+                clients_data_list.index("COPY_REQ") + 1] if "COPY_REQ" in clients_data_list else 1
 
             # Retrieve the Marriage Date (Month, Day, Years)
             month = clients_data_list[clients_data_list.index("MONTH") + 1] if "MONTH" in clients_data_list else None
@@ -586,7 +586,7 @@ def import_file(file_name):
 
             # Retrieve Number of Copies
             num_copies = clients_data_list[
-                clients_data_list.index("ADDITIONAL_COPY") + 1] if "ADDITIONAL_COPY" in clients_data_list else 1
+                clients_data_list.index("COPY_REQ") + 1] if "COPY_REQ" in clients_data_list else 1
 
             # Retrieve the Marriage Date (Month, Day, Years)
             month = clients_data_list[clients_data_list.index("MONTH") + 1] if "MONTH" in clients_data_list else None
