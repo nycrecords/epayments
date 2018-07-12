@@ -1,10 +1,10 @@
 import React from 'react';
-import {Grid, Container, Header, Button, Segment, Divider, Dimmer, Loader, Icon} from 'semantic-ui-react';
+import {Button, Container, Dimmer, Divider, Grid, Header, Icon, Loader, Segment} from 'semantic-ui-react';
 import {connect} from 'react-redux';
 import {mapDispatchToProps, mapStateToProps} from "../utils/reduxMappers";
 import OrderForm from "./order_form";
 import Order from "./order";
-import LoginModal from "./login_modal"
+import LoginModal from "./login_modal";
 import {csrfFetch, handleFetchErrors} from "../utils/fetch"
 
 
@@ -42,7 +42,7 @@ class Home extends React.Component {
 
         this.setLoadingState = (loading) => {
             this.setState({
-              loading: loading
+                loading: loading
             });
         };
 
@@ -78,7 +78,7 @@ class Home extends React.Component {
                         alert("Logged Out");
                     }
                 }).catch((error) => {
-                console.log(error);
+                console.error(error);
                 this.props.authenticated && this.props.logout();
                 this.setLoadingState(false);
             });
@@ -91,14 +91,26 @@ class Home extends React.Component {
 
     getOrders() {
         csrfFetch('api/v1.0/orders')
-            .then(handleFetchErrors)
+            .then(response => {
+                // check response status to logout user if backend session expired
+                switch (response.status) {
+                    case 500:
+                        throw Error(response.statusText);
+                    case 401:
+                        this.props.authenticated && this.props.logout();
+                        throw Error(response.statusText);
+                    case 200:
+                        return response.json();
+                    default:
+                        throw Error("Unhandled HTTP status code");
+                }
+            })
             .then((json) => {
                 this.addOrder(json.order_count, json.suborder_count, json.all_orders);
-                this.setLoadingState(false)
             }).catch((error) => {
-            console.log(error);
-            this.setLoadingState(false);
+            console.error(error);
         });
+        this.setLoadingState(false);
     };
 
     componentWillReceiveProps(nextProps) {
@@ -133,7 +145,8 @@ class Home extends React.Component {
                                 <br/>
                                 <Button fluid content='Logout' onClick={this.logOut}/>
                             </Segment>
-                            <OrderForm addOrder={this.addOrder} setLoadingState={this.setLoadingState} toggleCSV={this.toggleCSV} ref={orderForm => this.orderForm = orderForm}/>
+                            <OrderForm addOrder={this.addOrder} setLoadingState={this.setLoadingState}
+                                       toggleCSV={this.toggleCSV} ref={orderForm => this.orderForm = orderForm}/>
                         </Grid.Column>
                         <Grid.Column width={1}/>
                         <Dimmer inverted active={this.state.loading}>
@@ -146,7 +159,8 @@ class Home extends React.Component {
                                     <Button icon active={true}>
                                         <Icon name='print'/>
                                     </Button>
-                                    {this.state.showCSVButton && <Button content='Generate CSV' onClick={this.generateCSV} />}
+                                    {this.state.showCSVButton &&
+                                    <Button content='Generate CSV' onClick={this.generateCSV}/>}
                                     <Button content='Order Sheets' onClick={this.printOrderSheet}/>
                                     <Button content='Big Labels' onClick={this.printBigLabels}/>
                                     <Button content='Small Labels' onClick={this.printSmallLabels}/>

@@ -73,7 +73,7 @@ def get_orders():
                                                                    date_received_end)
         return jsonify(order_count=order_count,
                        suborder_count=suborder_count,
-                       all_orders=orders)
+                       all_orders=orders), 200
 
     else:
         orders = []
@@ -82,7 +82,7 @@ def get_orders():
             order_count += 1
             for suborder in order.suborder:
                 orders.append(suborder.serialize)
-        return jsonify(order_count=order_count, suborder_count=len(orders), all_orders=orders)
+        return jsonify(order_count=order_count, suborder_count=len(orders), all_orders=orders), 200
 
 
 @api.route('/orders/<doc_type>', methods=['GET'])
@@ -95,7 +95,7 @@ def orders_doc(doc_type):
     """
     if doc_type.lower() == 'csv':
         url = generate_csv(request.args)
-        return jsonify(url=url)
+        return jsonify(url=url), 200
 
 
 @api.route('/status/<string:suborder_number>', methods=['GET', 'POST'])
@@ -129,7 +129,7 @@ def status_change(suborder_number):
             returns: {status_id, suborder_number, status, comment}, 201
         """
         status_code = update_status(suborder_number, comment, new_status)
-        return jsonify(status_code=status_code)
+        return jsonify(status_code=status_code), 200
 
 
 @api.route('/history/<string:suborder_number>', methods=['GET'])
@@ -150,7 +150,7 @@ def history(suborder_number):
                                               [event_type.UPDATE_STATUS, event_type.INITIAL_IMPORT])
                                           ).order_by(desc(Events.timestamp)).all()]
 
-    return jsonify(history=status_history)
+    return jsonify(history=status_history), 200
 
 
 @api.route('/orders/<int:order_id>', methods=['GET'])
@@ -165,7 +165,7 @@ def get_single_order(order_id):
     if len(orders) == 0:
         abort(404)
 
-    return jsonify(orders=orders)
+    return jsonify(orders=orders), 200
 
 
 @api.route('/tax_photo/<string:suborder_number>', methods=['GET', 'POST'])
@@ -175,7 +175,7 @@ def tax_photo(suborder_number):
         t_photo = TaxPhoto.query.filter_by(suborder_number=suborder_number).one()
         return jsonify(block_no=t_photo.block,
                        lot_no=t_photo.lot,
-                       roll_no=t_photo.roll)
+                       roll_no=t_photo.roll), 200
 
     else:
         json = request.get_json(force=True)
@@ -184,7 +184,7 @@ def tax_photo(suborder_number):
         roll_no = json.get("roll_no")
 
         message = update_tax_photo(suborder_number, block_no, lot_no, roll_no)
-        return jsonify(message=message)
+        return jsonify(message=message), 200
 
 
 @api.route('/print/<string:print_type>', methods=['POST'])
@@ -205,7 +205,7 @@ def print_order(print_type):
 
     url = handler_for_type[print_type](search_params)
 
-    return jsonify({"url": url})
+    return jsonify({"url": url}), 200
 
 
 @api.route('/login', methods=['POST'])

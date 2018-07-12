@@ -2,7 +2,7 @@
  * Created by sinsang on 5/23/17.
  */
 import React from 'react';
-import {Divider, Button} from 'semantic-ui-react';
+import {Button, Divider} from 'semantic-ui-react';
 import 'semantic-ui-css/semantic.min.css';
 import StatusModal from './statusModal';
 import History from './history';
@@ -21,11 +21,13 @@ class Order extends React.Component {
                 <br/>
                 Suborder #: {this.props.suborder_number}<br/>
                 Order Type: {this.props.order_type}
-                { this.props.order_type === 'Tax Photo' && <TaxPhotoModal suborder_number={this.props.suborder_number}/> }
+                {this.props.order_type === "Tax Photo" && <TaxPhotoModal suborder_number={this.props.suborder_number}/>}
                 <br/>
-                Billing Name: {this.props.billing_name} <br/>
-                Date Received: {this.props.date_received} <br/>
-                <History suborder_number={this.props.suborder_number} />
+                Billing Name: {this.props.billing_name}
+                <br/>
+                Date Received: {this.props.date_received}
+                <br/>
+                <History suborder_number={this.props.suborder_number}/>
                 <Divider/>
             </div>
         )
