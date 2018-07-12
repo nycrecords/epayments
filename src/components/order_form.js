@@ -109,7 +109,7 @@ class OrderForm extends React.Component {
                             this.props.setLoadingState(false);
                             window.open(json.url);
                         }).catch((error) => {
-                        console.log(error);
+                        console.error(error);
                         this.props.setLoadingState(false);
                     });
                     break;
@@ -135,7 +135,7 @@ class OrderForm extends React.Component {
                             this.props.setLoadingState(false);
                             window.open(json.url);
                         }).catch((error) => {
-                        console.log(error);
+                        console.error(error);
                         this.props.setLoadingState(false);
                     });
                     break;
@@ -160,7 +160,7 @@ class OrderForm extends React.Component {
                             this.props.addOrder(json.order_count, json.suborder_count, json.all_orders);
                             this.props.setLoadingState(false);
                         }).catch((error) => {
-                        console.log(error);
+                        console.error(error);
                         this.props.setLoadingState(false);
                     });
                     break;
