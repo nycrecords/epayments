@@ -1,5 +1,5 @@
 import React from 'react';
-import { BrowserRouter as Router, Route, Link } from "react-router-dom";
+import {BrowserRouter as Router, Route, Link} from "react-router-dom";
 import {Button, Container, Dimmer, Divider, Grid, Header, Icon, Loader, Segment} from 'semantic-ui-react';
 import {connect} from 'react-redux';
 import {mapDispatchToProps, mapStateToProps} from "../utils/reduxMappers";
@@ -133,15 +133,17 @@ class Home extends React.Component {
 
             />
         );
-        const Order= () => (
-          <div>
-            <h2>Home</h2>
-          </div>
+        const Order = () => (
+            <Container>
+                <div>
+                    <h2>Home</h2>
+                    <Link to="/">
+                        <Button content="Go Back"/>
+                    </Link>
+                </div>
+            </Container>
         );
-
-
-
-        return (
+        const Home = () => (
             <Container>
 
                 {this.props.authenticated ? (
@@ -177,19 +179,16 @@ class Home extends React.Component {
                                     <Button content='Order Sheets' onClick={this.printOrderSheet}/>
                                     <Button content='Big Labels' onClick={this.printBigLabels}/>
                                     <Button content='Small Labels' onClick={this.printSmallLabels}/>
-                                    <Router>
-                                        <div>
+                                    {/*<Router>*/}
+                                        {/*<div>*/}
 
-                                            <Link to="/Order">
-                                                <Button content='Order'/>
-                                            </Link>
+                                            {/*<Link to="/Order">*/}
+                                                {/*<Button content='Order'/>*/}
+                                            {/*</Link>*/}
 
-                                            <Route path="/Order" component={Order} />
-                                        </div>
-                                    </Router>
-
-
-
+                                            {/*<Route path="/Order" component={Order}/>*/}
+                                        {/*</div>*/}
+                                    {/*</Router>*/}
 
 
                                 </Button.Group>
@@ -213,8 +212,31 @@ class Home extends React.Component {
                     </Segment>
                 )}
             </Container>
-        )
+
+
+        );
+
+
+        return (
+            <Router>
+                <div>
+
+                    <Link to="/Order">
+                        <Button content='Order'/>
+                    </Link>
+                    <Link to="/">
+                        <Button content='Home'/>
+                    </Link>
+
+                    <Route exact path="/" component={Home}/>
+                    <Route exact path="/Order" component={Order}/>
+                </div>
+            </Router>
+
+
+    )
     }
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(Home);
+
