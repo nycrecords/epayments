@@ -1,5 +1,5 @@
 import React from 'react';
-import { BrowserRouter, Switch, Route, Link } from 'react-router-dom'
+import { BrowserRouter as Router, Route, Link } from "react-router-dom";
 import {Button, Container, Dimmer, Divider, Grid, Header, Icon, Loader, Segment} from 'semantic-ui-react';
 import {connect} from 'react-redux';
 import {mapDispatchToProps, mapStateToProps} from "../utils/reduxMappers";
@@ -130,22 +130,22 @@ class Home extends React.Component {
                 date_received={order.date_received.slice(0, -9)}
                 current_status={order.current_status}
                 updateStatus={this.updateStatus}
+
             />
         );
-        // const Header = () => (
-        //   <header>
-        //     <nav>
-        //       <ul>
-        //         <li><Link to='/'>Home</Link></li>
-        //         <li><Link to='/Order'>Order</Link></li>
-        //       </ul>
-        //     </nav>
-        //   </header>
-        // )
+        const Order= () => (
+          <div>
+            <h2>Home</h2>
+          </div>
+        );
+
+
 
         return (
             <Container>
+
                 {this.props.authenticated ? (
+
                     <Grid padded columns={3}>
                         <Grid.Column width={4} id="grid-column-search">
                             <Header as="h1" textAlign="center">ePayments
@@ -165,6 +165,8 @@ class Home extends React.Component {
                         </Dimmer>
                         <Grid.Column width={11} id="grid-column-order">
                             <Header as="h1" dividing textAlign="center">Order</Header>
+
+
                             <div>
                                 <Button.Group size='medium' floated='right'>
                                     <Button icon active={true}>
@@ -175,7 +177,19 @@ class Home extends React.Component {
                                     <Button content='Order Sheets' onClick={this.printOrderSheet}/>
                                     <Button content='Big Labels' onClick={this.printBigLabels}/>
                                     <Button content='Small Labels' onClick={this.printSmallLabels}/>
-                                    <Link to='/Order'><Button content='Place New Order'/></Link>
+                                    <Router>
+                                        <div>
+
+                                            <Link to="/Order">
+                                                <Button content='Order'/>
+                                            </Link>
+
+                                            <Route path="/Order" component={Order} />
+                                        </div>
+                                    </Router>
+
+
+
 
 
                                 </Button.Group>
@@ -187,6 +201,7 @@ class Home extends React.Component {
                                 <Divider clearing/>
                             </div>
                             {orderRows}
+
                         </Grid.Column>
                     </Grid>
                 ) : (
