@@ -1,4 +1,5 @@
 import React from 'react';
+import { BrowserRouter, Switch, Route, Link } from 'react-router-dom'
 import {Button, Container, Dimmer, Divider, Grid, Header, Icon, Loader, Segment} from 'semantic-ui-react';
 import {connect} from 'react-redux';
 import {mapDispatchToProps, mapStateToProps} from "../utils/reduxMappers";
@@ -131,6 +132,16 @@ class Home extends React.Component {
                 updateStatus={this.updateStatus}
             />
         );
+        // const Header = () => (
+        //   <header>
+        //     <nav>
+        //       <ul>
+        //         <li><Link to='/'>Home</Link></li>
+        //         <li><Link to='/Order'>Order</Link></li>
+        //       </ul>
+        //     </nav>
+        //   </header>
+        // )
 
         return (
             <Container>
@@ -164,6 +175,9 @@ class Home extends React.Component {
                                     <Button content='Order Sheets' onClick={this.printOrderSheet}/>
                                     <Button content='Big Labels' onClick={this.printBigLabels}/>
                                     <Button content='Small Labels' onClick={this.printSmallLabels}/>
+                                    <Link to='/Order'><Button content='Place New Order'/></Link>
+
+
                                 </Button.Group>
                                 <strong>Number of Items: {this.state.suborder_count}</strong>
                                 <br/>
