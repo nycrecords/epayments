@@ -7,7 +7,8 @@ import OrderForm from "./order_form";
 import Order from "./order";
 import LoginModal from "./login_modal";
 import {csrfFetch, handleFetchErrors} from "../utils/fetch"
-
+import newOrder from "./newOrderForm.js"
+import NewOrderForm from "./newOrderForm";
 
 class Home extends React.Component {
     constructor() {
@@ -133,16 +134,7 @@ class Home extends React.Component {
 
             />
         );
-        const Order = () => (
-            <Container>
-                <div>
-                    <h2>Home</h2>
-                    <Link to="/">
-                        <Button content="Go Back"/>
-                    </Link>
-                </div>
-            </Container>
-        );
+
         const Home = () => (
             <Container>
 
@@ -179,16 +171,6 @@ class Home extends React.Component {
                                     <Button content='Order Sheets' onClick={this.printOrderSheet}/>
                                     <Button content='Big Labels' onClick={this.printBigLabels}/>
                                     <Button content='Small Labels' onClick={this.printSmallLabels}/>
-                                    {/*<Router>*/}
-                                        {/*<div>*/}
-
-                                            {/*<Link to="/Order">*/}
-                                                {/*<Button content='Order'/>*/}
-                                            {/*</Link>*/}
-
-                                            {/*<Route path="/Order" component={Order}/>*/}
-                                        {/*</div>*/}
-                                    {/*</Router>*/}
 
 
                                 </Button.Group>
@@ -199,7 +181,7 @@ class Home extends React.Component {
                             <div>
                                 <Divider clearing/>
                             </div>
-                            {orderRows}
+                            {/*{orderRows}*/}
 
                         </Grid.Column>
                     </Grid>
@@ -218,23 +200,34 @@ class Home extends React.Component {
 
 
         return (
-            <Router>
-                <div>
+            <Container>
+            {this.props.authenticated ? (
+                <Router>
+                    <div>
 
-                    <Link to="/Order">
-                        <Button content='Order'/>
-                    </Link>
-                    <Link to="/">
-                        <Button content='Home'/>
-                    </Link>
+                        <Link to="/Order">
+                            <Button content='Order'/>
+                        </Link>
+                        <Link to="/">
+                            <Button content='Home'/>
+                        </Link>
 
-                    <Route exact path="/" component={Home}/>
-                    <Route exact path="/Order" component={Order}/>
-                </div>
-            </Router>
+                        <Route exact path="/" component={Home}/>
+                        <Route exact path="/Order" component={NewOrderForm}/>
+                    </div>
+                </Router>
+            ) :(
+                    <Segment id="center">
+                        <Header as="h1" textAlign="center">ePayments
+                            <Container className="sub header">Department of Records</Container>
+                        </Header>
+                        <LoginModal/>
+                    </Segment>
+                )}
+            </Container>)
 
 
-    )
+
     }
 }
 
