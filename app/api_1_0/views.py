@@ -62,22 +62,31 @@ def get_orders():
         date_received_start = json.get("date_received_start")
         date_received_end = json.get("date_received_end")
 
-        return jsonify(all_orders=search_queries(suborder_number, 1, 100))
+        orders = search_queries(suborder_number, 1, 100)
+        #formatting results
+        # total = orders['hits']['total']
+        # formatted_orders = None
+        # if total != 0:
+        #     formatted_orders = orders['hits']['hits']
 
-        #
-        # if not (order_number or suborder_number or billing_name) and not date_received_start:
-        #     date_received_start = date.today()
-        # order_count, suborder_count, orders = get_orders_by_fields(order_number,
-        #                                                            suborder_number,
-        #                                                            order_type,
-        #                                                            status,
-        #                                                            billing_name,
-        #                                                            user,
-        #                                                            date_received_start,
-        #                                                            date_received_end)
-        # return jsonify(order_count=order_count,
-        #                suborder_count=suborder_count,
-        #                all_orders=orders), 200
+        # return jsonify(order_count = 1,
+        #                suborder_count=len(orders['hits']['hits']),
+        #                all_orders=formatted_orders), 200
+
+
+        if not (order_number or suborder_number or billing_name) and not date_received_start:
+            date_received_start = date.today()
+        order_count, suborder_count, orders = get_orders_by_fields(order_number,
+                                                                   suborder_number,
+                                                                   order_type,
+                                                                   status,
+                                                                   billing_name,
+                                                                   user,
+                                                                   date_received_start,
+                                                                   date_received_end)
+        return jsonify(order_count=order_count,
+                       suborder_count=suborder_count,
+                       all_orders=orders), 200
 
     else:
         orders = []

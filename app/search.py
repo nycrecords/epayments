@@ -23,7 +23,7 @@ def create_index():
                         "ngram_tokenizer": {
                             "type": "ngram",
                             "min_gram": 1,
-                            "max_gram": 6
+                            "max_gram": 20
                         }
                     },
                     "analyzer": {
@@ -60,6 +60,10 @@ def create_index():
                                 },
                             },
                         },
+                        "suborder_number":{
+                            "type": 'text',
+                            "analyzer": "ngram_tokenizer_analyzer",
+                        },
                         "order_type": {
                             "type": "keyword"
                         },
@@ -72,6 +76,7 @@ def create_index():
             }
         }
     )
+
 
 def create_docs():
     """Creates elasticsearch request docs for every request"""
@@ -147,6 +152,7 @@ def search_queries(query, start, size):
         'customer_email': True,
         'customer_email.exact': True,
         'order_type': True,
+        'order_number': True
     }
 
     dsl_gen = DSLGenerator(query=query, query_fields = query_field, match_type=match_type)
@@ -161,13 +167,13 @@ def search_queries(query, start, size):
                                    'billing_name',
                                    'customer_email',
                                    'order_type',
+                                   'suborder_number'
                                ],
                                size=size,
                                from_=start,
                                )
     print(type(search_results))
     return search_results
-
 
 
 
