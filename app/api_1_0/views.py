@@ -23,6 +23,7 @@ from app.models import (
     Users,
     Events
 )
+from app.search import create_docs, update_docs, search_queries
 
 
 @api.route('/', methods=['GET'])
@@ -61,19 +62,22 @@ def get_orders():
         date_received_start = json.get("date_received_start")
         date_received_end = json.get("date_received_end")
 
-        if not (order_number or suborder_number or billing_name) and not date_received_start:
-            date_received_start = date.today()
-        order_count, suborder_count, orders = get_orders_by_fields(order_number,
-                                                                   suborder_number,
-                                                                   order_type,
-                                                                   status,
-                                                                   billing_name,
-                                                                   user,
-                                                                   date_received_start,
-                                                                   date_received_end)
-        return jsonify(order_count=order_count,
-                       suborder_count=suborder_count,
-                       all_orders=orders), 200
+        return jsonify(all_orders=search_queries(suborder_number, 1, 100))
+
+        #
+        # if not (order_number or suborder_number or billing_name) and not date_received_start:
+        #     date_received_start = date.today()
+        # order_count, suborder_count, orders = get_orders_by_fields(order_number,
+        #                                                            suborder_number,
+        #                                                            order_type,
+        #                                                            status,
+        #                                                            billing_name,
+        #                                                            user,
+        #                                                            date_received_start,
+        #                                                            date_received_end)
+        # return jsonify(order_count=order_count,
+        #                suborder_count=suborder_count,
+        #                all_orders=orders), 200
 
     else:
         orders = []

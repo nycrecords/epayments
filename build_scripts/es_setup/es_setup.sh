@@ -14,7 +14,7 @@ sudo chkconfig --add elasticsearch
 
 # 5. Configure Elastic Search
 mv /etc/elasticsearch/elasticsearch.yml etc/elasticsearch/elasticsearch.yml.orig
-ln -s /vargant/build_scripts/es_setup/elasticsearch.yml /etc/elasticsearch/elasticsearch.yml
+cp /vargant/build_scripts/es_setup/elasticsearch.yml /etc/elasticsearch/elasticsearch.yml
 
 mkdir -p data/es_logs
 chown -R vagrant:vagrant /data

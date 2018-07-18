@@ -1,4 +1,4 @@
-from app import db
+from app import db, es
 from app.constants import order_types, status
 from sqlalchemy.dialects.postgresql import ARRAY
 
@@ -56,6 +56,8 @@ class Orders(db.Model):
             'order_types': self.order_types,
             'multiple_items': self.multiple_items,
         }
+
+    #Elastic Search
 
 
 class Suborders(db.Model):
@@ -131,3 +133,31 @@ class Suborders(db.Model):
             'order_type': self.order_type,
             'current_status': self.status
         }
+
+
+    #Elastic Search
+    def es_create(self):
+        """Creates Elastic Search doc"""
+        es.create(
+            index='suborders',
+            doc_type='suborder',
+            id=self.id,
+            body={
+                'billing_name': self.order.customer.billing_name,
+                'customer_email': self.order.customer.email,
+                'order_type': self.order_type,
+                'data_created': self.date_crated.strftime('%Y-%m-%dT%H:%M:%S')
+            }
+        )
+
+    def es_update(self):
+        es.update(
+            index='suborders',
+            doc_type='suborder',
+            id=self.id,
+            body={
+                'billing_name': self.order.customer.billing_name,
+                'customer_email': self.order.customer.email,
+                'order_type': self.order_type,
+            }
+        )

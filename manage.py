@@ -74,6 +74,11 @@ def test(coverage=False):
         print('HTML version: file://%s/indexJS.html' % covdir)
         COV.erase()
 
+@manager.command
+def es_recreate():
+    """Recreates the index and request docs"""
+    from app.search import recreate
+    recreate()
 
 if __name__ == '__main__':
     manager.run()
