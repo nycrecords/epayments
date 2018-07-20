@@ -98,6 +98,18 @@ def orders_doc(doc_type):
         return jsonify(url=url), 200
 
 
+@api.route('/orders/new', methods=['GET'])
+@login_required
+def new_order():
+    """
+
+    :return:
+    """
+    print("Working")
+    return 200
+
+
+
 @api.route('/status/<string:suborder_number>', methods=['GET', 'POST'])
 @login_required
 def status_change(suborder_number):
