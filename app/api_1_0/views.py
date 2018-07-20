@@ -98,7 +98,7 @@ def orders_doc(doc_type):
         return jsonify(url=url), 200
 
 
-@api.route('/orders/new', methods=['GET'])
+@api.route('/orders/new', methods=['POST'])
 @login_required
 def new_order():
     """
@@ -106,7 +106,7 @@ def new_order():
     :return:
     """
     print("Working")
-    return 200
+    return jsonify(), 200
 
 
 

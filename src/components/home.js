@@ -7,7 +7,6 @@ import OrderForm from "./order_form";
 import Order from "./order";
 import LoginModal from "./login_modal";
 import {csrfFetch, handleFetchErrors} from "../utils/fetch"
-import newOrder from "./newOrderForm.js"
 import NewOrderForm from "./newOrderForm";
 
 class Home extends React.Component {

@@ -1,11 +1,10 @@
-import React, {Component} from 'react';
+import React, {} from 'react';
 import {
-    BrowserRouter as Router,
     Route,
     Link
 } from 'react-router-dom';
 
-import {Button, Container, Message, Divider, Grid, Header, Form, Loader, Segment} from 'semantic-ui-react';
+import {Button, Container, Divider, Grid, Header, Form, Loader, Dimmer} from 'semantic-ui-react';
 import moment from 'moment';
 import {csrfFetch, handleFetchErrors} from "../utils/fetch"
 
@@ -51,11 +50,12 @@ class NewOrderForm extends React.Component {
             collection: '',
             printSize: '',
             numCopies: '',
-            status: 'All'
+            status: 'All',
+            loading: false
+
         };
 
         this.handleChange = this.handleChange.bind(this);
-        // this.handleChange = (e, { name, value }) => this.setState({ [name]: value })
 
         this.clearSelection = () => {
             this.setState({
@@ -72,7 +72,7 @@ class NewOrderForm extends React.Component {
         this.photosValueList = ['photos', 'Tax Photo', 'Photo Gallery'];
         this.yesterday = moment().subtract(1, 'days');
         this.today = moment();
-    }
+    };
 
     handleChange = (e) => {
         const target = e.target;
@@ -81,11 +81,11 @@ class NewOrderForm extends React.Component {
         this.setState({
             [name]: value
         });
-    }
+    };
 
     handleSubmit = (e) => {
         e.preventDefault();
-        this.props.setLoadingState(true);
+        this.setState({loading : true});
         csrfFetch('api/v1.0/orders/new', {
             method: "POST",
             body: JSON.stringify({
@@ -96,28 +96,29 @@ class NewOrderForm extends React.Component {
                 printSize: this.state.printSize,
                 numCopies: this.state.numCopies,
                 status: this.state.status
-
             })
+        })
                 .then(handleFetchErrors)
                 .then((json) => {
-                    this.props.setLoadingState(false);
+                    this.setState({loading : false});
                     window.open(json.url);
 
                 }).catch((error) => {
                     console.error(error);
-                    this.props.setLoadingState(false);
-                })
+                    this.setState({loading : false});
+                });
 
-        })
-    }
+    };
 
     render() {
         return (
             <div>
+                <Dimmer inverted active={this.state.loading}>
+                    <Loader content='Loading'/>
+                </Dimmer>
                 <div>
                     <Grid padded columns={3}>
                         <Grid.Column width={4} id="grid-column-search">
-
                             <Link to="/">
                                 <Header as="h1" textAlign="center">ePayments
                                     <Container className="sub header">Department of Records</Container>
@@ -133,32 +134,42 @@ class NewOrderForm extends React.Component {
                         <div>
                             <Container>
                                 <Form onSubmit={this.handleSubmit}>
-                                    <Form.Input label="Billing Name" name="billingName" placeholder="Billing Name"
-                                                maxLength="64" width={6}
+                                    <Form.Input label="Billing Name"
+                                                name="billingName"
+                                                placeholder="Billing Name"
+                                                maxLength="64"
+                                                width={8}
                                                 onChange={this.handleChange}
                                                 value={this.state.billingName}
                                     />
-                                    <Form.Input label="Address" name="address" placeholder="Address" maxLength="64"
+                                    <Form.Input label="Address"
+                                                name="address"
+                                                placeholder="Address"
+                                                maxLength="64"
                                                 width={8}
                                                 onChange={this.handleChange}
                                                 value={this.state.address}
                                     />
-                                    <Form.Select label="Order Type" name="orderType" placeholder="Order Type"
-                                                 options={orderTypeOptions} width={6}
+                                    <Form.Select label="Order Type"
+                                                 name="orderType"
+                                                 placeholder="Order Type"
+                                                 options={orderTypeOptions}
+                                                 width={8}
                                                  onChange={(e, {value}) => {
                                                      this.setState({orderType: value});
                                                  }}
                                                  value={this.state.orderType}
-
                                     />
-                                    <Form.Input label="Collection" name="collection" placeholder="Collection"
-                                                maxLength="64" width={6}
+                                    <Form.Input label="Collection"
+                                                name="collection"
+                                                placeholder="Collection"
+                                                maxLength="64"
+                                                width={8}
                                                 onChange={this.handleChange}
                                                 value={this.state.collection}
                                     />
                                     <Form.Group inline>
                                         <label>Printing Size</label>
-
                                         <Form.Radio
                                             name={"printSize"}
                                             label='Small'
@@ -184,9 +195,11 @@ class NewOrderForm extends React.Component {
                                             value={this.state.printSize}
                                         />
                                     </Form.Group>
-                                    <Form.Input label="Number of Copies" name="numCopies"
+                                    <Form.Input label="Number of Copies"
+                                                name="numCopies"
                                                 placeholder="Number of Copies"
-                                                maxLength="2" width={6}
+                                                maxLength="2"
+                                                width={8}
                                                 onChange={(e, {value}) => {
                                                     if (/^[0-9]+$/.test(value.slice(-1)) || value === '') {
                                                         this.handleChange(e)
@@ -194,8 +207,11 @@ class NewOrderForm extends React.Component {
                                                 }}
                                                 value={this.state.numCopies}
                                     />
-                                    <Form.Select label="Status" name="status" placeholder="Status"
-                                                 options={statusOptions} width={6}
+                                    <Form.Select label="Status"
+                                                 name="status"
+                                                 placeholder="Status"
+                                                 options={statusOptions}
+                                                 width={8}
                                                  onChange={(e, {value}) => {
                                                      this.setState({status: value})
                                                  }}
@@ -214,7 +230,7 @@ class NewOrderForm extends React.Component {
             </div>
         )
     };
-}
+};
 
 
 export default NewOrderForm;
