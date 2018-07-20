@@ -3,6 +3,11 @@ from flask import jsonify, abort, request
 from flask_login import login_user, logout_user, current_user, login_required
 from sqlalchemy import desc
 from app.api_1_0 import api_1_0 as api
+from app import db
+from app.models.orders import Orders, Suborders
+from app import db_utils
+
+from app.db_utils import (create_object)
 
 from app.api_1_0.utils import (
     update_status,
@@ -105,6 +110,18 @@ def new_order():
 
     :return:
     """
+    if request.method == 'POST':  # makes it so we get a post method to receive the info put in on the form
+        json = request.get_json(force=True)
+        order_type = json.get("orderType")
+        status = json.get("status")
+        billing_name = json.get("billingName")
+        address = json.get("address")
+        collection = json.get("collection")
+        print_size = json.get("printSize")
+        num_copies = json.get("numCopies")
+
+        order = Suborders(id=999, client_id=999, order_type=order_type, order_number=999, _status=status)
+        create_object(order)
     print("Working")
     return jsonify(), 200
 
