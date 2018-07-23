@@ -46,13 +46,13 @@ class NewOrderForm extends React.Component {
         this.state = {
             billingName: '',
             email:'',
-            address_line_1: '',
-            address_line_2: '',
+            addressLine1:'None',
+            addressLine2: 'None',
             city:'',
             state:'',
-            zip_code:'',
-            phone:'',
-            instructions:'',
+            zipCode:'',
+            phone:'None',
+            instructions:'None',
             orderType: '',
             collection: '',
             printSize: '',
@@ -68,11 +68,11 @@ class NewOrderForm extends React.Component {
             this.setState({
                 billingName: '',
                 email:'',
-                address_line_1: '',
-                address_line_2:'',
+                addressLine1: '',
+                addressLine2:'',
                 city:'',
                 state:'',
-                zip_code:'',
+                zipCode:'',
                 phone:'',
                 instructions:'',
                 orderType: '',
@@ -105,11 +105,11 @@ class NewOrderForm extends React.Component {
             body: JSON.stringify({
                 billingName: this.state.billingName,
                 email:this.state.email,
-                address_line_1: this.state.address_line_1,
-                address_two_2:this.state.address_line_2,
+                addressLine1: this.state.addressLine1,
+                address_two_2:this.state.addressLine2,
                 city:this.state.city,
                 state:this.state.state,
-                zip_code:this.state.zip_code,
+                zipCode:this.state.zipCode,
                 phone:this.state.phone,
                 instructions:this.state.instructions,
                 orderType: this.state.orderType,
@@ -132,6 +132,13 @@ class NewOrderForm extends React.Component {
     };
 
     render() {
+        // const OrderForm = () => (
+        //
+        //    
+        //
+        //
+        // );
+
         return (
             <div>
                 <Dimmer inverted active={this.state.loading}>
@@ -172,20 +179,20 @@ class NewOrderForm extends React.Component {
                                                 value={this.state.email}
                                     />
                                     <Form.Input label="Address line 1"
-                                                name="address_line_1"
+                                                name="addressLine1"
                                                 placeholder="Address"
                                                 maxLength="64"
                                                 width={8}
                                                 onChange={this.handleChange}
-                                                value={this.state.address_line_1}
+                                                value={this.state.addressLine1}
                                     />
                                     <Form.Input label="Address line 2"
-                                                name="address_line_2"
+                                                name="addressLine2"
                                                 placeholder="Address"
                                                 maxLength="64"
                                                 width={8}
                                                 onChange={this.handleChange}
-                                                value={this.state.address_line_2}
+                                                value={this.state.addressLine2}
                                     />
                                     <Form.Group>
                                         <Form.Input label="City"
@@ -205,12 +212,12 @@ class NewOrderForm extends React.Component {
                                                     value={this.state.state}
                                         />
                                         <Form.Input label="Zip Code"
-                                                    name="zip_code"
+                                                    name="zipCode"
                                                     placeholder="Zip Code"
                                                     maxLength="5"
                                                     width={4}
                                                     onChange={this.handleChange}
-                                                    value={this.state.zip_code}
+                                                    value={this.state.zipCode}
                                         />
                                     </Form.Group>
                                     <Form.Input label="Phone"

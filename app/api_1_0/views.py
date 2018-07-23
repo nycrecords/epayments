@@ -5,7 +5,10 @@ from sqlalchemy import desc
 from app.api_1_0 import api_1_0 as api
 from app import db
 from app.models.orders import Orders, Suborders
+from app.models.customers import Customers
 from app import db_utils
+from sqlalchemy import *
+from sqlalchemy.orm import *
 
 from app.db_utils import (create_object)
 
@@ -114,27 +117,50 @@ def new_order():
         order_type = json.get("orderType")
         status = json.get("status")
         billing_name = json.get("billingName")
-        address = json.get("address")
+        email = json.get("email")
+        address_line_1 = json.get("addressLine1")
+        address_line_2 = json.get("addressLine2")
+        city = json.get("city")
+        state = json.get("state")
+        zip_code = json.get("zipCode")
+        phone = json.get("phone")
+        instruction = json.get("instructions")
         collection = json.get("collection")
         print_size = json.get("printSize")
         num_copies = json.get("numCopies")
 
-
-        main_order = Orders(id="9909011",
+        # check_id=time.time()
+        id="9909013"
+        # if Session.query(exists().where(Orders.id == id)):
+        main_order = Orders(id=id,
                             date_submitted="07/16/18",
                             date_received="07/16/18",
                             confirmation_message="confirmation message",
                             client_data="client",
                             order_types=order_type,
                             multiple_items=True)
-        print(main_order.date_submitted)
-        create_object(main_order)
-        order = Suborders(id="999161",
-                          client_id=999,
-                          order_type=order_type,
-                          order_number=main_order.id,
-                          _status=status)
-        create_object(order)
+        # create_object(main_order)
+
+        customer = Customers(billing_name=billing_name,
+                             email=email,
+                             shipping_name=billing_name,
+                             address_line_1=address_line_1,
+                             address_line_2=address_line_2,
+                             city=city,
+                             state=state,
+                             zip_code=zip_code,
+                             phone=phone,
+                             instructions=instruction,
+                             order_number=main_order.id,
+                             )
+
+        create_object(customer)
+        sub_order = Suborders(id="999134",
+                              client_id=999,
+                              order_type=order_type,
+                              order_number=main_order.id,
+                              _status=status)
+        # create_object(sub_order)
 
     print("Working")
     return jsonify(), 200
