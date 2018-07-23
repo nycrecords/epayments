@@ -24,13 +24,13 @@ def create_object(obj):
         print("Failed to CREATE {} : {}".format(obj, e))
         print(sys.exc_info())
         db.session.rollback()
-    else:
-        # create elasticsearch doc
-        if (not isinstance(obj, Stories)
-            and hasattr(obj, 'es_create')
-            and current_app.config['ELASTICSEARCH_ENABLED']):
-              obj.es_create()
-        return str(obj)
+    # else:
+    #     # create elasticsearch doc
+    #     if (not isinstance(obj, Storie)
+    #         and hasattr(obj, 'es_create')
+    #         and current_app.config['ELASTICSEARCH_ENABLED']):
+    #           obj.es_create()
+    #     return str(obj)
 
 
 def update_object(data, obj_type, obj_id, es_update=True):

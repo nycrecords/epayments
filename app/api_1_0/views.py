@@ -107,7 +107,6 @@ def orders_doc(doc_type):
 @login_required
 def new_order():
     """
-
     :return:
     """
     if request.method == 'POST':  # makes it so we get a post method to receive the info put in on the form
@@ -120,8 +119,23 @@ def new_order():
         print_size = json.get("printSize")
         num_copies = json.get("numCopies")
 
-        order = Suborders(id=999, client_id=999, order_type=order_type, order_number=999, _status=status)
+
+        main_order = Orders(id="9909011",
+                            date_submitted="07/16/18",
+                            date_received="07/16/18",
+                            confirmation_message="confirmation message",
+                            client_data="client",
+                            order_types=order_type,
+                            multiple_items=True)
+        print(main_order.date_submitted)
+        create_object(main_order)
+        order = Suborders(id="999161",
+                          client_id=999,
+                          order_type=order_type,
+                          order_number=main_order.id,
+                          _status=status)
         create_object(order)
+
     print("Working")
     return jsonify(), 200
 

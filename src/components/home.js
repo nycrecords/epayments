@@ -180,7 +180,7 @@ class Home extends React.Component {
                             <div>
                                 <Divider clearing/>
                             </div>
-                            {/*{orderRows}*/}
+                            {orderRows}
 
                         </Grid.Column>
                     </Grid>

@@ -45,7 +45,14 @@ class NewOrderForm extends React.Component {
 
         this.state = {
             billingName: '',
-            address: '',
+            email:'',
+            address_line_1: '',
+            address_line_2: '',
+            city:'',
+            state:'',
+            zip_code:'',
+            phone:'',
+            instructions:'',
             orderType: '',
             collection: '',
             printSize: '',
@@ -60,7 +67,14 @@ class NewOrderForm extends React.Component {
         this.clearSelection = () => {
             this.setState({
                 billingName: '',
-                address: '',
+                email:'',
+                address_line_1: '',
+                address_line_2:'',
+                city:'',
+                state:'',
+                zip_code:'',
+                phone:'',
+                instructions:'',
                 orderType: '',
                 collection: '',
                 printSize: '',
@@ -90,7 +104,14 @@ class NewOrderForm extends React.Component {
             method: "POST",
             body: JSON.stringify({
                 billingName: this.state.billingName,
-                address: this.state.address,
+                email:this.state.email,
+                address_line_1: this.state.address_line_1,
+                address_two_2:this.state.address_line_2,
+                city:this.state.city,
+                state:this.state.state,
+                zip_code:this.state.zip_code,
+                phone:this.state.phone,
+                instructions:this.state.instructions,
                 orderType: this.state.orderType,
                 collection: this.state.collection,
                 printSize: this.state.printSize,
@@ -142,13 +163,71 @@ class NewOrderForm extends React.Component {
                                                 onChange={this.handleChange}
                                                 value={this.state.billingName}
                                     />
-                                    <Form.Input label="Address"
-                                                name="address"
+                                    <Form.Input label="Email"
+                                                name="email"
+                                                placeholder="Email"
+                                                maxLength="64"
+                                                width={8}
+                                                onChange={this.handleChange}
+                                                value={this.state.email}
+                                    />
+                                    <Form.Input label="Address line 1"
+                                                name="address_line_1"
                                                 placeholder="Address"
                                                 maxLength="64"
                                                 width={8}
                                                 onChange={this.handleChange}
-                                                value={this.state.address}
+                                                value={this.state.address_line_1}
+                                    />
+                                    <Form.Input label="Address line 2"
+                                                name="address_line_2"
+                                                placeholder="Address"
+                                                maxLength="64"
+                                                width={8}
+                                                onChange={this.handleChange}
+                                                value={this.state.address_line_2}
+                                    />
+                                    <Form.Group>
+                                        <Form.Input label="City"
+                                                    name="city"
+                                                    placeholder="City"
+                                                    maxLength="64"
+                                                    width={4}
+                                                    onChange={this.handleChange}
+                                                    value={this.state.city}
+                                        />
+                                        <Form.Input label="State"
+                                                    name="state"
+                                                    placeholder="State"
+                                                    maxLength="64"
+                                                    width={4}
+                                                    onChange={this.handleChange}
+                                                    value={this.state.state}
+                                        />
+                                        <Form.Input label="Zip Code"
+                                                    name="zip_code"
+                                                    placeholder="Zip Code"
+                                                    maxLength="5"
+                                                    width={4}
+                                                    onChange={this.handleChange}
+                                                    value={this.state.zip_code}
+                                        />
+                                    </Form.Group>
+                                    <Form.Input label="Phone"
+                                                name="phone"
+                                                placeholder="Phone"
+                                                maxLength="64"
+                                                width={8}
+                                                onChange={this.handleChange}
+                                                value={this.state.phone}
+                                    />
+                                    <Form.Input label="Instructions"
+                                                name="instructions"
+                                                placeholder="Instructions"
+                                                maxLength="64"
+                                                width={8}
+                                                onChange={this.handleChange}
+                                                value={this.state.instructions}
                                     />
                                     <Form.Select label="Order Type"
                                                  name="orderType"
