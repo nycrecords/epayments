@@ -2,6 +2,12 @@ from flask import current_app
 from app.models import Suborders
 from app import es
 from elasticsearch.helpers import bulk
+from datetime import datetime
+
+#constants
+ELASTICSEARCH_DATETIME = '%m/%d/%Y'
+
+
 
 def recreate():
     """Deletes then recreates the index"""
@@ -9,6 +15,7 @@ def recreate():
                       ignore=[400, 404])
     create_index()
     create_docs()
+
 
 def create_index():
     """
@@ -22,8 +29,8 @@ def create_index():
                     "tokenizer": {
                         "ngram_tokenizer": {
                             "type": "ngram",
-                            "min_gram": 1,
-                            "max_gram": 20
+                            "min_gram": 3,
+                            "max_gram": 5,
                         }
                     },
                     "analyzer": {
@@ -50,26 +57,22 @@ def create_index():
                                 },
                             },
                         },
-                        "customer_email": {
-                            "type": "text",
-                            "analyzer": "ngram_tokenizer_analyzer",
-                            "fields": {
-                                "exact": {
-                                    "type": "text",
-                                    "analyzer": "standard",
-                                },
-                            },
-                        },
                         "suborder_number":{
-                            "type": 'text',
-                            "analyzer": "ngram_tokenizer_analyzer",
+                            "type": 'keyword',
+                        },
+                        "order_number": {
+                            "type": 'keyword',
                         },
                         "order_type": {
-                            "type": "keyword"
+                            "type": 'keyword',
+                            "similarity":'boolean'
+                        },
+                        "current_status": {
+                            "type": 'keyword'
                         },
                         "date_created": {
                             "type": "date",
-                            "format": "strict_date_hour_minute_second",
+                            "format": "MM/dd/yyyy",
                         }
                     }
                 }
@@ -90,28 +93,24 @@ def create_docs():
         operations.append({
             '_op_type': 'create',
             '_id': q.id,
-            'id': q.id,
-            'billing_name' : q.order.customer.billing_name,
+            'order_number': q.order_number,
+            'suborder_number': q.id,
+            'date_received': q.order.date_received.strftime(ELASTICSEARCH_DATETIME),
+            'date_submitted': q.order.date_submitted.strftime(ELASTICSEARCH_DATETIME),
+            'billing_name': q.order.customer.billing_name,
             'customer_email': q.order.customer.email,
+            'order_type': q.order_type,
+            'current_status': q.status,
         })
     num_success, _ = bulk(
         es,
         operations,
         index='suborders',
         doc_type='suborders',
-        chunk_size=50,
+        chunk_size=200,
         raise_on_error=False
         )
-"""
-#scrapped kept in for refrence
-def add_to_index(index, model):
-    if not current_app.elasticsearch:
-        return
-    payload = {}
-    for field in model.__searchable__:
-        payload[field] = getattr(model, field)
-    current_app.elasticsearch.index(index=index, doc_type=index, id=model.id, body=payload)
-"""
+    print("Successfully created %s docs." % num_success)
 
 
 def update_docs():
@@ -130,7 +129,14 @@ def remove_doc(index, model):
 #def search_queries(index,query,page,per_page):
 
 
-def search_queries(query, start, size):
+def search_queries(order_number,
+                   suborder_number,
+                   order_type,
+                   status,
+                   billing_name,
+                   date_received_start,
+                   date_received_end,
+                   start, size):
     """Arguments will match search results
 
         :param query: what the search terms will be
@@ -141,72 +147,116 @@ def search_queries(query, start, size):
     """
 
     # removes leading and tailing whitespaces
-    if query is not None:
-        query = query.strip()
+    if order_number is not None:
+        order_number = order_number.strip()
 
-    match_type = 'multi_match'
+    if suborder_number is not None:
+        suborder_number = suborder_number.strip()
+
+    if billing_name is not None:
+        billing_name = billing_name.strip()
+
+    if status == 'all':
+        status = ''
+
+    if order_type == 'all':
+        order_type = ''
+
+    match_type = 'match'
 
     query_field = {
-        'billing_name': True,
-        'billing_name.exact': False,
-        'customer_email': True,
-        'customer_email.exact': True,
-        'order_type': True,
-        'order_number': True
+        'billing_name': billing_name,
+        'order_type': order_type,
+        'suborder_number': suborder_number,
+        'order_number': order_number,
+        'current_status': status,
     }
 
-    dsl_gen = DSLGenerator(query=query, query_fields = query_field, match_type=match_type)
-    dsl = dsl_gen.search() if query else dsl_gen.no_query()
+    date_range = [
+        {'range': {
+            'date_received':{
+                'gte': date_received_start,
+                'lte': date_received_end if date_received_end else date_received_start,
+                'format': "MM/dd/yyyy"
+            }
+        }}
+    ]
+
+
+
+    dsl_gen = DSLGenerator( query_fields = query_field, date_range= date_range ,match_type=match_type)
+    dsl = dsl_gen.search() if date_received_start else dsl_gen.no_query()
 
     if not current_app.elasticsearch:
         return [], 0
     search_results = es.search(index='suborders',
                                doc_type='suborders',
-                               body=dsl,
+                               body= dsl,
                                _source=[
+                                   'order_number',
+                                   'suborder_number',
+                                   'date_received',
+                                   'date_submitted',
                                    'billing_name',
                                    'customer_email',
                                    'order_type',
-                                   'suborder_number'
+                                   'current_status',
                                ],
                                size=size,
                                from_=start,
                                )
-    print(type(search_results))
     return search_results
 
 
 
 class DSLGenerator(object):
     """Class for generating DSL for searching"""
-    def __init__(self, query, query_fields, match_type):
+    def __init__(self,query_fields,date_range , match_type):
         """
         Constructor for class
 
-        :param query: string to query for
         :param query_fields: fields to query by
-        #:param tags: tags to query by
         :param match_type: type of query
         """
-        self.__query = query
+
         self.__query_fields = query_fields
         self.__match_type = match_type
+        self.__date_range = date_range
 
-        #self.__default_filters = [{'terms': {'tag': tags}}]
         self.__filters = []
         self.__conditions = []
 
     def search(self):
         """GEnerate dictionary of generic search query"""
-        self.__filters = [
-            {self.__match_type: {
-                'query': self.__query,
-                'fields': [name for name in self.__query_fields.keys()],
-                'type': "most_fields"
-            }}
-        ]
-        self.__conditions.append(self.__must)
+
+        for i in self.__query_fields:
+            if self.__query_fields[i]:
+                if i is 'billing_name':
+                    self.__filters.append({
+                        'bool':{
+                            'should':{
+                                'match': {
+                                    i: {
+                                        'query': self.__query_fields[i],
+                                        #'minimum_should_match': '75%'
+                                    }
+                                }
+                            }
+                        }
+                    })
+                else:
+                    self.__filters.append({
+                       'bool':{
+                           'must':{
+                               'term': {
+                                   i: self.__query_fields[i]
+                               }
+                           }
+                       }
+                    })
+        self.__conditions.append(self.__get_filters())
         return self.__should
+
 
     def no_query(self):
         self.__filters = [
@@ -233,10 +283,10 @@ class DSLGenerator(object):
         return{
             'query': {
                 'bool': {
-                    'should': self.__conditions
-                }
+                    'should': self.__get_filters()
+                },
             }
         }
 
     def __get_filters(self):
-        return self.__filters
+        return self.__filters + self.__date_range

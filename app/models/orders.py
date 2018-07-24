@@ -143,10 +143,14 @@ class Suborders(db.Model):
             doc_type='suborder',
             id=self.id,
             body={
+                'order_number': self.order_number,
+                'suborder_number': self.id,
+                'date_submitted': self.date_submitted.strftime("%x %I:%M %p"),
+                'current_status': self.status,
                 'billing_name': self.order.customer.billing_name,
                 'customer_email': self.order.customer.email,
                 'order_type': self.order_type,
-                'data_created': self.date_crated.strftime('%Y-%m-%dT%H:%M:%S')
+                'data_created': self.date_crated.strftime('%x %I:%M %p')
             }
         )
 
@@ -156,8 +160,13 @@ class Suborders(db.Model):
             doc_type='suborder',
             id=self.id,
             body={
+                'order_number': self.order_number,
+                'suborder_number': self.id,
+                'date_submitted': self.date_submitted.strftime("%x %I:%M %p"),
+                'current_status': self.status,
                 'billing_name': self.order.customer.billing_name,
                 'customer_email': self.order.customer.email,
                 'order_type': self.order_type,
+                'data_created': self.date_crated.strftime('%x %I:%M %p')
             }
         )
