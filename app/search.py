@@ -2,7 +2,7 @@ from flask import current_app
 from app.models import Suborders
 from app import es
 from elasticsearch.helpers import bulk
-from datetime import datetime
+
 
 #constants
 ELASTICSEARCH_DATETIME = '%m/%d/%Y'
@@ -125,9 +125,6 @@ def remove_doc(index, model):
         return
     es.delete(index=index, doc_type=index, id=model.id)
 
-#Hard-coding in sub orders for a 'proof of concept'
-#def search_queries(index,query,page,per_page):
-
 
 def search_queries(order_number,
                    suborder_number,
@@ -182,6 +179,22 @@ def search_queries(order_number,
         }}
     ]
 
+    # created manual dsl for testing date
+    body = {
+        'query':{
+            'bool':{
+                'should':[
+                    {'range': {
+                        'date_received': {
+                            'gte': date_received_start + '/d',
+                            'lte': date_received_end +'/d',
+                            'format': "MM/dd/yyyy"
+                        }
+                    }} if date_received_end else {'range':{'date_received': {'gte': date_received_start}}}
+                ]
+            }
+        }
+    }
 
 
     dsl_gen = DSLGenerator( query_fields = query_field, date_range= date_range ,match_type=match_type)
@@ -191,7 +204,7 @@ def search_queries(order_number,
         return [], 0
     search_results = es.search(index='suborders',
                                doc_type='suborders',
-                               body= dsl,
+                               body= body,
                                _source=[
                                    'order_number',
                                    'suborder_number',
