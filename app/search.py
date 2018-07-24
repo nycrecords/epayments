@@ -233,26 +233,19 @@ class DSLGenerator(object):
             if self.__query_fields[i]:
                 if i is 'billing_name':
                     self.__filters.append({
-                        'bool':{
-                            'should':{
-                                'match': {
-                                    i: {
-                                        'query': self.__query_fields[i],
-                                        #'minimum_should_match': '75%'
-                                    }
-                                }
+                        'match': {
+                            i: {
+                                'query': self.__query_fields[i],
+                                #'minimum_should_match': '75%'
                             }
                         }
                     })
                 else:
                     self.__filters.append({
-                       'bool':{
-                           'must':{
-                               'term': {
-                                   i: self.__query_fields[i]
-                               }
-                           }
+                       'term': {
+                           i: self.__query_fields[i]
                        }
+
                     })
         self.__conditions.append(self.__get_filters())
         return self.__should
@@ -283,10 +276,10 @@ class DSLGenerator(object):
         return{
             'query': {
                 'bool': {
-                    'should': self.__get_filters()
+                    'must': self.__get_filters()
                 },
             }
         }
 
     def __get_filters(self):
-        return self.__filters + self.__date_range
+        return self.__filters
