@@ -129,10 +129,26 @@ def new_order():
         print_size = json.get("printSize")
         num_copies = json.get("numCopies")
 
-        # check_id=time.time()
-        id="9909013"
+        print(order_type)
+        # list to string fixing format
+        # string to list for iteration
+        order_type_list = ''.join(order_type)
+        print(order_type_list)
+        order_type_list = order_type_list.split(", ")
+        # delete last empty index
+        del order_type_list[-1]
+        print(order_type_list)
+        print((len(order_type_list)))
+        print(status)
+        status_list = ''.join(status)
+        status_list = status_list.split()
+        print(status_list)
+
+
+        #check_id=time.time()
+        order_id = "9909014"
         # if Session.query(exists().where(Orders.id == id)):
-        main_order = Orders(id=id,
+        main_order = Orders(id=order_id,
                             date_submitted="07/16/18",
                             date_received="07/16/18",
                             confirmation_message="confirmation message",
@@ -153,14 +169,17 @@ def new_order():
                              instructions=instruction,
                              order_number=main_order.id,
                              )
+        # create_object(customer)
 
-        create_object(customer)
-        sub_order = Suborders(id="999134",
-                              client_id=999,
-                              order_type=order_type,
-                              order_number=main_order.id,
-                              _status=status)
-        # create_object(sub_order)
+        # sub_id = "999136"
+        # for index in range(len(order_type_list)):
+        #     sub_order = Suborders(id=str(int(sub_id)+index),
+        #                           client_id=customer.id,
+        #                           order_type=order_type_list[index],
+        #                           order_number=main_order.id,
+        #                           _status=status_list[index]
+        #                           )
+        #     create_object(sub_order)
 
     print("Working")
     return jsonify(), 200

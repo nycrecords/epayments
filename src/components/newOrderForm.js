@@ -7,6 +7,7 @@ import {
 import {Button, Container, Divider, Grid, Header, Form, Loader, Dimmer} from 'semantic-ui-react';
 import moment from 'moment';
 import {csrfFetch, handleFetchErrors} from "../utils/fetch"
+import Order from "./order";
 
 const orderTypeOptions = [
     {key: 'all', text: 'All', value: 'all'},
@@ -46,18 +47,18 @@ class NewOrderForm extends React.Component {
         this.state = {
             billingName: '',
             email:'',
-            addressLine1:'None',
-            addressLine2: 'None',
+            addressLine1:'',
+            addressLine2: '',
             city:'',
             state:'',
             zipCode:'',
-            phone:'None',
-            instructions:'None',
-            orderType: '',
-            collection: '',
-            printSize: '',
-            numCopies: '',
-            status: 'All',
+            phone:'',
+            instructions:'',
+            orderType: [],
+            collection: [],
+            printSize: [],
+            numCopies: [],
+            status: '',
             loading: false
 
         };
@@ -75,11 +76,11 @@ class NewOrderForm extends React.Component {
                 zipCode:'',
                 phone:'',
                 instructions:'',
-                orderType: '',
-                collection: '',
-                printSize: '',
-                numCopies: '',
-                status: 'All'
+                orderType: [],
+                collection: [],
+                printSize: [],
+                numCopies: [],
+                status: ''
             });
         };
 
@@ -97,7 +98,16 @@ class NewOrderForm extends React.Component {
         });
     };
 
-    handleSubmit = (e) => {
+    handleArrayChange = (e) => {
+        const target = e.target;
+        const value = target.value;
+        const name = target.name;
+        this.setState({
+            [name]:[this.state.name, value]
+        });
+    };
+
+    handleSubmit = (e, value) => {
         e.preventDefault();
         this.setState({loading : true});
         csrfFetch('api/v1.0/orders/new', {
@@ -132,12 +142,84 @@ class NewOrderForm extends React.Component {
     };
 
     render() {
-        // const OrderForm = () => (
-        //
-        //    
-        //
-        //
-        // );
+        const OrderForm = () => (
+            <Form>
+                <Form.Select label="Order Type"
+                             name="orderType"
+                             placeholder="Order Type"
+                             options={orderTypeOptions}
+                             width={8}
+                             onChange={(e, {value}) => {
+                                 this.setState({orderType: [this.state.orderType + value +", " ]});
+                                 }}
+                             value={this.state.value}
+                />
+                <Form.Input label="Collection"
+                            name="collection"
+                            placeholder="Collection"
+                            maxLength="64"
+                            width={8}
+                            onChange={this.handleArrayChange}
+                            value={this.state.value}
+                />
+                <Form.Group inline>
+                    <label>Printing Size</label>
+                    <Form.Radio
+                        name={"printSize"}
+                        label='Small'
+                        onChange={(e, {}) =>{
+                            this.setState({printSize: "Small"})
+                        }}
+
+                        value={this.state.printSize}
+                    />
+                    <Form.Radio
+                        name={"printSize"}
+                        label='Medium'
+                        onChange={(e, {}) =>{
+                            this.setState({printSize: "Medium"})
+                        }}
+                        value={this.state.printSize}
+                    />
+                    <Form.Radio
+                        name={"printSize"}
+                        label='Large'
+                        onChange={(e, {}) =>{
+                            this.setState({printSize: "Large"})
+                        }}
+                        value={this.state.printSize}
+                    />
+                </Form.Group>
+                <Form.Input label="Number of Copies"
+                            name="numCopies"
+                            placeholder="Number of Copies"
+                            maxLength="2"
+                            width={8}
+                            onChange={(e, {value}) => {
+                                if (/^[0-9]+$/.test(value.slice(-1)) || value === '') {
+                                    this.handleArrayChange(e)
+                                }
+                                }}
+                            value={this.state.value}
+                />
+                <Form.Select label="Status"
+                             name="status"
+                             placeholder="Status"
+                             options={statusOptions}
+                             width={8}
+                             onChange={(e, {value}) => {
+                                 this.setState({status: [this.state.status + value + " "]})
+                             }}
+                             value={this.state.value}
+                />
+            </Form>
+
+
+
+
+
+
+        );
 
         return (
             <div>
@@ -236,73 +318,79 @@ class NewOrderForm extends React.Component {
                                                 onChange={this.handleChange}
                                                 value={this.state.instructions}
                                     />
-                                    <Form.Select label="Order Type"
-                                                 name="orderType"
-                                                 placeholder="Order Type"
-                                                 options={orderTypeOptions}
-                                                 width={8}
-                                                 onChange={(e, {value}) => {
-                                                     this.setState({orderType: value});
-                                                 }}
-                                                 value={this.state.orderType}
-                                    />
-                                    <Form.Input label="Collection"
-                                                name="collection"
-                                                placeholder="Collection"
-                                                maxLength="64"
-                                                width={8}
-                                                onChange={this.handleChange}
-                                                value={this.state.collection}
-                                    />
-                                    <Form.Group inline>
-                                        <label>Printing Size</label>
-                                        <Form.Radio
-                                            name={"printSize"}
-                                            label='Small'
-                                            onChange={(e, {}) =>{
-                                                this.setState({printSize: "Small"})
-                                            }}
-                                            value={this.state.printSize}
-                                        />
-                                        <Form.Radio
-                                            name={"printSize"}
-                                            label='Medium'
-                                            onChange={(e, {}) =>{
-                                                this.setState({printSize: "Medium"})
-                                            }}
-                                            value={this.state.printSize}
-                                        />
-                                        <Form.Radio
-                                            name={"printSize"}
-                                            label='Large'
-                                            onChange={(e, {}) =>{
-                                                this.setState({printSize: "Large"})
-                                            }}
-                                            value={this.state.printSize}
-                                        />
+                                    {/*<Form.Select label="Order Type"*/}
+                                                 {/*name="orderType"*/}
+                                                 {/*placeholder="Order Type"*/}
+                                                 {/*options={orderTypeOptions}*/}
+                                                 {/*width={8}*/}
+                                                 {/*onChange={(e, {value}) => {*/}
+                                                     {/*this.setState({orderType: value});*/}
+                                                 {/*}}*/}
+                                                 {/*value={this.state.orderType}*/}
+                                    {/*/>*/}
+                                    {/*<Form.Input label="Collection"*/}
+                                                {/*name="collection"*/}
+                                                {/*placeholder="Collection"*/}
+                                                {/*maxLength="64"*/}
+                                                {/*width={8}*/}
+                                                {/*onChange={this.handleChange}*/}
+                                                {/*value={this.state.collection}*/}
+                                    {/*/>*/}
+                                    {/*<Form.Group inline>*/}
+                                        {/*<label>Printing Size</label>*/}
+                                        {/*<Form.Radio*/}
+                                            {/*name={"printSize"}*/}
+                                            {/*label='Small'*/}
+                                            {/*onChange={(e, {}) =>{*/}
+                                                {/*this.setState({printSize: "Small"})*/}
+                                            {/*}}*/}
+                                            {/*value={this.state.printSize}*/}
+                                        {/*/>*/}
+                                        {/*<Form.Radio*/}
+                                            {/*name={"printSize"}*/}
+                                            {/*label='Medium'*/}
+                                            {/*onChange={(e, {}) =>{*/}
+                                                {/*this.setState({printSize: "Medium"})*/}
+                                            {/*}}*/}
+                                            {/*value={this.state.printSize}*/}
+                                        {/*/>*/}
+                                        {/*<Form.Radio*/}
+                                            {/*name={"printSize"}*/}
+                                            {/*label='Large'*/}
+                                            {/*onChange={(e, {}) =>{*/}
+                                                {/*this.setState({printSize: "Large"})*/}
+                                            {/*}}*/}
+                                            {/*value={this.state.printSize}*/}
+                                        {/*/>*/}
+                                    {/*</Form.Group>*/}
+                                    {/*<Form.Input label="Number of Copies"*/}
+                                                {/*name="numCopies"*/}
+                                                {/*placeholder="Number of Copies"*/}
+                                                {/*maxLength="2"*/}
+                                                {/*width={8}*/}
+                                                {/*onChange={(e, {value}) => {*/}
+                                                    {/*if (/^[0-9]+$/.test(value.slice(-1)) || value === '') {*/}
+                                                        {/*this.handleChange(e)*/}
+                                                    {/*}*/}
+                                                {/*}}*/}
+                                                {/*value={this.state.numCopies}*/}
+                                    {/*/>*/}
+                                    {/*<Form.Select label="Status"*/}
+                                                 {/*name="status"*/}
+                                                 {/*placeholder="Status"*/}
+                                                 {/*options={statusOptions}*/}
+                                                 {/*width={8}*/}
+                                                 {/*onChange={(e, {value}) => {*/}
+                                                     {/*this.setState({status: value})*/}
+                                                 {/*}}*/}
+                                                 {/*value={this.state.status}*/}
+                                    {/*/>*/}
+                                    <Form.Group>
+                                        {OrderForm()}
+                                        {OrderForm()}
+
+
                                     </Form.Group>
-                                    <Form.Input label="Number of Copies"
-                                                name="numCopies"
-                                                placeholder="Number of Copies"
-                                                maxLength="2"
-                                                width={8}
-                                                onChange={(e, {value}) => {
-                                                    if (/^[0-9]+$/.test(value.slice(-1)) || value === '') {
-                                                        this.handleChange(e)
-                                                    }
-                                                }}
-                                                value={this.state.numCopies}
-                                    />
-                                    <Form.Select label="Status"
-                                                 name="status"
-                                                 placeholder="Status"
-                                                 options={statusOptions}
-                                                 width={8}
-                                                 onChange={(e, {value}) => {
-                                                     this.setState({status: value})
-                                                 }}
-                                                 value={this.state.status}
-                                    />
                                     <Button type='submit' positive floated="left" content="Place Order"/>
                                     <Button type="reset" onClick={this.clearSelection} content="Clear"/>
                                 </Form>
@@ -310,6 +398,9 @@ class NewOrderForm extends React.Component {
                         </div>
                         <div>
                             <Divider clearing/>
+                            {this.state.orderType}
+                            {this.state.numCopies}
+                            {this.state.status}
                         </div>
                     </Grid.Column>
                 </div>
