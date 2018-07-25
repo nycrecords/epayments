@@ -140,33 +140,35 @@ class Suborders(db.Model):
         """Creates Elastic Search doc"""
         es.create(
             index='suborders',
-            doc_type='suborder',
+            doc_type='suborders',
             id=self.id,
             body={
                 'order_number': self.order_number,
                 'suborder_number': self.id,
-                'date_submitted': self.date_submitted.strftime("%x %I:%M %p"),
+                'date_submitted': self.order.date_submitted.strftime("%x %I:%M %p"),
                 'current_status': self.status,
                 'billing_name': self.order.customer.billing_name,
                 'customer_email': self.order.customer.email,
                 'order_type': self.order_type,
-                'data_created': self.date_crated.strftime('%x %I:%M %p')
+                'data_received': self.order.date_received.strftime('%x %I:%M %p')
             }
         )
 
     def es_update(self):
         es.update(
             index='suborders',
-            doc_type='suborder',
+            doc_type='suborders',
             id=self.id,
             body={
-                'order_number': self.order_number,
-                'suborder_number': self.id,
-                'date_submitted': self.date_submitted.strftime("%x %I:%M %p"),
-                'current_status': self.status,
-                'billing_name': self.order.customer.billing_name,
-                'customer_email': self.order.customer.email,
-                'order_type': self.order_type,
-                'data_created': self.date_crated.strftime('%x %I:%M %p')
+                'doc':{
+                    'order_number': self.order_number,
+                    'suborder_number': self.id,
+                    'date_submitted': self.order.date_submitted.strftime("%x %I:%M %p"),
+                    'current_status': self.status,
+                    'billing_name': self.order.customer.billing_name,
+                    'customer_email': self.order.customer.email,
+                    'order_type': self.order_type,
+                    'data_received': self.order.date_received.strftime('%x %I:%M %p')
+                }
             }
         )

@@ -80,5 +80,10 @@ def es_recreate():
     from app.search import recreate
     recreate()
 
+@manager.command
+def es_update():
+    from app.search import update_docs
+    update_docs()
+
 if __name__ == '__main__':
     manager.run()

@@ -116,12 +116,12 @@ def update_docs():
     for q in order:
         q.es_update()
 
+
 def delete_doc(suborder_id):
     """Delete a specific doc in the index"""
     es.delete(index=current_app.config['ELASTICSEARCH_INDEX'],
               doc_type=current_app.config["ELASTICSEARCH_INDEX"],
               id=suborder_id)
-
 
 
 def search_queries(order_number,
@@ -165,10 +165,10 @@ def search_queries(order_number,
 
     # Time formatting: from mm/dd/yyyy to mm/dd/yy hh:mm AM/PM
     if date_received_start:
-        date_received_start = datetime.strptime(date_received_start,'%m/%d/%Y').strftime('%x %I:%M %p')
+        date_received_start = datetime.strptime(date_received_start, '%m/%d/%Y').strftime('%x %I:%M %p')
 
     if date_received_end:
-        date_received_end = datetime.strptime(date_received_end,'%m/%d/%Y').strftime('%x %I:%M %p')
+        date_received_end = datetime.strptime(date_received_end, '%m/%d/%Y').strftime('%x %I:%M %p')
 
     query_field = {
         'billing_name': billing_name,

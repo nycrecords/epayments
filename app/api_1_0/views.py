@@ -85,20 +85,6 @@ def get_orders():
                        suborder_count=suborder_total,
                        all_orders=formatted_orders), 200
 
-        '''Original Search Method'''
-        # if not (order_number or suborder_number or billing_name) and not date_received_start:
-        #     date_received_start = date.today()
-        # order_count, suborder_count, orders = get_orders_by_fields(order_number,
-        #                                                            suborder_number,
-        #                                                            order_type,
-        #                                                            status,
-        #                                                            billing_name,
-        #                                                            user,
-        #                                                            date_received_start,
-        #                                                            date_received_end)
-        # return jsonify(order_count=order_count,
-        #                suborder_count=suborder_count,
-        #                all_orders=orders), 200
 
     else:
         orders = []

@@ -30,7 +30,7 @@ from app.models import (
     Users,
     Events
 )
-
+from app.search import update_docs
 
 def _order_query_filters(order_number, suborder_number, order_type, status, billing_name, user, date_received_start,
                          date_received_end):
@@ -133,7 +133,7 @@ def update_status(suborder_number, comment, new_status):
 
         db.session.add(event)
         db.session.commit()
-
+        suborder.es_update()
         return 201
     else:
         return 400
@@ -179,6 +179,7 @@ def update_tax_photo(suborder_number, block_no, lot_no, roll_no):
         db.session.add(event)
         db.session.commit()
         message = "Tax Photo Info Updated"
+        tax_photo.es_update()
     return message
 
 
