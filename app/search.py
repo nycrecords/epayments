@@ -184,7 +184,7 @@ def search_queries(order_number,
     }
 
     dsl_gen = DSLGenerator(query_fields=query_field, date_range=date_range)
-    dsl = dsl_gen.search() if date_received_start else dsl_gen.no_query()
+    dsl = dsl_gen.search() if date_received_start or billing_name else dsl_gen.no_query()
 
     # Search query
     search_results = es.search(index=current_app.config["ELASTICSEARCH_INDEX"],
@@ -248,7 +248,7 @@ class DSLGenerator(object):
                     })
 
         # Creates dictionary from the fields in date range
-        if self.__date_range:
+        if self.__date_range['date_received_start']:
             self.__filters.append({
                 'range': {
                     'date_received': {
