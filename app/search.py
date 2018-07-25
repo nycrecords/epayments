@@ -180,11 +180,17 @@ def search_queries(order_number,
 
     date_range = {
         'date_received_start': date_received_start,
-        'date_received_end': date_received_end if date_received_end else date_received_start
+        'date_received_end': date_received_end
     }
 
     dsl_gen = DSLGenerator(query_fields=query_field, date_range=date_range)
-    dsl = dsl_gen.search() if date_received_start or billing_name else dsl_gen.no_query()
+    dsl = dsl_gen.search() if date_received_start or \
+                              billing_name or \
+                              date_received_end or \
+                              order_type or \
+                              suborder_number or \
+                              order_number or \
+                              status else dsl_gen.no_query()
 
     # Search query
     search_results = es.search(index=current_app.config["ELASTICSEARCH_INDEX"],
@@ -249,11 +255,30 @@ class DSLGenerator(object):
 
         # Creates dictionary from the fields in date range
         if self.__date_range['date_received_start']:
+            if self.__date_range['date_received_end']:
+                self.__filters.append({
+                    'range': {
+                        'date_received': {
+                            'gte': self.__date_range['date_received_start'],
+                            'lte':  self.__date_range['date_received_end'],
+                            'format': ES_DATETIME_FORMAT
+                        }
+                    }
+                })
+            else:
+                self.__filters.append({
+                    'range': {
+                        'date_received': {
+                            'gte': self.__date_range['date_received_start'],
+                            'format': ES_DATETIME_FORMAT
+                        }
+                    }
+                })
+        else:
             self.__filters.append({
                 'range': {
                     'date_received': {
-                        'gte': self.__date_range['date_received_start'],
-                        'lte':  self.__date_range['date_received_end'],
+                        'lte': self.__date_range['date_received_end'],
                         'format': ES_DATETIME_FORMAT
                     }
                 }
