@@ -94,7 +94,7 @@ def create_docs():
             'suborder_number': q.id,
             'date_received': q.order.date_received.strftime(DATETIME_FORMAT),
             'date_submitted': q.order.date_submitted.strftime(DATETIME_FORMAT),
-            'billing_name': q.order.customer.billing_name,
+            'billing_name': q.order.customer.billing_name.title(),
             'customer_email': q.order.customer.email,
             'order_type': q.order_type,
             'current_status': q.status,

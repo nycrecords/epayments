@@ -58,8 +58,6 @@ class Orders(db.Model):
             'multiple_items': self.multiple_items,
         }
 
-    #Elastic Search
-
 
 class Suborders(db.Model):
     """
@@ -166,7 +164,7 @@ class Suborders(db.Model):
                     'suborder_number': self.id,
                     'date_submitted': self.order.date_submitted.strftime("%x %I:%M %p"),
                     'current_status': self.status,
-                    'billing_name': self.order.customer.billing_name,
+                    'billing_name': self.order.customer.billing_name.title(),
                     'customer_email': self.order.customer.email,
                     'order_type': self.order_type,
                     'data_received': self.order.date_received.strftime('%x %I:%M %p')
