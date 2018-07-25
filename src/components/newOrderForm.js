@@ -12,8 +12,6 @@ import update from 'react-addons-update';
 
 
 const orderTypeOptions = [
-    {key: 'all', text: 'All', value: 'all'},
-    {key: 'vitalrecords', text: '--Vital Records--', value: 'vital_records'},
     {key: 'birthsearch', text: 'Birth Search', value: 'Birth Search'},
     {key: 'marriagesearch', text: 'Marriage Search', value: 'Marriage Search'},
     {key: 'deathsearch', text: 'Death Search', value: 'Death Search'},
@@ -21,12 +19,8 @@ const orderTypeOptions = [
     {key: 'marriagecert', text: 'Marriage Certificate', value: 'Marriage Cert'},
     {key: 'deathcert', text: 'Death Certificate', value: 'Death Cert'},
     {key: 'propertycard', text: 'Property Card', value: 'Property Card'},
-    {key: 'photos', text: '--Photos--', value: 'photos'},
     {key: 'taxphoto', text: 'Tax Photo', value: 'Tax Photo'},
     {key: 'photogallery', text: 'Photo Gallery', value: 'Photo Gallery'},
-    {key: 'other', text: '--Other--', value: 'other', disabled: true},
-    {key: 'multipleincart', text: 'Multiple Items In Cart', value: 'multiple_items'},
-    {key: 'vitalincart', text: 'Vital Records And Photos In Cart', value: 'vital_records_and_photos'}
 ];
 const statusOptions = [
     {key: 'all', text: 'All', value: 'all'},
@@ -60,15 +54,18 @@ class NewOrderForm extends React.Component {
             block:'',
             lot:'',
             row:'',
+            imgId:'',
+            imgTitle:'',
+            addDescription:'',
             collection: [],
             printSize: [],
             numCopies: [],
             status: '',
-            showBlockForm:false,
+            showBlockForm: false,
+            showPhotoGalleryForm: false,
             loading:false
 
         };
-        this.taxPhoto='Tax Photo';
 
         this.handleChange = this.handleChange.bind(this);
 
@@ -87,6 +84,9 @@ class NewOrderForm extends React.Component {
                 block:'',
                 lot:'',
                 roll:'',
+                imgId:'',
+                imgTitle:'',
+                addDescription:'',
                 collection:'',
                 printSize:'',
                 numCopies:'',
@@ -94,7 +94,7 @@ class NewOrderForm extends React.Component {
             });
         };
 
-        this.photosValueList = ['photos', 'Tax Photo', 'Photo Gallery'];
+        this.photosValueList = ['Tax Photo', 'Photo Gallery'];
         this.yesterday = moment().subtract(1, 'days');
         this.today = moment();
     };
@@ -136,6 +136,9 @@ class NewOrderForm extends React.Component {
                 block:this.state.block,
                 lot:this.state.lot,
                 roll:this.state.roll,
+                imgId:this.state.imgId,
+                imgTitle:this.state.imgTitle,
+                addDescription:this.state.addDescription,
                 collection:this.state.collection,
                 printSize:this.state.printSize,
                 numCopies:this.state.numCopies,
@@ -156,36 +159,155 @@ class NewOrderForm extends React.Component {
     };
 
     render() {
+        const TaxPhotoForm = () => (
+            <Container>
+                <Grid>
+                    <Grid.Row centered>
+                        <Grid.Column width={8}>
+                            <Form>
+                                <Form.Group inline>
+                                    <label>Collection</label>
+                                    <Form.Radio
+                                        name="collection"
+                                        label='1940s'
+                                        onChange={(e, {}) =>{
+                                            this.setState({collection: "1940s"})
+                                        }}
+
+                                    />
+                                    <Form.Radio
+                                        name="collection"
+                                        label='1980s'
+                                        onChange={(e, {}) =>{
+                                            this.setState({collection: "1980s"})
+                                        }}
+                                    />
+                                    <Form.Radio
+                                        name="collection"
+                                        label='Both'
+                                        onChange={(e, {}) =>{
+                                            this.setState({collection: "Both"})
+                                        }}
+                                    />
+                                </Form.Group>
+
+                                <Form.Input label="Block"
+                                            name="block"
+                                            placeholder="Block"
+                                            width={8}
+                                            onChange={this.handleChange}
+                                            value={this.state.block}
+                                />
+                                <Form.Input label="Lot"
+                                            name="lot"
+                                            placeholder="Lot"
+                                            width={8}
+                                            onChange={this.handleChange}
+                                            value={this.state.lot}
+                                />
+                                <Form.Input label="Roll"
+                                            name="roll"
+                                            placeholder="Roll#"
+                                            width={8}
+                                            onChange={this.handleChange}
+                                            value={this.state.roll}
+                                />
+                                <Form.Group inline>
+                                    <label>Printing Size</label>
+
+                                    <Form.Radio
+                                        name={"printSize"}
+                                        label='8" x 10" Print'
+                                        onChange={(e, {}) =>{
+                                            this.setState({printSize: '"8 x 10" Print'})
+                                        }}
+
+                                        value={this.state.printSize}
+                                    />
+
+                                    <Form.Radio
+                                        name={"printSize"}
+                                        label='11" x 14" Print'
+                                        onChange={(e, {}) =>{
+                                            this.setState({printSize: '"11 x 14" Print'})
+                                        }}
+                                        value={this.state.printSize}
+                                    />
+                                </Form.Group>
+                            </Form>
+                        </Grid.Column>
+                    </Grid.Row>
+                </Grid>
+            </Container>
+        );
+        const PhotoGallaryForm = () => (
+            <Container>
+                <Grid>
+                    <Grid.Row Centered>
+                        <Grid.Column width={8}>
+                            <Form>
+                                <Form.Input label="Image Identifier"
+                                            name="imgId"
+                                            placeholder="Image Identifier"
+                                            width={8}
+                                            onChange={this.handleChange}
+                                            value={this.state.imgId}
+                                />
+
+                                <Form.Input label="Title/Description of Image"
+                                            name="imgTitle"
+                                            width={8}
+                                            onChange={this.handleChange}
+                                            value={this.state.imgTitle}
+                                />
+
+                                <Form.Input label="Addition Description"
+                                            name="addDescription"
+                                            width={8}
+                                            onChange={this.handleChange}
+                                            value={this.state.addDescription}
+                                />
+
+                                <Form.Group inline>
+                                    <label>Printing Size</label>
+
+                                    <Form.Radio
+                                        name={"printSize"}
+                                        label='8" x 10" Print ($45 +shipping)'
+                                        onChange={(e, {}) =>{
+                                            this.setState({printSize: '8" x 10" Print ($45 +shipping)'})
+                                        }}
+
+                                        value={this.state.printSize}
+                                    />
+
+                                    <Form.Radio
+                                        name={"printSize"}
+                                        label='11" x 14" Print ($60 + shipping)'
+                                        onChange={(e, {}) =>{
+                                            this.setState({printSize: '11" x 14" Print ($60 + shipping)'})
+                                        }}
+                                        value={this.state.printSize}
+                                    />
+
+                                    <Form.Radio
+                                        name={"printSize"}
+                                        label='16" x 20" Print ($120 + shipping)'
+                                        onChange={(e, {}) =>{
+                                            this.setState({printSize: '16" x 20" Print ($120 + shipping)'})
+                                        }}
+                                        value={this.state.printSize}
+                                    />
+
+                                </Form.Group>
+                            </Form>
+                        </Grid.Column>
+                    </Grid.Row>
+                </Grid>
+            </Container>
+        );
         const OrderForm = () => (
             <Form>
-                <Form.Group inline>
-                    <label>Collection</label>
-                    <Form.Radio
-                        name={"collection"}
-                        label='1940s'
-                        onChange={(e, {}) =>{
-                            this.setState({collection: "1940s"})
-                        }}
-
-                        value={this.state.collection}
-                    />
-                    <Form.Radio
-                        name={"collection"}
-                        label='1980s'
-                        onChange={(e, {}) =>{
-                            this.setState({collection: "1980s"})
-                        }}
-                        value={this.state.collection}
-                    />
-                    <Form.Radio
-                        name={"collection"}
-                        label='Both'
-                        onChange={(e, {}) =>{
-                            this.setState({collection: "Both"})
-                        }}
-                        value={this.state.collection}
-                    />
-                </Form.Group>
                 <Form.Select label="Order Type"
                              name="orderType"
                              placeholder="Order Type"
@@ -194,71 +316,22 @@ class NewOrderForm extends React.Component {
                              onChange={(e, {value}) => {
                                  this.setState({orderType: [this.state.orderType + value +", " ]});
                                  console.log(value);
-                                 (this.taxPhoto == value) ?
+                                 (this.photosValueList.indexOf(value) == 0) ?
                                      this.setState({showBlockForm : true}) :
                                      this.setState({showBlockForm : false});
+                                 (this.photosValueList.indexOf(value) ==1) ?
+                                     this.setState({showPhotoGalleryForm: true}) :
+                                     this.setState({showPhotoGalleryForm: false});
                              }}
                              value={this.state.value}
                 />
 
                 {this.state.showBlockForm &&
-                    <div>
-                        <Form.Input label="Block"
-                                    name="block"
-                                    placeholder="Block"
-                                    width={8}
-                                    onChange={this.handleChange}
-                                    value={this.state.block}
-                        />
-                        <Form.Input label="Lot"
-                                    name="lot"
-                                    placeholder="Lot"
-                                    width={8}
-                                    onChange={this.handleChange}
-                                    value={this.state.lot}
-                        />
-                        <Form.Input label="Roll"
-                                    name="roll"
-                                    placeholder="Roll#"
-                                    width={8}
-                                    onChange={this.handleChange}
-                                    value={this.state.roll}
-                        />
-                    </div>
+                    TaxPhotoForm()
                 }
-
-                <Form.Group inline>
-                    <label>Printing Size</label>
-
-                    <Form.Radio
-                        name={"printSize"}
-                        label='Small'
-                        onChange={(e, {}) =>{
-                            this.setState({printSize: "Small"})
-                        }}
-
-                        value={this.state.printSize}
-                    />
-
-                    <Form.Radio
-                        name={"printSize"}
-                        label='Medium'
-                        onChange={(e, {}) =>{
-                            this.setState({printSize: "Medium"})
-                        }}
-                        value={this.state.printSize}
-                    />
-
-                    <Form.Radio
-                        name={"printSize"}
-                        label='Large'
-                        onChange={(e, {}) =>{
-                            this.setState({printSize: "Large"})
-                        }}
-                        value={this.state.printSize}
-                    />
-
-                </Form.Group>
+                {this.state.showPhotoGalleryForm &&
+                    PhotoGallaryForm()
+                }
 
                 <Form.Input label="Number of Copies"
                             name="numCopies"
@@ -392,7 +465,6 @@ class NewOrderForm extends React.Component {
                                     />
 
                                         {OrderForm()}
-                                        {/*{OrderForm()}*/}
 
 
 
@@ -403,9 +475,6 @@ class NewOrderForm extends React.Component {
                         </div>
                         <div>
                             <Divider clearing/>
-                            {this.state.status}
-                            {this.state.showBlockForm}
-                            {this.taxPhoto}
                         </div>
                     </Grid.Column>
                 </div>
