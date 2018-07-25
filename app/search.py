@@ -102,8 +102,8 @@ def create_docs():
     num_success, _ = bulk(
         es,
         operations,
-        index='suborders',
-        doc_type='suborders',
+        index=current_app.config["ELASTICSEARCH_INDEX"],
+        doc_type=current_app.config["ELASTICSEARCH_INDEX"],
         chunk_size=RESULTS_CHUNK_SIZE,
         raise_on_error=False
         )

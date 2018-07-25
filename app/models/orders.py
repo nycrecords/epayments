@@ -1,6 +1,7 @@
 from app import db, es
 from app.constants import order_types, status
 from sqlalchemy.dialects.postgresql import ARRAY
+from flask import current_app
 
 
 class Orders(db.Model):
@@ -139,8 +140,8 @@ class Suborders(db.Model):
     def es_create(self):
         """Creates Elastic Search doc"""
         es.create(
-            index='suborders',
-            doc_type='suborders',
+            index=current_app.config["ELASTICSEARCH_INDEX"],
+            doc_type=current_app.config["ELASTICSEARCH_INDEX"],
             id=self.id,
             body={
                 'order_number': self.order_number,
@@ -156,8 +157,8 @@ class Suborders(db.Model):
 
     def es_update(self):
         es.update(
-            index='suborders',
-            doc_type='suborders',
+            index=current_app.config["ELASTICSEARCH_INDEX"],
+            doc_type=current_app.config["ELASTICSEARCH_INDEX"],
             id=self.id,
             body={
                 'doc':{
