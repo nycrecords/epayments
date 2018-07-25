@@ -26,6 +26,7 @@ class Orders(db.Model):
     multiple_items = db.Column(db.Boolean, nullable=False)
     suborder = db.relationship('Suborders', backref='suborders', lazy=True)
     customer = db.relationship('Customers', backref='customers', uselist=False)
+    next_suborder_number = db.Column(db.Integer(), db.Sequence('suborder_seq'), name='next_suborder_number')
 
     def __init__(
             self,
@@ -56,6 +57,16 @@ class Orders(db.Model):
             'order_types': self.order_types,
             'multiple_items': self.multiple_items,
         }
+    @property
+    def next_suborder_number(self):
+        from app.db_utils import update_object
+        num = self._next_request_number
+        update_object(
+            {'_next_request_number': self._next_request_number + 1},
+            Orders,
+            1
+        )
+        return num
 
 
 class Suborders(db.Model):

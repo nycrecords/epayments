@@ -4,11 +4,14 @@ from flask_login import login_user, logout_user, current_user, login_required
 from sqlalchemy import desc
 from app.api_1_0 import api_1_0 as api
 from app import db
+from app.models.next_request_num import NextOrder
 from app.models.orders import Orders, Suborders
 from app.models.customers import Customers
 from app import db_utils
 from sqlalchemy import *
 from sqlalchemy.orm import *
+import datetime
+
 
 from app.db_utils import (create_object)
 
@@ -128,6 +131,10 @@ def new_order():
         collection = json.get("collection")
         print_size = json.get("printSize")
         num_copies = json.get("numCopies")
+        block = json.get("block")
+        lot = json.get("lot")
+        roll = json.get("roll")
+        print(collection)
 
         print(order_type)
         # list to string fixing format
@@ -146,7 +153,10 @@ def new_order():
 
 
         #check_id=time.time()
-        order_id = "9909014"
+        #"9909014"
+        now = datetime.datetime.now()
+        next_order_number = NextOrder.query.filter_by(year=now.year).one().next_order_number
+        order_id = "EPAY-" + now.year + "-" + next_order_number
         # if Session.query(exists().where(Orders.id == id)):
         main_order = Orders(id=order_id,
                             date_submitted="07/16/18",
@@ -155,7 +165,7 @@ def new_order():
                             client_data="client",
                             order_types=order_type,
                             multiple_items=True)
-        # create_object(main_order)
+        create_object(main_order)
 
         customer = Customers(billing_name=billing_name,
                              email=email,
@@ -169,17 +179,18 @@ def new_order():
                              instructions=instruction,
                              order_number=main_order.id,
                              )
-        # create_object(customer)
+        create_object(customer)
 
         # sub_id = "999136"
-        # for index in range(len(order_type_list)):
-        #     sub_order = Suborders(id=str(int(sub_id)+index),
-        #                           client_id=customer.id,
-        #                           order_type=order_type_list[index],
-        #                           order_number=main_order.id,
-        #                           _status=status_list[index]
-        #                           )
-        #     create_object(sub_order)
+        sub_id = Orders.query.filter_by(year=now.year).one().next_suborder_number
+        for index in range(len(order_type_list)):
+            sub_order = Suborders(id=str(int(sub_id)+index),
+                                  client_id=customer.id,
+                                  order_type=order_type_list[index],
+                                  order_number=main_order.id,
+                                  _status=status_list[index]
+                                  )
+            create_object(sub_order)
 
     print("Working")
     return jsonify(), 200
