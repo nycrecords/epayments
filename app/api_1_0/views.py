@@ -24,6 +24,7 @@ from app.models import (
     Events
 )
 from app.search import search_queries
+from collections import Counter
 
 
 @api.route('/', methods=['GET'])
@@ -71,19 +72,20 @@ def get_orders():
                                 date_received_end,0, 100)
 
         #formatting results
-        total = orders['hits']['total']
         formatted_orders = []
-        subcount = len(orders['hits']['hits'])
+        suborder_total = len(orders['hits']['hits'])
+        order_total_list = [orders['hits']['hits'][i]['_source']['order_number'] for i in range(suborder_total)]
+        order_total = len(set(order_total_list))
 
-        if total != 0:
-            for i in range(subcount):
+        if order_total != 0:
+            for i in range(suborder_total):
                 formatted_orders.append(orders['hits']['hits'][i]['_source'])
 
-        return jsonify(order_count=total,
-                       suborder_count=subcount,
+        return jsonify(order_count=order_total,
+                       suborder_count=suborder_total,
                        all_orders=formatted_orders), 200
 
-
+        '''Original Search Method'''
         # if not (order_number or suborder_number or billing_name) and not date_received_start:
         #     date_received_start = date.today()
         # order_count, suborder_count, orders = get_orders_by_fields(order_number,
