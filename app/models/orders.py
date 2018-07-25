@@ -154,6 +154,7 @@ class Suborders(db.Model):
         )
 
     def es_update(self):
+        """Updates elastic search docs"""
         es.update(
             index=current_app.config["ELASTICSEARCH_INDEX"],
             doc_type=current_app.config["ELASTICSEARCH_INDEX"],

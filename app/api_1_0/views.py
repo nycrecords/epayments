@@ -48,7 +48,7 @@ def get_orders():
 
     GET {order_number, suborder_number, order_type, billing_name, user, date_received_start, date_received_end},
 
-    Search functionality should be in utils.py
+    Search functionality should be in search.py
 
     :return {orders, 200}
     """
@@ -84,7 +84,6 @@ def get_orders():
         return jsonify(order_count=order_total,
                        suborder_count=suborder_total,
                        all_orders=formatted_orders), 200
-
 
     else:
         orders = []
