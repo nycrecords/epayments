@@ -71,7 +71,7 @@ def create_index():
                             "type": "date",
                             "format": ES_DATETIME_FORMAT,
                         },
-                        "date_submitted":{
+                        "date_submitted" :{
                             "type": "date",
                             "format": ES_DATETIME_FORMAT,
                         },
@@ -296,11 +296,16 @@ class DSLGenerator(object):
 
         # Appends the filters with the full range queries
         if self.__date_range['date_received_start'] or self.__date_range['date_received_end']:
-            self.__filters.append({'range': {'date_received': date_ranges['date_received']}})
+            self.__filters.append({
+                'range': {
+                    'date_received': date_ranges['date_received']}})
 
         if self.__date_range['date_submitted_start'] or self.__date_range['date_submitted_end']:
-            self.__filters.append({'range': {'date_submitted': date_ranges['date_submitted']}})
+            self.__filters.append({
+                'range': {
+                    'date_submitted': date_ranges['date_submitted']}})
 
+        return self.__query
 
     def no_query(self):
         """
