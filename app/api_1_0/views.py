@@ -136,10 +136,10 @@ def new_order():
         img_title = json.get("imgTitle")
         add_description = json.get("addDescription")
 
-        now = datetime.datetime.now().strftime("%Y")
+        year = datetime.datetime.now().strftime("%Y")
         today = datetime.datetime.today().strftime("%m/%d/%y")
-        next_order_number = OrderNumberCounter.query.filter_by(year=now).one().next_order_number
-        order_id = "EPAY-" + now + "-" + str(next_order_number)
+        next_order_number = OrderNumberCounter.query.filter_by(year=year).one().next_order_number
+        order_id = "EPAY-" + year + "-" + str(next_order_number)
         main_order = Orders(id=order_id,
                             date_submitted=today,
                             date_received=today,
@@ -173,7 +173,6 @@ def new_order():
                               )
         create_object(sub_order)
 
-    print("Working")
     return jsonify(), 200
 
 
