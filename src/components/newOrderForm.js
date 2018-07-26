@@ -50,7 +50,7 @@ class NewOrderForm extends React.Component {
             zipCode: '',
             phone: '',
             instructions: '',
-            orderType: [],
+            orderType: '',
             block: '',
             lot: '',
             row: '',
@@ -58,8 +58,8 @@ class NewOrderForm extends React.Component {
             imgTitle: '',
             addDescription: '',
             collection: '',
-            printSize: [],
-            numCopies: [],
+            printSize: '',
+            numCopies: '',
             status: '',
             showTaxForm: false,
             showPhotoGalleryForm: false,
@@ -80,7 +80,7 @@ class NewOrderForm extends React.Component {
                 zipCode: '',
                 phone: '',
                 instructions: '',
-                orderType: '',
+                orderType: [],
                 block: '',
                 lot: '',
                 roll: '',
@@ -169,6 +169,7 @@ class NewOrderForm extends React.Component {
                                 <Form.Radio
                                     name="collection"
                                     label='1940s'
+                                    checked={this.state.collection === "1940s"}
                                     onChange={(e, {}) => {
                                         this.setState({collection: "1940s"})
                                     }}
@@ -177,6 +178,7 @@ class NewOrderForm extends React.Component {
                                 <Form.Radio
                                     name="collection"
                                     label='1980s'
+                                    checked={this.state.collection === "1980s"}
                                     onChange={(e, {}) => {
                                         this.setState({collection: "1980s"})
                                     }}
@@ -184,6 +186,7 @@ class NewOrderForm extends React.Component {
                                 <Form.Radio
                                     name="collection"
                                     label='Both'
+                                    checked={this.state.collection === "Both"}
                                     onChange={(e, {}) => {
                                         this.setState({collection: "Both"})
                                     }}
@@ -217,20 +220,20 @@ class NewOrderForm extends React.Component {
                                 <Form.Radio
                                     name={"printSize"}
                                     label='8" x 10" Print'
+                                    checked={this.state.printSize ==='"8 x 10" Print'}
                                     onChange={(e, {}) => {
                                         this.setState({printSize: '"8 x 10" Print'})
                                     }}
 
-                                    value={this.state.printSize}
                                 />
 
                                 <Form.Radio
                                     name={"printSize"}
                                     label='11" x 14" Print'
+                                    checked={this.state.printSize === '"11 x 14" Print'}
                                     onChange={(e, {}) => {
                                         this.setState({printSize: '"11 x 14" Print'})
                                     }}
-                                    value={this.state.printSize}
                                 />
                             </Form.Group>
                         </Grid.Column>
@@ -271,29 +274,32 @@ class NewOrderForm extends React.Component {
                                 <Form.Radio
                                     name={"printSize"}
                                     label='8" x 10" Print'
+                                    checked={this.state.printSize === '8" x 10" Print'}
                                     onChange={(e, {}) => {
                                         this.setState({printSize: '8" x 10" Print'})
                                     }}
 
-                                    value={this.state.printSize}
+                                    // value={this.state.printSize}
                                 />
 
                                 <Form.Radio
                                     name={"printSize"}
                                     label='11" x 14" Print'
+                                    checked={this.state.printSize === '11" x 14" Print'}
                                     onChange={(e, {}) => {
                                         this.setState({printSize: '11" x 14" Print'})
                                     }}
-                                    value={this.state.printSize}
+                                    // value={this.state.printSize}
                                 />
 
                                 <Form.Radio
                                     name={"printSize"}
                                     label='16" x 20" Print'
+                                    checked={this.state.printSize === '16" x 20" Print'}
                                     onChange={(e, {}) => {
                                         this.setState({printSize: '16" x 20" Print'})
                                     }}
-                                    value={this.state.printSize}
+                                    // value={this.state.printSize}
                                 />
 
                             </Form.Group>
@@ -322,7 +328,7 @@ class NewOrderForm extends React.Component {
                 <div>
                     <Grid padded columns={3}>
                         <Grid.Row centered>
-                            <Grid.Column width={12} id="grid-column-order" centered>
+                            <Grid.Column width={12} id="grid-column-order">
                                 <Header as="h1" dividing>New Order</Header>
                                 <div>
                                     <Form onSubmit={this.handleSubmit}>
@@ -359,6 +365,7 @@ class NewOrderForm extends React.Component {
                                                     value={this.state.addressLine2}
                                         />
                                         <Form.Group>
+
                                             <Form.Input label="City"
                                                         name="city"
                                                         placeholder="City"
@@ -384,6 +391,7 @@ class NewOrderForm extends React.Component {
                                                         value={this.state.zipCode}
                                             />
                                         </Form.Group>
+
                                         <Form.Input label="Phone"
                                                     name="phone"
                                                     placeholder="Phone"
