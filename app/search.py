@@ -70,7 +70,11 @@ def create_index():
                         "date_received": {
                             "type": "date",
                             "format": ES_DATETIME_FORMAT,
-                        }
+                        },
+                        "date_submitted":{
+                            "type": "date",
+                            "format": ES_DATETIME_FORMAT,
+                        },
                     }
                 }
             }
@@ -131,6 +135,8 @@ def search_queries(order_number,
                    billing_name,
                    date_received_start,
                    date_received_end,
+                   date_submitted_start,
+                   date_submitted_end,
                    start, size):
     """Arguments will match search parameters
         :param order_number: search by order number
@@ -140,6 +146,8 @@ def search_queries(order_number,
         :param billing_name: search by billing name
         :param date_received_start: search by starting date
         :param date_received_end: search by ending date
+        :param date_submitted_start: search by starting date submitted
+        :param date_submitted_end: search by ending date submitted
         :param start: starting index of the set
         :param size: size of results pool
 
@@ -170,6 +178,12 @@ def search_queries(order_number,
     if date_received_end:
         date_received_end = datetime.strptime(date_received_end, '%m/%d/%Y').strftime('%x %I:%M %p')
 
+    if date_submitted_start:
+        date_submitted_start = datetime.strptime(date_submitted_start, '%m/%d/%Y').strftime('%x %I:%M %p')
+
+    if date_submitted_end:
+        date_submitted_end = datetime.strptime(date_submitted_end, '%m/%d/%Y').strftime('%x %I:%M %p')
+
     query_field = {
         'billing_name': billing_name,
         'order_type': order_type,
@@ -180,7 +194,9 @@ def search_queries(order_number,
 
     date_range = {
         'date_received_start': date_received_start,
-        'date_received_end': date_received_end
+        'date_received_end': date_received_end,
+        'date_submitted_start': date_submitted_start,
+        'date_submitted_end': date_submitted_end
     }
 
     dsl_gen = DSLGenerator(query_fields=query_field, date_range=date_range)
@@ -190,7 +206,9 @@ def search_queries(order_number,
                               order_type or \
                               suborder_number or \
                               order_number or \
-                              status else dsl_gen.no_query()
+                              status or \
+                              date_submitted_start or \
+                              date_submitted_end else dsl_gen.no_query()
 
     # Search query
     search_results = es.search(index=current_app.config["ELASTICSEARCH_INDEX"],
@@ -254,36 +272,35 @@ class DSLGenerator(object):
                     })
 
         # Creates dictionary from the fields in date range
+        date_ranges = {}
+
+        # Initializes the keys 'date received' and 'date submitted' and sets it with a dict
+        if self.__date_range['date_received_start'] or self.__date_range['date_received_end']:
+            date_ranges['date_received'] = {'format': ES_DATETIME_FORMAT}
+
+        if self.__date_range['date_submitted_start'] or self.__date_range['date_submitted_end']:
+            date_ranges['date_submitted'] = {'format': ES_DATETIME_FORMAT}
+
+        # Sets the nested keys 'gte' and 'lte' based on whats given
         if self.__date_range['date_received_start']:
-            if self.__date_range['date_received_end']:
-                self.__filters.append({
-                    'range': {
-                        'date_received': {
-                            'gte': self.__date_range['date_received_start'],
-                            'lte':  self.__date_range['date_received_end'],
-                            'format': ES_DATETIME_FORMAT
-                        }
-                    }
-                })
-            else:
-                self.__filters.append({
-                    'range': {
-                        'date_received': {
-                            'gte': self.__date_range['date_received_start'],
-                            'format': ES_DATETIME_FORMAT
-                        }
-                    }
-                })
-        else:
-            self.__filters.append({
-                'range': {
-                    'date_received': {
-                        'lte': self.__date_range['date_received_end'],
-                        'format': ES_DATETIME_FORMAT
-                    }
-                }
-            })
-        return self.__query
+            date_ranges['date_received']['gte'] = self.__date_range['date_received_start']
+
+        if self.__date_range['date_received_end']:
+            date_ranges['date_received']['lte'] = self.__date_range['date_received_end']
+
+        if self.__date_range['date_submitted_start']:
+            date_ranges['date_submitted']['gte'] = self.__date_range['date_submitted_start']
+
+        if self.__date_range['date_submitted_end']:
+            date_ranges['date_submitted']['lte'] = self.__date_range['date_submitted_end']
+
+        # Appends the filters with the full range queries
+        if self.__date_range['date_received_start'] or self.__date_range['date_received_end']:
+            self.__filters.append({'range': {'date_received': date_ranges['date_received']}})
+
+        if self.__date_range['date_submitted_start'] or self.__date_range['date_submitted_end']:
+            self.__filters.append({'range': {'date_submitted': date_ranges['date_submitted']}})
+
 
     def no_query(self):
         """

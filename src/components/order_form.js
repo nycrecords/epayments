@@ -65,6 +65,14 @@ class OrderForm extends React.Component {
             this.dateReceivedEnd.setState({
                 date: '',
             });
+
+            this.dateSubmittedStart.setState({
+                date:'',
+            });
+
+            this.dateSubmittedEnd.setState({
+                date:'',
+            });
         };
 
         this.state = {
@@ -101,7 +109,9 @@ class OrderForm extends React.Component {
                             status: this.state.status,
                             billing_name: this.state.billing_name,
                             date_received_start: formatDate(this.dateReceivedStart),
-                            date_received_end: formatDate(this.dateReceivedEnd)
+                            date_received_end: formatDate(this.dateReceivedEnd),
+                            date_submitted_start:formatDate(this.dateSubmittedStart),
+                            date_submitted_end:formatDate(this.dateSubmittedEnd)
                         })
                     })
                         .then(handleFetchErrors)
@@ -122,7 +132,9 @@ class OrderForm extends React.Component {
                         status: this.state.status,
                         billing_name: this.state.billing_name,
                         date_received_start: formatDate(this.dateReceivedStart),
-                        date_received_end: formatDate(this.dateReceivedEnd)
+                        date_received_end: formatDate(this.dateReceivedEnd),
+                        date_submitted_start:formatDate(this.dateSubmittedStart),
+                        date_submitted_end:formatDate(this.dateSubmittedEnd),
                     };
 
                     let esc = encodeURIComponent;
@@ -152,7 +164,10 @@ class OrderForm extends React.Component {
                             status: this.state.status,
                             billing_name: this.state.billing_name,
                             date_received_start: formatDate(this.dateReceivedStart),
-                            date_received_end: formatDate(this.dateReceivedEnd)
+                            date_received_end: formatDate(this.dateReceivedEnd),
+                            date_submitted_start:formatDate(this.dateSubmittedStart),
+                            date_submitted_end:formatDate(this.dateSubmittedEnd)
+
                         })
                     })
                         .then(handleFetchErrors)
@@ -243,6 +258,26 @@ class OrderForm extends React.Component {
                                 name="Date Received - End"
                                 maxDate={this.today}
                                 ref={(date) => this.dateReceivedEnd = date}
+                            />
+                        </Form.Field>
+                    </Form.Group>
+                    <Form.Group>
+                        <Form.Field width="16">
+                            <Date
+                                label="Date Submitted - Start"
+                                name="Date Submitted Start"
+                                maxDate={this.today}
+                                ref={(date) => this.dateSubmittedStart = date}
+                            />
+                        </Form.Field>
+                    </Form.Group>
+                    <Form.Group>
+                        <Form.Field width="16">
+                            <Date
+                                label="Date Submitted - End"
+                                name="Date Submitted - End"
+                                maxDate={this.today}
+                                ref={(date) => this.dateSubmittedEnd = date}
                             />
                         </Form.Field>
                     </Form.Group>

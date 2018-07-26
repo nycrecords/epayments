@@ -62,6 +62,8 @@ def get_orders():
         user = ''
         date_received_start = json.get("date_received_start")
         date_received_end = json.get("date_received_end")
+        date_submitted_start = json.get("date_submitted_start")
+        date_submitted_end = json.get("date_submitted_end")
 
         orders = search_queries(order_number,
                                 suborder_number,
@@ -69,7 +71,9 @@ def get_orders():
                                 status,
                                 billing_name,
                                 date_received_start,
-                                date_received_end,0, 100)
+                                date_received_end,
+                                date_submitted_start,
+                                date_submitted_end,0, 100)
 
         #formatting results
         formatted_orders = []
