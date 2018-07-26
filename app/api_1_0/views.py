@@ -136,9 +136,6 @@ def new_order():
         img_title = json.get("imgTitle")
         add_description = json.get("addDescription")
 
-        print(print_size)
-        print(collection)
-
         now = datetime.datetime.now().strftime("%Y")
         today = datetime.datetime.today().strftime("%m/%d/%y")
         next_order_number = OrderNumberCounter.query.filter_by(year=now).one().next_order_number
@@ -166,7 +163,6 @@ def new_order():
                              )
         create_object(customer)
 
-        # sub_id = "999136"
         sub_order_number = Orders.query.filter_by(id=main_order.id).one().next_suborder_number
         sub_order_id = main_order.id + "-" + str(sub_order_number)
         sub_order = Suborders(id=sub_order_id,
@@ -179,6 +175,7 @@ def new_order():
 
     print("Working")
     return jsonify(), 200
+
 
 @api.route('/status/<string:suborder_number>', methods=['GET', 'POST'])
 @login_required

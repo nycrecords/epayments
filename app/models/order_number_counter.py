@@ -9,8 +9,6 @@ class OrderNumberCounter(db.Model):
     year = db.Column(db.Integer(), primary_key=True, nullable=False)
     _next_order_number = db.Column(db.Integer(), db.Sequence('order_seq'), name='next_order_number')
 
-
-
     @property
     def next_order_number(self):
         from app.db_utils import update_object
@@ -21,5 +19,3 @@ class OrderNumberCounter(db.Model):
             self.year
         )
         return num
-
-

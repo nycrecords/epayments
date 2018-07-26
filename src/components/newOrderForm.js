@@ -7,8 +7,6 @@ import {
 import {Button, Container, Divider, Grid, Header, Form, Loader, Dimmer} from 'semantic-ui-react';
 import moment from 'moment';
 import {csrfFetch, handleFetchErrors} from "../utils/fetch"
-import Order from "./order";
-import update from 'react-addons-update';
 
 
 const orderTypeOptions = [
@@ -80,7 +78,7 @@ class NewOrderForm extends React.Component {
                 zipCode: '',
                 phone: '',
                 instructions: '',
-                orderType: [],
+                orderType: '',
                 block: '',
                 lot: '',
                 roll: '',
@@ -105,15 +103,6 @@ class NewOrderForm extends React.Component {
         const name = target.name;
         this.setState({
             [name]: value
-        });
-    };
-
-    handleArrayChange = (e) => {
-        const target = e.target;
-        const value = target.value;
-        const name = target.name;
-        this.setState({
-            [name]: [this.state.name, value]
         });
     };
 
@@ -220,7 +209,7 @@ class NewOrderForm extends React.Component {
                                 <Form.Radio
                                     name={"printSize"}
                                     label='8" x 10" Print'
-                                    checked={this.state.printSize ==='"8 x 10" Print'}
+                                    checked={this.state.printSize === '"8 x 10" Print'}
                                     onChange={(e, {}) => {
                                         this.setState({printSize: '"8 x 10" Print'})
                                     }}
@@ -278,8 +267,6 @@ class NewOrderForm extends React.Component {
                                     onChange={(e, {}) => {
                                         this.setState({printSize: '8" x 10" Print'})
                                     }}
-
-                                    // value={this.state.printSize}
                                 />
 
                                 <Form.Radio
@@ -289,7 +276,6 @@ class NewOrderForm extends React.Component {
                                     onChange={(e, {}) => {
                                         this.setState({printSize: '11" x 14" Print'})
                                     }}
-                                    // value={this.state.printSize}
                                 />
 
                                 <Form.Radio
@@ -299,7 +285,6 @@ class NewOrderForm extends React.Component {
                                     onChange={(e, {}) => {
                                         this.setState({printSize: '16" x 20" Print'})
                                     }}
-                                    // value={this.state.printSize}
                                 />
 
                             </Form.Group>
@@ -414,8 +399,7 @@ class NewOrderForm extends React.Component {
                                                      options={orderTypeOptions}
                                                      width={8}
                                                      onChange={(e, {value}) => {
-                                                         this.setState({orderType : value});
-                                                         console.log(value);
+                                                         this.setState({orderType: value});
                                                          //toggles hidden forms for Tax Photo if selected
                                                          (this.photosValueList.indexOf(value) == 0) ?
                                                              this.setState({showTaxForm: true}) :
