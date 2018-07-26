@@ -73,7 +73,7 @@ def get_orders():
                                 date_received_start,
                                 date_received_end,
                                 date_submitted_start,
-                                date_submitted_end,0, 100)
+                                date_submitted_end, 0, 100)
 
         #formatting results
         formatted_orders = []

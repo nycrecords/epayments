@@ -71,7 +71,7 @@ def create_index():
                             "type": "date",
                             "format": ES_DATETIME_FORMAT,
                         },
-                        "date_submitted" :{
+                        "date_submitted": {
                             "type": "date",
                             "format": ES_DATETIME_FORMAT,
                         },
