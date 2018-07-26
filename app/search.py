@@ -26,7 +26,7 @@ def create_index():
                     "tokenizer": {
                         "ngram_tokenizer": {
                             "type": "ngram",
-                            "min_gram": 3,
+                            "min_gram": 4,
                             "max_gram": 6,
                         }
                     },
@@ -244,6 +244,7 @@ class DSLGenerator(object):
         self.__date_range = date_range
 
         self.__filters = []
+        self.__sort_filters = []
 
     def search(self):
         """
@@ -344,6 +345,12 @@ class DSLGenerator(object):
         :return: nested dictionary
         """
         return{
+            'sort': [
+                '_score',
+                {'date_received': 'desc'} if self.__query_fields['current_status'] else {'date_received': 'asc'}
+                    if self.__date_range['date_received_start'] else {'date_received': 'desc'},
+                {'date_submitted': 'asc'},
+            ],
             'query': {
                 'bool': {
                     'must': self.__get_filters()
