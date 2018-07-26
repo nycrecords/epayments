@@ -61,7 +61,7 @@ class NewOrderForm extends React.Component {
             printSize: [],
             numCopies: [],
             status: '',
-            showBlockForm: false,
+            showTaxForm: false,
             showPhotoGalleryForm: false,
             loading: false
 
@@ -270,9 +270,9 @@ class NewOrderForm extends React.Component {
 
                                 <Form.Radio
                                     name={"printSize"}
-                                    label='8" x 10" Print ($45 +shipping)'
+                                    label='8" x 10" Print'
                                     onChange={(e, {}) => {
-                                        this.setState({printSize: '8" x 10" Print ($45 +shipping)'})
+                                        this.setState({printSize: '8" x 10" Print'})
                                     }}
 
                                     value={this.state.printSize}
@@ -280,18 +280,18 @@ class NewOrderForm extends React.Component {
 
                                 <Form.Radio
                                     name={"printSize"}
-                                    label='11" x 14" Print ($60 + shipping)'
+                                    label='11" x 14" Print'
                                     onChange={(e, {}) => {
-                                        this.setState({printSize: '11" x 14" Print ($60 + shipping)'})
+                                        this.setState({printSize: '11" x 14" Print'})
                                     }}
                                     value={this.state.printSize}
                                 />
 
                                 <Form.Radio
                                     name={"printSize"}
-                                    label='16" x 20" Print ($120 + shipping)'
+                                    label='16" x 20" Print'
                                     onChange={(e, {}) => {
-                                        this.setState({printSize: '16" x 20" Print ($120 + shipping)'})
+                                        this.setState({printSize: '16" x 20" Print'})
                                     }}
                                     value={this.state.printSize}
                                 />
@@ -302,61 +302,6 @@ class NewOrderForm extends React.Component {
                 </Grid>
             </Container>
         );
-        // const OrderForm = () => (
-        //     <Form>
-        //         <Form.Select label="Order Type"
-        //                      name="orderType"
-        //                      placeholder="Order Type"
-        //                      options={orderTypeOptions}
-        //                      width={8}
-        //                      onChange={(e, {value}) => {
-        //                          this.setState({orderType: [this.state.orderType + value + ", "]});
-        //                          console.log(value);
-        //                          (this.photosValueList.indexOf(value) == 0) ?
-        //                              this.setState({showBlockForm: true}) :
-        //                              this.setState({showBlockForm: false});
-        //                          (this.photosValueList.indexOf(value) == 1) ?
-        //                              this.setState({showPhotoGalleryForm: true}) :
-        //                              this.setState({showPhotoGalleryForm: false});
-        //                      }}
-        //                      value={this.state.value}
-        //         />
-        //
-        //         {this.state.showBlockForm &&
-        //         TaxPhotoForm()
-        //         }
-        //         {this.state.showPhotoGalleryForm &&
-        //         PhotoGalleryForm()
-        //         }
-        //
-        //         <Form.Input label="Number of Copies"
-        //                     name="numCopies"
-        //                     placeholder="Number of Copies"
-        //                     maxLength="2"
-        //                     width={8}
-        //                     onChange={(e, {value}) => {
-        //                         if (/^[0-9]+$/.test(value.slice(-1)) || value === '') {
-        //                             this.handleArrayChange(e)
-        //                         }
-        //                     }}
-        //                     value={this.state.value}
-        //         />
-        //
-        //         <Form.Select label="Status"
-        //                      name="status"
-        //                      placeholder="Status"
-        //                      options={statusOptions}
-        //                      width={8}
-        //                      onChange={(e, {value}) => {
-        //                          this.setState({status: [this.state.status + value + " "]});
-        //
-        //                      }}
-        //                      value={this.state.value}
-        //         />
-        //     </Form>
-        //
-        //
-        // );
 
         return (
             <div>
@@ -375,142 +320,145 @@ class NewOrderForm extends React.Component {
                     </Grid>
                 </div>
                 <div>
-                    <Grid.Column width={1}/>
-                    <Grid.Column width={11} id="grid-column-order">
-                        <Header as="h1" dividing textAlign="center">New Order</Header>
-                        <div>
-                            <Container>
-                                <Form onSubmit={this.handleSubmit}>
-                                    <Form.Input label="Billing Name"
-                                                name="billingName"
-                                                placeholder="Billing Name"
-                                                maxLength="64"
-                                                width={8}
-                                                onChange={this.handleChange}
-                                                value={this.state.billingName}
-                                    />
-                                    <Form.Input label="Email"
-                                                name="email"
-                                                placeholder="Email"
-                                                maxLength="64"
-                                                width={8}
-                                                onChange={this.handleChange}
-                                                value={this.state.email}
-                                    />
-                                    <Form.Input label="Address line 1"
-                                                name="addressLine1"
-                                                placeholder="Address"
-                                                maxLength="64"
-                                                width={8}
-                                                onChange={this.handleChange}
-                                                value={this.state.addressLine1}
-                                    />
-                                    <Form.Input label="Address line 2"
-                                                name="addressLine2"
-                                                placeholder="Address"
-                                                maxLength="64"
-                                                width={8}
-                                                onChange={this.handleChange}
-                                                value={this.state.addressLine2}
-                                    />
-                                    <Form.Group>
-                                        <Form.Input label="City"
-                                                    name="city"
-                                                    placeholder="City"
+                    <Grid padded columns={3}>
+                        <Grid.Row centered>
+                            <Grid.Column width={12} id="grid-column-order" centered>
+                                <Header as="h1" dividing>New Order</Header>
+                                <div>
+                                    <Form onSubmit={this.handleSubmit}>
+                                        <Form.Input label="Billing Name"
+                                                    name="billingName"
+                                                    placeholder="Billing Name"
                                                     maxLength="64"
-                                                    width={4}
+                                                    width={8}
                                                     onChange={this.handleChange}
-                                                    value={this.state.city}
+                                                    value={this.state.billingName}
                                         />
-                                        <Form.Input label="State"
-                                                    name="state"
-                                                    placeholder="State"
+                                        <Form.Input label="Email"
+                                                    name="email"
+                                                    placeholder="Email"
                                                     maxLength="64"
-                                                    width={4}
+                                                    width={8}
                                                     onChange={this.handleChange}
-                                                    value={this.state.state}
+                                                    value={this.state.email}
                                         />
-                                        <Form.Input label="Zip Code"
-                                                    name="zipCode"
-                                                    placeholder="Zip Code"
-                                                    maxLength="5"
-                                                    width={4}
+                                        <Form.Input label="Address line 1"
+                                                    name="addressLine1"
+                                                    placeholder="Address"
+                                                    maxLength="64"
+                                                    width={8}
                                                     onChange={this.handleChange}
-                                                    value={this.state.zipCode}
+                                                    value={this.state.addressLine1}
                                         />
-                                    </Form.Group>
-                                    <Form.Input label="Phone"
-                                                name="phone"
-                                                placeholder="Phone"
-                                                maxLength="64"
-                                                width={8}
-                                                onChange={this.handleChange}
-                                                value={this.state.phone}
-                                    />
-                                    <Form.Input label="Instructions"
-                                                name="instructions"
-                                                placeholder="Instructions"
-                                                maxLength="64"
-                                                width={8}
-                                                onChange={this.handleChange}
-                                                value={this.state.instructions}
-                                    />
-                                    <Form.Select label="Order Type"
-                                                 name="orderType"
-                                                 placeholder="Order Type"
-                                                 options={orderTypeOptions}
-                                                 width={8}
-                                                 onChange={(e, {value}) => {
-                                                     this.setState({orderType: [this.state.orderType + value + ", "]});
-                                                     console.log(value);
-                                                     (this.photosValueList.indexOf(value) == 0) ?
-                                                         this.setState({showBlockForm: true}) :
-                                                         this.setState({showBlockForm: false});
-                                                     (this.photosValueList.indexOf(value) == 1) ?
-                                                         this.setState({showPhotoGalleryForm: true}) :
-                                                         this.setState({showPhotoGalleryForm: false});
-                                                 }}
-                                                 value={this.state.value}
-                                    />
+                                        <Form.Input label="Address line 2"
+                                                    name="addressLine2"
+                                                    placeholder="Address"
+                                                    maxLength="64"
+                                                    width={8}
+                                                    onChange={this.handleChange}
+                                                    value={this.state.addressLine2}
+                                        />
+                                        <Form.Group>
+                                            <Form.Input label="City"
+                                                        name="city"
+                                                        placeholder="City"
+                                                        maxLength="64"
+                                                        width={4}
+                                                        onChange={this.handleChange}
+                                                        value={this.state.city}
+                                            />
+                                            <Form.Input label="State"
+                                                        name="state"
+                                                        placeholder="State"
+                                                        maxLength="64"
+                                                        width={4}
+                                                        onChange={this.handleChange}
+                                                        value={this.state.state}
+                                            />
+                                            <Form.Input label="Zip Code"
+                                                        name="zipCode"
+                                                        placeholder="Zip Code"
+                                                        maxLength="5"
+                                                        width={4}
+                                                        onChange={this.handleChange}
+                                                        value={this.state.zipCode}
+                                            />
+                                        </Form.Group>
+                                        <Form.Input label="Phone"
+                                                    name="phone"
+                                                    placeholder="Phone"
+                                                    maxLength="64"
+                                                    width={8}
+                                                    onChange={this.handleChange}
+                                                    value={this.state.phone}
+                                        />
+                                        <Form.Input label="Instructions"
+                                                    name="instructions"
+                                                    placeholder="Instructions"
+                                                    maxLength="64"
+                                                    width={8}
+                                                    onChange={this.handleChange}
+                                                    value={this.state.instructions}
+                                        />
+                                        <Form.Select label="Order Type"
+                                                     name="orderType"
+                                                     placeholder="Order Type"
+                                                     options={orderTypeOptions}
+                                                     width={8}
+                                                     onChange={(e, {value}) => {
+                                                         this.setState({orderType : value});
+                                                         console.log(value);
+                                                         //toggles hidden forms for Tax Photo if selected
+                                                         (this.photosValueList.indexOf(value) == 0) ?
+                                                             this.setState({showTaxForm: true}) :
+                                                             this.setState({showTaxForm: false});
+                                                         //toggles hidden forms for Photo Gallery if selected
+                                                         (this.photosValueList.indexOf(value) == 1) ?
+                                                             this.setState({showPhotoGalleryForm: true}) :
+                                                             this.setState({showPhotoGalleryForm: false});
+                                                     }}
+                                                     value={this.state.value}
+                                        />
 
-                                    {this.state.showBlockForm && TaxPhotoForm()}
-                                    {this.state.showPhotoGalleryForm && PhotoGalleryForm()}
+                                        {this.state.showTaxForm && TaxPhotoForm()}
+                                        {this.state.showPhotoGalleryForm && PhotoGalleryForm()}
 
-                                    <Form.Input label="Number of Copies"
-                                                name="numCopies"
-                                                placeholder="Number of Copies"
-                                                maxLength="2"
-                                                width={8}
-                                                onChange={(e, {value}) => {
-                                                    if (/^[0-9]+$/.test(value.slice(-1)) || value === '') {
-                                                        this.handleArrayChange(e)
-                                                    }
-                                                }}
-                                                value={this.state.value}
-                                    />
+                                        <Form.Input label="Number of Copies"
+                                                    name="numCopies"
+                                                    placeholder="Number of Copies"
+                                                    maxLength="2"
+                                                    width={8}
+                                                    onChange={(e, {value}) => {
+                                                        if (/^[0-9]+$/.test(value.slice(-1)) || value === '') {
+                                                            this.handleArrayChange(e)
+                                                        }
+                                                    }}
+                                                    value={this.state.value}
+                                        />
 
-                                    <Form.Select label="Status"
-                                                 name="status"
-                                                 placeholder="Status"
-                                                 options={statusOptions}
-                                                 width={8}
-                                                 onChange={(e, {value}) => {
-                                                     this.setState({status: [this.state.status + value + " "]});
+                                        <Form.Select label="Status"
+                                                     name="status"
+                                                     placeholder="Status"
+                                                     options={statusOptions}
+                                                     width={8}
+                                                     onChange={(e, {value}) => {
+                                                         this.setState({status: value});
 
-                                                 }}
-                                                 value={this.state.value}
-                                    />
+                                                     }}
+                                                     value={this.state.value}
+                                        />
 
 
-                                    <Button type='submit' positive floated="left" content="Place Order"/>
-                                    <Button type="reset" onClick={this.clearSelection} content="Clear"/>
-                                </Form>
-                            </Container>
-                        </div>
-                        <div>
-                            <Divider clearing/>
-                        </div>
-                    </Grid.Column>
+                                        <Button type='submit' positive floated="left" content="Place Order"/>
+                                        <Button type="reset" onClick={this.clearSelection} content="Clear"/>
+                                    </Form>
+                                </div>
+                                <div>
+                                    <Divider clearing/>
+                                </div>
+                            </Grid.Column>
+                        </Grid.Row>
+                    </Grid>
                 </div>
             </div>
         )

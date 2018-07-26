@@ -26,7 +26,7 @@ class Orders(db.Model):
     multiple_items = db.Column(db.Boolean, nullable=False)
     suborder = db.relationship('Suborders', backref='suborders', lazy=True)
     customer = db.relationship('Customers', backref='customers', uselist=False)
-    next_suborder_number = db.Column(db.Integer(), db.Sequence('suborder_seq'), name='next_suborder_number')
+    _next_suborder_number = db.Column(db.Integer(), db.Sequence('suborder_seq'), name='next_suborder_number')
 
     def __init__(
             self,
@@ -36,7 +36,8 @@ class Orders(db.Model):
             confirmation_message,
             client_data,
             order_types,
-            multiple_items):
+            multiple_items,
+            _next_suborder_number=1):
         self.id = id
         self.date_submitted = date_submitted
         self.date_received = date_received or None
@@ -44,6 +45,7 @@ class Orders(db.Model):
         self.client_data = client_data
         self.order_types = order_types
         self.multiple_items = multiple_items
+        self._next_suborder_number = _next_suborder_number
 
     @property
     def serialize(self):
@@ -57,14 +59,15 @@ class Orders(db.Model):
             'order_types': self.order_types,
             'multiple_items': self.multiple_items,
         }
+
     @property
     def next_suborder_number(self):
         from app.db_utils import update_object
-        num = self._next_request_number
+        num = self._next_suborder_number
         update_object(
-            {'_next_request_number': self._next_request_number + 1},
+            {'_next_suborder_number': self._next_suborder_number + 1},
             Orders,
-            1
+            self.id
         )
         return num
 
