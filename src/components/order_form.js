@@ -2,7 +2,7 @@
  * Created by sinsang on 4/25/17.
  */
 import React from 'react';
-import {Form, Button, Container} from 'semantic-ui-react';
+import {Form, Menu, Button, Container, Segment} from 'semantic-ui-react';
 import Date from './datepicker'
 import 'react-datepicker/dist/react-datepicker.css'
 import 'semantic-ui-css/semantic.min.css';
@@ -185,7 +185,13 @@ class OrderForm extends React.Component {
         };
     }
 
+    //Ideas foo
+    state = { activeItem: 'Date Received' }
+
+    handleItemClick = (e, { name }) => this.setState({ activeItem: name })
+
     render() {
+        const {activeItem} = this.state
         return (
             <Container>
                 <Form onSubmit={this.submitFormData}>
@@ -239,7 +245,44 @@ class OrderForm extends React.Component {
                                 value={this.state.billing_name}
                     />
 
-                    <Form.Group>
+
+                    { /*Testing out ideas...*/}
+                    <Menu secondary pointing>
+                        <Menu.Item position = 'right'
+                            name = 'Date Received'
+                            active={activeItem === 'Date Received'}
+                            onClick={this.handleItemClick}
+                        />
+
+                        <Menu.Item position = 'left'
+                            name = "Date Submitted"
+                            active={activeItem === 'Date Submitted'}
+                            onClick={this.handleItemClick}
+                        />
+                    </Menu>
+                    <Segment>
+                        <Form.Group>
+                            <Form.Field width="16">
+                                <Date
+                                    label="start"
+                                    name="start"
+                                    maxDate={this.today}
+                                    ref={(date) => this.dateReceivedEnd = date}
+                                />
+                            </Form.Field>
+                        </Form.Group>
+                        <Form.Group>
+                            <Form.Field width="16">
+                                <Date
+                                    label="End"
+                                    name="End"
+                                    maxDate={this.today}
+                                    ref={(date) => this.dateReceivedEnd = date}
+                                />
+                            </Form.Field>
+                        </Form.Group>
+                    </Segment>
+                    {/*<Form.Group>
                         <Form.Field width="16">
                             <Date
                                 label="Date Received - Start"
@@ -280,7 +323,7 @@ class OrderForm extends React.Component {
                                 ref={(date) => this.dateSubmittedEnd = date}
                             />
                         </Form.Field>
-                    </Form.Group>
+                    </Form.Group>*/}
                     <Button type="reset" onClick={this.clearSelection} content="Clear"/>
                     <Button type='submit' positive floated="right" content="Apply"/>
                 </Form>

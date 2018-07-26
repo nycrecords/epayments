@@ -347,8 +347,10 @@ class DSLGenerator(object):
         return{
             'sort': [
                 '_score',
+
                 {'date_received': 'desc'} if self.__query_fields['current_status'] else {'date_received': 'asc'}
-                    if self.__date_range['date_received_start'] else {'date_received': 'desc'},
+                if self.__date_range['date_received_start'] else {'date_received': 'desc'},
+
                 {'date_submitted': 'asc'},
             ],
             'query': {
