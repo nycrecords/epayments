@@ -51,12 +51,24 @@ class NewOrderForm extends React.Component {
             addressLine1: '',
             addressLine2: '',
             city: '',
-            certified:'',
+            certified: '',
             state: '',
             zipCode: '',
             phone: '',
             instructions: '',
             orderType: '',
+
+            certificateNum: '',
+            groomLastName: '',
+            groomFirstName: '',
+            brideLastName: '',
+            brideFirstName: '',
+            month: '',
+            day: '',
+            year: '',
+            marriagePlace: '',
+            letter: '',
+
 
             block: '',
             lot: '',
@@ -76,8 +88,12 @@ class NewOrderForm extends React.Component {
             printSize: '',
             numCopies: '',
             status: '',
+
+            showMarriageCert: false,
+            showMarriageSearch: false,
             showTaxForm: false,
             showPhotoGalleryForm: false,
+            showPropertyForm: false,
             loading: false
 
         };
@@ -91,12 +107,24 @@ class NewOrderForm extends React.Component {
                 addressLine1: '',
                 addressLine2: '',
                 city: '',
-                certified:'',
+                certified: '',
                 state: '',
                 zipCode: '',
                 phone: '',
                 instructions: '',
                 orderType: '',
+
+                certificateNum: '',
+                groomLastName: '',
+                groomFirstName: '',
+                brideLastName: '',
+                brideFirstName: '',
+                month: '',
+                day: '',
+                year: '',
+                marriagePlace: '',
+                letter: '',
+
                 block: '',
                 lot: '',
                 roll: '',
@@ -117,7 +145,7 @@ class NewOrderForm extends React.Component {
             });
         };
 
-        this.photosValueList = ['Tax Photo', 'Photo Gallery'];
+        this.orderList = ['Tax Photo', 'Photo Gallery', 'Property Card', 'Marriage Search', 'Marriage Cert'];
         this.yesterday = moment().subtract(1, 'days');
         this.today = moment();
     };
@@ -142,12 +170,24 @@ class NewOrderForm extends React.Component {
                 addressLine1: this.state.addressLine1,
                 address_two_2: this.state.addressLine2,
                 city: this.state.city,
-                certified:this.state.certified,
+                certified: this.state.certified,
                 state: this.state.state,
                 zipCode: this.state.zipCode,
                 phone: this.state.phone,
                 instructions: this.state.instructions,
                 orderType: this.state.orderType,
+
+                certificateNum: this.state.certificateNum,
+                groomLastName: this.state.groomFirstName,
+                groomFirstName: this.state.groomFirstName,
+                brideLastName: this.state.brideLastName,
+                brideFirstName: this.state.brideFirstName,
+                month: this.state.month,
+                day: this.state.day,
+                year: this.state.year,
+                marriagePlace: this.state.marriagePlace,
+                letter: this.state.letter,
+
                 block: this.state.block,
                 lot: this.state.lot,
                 roll: this.state.roll,
@@ -253,58 +293,212 @@ class NewOrderForm extends React.Component {
                                     this.setState({printSize: '"11 x 14" Print'})
                                 }}
                             />
-                            <Form.Select label="Borough"
-                                         name="borough"
-                                         options={boroughOptions}
-                                         placeholder="Borough"
-                                         onChange={this.handleChange}
-                                         value={this.state.borough}
-                            />
-                            <Form.Input label="Building Number"
-                                        name="buildingNum"
-                                        placeholder="Building Number"
-                                        onChange={this.handleChange}
-                                        value={this.state.buildingNum}
-                            />
-                            <Form.Input label="Street"
-                                        name="street"
-                                        placeholder="Street"
-                                        onChange={this.handleChange}
-                                        value={this.state.street}
-                            />
-                            <Form.Input label="Mail"
-                                        name="mail"
-                                        placeholder="Mail"
-                                        onChange={this.handleChange}
-                                        value={this.state.mail}
-                            />
-                            <Form.Input label="description"
-                                        name="addDescription"
-                                        placeholder="Description"
-                                        onChange={this.handleChange}
-                                        value={this.state.addDescription}
-                            />
-                            <Form.Input label="Contact Number"
-                                        name="contactNum"
-                                        placeholder="Contact Number"
-                                        onChange={this.handleChange}
-                                        value={this.state.contactNum}
-                            />
-
                         </Form.Group>
+                        <Form.Select label="Borough"
+                                     name="borough"
+                                     options={boroughOptions}
+                                     placeholder="Borough"
+                                     onChange={this.handleChange}
+                                     value={this.state.value}
+                        />
+                        <Form.Input label="Building Number"
+                                    name="buildingNum"
+                                    placeholder="Building Number"
+                                    onChange={this.handleChange}
+                                    value={this.state.buildingNum}
+                        />
+                        <Form.Input label="Street"
+                                    name="street"
+                                    placeholder="Street"
+                                    onChange={this.handleChange}
+                                    value={this.state.street}
+                        />
+                        <Form.Input label="Mail"
+                                    name="mail"
+                                    placeholder="Mail"
+                                    onChange={this.handleChange}
+                                    value={this.state.mail}
+                        />
+                        <Form.Input label="description"
+                                    name="addDescription"
+                                    placeholder="Description"
+                                    onChange={this.handleChange}
+                                    value={this.state.addDescription}
+                        />
+                        <Form.Input label="Contact Number"
+                                    name="contactNum"
+                                    placeholder="Contact Number"
+                                    onChange={this.handleChange}
+                                    value={this.state.contactNum}
+                        />
                     </Grid.Column>
                 </Grid.Row>
             </Grid>
         );
-        const PropertyCard = () => (
+        const PropertyCardForm = () => (
             <Grid>
                 <Grid.Row>
                     <Grid.Column>
+                        <Form.Input label="Block"
+                                    name="block"
+                                    placeholder="Block"
+                                    onChange={this.handleChange}
+                                    value={this.state.block}
+                        />
+                        <Form.Input label="Lot"
+                                    name="lot"
+                                    placeholder="Lot"
+                                    onChange={this.handleChange}
+                                    value={this.state.lot}
+                        />
+                        <Form.Select label="Borough"
+                                     name="borough"
+                                     options={boroughOptions}
+                                     placeholder="Borough"
+                                     onChange={this.handleChange}
+                                     value={this.state.value}
+                        />
+                        <Form.Input label="Building Number"
+                                    name="buildingNum"
+                                    placeholder="Building Number"
+                                    onChange={this.handleChange}
+                                    value={this.state.buildingNum}
+                        />
+                        <Form.Input label="Street"
+                                    name="street"
+                                    placeholder="Street"
+                                    onChange={this.handleChange}
+                                    value={this.state.street}
+                        />
+                        <Form.Input label="Mail"
+                                    name="mail"
+                                    placeholder="Mail"
+                                    onChange={this.handleChange}
+                                    value={this.state.mail}
+                        />
+                        <Form.Input label="description"
+                                    name="addDescription"
+                                    placeholder="Description"
+                                    onChange={this.handleChange}
+                                    value={this.state.addDescription}
+                        />
+                        <Form.Input label="Contact Number"
+                                    name="contactNum"
+                                    placeholder="Contact Number"
+                                    onChange={this.handleChange}
+                                    value={this.state.contactNum}
+                        />
+                        <Form.Input label="Certified"
+                                    name="certified"
+                                    placeholder="Certified"
+                                    onChange={this.handleChange}
+                                    value={this.state.certified}
+                        />
 
                     </Grid.Column>
                 </Grid.Row>
             </Grid>
 
+        )
+        const MarriageSearchForm = () => (
+            <Grid>
+                <Grid.Row>
+                    <Grid.Column>
+                        <Form.Group>
+                            <Form.Input label="Groom First Name"
+                                        name="groomFirstName"
+                                        placeholder="Groom First Name"
+                                        onChange={this.handleChange}
+                                        value={this.state.groomFirstName}
+                            />
+                            <Form.Input label="Groom Last Name"
+                                        name="groomLastName"
+                                        placeholder="Groom Last Name"
+                                        onChange={this.handleChange}
+                                        value={this.state.groomLastName}
+                            />
+                        </Form.Group>
+                        <Form.Group>
+                            <Form.Input label="Bride First Name"
+                                        name="brideFirstName"
+                                        placeholder="Bride First Name"
+                                        onChange={this.handleChange}
+                                        value={this.state.brideFirstName}
+                            />
+                            <Form.Input label="Bride Last Name"
+                                        name="BrideLastName"
+                                        placeholder="Bride Last Name"
+                                        onChange={this.handleChange}
+                                        value={this.state.brideLastName}
+                            />
+                        </Form.Group>
+                        <Form.Group>
+                            <Form.Input label="Month"
+                                        name="month"
+                                        placeholder="Month"
+                                        onChange={this.handleChange}
+                                        value={this.state.month}
+                            />
+                            <Form.Input label="Day"
+                                        name="day"
+                                        maxLength={2}
+                                        placeholder="Day"
+                                        onChange={this.handleChange}
+                                        value={this.state.day}
+                            />
+                            <Form.Input label="Year"
+                                        name="year"
+                                        maxLength={4}
+                                        placeholder="Year"
+                                        onChange={this.handleChange}
+                                        value={this.state.year}
+                            />
+                        </Form.Group>
+
+                        <Form.Select label="Borough"
+                                     name="borough"
+                                     options={boroughOptions}
+                                     placeholder="Borough"
+                                     onChange={this.handleChange}
+                                     value={this.state.value}
+                        />
+                        <Form.Input label="Marriage Place"
+                                    name="marriagePlace"
+                                    placeholder="Marriage Place"
+                                    onChange={this.handleChange}
+                                    value={this.state.marriagePlace}
+                        />
+                        <Form.Input label="Letter"
+                                    name="letter"
+                                    placeholder="Letter"
+                                    onChange={this.handleChange}
+                                    value={this.state.letter}
+                        />
+                        <Form.Input label="Comment"
+                                    name="comment"
+                                    placeholder="Comment"
+                                    onChange={this.handleChange}
+                                    value={this.state.comment}
+                        />
+                    </Grid.Column>
+                </Grid.Row>
+            </Grid>
+        )
+        const MarriageCertForm = () => (
+            <Grid>
+                <Grid.Row>
+                    <Grid.Column>
+                        <Form.Input label="Certificate Number"
+                                    name="certificateNum"
+                                    placeholder="Certificiate Number"
+                                    onChange={this.handleChange}
+                                    value={this.state.certificateNum}
+                        />
+                        {MarriageSearchForm()}
+
+                    </Grid.Column>
+                </Grid.Row>
+            </Grid>
         )
         const PhotoGalleryForm = () => (
             <Grid>
@@ -484,19 +678,34 @@ class NewOrderForm extends React.Component {
                                                  onChange={(e, {value}) => {
                                                      this.setState({orderType: value});
                                                      //toggles hidden forms for Tax Photo if selected
-                                                     (this.photosValueList.indexOf(value) == 0) ?
+                                                     (this.orderList.indexOf(value) == 0) ?
                                                          this.setState({showTaxForm: true}) :
                                                          this.setState({showTaxForm: false});
                                                      //toggles hidden forms for Photo Gallery if selected
-                                                     (this.photosValueList.indexOf(value) == 1) ?
+                                                     (this.orderList.indexOf(value) == 1) ?
                                                          this.setState({showPhotoGalleryForm: true}) :
                                                          this.setState({showPhotoGalleryForm: false});
+                                                     (this.orderList.indexOf(value) == 2) ?
+                                                         this.setState({showPropertyForm: true}) :
+                                                         this.setState({showPropertyForm: false});
+                                                     (this.orderList.indexOf(value) == 3) ?
+                                                         this.setState({showMarriageSearch: true}) :
+                                                         this.setState({showMarriageSearch: false});
+                                                     (this.orderList.indexOf(value) == 4) ?
+                                                         this.setState({showMarriageCert: true}) :
+                                                         this.setState({showMarriageCert: false});
+
+
                                                  }}
                                                  value={this.state.value}
                                     />
 
                                     {this.state.showTaxForm && TaxPhotoForm()}
                                     {this.state.showPhotoGalleryForm && PhotoGalleryForm()}
+                                    {this.state.showPropertyForm && PropertyCardForm()}
+                                    {this.state.showMarriageSearch && MarriageSearchForm()}
+                                    {this.state.showMarriageCert && MarriageCertForm()}
+
 
                                     <Form.Input label="Number of Copies"
                                                 name="numCopies"
