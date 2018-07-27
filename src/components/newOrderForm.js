@@ -8,6 +8,13 @@ import {Button, Container, Divider, Grid, Header, Form, Loader, Dimmer} from 'se
 import moment from 'moment';
 import {csrfFetch, handleFetchErrors} from "../utils/fetch"
 
+const boroughOptions = [
+    {key: 'bronx', text: 'Bronx', value: 'Bronx'},
+    {key: 'brooklyn', text: 'Brooklyn', value: 'Brooklyn'},
+    {key: 'manhattan', text: 'Manhattan', value: 'Manhattan'},
+    {key: 'queens', text: 'Queens', value: 'Queens'},
+    {key: 'statenisland', text: 'Staten Island', value: 'Staten Island'},
+]
 
 const orderTypeOptions = [
     {key: 'birthsearch', text: 'Birth Search', value: 'Birth Search'},
@@ -44,16 +51,26 @@ class NewOrderForm extends React.Component {
             addressLine1: '',
             addressLine2: '',
             city: '',
+            certified:'',
             state: '',
             zipCode: '',
             phone: '',
             instructions: '',
             orderType: '',
+
             block: '',
             lot: '',
             row: '',
+            borough: '',
+            buildingNum: '',
+            street: '',
+            mail: '',
+            contactNum: '',
+
             imgId: '',
             imgTitle: '',
+            comment: '',
+            personalUseAgreement: '',
             addDescription: '',
             collection: '',
             printSize: '',
@@ -74,6 +91,7 @@ class NewOrderForm extends React.Component {
                 addressLine1: '',
                 addressLine2: '',
                 city: '',
+                certified:'',
                 state: '',
                 zipCode: '',
                 phone: '',
@@ -82,8 +100,15 @@ class NewOrderForm extends React.Component {
                 block: '',
                 lot: '',
                 roll: '',
+                borough: '',
+                buildingNum: '',
+                street: '',
+                mail: '',
+                contactNum: '',
                 imgId: '',
                 imgTitle: '',
+                comment: '',
+                personalUseAgreement: '',
                 addDescription: '',
                 collection: '',
                 printSize: '',
@@ -117,6 +142,7 @@ class NewOrderForm extends React.Component {
                 addressLine1: this.state.addressLine1,
                 address_two_2: this.state.addressLine2,
                 city: this.state.city,
+                certified:this.state.certified,
                 state: this.state.state,
                 zipCode: this.state.zipCode,
                 phone: this.state.phone,
@@ -125,8 +151,15 @@ class NewOrderForm extends React.Component {
                 block: this.state.block,
                 lot: this.state.lot,
                 roll: this.state.roll,
+                borough: this.state.borough,
+                buildingNum: this.state.buildingNum,
+                street: this.state.street,
+                mail: this.state.mail,
+                contactNum: this.state.contactNum,
                 imgId: this.state.imgId,
                 imgTitle: this.state.imgTitle,
+                comment: this.state.comment,
+                personalUseAgreement: this.state.personalUseAgreement,
                 addDescription: this.state.addDescription,
                 collection: this.state.collection,
                 printSize: this.state.printSize,
@@ -220,11 +253,59 @@ class NewOrderForm extends React.Component {
                                     this.setState({printSize: '"11 x 14" Print'})
                                 }}
                             />
+                            <Form.Select label="Borough"
+                                         name="borough"
+                                         options={boroughOptions}
+                                         placeholder="Borough"
+                                         onChange={this.handleChange}
+                                         value={this.state.borough}
+                            />
+                            <Form.Input label="Building Number"
+                                        name="buildingNum"
+                                        placeholder="Building Number"
+                                        onChange={this.handleChange}
+                                        value={this.state.buildingNum}
+                            />
+                            <Form.Input label="Street"
+                                        name="street"
+                                        placeholder="Street"
+                                        onChange={this.handleChange}
+                                        value={this.state.street}
+                            />
+                            <Form.Input label="Mail"
+                                        name="mail"
+                                        placeholder="Mail"
+                                        onChange={this.handleChange}
+                                        value={this.state.mail}
+                            />
+                            <Form.Input label="description"
+                                        name="addDescription"
+                                        placeholder="Description"
+                                        onChange={this.handleChange}
+                                        value={this.state.addDescription}
+                            />
+                            <Form.Input label="Contact Number"
+                                        name="contactNum"
+                                        placeholder="Contact Number"
+                                        onChange={this.handleChange}
+                                        value={this.state.contactNum}
+                            />
+
                         </Form.Group>
                     </Grid.Column>
                 </Grid.Row>
             </Grid>
         );
+        const PropertyCard = () => (
+            <Grid>
+                <Grid.Row>
+                    <Grid.Column>
+
+                    </Grid.Column>
+                </Grid.Row>
+            </Grid>
+
+        )
         const PhotoGalleryForm = () => (
             <Grid>
                 <Grid.Row>
@@ -248,6 +329,24 @@ class NewOrderForm extends React.Component {
                                     placeholder="Addition Description"
                                     onChange={this.handleChange}
                                     value={this.state.addDescription}
+                        />
+                        <Form.Input label="Mail"
+                                    name="mail"
+                                    placeholder="Mail"
+                                    onChange={this.handleChange}
+                                    value={this.state.mail}
+                        />
+                        <Form.Input label="Contact Number"
+                                    name="contactNum"
+                                    placeholder="Contact Number"
+                                    onChange={this.handleChange}
+                                    value={this.state.contactNum}
+                        />
+                        <Form.Input label="Comment"
+                                    name="comment"
+                                    placeholder="Comment"
+                                    onChange={this.handleChange}
+                                    value={this.state.comment}
                         />
                         <Form.Group inline>
                             <label>Printing Size</label>

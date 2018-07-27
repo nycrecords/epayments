@@ -12,6 +12,19 @@ from sqlalchemy import *
 from sqlalchemy.orm import *
 import datetime
 from app.db_utils import (create_object)
+from app.constants import order_types
+from app.models.photo import TaxPhoto,PhotoGallery
+from app.models.property_card import PropertyCard
+
+BIRTH_SEARCH = "Birth Search"
+BIRTH_CERT = "Birth Cert"
+MARRIAGE_SEARCH = "Marriage Search"
+MARRIAGE_CERT = "Marriage Cert"
+DEATH_SEARCH = "Death Search"
+DEATH_CERT = "Death Cert"
+TAX_PHOTO = "Tax Photo"
+PHOTO_GALLERY = "Photo Gallery"
+PROPERTY_CARD = "Property Card"
 
 from app.api_1_0.utils import (
     update_status,
@@ -115,26 +128,34 @@ def new_order():
     """
     if request.method == 'POST':  # makes it so we get a post method to receive the info put in on the form
         json = request.get_json(force=True)
-        order_type = json.get("orderType")
-        status = json.get("status")
-        billing_name = json.get("billingName")
-        email = json.get("email")
+        add_description = json.get("addDescription")
         address_line_1 = json.get("addressLine1")
         address_line_2 = json.get("addressLine2")
-        city = json.get("city")
-        state = json.get("state")
-        zip_code = json.get("zipCode")
-        phone = json.get("phone")
-        instruction = json.get("instructions")
-        collection = json.get("collection")
-        print_size = json.get("printSize")
-        num_copies = json.get("numCopies")
+        billing_name = json.get("billingName")
         block = json.get("block")
-        lot = json.get("lot")
-        roll = json.get("roll")
+        borough = json.get("borough")
+        building_number = json.get("buildingNum")
+        certified = json.get("certified")
+        collection = json.get("collection")
+        comment = json.get("comment")
+        contact_number = json.get("contactNum")
+        city = json.get("city")
+        email = json.get("email")
+        instruction = json.get("instructions")
         img_id = json.get("imgId")
         img_title = json.get("imgTitle")
-        add_description = json.get("addDescription")
+        lot = json.get("lot")
+        mail = json.get("mail")
+        num_copies = json.get("numCopies")
+        order_type = json.get("orderType")
+        personal_use_agreement = json.get("personUseAgreement")
+        phone = json.get("phone")
+        print_size = json.get("printSize")
+        roll = json.get("roll")
+        state = json.get("state")
+        status = json.get("status")
+        street = json.get("street")
+        zip_code = json.get("zipCode")
 
         year = datetime.datetime.now().strftime("%Y")
         today = datetime.datetime.today().strftime("%m/%d/%y")
@@ -147,8 +168,8 @@ def new_order():
                             client_data="client",
                             order_types=order_type,
                             multiple_items=True)
-        create_object(main_order)
-
+        # create_object(main_order)
+        #
         customer = Customers(billing_name=billing_name,
                              email=email,
                              shipping_name=billing_name,
@@ -161,8 +182,8 @@ def new_order():
                              instructions=instruction,
                              order_number=main_order.id,
                              )
-        create_object(customer)
-
+        # create_object(customer)
+        #
         sub_order_number = Orders.query.filter_by(id=main_order.id).one().next_suborder_number
         sub_order_id = main_order.id + "-" + str(sub_order_number)
         sub_order = Suborders(id=sub_order_id,
@@ -171,7 +192,48 @@ def new_order():
                               order_number=main_order.id,
                               _status=status
                               )
-        create_object(sub_order)
+        # create_object(sub_order)
+        if order_type == TaxPhoto:
+            object = TaxPhoto(borough=None,
+                              collection=collection,
+                              roll=roll,
+                              block=block,
+                              lot=lot,
+                              building_number=building_number,
+                              street=street,
+                              description=add_description,
+                              mail=mail,
+                              contact_number=contact_number
+                              )
+        elif order_type == PHOTO_GALLERY:
+            object = PhotoGallery(image_id=img_id,
+                                  description=img_title,
+                                  add_description=add_description,
+                                  size=print_size,
+                                  num_copies=num_copies,
+                                  mail=mail,
+                                  contact_number=contact_number,
+                                  personal_use_agreement=personal_use_agreement,
+                                  comment=comment,
+                                  suborder_number=sub_order.id
+            )
+        elif order_type == PROPERTY_CARD:
+            object = PropertyCard(borough=borough,
+                                  block=block,
+                                  lot=lot,
+                                  building_number=building_number,
+                                  street=street,
+                                  description=add_description,
+                                  certified=certified,
+                                  mail=mail,
+                                  contact_number=contact_number,
+                                  suborder_number=sub_order.id
+                                  )
+        # elif order_type == DEATH_CERT:
+
+
+
+        print(order_type)
 
     return jsonify(), 200
 
