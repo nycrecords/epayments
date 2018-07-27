@@ -16,6 +16,11 @@ const boroughOptions = [
     {key: 'statenisland', text: 'Staten Island', value: 'Staten Island'},
 ]
 
+const genderOptions = [
+    {key: 'male', text: 'Male', value: 'Male'},
+    {key: 'female', text: 'Female', value: 'Female'},
+]
+
 const orderTypeOptions = [
     {key: 'birthsearch', text: 'Birth Search', value: 'Birth Search'},
     {key: 'marriagesearch', text: 'Marriage Search', value: 'Marriage Search'},
@@ -57,6 +62,16 @@ class NewOrderForm extends React.Component {
             phone: '',
             instructions: '',
             orderType: '',
+            deathPlace: '',
+            cemetery: '',
+
+            gender: '',
+            fatherName: '',
+            motherName: '',
+            birthPlace: '',
+            lastName: '',
+            firstName: '',
+            middleName: '',
 
             certificateNum: '',
             groomLastName: '',
@@ -89,6 +104,8 @@ class NewOrderForm extends React.Component {
             numCopies: '',
             status: '',
 
+            showDeathCert: false,
+            showDeathSearch: false,
             showMarriageCert: false,
             showMarriageSearch: false,
             showTaxForm: false,
@@ -113,6 +130,15 @@ class NewOrderForm extends React.Component {
                 phone: '',
                 instructions: '',
                 orderType: '',
+                deathPlace: '',
+                cemetery: '',
+                firstName: '',
+                lastName: '',
+                birthPlace: '',
+                gender: '',
+                fatherName: '',
+                motherName: '',
+                middleName: '',
 
                 certificateNum: '',
                 groomLastName: '',
@@ -145,7 +171,11 @@ class NewOrderForm extends React.Component {
             });
         };
 
-        this.orderList = ['Tax Photo', 'Photo Gallery', 'Property Card', 'Marriage Search', 'Marriage Cert'];
+        this.orderList = ['Tax Photo', 'Photo Gallery',
+            'Property Card', 'Marriage Search',
+            'Marriage Cert', 'Death Search',
+            'Death Cert', 'Birth Search',
+            'Birth Cert'];
         this.yesterday = moment().subtract(1, 'days');
         this.today = moment();
     };
@@ -177,6 +207,11 @@ class NewOrderForm extends React.Component {
                 instructions: this.state.instructions,
                 orderType: this.state.orderType,
 
+                gender: this.state.gender,
+                motherName: this.state.motherName,
+                fatherName: this.state.fatherName,
+                birthPlace: this.state.birthPlace,
+
                 certificateNum: this.state.certificateNum,
                 groomLastName: this.state.groomFirstName,
                 groomFirstName: this.state.groomFirstName,
@@ -187,6 +222,11 @@ class NewOrderForm extends React.Component {
                 year: this.state.year,
                 marriagePlace: this.state.marriagePlace,
                 letter: this.state.letter,
+                deathPlace: this.state.deathPlace,
+                cemetery: this.state.cemetery,
+                firstName: this.state.firstName,
+                lastName: this.state.lastName,
+
 
                 block: this.state.block,
                 lot: this.state.lot,
@@ -432,6 +472,15 @@ class NewOrderForm extends React.Component {
                                         value={this.state.brideLastName}
                             />
                         </Form.Group>
+                        {VitalRecordForm()}
+                    </Grid.Column>
+                </Grid.Row>
+            </Grid>
+        )
+        const VitalRecordForm = () => (
+            <Grid>
+                <Grid.Row>
+                    <Grid.Column>
                         <Form.Group>
                             <Form.Input label="Month"
                                         name="month"
@@ -480,6 +529,7 @@ class NewOrderForm extends React.Component {
                                     onChange={this.handleChange}
                                     value={this.state.comment}
                         />
+
                     </Grid.Column>
                 </Grid.Row>
             </Grid>
@@ -499,6 +549,137 @@ class NewOrderForm extends React.Component {
                     </Grid.Column>
                 </Grid.Row>
             </Grid>
+        )
+
+        const DeathSearchForm = () => (
+            <Grid>
+                <Grid.Row>
+                    <Grid.Column>
+                        <Form.Group>
+                            <Form.Input label="First Name"
+                                        name="firstName"
+                                        placeholder="First Name"
+                                        onChange={this.handleChange}
+                                        value={this.state.firstName}
+                            />
+                            <Form.Input label="Middle Name"
+                                        name="middleName"
+                                        placeholder="Middle Name"
+                                        onChange={this.handleChange}
+                                        value={this.state.middleName}
+                            />
+                            <Form.Input label="Last Name"
+                                        name="lastName"
+                                        placeholder="Last Name"
+                                        onChange={this.handleChange}
+                                        value={this.state.lastName}
+                            />
+                        </Form.Group>
+                        <Form.Input label="Cemetery"
+                                    name="cemetery"
+                                    placeholder="Cemetery"
+                                    onChange={this.handleChange}
+                                    value={this.state.cemetery}
+                        />
+                        <Form.Input label="Death Place"
+                                    name="deathPlace"
+                                    placeholder="Death Place"
+                                    onChange={this.handleChange}
+                                    value={this.state.deathPlace}
+                        />
+                        {VitalRecordForm()}
+                    </Grid.Column>
+                </Grid.Row>
+            </Grid>
+        )
+
+        const DeathCertForm = () => (
+            <Grid>
+                <Grid.Row>
+                    <Grid.Column>
+                        <Form.Input label="Certificate Number"
+                                    name="certificateNum"
+                                    placeholder="Certificate Number"
+                                    onChange={this.handleChange}
+                                    value={this.state.certificateNum}
+                        />
+                        {DeathSearchForm()}
+                    </Grid.Column>
+                </Grid.Row>
+            </Grid>
+        )
+        const BirthSearchForm = () => (
+            <Gird>
+                <Grid.Row>
+                    <Grid.Column>
+                        <Form.Group>
+                            <Form.Input label="First Name"
+                                        name="firstName"
+                                        placeholder="First Name"
+                                        onChange={this.handleChange}
+                                        value={this.state.firstName}
+                            />
+                            <Form.Input label="Middle Name"
+                                        name="middleName"
+                                        placeholder="Middle Name"
+                                        onChange={this.handleChange}
+                                        value={this.state.middleName}
+                            />
+                            <Form.Input label="Last Name"
+                                        name="lastName"
+                                        placeholder="Last Name"
+                                        onChange={this.handleChange}
+                                        value={this.state.lastName}
+                            />
+                        </Form.Group>
+                        <Form.Input label="Birth Place"
+                                    name="birthPlace"
+                                    placeholder="BirthPlace"
+                                    onChange={this.handleChange}
+                                    value={this.state.birthPlace}
+                        />
+                        <Form.Input label="Gender"
+                                    name="gender"
+                                    placeholder="Gender"
+                                    options={genderOptions}
+                                    onChange={this.handleChange}
+                                    value={this.state.value}
+                        />
+                        <Form.Input label="Mother Name"
+                                    name="motherName"
+                                    placeholder="Mother Name"
+                                    onChange={this.handleChange}
+                                    value={this.state.motherName}
+                        />
+                        <Form.Input label="Father Name"
+                                    name="fatherName"
+                                    placeholder="Father Name"
+                                    onChange={this.handleChange}
+                                    value={this.state.fatherName}
+                        />
+                        {VitalRecordForm()}
+                    </Grid.Column>
+                </Grid.Row>
+            </Gird>
+
+
+        )
+        const BirthCertForm = () => (
+            <Grid>
+                <Grid.Row>
+                    <Grid.Column>
+                        <Form.Input label="Certificate Number"
+                                    name="certificateNum"
+                                    placeholder="Certificiate Number"
+                                    onChange={this.handleChange}
+                                    value={this.state.certificateNum}
+                        />
+                        {BirthSearchForm()}
+                    </Grid.Column>
+                </Grid.Row>
+            </Grid>
+
+
         )
         const PhotoGalleryForm = () => (
             <Grid>
@@ -694,8 +875,18 @@ class NewOrderForm extends React.Component {
                                                      (this.orderList.indexOf(value) == 4) ?
                                                          this.setState({showMarriageCert: true}) :
                                                          this.setState({showMarriageCert: false});
-
-
+                                                     (this.orderList.indexOf(value) == 5) ?
+                                                         this.setState({showDeathSearch: true}) :
+                                                         this.setState({showDeathSearch: false});
+                                                     (this.orderList.indexOf(value) == 6) ?
+                                                         this.setState({showDeathCert: true}) :
+                                                         this.setState({showDeathCert: false});
+                                                     (this.orderList.indexOf(value) == 7) ?
+                                                         this.setState({showBirthSearch: true}) :
+                                                         this.setState({showBirthSearch: false});
+                                                     (this.orderList.indexOf(value) == 8) ?
+                                                         this.setState({showBirthCert: true}) :
+                                                         this.setState({showBirthCert: false});
                                                  }}
                                                  value={this.state.value}
                                     />
@@ -705,6 +896,10 @@ class NewOrderForm extends React.Component {
                                     {this.state.showPropertyForm && PropertyCardForm()}
                                     {this.state.showMarriageSearch && MarriageSearchForm()}
                                     {this.state.showMarriageCert && MarriageCertForm()}
+                                    {this.state.showDeathSearch && DeathSearchForm()}
+                                    {this.state.showDeathCert && DeathCertForm()}
+                                    {this.state.showBirthSearch && BirthSearchForm()}
+                                    {this.state.showBirthCert && BirthCertForm()}
 
 
                                     <Form.Input label="Number of Copies"
