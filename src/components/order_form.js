@@ -247,27 +247,34 @@ class OrderForm extends React.Component {
 
 
                     { /*Testing out ideas...*/}
-                    <Menu secondary pointing>
-                        <Menu.Item position = 'right'
-                            name = 'Date Received'
-                            active={activeItem === 'Date Received'}
+
+                    <Menu pointing attached='top' borderless>
+                        <Menu.Item position='left'
+                            name='Date Received'
+                            active={activeItem==='Date Received'}
                             onClick={this.handleItemClick}
                         />
 
-                        <Menu.Item position = 'left'
-                            name = "Date Submitted"
+                        <Menu.Item position='right'
+                            name="Date Submitted"
                             active={activeItem === 'Date Submitted'}
                             onClick={this.handleItemClick}
                         />
                     </Menu>
-                    <Segment>
+                    <Segment attached="bottom">
                         <Form.Group>
                             <Form.Field width="16">
                                 <Date
-                                    label="start"
+                                    label="Start"
                                     name="start"
                                     maxDate={this.today}
-                                    ref={(date) => this.dateReceivedEnd = date}
+                                    ref={
+                                        (date) => {
+                                            if(activeItem==='Date Submitted'){
+                                                return this.dateSubmittedStart= date}
+                                            else{
+                                                return this.dateReceivedStart= date
+                                            }}}
                                 />
                             </Form.Field>
                         </Form.Group>
@@ -277,7 +284,13 @@ class OrderForm extends React.Component {
                                     label="End"
                                     name="End"
                                     maxDate={this.today}
-                                    ref={(date) => this.dateReceivedEnd = date}
+                                    ref={
+                                        (date) =>{
+                                            if(activeItem === 'Date Submitted'){
+                                                return this.dateSubmittedEnd= date}
+                                            else{
+                                                return this.dateReceivedEnd= date
+                                            }}}
                                 />
                             </Form.Field>
                         </Form.Group>
