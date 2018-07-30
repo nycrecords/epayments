@@ -194,7 +194,7 @@ class OrderForm extends React.Component {
                 <Form onSubmit={this.submitFormData}>
                     {/*This component defines the form fields required for the search form:
 
-                         The Order Number, Suborder Number, Order Type, Billing Name, Date Received Start and End.
+                         The Order Number, Suborder Number, Order Type, Billing Name, Date Received/Submitted Start and End.
                          Order Number, Suborder Number, and Billing Name are input fields.
                          Order Type is a dropdown listing the types of orders requested
                          Date Received Start and End are input fields that call the React Datepicker component
