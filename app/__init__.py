@@ -17,7 +17,7 @@ login_manager = LoginManager()
 
 PYTZ_TIMEZONE = pytz.timezone(Config.TIME_ZONE)
 
-#ElasticSearch Extension
+# ElasticSearch Extension
 es = Elasticsearch()
 
 

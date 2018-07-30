@@ -265,7 +265,7 @@ class OrderForm extends React.Component {
                                     maxDate={this.today}
                                     ref={
                                         (date) => {
-                                            if(activeItem==='Date Submitted'){
+                                            if(activeItem ==='Date Submitted'){
                                                 return this.dateSubmittedStart= date}
                                             else{
                                                 return this.dateReceivedStart= date

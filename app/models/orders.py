@@ -134,7 +134,7 @@ class Suborders(db.Model):
         }
 
 
-    #Elastic Search
+    # Elasticsearch
     def es_create(self):
         """Creates Elastic Search doc"""
         es.create(
@@ -160,7 +160,7 @@ class Suborders(db.Model):
             doc_type=current_app.config["ELASTICSEARCH_INDEX"],
             id=self.id,
             body={
-                'doc':{
+                'doc': {
                     'order_number': self.order_number,
                     'suborder_number': self.id,
                     'date_submitted': self.order.date_submitted.strftime("%x %I:%M %p"),

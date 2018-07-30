@@ -137,7 +137,8 @@ def search_queries(order_number,
                    date_received_end,
                    date_submitted_start,
                    date_submitted_end,
-                   start, size):
+                   start,
+                   size):
     """Arguments will match search parameters
         :param order_number: search by order number
         :param suborder_number: search by suborder number

@@ -24,7 +24,6 @@ from app.models import (
     Events
 )
 from app.search import search_queries
-from collections import Counter
 
 
 @api.route('/', methods=['GET'])
@@ -73,9 +72,11 @@ def get_orders():
                                 date_received_start,
                                 date_received_end,
                                 date_submitted_start,
-                                date_submitted_end, 0, 100)
+                                date_submitted_end,
+                                0,
+                                100)
 
-        #formatting results
+        # formatting results
         formatted_orders = []
         suborder_total = len(orders['hits']['hits'])
         order_total_list = [orders['hits']['hits'][i]['_source']['order_number'] for i in range(suborder_total)]
