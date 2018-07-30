@@ -82,7 +82,7 @@ class NewOrderForm extends React.Component {
             day: '',
             year: '',
             marriagePlace: '',
-            letter: '',
+            letter: false,
 
 
             block: '',
@@ -91,13 +91,13 @@ class NewOrderForm extends React.Component {
             borough: '',
             buildingNum: '',
             street: '',
-            mail: '',
+            mail: false,
             contactNum: '',
 
             imgId: '',
             imgTitle: '',
             comment: '',
-            personalUseAgreement: '',
+            personalUseAgreement: false,
             addDescription: '',
             collection: '',
             printSize: '',
@@ -151,7 +151,7 @@ class NewOrderForm extends React.Component {
                 day: '',
                 year: '',
                 marriagePlace: '',
-                letter: '',
+                letter: false,
 
                 block: '',
                 lot: '',
@@ -159,12 +159,12 @@ class NewOrderForm extends React.Component {
                 borough: '',
                 buildingNum: '',
                 street: '',
-                mail: '',
+                mail: false,
                 contactNum: '',
                 imgId: '',
                 imgTitle: '',
                 comment: '',
-                personalUseAgreement: '',
+                personalUseAgreement: false,
                 addDescription: '',
                 collection: '',
                 printSize: '',
@@ -355,11 +355,14 @@ class NewOrderForm extends React.Component {
                                     onChange={this.handleChange}
                                     value={this.state.street}
                         />
-                        <Form.Input label="Mail"
-                                    name="mail"
-                                    placeholder="Mail"
-                                    onChange={this.handleChange}
-                                    value={this.state.mail}
+                        <Form.Checkbox label="Mail"
+                                       name="mail"
+                                       onChange={() => {
+                                           (this.state.mail == false) ?
+                                               this.setState({mail: true}) :
+                                               this.setState({mail: false});
+                                       }}
+                                       value={this.state.mail}
                         />
                         <Form.Input label="description"
                                     name="addDescription"
@@ -412,11 +415,14 @@ class NewOrderForm extends React.Component {
                                     onChange={this.handleChange}
                                     value={this.state.street}
                         />
-                        <Form.Input label="Mail"
-                                    name="mail"
-                                    placeholder="Mail"
-                                    onChange={this.handleChange}
-                                    value={this.state.mail}
+                        <Form.Checkbox label="Mail"
+                                       name="mail"
+                                       onChange={() => {
+                                           (this.state.mail == false) ?
+                                               this.setState({mail: true}) :
+                                               this.setState({mail: false});
+                                       }}
+                                       value={this.state.mail}
                         />
                         <Form.Input label="description"
                                     name="addDescription"
@@ -519,11 +525,15 @@ class NewOrderForm extends React.Component {
                                     onChange={this.handleChange}
                                     value={this.state.marriagePlace}
                         />
-                        <Form.Input label="Letter"
-                                    name="letter"
-                                    placeholder="Letter"
-                                    onChange={this.handleChange}
-                                    value={this.state.letter}
+                        <Form.Checkbox label="Letter"
+                                       name="letter"
+                                       onChange={() => {
+                                           (this.state.letter == false) ?
+                                               this.setState({letter: true}) :
+                                               this.setState({letter: false});
+                                       }}
+                            // checked={this.state.letter === true}
+                                       value={this.state.letter}
                         />
                         <Form.Input label="Comment"
                                     name="comment"
@@ -641,14 +651,14 @@ class NewOrderForm extends React.Component {
                                     value={this.state.birthPlace}
                         />
                         <Form.Select label="Gender"
-                                    name="gender"
-                                    placeholder="Gender"
-                                    options={genderOptions}
-                                    onChange={(e, {value}) => {
-                                                     this.setState({gender: value});
+                                     name="gender"
+                                     placeholder="Gender"
+                                     options={genderOptions}
+                                     onChange={(e, {value}) => {
+                                         this.setState({gender: value});
 
-                                                 }}
-                                    value={this.state.value}
+                                     }}
+                                     value={this.state.value}
                         />
                         <Form.Input label="Mother Name"
                                     name="motherName"
@@ -710,17 +720,29 @@ class NewOrderForm extends React.Component {
                                     onChange={this.handleChange}
                                     value={this.state.addDescription}
                         />
-                        <Form.Input label="Mail"
-                                    name="mail"
-                                    placeholder="Mail"
-                                    onChange={this.handleChange}
-                                    value={this.state.mail}
+                        <Form.Checkbox label="Mail"
+                                       name="mail"
+                                       onChange={() => {
+                                           (this.state.mail == false) ?
+                                               this.setState({mail: true}) :
+                                               this.setState({mail: false});
+                                       }}
+                                       value={this.state.mail}
                         />
                         <Form.Input label="Contact Number"
                                     name="contactNum"
                                     placeholder="Contact Number"
                                     onChange={this.handleChange}
                                     value={this.state.contactNum}
+                        />
+                        <Form.Checkbox label="Personal Use Agreement"
+                                       name="personalUseAgreement"
+                                       onChange={() => {
+                                           (this.state.personalUseAgreement == false) ?
+                                               this.setState({personalUseAgreement: true}) :
+                                               this.setState({personalUseAgreement: false});
+                                       }}
+                                       value={this.state.personalUseAgreement}
                         />
                         <Form.Input label="Comment"
                                     name="comment"
@@ -857,7 +879,7 @@ class NewOrderForm extends React.Component {
                                                 value={this.state.instructions}
                                     />
                                     <Form.Select label="Order Type"
-                                                 required
+                                                 required={}
                                                  name="orderType"
                                                  placeholder="Order Type"
                                                  options={orderTypeOptions}

@@ -178,6 +178,7 @@ def new_order():
         street = json.get("street")
         years = json.get("year")
         zip_code = json.get("zipCode")
+        print(letter)
 
         print(status)
         print(gender)
