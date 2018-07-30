@@ -62,7 +62,6 @@ def create_index():
                         },
                         "order_type": {
                             "type": 'keyword',
-                            "similarity":'boolean'
                         },
                         "current_status": {
                             "type": 'keyword'

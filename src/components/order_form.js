@@ -246,7 +246,7 @@ class OrderForm extends React.Component {
                     <Menu pointing attached='top' borderless>
                         <Menu.Item position='left'
                             name='Date Received'
-                            active={activeItem==='Date Received'}
+                            active={activeItem ==='Date Received'}
                             onClick={this.handleItemClick}
                         />
 
