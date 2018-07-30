@@ -6,7 +6,7 @@ import {
 
 import {Button, Container, Divider, Grid, Header, Form, Loader, Dimmer} from 'semantic-ui-react';
 import moment from 'moment';
-import {csrfFetch, handleFetchErrors} from "../utils/fetch"
+import {csrfFetch, handleFetchErrors} from "../utils/fetch";
 
 const boroughOptions = [
     {key: 'bronx', text: 'Bronx', value: 'Bronx'},
@@ -104,6 +104,8 @@ class NewOrderForm extends React.Component {
             numCopies: '',
             status: '',
 
+            showBirthCert: false,
+            showBirthSearch: false,
             showDeathCert: false,
             showDeathSearch: false,
             showMarriageCert: false,
@@ -609,7 +611,7 @@ class NewOrderForm extends React.Component {
             </Grid>
         )
         const BirthSearchForm = () => (
-            <Gird>
+            <Grid>
                 <Grid.Row>
                     <Grid.Column>
                         <Form.Group>
@@ -638,11 +640,14 @@ class NewOrderForm extends React.Component {
                                     onChange={this.handleChange}
                                     value={this.state.birthPlace}
                         />
-                        <Form.Input label="Gender"
+                        <Form.Select label="Gender"
                                     name="gender"
                                     placeholder="Gender"
                                     options={genderOptions}
-                                    onChange={this.handleChange}
+                                    onChange={(e, {value}) => {
+                                                     this.setState({gender: value});
+
+                                                 }}
                                     value={this.state.value}
                         />
                         <Form.Input label="Mother Name"
@@ -660,7 +665,7 @@ class NewOrderForm extends React.Component {
                         {VitalRecordForm()}
                     </Grid.Column>
                 </Grid.Row>
-            </Gird>
+            </Grid>
 
 
         )
@@ -729,27 +734,27 @@ class NewOrderForm extends React.Component {
                             <Form.Radio
                                 name={"printSize"}
                                 label='8" x 10" Print'
-                                checked={this.state.printSize === '8" x 10" Print'}
+                                checked={this.state.printSize === '8x10'}
                                 onChange={(e, {}) => {
-                                    this.setState({printSize: '8" x 10" Print'})
+                                    this.setState({printSize: '8x10'})
                                 }}
                             />
 
                             <Form.Radio
                                 name={"printSize"}
                                 label='11" x 14" Print'
-                                checked={this.state.printSize === '11" x 14" Print'}
+                                checked={this.state.printSize === '11x14'}
                                 onChange={(e, {}) => {
-                                    this.setState({printSize: '11" x 14" Print'})
+                                    this.setState({printSize: '11x14'})
                                 }}
                             />
 
                             <Form.Radio
                                 name={"printSize"}
                                 label='16" x 20" Print'
-                                checked={this.state.printSize === '16" x 20" Print'}
+                                checked={this.state.printSize === '16x20'}
                                 onChange={(e, {}) => {
-                                    this.setState({printSize: '16" x 20" Print'})
+                                    this.setState({printSize: '16x20'})
                                 }}
                             />
 
@@ -797,7 +802,6 @@ class NewOrderForm extends React.Component {
                                                 placeholder="Email"
                                                 maxLength="64"
                                                 onChange={this.handleChange}
-                                                value={this.state.email}
                                     />
                                     <Form.Input label="Address line 1"
                                                 name="addressLine1"
@@ -853,6 +857,7 @@ class NewOrderForm extends React.Component {
                                                 value={this.state.instructions}
                                     />
                                     <Form.Select label="Order Type"
+                                                 required
                                                  name="orderType"
                                                  placeholder="Order Type"
                                                  options={orderTypeOptions}
@@ -915,6 +920,7 @@ class NewOrderForm extends React.Component {
                                     />
 
                                     <Form.Select label="Status"
+                                                 required
                                                  name="status"
                                                  placeholder="Status"
                                                  options={statusOptions}
