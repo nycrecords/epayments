@@ -514,7 +514,7 @@ class NewOrderForm extends React.Component {
                                         value={this.state.brideFirstName}
                             />
                             <Form.Input label="Bride Last Name"
-                                        name="BrideLastName"
+                                        name="brideLastName"
                                         placeholder="Bride Last Name"
                                         onChange={this.handleChange}
                                         value={this.state.brideLastName}
