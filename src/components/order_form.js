@@ -80,8 +80,8 @@ class OrderForm extends React.Component {
             subordernumber: '',
             order_type: '',
             status: 'all',
-            billing_name: ''
-
+            billing_name: '',
+            activeItem: 'Date Received'
         };
 
         this.photosValueList = ['photos', 'Tax Photo', 'Photo Gallery'];
@@ -185,13 +185,10 @@ class OrderForm extends React.Component {
         };
     }
 
-    //Ideas foo
-    state = { activeItem: 'Date Received' }
-
-    handleItemClick = (e, { name }) => this.setState({ activeItem: name })
+    handleItemClick = (e, { name }) => this.setState({ activeItem: name });
 
     render() {
-        const {activeItem} = this.state
+        const {activeItem} = this.state;
         return (
             <Container>
                 <Form onSubmit={this.submitFormData}>
@@ -246,8 +243,6 @@ class OrderForm extends React.Component {
                     />
 
 
-                    { /*Testing out ideas...*/}
-
                     <Menu pointing attached='top' borderless>
                         <Menu.Item position='left'
                             name='Date Received'
@@ -266,7 +261,7 @@ class OrderForm extends React.Component {
                             <Form.Field width="16">
                                 <Date
                                     label="Start"
-                                    name="start"
+                                    name="Start"
                                     maxDate={this.today}
                                     ref={
                                         (date) => {
@@ -295,48 +290,6 @@ class OrderForm extends React.Component {
                             </Form.Field>
                         </Form.Group>
                     </Segment>
-                    {/*<Form.Group>
-                        <Form.Field width="16">
-                            <Date
-                                label="Date Received - Start"
-                                name="Date Received - Start"
-                                date={this.today}
-                                maxDate={this.today}
-                                ref={(date) => this.dateReceivedStart = date}
-                            />
-
-                        </Form.Field>
-                    </Form.Group>
-                    <Form.Group>
-                        <Form.Field width="16">
-                            <Date
-                                label="Date Received - End"
-                                name="Date Received - End"
-                                maxDate={this.today}
-                                ref={(date) => this.dateReceivedEnd = date}
-                            />
-                        </Form.Field>
-                    </Form.Group>
-                    <Form.Group>
-                        <Form.Field width="16">
-                            <Date
-                                label="Date Submitted - Start"
-                                name="Date Submitted Start"
-                                maxDate={this.today}
-                                ref={(date) => this.dateSubmittedStart = date}
-                            />
-                        </Form.Field>
-                    </Form.Group>
-                    <Form.Group>
-                        <Form.Field width="16">
-                            <Date
-                                label="Date Submitted - End"
-                                name="Date Submitted - End"
-                                maxDate={this.today}
-                                ref={(date) => this.dateSubmittedEnd = date}
-                            />
-                        </Form.Field>
-                    </Form.Group>*/}
                     <Button type="reset" onClick={this.clearSelection} content="Clear"/>
                     <Button type='submit' positive floated="right" content="Apply"/>
                 </Form>
