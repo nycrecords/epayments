@@ -77,18 +77,13 @@ def get_orders():
                                 100)
 
         # formatting results
-        formatted_orders = []
         suborder_total = len(orders['hits']['hits'])
         order_total_list = [orders['hits']['hits'][i]['_source']['order_number'] for i in range(suborder_total)]
         order_total = len(set(order_total_list))
 
-        if order_total != 0:
-            for i in range(suborder_total):
-                formatted_orders.append(orders['hits']['hits'][i]['_source'])
-
         return jsonify(order_count=order_total,
                        suborder_count=suborder_total,
-                       all_orders=formatted_orders), 200
+                       all_orders=orders['hits']['hits']), 200
 
     else:
         orders = []

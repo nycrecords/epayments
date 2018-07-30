@@ -121,13 +121,13 @@ class Home extends React.Component {
     render() {
         const orderRows = this.state.all_orders.map((order) =>
             <Order
-                key={order.suborder_number}
-                order_number={order.order_number}
-                suborder_number={order.suborder_number}
-                order_type={order.order_type}
-                billing_name={order.billing_name}
-                date_received={order.date_received.slice(0, -9)}
-                current_status={order.current_status}
+                key={order._source.suborder_number}
+                order_number={order._source.order_number}
+                suborder_number={order._source.suborder_number}
+                order_type={order._source.order_type}
+                billing_name={order._source.billing_name}
+                date_received={order._source.date_received.slice(0, -9)}
+                current_status={order._source.current_status}
                 updateStatus={this.updateStatus}
             />
         );
