@@ -178,10 +178,6 @@ def new_order():
         street = json.get("street")
         years = json.get("year")
         zip_code = json.get("zipCode")
-        print(letter)
-
-        print(status)
-        print(gender)
 
         year = datetime.datetime.now().strftime("%Y")
         today = datetime.datetime.today().strftime("%m/%d/%y")
@@ -195,7 +191,6 @@ def new_order():
                             order_types=order_type,
                             multiple_items=True)
         create_object(main_order)
-        #
         customer = Customers(billing_name=billing_name,
                              email=email,
                              shipping_name=billing_name,
@@ -209,7 +204,6 @@ def new_order():
                              order_number=main_order.id,
                              )
         create_object(customer)
-        #
         sub_order_number = Orders.query.filter_by(id=main_order.id).one().next_suborder_number
         sub_order_id = main_order.id + "-" + str(sub_order_number)
         sub_order = Suborders(id=sub_order_id,
@@ -289,20 +283,20 @@ def new_order():
                                         suborder_number=sub_order.id)
             create_object(dc_order)
         elif order_type == MARRIAGE_SEARCH:
-            marriages_order = MarriageSearch(groom_last_name=groom_last_name,
-                                             groom_first_name=groom_first_name,
-                                             bride_last_name=bride_last_name,
-                                             bride_first_name=bride_first_name,
-                                             num_copies=num_copies,
-                                             month=month,
-                                             day=day,
-                                             years=years,
-                                             marriage_place=marriage_place,
-                                             borough=borough,
-                                             letter=letter,
-                                             comment=comment,
-                                             suborder_number=sub_order.id)
-            create_object(marriages_order)
+            ms_order = MarriageSearch(groom_last_name=groom_last_name,
+                                      groom_first_name=groom_first_name,
+                                      bride_last_name=bride_last_name,
+                                      bride_first_name=bride_first_name,
+                                      num_copies=num_copies,
+                                      month=month,
+                                      day=day,
+                                      years=years,
+                                      marriage_place=marriage_place,
+                                      borough=borough,
+                                      letter=letter,
+                                      comment=comment,
+                                      suborder_number=sub_order.id)
+            create_object(ms_order)
         elif order_type == MARRIAGE_CERT:
             mc_order = MarriageCertificate(certificate_number=certificate_num,
                                            groom_last_name=groom_last_name,
@@ -316,6 +310,7 @@ def new_order():
                                            marriage_place=marriage_place,
                                            borough=borough,
                                            letter=letter,
+                                           comment=comment,
                                            suborder_number=sub_order.id)
             create_object(mc_order)
         elif order_type == BIRTH_SEARCH:
@@ -353,8 +348,6 @@ def new_order():
                                         comment=comment,
                                         suborder_number=sub_order.id)
             create_object(bc_order)
-
-    print(order_type)
 
     return jsonify(), 200
 

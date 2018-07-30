@@ -80,7 +80,7 @@ class NewOrderForm extends React.Component {
             brideFirstName: '',
             month: '',
             day: '',
-            year: '',
+            year: ' ',
             marriagePlace: '',
             letter: false,
 
@@ -88,7 +88,7 @@ class NewOrderForm extends React.Component {
             block: '',
             lot: '',
             row: '',
-            borough: '',
+            borough: ' ',
             buildingNum: '',
             street: '',
             mail: false,
@@ -101,7 +101,7 @@ class NewOrderForm extends React.Component {
             addDescription: '',
             collection: '',
             printSize: '',
-            numCopies: '',
+            numCopies: ' ',
             status: '',
 
             showBirthCert: false,
@@ -149,14 +149,14 @@ class NewOrderForm extends React.Component {
                 brideFirstName: '',
                 month: '',
                 day: '',
-                year: '',
+                year: ' ',
                 marriagePlace: '',
                 letter: false,
 
                 block: '',
                 lot: '',
                 roll: '',
-                borough: '',
+                borough: ' ',
                 buildingNum: '',
                 street: '',
                 mail: false,
@@ -168,7 +168,7 @@ class NewOrderForm extends React.Component {
                 addDescription: '',
                 collection: '',
                 printSize: '',
-                numCopies: '',
+                numCopies: ' ',
                 status: ''
             });
         };
@@ -194,6 +194,39 @@ class NewOrderForm extends React.Component {
     handleSubmit = (e, value) => {
         e.preventDefault();
         this.setState({loading: true});
+        if (this.state.orderType == '' && this.state.status == '') {
+            alert("Please fill in Order Type and Status")
+            this.setState({loading: false});
+            return
+
+        } else if (this.state.orderType == '') {
+            alert("Please fill in Order Type")
+            this.setState({loading: false});
+            return
+        } else if (this.state.status == '') {
+            alert("Please fill in Status")
+            this.setState({loading: false});
+            return
+        }
+        if (this.state.orderType != '') {
+            if ((this.state.showBirthSearch == true || this.state.showBirthCert == true) && this.state.gender == '') {
+                alert("Please fill in the Gender")
+                this.setState({loading: false});
+                return
+
+            }
+            else if (this.state.showPropertyForm == true && this.state.borough == " ") {
+                alert("Please fill in the Borough")
+                this.setState({loading: false});
+                return
+            }
+            else if (this.state.showPhotoGalleryForm == true && this.state.printSize == "") {
+                alert("Please fill in the Printing Size")
+                this.setState({loading: false});
+                return
+            }
+        }
+
         csrfFetch('api/v1.0/orders/new', {
             method: "POST",
             body: JSON.stringify({
@@ -340,7 +373,10 @@ class NewOrderForm extends React.Component {
                                      name="borough"
                                      options={boroughOptions}
                                      placeholder="Borough"
-                                     onChange={this.handleChange}
+                                     onChange={(e, {value}) => {
+                                         this.setState({borough: value});
+
+                                     }}
                                      value={this.state.value}
                         />
                         <Form.Input label="Building Number"
@@ -397,10 +433,14 @@ class NewOrderForm extends React.Component {
                                     value={this.state.lot}
                         />
                         <Form.Select label="Borough"
+                                     required
                                      name="borough"
                                      options={boroughOptions}
                                      placeholder="Borough"
-                                     onChange={this.handleChange}
+                                     onChange={(e, {value}) => {
+                                         this.setState({borough: value});
+
+                                     }}
                                      value={this.state.value}
                         />
                         <Form.Input label="Building Number"
@@ -480,6 +520,12 @@ class NewOrderForm extends React.Component {
                                         value={this.state.brideLastName}
                             />
                         </Form.Group>
+                        <Form.Input label="Marriage Place"
+                                    name="marriagePlace"
+                                    placeholder="Marriage Place"
+                                    onChange={this.handleChange}
+                                    value={this.state.marriagePlace}
+                        />
                         {VitalRecordForm()}
                     </Grid.Column>
                 </Grid.Row>
@@ -516,14 +562,11 @@ class NewOrderForm extends React.Component {
                                      name="borough"
                                      options={boroughOptions}
                                      placeholder="Borough"
-                                     onChange={this.handleChange}
+                                     onChange={(e, {value}) => {
+                                         this.setState({borough: value});
+
+                                     }}
                                      value={this.state.value}
-                        />
-                        <Form.Input label="Marriage Place"
-                                    name="marriagePlace"
-                                    placeholder="Marriage Place"
-                                    onChange={this.handleChange}
-                                    value={this.state.marriagePlace}
                         />
                         <Form.Checkbox label="Letter"
                                        name="letter"
@@ -651,6 +694,7 @@ class NewOrderForm extends React.Component {
                                     value={this.state.birthPlace}
                         />
                         <Form.Select label="Gender"
+                                     required
                                      name="gender"
                                      placeholder="Gender"
                                      options={genderOptions}
@@ -750,7 +794,7 @@ class NewOrderForm extends React.Component {
                                     onChange={this.handleChange}
                                     value={this.state.comment}
                         />
-                        <Form.Group inline>
+                        <Form.Group inline required>
                             <label>Printing Size</label>
 
                             <Form.Radio
@@ -813,6 +857,7 @@ class NewOrderForm extends React.Component {
                             <Grid.Column width={6}>
                                 <Form onSubmit={this.handleSubmit}>
                                     <Form.Input label="Billing Name"
+                                                required
                                                 name="billingName"
                                                 placeholder="Billing Name"
                                                 maxLength="64"
@@ -820,6 +865,7 @@ class NewOrderForm extends React.Component {
                                                 value={this.state.billingName}
                                     />
                                     <Form.Input label="Email"
+                                                required
                                                 name="email"
                                                 placeholder="Email"
                                                 maxLength="64"
@@ -878,8 +924,9 @@ class NewOrderForm extends React.Component {
                                                 onChange={this.handleChange}
                                                 value={this.state.instructions}
                                     />
+
                                     <Form.Select label="Order Type"
-                                                 required={}
+                                                 required
                                                  name="orderType"
                                                  placeholder="Order Type"
                                                  options={orderTypeOptions}
