@@ -127,17 +127,17 @@ def delete_doc(suborder_id):
               id=suborder_id)
 
 
-def search_queries(order_number,
-                   suborder_number,
-                   order_type,
-                   status,
-                   billing_name,
-                   date_received_start,
-                   date_received_end,
-                   date_submitted_start,
-                   date_submitted_end,
-                   start,
-                   size):
+def search_queries(order_number = '',
+                   suborder_number = '',
+                   order_type = '',
+                   status = '',
+                   billing_name = '',
+                   date_received_start = '',
+                   date_received_end = '',
+                   date_submitted_start = '',
+                   date_submitted_end = '',
+                   start = 0,
+                   size = 0):
     """Arguments will match search parameters
         :param order_number: search by order number
         :param suborder_number: search by suborder number
@@ -200,15 +200,9 @@ def search_queries(order_number,
     }
 
     dsl_gen = DSLGenerator(query_fields=query_field, date_range=date_range)
-    dsl = dsl_gen.search() if date_received_start or \
-                              billing_name or \
-                              date_received_end or \
-                              order_type or \
-                              suborder_number or \
-                              order_number or \
-                              status or \
-                              date_submitted_start or \
-                              date_submitted_end else dsl_gen.no_query()
+    dsl = dsl_gen.search() if any(query_field.values()) or any(date_range.values()) else dsl_gen.no_query()
+
+
 
     # Search query
     search_results = es.search(index=current_app.config["ELASTICSEARCH_INDEX"],

@@ -78,22 +78,22 @@ def get_orders():
 
         # formatting results
         suborder_total = len(orders['hits']['hits'])
-        order_total_list = [orders['hits']['hits'][i]['_source']['order_number'] for i in range(suborder_total)]
-        order_total = len(set(order_total_list))
+        order_list = [orders['hits']['hits'][i]['_source']['order_number'] for i in range(suborder_total)]
+        order_total = len(set(order_list))
 
         return jsonify(order_count=order_total,
                        suborder_count=suborder_total,
                        all_orders=orders['hits']['hits']), 200
 
     else:
-        orders = []
-        order_count = 0
-        for order in Orders.query.filter(Orders.date_received == date.today()):
-            order_count += 1
-            for suborder in order.suborder:
-                orders.append(suborder.serialize)
-        return jsonify(order_count=order_count, suborder_count=len(orders), all_orders=orders), 200
+        orders = search_queries(date_received_start = date.today().strftime('%m/%d/%Y'))
+        suborder_total = len(orders['hits']['hits'])
+        order_list = [orders['hits']['hits'][i]['_source']['order_number'] for i in range(suborder_total)]
+        order_total = len(set(order_list))
 
+        return jsonify(order_count=order_total,
+                       suborder_count=suborder_total,
+                       all_orders=orders['hits']['hits']), 200
 
 @api.route('/orders/<doc_type>', methods=['GET'])
 @login_required

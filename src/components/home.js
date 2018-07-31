@@ -152,7 +152,7 @@ class Home extends React.Component {
                         <Dimmer inverted active={this.state.loading}>
                             <Loader content='Loading'/>
                         </Dimmer>
-                        <Grid.Column width={11} id="grid-column-order">
+                        <Grid.Column width={11}>
                             <Header as="h1" dividing textAlign="center">Order</Header>
                             <div>
                                 <Button.Group size='medium' floated='right'>
@@ -172,7 +172,9 @@ class Home extends React.Component {
                             <div>
                                 <Divider clearing/>
                             </div>
-                            {orderRows}
+                            <div  id="grid-column-order">
+                                {orderRows}
+                            </div>
                         </Grid.Column>
                     </Grid>
                 ) : (
