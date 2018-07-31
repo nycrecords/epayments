@@ -127,17 +127,17 @@ def delete_doc(suborder_id):
               id=suborder_id)
 
 
-def search_queries(order_number = '',
-                   suborder_number = '',
-                   order_type = '',
-                   status = '',
-                   billing_name = '',
-                   date_received_start = '',
-                   date_received_end = '',
-                   date_submitted_start = '',
-                   date_submitted_end = '',
-                   start = 0,
-                   size = 0):
+def search_queries(order_number='',
+                   suborder_number='',
+                   order_type='',
+                   status='',
+                   billing_name='',
+                   date_received_start='',
+                   date_received_end='',
+                   date_submitted_start='',
+                   date_submitted_end='',
+                   start=0,
+                   size=0):
     """Arguments will match search parameters
         :param order_number: search by order number
         :param suborder_number: search by suborder number
