@@ -95,6 +95,7 @@ def get_orders():
                        suborder_count=suborder_total,
                        all_orders=orders['hits']['hits']), 200
 
+
 @api.route('/orders/<doc_type>', methods=['GET'])
 @login_required
 def orders_doc(doc_type):
