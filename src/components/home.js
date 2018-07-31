@@ -172,7 +172,7 @@ class Home extends React.Component {
                             <div>
                                 <Divider clearing/>
                             </div>
-                            <div  id="grid-column-order">
+                            <div id="grid-column-order">
                                 {orderRows}
                             </div>
                         </Grid.Column>
