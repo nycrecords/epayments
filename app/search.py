@@ -11,7 +11,7 @@ def recreate():
     es.indices.delete(current_app.config["ELASTICSEARCH_INDEX"],
                       ignore=[400, 404])
     create_index()
-    #create_docs()
+    create_docs()
 
 
 def create_index():
