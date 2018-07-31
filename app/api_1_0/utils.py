@@ -179,7 +179,7 @@ def update_tax_photo(suborder_number, block_no, lot_no, roll_no):
         db.session.add(event)
         db.session.commit()
         message = "Tax Photo Info Updated"
-        return message
+    return message
 
 
 def get_orders_by_fields(order_number, suborder_number, order_type, status, billing_name, user, date_received_start,

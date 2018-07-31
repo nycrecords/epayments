@@ -199,10 +199,12 @@ def search_queries(order_number='',
         'date_submitted_end': date_submitted_end
     }
 
+    dsl = None
     dsl_gen = DSLGenerator(query_fields=query_field, date_range=date_range)
-    dsl = dsl_gen.search() if any(query_field.values()) or any(date_range.values()) else dsl_gen.no_query()
-
-
+    if any(query_field.values()) or any(date_range.values()):
+        dsl = dsl_gen.search()
+    else:
+        dsl = dsl_gen.no_query()
 
     # Search query
     search_results = es.search(index=current_app.config["ELASTICSEARCH_INDEX"],

@@ -11,13 +11,13 @@ input, label {
 }
 
 #grid-column-order {
-    max-height: 55em;
+    max-height: 44em;
     overflow-y: auto;
     padding-right: .30em;
 }
 
 html, body {
-    padding-top: 1em;
+    padding-top: .5em;
     overflow: auto;
 }
 
