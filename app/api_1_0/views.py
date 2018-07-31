@@ -86,7 +86,7 @@ def get_orders():
                        all_orders=orders['hits']['hits']), 200
 
     else:
-        orders = search_queries(date_received_start = date.today().strftime('%m/%d/%Y'))
+        orders = search_queries(date_received_start=date.today().strftime('%m/%d/%Y'))
         suborder_total = len(orders['hits']['hits'])
         order_list = [orders['hits']['hits'][i]['_source']['order_number'] for i in range(suborder_total)]
         order_total = len(set(order_list))
