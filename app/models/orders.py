@@ -145,11 +145,11 @@ class Suborders(db.Model):
                 'order_number': self.order_number,
                 'suborder_number': self.id,
                 'date_submitted': self.order.date_submitted.strftime("%x %I:%M %p"),
-                'current_status': self.status,
-                'billing_name': self.order.customer.billing_name,
+                'date_received': self.order.date_received.strftime("%x %I:%M %p"),
+                'billing_name': self.order.customer.billing_name.title(),
                 'customer_email': self.order.customer.email,
                 'order_type': self.order_type,
-                'data_received': self.order.date_received.strftime('%x %I:%M %p')
+                'current_status': self.status
             }
         )
 

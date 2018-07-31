@@ -199,6 +199,7 @@ def import_file(file_name):
 
         db.session.add(suborder)
         db.session.commit()
+        suborder.es_create()
 
         # Insert into the StatusTracker Table
         insert_event = Events(suborder_number=suborder_number,
@@ -688,6 +689,7 @@ def import_file(file_name):
             db.session.add(customer_order)
             db.session.commit()
 
+
         # Tax Photo
         if client_id == '10000048':
             # Retrieve Collection Information (1940's, 1980's, Both)
@@ -894,4 +896,7 @@ def import_file(file_name):
 
             db.session.add(customer_order)
             db.session.commit()
+
+
+
     return True

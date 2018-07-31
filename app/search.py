@@ -11,7 +11,7 @@ def recreate():
     es.indices.delete(current_app.config["ELASTICSEARCH_INDEX"],
                       ignore=[400, 404])
     create_index()
-    create_docs()
+    #create_docs()
 
 
 def create_index():
@@ -108,7 +108,7 @@ def create_docs():
         index=current_app.config["ELASTICSEARCH_INDEX"],
         doc_type=current_app.config["ELASTICSEARCH_INDEX"],
         chunk_size=RESULTS_CHUNK_SIZE,
-        raise_on_error=False
+        raise_on_error=True
         )
     print("Successfully created %s docs." % num_success)
 
