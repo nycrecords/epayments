@@ -173,16 +173,16 @@ def search_queries(order_number=None,
 
     # Time formatting: from mm/dd/yyyy to mm/dd/yy hh:mm AM/PM
     if date_received_start:
-        date_received_start = datetime.strptime(date_received_start, '%m/%d/%Y').strftime('%x %I:%M %p')
+        date_received_start = datetime.strptime(date_received_start, '%m/%d/%Y').strftime(DATETIME_FORMAT)
 
     if date_received_end:
-        date_received_end = datetime.strptime(date_received_end, '%m/%d/%Y').strftime('%x %I:%M %p')
+        date_received_end = datetime.strptime(date_received_end, '%m/%d/%Y').strftime(DATETIME_FORMAT)
 
     if date_submitted_start:
-        date_submitted_start = datetime.strptime(date_submitted_start, '%m/%d/%Y').strftime('%x %I:%M %p')
+        date_submitted_start = datetime.strptime(date_submitted_start, '%m/%d/%Y').strftime(DATETIME_FORMAT)
 
     if date_submitted_end:
-        date_submitted_end = datetime.strptime(date_submitted_end, '%m/%d/%Y').strftime('%x %I:%M %p')
+        date_submitted_end = datetime.strptime(date_submitted_end, '%m/%d/%Y').strftime(DATETIME_FORMAT)
 
     query_field = {
         'billing_name': billing_name,

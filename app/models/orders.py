@@ -1,5 +1,6 @@
 from app import db, es
 from app.constants import order_types, status
+from app.constants.search import DATETIME_FORMAT
 from sqlalchemy.dialects.postgresql import ARRAY
 from flask import current_app
 
@@ -50,8 +51,8 @@ class Orders(db.Model):
         """Return object data in easily serializable format"""
         return {
             'order_number': self.id,
-            'date_submitted': self.date_submitted.strftime("%x %I:%M %p"),
-            'date_received': self.date_received.strftime("%x %I:%m %p"),
+            'date_submitted': self.date_submitted.strftime(DATETIME_FORMAT),
+            'date_received': self.date_received.strftime(DATETIME_FORMAT),
             'confirmation_message': self.confirmation_message,
             'client_data': self.client_data,
             'order_types': self.order_types,
@@ -125,8 +126,8 @@ class Suborders(db.Model):
         return {
             'order_number': self.order_number,
             'suborder_number': self.id,
-            'date_submitted': self.order.date_submitted.strftime("%x %I:%M %p"),
-            'date_received': self.order.date_received.strftime("%x %I:%M %p"),
+            'date_submitted': self.order.date_submitted.strftime(DATETIME_FORMAT),
+            'date_received': self.order.date_received.strftime(DATETIME_FORMAT),
             'billing_name': self.order.customer.billing_name,
             'customer_email': self.order.customer.email,
             'order_type': self.order_type,
@@ -144,8 +145,8 @@ class Suborders(db.Model):
             body={
                 'order_number': self.order_number,
                 'suborder_number': self.id,
-                'date_submitted': self.order.date_submitted.strftime("%x %I:%M %p"),
-                'date_received': self.order.date_received.strftime("%x %I:%M %p"),
+                'date_submitted': self.order.date_submitted.strftime(DATETIME_FORMAT),
+                'date_received': self.order.date_received.strftime(DATETIME_FORMAT),
                 'billing_name': self.order.customer.billing_name.title(),
                 'customer_email': self.order.customer.email,
                 'order_type': self.order_type,
@@ -163,12 +164,12 @@ class Suborders(db.Model):
                 'doc': {
                     'order_number': self.order_number,
                     'suborder_number': self.id,
-                    'date_submitted': self.order.date_submitted.strftime("%x %I:%M %p"),
+                    'date_submitted': self.order.date_submitted.strftime(DATETIME_FORMAT),
                     'current_status': self.status,
                     'billing_name': self.order.customer.billing_name.title(),
                     'customer_email': self.order.customer.email,
                     'order_type': self.order_type,
-                    'data_received': self.order.date_received.strftime('%x %I:%M %p')
+                    'data_received': self.order.date_received.strftime(DATETIME_FORMAT)
                 }
             }
         )
