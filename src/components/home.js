@@ -158,26 +158,26 @@ class Home extends React.Component {
                         <Dimmer inverted active={this.state.loading}>
                             <Loader content='Loading'/>
                         </Dimmer>
+
                         <Grid.Column width={11} className="no-padding" >
                             <Header as="h1" dividing textAlign="center">Order</Header>
-                            <div>
-                                <Button.Group size='medium' floated='right'>
-                                    <Button icon active={true}>
-                                        <Icon name='print'/>
-                                    </Button>
-                                    {this.state.showCSVButton &&
-                                    <Button content='Generate CSV' onClick={this.generateCSV}/>}
-                                    <Button content='Order Sheets' onClick={this.printOrderSheet}/>
-                                    <Button content='Big Labels' onClick={this.printBigLabels}/>
-                                    <Button content='Small Labels' onClick={this.printSmallLabels}/>
-                                </Button.Group>
-                                <strong>Number of Items: {this.state.suborder_count}</strong>
-                                <br/>
-                                <strong>Number of Orders: {this.state.order_count}</strong>
-                            </div>
-                            <div>
-                                <Divider clearing/>
-                            </div>
+
+                            <Button.Group size='medium' floated='right'>
+                                <Button icon active={true}>
+                                    <Icon name='print'/>
+                                </Button>
+                                {this.state.showCSVButton &&
+                                <Button content='Generate CSV' onClick={this.generateCSV}/>}
+                                <Button content='Order Sheets' onClick={this.printOrderSheet}/>
+                                <Button content='Big Labels' onClick={this.printBigLabels}/>
+                                <Button content='Small Labels' onClick={this.printSmallLabels}/>
+                            </Button.Group>
+                            <strong>Number of Items: {this.state.suborder_count}</strong>
+                            <br/>
+                            <strong>Number of Orders: {this.state.order_count}</strong>
+
+                            <Divider clearing/>
+
                             <div id="grid-column-order">
                                 {orderRows}
                             </div>
