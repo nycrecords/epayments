@@ -194,7 +194,9 @@ class NewOrderForm extends React.Component {
 
     handleSubmit = (e, value) => {
         e.preventDefault();
-        console.log(this.state.orderType);
+        console.log("this is ordertype1: " + this.state.orderType);
+        console.log("num copies : " + this.state.numCopies);
+        console.log("gender:" + this.state.gender);
         this.setState({loading: true});
         if (this.state.orderType == '' && this.state.status == '') {
             alert("Please fill in Order Type and Status")
@@ -297,12 +299,9 @@ class NewOrderForm extends React.Component {
 
     };
 
-    callBack=(dataFromChild) =>{
-        const target = dataFromChild.target;
-        const value = target.value;
-        const name = target.name;
+    callBack = (dataFromChild, value) => {
         this.setState({
-            [name]: value
+            [dataFromChild]: value
         });
 
     }
@@ -938,43 +937,43 @@ class NewOrderForm extends React.Component {
                                     />
 
                                     {/*<Form.Select label="Order Type"*/}
-                                                 {/*required*/}
-                                                 {/*name="orderType"*/}
-                                                 {/*placeholder="Order Type"*/}
-                                                 {/*options={orderTypeOptions}*/}
-                                                 {/*onChange={(e, {value}) => {*/}
-                                                     {/*this.setState({orderType: value});*/}
-                                                     {/*//toggles hidden forms for Tax Photo if selected*/}
-                                                     {/*(this.orderList.indexOf(value) == 0) ?*/}
-                                                         {/*this.setState({showTaxForm: true}) :*/}
-                                                         {/*this.setState({showTaxForm: false});*/}
-                                                     {/*//toggles hidden forms for Photo Gallery if selected*/}
-                                                     {/*(this.orderList.indexOf(value) == 1) ?*/}
-                                                         {/*this.setState({showPhotoGalleryForm: true}) :*/}
-                                                         {/*this.setState({showPhotoGalleryForm: false});*/}
-                                                     {/*(this.orderList.indexOf(value) == 2) ?*/}
-                                                         {/*this.setState({showPropertyForm: true}) :*/}
-                                                         {/*this.setState({showPropertyForm: false});*/}
-                                                     {/*(this.orderList.indexOf(value) == 3) ?*/}
-                                                         {/*this.setState({showMarriageSearch: true}) :*/}
-                                                         {/*this.setState({showMarriageSearch: false});*/}
-                                                     {/*(this.orderList.indexOf(value) == 4) ?*/}
-                                                         {/*this.setState({showMarriageCert: true}) :*/}
-                                                         {/*this.setState({showMarriageCert: false});*/}
-                                                     {/*(this.orderList.indexOf(value) == 5) ?*/}
-                                                         {/*this.setState({showDeathSearch: true}) :*/}
-                                                         {/*this.setState({showDeathSearch: false});*/}
-                                                     {/*(this.orderList.indexOf(value) == 6) ?*/}
-                                                         {/*this.setState({showDeathCert: true}) :*/}
-                                                         {/*this.setState({showDeathCert: false});*/}
-                                                     {/*(this.orderList.indexOf(value) == 7) ?*/}
-                                                         {/*this.setState({showBirthSearch: true}) :*/}
-                                                         {/*this.setState({showBirthSearch: false});*/}
-                                                     {/*(this.orderList.indexOf(value) == 8) ?*/}
-                                                         {/*this.setState({showBirthCert: true}) :*/}
-                                                         {/*this.setState({showBirthCert: false});*/}
-                                                 {/*}}*/}
-                                                 {/*value={this.state.value}*/}
+                                    {/*required*/}
+                                    {/*name="orderType"*/}
+                                    {/*placeholder="Order Type"*/}
+                                    {/*options={orderTypeOptions}*/}
+                                    {/*onChange={(e, {value}) => {*/}
+                                    {/*this.setState({orderType: value});*/}
+                                    {/*//toggles hidden forms for Tax Photo if selected*/}
+                                    {/*(this.orderList.indexOf(value) == 0) ?*/}
+                                    {/*this.setState({showTaxForm: true}) :*/}
+                                    {/*this.setState({showTaxForm: false});*/}
+                                    {/*//toggles hidden forms for Photo Gallery if selected*/}
+                                    {/*(this.orderList.indexOf(value) == 1) ?*/}
+                                    {/*this.setState({showPhotoGalleryForm: true}) :*/}
+                                    {/*this.setState({showPhotoGalleryForm: false});*/}
+                                    {/*(this.orderList.indexOf(value) == 2) ?*/}
+                                    {/*this.setState({showPropertyForm: true}) :*/}
+                                    {/*this.setState({showPropertyForm: false});*/}
+                                    {/*(this.orderList.indexOf(value) == 3) ?*/}
+                                    {/*this.setState({showMarriageSearch: true}) :*/}
+                                    {/*this.setState({showMarriageSearch: false});*/}
+                                    {/*(this.orderList.indexOf(value) == 4) ?*/}
+                                    {/*this.setState({showMarriageCert: true}) :*/}
+                                    {/*this.setState({showMarriageCert: false});*/}
+                                    {/*(this.orderList.indexOf(value) == 5) ?*/}
+                                    {/*this.setState({showDeathSearch: true}) :*/}
+                                    {/*this.setState({showDeathSearch: false});*/}
+                                    {/*(this.orderList.indexOf(value) == 6) ?*/}
+                                    {/*this.setState({showDeathCert: true}) :*/}
+                                    {/*this.setState({showDeathCert: false});*/}
+                                    {/*(this.orderList.indexOf(value) == 7) ?*/}
+                                    {/*this.setState({showBirthSearch: true}) :*/}
+                                    {/*this.setState({showBirthSearch: false});*/}
+                                    {/*(this.orderList.indexOf(value) == 8) ?*/}
+                                    {/*this.setState({showBirthCert: true}) :*/}
+                                    {/*this.setState({showBirthCert: false});*/}
+                                    {/*}}*/}
+                                    {/*value={this.state.value}*/}
                                     {/*/>*/}
 
                                     {/*{this.state.showTaxForm && TaxPhotoForm()}*/}
@@ -989,29 +988,29 @@ class NewOrderForm extends React.Component {
 
 
                                     {/*<Form.Input label="Number of Copies"*/}
-                                                {/*name="numCopies"*/}
-                                                {/*placeholder="Number of Copies"*/}
-                                                {/*maxLength="2"*/}
-                                                {/*onChange={(e, {value}) => {*/}
-                                                    {/*if (/^[0-9]+$/.test(value.slice(-1)) || value === '') {*/}
-                                                        {/*this.handleChange(e)*/}
-                                                    {/*}*/}
-                                                {/*}}*/}
-                                                {/*value={this.state.value}*/}
+                                    {/*name="numCopies"*/}
+                                    {/*placeholder="Number of Copies"*/}
+                                    {/*maxLength="2"*/}
+                                    {/*onChange={(e, {value}) => {*/}
+                                    {/*if (/^[0-9]+$/.test(value.slice(-1)) || value === '') {*/}
+                                    {/*this.handleChange(e)*/}
+                                    {/*}*/}
+                                    {/*}}*/}
+                                    {/*value={this.state.value}*/}
                                     {/*/>*/}
 
                                     {/*<Form.Select label="Status"*/}
-                                                 {/*required*/}
-                                                 {/*name="status"*/}
-                                                 {/*placeholder="Status"*/}
-                                                 {/*options={statusOptions}*/}
-                                                 {/*onChange={(e, {value}) => {*/}
-                                                     {/*this.setState({status: value});*/}
+                                    {/*required*/}
+                                    {/*name="status"*/}
+                                    {/*placeholder="Status"*/}
+                                    {/*options={statusOptions}*/}
+                                    {/*onChange={(e, {value}) => {*/}
+                                    {/*this.setState({status: value});*/}
 
-                                                 {/*}}*/}
-                                                 {/*value={this.state.value}*/}
+                                    {/*}}*/}
+                                    {/*value={this.state.value}*/}
                                     {/*/>*/}
-                                    <SubOrderForm callBack={this.callBack} handleChange={this.handleChange}/>
+                                    <SubOrderForm callBack={this.callBack}/>
 
 
                                     <Button type='submit' positive floated="left" content="Place Order"/>

@@ -44,7 +44,7 @@ class SubOrderForm extends React.Component {
         super();
         this.state = {
             certified: '',
-            orderType: '',
+            orderType: 'nani ',
             deathPlace: '',
             cemetery: '',
             gender: '',
@@ -97,18 +97,21 @@ class SubOrderForm extends React.Component {
             'Death Cert', 'Birth Search',
             'Birth Cert'];
 
-        this.props.handleChange = this.props.handleChange.bind(this);
+        this.handleChange = this.handleChange.bind(this);
 
     }
 
-    // handleChange = (e) => {
-    //     const target = e.target;
-    //     const value = target.value;
-    //     const name = target.name;
-    //     this.setState({
-    //         [name]: value
-    //     });
-    // };
+    handleChange = (e) => {
+        const target = e.target;
+        const value = target.value;
+        const name = target.name;
+        // console.log("name is :"+ name);
+        // console.log("value is :"+ value);
+        this.props.callBack(name, value);
+        this.setState({
+            [name]: value
+        });
+    };
 
 
     render() {
@@ -124,6 +127,7 @@ class SubOrderForm extends React.Component {
                                 checked={this.state.collection === "1940s"}
                                 onChange={(e, {}) => {
                                     this.setState({collection: "1940s"})
+                                    this.props.callBack("collection","1940s")
                                 }}
 
                             />
@@ -133,6 +137,7 @@ class SubOrderForm extends React.Component {
                                 checked={this.state.collection === "1980s"}
                                 onChange={(e, {}) => {
                                     this.setState({collection: "1980s"})
+                                    this.props.callBack("collection","1980s")
                                 }}
                             />
                             <Form.Radio
@@ -141,6 +146,7 @@ class SubOrderForm extends React.Component {
                                 checked={this.state.collection === "Both"}
                                 onChange={(e, {}) => {
                                     this.setState({collection: "Both"})
+                                    this.props.callBack("collection","Both")
                                 }}
                             />
                         </Form.Group>
@@ -148,19 +154,19 @@ class SubOrderForm extends React.Component {
                         <Form.Input label="Block"
                                     name="block"
                                     placeholder="Block"
-                                    onChange={this.props.handleChange}
+                                    onChange={this.handleChange}
                                     value={this.state.block}
                         />
                         <Form.Input label="Lot"
                                     name="lot"
                                     placeholder="Lot"
-                                    onChange={this.props.handleChange}
+                                    onChange={this.handleChange}
                                     value={this.state.lot}
                         />
                         <Form.Input label="Roll"
                                     name="roll"
                                     placeholder="Roll#"
-                                    onChange={this.props.handleChange}
+                                    onChange={this.handleChange}
                                     value={this.state.roll}
                         />
                         <Form.Group inline>
@@ -171,7 +177,8 @@ class SubOrderForm extends React.Component {
                                 label='8" x 10" Print'
                                 checked={this.state.printSize === '"8 x 10" Print'}
                                 onChange={(e, {}) => {
-                                    this.setState({printSize: '"8 x 10" Print'})
+                                    this.setState({printSize: "8x10"})
+                                    this.props.callBack("printSize","8x10")
                                 }}
 
                             />
@@ -181,7 +188,8 @@ class SubOrderForm extends React.Component {
                                 label='11" x 14" Print'
                                 checked={this.state.printSize === '"11 x 14" Print'}
                                 onChange={(e, {}) => {
-                                    this.setState({printSize: '"11 x 14" Print'})
+                                    this.setState({printSize: "11x14"})
+                                    this.props.callBack("printSize","11x14")
                                 }}
                             />
                         </Form.Group>
@@ -191,6 +199,7 @@ class SubOrderForm extends React.Component {
                                      placeholder="Borough"
                                      onChange={(e, {value}) => {
                                          this.setState({borough: value});
+                                         this.props.callBack("borough", value);
 
                                      }}
                                      value={this.state.value}
@@ -198,34 +207,36 @@ class SubOrderForm extends React.Component {
                         <Form.Input label="Building Number"
                                     name="buildingNum"
                                     placeholder="Building Number"
-                                    onChange={this.props.handleChange}
+                                    onChange={this.handleChange}
                                     value={this.state.buildingNum}
                         />
                         <Form.Input label="Street"
                                     name="street"
                                     placeholder="Street"
-                                    onChange={this.props.handleChange}
+                                    onChange={this.handleChange}
                                     value={this.state.street}
                         />
                         <Form.Checkbox label="Mail"
                                        name="mail"
                                        onChange={() => {
                                            (this.state.mail == false) ?
+                                               this.props.callBack("mail", true) &&
                                                this.setState({mail: true}) :
-                                               this.setState({mail: false});
+                                               this.setState({mail: false}) &&
+                                               this.props.callBack("mail", false);
                                        }}
                                        value={this.state.mail}
                         />
                         <Form.Input label="description"
                                     name="addDescription"
                                     placeholder="Description"
-                                    onChange={this.props.handleChange}
+                                    onChange={this.handleChange}
                                     value={this.state.addDescription}
                         />
                         <Form.Input label="Contact Number"
                                     name="contactNum"
                                     placeholder="Contact Number"
-                                    onChange={this.props.handleChange}
+                                    onChange={this.handleChange}
                                     value={this.state.contactNum}
                         />
                     </Grid.Column>
@@ -239,13 +250,13 @@ class SubOrderForm extends React.Component {
                         <Form.Input label="Block"
                                     name="block"
                                     placeholder="Block"
-                                    onChange={this.props.handleChange}
+                                    onChange={this.handleChange}
                                     value={this.state.block}
                         />
                         <Form.Input label="Lot"
                                     name="lot"
                                     placeholder="Lot"
-                                    onChange={this.props.handleChange}
+                                    onChange={this.handleChange}
                                     value={this.state.lot}
                         />
                         <Form.Select label="Borough"
@@ -255,6 +266,7 @@ class SubOrderForm extends React.Component {
                                      placeholder="Borough"
                                      onChange={(e, {value}) => {
                                          this.setState({borough: value});
+                                         this.props.callBack("borough", value);
 
                                      }}
                                      value={this.state.value}
@@ -262,40 +274,42 @@ class SubOrderForm extends React.Component {
                         <Form.Input label="Building Number"
                                     name="buildingNum"
                                     placeholder="Building Number"
-                                    onChange={this.props.handleChange}
+                                    onChange={this.handleChange}
                                     value={this.state.buildingNum}
                         />
                         <Form.Input label="Street"
                                     name="street"
                                     placeholder="Street"
-                                    onChange={this.props.handleChange}
+                                    onChange={this.handleChange}
                                     value={this.state.street}
                         />
                         <Form.Checkbox label="Mail"
                                        name="mail"
                                        onChange={() => {
                                            (this.state.mail == false) ?
+                                               this.props.callBack("mail", true) &&
                                                this.setState({mail: true}) :
-                                               this.setState({mail: false});
+                                               this.setState({mail: false}) &&
+                                               this.props.callBack("mail", false);
                                        }}
                                        value={this.state.mail}
                         />
                         <Form.Input label="description"
                                     name="addDescription"
                                     placeholder="Description"
-                                    onChange={this.props.handleChange}
+                                    onChange={this.handleChange}
                                     value={this.state.addDescription}
                         />
                         <Form.Input label="Contact Number"
                                     name="contactNum"
                                     placeholder="Contact Number"
-                                    onChange={this.props.handleChange}
+                                    onChange={this.handleChange}
                                     value={this.state.contactNum}
                         />
                         <Form.Input label="Certified"
                                     name="certified"
                                     placeholder="Certified"
-                                    onChange={this.props.handleChange}
+                                    onChange={this.handleChange}
                                     value={this.state.certified}
                         />
 
@@ -312,13 +326,13 @@ class SubOrderForm extends React.Component {
                             <Form.Input label="Groom First Name"
                                         name="groomFirstName"
                                         placeholder="Groom First Name"
-                                        onChange={this.props.handleChange}
+                                        onChange={this.handleChange}
                                         value={this.state.groomFirstName}
                             />
                             <Form.Input label="Groom Last Name"
                                         name="groomLastName"
                                         placeholder="Groom Last Name"
-                                        onChange={this.props.handleChange}
+                                        onChange={this.handleChange}
                                         value={this.state.groomLastName}
                             />
                         </Form.Group>
@@ -326,20 +340,20 @@ class SubOrderForm extends React.Component {
                             <Form.Input label="Bride First Name"
                                         name="brideFirstName"
                                         placeholder="Bride First Name"
-                                        onChange={this.props.handleChange}
+                                        onChange={this.handleChange}
                                         value={this.state.brideFirstName}
                             />
                             <Form.Input label="Bride Last Name"
                                         name="brideLastName"
                                         placeholder="Bride Last Name"
-                                        onChange={this.props.handleChange}
+                                        onChange={this.handleChange}
                                         value={this.state.brideLastName}
                             />
                         </Form.Group>
                         <Form.Input label="Marriage Place"
                                     name="marriagePlace"
                                     placeholder="Marriage Place"
-                                    onChange={this.props.handleChange}
+                                    onChange={this.handleChange}
                                     value={this.state.marriagePlace}
                         />
                         {VitalRecordForm()}
@@ -453,6 +467,7 @@ class SubOrderForm extends React.Component {
                                      placeholder="Borough"
                                      onChange={(e, {value}) => {
                                          this.setState({borough: value});
+                                         this.props.callBack("borough", value);
 
                                      }}
                                      value={this.state.value}
@@ -461,11 +476,12 @@ class SubOrderForm extends React.Component {
                                        name="letter"
                                        onChange={() => {
                                            (this.state.letter == false) ?
-                                               this.setState({letter: true}) :
+                                               this.setState({letter: true}) &&
+                                               this.props.callBack("letter", true) :
                                                this.setState({letter: false});
+                                           this.props.callBack("letter", false)
                                        }}
                             // checked={this.state.letter === true}
-                                       value={this.state.letter}
                         />
                         <Form.Input label="Comment"
                                     name="comment"
@@ -482,7 +498,7 @@ class SubOrderForm extends React.Component {
             <Grid>
                 <Grid.Row>
                     <Grid.Column>
-                        <Form.Group>
+                        <Form.Group>a
                             <Form.Input label="First Name"
                                         name="firstName"
                                         placeholder="First Name"
@@ -515,7 +531,7 @@ class SubOrderForm extends React.Component {
                                      options={genderOptions}
                                      onChange={(e, {value}) => {
                                          this.setState({gender: value});
-
+                                         this.props.callBack("gender", value);
                                      }}
                                      value={this.state.value}
                         />
@@ -583,8 +599,10 @@ class SubOrderForm extends React.Component {
                                        name="mail"
                                        onChange={() => {
                                            (this.state.mail == false) ?
-                                               this.setState({mail: true}) :
-                                               this.setState({mail: false});
+                                               this.setState({mail: true}) &&
+                                               this.props.callBack("mail", true) :
+                                               this.setState({mail: false}) &&
+                                               this.props.callBack("mail", true);
                                        }}
                                        value={this.state.mail}
                         />
@@ -598,8 +616,10 @@ class SubOrderForm extends React.Component {
                                        name="personalUseAgreement"
                                        onChange={() => {
                                            (this.state.personalUseAgreement == false) ?
-                                               this.setState({personalUseAgreement: true}) :
-                                               this.setState({personalUseAgreement: false});
+                                               this.setState({personalUseAgreement: true}) &&
+                                               this.props.callBack("personalUseAgreement", true) :
+                                               this.setState({personalUseAgreement: false}) &&
+                                               this.props.callBack("personalUseAgreement", true);
                                        }}
                                        value={this.state.personalUseAgreement}
                         />
@@ -618,6 +638,7 @@ class SubOrderForm extends React.Component {
                                 checked={this.state.printSize === '8x10'}
                                 onChange={(e, {}) => {
                                     this.setState({printSize: '8x10'})
+                                    this.props.callBack("printSize", '8x10');
                                 }}
                             />
 
@@ -627,6 +648,7 @@ class SubOrderForm extends React.Component {
                                 checked={this.state.printSize === '11x14'}
                                 onChange={(e, {}) => {
                                     this.setState({printSize: '11x14'})
+                                    this.props.callBack("printSize", '11x14');
                                 }}
                             />
 
@@ -636,6 +658,7 @@ class SubOrderForm extends React.Component {
                                 checked={this.state.printSize === '16x20'}
                                 onChange={(e, {}) => {
                                     this.setState({printSize: '16x20'})
+                                    this.props.callBack("printSize", '16x20');
                                 }}
                             />
 
@@ -648,80 +671,84 @@ class SubOrderForm extends React.Component {
             <Grid>
                 <Grid.Row>
                     <Grid.Column>
-                            <Form.Select label="Order Type"
-                                         required
-                                         name="orderType"
-                                         placeholder="Order Type"
-                                         options={orderTypeOptions}
-                                         onChange={(e, {value}) => {
-                                             this.setState({orderType: value});
-                                             //toggles hidden forms for Tax Photo if selected
-                                             (this.orderList.indexOf(value) == 0) ?
-                                                 this.setState({showTaxForm: true}) :
-                                                 this.setState({showTaxForm: false});
-                                             //toggles hidden forms for Photo Gallery if selected
-                                             (this.orderList.indexOf(value) == 1) ?
-                                                 this.setState({showPhotoGalleryForm: true}) :
-                                                 this.setState({showPhotoGalleryForm: false});
-                                             (this.orderList.indexOf(value) == 2) ?
-                                                 this.setState({showPropertyForm: true}) :
-                                                 this.setState({showPropertyForm: false});
-                                             (this.orderList.indexOf(value) == 3) ?
-                                                 this.setState({showMarriageSearch: true}) :
-                                                 this.setState({showMarriageSearch: false});
-                                             (this.orderList.indexOf(value) == 4) ?
-                                                 this.setState({showMarriageCert: true}) :
-                                                 this.setState({showMarriageCert: false});
-                                             (this.orderList.indexOf(value) == 5) ?
-                                                 this.setState({showDeathSearch: true}) :
-                                                 this.setState({showDeathSearch: false});
-                                             (this.orderList.indexOf(value) == 6) ?
-                                                 this.setState({showDeathCert: true}) :
-                                                 this.setState({showDeathCert: false});
-                                             (this.orderList.indexOf(value) == 7) ?
-                                                 this.setState({showBirthSearch: true}) :
-                                                 this.setState({showBirthSearch: false});
-                                             (this.orderList.indexOf(value) == 8) ?
-                                                 this.setState({showBirthCert: true}) :
-                                                 this.setState({showBirthCert: false});
-                                         }}
-                                         value={this.state.value}
-                            />
+                        <Form.Select label="Order Type"
+                                     required
+                                     name="orderType"
+                                     placeholder="Order Type"
+                                     options={orderTypeOptions}
+                                     onChange={(e, {value}) => {
+                                         console.log("value :" + value);
+                                         console.log("e:" + e.target);
+                                         // this.setState({orderType: value});
+                                         this.props.callBack("orderType", value);
+                                         //toggles hidden forms for Tax Photo if selected
+                                         (this.orderList.indexOf(value) == 0) ?
+                                             this.setState({showTaxForm: true}) :
+                                             this.setState({showTaxForm: false});
+                                         //toggles hidden forms for Photo Gallery if selected
+                                         (this.orderList.indexOf(value) == 1) ?
+                                             this.setState({showPhotoGalleryForm: true}) :
+                                             this.setState({showPhotoGalleryForm: false});
+                                         (this.orderList.indexOf(value) == 2) ?
+                                             this.setState({showPropertyForm: true}) :
+                                             this.setState({showPropertyForm: false});
+                                         (this.orderList.indexOf(value) == 3) ?
+                                             this.setState({showMarriageSearch: true}) :
+                                             this.setState({showMarriageSearch: false});
+                                         (this.orderList.indexOf(value) == 4) ?
+                                             this.setState({showMarriageCert: true}) :
+                                             this.setState({showMarriageCert: false});
+                                         (this.orderList.indexOf(value) == 5) ?
+                                             this.setState({showDeathSearch: true}) :
+                                             this.setState({showDeathSearch: false});
+                                         (this.orderList.indexOf(value) == 6) ?
+                                             this.setState({showDeathCert: true}) :
+                                             this.setState({showDeathCert: false});
+                                         (this.orderList.indexOf(value) == 7) ?
+                                             this.setState({showBirthSearch: true}) :
+                                             this.setState({showBirthSearch: false});
+                                         (this.orderList.indexOf(value) == 8) ?
+                                             this.setState({showBirthCert: true}) :
+                                             this.setState({showBirthCert: false});
+                                     }}
+                                     value={this.state.value}
+                        />
 
-                            {this.state.showTaxForm && TaxPhotoForm()}
-                            {this.state.showPhotoGalleryForm && PhotoGalleryForm()}
-                            {this.state.showPropertyForm && PropertyCardForm()}
-                            {this.state.showMarriageSearch && MarriageSearchForm()}
-                            {this.state.showMarriageCert && MarriageCertForm()}
-                            {this.state.showDeathSearch && DeathSearchForm()}
-                            {this.state.showDeathCert && DeathCertForm()}
-                            {this.state.showBirthSearch && BirthSearchForm()}
-                            {this.state.showBirthCert && BirthCertForm()}
+                        {this.state.showTaxForm && TaxPhotoForm()}
+                        {this.state.showPhotoGalleryForm && PhotoGalleryForm()}
+                        {this.state.showPropertyForm && PropertyCardForm()}
+                        {this.state.showMarriageSearch && MarriageSearchForm()}
+                        {this.state.showMarriageCert && MarriageCertForm()}
+                        {this.state.showDeathSearch && DeathSearchForm()}
+                        {this.state.showDeathCert && DeathCertForm()}
+                        {this.state.showBirthSearch && BirthSearchForm()}
+                        {this.state.showBirthCert && BirthCertForm()}
 
 
-                            <Form.Input label="Number of Copies"
-                                        name="numCopies"
-                                        placeholder="Number of Copies"
-                                        maxLength="2"
-                                        onChange={(e, {value}) => {
-                                            if (/^[0-9]+$/.test(value.slice(-1)) || value === '') {
-                                                this.handleChange(e)
-                                            }
-                                        }}
-                                        value={this.state.value}
-                            />
+                        <Form.Input label="Number of Copies"
+                                    name="numCopies"
+                                    placeholder="Number of Copies"
+                                    maxLength="2"
+                                    onChange={(e, {value}) => {
+                                        if (/^[0-9]+$/.test(value.slice(-1)) || value === '') {
+                                            this.handleChange(e)
+                                        }
+                                    }}
+                                    value={this.state.value}
+                        />
 
-                            <Form.Select label="Status"
-                                         required
-                                         name="status"
-                                         placeholder="Status"
-                                         options={statusOptions}
-                                         onChange={(e, {value}) => {
-                                             this.setState({status: value});
+                        <Form.Select label="Status"
+                                     required
+                                     name="status"
+                                     placeholder="Status"
+                                     options={statusOptions}
+                                     onChange={(e, {value}) => {
+                                         // this.setState({status: value});
+                                         this.props.callBack("status", value);
 
-                                         }}
-                                         value={this.state.value}
-                            />
+                                     }}
+                                     value={this.state.value}
+                        />
                     </Grid.Column>
                 </Grid.Row>
 
