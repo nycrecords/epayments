@@ -136,23 +136,29 @@ class Home extends React.Component {
             <Container>
                 {this.props.authenticated ? (
                     <Grid padded columns={3}>
-                        <Grid.Column width={4} id="grid-column-search">
-                            <Header as="h1" textAlign="center">ePayments
+                        <Segment basic className="no-padding">
+                            <Header as="h1" className="half">ePayments
                                 <Container className="sub header">Department of Records</Container>
                             </Header>
-                            <Segment padded textAlign='center'>
-                                <div>Hi {this.props.user}</div>
-                                <br/>
-                                <Button fluid content='Logout' onClick={this.logOut}/>
+                            <Segment basic  className="half no-padding">
+                                <div className="float-right">
+                                    Hi {this.props.user}
+                                    <Button content='Logout' onClick={this.logOut} className="margin-left"/>
+                                </div>
                             </Segment>
+                        </Segment>
+
+                        <Grid.Column width={4} id="grid-column-search">
                             <OrderForm addOrder={this.addOrder} setLoadingState={this.setLoadingState}
-                                       toggleCSV={this.toggleCSV} ref={orderForm => this.orderForm = orderForm}/>
+                                   toggleCSV={this.toggleCSV} ref={orderForm => this.orderForm = orderForm}/>
                         </Grid.Column>
+
                         <Grid.Column width={1}/>
+
                         <Dimmer inverted active={this.state.loading}>
                             <Loader content='Loading'/>
                         </Dimmer>
-                        <Grid.Column width={11}>
+                        <Grid.Column width={11} className="no-padding" >
                             <Header as="h1" dividing textAlign="center">Order</Header>
                             <div>
                                 <Button.Group size='medium' floated='right'>

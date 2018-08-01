@@ -52,7 +52,6 @@ def create_test_user():
     db.session.add(user)
     db.session.commit()
 
-
 @manager.command
 def test(coverage=False):
     """Run the unit tests."""
