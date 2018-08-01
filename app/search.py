@@ -26,7 +26,7 @@ def create_index():
                     "tokenizer": {
                         "ngram_tokenizer": {
                             "type": "ngram",
-                            "min_gram": 4,
+                            "min_gram": 3,
                             "max_gram": 6,
                         }
                     },
