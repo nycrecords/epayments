@@ -197,7 +197,7 @@ class OrderForm extends React.Component {
                          The Order Number, Suborder Number, Order Type, Billing Name, Date Received/Submitted Start and End.
                          Order Number, Suborder Number, and Billing Name are input fields.
                          Order Type is a dropdown listing the types of orders requested
-                         Date Received Start and End are input fields that call the React Datepicker component
+                         Date Received/Submitted Start and End are input fields that call the React Datepicker component
                          */}
 
                     <Form.Input label="Order Number" placeholder="Order Number" maxLength="64"
@@ -258,7 +258,7 @@ class OrderForm extends React.Component {
                     </Menu>
                     <Segment attached="bottom">
                         <Form.Group>
-                            <Form.Field width="16">
+                            <Form.Field >
                                 <Date
                                     label="Start"
                                     name="Start"
@@ -275,7 +275,7 @@ class OrderForm extends React.Component {
                             </Form.Field>
                         </Form.Group>
                         <Form.Group>
-                            <Form.Field width="16">
+                            <Form.Field >
                                 <Date
                                     label="End"
                                     name="End"

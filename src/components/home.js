@@ -1,5 +1,5 @@
 import React from 'react';
-import {Button, Container, Dimmer, Divider, Grid, Header, Icon, Loader, Segment} from 'semantic-ui-react';
+import {Button, Container, Dimmer, Divider, Grid, Header, Icon, Loader, Segment, Sticky} from 'semantic-ui-react';
 import {connect} from 'react-redux';
 import {mapDispatchToProps, mapStateToProps} from "../utils/reduxMappers";
 import OrderForm from "./order_form";
@@ -117,6 +117,8 @@ class Home extends React.Component {
         nextProps.authenticated && this.getOrders();
     }
 
+    scrollHeight
+
 
     render() {
         const orderRows = this.state.all_orders.map((order) =>
@@ -149,8 +151,10 @@ class Home extends React.Component {
                         </Segment>
 
                         <Grid.Column width={4} id="grid-column-search">
-                            <OrderForm addOrder={this.addOrder} setLoadingState={this.setLoadingState}
+                            <Sticky>
+                                <OrderForm addOrder={this.addOrder} setLoadingState={this.setLoadingState}
                                    toggleCSV={this.toggleCSV} ref={orderForm => this.orderForm = orderForm}/>
+                            </Sticky>
                         </Grid.Column>
 
                         <Grid.Column width={1}/>
