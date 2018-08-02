@@ -80,7 +80,7 @@ class SubOrderForm extends React.Component {
             collection: '',
             printSize: '',
             numCopies: ' ',
-            status: '',
+            status: [],
             showBirthCert: false,
             showBirthSearch: false,
             showDeathCert: false,
@@ -107,7 +107,7 @@ class SubOrderForm extends React.Component {
         const name = target.name;
         // console.log("name is :"+ name);
         // console.log("value is :"+ value);
-        this.props.callBack(name, value);
+        this.props.callBack(name, value,this.props.index,this.props.state.name);
         this.setState({
             [name]: value
         });
@@ -127,7 +127,7 @@ class SubOrderForm extends React.Component {
                                 checked={this.state.collection === "1940s"}
                                 onChange={(e, {}) => {
                                     this.setState({collection: "1940s"})
-                                    this.props.callBack("collection","1940s")
+                                    this.props.callBack("collection","1940s",this.props.index,this.props.state.collection)
                                 }}
 
                             />
@@ -137,7 +137,7 @@ class SubOrderForm extends React.Component {
                                 checked={this.state.collection === "1980s"}
                                 onChange={(e, {}) => {
                                     this.setState({collection: "1980s"})
-                                    this.props.callBack("collection","1980s")
+                                    this.props.callBack("collection","1980s",this.props.index,this.props.state.collection)
                                 }}
                             />
                             <Form.Radio
@@ -146,7 +146,7 @@ class SubOrderForm extends React.Component {
                                 checked={this.state.collection === "Both"}
                                 onChange={(e, {}) => {
                                     this.setState({collection: "Both"})
-                                    this.props.callBack("collection","Both")
+                                    this.props.callBack("collection","Both",this.props.index,this.props.state.collection)
                                 }}
                             />
                         </Form.Group>
@@ -178,7 +178,7 @@ class SubOrderForm extends React.Component {
                                 checked={this.state.printSize === '"8 x 10" Print'}
                                 onChange={(e, {}) => {
                                     this.setState({printSize: "8x10"})
-                                    this.props.callBack("printSize","8x10")
+                                    this.props.callBack("printSize","8x10",this.props.index,this.props.state.printSize)
                                 }}
 
                             />
@@ -189,7 +189,7 @@ class SubOrderForm extends React.Component {
                                 checked={this.state.printSize === '"11 x 14" Print'}
                                 onChange={(e, {}) => {
                                     this.setState({printSize: "11x14"})
-                                    this.props.callBack("printSize","11x14")
+                                    this.props.callBack("printSize","11x14",this.props.index,this.props.state.printSize)
                                 }}
                             />
                         </Form.Group>
@@ -199,7 +199,7 @@ class SubOrderForm extends React.Component {
                                      placeholder="Borough"
                                      onChange={(e, {value}) => {
                                          this.setState({borough: value});
-                                         this.props.callBack("borough", value);
+                                         this.props.callBack("borough", value,this.props.index,this.props.state.borough);
 
                                      }}
                                      value={this.state.value}
@@ -220,10 +220,10 @@ class SubOrderForm extends React.Component {
                                        name="mail"
                                        onChange={() => {
                                            (this.state.mail == false) ?
-                                               this.props.callBack("mail", true) &&
+                                               this.props.callBack("mail", true,this.props.index,this.props.state.mail) &&
                                                this.setState({mail: true}) :
                                                this.setState({mail: false}) &&
-                                               this.props.callBack("mail", false);
+                                               this.props.callBack("mail", false,this.props.index,this.props.state.mail);
                                        }}
                                        value={this.state.mail}
                         />
@@ -266,7 +266,7 @@ class SubOrderForm extends React.Component {
                                      placeholder="Borough"
                                      onChange={(e, {value}) => {
                                          this.setState({borough: value});
-                                         this.props.callBack("borough", value);
+                                         this.props.callBack("borough", value,this.props.index,this.props.state.borough);
 
                                      }}
                                      value={this.state.value}
@@ -287,10 +287,10 @@ class SubOrderForm extends React.Component {
                                        name="mail"
                                        onChange={() => {
                                            (this.state.mail == false) ?
-                                               this.props.callBack("mail", true) &&
+                                               this.props.callBack("mail", true,this.props.index,this.props.state.mail) &&
                                                this.setState({mail: true}) :
                                                this.setState({mail: false}) &&
-                                               this.props.callBack("mail", false);
+                                               this.props.callBack("mail", false,this.props.index,this.props.state.mail);
                                        }}
                                        value={this.state.mail}
                         />
@@ -467,7 +467,7 @@ class SubOrderForm extends React.Component {
                                      placeholder="Borough"
                                      onChange={(e, {value}) => {
                                          this.setState({borough: value});
-                                         this.props.callBack("borough", value);
+                                         this.props.callBack("borough", value,this.props.index,this.props.state.borough);
 
                                      }}
                                      value={this.state.value}
@@ -477,9 +477,9 @@ class SubOrderForm extends React.Component {
                                        onChange={() => {
                                            (this.state.letter == false) ?
                                                this.setState({letter: true}) &&
-                                               this.props.callBack("letter", true) :
-                                               this.setState({letter: false});
-                                           this.props.callBack("letter", false)
+                                               this.props.callBack("letter", true,this.props.index,this.props.state.letter) :
+                                               this.setState({letter: false}) &&
+                                           this.props.callBack("letter", false,this.props.index,this.props.state.letter);
                                        }}
                             // checked={this.state.letter === true}
                         />
@@ -531,7 +531,7 @@ class SubOrderForm extends React.Component {
                                      options={genderOptions}
                                      onChange={(e, {value}) => {
                                          this.setState({gender: value});
-                                         this.props.callBack("gender", value);
+                                         this.props.callBack("gender", value,this.props.index,this.props.state.gender);
                                      }}
                                      value={this.state.value}
                         />
@@ -600,9 +600,9 @@ class SubOrderForm extends React.Component {
                                        onChange={() => {
                                            (this.state.mail == false) ?
                                                this.setState({mail: true}) &&
-                                               this.props.callBack("mail", true) :
+                                               this.props.callBack("mail", true,this.props.index,this.props.state.mail) :
                                                this.setState({mail: false}) &&
-                                               this.props.callBack("mail", true);
+                                               this.props.callBack("mail", true,this.props.index,this.props.state.mail);
                                        }}
                                        value={this.state.mail}
                         />
@@ -617,9 +617,9 @@ class SubOrderForm extends React.Component {
                                        onChange={() => {
                                            (this.state.personalUseAgreement == false) ?
                                                this.setState({personalUseAgreement: true}) &&
-                                               this.props.callBack("personalUseAgreement", true) :
+                                               this.props.callBack("personalUseAgreement", true,this.props.index,this.props.state.personalUseAgreement) :
                                                this.setState({personalUseAgreement: false}) &&
-                                               this.props.callBack("personalUseAgreement", true);
+                                               this.props.callBack("personalUseAgreement", true,this.props.index,this.props.state.personalUseAgreement);
                                        }}
                                        value={this.state.personalUseAgreement}
                         />
@@ -638,7 +638,7 @@ class SubOrderForm extends React.Component {
                                 checked={this.state.printSize === '8x10'}
                                 onChange={(e, {}) => {
                                     this.setState({printSize: '8x10'})
-                                    this.props.callBack("printSize", '8x10');
+                                    this.props.callBack("printSize", '8x10',this.props.index,this.props.state.printSize);
                                 }}
                             />
 
@@ -648,7 +648,7 @@ class SubOrderForm extends React.Component {
                                 checked={this.state.printSize === '11x14'}
                                 onChange={(e, {}) => {
                                     this.setState({printSize: '11x14'})
-                                    this.props.callBack("printSize", '11x14');
+                                    this.props.callBack("printSize", '11x14',this.props.index,this.props.state.printSize);
                                 }}
                             />
 
@@ -658,7 +658,7 @@ class SubOrderForm extends React.Component {
                                 checked={this.state.printSize === '16x20'}
                                 onChange={(e, {}) => {
                                     this.setState({printSize: '16x20'})
-                                    this.props.callBack("printSize", '16x20');
+                                    this.props.callBack("printSize", '16x20',this.props.index,this.props.state.printSize);
                                 }}
                             />
 
@@ -678,9 +678,8 @@ class SubOrderForm extends React.Component {
                                      options={orderTypeOptions}
                                      onChange={(e, {value}) => {
                                          console.log("value :" + value);
-                                         console.log("e:" + e.target);
                                          // this.setState({orderType: value});
-                                         this.props.callBack("orderType", value);
+                                         this.props.callBack("orderType", value,this.props.index,this.props.state.orderType);
                                          //toggles hidden forms for Tax Photo if selected
                                          (this.orderList.indexOf(value) == 0) ?
                                              this.setState({showTaxForm: true}) :
@@ -743,9 +742,8 @@ class SubOrderForm extends React.Component {
                                      placeholder="Status"
                                      options={statusOptions}
                                      onChange={(e, {value}) => {
-                                         // this.setState({status: value});
-                                         this.props.callBack("status", value);
-
+                                         this.setState({status: value});
+                                         this.props.callBack("status", value,this.props.index,this.props.state.status);
                                      }}
                                      value={this.state.value}
                         />

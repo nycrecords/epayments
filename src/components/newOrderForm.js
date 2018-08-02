@@ -24,48 +24,48 @@ class NewOrderForm extends React.Component {
             zipCode: '',
             phone: '',
             instructions: '',
-            orderType: '',
-            deathPlace: '',
-            cemetery: '',
+            orderType: [],
+            deathPlace: [],
+            cemetery: [],
 
-            gender: '',
-            fatherName: '',
-            motherName: '',
-            birthPlace: '',
-            lastName: '',
-            firstName: '',
-            middleName: '',
+            gender: [],
+            fatherName: [],
+            motherName: [],
+            birthPlace: [],
+            lastName: [],
+            firstName: [],
+            middleName: [],
 
-            certificateNum: '',
-            groomLastName: '',
-            groomFirstName: '',
-            brideLastName: '',
-            brideFirstName: '',
-            month: '',
-            day: '',
-            year: ' ',
-            marriagePlace: '',
-            letter: false,
+            certificateNum: [],
+            groomLastName: [],
+            groomFirstName: [],
+            brideLastName: [],
+            brideFirstName: [],
+            month: [],
+            day: [],
+            year: [],
+            marriagePlace: [],
+            letter: [false],
 
 
-            block: '',
-            lot: '',
-            row: '',
-            borough: ' ',
-            buildingNum: '',
-            street: '',
-            mail: false,
-            contactNum: '',
+            block: [],
+            lot: [],
+            row: [],
+            borough: [],
+            buildingNum: [],
+            street: [],
+            mail: [false],
+            contactNum: [],
 
-            imgId: '',
-            imgTitle: '',
-            comment: '',
-            personalUseAgreement: false,
-            addDescription: '',
-            collection: '',
-            printSize: '',
-            numCopies: ' ',
-            status: '',
+            imgId: [],
+            imgTitle: [],
+            comment: [],
+            personalUseAgreement: [false],
+            addDescription: [],
+            collection: [],
+            printSize: [],
+            numCopies: [],
+            status: [],
 
             showBirthCert: false,
             showBirthSearch: false,
@@ -78,7 +78,7 @@ class NewOrderForm extends React.Component {
             showSubOrder: false,
             showPropertyForm: false,
             loading: false,
-            subOrderList: []
+            subOrderList: [0]
 
         };
 
@@ -93,54 +93,54 @@ class NewOrderForm extends React.Component {
                 addressLine1: '',
                 addressLine2: '',
                 city: '',
-                certified: '',
+                certified: [],
                 state: '',
                 zipCode: '',
                 phone: '',
                 instructions: '',
-                orderType: '',
-                deathPlace: '',
-                cemetery: '',
-                firstName: '',
-                lastName: '',
-                birthPlace: '',
-                gender: '',
-                fatherName: '',
-                motherName: '',
-                middleName: '',
+                orderType: [],
+                deathPlace: [],
+                cemetery: [],
+                firstName: [],
+                lastName: [],
+                birthPlace: [],
+                gender: [],
+                fatherName: [],
+                motherName: [],
+                middleName: [],
 
-                certificateNum: '',
-                groomLastName: '',
-                groomFirstName: '',
-                brideLastName: '',
-                brideFirstName: '',
-                month: '',
-                day: '',
-                year: ' ',
-                marriagePlace: '',
+                certificateNum: [],
+                groomLastName: [],
+                groomFirstName: [],
+                brideLastName: [],
+                brideFirstName: [],
+                month: [],
+                day: [],
+                year: [],
+                marriagePlace: [],
                 letter: false,
 
-                block: '',
-                lot: '',
-                roll: '',
-                borough: ' ',
-                buildingNum: '',
-                street: '',
-                mail: false,
-                contactNum: '',
-                imgId: '',
-                imgTitle: '',
-                comment: '',
-                personalUseAgreement: false,
-                addDescription: '',
-                collection: '',
-                printSize: '',
-                numCopies: ' ',
-                status: '',
+                block: [],
+                lot: [],
+                roll: [],
+                borough: [],
+                buildingNum: [],
+                street: [],
+                mail: [false],
+                contactNum: [],
+                imgId: [],
+                imgTitle: [],
+                comment: [],
+                personalUseAgreement: [false],
+                addDescription: [],
+                collection: [],
+                printSize: [],
+                numCopies: [],
+                status: [],
             });
         };
         this.i = 0;
-        this.index = 0;
+        this.index = 1;
         this.orderList = ['Tax Photo', 'Photo Gallery',
             'Property Card', 'Marriage Search',
             'Marriage Cert', 'Death Search',
@@ -159,52 +159,50 @@ class NewOrderForm extends React.Component {
         });
     };
     handleClick = () => {
-        console.log(this.state.subOrderList);
-        this.setState({subOrderList: this.state.subOrderList.concat([this.index]) });
+        this.setState({subOrderList: this.state.subOrderList.concat([this.index])});
         this.index++;
-
 
 
     }
 
     handleSubmit = (e, value) => {
         e.preventDefault();
-        console.log("this is ordertype1: " + this.state.orderType);
-        console.log("num copies : " + this.state.numCopies);
-        console.log("gender:" + this.state.gender);
-        this.setState({loading: true});
-        if (this.state.orderType == '' && this.state.status == '') {
-            alert("Please fill in Order Type and Status")
-            this.setState({loading: false});
-            return
-
-        } else if (this.state.orderType == '') {
-            alert("Please fill in Order Type")
-            this.setState({loading: false});
-            return
-        } else if (this.state.status == '') {
-            alert("Please fill in Status")
-            this.setState({loading: false});
-            return
-        }
-        if (this.state.orderType != '') {
-            if ((this.state.showBirthSearch == true || this.state.showBirthCert == true) && this.state.gender == '') {
-                alert("Please fill in the Gender")
-                this.setState({loading: false});
-                return
-
-            }
-            else if (this.state.showPropertyForm == true && this.state.borough == " ") {
-                alert("Please fill in the Borough")
-                this.setState({loading: false});
-                return
-            }
-            else if (this.state.showPhotoGalleryForm == true && this.state.printSize == "") {
-                alert("Please fill in the Printing Size")
-                this.setState({loading: false});
-                return
-            }
-        }
+        // console.log("this is ordertype1: " + this.state.orderType);
+        // console.log("num copies : " + this.state.numCopies);
+        // console.log("gender:" + this.state.gender);
+        // this.setState({loading: true});
+        // if (this.state.orderType == '' && this.state.status == '') {
+        //     alert("Please fill in Order Type and Status")
+        //     this.setState({loading: false});
+        //     return
+        //
+        // } else if (this.state.orderType == '') {
+        //     alert("Please fill in Order Type")
+        //     this.setState({loading: false});
+        //     return
+        // } else if (this.state.status == '') {
+        //     alert("Please fill in Status")
+        //     this.setState({loading: false});
+        //     return
+        // }
+        // if (this.state.orderType != '') {
+        //     if ((this.state.showBirthSearch == true || this.state.showBirthCert == true) && this.state.gender == '') {
+        //         alert("Please fill in the Gender")
+        //         this.setState({loading: false});
+        //         return
+        //
+        //     }
+        //     else if (this.state.showPropertyForm == true && this.state.borough == " ") {
+        //         alert("Please fill in the Borough")
+        //         this.setState({loading: false});
+        //         return
+        //     }
+        //     else if (this.state.showPhotoGalleryForm == true && this.state.printSize == "") {
+        //         alert("Please fill in the Printing Size")
+        //         this.setState({loading: false});
+        //         return
+        //     }
+        // }
 
         csrfFetch('api/v1.0/orders/new', {
             method: "POST",
@@ -274,23 +272,37 @@ class NewOrderForm extends React.Component {
 
     };
 
-    callBack = (dataFromChild, value) => {
+    callBack = (dataFromChild, value, index, state) => {
+        // debugger;
+        console.log("data is " + dataFromChild);
+        const newState = state.slice()
+        newState[index]=value;
+        console.log(newState);
+
+
+
+
         this.setState({
-            [dataFromChild]: value
+            [dataFromChild]: newState
         });
+        console.log("status is :" + this.state.status);
 
     };
 
     render() {
 
+        console.log('current list is ' + this.state.subOrderList);
+        const SubOrders = this.state.subOrderList.map((suborderIndex) =>
+            <div>
+                Suborder: {suborderIndex + 1}
+                <SubOrderForm key={suborderIndex}
+                              index={suborderIndex}
+                              callBack={this.callBack}
+                              state={this.state}
+                />
 
-        const SubOrders = (this.state.subOrderList.map(() =>
-            <SubOrderForm
-                          callBack={this.callBack}/>
-
-
-
-        ));
+            </div>
+        );
 
         return (
             <div>
@@ -386,11 +398,18 @@ class NewOrderForm extends React.Component {
                                                 onChange={this.handleChange}
                                                 value={this.state.instructions}
                                     />
+                                    <Container>
 
-                                    <Form.Group>
-                                        {SubOrders}
+                                        <Form.Group>
+                                            {SubOrders}
+
+
+                                            {/*{this.state.showSubOrder && {SubOrders}}*/}
+
+
+                                        </Form.Group>
                                         <Button animated type="reset"
-                                                floated="right"
+                                                floated="left"
                                                 onClick={this.handleClick}
                                         >
                                             <Button.Content visible>
@@ -400,12 +419,7 @@ class NewOrderForm extends React.Component {
                                                 Additional Order
                                             </Button.Content>
                                         </Button>
-
-
-                                        {/*{this.state.showSubOrder && <SubOrderForm callBack={this.callBack}/>}*/}
-
-
-                                    </Form.Group>
+                                    </Container>
                                     <Button type='submit' positive floated="left" content="Place Order"/>
                                     <Button type="reset" onClick={this.clearSelection} content="Clear"/>
                                 </Form>
