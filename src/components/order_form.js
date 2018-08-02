@@ -93,6 +93,10 @@ class OrderForm extends React.Component {
             dateRef && dateRef.state.date ? dateRef.state.date.format('MM/DD/YYYY') : ''
         );
 
+        this.submitData = (e) =>{
+            this.submitFormData(e, 'submit');
+        };
+
         this.submitFormData = (e, print) => {
             e.preventDefault();
 
@@ -153,7 +157,7 @@ class OrderForm extends React.Component {
                     break;
 
                 // Search
-                case undefined:
+                case'submit':
                     this.props.setLoadingState(true);
                     csrfFetch('api/v1.0/orders', {
                         method: "POST",
@@ -191,7 +195,7 @@ class OrderForm extends React.Component {
         const {activeItem} = this.state;
         return (
             <Container>
-                <Form onSubmit={this.submitFormData}>
+                <Form onSubmit={this.submitData}>
                     {/*This component defines the form fields required for the search form:
 
                          The Order Number, Suborder Number, Order Type, Billing Name, Date Received/Submitted Start and End.
@@ -207,6 +211,7 @@ class OrderForm extends React.Component {
                                     }
                                 }}
                                 value={this.state.ordernumber}
+                                className="margin-small-tb"
                     />
 
                     <Form.Input label="Suborder Number" placeholder="Suborder Number" maxLength="32"
@@ -216,7 +221,7 @@ class OrderForm extends React.Component {
                                     }
                                 }}
                                 value={this.state.subordernumber}
-
+                                className="margin-small-tb"
                     />
                     <Form.Select label="Order Type" placeholder="Order Type" options={orderTypeOptions}
                                  onChange={(e, {value}) => {
@@ -226,12 +231,14 @@ class OrderForm extends React.Component {
                                      (this.photosValueList.indexOf(value) > -1) ? this.props.toggleCSV(true) : this.props.toggleCSV(false);
                                  }}
                                  value={this.state.order_type}
+                                 className="margin-small-tb"
                     />
                     <Form.Select label="Status" placeholder="Status" options={statusOptions}
                                  onChange={(e, {value}) => {
                                      this.setState({status: value})
                                  }}
                                  value={this.state.status}
+                                 className="margin-small-tb"
                     />
                     <Form.Input label="Billing Name" placeholder="Billing Name" maxLength="64"
                                 onChange={(e, {value}) => {
@@ -240,6 +247,7 @@ class OrderForm extends React.Component {
                                     }
                                 }}
                                 value={this.state.billing_name}
+                                className="margin-small-tb"
                     />
 
 
@@ -271,6 +279,7 @@ class OrderForm extends React.Component {
                                             else{
                                                 return this.dateReceivedStart= date
                                             }}}
+                                    className="margin-small-tb"
                                 />
                             </Form.Field>
                         </Form.Group>
@@ -287,6 +296,7 @@ class OrderForm extends React.Component {
                                             else{
                                                 return this.dateReceivedEnd= date
                                             }}}
+                                    className="margin-small-tb"
                                 />
                             </Form.Field>
                         </Form.Group>

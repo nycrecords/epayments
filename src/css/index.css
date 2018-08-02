@@ -6,19 +6,13 @@ input, label {
     display: block;
 }
 
-.ui.selection.dropdown {
-    min-width: 10%;
-}
-
-#grid-column-order {
-    max-height: 40em;
-    overflow-y: auto;
-    padding-right: .30em;
-}
-
 html, body {
     padding-top: .5em;
     overflow: auto;
+}
+
+.ui.selection.dropdown {
+    min-width: 10%;
 }
 
 .no-padding{
@@ -36,6 +30,24 @@ html, body {
 
 .float-right{
     float:right;
+}
+
+.no-margin{
+    margin:0!important;
+}
+.no-top-padding{
+    padding-top: 0!important;
+}
+.margin-tiny{
+    margin: .10em!important;
+}
+
+.margin-small-tb{
+    margin: .69em 0!important;
+}
+
+#grid-column-order {
+    padding-right: .30em;
 }
 
 #center {

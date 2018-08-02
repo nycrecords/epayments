@@ -1,5 +1,5 @@
 import React from 'react';
-import {Button, Container, Dimmer, Divider, Grid, Header, Icon, Loader, Segment, Sticky} from 'semantic-ui-react';
+import {Button, Container, Dimmer, Divider ,Grid, Header, Icon, Loader, Segment,} from 'semantic-ui-react';
 import {connect} from 'react-redux';
 import {mapDispatchToProps, mapStateToProps} from "../utils/reduxMappers";
 import OrderForm from "./order_form";
@@ -83,6 +83,7 @@ class Home extends React.Component {
                 this.setLoadingState(false);
             });
         };
+
     };
 
     toggleCSV = (visible) => {
@@ -117,8 +118,6 @@ class Home extends React.Component {
         nextProps.authenticated && this.getOrders();
     }
 
-    scrollHeight
-
 
     render() {
         const orderRows = this.state.all_orders.map((order) =>
@@ -138,7 +137,7 @@ class Home extends React.Component {
             <Container>
                 {this.props.authenticated ? (
                     <Grid padded columns={3}>
-                        <Segment basic className="no-padding">
+                        <Segment basic className="no-padding no-margin">
                             <Header as="h1" className="half">ePayments
                                 <Container className="sub header">Department of Records</Container>
                             </Header>
@@ -150,11 +149,9 @@ class Home extends React.Component {
                             </Segment>
                         </Segment>
 
-                        <Grid.Column width={4} id="grid-column-search">
-                            <Sticky>
-                                <OrderForm addOrder={this.addOrder} setLoadingState={this.setLoadingState}
-                                   toggleCSV={this.toggleCSV} ref={orderForm => this.orderForm = orderForm}/>
-                            </Sticky>
+                        <Grid.Column width={4}className="no-top-padding">
+                            <OrderForm addOrder={this.addOrder} setLoadingState={this.setLoadingState}
+                                       toggleCSV={this.toggleCSV} ref={orderForm => this.orderForm = orderForm}/>
                         </Grid.Column>
 
                         <Grid.Column width={1}/>
@@ -163,7 +160,7 @@ class Home extends React.Component {
                             <Loader content='Loading'/>
                         </Dimmer>
 
-                        <Grid.Column width={11} className="no-padding" >
+                        <Grid.Column width={11} className="no-padding">
                             <Header as="h1" dividing textAlign="center">Order</Header>
 
                             <Button.Group size='medium' floated='right'>
@@ -181,6 +178,7 @@ class Home extends React.Component {
                             <strong>Number of Orders: {this.state.order_count}</strong>
 
                             <Divider clearing/>
+
 
                             <div id="grid-column-order">
                                 {orderRows}
