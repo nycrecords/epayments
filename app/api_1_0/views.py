@@ -183,173 +183,175 @@ def new_order():
 
         print(status)
         print(order_type)
-        # next_order_number = OrderNumberCounter.query.filter_by(year=year).one().next_order_number
-        # order_id = "EPAY-" + year + "-" + str(next_order_number)
-        # main_order = Orders(id=order_id,
-        #                     date_submitted=today,
-        #                     date_received=today,
-        #                     confirmation_message="",
-        #                     client_data="",
-        #                     order_types=order_type,
-        #                     multiple_items=True)
-        # create_object(main_order)
-        # customer = Customers(billing_name=billing_name,
-        #                      email=email,
-        #                      shipping_name=billing_name,
-        #                      address_line_1=address_line_1,
-        #                      address_line_2=address_line_2,
-        #                      city=city,
-        #                      state=state,
-        #                      zip_code=zip_code,
-        #                      phone=phone,
-        #                      instructions=instruction,
-        #                      order_number=main_order.id,
-        #                      )
-        # create_object(customer)
-        # sub_order_number = Orders.query.filter_by(id=main_order.id).one().next_suborder_number
-        # sub_order_id = main_order.id + "-" + str(sub_order_number)
-        # sub_order = Suborders(id=sub_order_id,
-        #                       client_id=customer.id,
-        #                       order_type=order_type,
-        #                       order_number=main_order.id,
-        #                       _status=status
-        #                       )
-        # create_object(sub_order)
-        #
-        # if order_type == TaxPhoto:
-        #     tax_order = TaxPhoto(borough=None,
-        #                          collection=collection,
-        #                          roll=roll,
-        #                          block=block,
-        #                          lot=lot,
-        #                          building_number=building_number,
-        #                          street=street,
-        #                          description=add_description,
-        #                          mail=mail,
-        #                          contact_number=contact_number)
-        #     create_object(tax_order)
-        # elif order_type == PHOTO_GALLERY:
-        #     photo_order = PhotoGallery(image_id=img_id,
-        #                                description=img_title,
-        #                                additional_description=add_description,
-        #                                size=print_size,
-        #                                num_copies=num_copies,
-        #                                mail=mail,
-        #                                contact_number=contact_number,
-        #                                personal_use_agreement=personal_use_agreement,
-        #                                comment=comment,
-        #                                suborder_number=sub_order.id)
-        #     create_object(photo_order)
-        # elif order_type == PROPERTY_CARD:
-        #     property_order = PropertyCard(borough=borough,
-        #                                   block=block,
-        #                                   lot=lot,
-        #                                   building_number=building_number,
-        #                                   street=street,
-        #                                   description=add_description,
-        #                                   certified=certified,
-        #                                   mail=mail,
-        #                                   contact_info=contact_number,
-        #                                   suborder_number=sub_order.id
-        #                                   )
-        #     create_object(property_order)
-        # elif order_type == DEATH_SEARCH:
-        #     ds_order = DeathSearch(last_name=last_name,
-        #                            first_name=first_name,
-        #                            middle_name=middle_name,
-        #                            num_copies=num_copies,
-        #                            cemetery=cemetery,
-        #                            month=month,
-        #                            day=day,
-        #                            years=years,
-        #                            death_place=death_place,
-        #                            borough=borough,
-        #                            letter=letter,
-        #                            comment=comment,
-        #                            suborder_number=sub_order.id)
-        #     create_object(ds_order)
-        # elif order_type == DEATH_CERT:
-        #     dc_order = DeathCertificate(certificate_number=certificate_num,
-        #                                 last_name=last_name,
-        #                                 first_name=first_name,
-        #                                 middle_name=middle_name,
-        #                                 num_copies=num_copies,
-        #                                 cemetery=cemetery,
-        #                                 month=month,
-        #                                 day=day,
-        #                                 years=years,
-        #                                 death_place=death_place,
-        #                                 borough=borough,
-        #                                 letter=letter,
-        #                                 comment=comment,
-        #                                 suborder_number=sub_order.id)
-        #     create_object(dc_order)
-        # elif order_type == MARRIAGE_SEARCH:
-        #     ms_order = MarriageSearch(groom_last_name=groom_last_name,
-        #                               groom_first_name=groom_first_name,
-        #                               bride_last_name=bride_last_name,
-        #                               bride_first_name=bride_first_name,
-        #                               num_copies=num_copies,
-        #                               month=month,
-        #                               day=day,
-        #                               years=years,
-        #                               marriage_place=marriage_place,
-        #                               borough=borough,
-        #                               letter=letter,
-        #                               comment=comment,
-        #                               suborder_number=sub_order.id)
-        #     create_object(ms_order)
-        # elif order_type == MARRIAGE_CERT:
-        #     mc_order = MarriageCertificate(certificate_number=certificate_num,
-        #                                    groom_last_name=groom_last_name,
-        #                                    groom_first_name=groom_first_name,
-        #                                    bride_last_name=bride_last_name,
-        #                                    bride_first_name=bride_last_name,
-        #                                    num_copies=num_copies,
-        #                                    month=month,
-        #                                    day=day,
-        #                                    years=years,
-        #                                    marriage_place=marriage_place,
-        #                                    borough=borough,
-        #                                    letter=letter,
-        #                                    comment=comment,
-        #                                    suborder_number=sub_order.id)
-        #     create_object(mc_order)
-        # elif order_type == BIRTH_SEARCH:
-        #     bs_order = BirthSearch(first_name=first_name,
-        #                            last_name=last_name,
-        #                            middle_name=middle_name,
-        #                            gender=gender,
-        #                            father_name=father_name,
-        #                            mother_name=mother_name,
-        #                            num_copies=num_copies,
-        #                            month=month,
-        #                            day=day,
-        #                            years=years,
-        #                            birth_place=birth_place,
-        #                            borough=borough,
-        #                            letter=letter,
-        #                            comment=comment,
-        #                            suborder_number=sub_order.id)
-        #     create_object(bs_order)
-        # elif order_type == BIRTH_CERT:
-        #     bc_order = BirthCertificate(certificate_number=certificate_num,
-        #                                 last_name=last_name,
-        #                                 first_name=first_name,
-        #                                 middle_name=middle_name,
-        #                                 gender=gender,
-        #                                 father_name=father_name,
-        #                                 mother_name=mother_name,
-        #                                 num_copies=num_copies,
-        #                                 month=month,
-        #                                 day=day,
-        #                                 years=years,
-        #                                 birth_place=birth_place,
-        #                                 borough=borough,
-        #                                 letter=letter,
-        #                                 comment=comment,
-        #                                 suborder_number=sub_order.id)
-        #     create_object(bc_order)
+
+        next_order_number = OrderNumberCounter.query.filter_by(year=year).one().next_order_number
+        order_id = "EPAY-" + year + "-" + str(next_order_number)
+        main_order = Orders(id=order_id,
+                            date_submitted=today,
+                            date_received=today,
+                            confirmation_message="",
+                            client_data="",
+                            order_types=order_type,
+                            multiple_items=True)
+        create_object(main_order)
+        customer = Customers(billing_name=billing_name,
+                             email=email,
+                             shipping_name=billing_name,
+                             address_line_1=address_line_1,
+                             address_line_2=address_line_2,
+                             city=city,
+                             state=state,
+                             zip_code=zip_code,
+                             phone=phone,
+                             instructions=instruction,
+                             order_number=main_order.id,
+                             )
+        create_object(customer)
+        for index in range(len(order_type)):
+            sub_order_number = Orders.query.filter_by(id=main_order.id).one().next_suborder_number
+            sub_order_id = main_order.id + "-" + str(sub_order_number)
+            sub_order = Suborders(id=sub_order_id,
+                                  client_id=customer.id,
+                                  order_type=order_type[index],
+                                  order_number=main_order.id,
+                                  _status=status[index]
+                                  )
+            create_object(sub_order)
+
+            if order_type == TaxPhoto:
+                tax_order = TaxPhoto(borough=None,
+                                     collection=collection[index],
+                                     roll=roll[index],
+                                     block=block[index],
+                                     lot=lot[index],
+                                     building_number=building_number[index],
+                                     street=street[index],
+                                     description=add_description[index],
+                                     mail=mail[index],
+                                     contact_number=contact_number[index])
+                create_object(tax_order)
+            elif order_type == PHOTO_GALLERY:
+                photo_order = PhotoGallery(image_id=img_id[index],
+                                           description=img_title[index],
+                                           additional_description=add_description[index],
+                                           size=print_size[index],
+                                           num_copies=num_copies[index],
+                                           mail=mail[index],
+                                           contact_number=contact_number[index],
+                                           personal_use_agreement=personal_use_agreement[index],
+                                           comment=comment[index],
+                                           suborder_number=sub_order.id)
+                create_object(photo_order)
+            elif order_type == PROPERTY_CARD:
+                property_order = PropertyCard(borough=borough[index],
+                                              block=block[index],
+                                              lot=lot[index],
+                                              building_number=building_number[index],
+                                              street=street[index],
+                                              description=add_description[index],
+                                              certified=certified[index],
+                                              mail=mail[index],
+                                              contact_info=contact_number[index],
+                                              suborder_number=sub_order.id
+                                              )
+                create_object(property_order)
+            elif order_type == DEATH_SEARCH:
+                ds_order = DeathSearch(last_name=last_name[index],
+                                       first_name=first_name[index],
+                                       middle_name=middle_name[index],
+                                       num_copies=num_copies[index],
+                                       cemetery=cemetery[index],
+                                       month=month[index],
+                                       day=day[index],
+                                       years=years[index],
+                                       death_place=death_place[index],
+                                       borough=borough[index],
+                                       letter=letter[index],
+                                       comment=comment[index],
+                                       suborder_number=sub_order.id)
+                create_object(ds_order)
+            elif order_type == DEATH_CERT:
+                dc_order = DeathCertificate(certificate_number=certificate_num[index],
+                                            last_name=last_name[index],
+                                            first_name=first_name[index],
+                                            middle_name=middle_name[index],
+                                            num_copies=num_copies[index],
+                                            cemetery=cemetery[index],
+                                            month=month[index],
+                                            day=day[index],
+                                            years=years[index],
+                                            death_place=death_place[index],
+                                            borough=borough[index],
+                                            letter=letter[index],
+                                            comment=comment[index],
+                                            suborder_number=sub_order.id)
+                create_object(dc_order)
+            elif order_type == MARRIAGE_SEARCH:
+                ms_order = MarriageSearch(groom_last_name=groom_last_name[index],
+                                          groom_first_name=groom_first_name[index],
+                                          bride_last_name=bride_last_name[index],
+                                          bride_first_name=bride_first_name[index],
+                                          num_copies=num_copies[index],
+                                          month=month[index],
+                                          day=day[index],
+                                          years=years[index],
+                                          marriage_place=marriage_place[index],
+                                          borough=borough[index],
+                                          letter=letter[index],
+                                          comment=comment[index],
+                                          suborder_number=sub_order.id)
+                create_object(ms_order)
+            elif order_type == MARRIAGE_CERT:
+                mc_order = MarriageCertificate(certificate_number=certificate_num[index],
+                                               groom_last_name=groom_last_name[index],
+                                               groom_first_name=groom_first_name[index],
+                                               bride_last_name=bride_last_name[index],
+                                               bride_first_name=bride_last_name[index],
+                                               num_copies=num_copies[index],
+                                               month=month[index],
+                                               day=day[index],
+                                               years=years[index],
+                                               marriage_place=marriage_place[index],
+                                               borough=borough[index],
+                                               letter=letter[index],
+                                               comment=comment[index],
+                                               suborder_number=sub_order.id)
+                create_object(mc_order)
+            elif order_type == BIRTH_SEARCH:
+                bs_order = BirthSearch(first_name=first_name[index],
+                                       last_name=last_name[index],
+                                       middle_name=middle_name[index],
+                                       gender=gender[index],
+                                       father_name=father_name[index],
+                                       mother_name=mother_name[index],
+                                       num_copies=num_copies[index],
+                                       month=month[index],
+                                       day=day[index],
+                                       years=years[index],
+                                       birth_place=birth_place[index],
+                                       borough=borough[index],
+                                       letter=letter[index],
+                                       comment=comment[index],
+                                       suborder_number=sub_order.id)
+                create_object(bs_order)
+            elif order_type == BIRTH_CERT:
+                bc_order = BirthCertificate(certificate_number=certificate_num[index],
+                                            last_name=last_name[index],
+                                            first_name=first_name[index],
+                                            middle_name=middle_name[index],
+                                            gender=gender[index],
+                                            father_name=father_name[index],
+                                            mother_name=mother_name[index],
+                                            num_copies=num_copies[index],
+                                            month=month[index],
+                                            day=day[index],
+                                            years=years[index],
+                                            birth_place=birth_place[index],
+                                            borough=borough[index],
+                                            letter=letter[index],
+                                            comment=comment[index],
+                                            suborder_number=sub_order.id[index])
+                create_object(bc_order)
 
     return jsonify(), 200
 

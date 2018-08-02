@@ -273,9 +273,16 @@ class NewOrderForm extends React.Component {
     };
 
     callBack = (dataFromChild, value, index, state) => {
-        // debugger;
+        debugger;
         console.log("data is " + dataFromChild);
-        const newState = state.slice()
+        console.log(state);
+        const newState=state.slice();
+        // for(var i=0; i<state.length; i++){
+        //     newState[i]=state[i]
+        //
+        // }
+
+        // const newState ;
         newState[index]=value;
         console.log(newState);
 
@@ -283,9 +290,9 @@ class NewOrderForm extends React.Component {
 
 
         this.setState({
-            [dataFromChild]: newState
+            [dataFromChild]: state
         });
-        console.log("status is :" + this.state.status);
+        console.log("State is : " + dataFromChild + "   " + state);
 
     };
 
@@ -400,7 +407,7 @@ class NewOrderForm extends React.Component {
                                     />
                                     <Container>
 
-                                        <Form.Group>
+                                        <Form.Group >
                                             {SubOrders}
 
 
