@@ -4,7 +4,7 @@ import {
     Link
 } from 'react-router-dom';
 
-import {Button, Container, Divider, Grid, Header, Form, Loader, Dimmer, Icon} from 'semantic-ui-react';
+import {Button, Container, Divider, Grid, Header, Form, Loader, Dimmer, Icon, Segment} from 'semantic-ui-react';
 import moment from 'moment';
 import {csrfFetch, handleFetchErrors} from "../utils/fetch";
 import SubOrderForm from "./suborderform";
@@ -45,7 +45,7 @@ class NewOrderForm extends React.Component {
             day: [],
             year: [],
             marriagePlace: [],
-            letter: [false],
+            letter: [],
 
 
             block: [],
@@ -54,13 +54,13 @@ class NewOrderForm extends React.Component {
             borough: [],
             buildingNum: [],
             street: [],
-            mail: [false],
+            mail: [],
             contactNum: [],
 
             imgId: [],
             imgTitle: [],
             comment: [],
-            personalUseAgreement: [false],
+            personalUseAgreement: [],
             addDescription: [],
             collection: [],
             printSize: [],
@@ -83,9 +83,6 @@ class NewOrderForm extends React.Component {
         };
 
         this.handleChange = this.handleChange.bind(this);
-        this.setFalse = () => {
-            this.setState({showSubOrder: false});
-        }
         this.clearSelection = () => {
             this.setState({
                 billingName: '',
@@ -118,7 +115,7 @@ class NewOrderForm extends React.Component {
                 day: [],
                 year: [],
                 marriagePlace: [],
-                letter: false,
+                letter: [],
 
                 block: [],
                 lot: [],
@@ -126,12 +123,12 @@ class NewOrderForm extends React.Component {
                 borough: [],
                 buildingNum: [],
                 street: [],
-                mail: [false],
+                mail: [],
                 contactNum: [],
                 imgId: [],
                 imgTitle: [],
                 comment: [],
-                personalUseAgreement: [false],
+                personalUseAgreement: [],
                 addDescription: [],
                 collection: [],
                 printSize: [],
@@ -149,6 +146,52 @@ class NewOrderForm extends React.Component {
         this.yesterday = moment().subtract(1, 'days');
         this.today = moment();
     };
+
+    handleEmptyStates = (e) => {
+        this.setState({
+            certified: this.state.certified.concat(" "),
+            deathPlace: this.state.deathPlace.concat(" "),
+            cemetery: this.state.cemetery.concat(" "),
+            firstName: this.state.firstName.concat(" "),
+            lastName: this.state.lastName.concat("applepies "),
+            birthPlace: this.state.birthPlace.concat(" "),
+            gender: this.state.gender.concat(" "),
+            fatherName: this.state.fatherName.concat(" "),
+            motherName: this.state.motherName.concat(" "),
+            middleName: this.state.middleName.concat((" ")),
+
+            certificateNum: this.state.certificateNum.concat(" "),
+            groomLastName: this.state.groomLastName.concat(""),
+            groomFirstName: this.state.groomFirstName.concat(" "),
+            brideLastName: this.state.brideLastName.concat(" "),
+            brideFirstName: this.state.brideFirstName.concat(" "),
+            month: this.state.month.concat(" "),
+            day: this.state.day.concat(" "),
+            year: this.state.year.concat(" "),
+            marriagePlace: this.state.marriagePlace.concat(" "),
+            letter: this.state.letter.concat(" "),
+
+            block: this.state.block.concat(" "),
+            lot: this.state.lot.concat(" "),
+            roll: this.state.roll.concat(" "),
+            borough: this.state.borough.concat(" "),
+            buildingNum: this.state.buildingNum.concat(" "),
+            street: this.state.street.concat(" "),
+            mail: this.state.mail.concat(" "),
+            contactNum: this.state.contactNum.concat(" "),
+            imgId: this.state.imgId.concat(" "),
+            imgTitle: this.state.imgTitle.concat(" "),
+            comment: this.state.comment.concat(" "),
+            personalUseAgreement: this.state.personalUseAgreement.concat(" "),
+            addDescription: this.state.addDescription.concat(" "),
+            collection: this.state.collection.concat(" "),
+            printSize: this.state.printSize.concat(" "),
+            numCopies: this.state.numCopies.concat(" "),
+
+        })
+        console.log("last name is " + this.state.lastName);
+
+    }
 
     handleChange = (e) => {
         const target = e.target;
@@ -237,6 +280,7 @@ class NewOrderForm extends React.Component {
                 deathPlace: this.state.deathPlace,
                 cemetery: this.state.cemetery,
                 firstName: this.state.firstName,
+                middleName: this.state.middleName,
                 lastName: this.state.lastName,
 
 
@@ -273,26 +317,22 @@ class NewOrderForm extends React.Component {
     };
 
     callBack = (dataFromChild, value, index, state) => {
-        debugger;
+        console.log("start state is : " + state)
+
         console.log("data is " + dataFromChild);
-        console.log(state);
-        const newState=state.slice();
-        // for(var i=0; i<state.length; i++){
-        //     newState[i]=state[i]
-        //
-        // }
-
-        // const newState ;
-        newState[index]=value;
-        console.log(newState);
-
-
+        // console.log(state);
+        let newState = state.slice()
+        // const newState=state.slice();
+        // newState[index]=value;
+        // console.log("new state is " + newState);
+        newState[index] = value
 
 
         this.setState({
-            [dataFromChild]: state
+            [dataFromChild]: newState
         });
-        console.log("State is : " + dataFromChild + "   " + state);
+        console.log("State is : " + state);
+
 
     };
 
@@ -301,12 +341,16 @@ class NewOrderForm extends React.Component {
         console.log('current list is ' + this.state.subOrderList);
         const SubOrders = this.state.subOrderList.map((suborderIndex) =>
             <div>
-                Suborder: {suborderIndex + 1}
-                <SubOrderForm key={suborderIndex}
-                              index={suborderIndex}
-                              callBack={this.callBack}
-                              state={this.state}
-                />
+                <Segment compact>
+                    <h4>
+                        Suborder: {suborderIndex + 1}
+                    </h4>
+                    <SubOrderForm key={suborderIndex}
+                                  index={suborderIndex}
+                                  callBack={this.callBack}
+                                  state={this.state}
+                    />
+                </Segment>
 
             </div>
         );
@@ -336,6 +380,7 @@ class NewOrderForm extends React.Component {
 
                         <Grid.Row centered>
                             <Grid.Column width={6}>
+
                                 <Form onSubmit={this.handleSubmit}>
                                     <Form.Input label="Billing Name"
                                                 required
@@ -407,26 +452,26 @@ class NewOrderForm extends React.Component {
                                     />
                                     <Container>
 
-                                        <Form.Group >
+                                        {/*<Form.Group>*/}
+                                        <Segment.Group compact>
                                             {SubOrders}
+                                            {this.handleEmptyStates}
+                                        </Segment.Group>
 
 
-                                            {/*{this.state.showSubOrder && {SubOrders}}*/}
+                                        {/*{this.state.showSubOrder && {SubOrders}}*/}
 
 
-                                        </Form.Group>
-                                        <Button animated type="reset"
-                                                floated="left"
-                                                onClick={this.handleClick}
-                                        >
-                                            <Button.Content visible>
-                                                <Icon name='add'/>
-                                            </Button.Content>
-                                            <Button.Content hidden>
-                                                Additional Order
-                                            </Button.Content>
-                                        </Button>
+                                        {/*</Form.Group>*/}
                                     </Container>
+                                    <Button animated type="reset" floated="left" onClick={this.handleClick}>
+                                        <Button.Content visible>
+                                            <Icon name='add'/>
+                                        </Button.Content>
+                                        <Button.Content hidden>
+                                            Additional Order
+                                        </Button.Content>
+                                    </Button>
                                     <Button type='submit' positive floated="left" content="Place Order"/>
                                     <Button type="reset" onClick={this.clearSelection} content="Clear"/>
                                 </Form>

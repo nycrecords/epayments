@@ -169,7 +169,7 @@ def new_order():
         mother_name = json.get("motherName")
         num_copies = json.get("numCopies")
         order_type = json.get("orderType")
-        personal_use_agreement = json.get("personUseAgreement")
+        personal_use_agreement = json.get("personalUseAgreement")
         phone = json.get("phone")
         print_size = json.get("printSize")
         roll = json.get("roll")
@@ -183,7 +183,7 @@ def new_order():
 
         print(status)
         print(order_type)
-
+        print(last_name)
         next_order_number = OrderNumberCounter.query.filter_by(year=year).one().next_order_number
         order_id = "EPAY-" + year + "-" + str(next_order_number)
         main_order = Orders(id=order_id,
@@ -218,7 +218,7 @@ def new_order():
                                   )
             create_object(sub_order)
 
-            if order_type == TaxPhoto:
+            if order_type[index] == TaxPhoto:
                 tax_order = TaxPhoto(borough=None,
                                      collection=collection[index],
                                      roll=roll[index],
@@ -230,7 +230,7 @@ def new_order():
                                      mail=mail[index],
                                      contact_number=contact_number[index])
                 create_object(tax_order)
-            elif order_type == PHOTO_GALLERY:
+            elif order_type[index] == PHOTO_GALLERY:
                 photo_order = PhotoGallery(image_id=img_id[index],
                                            description=img_title[index],
                                            additional_description=add_description[index],
@@ -242,7 +242,7 @@ def new_order():
                                            comment=comment[index],
                                            suborder_number=sub_order.id)
                 create_object(photo_order)
-            elif order_type == PROPERTY_CARD:
+            elif order_type[index] == PROPERTY_CARD:
                 property_order = PropertyCard(borough=borough[index],
                                               block=block[index],
                                               lot=lot[index],
@@ -255,7 +255,7 @@ def new_order():
                                               suborder_number=sub_order.id
                                               )
                 create_object(property_order)
-            elif order_type == DEATH_SEARCH:
+            elif order_type[index] == DEATH_SEARCH:
                 ds_order = DeathSearch(last_name=last_name[index],
                                        first_name=first_name[index],
                                        middle_name=middle_name[index],
@@ -270,7 +270,7 @@ def new_order():
                                        comment=comment[index],
                                        suborder_number=sub_order.id)
                 create_object(ds_order)
-            elif order_type == DEATH_CERT:
+            elif order_type[index] == DEATH_CERT:
                 dc_order = DeathCertificate(certificate_number=certificate_num[index],
                                             last_name=last_name[index],
                                             first_name=first_name[index],
@@ -286,7 +286,8 @@ def new_order():
                                             comment=comment[index],
                                             suborder_number=sub_order.id)
                 create_object(dc_order)
-            elif order_type == MARRIAGE_SEARCH:
+            elif order_type[index] == MARRIAGE_SEARCH:
+                print(index)
                 ms_order = MarriageSearch(groom_last_name=groom_last_name[index],
                                           groom_first_name=groom_first_name[index],
                                           bride_last_name=bride_last_name[index],
@@ -301,7 +302,7 @@ def new_order():
                                           comment=comment[index],
                                           suborder_number=sub_order.id)
                 create_object(ms_order)
-            elif order_type == MARRIAGE_CERT:
+            elif order_type[index] == MARRIAGE_CERT:
                 mc_order = MarriageCertificate(certificate_number=certificate_num[index],
                                                groom_last_name=groom_last_name[index],
                                                groom_first_name=groom_first_name[index],
@@ -317,7 +318,7 @@ def new_order():
                                                comment=comment[index],
                                                suborder_number=sub_order.id)
                 create_object(mc_order)
-            elif order_type == BIRTH_SEARCH:
+            elif order_type[index] == BIRTH_SEARCH:
                 bs_order = BirthSearch(first_name=first_name[index],
                                        last_name=last_name[index],
                                        middle_name=middle_name[index],
@@ -334,7 +335,7 @@ def new_order():
                                        comment=comment[index],
                                        suborder_number=sub_order.id)
                 create_object(bs_order)
-            elif order_type == BIRTH_CERT:
+            elif order_type[index] == BIRTH_CERT:
                 bc_order = BirthCertificate(certificate_number=certificate_num[index],
                                             last_name=last_name[index],
                                             first_name=first_name[index],
