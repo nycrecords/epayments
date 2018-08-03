@@ -171,19 +171,6 @@ def search_queries(order_number=None,
     if order_type == 'all':
         order_type = ''
 
-    # Time formatting: from mm/dd/yyyy to mm/dd/yy hh:mm AM/PM
-    if date_received_start:
-        date_received_start = datetime.strptime(date_received_start, '%m/%d/%Y').strftime(DATETIME_FORMAT)
-
-    if date_received_end:
-        date_received_end = datetime.strptime(date_received_end, '%m/%d/%Y').strftime(DATETIME_FORMAT)
-
-    if date_submitted_start:
-        date_submitted_start = datetime.strptime(date_submitted_start, '%m/%d/%Y').strftime(DATETIME_FORMAT)
-
-    if date_submitted_end:
-        date_submitted_end = datetime.strptime(date_submitted_end, '%m/%d/%Y').strftime(DATETIME_FORMAT)
-
     query_field = {
         'billing_name': billing_name,
         'order_type': order_type,
@@ -198,6 +185,13 @@ def search_queries(order_number=None,
         'date_submitted_start': date_submitted_start,
         'date_submitted_end': date_submitted_end
     }
+    # Remove 'Invalid date' as an option
+    # Time formatting: from mm/dd/yyyy to mm/dd/yy hh:mm AM/PM
+    for a in date_range:
+        if date_range[a] == 'Invalid date':
+            date_range[a] = ''
+        if date_range[a]:
+            date_range[a] = datetime.strptime(date_range[a], '%m/%d/%Y').strftime(DATETIME_FORMAT)
 
     dsl_gen = DSLGenerator(query_fields=query_field, date_range=date_range)
     dsl = dsl_gen.no_query()
