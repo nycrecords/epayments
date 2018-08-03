@@ -38,16 +38,29 @@ html, body {
 .no-top-padding{
     padding-top: 0!important;
 }
-.margin-tiny{
-    margin: .10em!important;
+.margin-top-none{
+    margin-top: 0!important;
 }
 
-.margin-small-tb{
-    margin: .69em 0!important;
+#rail-right{
+    width: 200px!important;
+    top: 1.25em;
+    max-height:42em;
+}
+
+#left-shift{
+    left:2em;
 }
 
 #grid-column-order {
+    overflow-y: auto;
+    max-height: 42em;
     padding-right: .30em;
+}
+
+#grid-column-search{
+    width:35.5%;
+
 }
 
 #center {

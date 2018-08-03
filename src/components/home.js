@@ -1,5 +1,5 @@
 import React from 'react';
-import {Button, Container, Dimmer, Divider ,Grid, Header, Icon, Loader, Segment,} from 'semantic-ui-react';
+import {Button, Container, Dimmer,Rail ,Grid, Header, Icon, Loader, Segment,} from 'semantic-ui-react';
 import {connect} from 'react-redux';
 import {mapDispatchToProps, mapStateToProps} from "../utils/reduxMappers";
 import OrderForm from "./order_form";
@@ -149,40 +149,39 @@ class Home extends React.Component {
                             </Segment>
                         </Segment>
 
-                        <Grid.Column width={4}className="no-top-padding">
-                            <OrderForm addOrder={this.addOrder} setLoadingState={this.setLoadingState}
-                                       toggleCSV={this.toggleCSV} ref={orderForm => this.orderForm = orderForm}/>
-                        </Grid.Column>
-
-                        <Grid.Column width={1}/>
-
                         <Dimmer inverted active={this.state.loading}>
                             <Loader content='Loading'/>
                         </Dimmer>
+                        <Grid.Column width={3}>
+                        </Grid.Column>
+                        <Grid.Column width={11} centered className="no-padding" id="left-shift">
+                            <Rail position="left" id="grid-column-search" >
+                                <OrderForm addOrder={this.addOrder} setLoadingState={this.setLoadingState}
+                                       toggleCSV={this.toggleCSV} ref={orderForm => this.orderForm = orderForm}/>
+                            </Rail>
 
-                        <Grid.Column width={11} className="no-padding">
-                            <Header as="h1" dividing textAlign="center">Order</Header>
+                            <Header as="h1" dividing textAlign="center" className='margin-top-none'>Order</Header>
+                            
+                            <Rail position="right"  id="rail-right">
+                                <p><strong>Number of Items: {this.state.suborder_count}</strong> </p>
 
-                            <Button.Group size='medium' floated='right'>
-                                <Button icon active={true}>
-                                    <Icon name='print'/>
-                                </Button>
-                                {this.state.showCSVButton &&
-                                <Button content='Generate CSV' onClick={this.generateCSV}/>}
-                                <Button content='Order Sheets' onClick={this.printOrderSheet}/>
-                                <Button content='Big Labels' onClick={this.printBigLabels}/>
-                                <Button content='Small Labels' onClick={this.printSmallLabels}/>
-                            </Button.Group>
-                            <strong>Number of Items: {this.state.suborder_count}</strong>
-                            <br/>
-                            <strong>Number of Orders: {this.state.order_count}</strong>
+                                <p><strong>Number of Orders: {this.state.order_count}</strong></p>
 
-                            <Divider clearing/>
-
-
+                                <Button.Group vertical size='medium'>
+                                    <Button icon active={true}>
+                                        <Icon name='print'/>
+                                    </Button>
+                                    {this.state.showCSVButton &&
+                                    <Button content='Generate CSV' onClick={this.generateCSV}/>}
+                                    <Button content='Order Sheets' onClick={this.printOrderSheet}/>
+                                    <Button content='Big Labels' onClick={this.printBigLabels}/>
+                                    <Button content='Small Labels' onClick={this.printSmallLabels}/>
+                                </Button.Group>
+                            </Rail>
                             <div id="grid-column-order">
                                 {orderRows}
                             </div>
+
                         </Grid.Column>
                     </Grid>
                 ) : (
