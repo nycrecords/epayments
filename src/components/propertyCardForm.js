@@ -1,99 +1,124 @@
 import React from 'react'
-
+import {Grid, Form} from 'semantic-ui-react';
+const boroughOptions = [
+    {key: 'bronx', text: 'Bronx', value: 'Bronx'},
+    {key: 'brooklyn', text: 'Brooklyn', value: 'Brooklyn'},
+    {key: 'manhattan', text: 'Manhattan', value: 'Manhattan'},
+    {key: 'queens', text: 'Queens', value: 'Queens'},
+    {key: 'statenisland', text: 'Staten Island', value: 'Staten Island'},
+];
 class PropertyCardForm extends React.Component {
+     constructor() {
+         super();
+         this.state = {
+             certified: ' ',
+             block: ' ',
+             lot: ' ',
+             borough: ' ',
+             buildingNum: ' ',
+             street: ' ',
+             mail: false,
+             contactNum: ' ',
+             imgId: ' ',
+             imgTitle: ' ',
+             comment: ' ',
+             personalUseAgreement: false,
+             addDescription: ' ',
+             printSize: ' ',
+         }
+     }
     render() {
         return (
             <Grid>
                 <Grid.Row>
                     <Grid.Column>
-                        <Form.Input label="Image Identifier"
-                                    name="imgId"
-                                    placeholder="Image Identifier"
-                                    onChange={this.handleChange}
-                                    value={this.state.imgId}
+                        <Form.Input label="Block"
+                                    name="block"
+                                    placeholder="Block"
+                                    onChange={(e, {value}) => {
+                                        this.setState({block: value})
+                                        this.props.callBack("block", value, this.props.index, this.props.state.block)
+                                    }}
+                                    value={this.state.block}
                         />
-
-                        <Form.Input label="Title/Description of Image"
-                                    name="imgTitle"
-                                    placeholder="Title/Description of Image"
-                                    onChange={this.handleChange}
-                                    value={this.state.imgTitle}
+                        <Form.Input label="Lot"
+                                    name="lot"
+                                    placeholder="Lot"
+                                    onChange={(e, {value}) => {
+                                        this.setState({lot: value})
+                                        this.props.callBack("lot", value, this.props.index, this.props.state.lot)
+                                    }}
+                                    value={this.state.lot}
                         />
+                        <Form.Select label="Borough"
+                                     required
+                                     name="borough"
+                                     options={boroughOptions}
+                                     placeholder="Borough"
+                                     onChange={(e, {value}) => {
+                                         this.setState({borough: value});
+                                         this.props.callBack("borough", value, this.props.index, this.props.state.borough);
 
-                        <Form.Input label="Addition Description"
-                                    name="addDescription"
-                                    placeholder="Addition Description"
-                                    onChange={this.handleChange}
-                                    value={this.state.addDescription}
+                                     }}
+                                     value={this.state.value}
+                        />
+                        <Form.Input label="Building Number"
+                                    name="buildingNum"
+                                    placeholder="Building Number"
+                                    onChange={(e, {value}) => {
+                                        this.setState({buildingNum: value})
+                                        this.props.callBack("buildingNum", value, this.props.index, this.props.state.buildingNum)
+                                    }}
+                                    value={this.state.buildingNum}
+                        />
+                        <Form.Input label="Street"
+                                    name="street"
+                                    placeholder="Street"
+                                    onChange={(e, {value}) => {
+                                        this.setState({street: value})
+                                        this.props.callBack("street", value, this.props.index, this.props.state.street)
+                                    }}
+                                    value={this.state.street}
                         />
                         <Form.Checkbox label="Mail"
                                        name="mail"
                                        onChange={() => {
-                                           (this.state.mail == false) ?
-                                               this.setState({mail: true}) &&
-                                               this.props.callBack("mail", true) :
-                                               this.setState({mail: false}) &&
-                                               this.props.callBack("mail", true);
+                                           (this.state.mail === false) ?
+                                               this.props.callBack("mail", true, this.props.index, this.props.state.mail):
+                                               this.props.callBack("mail", false, this.props.index, this.props.state.mail);
+                                           (this.state.mail === false) ?
+                                               this.setState({mail: true}) :
+                                               this.setState({mail: false})
                                        }}
-                                       value={this.state.mail}
+                        />
+                        <Form.Input label="description"
+                                    name="addDescription"
+                                    placeholder="Description"
+                                    onChange={(e, {value}) => {
+                                        this.setState({addDescription: value})
+                                        this.props.callBack("addDescription", value, this.props.index, this.props.state.addDescription)
+                                    }}
+                                    value={this.state.addDescription}
                         />
                         <Form.Input label="Contact Number"
                                     name="contactNum"
                                     placeholder="Contact Number"
-                                    onChange={this.handleChange}
+                                    onChange={(e, {value}) => {
+                                        this.setState({contactNum: value})
+                                        this.props.callBack("contactNum", value, this.props.index, this.props.state.contactNum)
+                                    }}
                                     value={this.state.contactNum}
                         />
-                        <Form.Checkbox label="Personal Use Agreement"
-                                       name="personalUseAgreement"
-                                       onChange={() => {
-                                           (this.state.personalUseAgreement == false) ?
-                                               this.setState({personalUseAgreement: true}) &&
-                                               this.props.callBack("personalUseAgreement", true) :
-                                               this.setState({personalUseAgreement: false}) &&
-                                               this.props.callBack("personalUseAgreement", true);
-                                       }}
-                                       value={this.state.personalUseAgreement}
+                        <Form.Input label="Certified"
+                                    name="certified"
+                                    placeholder="Certified"
+                                    onChange={(e, {value}) => {
+                                        this.setState({certified: value})
+                                        this.props.callBack("certified", value, this.props.index, this.props.state.certified)
+                                    }}
+                                    value={this.state.certified}
                         />
-                        <Form.Input label="Comment"
-                                    name="comment"
-                                    placeholder="Comment"
-                                    onChange={this.handleChange}
-                                    value={this.state.comment}
-                        />
-                        <Form.Group inline required>
-                            <label>Printing Size</label>
 
-                            <Form.Radio
-                                name={"printSize"}
-                                label='8" x 10" Print'
-                                checked={this.state.printSize === '8x10'}
-                                onChange={(e, {}) => {
-                                    this.setState({printSize: '8x10'})
-                                    this.props.callBack("printSize", '8x10');
-                                }}
-                            />
-
-                            <Form.Radio
-                                name={"printSize"}
-                                label='11" x 14" Print'
-                                checked={this.state.printSize === '11x14'}
-                                onChange={(e, {}) => {
-                                    this.setState({printSize: '11x14'})
-                                    this.props.callBack("printSize", '11x14');
-                                }}
-                            />
-
-                            <Form.Radio
-                                name={"printSize"}
-                                label='16" x 20" Print'
-                                checked={this.state.printSize === '16x20'}
-                                onChange={(e, {}) => {
-                                    this.setState({printSize: '16x20'})
-                                    this.props.callBack("printSize", '16x20');
-                                }}
-                            />
-
-                        </Form.Group>
                     </Grid.Column>
                 </Grid.Row>
             </Grid>

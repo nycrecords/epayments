@@ -183,7 +183,7 @@ def new_order():
 
         print(status)
         print(order_type)
-        print(last_name)
+        print(block)
         next_order_number = OrderNumberCounter.query.filter_by(year=year).one().next_order_number
         order_id = "EPAY-" + year + "-" + str(next_order_number)
         main_order = Orders(id=order_id,
