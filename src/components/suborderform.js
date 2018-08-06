@@ -49,8 +49,8 @@ class SubOrderForm extends React.Component {
     constructor() {
         super();
         this.state = {
-            orderType: ' ',
-            numCopies: ' ',
+            orderType: '',
+            numCopies: '',
             status: [],
             showBirthCert: false,
             showBirthSearch: false,

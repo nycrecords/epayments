@@ -155,19 +155,19 @@ class NewOrderForm extends React.Component {
                 day: this.state.day.concat([" "]),
                 year: this.state.year.concat([" "]),
                 marriagePlace: this.state.marriagePlace.concat([" "]),
-                letter: this.state.letter.concat([" "]),
+                letter: this.state.letter.concat([false]),
                 block: this.state.block.concat([" "]),
                 lot: this.state.lot.concat([" "]),
-                // roll: this.state.roll.concat([" "]),
+                roll: this.state.roll.concat([" "]),
                 borough: this.state.borough.concat([" "]),
                 buildingNum: this.state.buildingNum.concat([" "]),
                 street: this.state.street.concat([" "]),
-                mail: this.state.mail.concat([" "]),
+                mail: this.state.mail.concat([false]),
                 contactNum: this.state.contactNum.concat([" "]),
                 imgId: this.state.imgId.concat([" "]),
                 imgTitle: this.state.imgTitle.concat([" "]),
                 comment: this.state.comment.concat([" "]),
-                personalUseAgreement: this.state.personalUseAgreement.concat([" "]),
+                personalUseAgreement: this.state.personalUseAgreement.concat([false]),
                 addDescription: this.state.addDescription.concat([" "]),
                 collection: this.state.collection.concat([" "]),
                 printSize: this.state.printSize.concat([" "]),
@@ -330,7 +330,6 @@ class NewOrderForm extends React.Component {
     render() {
         console.log('current list is ' + this.state.subOrderList);
         const SubOrders = this.state.subOrderList.map((suborderIndex) =>
-            <div>
                 <Segment compact>
                     <h4>
                         Suborder: {suborderIndex + 1}
@@ -341,8 +340,6 @@ class NewOrderForm extends React.Component {
                                   state={this.state}
                     />
                 </Segment>
-
-            </div>
         );
 
         return (

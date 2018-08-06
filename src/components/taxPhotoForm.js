@@ -28,21 +28,21 @@ class TaxPhotoForm extends React.Component {
                             <label>Collection</label>
                             <Form.Radio
                                 name="collection"
-                                label='1940s'
-                                checked={this.state.collection === "1940s"}
+                                label='1940'
+                                checked={this.state.collection === "1940"}
                                 onChange={(e) => {
-                                    this.setState({collection: "1940s"})
-                                    this.props.callBack("collection", "1940s", this.props.index, this.props.state.collection)
+                                    this.setState({collection: "1940"})
+                                    this.props.callBack("collection", "1940", this.props.index, this.props.state.collection)
                                 }}
 
                             />
                             <Form.Radio
                                 name="collection"
-                                label='1980s'
-                                checked={this.state.collection === "1980s"}
+                                label='1980'
+                                checked={this.state.collection === "1980"}
                                 onChange={(e) => {
-                                    this.setState({collection: "1980s"})
-                                    this.props.callBack("collection", "1980s", this.props.index, this.props.state.collection)
+                                    this.setState({collection: "1980"})
+                                    this.props.callBack("collection", "1980", this.props.index, this.props.state.collection)
                                 }}
                             />
                             <Form.Radio

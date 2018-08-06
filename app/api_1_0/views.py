@@ -18,16 +18,7 @@ from app.models.property_card import PropertyCard
 from app.models.death import DeathCertificate, DeathSearch
 from app.models.marriage import MarriageCertificate, MarriageSearch
 from app.models.birth import BirthCertificate, BirthSearch
-
-BIRTH_SEARCH = "Birth Search"
-BIRTH_CERT = "Birth Cert"
-MARRIAGE_SEARCH = "Marriage Search"
-MARRIAGE_CERT = "Marriage Cert"
-DEATH_SEARCH = "Death Search"
-DEATH_CERT = "Death Cert"
-TAX_PHOTO = "Tax Photo"
-PHOTO_GALLERY = "Photo Gallery"
-PROPERTY_CARD = "Property Card"
+from app.constants import order_types
 
 from app.api_1_0.utils import (
     update_status,
@@ -184,6 +175,7 @@ def new_order():
         print(status)
         print(order_type)
         print(block)
+        print(roll)
         next_order_number = OrderNumberCounter.query.filter_by(year=year).one().next_order_number
         order_id = "EPAY-" + year + "-" + str(next_order_number)
         main_order = Orders(id=order_id,
@@ -217,8 +209,7 @@ def new_order():
                                   _status=status[index]
                                   )
             create_object(sub_order)
-
-            if order_type[index] == TaxPhoto:
+            if order_type[index] == order_types.TAX_PHOTO:
                 tax_order = TaxPhoto(borough=None,
                                      collection=collection[index],
                                      roll=roll[index],
@@ -228,9 +219,14 @@ def new_order():
                                      street=street[index],
                                      description=add_description[index],
                                      mail=mail[index],
-                                     contact_number=contact_number[index])
+                                     contact_number=contact_number[index],
+                                     size=print_size[index],
+                                     num_copies=num_copies[index],
+                                     suborder_number=sub_order.id)
+
                 create_object(tax_order)
-            elif order_type[index] == PHOTO_GALLERY:
+                print("Created tax ORder")
+            elif order_type[index] == order_types.PHOTO_GALLERY:
                 photo_order = PhotoGallery(image_id=img_id[index],
                                            description=img_title[index],
                                            additional_description=add_description[index],
@@ -242,7 +238,7 @@ def new_order():
                                            comment=comment[index],
                                            suborder_number=sub_order.id)
                 create_object(photo_order)
-            elif order_type[index] == PROPERTY_CARD:
+            elif order_type[index] == order_types.PROPERTY_CARD:
                 property_order = PropertyCard(borough=borough[index],
                                               block=block[index],
                                               lot=lot[index],
@@ -255,7 +251,7 @@ def new_order():
                                               suborder_number=sub_order.id
                                               )
                 create_object(property_order)
-            elif order_type[index] == DEATH_SEARCH:
+            elif order_type[index] == order_types.DEATH_SEARCH:
                 ds_order = DeathSearch(last_name=last_name[index],
                                        first_name=first_name[index],
                                        middle_name=middle_name[index],
@@ -270,7 +266,7 @@ def new_order():
                                        comment=comment[index],
                                        suborder_number=sub_order.id)
                 create_object(ds_order)
-            elif order_type[index] == DEATH_CERT:
+            elif order_type[index] == order_types.DEATH_CERT:
                 dc_order = DeathCertificate(certificate_number=certificate_num[index],
                                             last_name=last_name[index],
                                             first_name=first_name[index],
@@ -286,7 +282,7 @@ def new_order():
                                             comment=comment[index],
                                             suborder_number=sub_order.id)
                 create_object(dc_order)
-            elif order_type[index] == MARRIAGE_SEARCH:
+            elif order_type[index] == order_types.MARRIAGE_SEARCH:
                 print(index)
                 ms_order = MarriageSearch(groom_last_name=groom_last_name[index],
                                           groom_first_name=groom_first_name[index],
@@ -302,7 +298,7 @@ def new_order():
                                           comment=comment[index],
                                           suborder_number=sub_order.id)
                 create_object(ms_order)
-            elif order_type[index] == MARRIAGE_CERT:
+            elif order_type[index] == order_types.MARRIAGE_CERT:
                 mc_order = MarriageCertificate(certificate_number=certificate_num[index],
                                                groom_last_name=groom_last_name[index],
                                                groom_first_name=groom_first_name[index],
@@ -318,7 +314,7 @@ def new_order():
                                                comment=comment[index],
                                                suborder_number=sub_order.id)
                 create_object(mc_order)
-            elif order_type[index] == BIRTH_SEARCH:
+            elif order_type[index] == order_types.BIRTH_SEARCH:
                 bs_order = BirthSearch(first_name=first_name[index],
                                        last_name=last_name[index],
                                        middle_name=middle_name[index],
@@ -335,7 +331,7 @@ def new_order():
                                        comment=comment[index],
                                        suborder_number=sub_order.id)
                 create_object(bs_order)
-            elif order_type[index] == BIRTH_CERT:
+            elif order_type[index] == order_types.BIRTH_CERT:
                 bc_order = BirthCertificate(certificate_number=certificate_num[index],
                                             last_name=last_name[index],
                                             first_name=first_name[index],
