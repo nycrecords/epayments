@@ -50,7 +50,7 @@ class NewOrderForm extends React.Component {
 
             block: [" "],
             lot: [" "],
-            row: [" "],
+            roll: [" "],
             borough: [" "],
             buildingNum: [" "],
             street: [" "],
@@ -137,43 +137,46 @@ class NewOrderForm extends React.Component {
             });
         };
         this.handleEmptyStates = () => {
+            /*Add empty index to list whenever additional suborders are prompted
+             to prevent null insert into DB if user left some fields unanswered
+            */
             this.setState({
-                certified: this.state.certified + (" "),
-                deathPlace: this.state.deathPlace + (" "),
-                cemetery: this.state.cemetery + (" "),
-                firstName: this.state.firstName.push(" "),
-                lastName: this.state.lastName + " ",
-                birthPlace: this.state.birthPlace + (" "),
-                gender: this.state.gender + (" "),
-                fatherName: this.state.fatherName + (" "),
-                motherName: this.state.motherName + (" "),
-                middleName: this.state.middleName + ((" ")),
-                certificateNum: this.state.certificateNum + (" "),
-                groomLastName: this.state.groomLastName + (" "),
-                groomFirstName: this.state.groomFirstName + (" "),
-                brideLastName: this.state.brideLastName + (" "),
-                brideFirstName: this.state.brideFirstName + (" "),
-                month: this.state.month + (" "),
-                day: this.state.day + (" "),
-                year: this.state.year + (" "),
-                marriagePlace: this.state.marriagePlace + (" "),
-                letter: this.state.letter + (" "),
-                block: this.state.block + (" "),
-                lot: this.state.lot + (" "),
-                roll: this.state.roll + (" "),
-                borough: this.state.borough + (" "),
-                buildingNum: this.state.buildingNum + (" "),
-                street: this.state.street + (" "),
-                mail: this.state.mail + (" "),
-                contactNum: this.state.contactNum + (" "),
-                imgId: this.state.imgId + (" "),
-                imgTitle: this.state.imgTitle + (" "),
-                comment: this.state.comment + (" "),
-                personalUseAgreement: this.state.personalUseAgreement + (" "),
-                addDescription: this.state.addDescription + (" "),
-                collection: this.state.collection + (" "),
-                printSize: this.state.printSize + (" "),
-                numCopies: this.state.numCopies + (" "),
+                certified: this.state.certified.concat([" "]),
+                deathPlace: this.state.deathPlace.concat([" "]),
+                cemetery: this.state.cemetery.concat([" "]),
+                firstName: this.state.firstName.concat([" "]),
+                lastName: this.state.lastName.concat([" "]),
+                birthPlace: this.state.birthPlace.concat([" "]),
+                gender: this.state.gender.concat([" "]),
+                fatherName: this.state.fatherName.concat([" "]),
+                motherName: this.state.motherName.concat([" "]),
+                middleName: this.state.middleName.concat([" "]),
+                certificateNum: this.state.certificateNum.concat([" "]),
+                groomLastName: this.state.groomLastName.concat([" "]),
+                groomFirstName: this.state.groomFirstName.concat([" "]),
+                brideLastName: this.state.brideLastName.concat([" "]),
+                brideFirstName: this.state.brideFirstName.concat([" "]),
+                month: this.state.month.concat([" "]),
+                day: this.state.day.concat([" "]),
+                year: this.state.year.concat([" "]),
+                marriagePlace: this.state.marriagePlace.concat([" "]),
+                letter: this.state.letter.concat([" "]),
+                block: this.state.block.concat([" "]),
+                lot: this.state.lot.concat([" "]),
+                // roll: this.state.roll.concat([" "]),
+                borough: this.state.borough.concat([" "]),
+                buildingNum: this.state.buildingNum.concat([" "]),
+                street: this.state.street.concat([" "]),
+                mail: this.state.mail.concat([" "]),
+                contactNum: this.state.contactNum.concat([" "]),
+                imgId: this.state.imgId.concat([" "]),
+                imgTitle: this.state.imgTitle.concat([" "]),
+                comment: this.state.comment.concat([" "]),
+                personalUseAgreement: this.state.personalUseAgreement.concat([" "]),
+                addDescription: this.state.addDescription.concat([" "]),
+                collection: this.state.collection.concat([" "]),
+                printSize: this.state.printSize.concat([" "]),
+                numCopies: this.state.numCopies.concat([" "]),
 
             })
             console.log("THIS IS WORKING")
@@ -460,7 +463,7 @@ class NewOrderForm extends React.Component {
                                         this.handleEmptyStates()
                                         this.handleClick()
 
-                                  
+
                                     }}
                                     >
                                         <Button.Content visible>
