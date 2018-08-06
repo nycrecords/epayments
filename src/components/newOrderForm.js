@@ -100,7 +100,6 @@ class NewOrderForm extends React.Component {
                 fatherName: [],
                 motherName: [],
                 middleName: [],
-
                 certificateNum: [],
                 groomLastName: [],
                 groomFirstName: [],

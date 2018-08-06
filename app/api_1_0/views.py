@@ -114,6 +114,27 @@ def orders_doc(doc_type):
         return jsonify(url=url), 200
 
 
+# @api.route('/orders/new', methods=['POST'])
+# @login_required
+# def create_order_type(order_type):
+#     handler_for_order_type = {
+#         order_types.TAX_PHOTO: TaxPhoto(borough=None,
+#                                         collection=collection[index],
+#                                         roll=roll[index],
+#                                         block=block[index],
+#                                         lot=lot[index],
+#                                         building_number=building_number[index],
+#                                         street=street[index],
+#                                         description=add_description[index],
+#                                         mail=mail[index],
+#                                         contact_number=contact_number[index],
+#                                         size=print_size[index],
+#                                         num_copies=num_copies[index],
+#                                         suborder_number=sub_order.id)
+#
+#     }
+
+
 @api.route('/orders/new', methods=['POST'])
 @login_required
 def new_order():
@@ -174,8 +195,7 @@ def new_order():
 
         print(status)
         print(order_type)
-        print(block)
-        print(roll)
+        print(building_number)
         next_order_number = OrderNumberCounter.query.filter_by(year=year).one().next_order_number
         order_id = "EPAY-" + year + "-" + str(next_order_number)
         main_order = Orders(id=order_id,
@@ -209,146 +229,268 @@ def new_order():
                                   _status=status[index]
                                   )
             create_object(sub_order)
-            if order_type[index] == order_types.TAX_PHOTO:
-                tax_order = TaxPhoto(borough=None,
-                                     collection=collection[index],
-                                     roll=roll[index],
-                                     block=block[index],
-                                     lot=lot[index],
-                                     building_number=building_number[index],
-                                     street=street[index],
-                                     description=add_description[index],
-                                     mail=mail[index],
-                                     contact_number=contact_number[index],
-                                     size=print_size[index],
-                                     num_copies=num_copies[index],
-                                     suborder_number=sub_order.id)
 
-                create_object(tax_order)
-                print("Created tax ORder")
-            elif order_type[index] == order_types.PHOTO_GALLERY:
-                photo_order = PhotoGallery(image_id=img_id[index],
-                                           description=img_title[index],
-                                           additional_description=add_description[index],
-                                           size=print_size[index],
-                                           num_copies=num_copies[index],
-                                           mail=mail[index],
-                                           contact_number=contact_number[index],
-                                           personal_use_agreement=personal_use_agreement[index],
-                                           comment=comment[index],
-                                           suborder_number=sub_order.id)
-                create_object(photo_order)
-            elif order_type[index] == order_types.PROPERTY_CARD:
-                property_order = PropertyCard(borough=borough[index],
-                                              block=block[index],
-                                              lot=lot[index],
-                                              building_number=building_number[index],
-                                              street=street[index],
-                                              description=add_description[index],
-                                              certified=certified[index],
-                                              mail=mail[index],
-                                              contact_info=contact_number[index],
-                                              suborder_number=sub_order.id
-                                              )
-                create_object(property_order)
-            elif order_type[index] == order_types.DEATH_SEARCH:
-                ds_order = DeathSearch(last_name=last_name[index],
-                                       first_name=first_name[index],
-                                       middle_name=middle_name[index],
-                                       num_copies=num_copies[index],
-                                       cemetery=cemetery[index],
-                                       month=month[index],
-                                       day=day[index],
-                                       years=years[index],
-                                       death_place=death_place[index],
-                                       borough=borough[index],
-                                       letter=letter[index],
-                                       comment=comment[index],
-                                       suborder_number=sub_order.id)
-                create_object(ds_order)
-            elif order_type[index] == order_types.DEATH_CERT:
-                dc_order = DeathCertificate(certificate_number=certificate_num[index],
-                                            last_name=last_name[index],
-                                            first_name=first_name[index],
-                                            middle_name=middle_name[index],
-                                            num_copies=num_copies[index],
-                                            cemetery=cemetery[index],
-                                            month=month[index],
-                                            day=day[index],
-                                            years=years[index],
-                                            death_place=death_place[index],
-                                            borough=borough[index],
-                                            letter=letter[index],
-                                            comment=comment[index],
-                                            suborder_number=sub_order.id)
-                create_object(dc_order)
-            elif order_type[index] == order_types.MARRIAGE_SEARCH:
-                print(index)
-                ms_order = MarriageSearch(groom_last_name=groom_last_name[index],
-                                          groom_first_name=groom_first_name[index],
-                                          bride_last_name=bride_last_name[index],
-                                          bride_first_name=bride_first_name[index],
-                                          num_copies=num_copies[index],
-                                          month=month[index],
-                                          day=day[index],
-                                          years=years[index],
-                                          marriage_place=marriage_place[index],
-                                          borough=borough[index],
-                                          letter=letter[index],
-                                          comment=comment[index],
-                                          suborder_number=sub_order.id)
-                create_object(ms_order)
-            elif order_type[index] == order_types.MARRIAGE_CERT:
-                mc_order = MarriageCertificate(certificate_number=certificate_num[index],
-                                               groom_last_name=groom_last_name[index],
-                                               groom_first_name=groom_first_name[index],
-                                               bride_last_name=bride_last_name[index],
-                                               bride_first_name=bride_last_name[index],
-                                               num_copies=num_copies[index],
-                                               month=month[index],
-                                               day=day[index],
-                                               years=years[index],
-                                               marriage_place=marriage_place[index],
-                                               borough=borough[index],
-                                               letter=letter[index],
-                                               comment=comment[index],
-                                               suborder_number=sub_order.id)
-                create_object(mc_order)
-            elif order_type[index] == order_types.BIRTH_SEARCH:
-                bs_order = BirthSearch(first_name=first_name[index],
-                                       last_name=last_name[index],
-                                       middle_name=middle_name[index],
-                                       gender=gender[index],
-                                       father_name=father_name[index],
-                                       mother_name=mother_name[index],
-                                       num_copies=num_copies[index],
-                                       month=month[index],
-                                       day=day[index],
-                                       years=years[index],
-                                       birth_place=birth_place[index],
-                                       borough=borough[index],
-                                       letter=letter[index],
-                                       comment=comment[index],
-                                       suborder_number=sub_order.id)
-                create_object(bs_order)
-            elif order_type[index] == order_types.BIRTH_CERT:
-                bc_order = BirthCertificate(certificate_number=certificate_num[index],
-                                            last_name=last_name[index],
-                                            first_name=first_name[index],
-                                            middle_name=middle_name[index],
-                                            gender=gender[index],
-                                            father_name=father_name[index],
-                                            mother_name=mother_name[index],
-                                            num_copies=num_copies[index],
-                                            month=month[index],
-                                            day=day[index],
-                                            years=years[index],
-                                            birth_place=birth_place[index],
-                                            borough=borough[index],
-                                            letter=letter[index],
-                                            comment=comment[index],
-                                            suborder_number=sub_order.id[index])
-                create_object(bc_order)
+            handler_for_order_type = {
+                order_types.TAX_PHOTO: TaxPhoto(borough=None,
+                                                collection=collection[index],
+                                                roll=roll[index],
+                                                block=block[index],
+                                                lot=lot[index],
+                                                building_number=building_number[index],
+                                                street=street[index],
+                                                description=add_description[index],
+                                                mail=mail[index],
+                                                contact_number=contact_number[index],
+                                                size=print_size[index],
+                                                num_copies=num_copies[index],
+                                                suborder_number=sub_order.id),
+                order_types.PHOTO_GALLERY: PhotoGallery(image_id=img_id[index],
+                                                        description=img_title[index],
+                                                        additional_description=add_description[index],
+                                                        size=print_size[index],
+                                                        num_copies=num_copies[index],
+                                                        mail=mail[index],
+                                                        contact_number=contact_number[index],
+                                                        personal_use_agreement=personal_use_agreement[index],
+                                                        comment=comment[index],
+                                                        suborder_number=sub_order.id),
+                order_types.PROPERTY_CARD: PropertyCard(borough=borough[index],
+                                                        block=block[index],
+                                                        lot=lot[index],
+                                                        building_number=building_number[index],
+                                                        street=street[index],
+                                                        description=add_description[index],
+                                                        certified=certified[index],
+                                                        mail=mail[index],
+                                                        contact_info=contact_number[index],
+                                                        suborder_number=sub_order.id
+                                                        ),
+                order_types.DEATH_SEARCH: DeathSearch(last_name=last_name[index],
+                                                      first_name=first_name[index],
+                                                      middle_name=middle_name[index],
+                                                      num_copies=num_copies[index],
+                                                      cemetery=cemetery[index],
+                                                      month=month[index],
+                                                      day=day[index],
+                                                      years=years[index],
+                                                      death_place=death_place[index],
+                                                      borough=borough[index],
+                                                      letter=letter[index],
+                                                      comment=comment[index],
+                                                      suborder_number=sub_order.id),
+                order_types.DEATH_CERT: DeathCertificate(certificate_number=certificate_num[index],
+                                                         last_name=last_name[index],
+                                                         first_name=first_name[index],
+                                                         middle_name=middle_name[index],
+                                                         num_copies=num_copies[index],
+                                                         cemetery=cemetery[index],
+                                                         month=month[index],
+                                                         day=day[index],
+                                                         years=years[index],
+                                                         death_place=death_place[index],
+                                                         borough=borough[index],
+                                                         letter=letter[index],
+                                                         comment=comment[index],
+                                                         suborder_number=sub_order.id),
+                order_types.MARRIAGE_SEARCH: MarriageSearch(groom_last_name=groom_last_name[index],
+                                                            groom_first_name=groom_first_name[index],
+                                                            bride_last_name=bride_last_name[index],
+                                                            bride_first_name=bride_first_name[index],
+                                                            num_copies=num_copies[index],
+                                                            month=month[index],
+                                                            day=day[index],
+                                                            years=years[index],
+                                                            marriage_place=marriage_place[index],
+                                                            borough=borough[index],
+                                                            letter=letter[index],
+                                                            comment=comment[index],
+                                                            suborder_number=sub_order.id),
+                order_types.MARRIAGE_CERT: MarriageCertificate(certificate_number=certificate_num[index],
+                                                               groom_last_name=groom_last_name[index],
+                                                               groom_first_name=groom_first_name[index],
+                                                               bride_last_name=bride_last_name[index],
+                                                               bride_first_name=bride_last_name[index],
+                                                               num_copies=num_copies[index],
+                                                               month=month[index],
+                                                               day=day[index],
+                                                               years=years[index],
+                                                               marriage_place=marriage_place[index],
+                                                               borough=borough[index],
+                                                               letter=letter[index],
+                                                               comment=comment[index],
+                                                               suborder_number=sub_order.id),
+                order_types.BIRTH_SEARCH: BirthSearch(first_name=first_name[index],
+                                                      last_name=last_name[index],
+                                                      middle_name=middle_name[index],
+                                                      gender=gender[index],
+                                                      father_name=father_name[index],
+                                                      mother_name=mother_name[index],
+                                                      num_copies=num_copies[index],
+                                                      month=month[index],
+                                                      day=day[index],
+                                                      years=years[index],
+                                                      birth_place=birth_place[index],
+                                                      borough=borough[index],
+                                                      letter=letter[index],
+                                                      comment=comment[index],
+                                                      suborder_number=sub_order.id),
+                order_types.BIRTH_CERT: BirthCertificate(certificate_number=certificate_num[index],
+                                                         last_name=last_name[index],
+                                                         first_name=first_name[index],
+                                                         middle_name=middle_name[index],
+                                                         gender=gender[index],
+                                                         father_name=father_name[index],
+                                                         mother_name=mother_name[index],
+                                                         num_copies=num_copies[index],
+                                                         month=month[index],
+                                                         day=day[index],
+                                                         years=years[index],
+                                                         birth_place=birth_place[index],
+                                                         borough=borough[index],
+                                                         letter=letter[index],
+                                                         comment=comment[index],
+                                                         suborder_number=sub_order.id[index])
+            }
+            create_object(handler_for_order_type[order_type[index]])
+            # if order_type[index] == order_types.TAX_PHOTO:
+            #     tax_order = TaxPhoto(borough=None,
+            #                          collection=collection[index],
+            #                          roll=roll[index],
+            #                          block=block[index],
+            #                          lot=lot[index],
+            #                          building_number=building_number[index],
+            #                          street=street[index],
+            #                          description=add_description[index],
+            #                          mail=mail[index],
+            #                          contact_number=contact_number[index],
+            #                          size=print_size[index],
+            #                          num_copies=num_copies[index],
+            #                          suborder_number=sub_order.id)
+            #
+            #     create_object(tax_order)
+            # elif order_type[index] == order_types.PHOTO_GALLERY:
+            #     photo_order = PhotoGallery(image_id=img_id[index],
+            #                                description=img_title[index],
+            #                                additional_description=add_description[index],
+            #                                size=print_size[index],
+            #                                num_copies=num_copies[index],
+            #                                mail=mail[index],
+            #                                contact_number=contact_number[index],
+            #                                personal_use_agreement=personal_use_agreement[index],
+            #                                comment=comment[index],
+            #                                suborder_number=sub_order.id)
+            #     create_object(photo_order)
+            # elif order_type[index] == order_types.PROPERTY_CARD:
+            #     property_order = PropertyCard(borough=borough[index],
+            #                                   block=block[index],
+            #                                   lot=lot[index],
+            #                                   building_number=building_number[index],
+            #                                   street=street[index],
+            #                                   description=add_description[index],
+            #                                   certified=certified[index],
+            #                                   mail=mail[index],
+            #                                   contact_info=contact_number[index],
+            #                                   suborder_number=sub_order.id
+            #                                   )
+            #     create_object(property_order)
+            # elif order_type[index] == order_types.DEATH_SEARCH:
+            #     ds_order = DeathSearch(last_name=last_name[index],
+            #                            first_name=first_name[index],
+            #                            middle_name=middle_name[index],
+            #                            num_copies=num_copies[index],
+            #                            cemetery=cemetery[index],
+            #                            month=month[index],
+            #                            day=day[index],
+            #                            years=years[index],
+            #                            death_place=death_place[index],
+            #                            borough=borough[index],
+            #                            letter=letter[index],
+            #                            comment=comment[index],
+            #                            suborder_number=sub_order.id)
+            #     create_object(ds_order)
+            # elif order_type[index] == order_types.DEATH_CERT:
+            #     dc_order = DeathCertificate(certificate_number=certificate_num[index],
+            #                                 last_name=last_name[index],
+            #                                 first_name=first_name[index],
+            #                                 middle_name=middle_name[index],
+            #                                 num_copies=num_copies[index],
+            #                                 cemetery=cemetery[index],
+            #                                 month=month[index],
+            #                                 day=day[index],
+            #                                 years=years[index],
+            #                                 death_place=death_place[index],
+            #                                 borough=borough[index],
+            #                                 letter=letter[index],
+            #                                 comment=comment[index],
+            #                                 suborder_number=sub_order.id)
+            #     create_object(dc_order)
+            # elif order_type[index] == order_types.MARRIAGE_SEARCH:
+            #     print(index)
+            #     ms_order = MarriageSearch(groom_last_name=groom_last_name[index],
+            #                               groom_first_name=groom_first_name[index],
+            #                               bride_last_name=bride_last_name[index],
+            #                               bride_first_name=bride_first_name[index],
+            #                               num_copies=num_copies[index],
+            #                               month=month[index],
+            #                               day=day[index],
+            #                               years=years[index],
+            #                               marriage_place=marriage_place[index],
+            #                               borough=borough[index],
+            #                               letter=letter[index],
+            #                               comment=comment[index],
+            #                               suborder_number=sub_order.id)
+            #     create_object(ms_order)
+            # elif order_type[index] == order_types.MARRIAGE_CERT:
+            #     mc_order = MarriageCertificate(certificate_number=certificate_num[index],
+            #                                    groom_last_name=groom_last_name[index],
+            #                                    groom_first_name=groom_first_name[index],
+            #                                    bride_last_name=bride_last_name[index],
+            #                                    bride_first_name=bride_last_name[index],
+            #                                    num_copies=num_copies[index],
+            #                                    month=month[index],
+            #                                    day=day[index],
+            #                                    years=years[index],
+            #                                    marriage_place=marriage_place[index],
+            #                                    borough=borough[index],
+            #                                    letter=letter[index],
+            #                                    comment=comment[index],
+            #                                    suborder_number=sub_order.id)
+            #     create_object(mc_order)
+            # elif order_type[index] == order_types.BIRTH_SEARCH:
+            #     bs_order = BirthSearch(first_name=first_name[index],
+            #                            last_name=last_name[index],
+            #                            middle_name=middle_name[index],
+            #                            gender=gender[index],
+            #                            father_name=father_name[index],
+            #                            mother_name=mother_name[index],
+            #                            num_copies=num_copies[index],
+            #                            month=month[index],
+            #                            day=day[index],
+            #                            years=years[index],
+            #                            birth_place=birth_place[index],
+            #                            borough=borough[index],
+            #                            letter=letter[index],
+            #                            comment=comment[index],
+            #                            suborder_number=sub_order.id)
+            #     create_object(bs_order)
+            # elif order_type[index] == order_types.BIRTH_CERT:
+            #     bc_order = BirthCertificate(certificate_number=certificate_num[index],
+            #                                 last_name=last_name[index],
+            #                                 first_name=first_name[index],
+            #                                 middle_name=middle_name[index],
+            #                                 gender=gender[index],
+            #                                 father_name=father_name[index],
+            #                                 mother_name=mother_name[index],
+            #                                 num_copies=num_copies[index],
+            #                                 month=month[index],
+            #                                 day=day[index],
+            #                                 years=years[index],
+            #                                 birth_place=birth_place[index],
+            #                                 borough=borough[index],
+            #                                 letter=letter[index],
+            #                                 comment=comment[index],
+            #                                 suborder_number=sub_order.id[index])
+            #     create_object(bc_order)
 
     return jsonify(), 200
 
