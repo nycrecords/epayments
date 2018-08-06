@@ -320,16 +320,16 @@ class NewOrderForm extends React.Component {
     render() {
         console.log('current list is ' + this.state.subOrderList);
         const SubOrders = this.state.subOrderList.map((suborderIndex) =>
-                <Segment compact>
-                    <h4>
-                        Suborder: {suborderIndex + 1}
-                    </h4>
-                    <SubOrderForm key={suborderIndex}
-                                  index={suborderIndex}
-                                  callBack={this.callBack}
-                                  state={this.state}
-                    />
-                </Segment>
+            <Segment compact key={suborderIndex}>
+                <h4>
+                    Suborder: {suborderIndex + 1}
+                </h4>
+                <SubOrderForm
+                    index={suborderIndex}
+                    callBack={this.callBack}
+                    state={this.state}
+                />
+            </Segment>
         );
 
         return (
@@ -429,7 +429,6 @@ class NewOrderForm extends React.Component {
                                     />
                                     <Container>
 
-                                        {/*<Form.Group>*/}
                                         <Segment.Group compact>
                                             {SubOrders}
 

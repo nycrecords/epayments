@@ -24,8 +24,10 @@ class VitalRecordForm extends React.Component {
                                         name="month"
                                         placeholder="Month"
                                         onChange={(e, {value}) => {
+
                                             this.setState({month: value})
                                             this.props.callBack("month", value, this.props.index, this.props.state.month)
+
                                         }}
                                         value={this.state.month}
                             />
@@ -34,8 +36,10 @@ class VitalRecordForm extends React.Component {
                                         maxLength={2}
                                         placeholder="Day"
                                         onChange={(e, {value}) => {
-                                            this.setState({day: value})
-                                            this.props.callBack("day", value, this.props.index, this.props.state.day)
+                                            if (/^[0-9]+$/.test(value.slice(-1)) || value === '') {
+                                                this.setState({day: value})
+                                                this.props.callBack("day", value, this.props.index, this.props.state.day)
+                                            }
                                         }}
                                         value={this.state.day}
                             />
@@ -44,8 +48,10 @@ class VitalRecordForm extends React.Component {
                                         maxLength={4}
                                         placeholder="Year"
                                         onChange={(e, {value}) => {
-                                            this.setState({year: value})
-                                            this.props.callBack("year", value, this.props.index, this.props.state.year)
+                                            if (/^[0-9]+$/.test(value.slice(-1)) || value === '') {
+                                                this.setState({year: value})
+                                                this.props.callBack("year", value, this.props.index, this.props.state.year)
+                                            }
                                         }}
                                         value={this.state.year}
                             />

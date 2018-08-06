@@ -168,12 +168,13 @@ class SubOrderForm extends React.Component {
                                     maxLength="2"
                                     onChange={(e, {value}) => {
                                         if (/^[0-9]+$/.test(value.slice(-1)) || value === '') {
+                                            console.log("not an alphabet")
                                             this.setState({numCopies: value});
                                             this.props.callBack("numCopies", value, this.props.index, this.props.state.numCopies);
 
                                         }
                                     }}
-                                    value={this.state.value}
+                                    value={this.state.numCopies}
                         />
 
                         <Form.Select label="Status"
