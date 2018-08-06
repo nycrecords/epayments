@@ -35,9 +35,8 @@ class Home extends React.Component {
                    order_count: this.state.order_count +order_count,
                    suborder_count: this.state.suborder_count +suborder_count,
                    suborder_two: this.state.suborder_two +20
-            });
+                });
             }
-
         };
 
         this.updateStatus = (suborder_number, new_status) => {
