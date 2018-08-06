@@ -1,34 +1,24 @@
 import React from 'react';
 import {Grid, Form} from 'semantic-ui-react';
-const boroughOptions = [
-    {key: 'bronx', text: 'Bronx', value: 'Bronx'},
-    {key: 'brooklyn', text: 'Brooklyn', value: 'Brooklyn'},
-    {key: 'manhattan', text: 'Manhattan', value: 'Manhattan'},
-    {key: 'queens', text: 'Queens', value: 'Queens'},
-    {key: 'statenisland', text: 'Staten Island', value: 'Staten Island'},
-];
 
 class TaxPhotoForm extends React.Component {
      constructor() {
          super();
          this.state = {
-             block: ' ',
-             lot: ' ',
-             row: ' ',
-             borough: ' ',
-             buildingNum: ' ',
-             street: ' ',
+             block: '',
+             lot: '',
+             row: '',
+             borough: '',
+             buildingNum: '',
+             street: '',
              mail: false,
-             contactNum: ' ',
-             comment: ' ',
-             addDescription: ' ',
-             collection: ' ',
-             printSize: ' '
-
-
+             contactNum: '',
+             comment: '',
+             addDescription: '',
+             collection: '',
+             printSize: ''
          }
      }
-
     render() {
         return (
             <Grid>
@@ -118,7 +108,7 @@ class TaxPhotoForm extends React.Component {
                         </Form.Group>
                         <Form.Select label="Borough"
                                      name="borough"
-                                     options={boroughOptions}
+                                     options={this.props.boroughOptions}
                                      placeholder="Borough"
                                      onChange={(e, {value}) => {
                                          this.setState({borough: value});
@@ -177,7 +167,6 @@ class TaxPhotoForm extends React.Component {
                     </Grid.Column>
                 </Grid.Row>
             </Grid>
-
         )
     }
 }

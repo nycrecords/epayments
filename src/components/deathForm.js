@@ -2,20 +2,17 @@ import React from 'react';
 import {Grid, Form} from 'semantic-ui-react';
 import VitalRecordForm from "./vitalRecordForm";
 
-class BirthSearchForm extends React.Component {
+class DeathSearchForm extends React.Component {
     constructor() {
         super()
         this.state = {
-            gender: '',
-            fatherName: '',
-            motherName: '',
-            birthPlace: '',
+            cemetery: '',
             lastName: '',
             firstName: '',
             middleName: '',
+            deathPlace: '',
         }
     }
-
     render() {
         return (
             <Grid>
@@ -50,69 +47,46 @@ class BirthSearchForm extends React.Component {
                                         value={this.state.lastName}
                             />
                         </Form.Group>
-                        <Form.Input label="Birth Place"
-                                    name="birthPlace"
-                                    placeholder="BirthPlace"
+                        <Form.Input label="Cemetery"
+                                    name="cemetery"
+                                    placeholder="Cemetery"
                                     onChange={(e, {value}) => {
-                                        this.setState({birthPlace: value})
-                                        this.props.callBack("birthPlace", value, this.props.index, this.props.state.birthPlace)
+                                        this.setState({cemetery: value})
+                                        this.props.callBack("cemetery", value, this.props.index, this.props.state.cemetery)
                                     }}
-                                    value={this.state.birthPlace}
+                                    value={this.state.cemetery}
                         />
-                        <Form.Select label="Gender"
-                                     required
-                                     name="gender"
-                                     placeholder="Gender"
-                                     options={this.props.genderOptions}
-                                     onChange={(e, {value}) => {
-                                         this.setState({gender: value});
-                                         this.props.callBack("gender", value, this.props.index, this.props.state.gender);
-                                     }}
-                                     value={this.state.value}
-                        />
-                        <Form.Input label="Mother Name"
-                                    name="motherName"
-                                    placeholder="Mother Name"
+                        <Form.Input label="Death Place"
+                                    name="deathPlace"
+                                    placeholder="Death Place"
                                     onChange={(e, {value}) => {
-                                        this.setState({motherName: value})
-                                        this.props.callBack("motherName", value, this.props.index, this.props.state.motherName)
+                                        this.setState({deathPlace: value})
+                                        this.props.callBack("deathPlace", value, this.props.index, this.props.state.deathPlace)
                                     }}
-                                    value={this.state.motherName}
-                        />
-                        <Form.Input label="Father Name"
-                                    name="fatherName"
-                                    placeholder="Father Name"
-                                    onChange={(e, {value}) => {
-                                        this.setState({fatherName: value})
-                                        this.props.callBack("fatherName", value, this.props.index, this.props.state.fatherName)
-                                    }}
-                                    value={this.state.fatherName}
+                                    value={this.state.deathPlace}
                         />
                         <VitalRecordForm callBack={this.props.callBack} index={this.props.index}
                                          state={this.props.state} boroughOptions={this.props.boroughOptions}/>
                     </Grid.Column>
                 </Grid.Row>
             </Grid>
+
         )
     }
 }
 
-class BirthCertForm extends React.Component {
+class DeathCertForm extends React.Component {
     constructor() {
         super()
         this.state = {
-            gender: '',
-            fatherName: '',
-            motherName: '',
-            birthPlace: '',
+            cemetery: '',
             lastName: '',
             firstName: '',
             middleName: '',
+            deathPlace: '',
             certificateNum: '',
-
         }
     }
-
     render() {
         return (
             <Grid>
@@ -127,14 +101,15 @@ class BirthCertForm extends React.Component {
                                     }}
                                     value={this.state.certificateNum}
                         />
-                        <BirthSearchForm callBack={this.props.callBack} index={this.props.index}
-                                         state={this.props.state} boroughOptions={this.props.boroughOptions}
-                                         genderOptions={this.props.genderOptions}/>
+                        <DeathSearchForm callBack={this.props.callBack} index={this.props.index}
+                                         state={this.props.state} boroughOptions={this.props.boroughOptions}/>
                     </Grid.Column>
                 </Grid.Row>
             </Grid>
+
         )
     }
 }
 
-export {BirthSearchForm, BirthCertForm};
+export {DeathCertForm, DeathSearchForm};
+

@@ -1,30 +1,23 @@
 import React from 'react'
 import {Grid, Form} from 'semantic-ui-react';
-const boroughOptions = [
-    {key: 'bronx', text: 'Bronx', value: 'Bronx'},
-    {key: 'brooklyn', text: 'Brooklyn', value: 'Brooklyn'},
-    {key: 'manhattan', text: 'Manhattan', value: 'Manhattan'},
-    {key: 'queens', text: 'Queens', value: 'Queens'},
-    {key: 'statenisland', text: 'Staten Island', value: 'Staten Island'},
-];
 class PropertyCardForm extends React.Component {
      constructor() {
          super();
          this.state = {
-             certified: ' ',
-             block: ' ',
-             lot: ' ',
-             borough: ' ',
-             buildingNum: ' ',
-             street: ' ',
+             certified: '',
+             block: '',
+             lot: '',
+             borough: '',
+             buildingNum: '',
+             street: '',
              mail: false,
-             contactNum: ' ',
-             imgId: ' ',
-             imgTitle: ' ',
-             comment: ' ',
+             contactNum: '',
+             imgId: '',
+             imgTitle: '',
+             comment: '',
              personalUseAgreement: false,
-             addDescription: ' ',
-             printSize: ' ',
+             addDescription: '',
+             printSize: '',
          }
      }
     render() {
@@ -53,7 +46,7 @@ class PropertyCardForm extends React.Component {
                         <Form.Select label="Borough"
                                      required
                                      name="borough"
-                                     options={boroughOptions}
+                                     options={this.props.boroughOptions}
                                      placeholder="Borough"
                                      onChange={(e, {value}) => {
                                          this.setState({borough: value});
@@ -118,11 +111,9 @@ class PropertyCardForm extends React.Component {
                                     }}
                                     value={this.state.certified}
                         />
-
                     </Grid.Column>
                 </Grid.Row>
             </Grid>
-
         )
     }
 }

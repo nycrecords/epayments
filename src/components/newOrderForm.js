@@ -12,7 +12,6 @@ import SubOrderForm from "./suborderform";
 class NewOrderForm extends React.Component {
     constructor() {
         super();
-
         this.state = {
             billingName: '',
             email: '',
@@ -27,7 +26,6 @@ class NewOrderForm extends React.Component {
             orderType: [" "],
             deathPlace: [" "],
             cemetery: [" "],
-
             gender: [" "],
             fatherName: [" "],
             motherName: [" "],
@@ -35,7 +33,6 @@ class NewOrderForm extends React.Component {
             lastName: [" "],
             firstName: [" "],
             middleName: [" "],
-
             certificateNum: [" "],
             groomLastName: [" "],
             groomFirstName: [" "],
@@ -46,8 +43,6 @@ class NewOrderForm extends React.Component {
             year: [" "],
             marriagePlace: [" "],
             letter: [false],
-
-
             block: [" "],
             lot: [" "],
             roll: [" "],
