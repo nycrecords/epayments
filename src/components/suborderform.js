@@ -1,5 +1,5 @@
 import React from 'react';
-import {Button, Container, Divider, Grid, Header, Form, Loader, Dimmer, FormCheckbox} from 'semantic-ui-react';
+import {Button, Container, Divider, Grid, Popup, Form, Loader, Icon, FormCheckbox} from 'semantic-ui-react';
 import TaxPhotoForm from "./taxPhotoForm"
 import PropertyCardForm from "./propertyCardForm"
 import PhotoGalleryForm from "./photoGalleryForm"
@@ -89,6 +89,16 @@ class SubOrderForm extends React.Component {
             <Grid>
                 <Grid.Row>
                     <Grid.Column>
+                        <Popup trigger={
+                            <Button floated="right" type="button" size="mini">
+                                <Icon name="remove"/>
+                            </Button>}
+                               content={"Remove"}
+                        />
+                        <h4>
+                            Suborder: {this.props.index + 1}
+                        </h4>
+
                         <Form.Select label="Order Type"
                                      required
                                      name="orderType"
