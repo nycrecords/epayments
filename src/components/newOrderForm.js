@@ -174,7 +174,6 @@ class NewOrderForm extends React.Component {
                 numCopies: this.state.numCopies.concat([" "]),
 
             })
-            console.log("THIS IS WORKING")
 
         };
         this.i = 0;
@@ -308,17 +307,8 @@ class NewOrderForm extends React.Component {
     };
 
     callBack = (dataFromChild, value, index, state) => {
-        console.log("start state is : " + state)
-
-        console.log("data is " + dataFromChild);
-        // console.log(state);
         let newState = state.slice()
-        // const newState=state.slice();
-        // newState[index]=value;
-        // console.log("new state is " + newState);
         newState[index] = value
-
-
         this.setState({
             [dataFromChild]: newState
         });
@@ -444,18 +434,10 @@ class NewOrderForm extends React.Component {
                                             {SubOrders}
 
                                         </Segment.Group>
-
-
-                                        {/*{this.state.showSubOrder && {SubOrders}}*/}
-
-
-                                        {/*</Form.Group>*/}
                                     </Container>
-                                    <Button animated type="reset" floated="left" onClick={() => {
+                                    <Button animated type="button" floated="left" onClick={() => {
                                         this.handleEmptyStates()
                                         this.handleClick()
-
-
                                     }}
                                     >
                                         <Button.Content visible>

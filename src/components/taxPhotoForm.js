@@ -107,6 +107,7 @@ class TaxPhotoForm extends React.Component {
                             />
                         </Form.Group>
                         <Form.Select label="Borough"
+                                     required
                                      name="borough"
                                      options={this.props.boroughOptions}
                                      placeholder="Borough"

@@ -76,8 +76,6 @@ class SubOrderForm extends React.Component {
         const target = e.target;
         const value = target.value;
         const name = target.name;
-        // console.log("name is :"+ name);
-        // console.log("value is :"+ value);c
         console.log(this.props.state + "." + name);
         this.props.callBack(name, value, this.props.index, this.props.state + "." + name);
 
