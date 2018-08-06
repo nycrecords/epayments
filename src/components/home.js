@@ -18,6 +18,7 @@ class Home extends React.Component {
             suborder_count: 0,
             loading: true,
             showCSVButton: false,
+            suborder_two: 0
         };
 
         this.addOrder = (order_count, suborder_count, orders, firstTime) => {
@@ -26,17 +27,18 @@ class Home extends React.Component {
                     all_orders: orders,
                     order_count: order_count,
                     suborder_count: suborder_count,
+                    suborder_two: suborder_count,
                 });
             }else{
                this.setState({
                    all_orders: this.state.all_orders.concat(orders),
                    order_count: this.state.order_count +order_count,
                    suborder_count: this.state.suborder_count +suborder_count,
+                   suborder_two: this.state.suborder_two +20
             });
             }
 
         };
-
 
         this.updateStatus = (suborder_number, new_status) => {
             let status_obj = this.state.all_orders.find(obj => {
@@ -98,11 +100,7 @@ class Home extends React.Component {
                 this.setLoadingState(false);
             });
         };
-
-
-
     };
-
 
     toggleCSV = (visible) => {
         this.setState({showCSVButton: visible});
@@ -132,12 +130,9 @@ class Home extends React.Component {
         this.setLoadingState(false);
     };
 
-
     componentWillReceiveProps(nextProps) {
         nextProps.authenticated && this.getOrders();
     }
-
-
 
     render() {
         const orderRows = this.state.all_orders.map((order) =>
@@ -202,13 +197,14 @@ class Home extends React.Component {
                             </Rail>
                             <div id="grid-column-order">
                                 {orderRows}
-                                { this.state.suborder_count%20 === 0 && this.state.suborder_count!==0 ?(
+                                { this.state.suborder_count >= this.state.suborder_two && this.state.suborder_count !== 0?(
                                     <div className="center">
-                                         <Button content="Load More"
-                                                onClick={this.loadMore}/>
+                                        <Button content="Load More"
+                                            onClick={this.loadMore}/>
                                     </div>
                                 ) : (<div className="center">
-
+                                    {this.state.suborder_count === 0?
+                                        (<p>No Results</p>) : (<p>End of Results</p>)}
                                     </div>)
                                 }
 
