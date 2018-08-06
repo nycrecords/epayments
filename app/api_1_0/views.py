@@ -63,6 +63,8 @@ def get_orders():
         date_received_end = json.get("date_received_end")
         date_submitted_start = json.get("date_submitted_start")
         date_submitted_end = json.get("date_submitted_end")
+        start = json.get("start")
+        size = json.get("size")
 
         orders = search_queries(order_number,
                                 suborder_number,
@@ -73,8 +75,8 @@ def get_orders():
                                 date_received_end,
                                 date_submitted_start,
                                 date_submitted_end,
-                                0,
-                                100)
+                                start,
+                                size)
 
         # formatting results
         suborder_total = len(orders['hits']['hits'])

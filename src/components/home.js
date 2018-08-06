@@ -17,16 +17,26 @@ class Home extends React.Component {
             order_count: 0,
             suborder_count: 0,
             loading: true,
-            showCSVButton: false
+            showCSVButton: false,
         };
 
-        this.addOrder = (order_count, suborder_count, orders) => {
-            this.setState({
+        this.addOrder = (order_count, suborder_count, orders, firstTime) => {
+            if(firstTime){
+                this.setState({
                 all_orders: orders,
                 order_count: order_count,
                 suborder_count: suborder_count
+                });
+            }else{
+               this.setState({
+                all_orders: this.state.all_orders.concat(orders),
+                order_count: this.state.order_count +order_count,
+                suborder_count: this.state.suborder_count +suborder_count,
             });
+            }
+
         };
+
 
         this.updateStatus = (suborder_number, new_status) => {
             let status_obj = this.state.all_orders.find(obj => {
@@ -44,6 +54,11 @@ class Home extends React.Component {
             this.setState({
                 loading: loading
             });
+        };
+
+        this.loadMore = (e) => {
+            this.setLoadingState(true);
+            this.orderForm.submitFormData(e, 'load_more');
         };
 
         this.generateCSV = (e) => {
@@ -84,7 +99,10 @@ class Home extends React.Component {
             });
         };
 
+
+
     };
+
 
     toggleCSV = (visible) => {
         this.setState({showCSVButton: visible});
@@ -107,16 +125,18 @@ class Home extends React.Component {
                 }
             })
             .then((json) => {
-                this.addOrder(json.order_count, json.suborder_count, json.all_orders);
+                this.addOrder(json.order_count, json.suborder_count, json.all_orders,true);
             }).catch((error) => {
             console.error(error);
         });
         this.setLoadingState(false);
     };
 
+
     componentWillReceiveProps(nextProps) {
         nextProps.authenticated && this.getOrders();
     }
+
 
 
     render() {
@@ -154,10 +174,12 @@ class Home extends React.Component {
                         </Dimmer>
                         <Grid.Column width={3}>
                         </Grid.Column>
-                        <Grid.Column width={11} centered className="no-padding" id="left-shift">
+                        <Grid.Column width={11} className="no-padding" id="orders-properties">
                             <Rail position="left" id="grid-column-search" >
-                                <OrderForm addOrder={this.addOrder} setLoadingState={this.setLoadingState}
-                                       toggleCSV={this.toggleCSV} ref={orderForm => this.orderForm = orderForm}/>
+                                <OrderForm addOrder={this.addOrder}
+                                           setLoadingState={this.setLoadingState}
+                                           toggleCSV={this.toggleCSV}
+                                           ref={orderForm => this.orderForm = orderForm}/>
                             </Rail>
 
                             <Header as="h1" dividing textAlign="center" className='margin-top-none'>Order</Header>
@@ -180,6 +202,15 @@ class Home extends React.Component {
                             </Rail>
                             <div id="grid-column-order">
                                 {orderRows}
+                                {this.state.suborder_count > 4 ?(
+                                    <div className="center">
+                                        <Button content="Load More"
+                                                onClick={this.loadMore}/>
+                                    </div>
+                                ) : (<div>
+                                </div>)
+                                }
+
                             </div>
 
                         </Grid.Column>

@@ -81,7 +81,9 @@ class OrderForm extends React.Component {
             order_type: '',
             status: 'all',
             billing_name: '',
-            activeItem: 'Date Received'
+            activeItem: 'Date Received',
+            start:0,
+            size: 20,
         };
 
         this.photosValueList = ['photos', 'Tax Photo', 'Photo Gallery'];
@@ -115,7 +117,9 @@ class OrderForm extends React.Component {
                             date_received_start: formatDate(this.dateReceivedStart),
                             date_received_end: formatDate(this.dateReceivedEnd),
                             date_submitted_start:formatDate(this.dateSubmittedStart),
-                            date_submitted_end:formatDate(this.dateSubmittedEnd)
+                            date_submitted_end:formatDate(this.dateSubmittedEnd),
+                            start:this.state.start,
+                            size:this.state.size,
                         })
                     })
                         .then(handleFetchErrors)
@@ -139,6 +143,8 @@ class OrderForm extends React.Component {
                         date_received_end: formatDate(this.dateReceivedEnd),
                         date_submitted_start:formatDate(this.dateSubmittedStart),
                         date_submitted_end:formatDate(this.dateSubmittedEnd),
+                        start:this.state.start,
+                        size:this.state.size,
                     };
 
                     let esc = encodeURIComponent;
@@ -158,6 +164,10 @@ class OrderForm extends React.Component {
 
                 // Search
                 case'submit':
+                    this.setState({
+                        start:0,
+                        size:20,
+                    });
                     this.props.setLoadingState(true);
                     csrfFetch('api/v1.0/orders', {
                         method: "POST",
@@ -170,13 +180,15 @@ class OrderForm extends React.Component {
                             date_received_start: formatDate(this.dateReceivedStart),
                             date_received_end: formatDate(this.dateReceivedEnd),
                             date_submitted_start:formatDate(this.dateSubmittedStart),
-                            date_submitted_end:formatDate(this.dateSubmittedEnd)
+                            date_submitted_end:formatDate(this.dateSubmittedEnd),
+                            start:this.state.start,
+                            size:this.state.size,
 
                         })
                     })
                         .then(handleFetchErrors)
                         .then((json) => {
-                            this.props.addOrder(json.order_count, json.suborder_count, json.all_orders);
+                            this.props.addOrder(json.order_count, json.suborder_count, json.all_orders,true);
                             this.props.setLoadingState(false);
                         }).catch((error) => {
                         console.error(error);
@@ -184,6 +196,37 @@ class OrderForm extends React.Component {
                     });
                     break;
 
+                case'load_more':
+                    this.setState({
+                        start:this.state.start +20
+                    });
+                    this.props.setLoadingState(true);
+                    csrfFetch('api/v1.0/orders', {
+                        method: "POST",
+                        body: JSON.stringify({
+                            order_number: this.state.ordernumber,
+                            suborder_number: this.state.subordernumber,
+                            order_type: this.state.order_type,
+                            status: this.state.status,
+                            billing_name: this.state.billing_name,
+                            date_received_start: formatDate(this.dateReceivedStart),
+                            date_received_end: formatDate(this.dateReceivedEnd),
+                            date_submitted_start:formatDate(this.dateSubmittedStart),
+                            date_submitted_end:formatDate(this.dateSubmittedEnd),
+                            start:this.state.start,
+                            size:this.state.size,
+
+                        })
+                    })
+                        .then(handleFetchErrors)
+                        .then((json) => {
+                            this.props.addOrder(json.order_count, json.suborder_count, json.all_orders, false);
+                            this.props.setLoadingState(false);
+                        }).catch((error) => {
+                        console.error(error);
+                        this.props.setLoadingState(false);
+                    });
+                    break;
                 // no default
             }
         };

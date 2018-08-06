@@ -44,22 +44,28 @@ html, body {
 
 #rail-right{
     width: 200px!important;
-    top: 1.25em;
+    top: 2.75em;
     max-height:42em;
 }
 
-#left-shift{
+#orders-properties{
     left:2em;
+    bottom: 2em;
 }
 
 #grid-column-order {
     overflow-y: auto;
-    max-height: 42em;
+    max-height: 43em;
     padding-right: .30em;
+}
+
+.center{
+    margin: 0 auto;
 }
 
 #grid-column-search{
     width:35.5%;
+    top: 2.25em;
 
 }
 
