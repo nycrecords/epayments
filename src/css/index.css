@@ -55,7 +55,7 @@ html, body {
 
 #grid-column-order {
     overflow-y: auto;
-    max-height: 43em;
+    max-height: 90vh;
     padding-right: .30em;
 }
 
