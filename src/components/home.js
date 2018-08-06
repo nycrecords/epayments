@@ -23,15 +23,15 @@ class Home extends React.Component {
         this.addOrder = (order_count, suborder_count, orders, firstTime) => {
             if(firstTime){
                 this.setState({
-                all_orders: orders,
-                order_count: order_count,
-                suborder_count: suborder_count
+                    all_orders: orders,
+                    order_count: order_count,
+                    suborder_count: suborder_count,
                 });
             }else{
                this.setState({
-                all_orders: this.state.all_orders.concat(orders),
-                order_count: this.state.order_count +order_count,
-                suborder_count: this.state.suborder_count +suborder_count,
+                   all_orders: this.state.all_orders.concat(orders),
+                   order_count: this.state.order_count +order_count,
+                   suborder_count: this.state.suborder_count +suborder_count,
             });
             }
 
@@ -202,13 +202,14 @@ class Home extends React.Component {
                             </Rail>
                             <div id="grid-column-order">
                                 {orderRows}
-                                {this.state.suborder_count > 4 ?(
+                                { this.state.suborder_count%20 === 0 && this.state.suborder_count!==0 ?(
                                     <div className="center">
-                                        <Button content="Load More"
+                                         <Button content="Load More"
                                                 onClick={this.loadMore}/>
                                     </div>
-                                ) : (<div>
-                                </div>)
+                                ) : (<div className="center">
+
+                                    </div>)
                                 }
 
                             </div>
