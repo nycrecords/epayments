@@ -172,9 +172,12 @@ class NewOrderForm extends React.Component {
                 collection: this.state.collection.concat([" "]),
                 printSize: this.state.printSize.concat([" "]),
                 numCopies: this.state.numCopies.concat([" "]),
-
             })
-
+        };
+        this.deleteSuborderValues = (index, state, name) => {
+            let newState = state.slice();
+            newState.splice(index, 1);
+            this.setState({[name]: newState})
         };
         this.i = 0;
         this.index = 1;
@@ -307,12 +310,74 @@ class NewOrderForm extends React.Component {
     };
 
     callBack = (dataFromChild, value, index, state) => {
+        console.log("AT CALL BACK")
         let newState = state.slice()
         newState[index] = value
         this.setState({
             [dataFromChild]: newState
         });
         console.log("State is : " + state);
+
+
+    };
+    deleteSuborder = (index) => {
+        this.index--;
+        let newSubOrderList = this.state.subOrderList.slice()
+        newSubOrderList.splice(index, 1);
+        for (var i = index; i < newSubOrderList.length; i++) {
+            newSubOrderList[i] = newSubOrderList[i] - 1;
+        }
+        this.setState({subOrderList: newSubOrderList});
+        console.log("newList is " + newSubOrderList);
+        this.deleteSuborderValues(index, this.state.certified, "certified")
+        this.deleteSuborderValues(index, this.state.deathPlace, "deathPlace")
+        this.deleteSuborderValues(index, this.state.cemetery, "cemetery")
+        this.deleteSuborderValues(index, this.state.firstName, "firstName")
+        this.deleteSuborderValues(index, this.state.lastName, "lastName")
+        this.deleteSuborderValues(index, this.state.birthPlace, "birthPlace")
+        this.deleteSuborderValues(index, this.state.gender, "gender")
+        this.deleteSuborderValues(index, this.state.fatherName, "fatherName")
+        this.deleteSuborderValues(index, this.state.motherName, "motherName")
+        this.deleteSuborderValues(index, this.state.middleName, "middleName")
+        this.deleteSuborderValues(index, this.state.certificateNum, "certificateNum")
+        this.deleteSuborderValues(index, this.state.groomLastName, "groomLastName")
+        this.deleteSuborderValues(index, this.state.groomFirstName, "groomFirstName")
+        this.deleteSuborderValues(index, this.state.brideLastName, "brideLastName")
+        this.deleteSuborderValues(index, this.state.brideFirstName, "brideFirstName")
+        this.deleteSuborderValues(index, this.state.month, "month")
+        this.deleteSuborderValues(index, this.state.day, "day")
+        this.deleteSuborderValues(index, this.state.year, "year")
+        this.deleteSuborderValues(index, this.state.marriagePlace, "marriagePlace")
+        this.deleteSuborderValues(index, this.state.letter, "letter")
+        this.deleteSuborderValues(index, this.state.block, "block")
+        this.deleteSuborderValues(index, this.state.lot, "lot")
+        this.deleteSuborderValues(index, this.state.roll, "roll")
+        this.deleteSuborderValues(index, this.state.borough, "borough")
+        this.deleteSuborderValues(index, this.state.buildingNum, "buildingNum")
+        this.deleteSuborderValues(index, this.state.street, "street")
+        this.deleteSuborderValues(index, this.state.mail, "mail")
+        this.deleteSuborderValues(index, this.state.contactNum, "contactNum")
+        this.deleteSuborderValues(index, this.state.imgId, "imgId")
+        this.deleteSuborderValues(index, this.state.imgTitle, "imgTitle")
+        this.deleteSuborderValues(index, this.state.comment, "comment")
+        this.deleteSuborderValues(index, this.state.personalUseAgreement, "personalUseAgreement")
+        this.deleteSuborderValues(index, this.state.addDescription, "addDescription")
+        this.deleteSuborderValues(index, this.state.collection, "collection")
+        this.deleteSuborderValues(index, this.state.printSize, "printSize")
+        this.deleteSuborderValues(index, this.state.numCopies, "numCopies")
+        this.deleteSuborderValues(index, this.state.orderType, "orderType")
+        this.deleteSuborderValues(index, this.state.status, "status")
+
+
+
+
+
+
+
+
+
+
+
 
 
     };
@@ -328,6 +393,7 @@ class NewOrderForm extends React.Component {
                     ref={instance => {
                         this.subOrderForm = instance
                     }}
+                    deleteSuborder={this.deleteSuborder}
 
                 />
             </Segment>
@@ -374,6 +440,7 @@ class NewOrderForm extends React.Component {
                                                 placeholder="Email"
                                                 maxLength="64"
                                                 onChange={this.handleChange}
+                                                value={this.state.email}
                                     />
                                     <Form.Input label="Address line 1"
                                                 name="addressLine1"
@@ -449,7 +516,7 @@ class NewOrderForm extends React.Component {
                                     </Button>
                                     <Button type='submit' positive floated="left" content="Place Order"/>
                                     <Button type="reset" onClick={() => {
-                                        this.clearSelection
+                                        this.clearSelection()
                                         this.subOrderForm.clearSelection()
                                     }} content="Clear"/>
                                 </Form>
@@ -462,7 +529,8 @@ class NewOrderForm extends React.Component {
                 </div>
             </div>
         )
-    };
+    }
+    ;
 }
 
 

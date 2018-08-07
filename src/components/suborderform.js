@@ -51,7 +51,7 @@ class SubOrderForm extends React.Component {
         this.state = {
             orderType: '',
             numCopies: '',
-            status: [],
+            status: '',
             showBirthCert: false,
             showBirthSearch: false,
             showDeathCert: false,
@@ -69,12 +69,11 @@ class SubOrderForm extends React.Component {
             'Birth Cert'];
 
         this.handleChange = this.handleChange.bind(this);
-
         this.clearSelection = () => {
             this.setState({
                 orderType: '',
                 numCopies: '',
-                status: [],
+                status: '',
                 showBirthCert: false,
                 showBirthSearch: false,
                 showDeathCert: false,
@@ -84,9 +83,8 @@ class SubOrderForm extends React.Component {
                 showTaxForm: false,
                 showPhotoGalleryForm: false,
                 showPropertyForm: false,
+
             })
-
-
         }
 
     }
@@ -103,17 +101,19 @@ class SubOrderForm extends React.Component {
         });
     };
 
-
     render() {
         return (
             <Grid>
                 <Grid.Row>
                     <Grid.Column>
                         <Popup trigger={
-                            <Button floated="right" type="button" size="mini">
+                            <Button floated="right" type="button" size="mini"
+                                    onClick={() =>{
+                                        this.props.deleteSuborder(this.props.index)
+
+                                    console.log("this clicked")}}>
                                 <Icon name="remove"/>
-                            </Button>}
-                               content={"Remove"}
+                            </Button>} content={"Remove"}
                         />
                         <h4>
                             Suborder: {this.props.index + 1}
