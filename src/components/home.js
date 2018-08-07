@@ -6,6 +6,11 @@ import OrderForm from "./order_form";
 import Order from "./order";
 import LoginModal from "./login_modal";
 import {csrfFetch, handleFetchErrors} from "../utils/fetch"
+import CHUNK_SIZE from "../constants/constants"
+
+/***
+ * Custom Classes from index.css Starts with '-'; Overrides Bootstrap css and Semantic ui css
+ */
 
 
 class Home extends React.Component {
@@ -32,9 +37,7 @@ class Home extends React.Component {
             }else{
                this.setState({
                    all_orders: this.state.all_orders.concat(orders),
-                   order_count: this.state.order_count +order_count,
-                   suborder_count: this.state.suborder_count +suborder_count,
-                   suborder_two: this.state.suborder_two +20
+                   suborder_two: this.state.suborder_two + CHUNK_SIZE
                 });
             }
         };
@@ -136,13 +139,13 @@ class Home extends React.Component {
     render() {
         const orderRows = this.state.all_orders.map((order) =>
             <Order
-                key={order._source.suborder_number}
-                order_number={order._source.order_number}
-                suborder_number={order._source.suborder_number}
-                order_type={order._source.order_type}
-                billing_name={order._source.billing_name}
-                date_received={order._source.date_received.slice(0, -9)}
-                current_status={order._source.current_status}
+                key={order.suborder_number}
+                order_number={order.order_number}
+                suborder_number={order.suborder_number}
+                order_type={order.order_type}
+                billing_name={order.billing_name}
+                date_received={order.date_received.slice(0, -9)}
+                current_status={order.current_status}
                 updateStatus={this.updateStatus}
             />
         );
@@ -151,14 +154,14 @@ class Home extends React.Component {
             <Container>
                 {this.props.authenticated ? (
                     <Grid padded columns={3}>
-                        <Segment basic className="no-padding no-margin">
-                            <Header as="h1" className="half">ePayments
+                        <Segment basic className="-no-padding -no-margin">
+                            <Header as="h1" className="-half">ePayments
                                 <Container className="sub header">Department of Records</Container>
                             </Header>
-                            <Segment basic  className="half no-padding">
-                                <div className="float-right">
+                            <Segment basic  className="-half -no-padding">
+                                <div className="-float-right">
                                     Hi {this.props.user}
-                                    <Button content='Logout' onClick={this.logOut} className="margin-left"/>
+                                    <Button content='Logout' onClick={this.logOut} className="-margin-left"/>
                                 </div>
                             </Segment>
                         </Segment>
@@ -168,7 +171,7 @@ class Home extends React.Component {
                         </Dimmer>
                         <Grid.Column width={3}>
                         </Grid.Column>
-                        <Grid.Column width={11} className="no-padding" id="orders-properties">
+                        <Grid.Column width={11} className="-no-padding" id="orders-properties">
                             <Rail position="left" id="grid-column-search" >
                                 <OrderForm addOrder={this.addOrder}
                                            setLoadingState={this.setLoadingState}
@@ -176,7 +179,7 @@ class Home extends React.Component {
                                            ref={orderForm => this.orderForm = orderForm}/>
                             </Rail>
 
-                            <Header as="h1" dividing textAlign="center" className='margin-top-none'>Order</Header>
+                            <Header as="h1" dividing textAlign="center" className='-margin-top-none'>Order</Header>
                             
                             <Rail position="right"  id="rail-right">
                                 <p><strong>Number of Items: {this.state.suborder_count}</strong> </p>

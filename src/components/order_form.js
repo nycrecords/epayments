@@ -8,6 +8,8 @@ import 'react-datepicker/dist/react-datepicker.css'
 import 'semantic-ui-css/semantic.min.css';
 import moment from 'moment';
 import {csrfFetch, handleFetchErrors} from "../utils/fetch"
+import CHUNK_SIZE from "../constants/constants"
+
 
 
 //Creates the options for the Order Type dropdown.
@@ -166,7 +168,7 @@ class OrderForm extends React.Component {
                 case'submit':
                     this.setState({
                         start:0,
-                        size:20,
+                        size:CHUNK_SIZE,
                     });
                     this.props.setLoadingState(true);
                     csrfFetch('api/v1.0/orders', {
@@ -198,7 +200,7 @@ class OrderForm extends React.Component {
 
                 case'load_more':
                     this.setState({
-                        start:this.state.start +20
+                        start:this.state.start + CHUNK_SIZE
                     });
                     this.props.setLoadingState(true);
                     csrfFetch('api/v1.0/orders', {
