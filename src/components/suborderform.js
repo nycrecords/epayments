@@ -157,7 +157,7 @@ class SubOrderForm extends React.Component {
                                              this.setState({showBirthCert: true}) :
                                              this.setState({showBirthCert: false});
                                      }}
-                                     value={this.state.orderType}
+                                     value={this.props.state.orderType[this.props.index]}
                         />
 
                         {this.state.showTaxForm && <TaxPhotoForm callBack={this.props.callBack} index={this.props.index}
@@ -203,7 +203,7 @@ class SubOrderForm extends React.Component {
 
                                         }
                                     }}
-                                    value={this.state.numCopies}
+                                    value={this.props.state.numCopies[this.props.index]}
                         />
 
                         <Form.Select label="Status"
@@ -215,7 +215,7 @@ class SubOrderForm extends React.Component {
                                          this.setState({status: value});
                                          this.props.callBack("status", value, this.props.index, this.props.state.status);
                                      }}
-                                     value={this.state.status}
+                                     value={this.props.state.status[this.props.index]}
                         />
                     </Grid.Column>
                 </Grid.Row>

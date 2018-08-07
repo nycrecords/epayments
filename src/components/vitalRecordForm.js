@@ -29,7 +29,7 @@ class VitalRecordForm extends React.Component {
                                             this.props.callBack("month", value, this.props.index, this.props.state.month)
 
                                         }}
-                                        value={this.state.month}
+                                        value={this.props.state.month[this.props.index]}
                             />
                             <Form.Input label="Day"
                                         name="day"
@@ -41,7 +41,7 @@ class VitalRecordForm extends React.Component {
                                                 this.props.callBack("day", value, this.props.index, this.props.state.day)
                                             }
                                         }}
-                                        value={this.state.day}
+                                        value={this.props.state.day[this.props.index]}
                             />
                             <Form.Input label="Year"
                                         name="year"
@@ -53,7 +53,7 @@ class VitalRecordForm extends React.Component {
                                                 this.props.callBack("year", value, this.props.index, this.props.state.year)
                                             }
                                         }}
-                                        value={this.state.year}
+                                        value={this.props.state.year[this.props.index]}
                             />
                         </Form.Group>
 
@@ -67,7 +67,7 @@ class VitalRecordForm extends React.Component {
                                          this.props.callBack("borough", value, this.props.index, this.props.state.borough);
 
                                      }}
-                                     value={this.state.borough}
+                                     value={this.props.state.borough[this.props.index]}
                         />
                         <Form.Checkbox label="Letter"
                                        name="letter"
@@ -87,7 +87,7 @@ class VitalRecordForm extends React.Component {
                                         this.setState({comment: value})
                                         this.props.callBack("comment", value, this.props.index, this.props.state.comment)
                                     }}
-                                    value={this.state.comment}
+                                    value={this.props.state.comment[this.props.index]}
                         />
 
                     </Grid.Column>

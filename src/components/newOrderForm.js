@@ -174,10 +174,6 @@ class NewOrderForm extends React.Component {
                 numCopies: this.state.numCopies.concat([" "]),
             })
         };
-        this.deleteChildValues = (name,state) => {
-
-
-        }
         this.deleteSuborderValues = (index, state, name) => {
             let newState = state.slice();
             newState.splice(index, 1);

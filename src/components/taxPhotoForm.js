@@ -63,7 +63,7 @@ class TaxPhotoForm extends React.Component {
                                         this.setState({block: value})
                                         this.props.callBack("block", value, this.props.index, this.props.state.block)
                                     }}
-                                    value={this.state.block}
+                                    value={this.props.state.block[this.props.index]}
                         />
                         <Form.Input label="Lot"
                                     name="lot"
@@ -72,7 +72,7 @@ class TaxPhotoForm extends React.Component {
                                         this.setState({lot: value})
                                         this.props.callBack("lot", value, this.props.index, this.props.state.lot)
                                     }}
-                                    value={this.state.lot}
+                                    value={this.props.state.lot[this.props.index]}
                         />
                         <Form.Input label="Roll"
                                     name="roll"
@@ -81,7 +81,7 @@ class TaxPhotoForm extends React.Component {
                                         this.setState({roll: e.target.value})
                                         this.props.callBack("roll", value, this.props.index, this.props.state.roll)
                                     }}
-                                    value={this.state.roll}
+                                    value={this.props.state.roll[this.props.index]}
                         />
                         <Form.Group inline>
                             <label>Printing Size</label>
@@ -116,7 +116,7 @@ class TaxPhotoForm extends React.Component {
                                          this.props.callBack("borough", value, this.props.index, this.props.state.borough);
 
                                      }}
-                                     value={this.state.value}
+                                     value={this.props.state.borough[this.props.index]}
                         />
                         <Form.Input label="Building Number"
                                     name="buildingNum"
@@ -125,7 +125,7 @@ class TaxPhotoForm extends React.Component {
                                         this.setState({buildingNum: value})
                                         this.props.callBack("buildingNum", value, this.props.index, this.props.state.buildingNum)
                                     }}
-                                    value={this.state.buildingNum}
+                                    value={this.props.state.buildingNum[this.props.index]}
                         />
                         <Form.Input label="Street"
                                     name="street"
@@ -134,7 +134,7 @@ class TaxPhotoForm extends React.Component {
                                         this.setState({street: value})
                                         this.props.callBack("street", value, this.props.index, this.props.state.street)
                                     }}
-                                    value={this.state.street}
+                                    value={this.props.state.street[this.props.index]}
                         />
                         <Form.Checkbox label="Mail"
                                        name="mail"
@@ -154,7 +154,7 @@ class TaxPhotoForm extends React.Component {
                                         this.setState({addDescription: value})
                                         this.props.callBack("addDescription", value, this.props.index, this.props.state.addDescription)
                                     }}
-                                    value={this.state.addDescription}
+                                    value={this.props.state.addDescription[this.props.index]}
                         />
                         <Form.Input label="Contact Number"
                                     name="contactNum"
@@ -163,7 +163,7 @@ class TaxPhotoForm extends React.Component {
                                         this.setState({contactNum: value})
                                         this.props.callBack("contactNum", value, this.props.index, this.props.state.contactNum)
                                     }}
-                                    value={this.state.contactNum}
+                                    value={this.props.state.contactNum[this.props.index]}
                         />
                     </Grid.Column>
                 </Grid.Row>

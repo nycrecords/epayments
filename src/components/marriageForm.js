@@ -27,7 +27,7 @@ class MarriageSearchForm extends React.Component {
                                             this.setState({groomFirstName: value})
                                             this.props.callBack("groomFirstName", value, this.props.index, this.props.state.groomFirstName)
                                         }}
-                                        value={this.state.groomFirstName}
+                                        value={this.props.state.groomFirstName[this.props.index]}
                             />
                             <Form.Input label="Groom Last Name"
                                         name="groomLastName"
@@ -36,7 +36,7 @@ class MarriageSearchForm extends React.Component {
                                             this.setState({groomLastName: value})
                                             this.props.callBack("groomLastName", value, this.props.index, this.props.state.groomLastName)
                                         }}
-                                        value={this.state.groomLastName}
+                                        value={this.props.state.groomLastName[this.props.index]}
                             />
                         </Form.Group>
                         <Form.Group>
@@ -47,7 +47,7 @@ class MarriageSearchForm extends React.Component {
                                             this.setState({brideFirstName: value})
                                             this.props.callBack("brideFirstName", value, this.props.index, this.props.state.brideFirstName)
                                         }}
-                                        value={this.state.brideFirstName}
+                                        value={this.props.state.brideFirstName[this.props.index]}
                             />
                             <Form.Input label="Bride Last Name"
                                         name="brideLastName"
@@ -56,7 +56,7 @@ class MarriageSearchForm extends React.Component {
                                             this.setState({brideLastName: value})
                                             this.props.callBack("brideLastName", value, this.props.index, this.props.state.brideLastName)
                                         }}
-                                        value={this.state.brideLastName}
+                                        value={this.props.state.brideLastName[this.props.index]}
                             />
                         </Form.Group>
                         <Form.Input label="Marriage Place"
@@ -66,9 +66,8 @@ class MarriageSearchForm extends React.Component {
                                         this.setState({marriagePlace: value})
                                         this.props.callBack("marriagePlace", value, this.props.index, this.props.state.marriagePlace)
                                     }}
-                                    value={this.state.marriagePlace}
+                                    value={this.props.state.marriagePlace[this.props.index]}
                         />
-                        {/*{VitalRecordForm()}*/}
                         <VitalRecordForm callBack={this.props.callBack} index={this.props.index}
                                          state={this.props.state} boroughOptions={this.props.boroughOptions}/>
                     </Grid.Column>
@@ -105,7 +104,7 @@ class MarriageCertForm extends React.Component {
                                         this.setState({certificateNum: value})
                                         this.props.callBack("certificateNum", value, this.props.index, this.props.state.certificateNum)
                                     }}
-                                    value={this.state.certificateNum}
+                                    value={this.props.state.certificateNum[this.props.index]}
                         />
                         <MarriageSearchForm callBack={this.props.callBack} index={this.props.index}
                                             state={this.props.state} boroughOptions={this.props.boroughOptions}/>

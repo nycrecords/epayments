@@ -26,7 +26,7 @@ class DeathSearchForm extends React.Component {
                                             this.setState({firstName: value})
                                             this.props.callBack("firstName", value, this.props.index, this.props.state.firstName)
                                         }}
-                                        value={this.state.firstName}
+                                        value={this.props.state.firstName[this.props.index]}
                             />
                             <Form.Input label="Middle Name"
                                         name="middleName"
@@ -35,7 +35,7 @@ class DeathSearchForm extends React.Component {
                                             this.setState({middleName: value})
                                             this.props.callBack("middleName", value, this.props.index, this.props.state.middleName)
                                         }}
-                                        value={this.state.middleName}
+                                        value={this.props.state.middleName[this.props.index]}
                             />
                             <Form.Input label="Last Name"
                                         name="lastName"
@@ -44,7 +44,7 @@ class DeathSearchForm extends React.Component {
                                             this.setState({lastName: value})
                                             this.props.callBack("lastName", value, this.props.index, this.props.state.lastName)
                                         }}
-                                        value={this.state.lastName}
+                                        value={this.props.state.lastName[this.props.index]}
                             />
                         </Form.Group>
                         <Form.Input label="Cemetery"
@@ -54,7 +54,7 @@ class DeathSearchForm extends React.Component {
                                         this.setState({cemetery: value})
                                         this.props.callBack("cemetery", value, this.props.index, this.props.state.cemetery)
                                     }}
-                                    value={this.state.cemetery}
+                                    value={this.props.state.cemetery[this.props.index]}
                         />
                         <Form.Input label="Death Place"
                                     name="deathPlace"
@@ -63,7 +63,7 @@ class DeathSearchForm extends React.Component {
                                         this.setState({deathPlace: value})
                                         this.props.callBack("deathPlace", value, this.props.index, this.props.state.deathPlace)
                                     }}
-                                    value={this.state.deathPlace}
+                                    value={this.props.state.deathPlace[this.props.index]}
                         />
                         <VitalRecordForm callBack={this.props.callBack} index={this.props.index}
                                          state={this.props.state} boroughOptions={this.props.boroughOptions}/>
@@ -99,7 +99,7 @@ class DeathCertForm extends React.Component {
                                         this.setState({certificateNum: value})
                                         this.props.callBack("certificateNum", value, this.props.index, this.props.state.certificateNum)
                                     }}
-                                    value={this.state.certificateNum}
+                                    value={this.props.state.certificateNum[this.props.index]}
                         />
                         <DeathSearchForm callBack={this.props.callBack} index={this.props.index}
                                          state={this.props.state} boroughOptions={this.props.boroughOptions}/>

@@ -29,7 +29,7 @@ class BirthSearchForm extends React.Component {
                                             this.setState({firstName: value})
                                             this.props.callBack("firstName", value, this.props.index, this.props.state.firstName)
                                         }}
-                                        value={this.state.firstName}
+                                        value={this.props.state.firstName[this.props.index]}
                             />
                             <Form.Input label="Middle Name"
                                         name="middleName"
@@ -38,7 +38,7 @@ class BirthSearchForm extends React.Component {
                                             this.setState({middleName: value})
                                             this.props.callBack("middleName", value, this.props.index, this.props.state.middleName)
                                         }}
-                                        value={this.state.middleName}
+                                        value={this.props.state.middleName[this.props.index]}
                             />
                             <Form.Input label="Last Name"
                                         name="lastName"
@@ -47,7 +47,7 @@ class BirthSearchForm extends React.Component {
                                             this.setState({lastName: value})
                                             this.props.callBack("lastName", value, this.props.index, this.props.state.lastName)
                                         }}
-                                        value={this.state.lastName}
+                                        value={this.props.state.lastName[this.props.index]}
                             />
                         </Form.Group>
                         <Form.Input label="Birth Place"
@@ -57,7 +57,7 @@ class BirthSearchForm extends React.Component {
                                         this.setState({birthPlace: value})
                                         this.props.callBack("birthPlace", value, this.props.index, this.props.state.birthPlace)
                                     }}
-                                    value={this.state.birthPlace}
+                                    value={this.props.state.birthPlace[this.props.index]}
                         />
                         <Form.Select label="Gender"
                                      required
@@ -68,7 +68,7 @@ class BirthSearchForm extends React.Component {
                                          this.setState({gender: value});
                                          this.props.callBack("gender", value, this.props.index, this.props.state.gender);
                                      }}
-                                     value={this.state.value}
+                                     value={this.props.state.gender[this.props.index]}
                         />
                         <Form.Input label="Mother Name"
                                     name="motherName"
@@ -77,7 +77,7 @@ class BirthSearchForm extends React.Component {
                                         this.setState({motherName: value})
                                         this.props.callBack("motherName", value, this.props.index, this.props.state.motherName)
                                     }}
-                                    value={this.state.motherName}
+                                    value={this.props.state.motherName[this.props.index]}
                         />
                         <Form.Input label="Father Name"
                                     name="fatherName"
@@ -86,7 +86,7 @@ class BirthSearchForm extends React.Component {
                                         this.setState({fatherName: value})
                                         this.props.callBack("fatherName", value, this.props.index, this.props.state.fatherName)
                                     }}
-                                    value={this.state.fatherName}
+                                    value={this.props.state.fatherName[this.props.index]}
                         />
                         <VitalRecordForm callBack={this.props.callBack} index={this.props.index}
                                          state={this.props.state} boroughOptions={this.props.boroughOptions}/>
@@ -125,7 +125,7 @@ class BirthCertForm extends React.Component {
                                         this.setState({certificateNum: value})
                                         this.props.callBack("certificateNum", value, this.props.index, this.props.state.certificateNum)
                                     }}
-                                    value={this.state.certificateNum}
+                                    value={this.props.state.certificateNum[this.props.index]}
                         />
                         <BirthSearchForm callBack={this.props.callBack} index={this.props.index}
                                          state={this.props.state} boroughOptions={this.props.boroughOptions}

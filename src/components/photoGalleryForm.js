@@ -28,7 +28,7 @@ class PhotoGalleryForm extends React.Component {
                                         this.setState({imgId: value})
                                         this.props.callBack("imgId", value, this.props.index, this.props.state.imgId)
                                     }}
-                                    value={this.state.imgId}
+                                    value={this.props.state.imgId[this.props.index]}
                         />
 
                         <Form.Input label="Title/Description of Image"
@@ -38,7 +38,7 @@ class PhotoGalleryForm extends React.Component {
                                         this.setState({imgTitle: value})
                                         this.props.callBack("imgTitle", value, this.props.index, this.props.state.imgTitle)
                                     }}
-                                    value={this.state.imgTitle}
+                                    value={this.props.state.imgTitle[this.props.index]}
                         />
 
                         <Form.Input label="Addition Description"
@@ -48,7 +48,7 @@ class PhotoGalleryForm extends React.Component {
                                         this.setState({addDescription: value})
                                         this.props.callBack("addDescription", value, this.props.index, this.props.state.addDescription)
                                     }}
-                                    value={this.state.addDescription}
+                                    value={this.props.state.addDescription[this.props.index]}
                         />
                         <Form.Checkbox label="Mail"
                                        name="mail"
@@ -68,7 +68,7 @@ class PhotoGalleryForm extends React.Component {
                                         this.setState({contactNum: value})
                                         this.props.callBack("contactNum", value, this.props.index, this.props.state.contactNum)
                                     }}
-                                    value={this.state.contactNum}
+                                    value={this.props.state.contactNum[this.props.index]}
                         />
                         <Form.Checkbox label="Personal Use Agreement"
                                        name="personalUseAgreement"
@@ -88,7 +88,7 @@ class PhotoGalleryForm extends React.Component {
                                         this.setState({comment: value})
                                         this.props.callBack("comment", value, this.props.index, this.props.state.comment)
                                     }}
-                                    value={this.state.comment}
+                                    value={this.props.state.comment[this.props.index]}
                         />
                         <Form.Group inline required>
                             <label>Printing Size</label>
