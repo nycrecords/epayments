@@ -110,8 +110,7 @@ class SubOrderForm extends React.Component {
                             <Button floated="right" type="button" size="mini"
                                     onClick={() =>{
                                         this.props.deleteSuborder(this.props.index)
-
-                                    console.log("this clicked")}}>
+                                    }}>
                                 <Icon name="remove"/>
                             </Button>} content={"Remove"}
                         />

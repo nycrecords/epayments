@@ -174,10 +174,22 @@ class NewOrderForm extends React.Component {
                 numCopies: this.state.numCopies.concat([" "]),
             })
         };
+        this.deleteChildValues = (name,state) => {
+
+
+        }
         this.deleteSuborderValues = (index, state, name) => {
             let newState = state.slice();
             newState.splice(index, 1);
+            for (var i = index; i < newState; i++) {
+                newState[i]=newState[i-1]
+
+            }
+
+
             this.setState({[name]: newState})
+
+
         };
         this.i = 0;
         this.index = 1;
@@ -321,13 +333,16 @@ class NewOrderForm extends React.Component {
 
     };
     deleteSuborder = (index) => {
-        this.index--;
+        console.log("index is " + index);
         let newSubOrderList = this.state.subOrderList.slice()
         newSubOrderList.splice(index, 1);
         for (var i = index; i < newSubOrderList.length; i++) {
             newSubOrderList[i] = newSubOrderList[i] - 1;
         }
-        this.setState({subOrderList: newSubOrderList});
+        // this.setState({subOrderList: newSubOrderList.filter(function (value) {
+        //     return value!=newSubOrderList[index]
+        //     })});
+        this.setState({subOrderList:newSubOrderList})
         console.log("newList is " + newSubOrderList);
         this.deleteSuborderValues(index, this.state.certified, "certified")
         this.deleteSuborderValues(index, this.state.deathPlace, "deathPlace")
@@ -367,6 +382,9 @@ class NewOrderForm extends React.Component {
         this.deleteSuborderValues(index, this.state.numCopies, "numCopies")
         this.deleteSuborderValues(index, this.state.orderType, "orderType")
         this.deleteSuborderValues(index, this.state.status, "status")
+        console.log(this.state)
+        this.index--;
+
 
 
 
