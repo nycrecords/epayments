@@ -8,7 +8,7 @@ import 'react-datepicker/dist/react-datepicker.css'
 import 'semantic-ui-css/semantic.min.css';
 import moment from 'moment';
 import {csrfFetch, handleFetchErrors} from "../utils/fetch"
-import CHUNK_SIZE from "../constants/constants"
+import {CHUNK_SIZE}from "../constants/constants"
 
 
 
@@ -84,8 +84,8 @@ class OrderForm extends React.Component {
             status: 'all',
             billing_name: '',
             activeItem: 'Date Received',
-            start:0,
-            size: 20,
+            start: 0,
+            size: CHUNK_SIZE,
         };
 
         this.photosValueList = ['photos', 'Tax Photo', 'Photo Gallery'];
@@ -167,9 +167,13 @@ class OrderForm extends React.Component {
                 // Search
                 case'submit':
                     this.setState({
-                        start:0,
-                        size:CHUNK_SIZE,
+                        start: 0
                     });
+                    // this.setState((prevState)=>{
+                    //     return {
+                    //         start: prevState.start =0
+                    //     };
+                    // });
                     this.props.setLoadingState(true);
                     csrfFetch('api/v1.0/orders', {
                         method: "POST",
@@ -190,18 +194,23 @@ class OrderForm extends React.Component {
                     })
                         .then(handleFetchErrors)
                         .then((json) => {
-                            this.props.addOrder(json.order_count, json.suborder_count, json.all_orders,true);
+                            this.props.addOrder(json.order_count, json.suborder_count, json.all_orders, true);
                             this.props.setLoadingState(false);
-                        }).catch((error) => {
+                        })
+                        .catch((error) => {
                         console.error(error);
                         this.props.setLoadingState(false);
                     });
                     break;
 
                 case'load_more':
+                    debugger;
                     this.setState({
-                        start:this.state.start + CHUNK_SIZE
+                        start: this.state.start + CHUNK_SIZE
                     });
+                    // this.setState((prevState)=>{
+                    //     return {start: prevState.start + CHUNK_SIZE};
+                    // });
                     this.props.setLoadingState(true);
                     csrfFetch('api/v1.0/orders', {
                         method: "POST",
@@ -224,7 +233,8 @@ class OrderForm extends React.Component {
                         .then((json) => {
                             this.props.addOrder(json.order_count, json.suborder_count, json.all_orders, false);
                             this.props.setLoadingState(false);
-                        }).catch((error) => {
+                        })
+                        .catch((error) => {
                         console.error(error);
                         this.props.setLoadingState(false);
                     });

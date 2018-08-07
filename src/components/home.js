@@ -6,7 +6,7 @@ import OrderForm from "./order_form";
 import Order from "./order";
 import LoginModal from "./login_modal";
 import {csrfFetch, handleFetchErrors} from "../utils/fetch"
-import CHUNK_SIZE from "../constants/constants"
+import {CHUNK_SIZE} from "../constants/constants"
 
 /***
  * Custom Classes from index.css Starts with '-'; Overrides Bootstrap css and Semantic ui css
@@ -32,12 +32,14 @@ class Home extends React.Component {
                     all_orders: orders,
                     order_count: order_count,
                     suborder_count: suborder_count,
-                    suborder_two: suborder_count,
+                    suborder_two: CHUNK_SIZE,
                 });
-            }else{
-               this.setState({
-                   all_orders: this.state.all_orders.concat(orders),
-                   suborder_two: this.state.suborder_two + CHUNK_SIZE
+            } else {
+               this.setState((prevState)=>{
+                   return{
+                       all_orders: prevState.all_orders.concat(orders),
+                       suborder_two: prevState.suborder_two + CHUNK_SIZE
+                   };
                 });
             }
         };
