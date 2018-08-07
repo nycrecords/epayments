@@ -73,6 +73,7 @@ class NewOrderForm extends React.Component {
             showSubOrder: false,
             showPropertyForm: false,
             loading: false,
+            clearForm: false,
             subOrderList: [0]
 
         };
@@ -127,6 +128,7 @@ class NewOrderForm extends React.Component {
                 printSize: [" "],
                 numCopies: [" "],
                 status: [" "],
+                clearForm: true,
             });
         };
         this.handleEmptyStates = () => {
@@ -202,42 +204,42 @@ class NewOrderForm extends React.Component {
 
     handleSubmit = (e, value) => {
         e.preventDefault();
-        console.log("this is ordertype1: " + this.state.orderType);
-        console.log("num copies : " + this.state.numCopies);
-        console.log("gender:" + this.state.gender);
-        this.setState({loading: true});
-        if (this.state.orderType == '' && this.state.status == '') {
-            alert("Please fill in Order Type and Status")
-            this.setState({loading: false});
-            return
-
-        } else if (this.state.orderType == '') {
-            alert("Please fill in Order Type")
-            this.setState({loading: false});
-            return
-        } else if (this.state.status == '') {
-            alert("Please fill in Status")
-            this.setState({loading: false});
-            return
-        }
-        if (this.state.orderType != '') {
-            if ((this.state.showBirthSearch == true || this.state.showBirthCert == true) && this.state.gender == '') {
-                alert("Please fill in the Gender")
-                this.setState({loading: false});
-                return
-
-            }
-            else if (this.state.showPropertyForm == true && this.state.borough == " ") {
-                alert("Please fill in the Borough")
-                this.setState({loading: false});
-                return
-            }
-            else if (this.state.showPhotoGalleryForm == true && this.state.printSize == "") {
-                alert("Please fill in the Printing Size")
-                this.setState({loading: false});
-                return
-            }
-        }
+        // console.log("this is ordertype1: " + this.state.orderType);
+        // console.log("num copies : " + this.state.numCopies);
+        // console.log("gender:" + this.state.gender);
+        // this.setState({loading: true});
+        // if (this.state.orderType == '' && this.state.status == '') {
+        //     alert("Please fill in Order Type and Status")
+        //     this.setState({loading: false});
+        //     return
+        //
+        // } else if (this.state.orderType == '') {
+        //     alert("Please fill in Order Type")
+        //     this.setState({loading: false});
+        //     return
+        // } else if (this.state.status == '') {
+        //     alert("Please fill in Status")
+        //     this.setState({loading: false});
+        //     return
+        // }
+        // if (this.state.orderType != '') {
+        //     if ((this.state.showBirthSearch == true || this.state.showBirthCert == true) && this.state.gender == '') {
+        //         alert("Please fill in the Gender")
+        //         this.setState({loading: false});
+        //         return
+        //
+        //     }
+        //     else if (this.state.showPropertyForm == true && this.state.borough == " ") {
+        //         alert("Please fill in the Borough")
+        //         this.setState({loading: false});
+        //         return
+        //     }
+        //     else if (this.state.showPhotoGalleryForm == true && this.state.printSize == "") {
+        //         alert("Please fill in the Printing Size")
+        //         this.setState({loading: false});
+        //         return
+        //     }
+        // }
 
         csrfFetch('api/v1.0/orders/new', {
             method: "POST",
@@ -323,6 +325,9 @@ class NewOrderForm extends React.Component {
                     index={suborderIndex}
                     callBack={this.callBack}
                     state={this.state}
+                    ref={instance => {
+                        this.subOrderForm = instance
+                    }}
 
                 />
             </Segment>
@@ -443,7 +448,10 @@ class NewOrderForm extends React.Component {
                                         </Button.Content>
                                     </Button>
                                     <Button type='submit' positive floated="left" content="Place Order"/>
-                                    <Button type="reset" onClick={this.clearSelection} content="Clear"/>
+                                    <Button type="reset" onClick={() => {
+                                        this.clearSelection
+                                        this.subOrderForm.clearSelection()
+                                    }} content="Clear"/>
                                 </Form>
                             </Grid.Column>
                         </Grid.Row>

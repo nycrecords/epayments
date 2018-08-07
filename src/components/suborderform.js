@@ -70,6 +70,25 @@ class SubOrderForm extends React.Component {
 
         this.handleChange = this.handleChange.bind(this);
 
+        this.clearSelection = () => {
+            this.setState({
+                orderType: '',
+                numCopies: '',
+                status: [],
+                showBirthCert: false,
+                showBirthSearch: false,
+                showDeathCert: false,
+                showDeathSearch: false,
+                showMarriageCert: false,
+                showMarriageSearch: false,
+                showTaxForm: false,
+                showPhotoGalleryForm: false,
+                showPropertyForm: false,
+            })
+
+
+        }
+
     }
 
     handleChange = (e) => {
@@ -83,6 +102,7 @@ class SubOrderForm extends React.Component {
             [name]: value
         });
     };
+
 
     render() {
         return (
@@ -106,7 +126,7 @@ class SubOrderForm extends React.Component {
                                      options={orderTypeOptions}
                                      onChange={(e, {value}) => {
                                          console.log("value :" + value);
-                                         // this.setState({orderType: value});
+                                         this.setState({orderType: value});
                                          this.props.callBack("orderType", value, this.props.index, this.props.state.orderType);
                                          //toggles hidden forms for Tax Photo if selected
                                          (this.orderList.indexOf(value) === 0) ?
@@ -138,7 +158,7 @@ class SubOrderForm extends React.Component {
                                              this.setState({showBirthCert: true}) :
                                              this.setState({showBirthCert: false});
                                      }}
-                                     value={this.state.value}
+                                     value={this.state.orderType}
                         />
 
                         {this.state.showTaxForm && <TaxPhotoForm callBack={this.props.callBack} index={this.props.index}
@@ -196,7 +216,7 @@ class SubOrderForm extends React.Component {
                                          this.setState({status: value});
                                          this.props.callBack("status", value, this.props.index, this.props.state.status);
                                      }}
-                                     value={this.state.value}
+                                     value={this.state.status}
                         />
                     </Grid.Column>
                 </Grid.Row>
