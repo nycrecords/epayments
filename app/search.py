@@ -346,6 +346,14 @@ class DSLGenerator(object):
                 'bool': {
                     'must': self.__get_filters()
                 },
+            },
+            "size": 0,
+            "aggs": {
+                "order_count": {
+                    "cardinality": {
+                        "field": "order_number"
+                    }
+                }
             }
         }
 

@@ -81,19 +81,17 @@ def get_orders():
         # formatting results
         formatted_orders = [orders['hits']['hits'][i]['_source'] for i in range(len(orders['hits']['hits']))]
         suborder_total = orders['hits']['total']
-        #order_list = [orders['hits']['hits'][i]['_source']['order_number'] for i in range()]
-        #order_total = len(set(order_list))
+        order_total = orders['aggregations']['order_count']['value']
 
-        return jsonify(order_count=0,
+        return jsonify(order_count=order_total,
                        suborder_count=suborder_total,
                        all_orders=formatted_orders,), 200
 
     else:
         orders = search_queries(date_received_start=date.today().strftime('%m/%d/%Y'))
         formatted_orders = [orders['hits']['hits'][i]['_source'] for i in range(len(orders['hits']['hits']))]
-        suborder_total = len(orders['hits']['hits'])
-        order_list = [orders['hits']['hits'][i]['_source']['order_number'] for i in range(suborder_total)]
-        order_total = len(set(order_list))
+        suborder_total = orders['hits']['_total']
+        order_total = orders['aggregations']['order_count']['value']
 
         return jsonify(order_count=order_total,
                        suborder_count=suborder_total,
