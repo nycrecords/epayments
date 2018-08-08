@@ -15,7 +15,7 @@ class TaxPhotoForm extends React.Component {
              contactNum: '',
              comment: '',
              addDescription: '',
-             collection: '',
+             collection: ' ',
              printSize: ''
          }
      }
@@ -27,9 +27,9 @@ class TaxPhotoForm extends React.Component {
                         <Form.Group inline>
                             <label>Collection</label>
                             <Form.Radio
-                                name="collection"
+                                name={"collection"}
                                 label='1940'
-                                checked={this.state.collection === "1940"}
+                                checked={this.props.state.collection[this.props.index] === "1940"}
                                 onChange={(e) => {
                                     this.setState({collection: "1940"})
                                     this.props.callBack("collection", "1940", this.props.index, this.props.state.collection)
@@ -37,18 +37,18 @@ class TaxPhotoForm extends React.Component {
 
                             />
                             <Form.Radio
-                                name="collection"
+                                name={"collection"}
                                 label='1980'
-                                checked={this.state.collection === "1980"}
+                                checked={this.props.state.collection[this.props.index] === "1980"}
                                 onChange={(e) => {
                                     this.setState({collection: "1980"})
                                     this.props.callBack("collection", "1980", this.props.index, this.props.state.collection)
                                 }}
                             />
                             <Form.Radio
-                                name="collection"
+                                name={"collection"}
                                 label='Both'
-                                checked={this.state.collection === "Both"}
+                                checked={this.props.state.collection[this.props.index] === "Both"}
                                 onChange={(e) => {
                                     this.setState({collection: "Both"})
                                     this.props.callBack("collection", "Both", this.props.index, this.props.state.collection)
@@ -89,7 +89,7 @@ class TaxPhotoForm extends React.Component {
                             <Form.Radio
                                 name={"printSize"}
                                 label='8" x 10" Print'
-                                checked={this.state.printSize === '8x10'}
+                                checked={this.props.state.printSize[this.props.index] === '8x10'}
                                 onChange={(e) => {
                                     this.setState({printSize: '8x10'})
                                     this.props.callBack("printSize", '8x10', this.props.index, this.props.state.printSize);
@@ -99,7 +99,7 @@ class TaxPhotoForm extends React.Component {
                             <Form.Radio
                                 name={"printSize"}
                                 label='11" x 14" Print'
-                                checked={this.state.printSize === '11x14'}
+                                checked={this.props.state.printSize[this.props.index] === '11x14'}
                                 onChange={(e) => {
                                     this.setState({printSize: '11x14'})
                                     this.props.callBack("printSize", '11x14', this.props.index, this.props.state.printSize);
@@ -146,6 +146,7 @@ class TaxPhotoForm extends React.Component {
                                                this.setState({mail: true}) :
                                                this.setState({mail: false})
                                        }}
+                                       checked={this.props.state.mail[this.props.index]}
                         />
                         <Form.Input label="description"
                                     name="addDescription"

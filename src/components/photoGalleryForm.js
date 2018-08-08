@@ -60,6 +60,7 @@ class PhotoGalleryForm extends React.Component {
                                                this.setState({mail: true}) :
                                                this.setState({mail: false})
                                        }}
+                                       checked={this.props.state.mail[this.props.index]}
                         />
                         <Form.Input label="Contact Number"
                                     name="contactNum"
@@ -80,6 +81,7 @@ class PhotoGalleryForm extends React.Component {
                                                this.setState({personalUseAgreement: true}) :
                                                this.setState({personalUseAgreement: false})
                                        }}
+                                       checked={this.props.state.personalUseAgreement[this.props.index]}
                         />
                         <Form.Input label="Comment"
                                     name="comment"
@@ -96,7 +98,7 @@ class PhotoGalleryForm extends React.Component {
                             <Form.Radio
                                 name={"printSize"}
                                 label='8" x 10" Print'
-                                checked={this.state.printSize === '8x10'}
+                                checked={this.props.state.printSize[this.props.index] === '8x10'}
                                 onChange={(e) => {
                                     this.setState({printSize: '8x10'})
                                     this.props.callBack("printSize", '8x10', this.props.index, this.props.state.printSize);
@@ -106,7 +108,7 @@ class PhotoGalleryForm extends React.Component {
                             <Form.Radio
                                 name={"printSize"}
                                 label='11" x 14" Print'
-                                checked={this.state.printSize === '11x14'}
+                                checked={this.props.state.printSize[this.props.index] === '11x14'}
                                 onChange={(e) => {
                                     this.setState({printSize: '11x14'})
                                     this.props.callBack("printSize", '11x14', this.props.index, this.props.state.printSize);
@@ -116,7 +118,7 @@ class PhotoGalleryForm extends React.Component {
                             <Form.Radio
                                 name={"printSize"}
                                 label='16" x 20" Print'
-                                checked={this.state.printSize === '16x20'}
+                                checked={this.props.state.printSize[this.props.index] === '16x20'}
                                 onChange={(e) => {
                                     this.setState({printSize: '16x20'})
                                     this.props.callBack("printSize", '16x20', this.props.index, this.props.state.printSize);

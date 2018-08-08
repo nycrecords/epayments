@@ -79,6 +79,7 @@ class VitalRecordForm extends React.Component {
                                                this.setState({letter: true}) :
                                                this.setState({letter: false});
                                        }}
+                                       checked={this.props.state.letter[this.props.index]}
                         />
                         <Form.Input label="Comment"
                                     name="comment"

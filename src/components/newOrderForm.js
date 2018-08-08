@@ -51,7 +51,6 @@ class NewOrderForm extends React.Component {
             street: [" "],
             mail: [false],
             contactNum: [" "],
-
             imgId: [" "],
             imgTitle: [" "],
             comment: [" "],
@@ -61,17 +60,16 @@ class NewOrderForm extends React.Component {
             printSize: [" "],
             numCopies: [" "],
             status: [" "],
-
-            showBirthCert: false,
-            showBirthSearch: false,
-            showDeathCert: false,
-            showDeathSearch: false,
-            showMarriageCert: false,
-            showMarriageSearch: false,
-            showTaxForm: false,
-            showPhotoGalleryForm: false,
-            showSubOrder: false,
-            showPropertyForm: false,
+            showBirthCert: [false],
+            showBirthSearch: [false],
+            showDeathCert: [false],
+            showDeathSearch: [false],
+            showMarriageCert: [false],
+            showMarriageSearch: [false],
+            showTaxForm: [false],
+            showPhotoGalleryForm: [false],
+            showSubOrder: [false],
+            showPropertyForm: [false],
             loading: false,
             clearForm: false,
             subOrderList: [0]
@@ -128,7 +126,15 @@ class NewOrderForm extends React.Component {
                 printSize: [" "],
                 numCopies: [" "],
                 status: [" "],
-                clearForm: true,
+                showBirthCert: [false],
+                showBirthSearch: [false],
+                showDeathCert: [false],
+                showDeathSearch: [false],
+                showMarriageCert: [false],
+                showMarriageSearch: [false],
+                showTaxForm: [false],
+                showPhotoGalleryForm: [false],
+                showPropertyForm: [false],
             });
         };
         this.handleEmptyStates = () => {
@@ -178,7 +184,7 @@ class NewOrderForm extends React.Component {
             let newState = state.slice();
             newState.splice(index, 1);
             for (var i = index; i < newState; i++) {
-                newState[i]=newState[i-1]
+                newState[i] = newState[i - 1]
 
             }
 
@@ -318,12 +324,13 @@ class NewOrderForm extends React.Component {
     };
 
     callBack = (dataFromChild, value, index, state) => {
-        console.log("AT CALL BACK")
+        console.log(state)
         let newState = state.slice()
         newState[index] = value
         this.setState({
             [dataFromChild]: newState
         });
+        console.log(state[index]=="1940")
         console.log("State is : " + state);
 
 
@@ -338,7 +345,7 @@ class NewOrderForm extends React.Component {
         // this.setState({subOrderList: newSubOrderList.filter(function (value) {
         //     return value!=newSubOrderList[index]
         //     })});
-        this.setState({subOrderList:newSubOrderList})
+        this.setState({subOrderList: newSubOrderList})
         console.log("newList is " + newSubOrderList);
         this.deleteSuborderValues(index, this.state.certified, "certified")
         this.deleteSuborderValues(index, this.state.deathPlace, "deathPlace")
@@ -378,20 +385,17 @@ class NewOrderForm extends React.Component {
         this.deleteSuborderValues(index, this.state.numCopies, "numCopies")
         this.deleteSuborderValues(index, this.state.orderType, "orderType")
         this.deleteSuborderValues(index, this.state.status, "status")
+        this.deleteSuborderValues(index, this.state.showMarriageSearch, "showMarriageSearch")
+        this.deleteSuborderValues(index, this.state.showBirthSearch, "showBirthSearch")
+        this.deleteSuborderValues(index, this.state.showBirthCert, "showBirthCert")
+        this.deleteSuborderValues(index, this.state.showMarriageCert, "showBirthCert")
+        this.deleteSuborderValues(index, this.state.showDeathCert, "showDeathCert")
+        this.deleteSuborderValues(index, this.state.showDeathSearch, "showDeathSearch")
+        this.deleteSuborderValues(index, this.state.showTaxForm, "showTaxForm")
+        this.deleteSuborderValues(index, this.state.showPhotoGalleryForm, "showPhotoGalleryForm")
+        this.deleteSuborderValues(index, this.state.showPropertyForm, "showPropertyForm")
         console.log(this.state)
         this.index--;
-
-
-
-
-
-
-
-
-
-
-
-
 
 
     };
@@ -399,8 +403,9 @@ class NewOrderForm extends React.Component {
     render() {
         console.log('current list is ' + this.state.subOrderList);
         const SubOrders = this.state.subOrderList.map((suborderIndex) =>
-            <Segment compact key={suborderIndex}>
+            <Segment compact key={suborderIndex.toString()}>
                 <SubOrderForm
+                    key={suborderIndex}
                     index={suborderIndex}
                     callBack={this.callBack}
                     state={this.state}
@@ -513,7 +518,6 @@ class NewOrderForm extends React.Component {
 
                                         <Segment.Group compact>
                                             {SubOrders}
-
                                         </Segment.Group>
                                     </Container>
                                     <Button animated type="button" floated="left" onClick={() => {
@@ -546,6 +550,4 @@ class NewOrderForm extends React.Component {
     }
     ;
 }
-
-
 export default NewOrderForm;

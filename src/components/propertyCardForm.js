@@ -83,6 +83,7 @@ class PropertyCardForm extends React.Component {
                                                this.setState({mail: true}) :
                                                this.setState({mail: false})
                                        }}
+                                       checked={this.props.state.mail[this.props.index]}
                         />
                         <Form.Input label="description"
                                     name="addDescription"
