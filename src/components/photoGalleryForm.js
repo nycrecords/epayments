@@ -96,7 +96,7 @@ class PhotoGalleryForm extends React.Component {
                             <label>Printing Size</label>
 
                             <Form.Radio
-                                name={"printSize"}
+                                // name={"printSize"}
                                 label='8" x 10" Print'
                                 checked={this.props.state.printSize[this.props.index] === '8x10'}
                                 onChange={(e) => {
@@ -106,7 +106,7 @@ class PhotoGalleryForm extends React.Component {
                             />
 
                             <Form.Radio
-                                name={"printSize"}
+                                // name={"printSize"}
                                 label='11" x 14" Print'
                                 checked={this.props.state.printSize[this.props.index] === '11x14'}
                                 onChange={(e) => {
@@ -116,7 +116,7 @@ class PhotoGalleryForm extends React.Component {
                             />
 
                             <Form.Radio
-                                name={"printSize"}
+                                // name={"printSize"}
                                 label='16" x 20" Print'
                                 checked={this.props.state.printSize[this.props.index] === '16x20'}
                                 onChange={(e) => {

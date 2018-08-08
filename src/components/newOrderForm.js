@@ -73,9 +73,7 @@ class NewOrderForm extends React.Component {
             loading: false,
             clearForm: false,
             subOrderList: [0]
-
         };
-
         this.handleChange = this.handleChange.bind(this);
         this.clearSelection = () => {
             this.setState({
@@ -185,10 +183,7 @@ class NewOrderForm extends React.Component {
             newState.splice(index, 1);
             for (var i = index; i < newState; i++) {
                 newState[i] = newState[i - 1]
-
             }
-
-
             this.setState({[name]: newState})
 
 
@@ -330,7 +325,6 @@ class NewOrderForm extends React.Component {
         this.setState({
             [dataFromChild]: newState
         });
-        console.log(state[index]=="1940")
         console.log("State is : " + state);
 
 
@@ -342,11 +336,7 @@ class NewOrderForm extends React.Component {
         for (var i = index; i < newSubOrderList.length; i++) {
             newSubOrderList[i] = newSubOrderList[i] - 1;
         }
-        // this.setState({subOrderList: newSubOrderList.filter(function (value) {
-        //     return value!=newSubOrderList[index]
-        //     })});
         this.setState({subOrderList: newSubOrderList})
-        console.log("newList is " + newSubOrderList);
         this.deleteSuborderValues(index, this.state.certified, "certified")
         this.deleteSuborderValues(index, this.state.deathPlace, "deathPlace")
         this.deleteSuborderValues(index, this.state.cemetery, "cemetery")
@@ -394,12 +384,8 @@ class NewOrderForm extends React.Component {
         this.deleteSuborderValues(index, this.state.showTaxForm, "showTaxForm")
         this.deleteSuborderValues(index, this.state.showPhotoGalleryForm, "showPhotoGalleryForm")
         this.deleteSuborderValues(index, this.state.showPropertyForm, "showPropertyForm")
-        console.log(this.state)
         this.index--;
-
-
     };
-
     render() {
         console.log('current list is ' + this.state.subOrderList);
         const SubOrders = this.state.subOrderList.map((suborderIndex) =>

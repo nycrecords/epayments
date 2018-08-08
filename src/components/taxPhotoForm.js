@@ -15,7 +15,7 @@ class TaxPhotoForm extends React.Component {
              contactNum: '',
              comment: '',
              addDescription: '',
-             collection: ' ',
+             collection: '',
              printSize: ''
          }
      }
@@ -27,7 +27,7 @@ class TaxPhotoForm extends React.Component {
                         <Form.Group inline>
                             <label>Collection</label>
                             <Form.Radio
-                                name={"collection"}
+                                // name="collection"
                                 label='1940'
                                 checked={this.props.state.collection[this.props.index] === "1940"}
                                 onChange={(e) => {
@@ -37,7 +37,7 @@ class TaxPhotoForm extends React.Component {
 
                             />
                             <Form.Radio
-                                name={"collection"}
+                                // name="collection"
                                 label='1980'
                                 checked={this.props.state.collection[this.props.index] === "1980"}
                                 onChange={(e) => {
@@ -46,7 +46,7 @@ class TaxPhotoForm extends React.Component {
                                 }}
                             />
                             <Form.Radio
-                                name={"collection"}
+                                // name="collection"
                                 label='Both'
                                 checked={this.props.state.collection[this.props.index] === "Both"}
                                 onChange={(e) => {
@@ -87,7 +87,7 @@ class TaxPhotoForm extends React.Component {
                             <label>Printing Size</label>
 
                             <Form.Radio
-                                name={"printSize"}
+                                // name={"printSize"}
                                 label='8" x 10" Print'
                                 checked={this.props.state.printSize[this.props.index] === '8x10'}
                                 onChange={(e) => {
@@ -97,7 +97,7 @@ class TaxPhotoForm extends React.Component {
                             />
 
                             <Form.Radio
-                                name={"printSize"}
+                                // name={"printSize"}
                                 label='11" x 14" Print'
                                 checked={this.props.state.printSize[this.props.index] === '11x14'}
                                 onChange={(e) => {
