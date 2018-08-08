@@ -34,6 +34,7 @@ class Home extends React.Component {
                     suborder_count: suborder_count,
                     suborder_two: CHUNK_SIZE,
                 });
+                this.div.scrollTop =0;
             } else {
                this.setState((prevState)=>{
                    return{
@@ -200,7 +201,7 @@ class Home extends React.Component {
                                     <Button content='Small Labels' onClick={this.printSmallLabels}/>
                                 </Button.Group>
                             </Rail>
-                            <div id="grid-column-order">
+                            <div id="grid-column-order" ref={elem => this.div = elem}>
                                 {orderRows}
                                 { this.state.suborder_count >= this.state.suborder_two && this.state.suborder_count !== 0?(
                                     <div className="center">
