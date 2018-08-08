@@ -32,7 +32,6 @@ const orderTypeOptions = [
     {key: 'photogallery', text: 'Photo Gallery', value: 'Photo Gallery'},
 ];
 const statusOptions = [
-    {key: 'all', text: 'All', value: 'all'},
     {key: 'received', text: 'Received', value: 'Received'},
     {key: 'processing', text: 'Processing', value: 'Processing'},
     {key: 'found', text: 'Found', value: 'Found'},

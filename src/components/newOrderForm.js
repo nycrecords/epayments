@@ -3,8 +3,19 @@ import {
     Route,
     Link
 } from 'react-router-dom';
-
-import {Button, Container, Divider, Grid, Header, Form, Loader, Dimmer, Icon, Segment} from 'semantic-ui-react';
+import { Alert } from 'reactstrap';
+import {
+    Button,
+    Container,
+    Divider,
+    Grid,
+    Header,
+    Form,
+    Loader,
+    Dimmer,
+    Icon,
+    Segment,
+} from 'semantic-ui-react';
 import moment from 'moment';
 import {csrfFetch, handleFetchErrors} from "../utils/fetch";
 import SubOrderForm from "./suborderform";
@@ -185,16 +196,10 @@ class NewOrderForm extends React.Component {
                 newState[i] = newState[i - 1]
             }
             this.setState({[name]: newState})
-
-
         };
-        this.i = 0;
         this.index = 1;
-        this.orderList = ['Tax Photo', 'Photo Gallery',
-            'Property Card', 'Marriage Search',
-            'Marriage Cert', 'Death Search',
-            'Death Cert', 'Birth Search',
-            'Birth Cert'];
+        this.orderList = ['Tax Photo', 'Photo Gallery', 'Property Card', 'Marriage Search',
+            'Marriage Cert', 'Death Search', 'Death Cert', 'Birth Search', 'Birth Cert'];
         this.yesterday = moment().subtract(1, 'days');
         this.today = moment();
     };
@@ -210,49 +215,50 @@ class NewOrderForm extends React.Component {
     handleClick = () => {
         this.setState({subOrderList: this.state.subOrderList.concat([this.index])});
         this.index++;
-
-
     }
 
     handleSubmit = (e, value) => {
         e.preventDefault();
-        // console.log("this is ordertype1: " + this.state.orderType);
-        // console.log("num copies : " + this.state.numCopies);
-        // console.log("gender:" + this.state.gender);
-        // this.setState({loading: true});
-        // if (this.state.orderType == '' && this.state.status == '') {
-        //     alert("Please fill in Order Type and Status")
-        //     this.setState({loading: false});
-        //     return
-        //
-        // } else if (this.state.orderType == '') {
-        //     alert("Please fill in Order Type")
-        //     this.setState({loading: false});
-        //     return
-        // } else if (this.state.status == '') {
-        //     alert("Please fill in Status")
-        //     this.setState({loading: false});
-        //     return
-        // }
-        // if (this.state.orderType != '') {
-        //     if ((this.state.showBirthSearch == true || this.state.showBirthCert == true) && this.state.gender == '') {
-        //         alert("Please fill in the Gender")
-        //         this.setState({loading: false});
-        //         return
-        //
-        //     }
-        //     else if (this.state.showPropertyForm == true && this.state.borough == " ") {
-        //         alert("Please fill in the Borough")
-        //         this.setState({loading: false});
-        //         return
-        //     }
-        //     else if (this.state.showPhotoGalleryForm == true && this.state.printSize == "") {
-        //         alert("Please fill in the Printing Size")
-        //         this.setState({loading: false});
-        //         return
-        //     }
-        // }
+        console.log("this is ordertype1: " + this.state.orderType);
+        console.log("num copies : " + this.state.numCopies);
+        console.log("gender:" + this.state.gender);
+        console.log(this.state.subOrderList.length)
+        this.setState({loading: true});
+        for (var i = 0; i < this.state.subOrderList.length; i++) {
+            if (this.state.orderType[i] == " " && this.state.status[i] == " ") {
+                <Alert color="danger"> "Please fill in Order Type and Status in Suborder: " + (i + 1))</Alert>
+                // Alert.error("Please fill in Order Type and Status in Suborder: " + (i + 1))
+                this.setState({loading: false});
+                return
 
+            } else if (this.state.orderType[i] == " ") {
+                alert("Please fill in Order Type in Suborder: " + (i + 1))
+                this.setState({loading: false});
+                return
+            } else if (this.state.status[i] == " ") {
+                alert("Please fill in Status in Suborder: " + (i + 1))
+                this.setState({loading: false});
+                return
+            }
+
+            if (this.state.orderType[i] != " ") {
+                if ((this.state.showBirthSearch[i] == true || this.state.showBirthCert == true[i]) && this.state.gender[i] == " ") {
+                    alert("Please fill in the Gender in Suborder: " + (i + 1))
+                    this.setState({loading: false});
+                    return
+                }
+                else if (this.state.showPropertyForm[i] == true && this.state.borough[i] == " ") {
+                    alert("Please fill in the Borough in Suborder:" + (i + 1))
+                    this.setState({loading: false});
+                    return
+                }
+                else if (this.state.showPhotoGalleryForm[i] == true && this.state.printSize[i] == " ") {
+                    alert("Please fill in the Printing Size in Suborder: " + (i + 1))
+                    this.setState({loading: false});
+                    return
+                }
+            }
+        }
         csrfFetch('api/v1.0/orders/new', {
             method: "POST",
             body: JSON.stringify({
@@ -386,10 +392,11 @@ class NewOrderForm extends React.Component {
         this.deleteSuborderValues(index, this.state.showPropertyForm, "showPropertyForm")
         this.index--;
     };
+
     render() {
         console.log('current list is ' + this.state.subOrderList);
         const SubOrders = this.state.subOrderList.map((suborderIndex) =>
-            <Segment compact key={suborderIndex.toString()}>
+            <Segment color={'black'} compact key={suborderIndex.toString()}>
                 <SubOrderForm
                     key={suborderIndex}
                     index={suborderIndex}
@@ -506,7 +513,7 @@ class NewOrderForm extends React.Component {
                                             {SubOrders}
                                         </Segment.Group>
                                     </Container>
-                                    <Button animated type="button" floated="left" onClick={() => {
+                                    <Button animated positive type="button" floated="left" onClick={() => {
                                         this.handleEmptyStates()
                                         this.handleClick()
                                     }}
@@ -519,7 +526,7 @@ class NewOrderForm extends React.Component {
                                         </Button.Content>
                                     </Button>
                                     <Button type='submit' positive floated="left" content="Place Order"/>
-                                    <Button type="reset" onClick={() => {
+                                    <Button type="reset" negative onClick={() => {
                                         this.clearSelection()
                                         this.subOrderForm.clearSelection()
                                     }} content="Clear"/>
@@ -536,4 +543,5 @@ class NewOrderForm extends React.Component {
     }
     ;
 }
+
 export default NewOrderForm;
