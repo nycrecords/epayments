@@ -64,7 +64,8 @@ class Home extends React.Component {
 
         this.loadMore = (e) => {
             this.setLoadingState(true);
-            this.orderForm.submitFormData(e, 'load_more');
+            this.orderForm.setStartSize(e);
+            // this.orderForm.submitFormData(e, 'load_more');
         };
 
         this.generateCSV = (e) => {

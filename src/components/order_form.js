@@ -98,11 +98,12 @@ class OrderForm extends React.Component {
         );
 
         this.submitData = (e) =>{
-            this.submitFormData(e, 'submit');
+            //this.submitFormData(e, 'submit');
+            this.setStartZero(e);
         };
 
         this.submitFormData = (e, print) => {
-            e.preventDefault();
+            //e.preventDefault();
 
             switch(print) {
                 case 'orders':
@@ -166,9 +167,6 @@ class OrderForm extends React.Component {
 
                 // Search
                 case'submit':
-                    this.setState({
-                        start: 0
-                    });
                     // this.setState((prevState)=>{
                     //     return {
                     //         start: prevState.start =0
@@ -205,9 +203,9 @@ class OrderForm extends React.Component {
 
                 case'load_more':
                     debugger;
-                    this.setState({
-                        start: this.state.start + CHUNK_SIZE
-                    });
+                    // this.setState({
+                    //     start: this.state.start + CHUNK_SIZE
+                    // });
                     // this.setState((prevState)=>{
                     //     return {start: prevState.start + CHUNK_SIZE};
                     // });
@@ -241,6 +239,18 @@ class OrderForm extends React.Component {
                     break;
                 // no default
             }
+        };
+
+        this.setStartZero = (e) =>{
+            this.setState({
+                start: 0,
+            }, () => this.submitFormData(e ,'submit'));
+        };
+
+        this.setStartSize = (e) => {
+            this.setState({
+               start: this.state.start + CHUNK_SIZE
+            }, () => this.submitFormData(e ,'load_more') );
         };
     }
 
