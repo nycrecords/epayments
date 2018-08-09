@@ -1,7 +1,25 @@
 from app.models import Orders
 from app import es
-from app.constants.search import ES_DATETIME_FORMAT, DATETIME_FORMAT, RESULTS_CHUNK_SIZE
+from app.constants.search import DATETIME_FORMAT, RESULTS_CHUNK_SIZE
 from elasticsearch.helpers import bulk
+
+
+def create_orders_index():
+    es.indices.create(
+        index='order',
+        body={
+            "mappings": {
+                'orders': {
+                    "properties": {
+                        'order_number': {
+                            'type': "keyword"
+                        },
+
+                    }
+                }
+            }
+        }
+    )
 
 
 def create_order_docs():
@@ -16,7 +34,11 @@ def create_order_docs():
             '_op_type': 'create',
             '_id': q.id,
             'order_number': q.id,
-            'client_date': q.client_data,
+            'date_submitted': q.date_submitted.strftime(DATETIME_FORMAT),
+            'date_received': q.date_received.strftime(DATETIME_FORMAT),
+            'confirmation_message': q.confirmation_message,
+            'order_types': q.order_types,
+            'client_data': q.client_data,
             'multiple_items': q.multiple_items
         })
 
