@@ -14,6 +14,7 @@ from app.constants import (
 )
 from app.constants.customer import EMPTY_CUSTOMER
 from app.constants.order_types import VITAL_RECORDS_LIST, PHOTOS_LIST
+from app.constants.search import ELASTICSEARCH_MAX_SIZE
 from app.models import (
     Orders,
     Suborders,
@@ -30,6 +31,8 @@ from app.models import (
     Users,
     Events
 )
+
+from app.search.search import search_queries
 
 
 def _order_query_filters(order_number, suborder_number, order_type, status, billing_name, user, date_received_start,
@@ -219,53 +222,108 @@ def _print_orders(search_params):
     user = ''
     date_received_start = search_params.get("date_received_start")
     date_received_end = search_params.get("date_received_end")
+    date_submitted_start = search_params.get("date_submitted_start")
+    date_submitted_end = search_params.get("date_submitted_end")
 
-    filter_args = _order_query_filters(order_number, suborder_number, order_type, status, billing_name, user,
-                                       date_received_start,
-                                       date_received_end)
+    suborders = search_queries(order_number,
+                               suborder_number,
+                               order_type,
+                               status,
+                               billing_name,
+                               date_received_start,
+                               date_received_end,
+                               date_submitted_start,
+                               date_submitted_end,
+                               0,
+                               ELASTICSEARCH_MAX_SIZE,
+                               "print")
 
-    suborders = Suborders.query.join(Orders, Customers).filter(*filter_args).all()
+    # Only want suborder_number, and order type
+    suborder = [suborders['hits']['hits'][i]['_source'] for i in range(suborders['hits']['total'])]
 
     order_type_template_handler = {
-        order_types.BIRTH_SEARCH: 'birth_search.html',
-        order_types.BIRTH_CERT: 'birth_cert.html',
-        order_types.MARRIAGE_SEARCH: 'marriage_search.html',
-        order_types.MARRIAGE_CERT: 'marriage_cert.html',
-        order_types.DEATH_SEARCH: 'death_search.html',
-        order_types.DEATH_CERT: 'death_cert.html',
-        order_types.TAX_PHOTO: 'tax_photo.html',
-        order_types.PHOTO_GALLERY: 'photo_gallery.html',
-        order_types.PROPERTY_CARD: 'property_card.html',
+        "Birth Search": 'birth_search.html',
+        "Birth Cert": 'birth_cert.html',
+        "Marriage Search": 'marriage_search.html',
+        "Marriage Cert": 'marriage_cert.html',
+        "Death Search": 'death_search.html',
+        "Death Cert": 'death_cert.html',
+        "Tax Photo": 'tax_photo.html',
+        "Photo Gallery": 'photo_gallery.html',
+        "Property Card": 'property_card.html',
     }
 
     order_type_models_handler = {
-        order_types.BIRTH_SEARCH: BirthSearch,
-        order_types.BIRTH_CERT: BirthCertificate,
-        order_types.MARRIAGE_SEARCH: MarriageSearch,
-        order_types.MARRIAGE_CERT: MarriageCertificate,
-        order_types.DEATH_SEARCH: DeathSearch,
-        order_types.DEATH_CERT: DeathCertificate,
-        order_types.TAX_PHOTO: TaxPhoto,
-        order_types.PHOTO_GALLERY: PhotoGallery,
-        order_types.PROPERTY_CARD: PropertyCard,
+        "Birth Search": BirthSearch,
+        "Birth Cert": BirthCertificate,
+        "Marriage Search": MarriageSearch,
+        "Marriage Cert": MarriageCertificate,
+        "Death Search": DeathSearch,
+        "Death Cert": DeathCertificate,
+        "Tax Photo": TaxPhoto,
+        "Photo Gallery": PhotoGallery,
+        "Property Card": PropertyCard,
     }
 
     html = ''
-    for item in suborders:
-        order_info = order_type_models_handler[item.order_type].query.filter_by(
-            suborder_number=item.id).one().serialize
+
+    for item in suborder:
+        order_info = order_type_models_handler[item['order_type']].query.filter_by(
+            suborder_number=item['suborder_number']).one().serialize
         order_info['customer'] = item.order.customer.serialize
         order_info['order'] = item.order.serialize
 
         order_info['order_type'] = item.order_type
-        html += render_template("orders/{}".format(order_type_template_handler[item.order_type]),
+        html += render_template("orders/{}".format(order_type_template_handler[item['order_type']]),
                                 order_info=order_info)
 
-    filename = 'order_sheets_{username}_{time}.pdf'.format(username=current_user.email, time=datetime.now().strftime("%Y%m%d-%H%M%S"))
-    with open(join(current_app.static_folder, 'files', filename), 'w+b') as file_:
-        CreatePDF(src=html, dest=file_)
-
-    return url_for('static', filename='files/{}'.format(filename), _external=True)
+    # filter_args = _order_query_filters(order_number, suborder_number, order_type, status, billing_name, user,
+    #                                    date_received_start,
+    #                                    date_received_end)
+    #
+    # suborders = Suborders.query.join(Orders, Customers).filter(*filter_args).all()
+    #
+    # order_type_template_handler = {
+    #     order_types.BIRTH_SEARCH: 'birth_search.html',
+    #     order_types.BIRTH_CERT: 'birth_cert.html',
+    #     order_types.MARRIAGE_SEARCH: 'marriage_search.html',
+    #     order_types.MARRIAGE_CERT: 'marriage_cert.html',
+    #     order_types.DEATH_SEARCH: 'death_search.html',
+    #     order_types.DEATH_CERT: 'death_cert.html',
+    #     order_types.TAX_PHOTO: 'tax_photo.html',
+    #     order_types.PHOTO_GALLERY: 'photo_gallery.html',
+    #     order_types.PROPERTY_CARD: 'property_card.html',
+    # }
+    #
+    # order_type_models_handler = {
+    #     order_types.BIRTH_SEARCH: BirthSearch,
+    #     order_types.BIRTH_CERT: BirthCertificate,
+    #     order_types.MARRIAGE_SEARCH: MarriageSearch,
+    #     order_types.MARRIAGE_CERT: MarriageCertificate,
+    #     order_types.DEATH_SEARCH: DeathSearch,
+    #     order_types.DEATH_CERT: DeathCertificate,
+    #     order_types.TAX_PHOTO: TaxPhoto,
+    #     order_types.PHOTO_GALLERY: PhotoGallery,
+    #     order_types.PROPERTY_CARD: PropertyCard,
+    # }
+    #
+    # html = ''
+    #
+    # for item in suborders:
+    #     order_info = order_type_models_handler[item.order_type].query.filter_by(
+    #         suborder_number=item.id).one().serialize
+    #     order_info['customer'] = item.order.customer.serialize
+    #     order_info['order'] = item.order.serialize
+    #
+    #     order_info['order_type'] = item.order_type
+    #     html += render_template("orders/{}".format(order_type_template_handler[item.order_type]),
+    #                             order_info=order_info)
+    #
+    # filename = 'order_sheets_{username}_{time}.pdf'.format(username=current_user.email, time=datetime.now().strftime("%Y%m%d-%H%M%S"))
+    # with open(join(current_app.static_folder, 'files', filename), 'w+b') as file_:
+    #     CreatePDF(src=html, dest=file_)
+    #
+    # return url_for('static', filename='files/{}'.format(filename), _external=True)
 
 
 def _print_small_labels(search_params):

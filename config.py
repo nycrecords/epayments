@@ -27,7 +27,7 @@ class Config:
     #Elastic Search Configurations
     ELASTICSEARCH_URL = os.environ.get('ELASTICSEARCH_URL') or 'localhost:9200'
     ELASTICSEARCH_ENABLED = os.environ.get("ELASTICSEARCH_ENABLED") or 'True'
-    ELASTICSEARCH_INDEX = os.environ.get("ELASTICSEARCH_INDEX") or 'suborders'
+    ELASTICSEARCH_INDEX = os.environ.get("ELASTICSEARCH_INDEX") or 'suborder'
 
 
     @staticmethod

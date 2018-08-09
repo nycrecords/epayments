@@ -1,123 +1,26 @@
 from flask import current_app
 from app.models import Suborders
 from app import es
-from elasticsearch.helpers import bulk
 from datetime import datetime
 from app.constants.search import DATETIME_FORMAT, ES_DATETIME_FORMAT, RESULTS_CHUNK_SIZE
+from app.search.index import create_suborder_index,create_suborder_docs
 
 
 def recreate():
     """Deletes then recreates the index"""
-    es.indices.delete(current_app.config["ELASTICSEARCH_INDEX"],
-                      ignore=[400, 404])
+    es.indices.delete('*', ignore=[400, 404])
     create_index()
     create_docs()
 
 
 def create_index():
-    """
-    Create elasticsearch index with mappings for stories docs.
-    """
-    es.indices.create(
-        index=current_app.config["ELASTICSEARCH_INDEX"],
-        body={
-            "settings": {
-                "analysis": {
-                    "tokenizer": {
-                        "ngram_tokenizer": {
-                            "type": "ngram",
-                            "min_gram": 3,
-                            "max_gram": 6,
-                        }
-                    },
-                    "analyzer": {
-                        "ngram_tokenizer_analyzer": {
-                            "type": "custom",
-                            "tokenizer": "ngram_tokenizer",
-                            "filter": [
-                                "lowercase"
-                            ]
-                        }
-                    }
-                }
-            },
-            "mappings": {
-                current_app.config["ELASTICSEARCH_INDEX"]: {
-                    "properties": {
-                        "billing_name": {
-                            "type": "text",
-                            "analyzer": "ngram_tokenizer_analyzer",
-                            "fields": {
-                                "exact": {
-                                    "type": "text",
-                                    "analyzer": "standard",
-                                },
-                            },
-                        },
-                        "suborder_number":{
-                            "type": 'keyword',
-                        },
-                        "order_number": {
-                            "type": 'keyword',
-                        },
-                        "order_type": {
-                            "type": 'keyword',
-                        },
-                        "current_status": {
-                            "type": 'keyword'
-                        },
-                        "date_received": {
-                            "type": "date",
-                            "format": ES_DATETIME_FORMAT,
-                        },
-                        "date_submitted": {
-                            "type": "date",
-                            "format": ES_DATETIME_FORMAT,
-                        },
-                    }
-                }
-            }
-        }
-    )
+    """Creates indices """
+    create_suborder_index()
 
 
 def create_docs():
     """Creates elasticsearch request docs for every request"""
-    if not es:
-        return
-    orders = Suborders.query.all()
-
-    operations = []
-
-    for q in orders:
-        operations.append({
-            '_op_type': 'create',
-            '_id': q.id,
-            'order_number': q.order_number,
-            'suborder_number': q.id,
-            'date_received': q.order.date_received.strftime(DATETIME_FORMAT),
-            'date_submitted': q.order.date_submitted.strftime(DATETIME_FORMAT),
-            'billing_name': q.order.customer.billing_name.title(),
-            'customer_email': q.order.customer.email,
-            'order_type': q.order_type,
-            'current_status': q.status,
-        })
-    num_success, _ = bulk(
-        es,
-        operations,
-        index=current_app.config["ELASTICSEARCH_INDEX"],
-        doc_type=current_app.config["ELASTICSEARCH_INDEX"],
-        chunk_size=RESULTS_CHUNK_SIZE,
-        raise_on_error=True
-        )
-    print("Successfully created %s docs." % num_success)
-
-
-def update_docs():
-    """Updates the elasticsearch index"""
-    order = Suborders.query.all()
-    for q in order:
-        q.es_update()
+    create_suborder_docs()
 
 
 def delete_doc(suborder_id):
@@ -137,7 +40,8 @@ def search_queries(order_number=None,
                    date_submitted_start='',
                    date_submitted_end='',
                    start=0,
-                   size=RESULTS_CHUNK_SIZE):
+                   size=RESULTS_CHUNK_SIZE,
+                   search_type='search'):
     """Arguments will match search parameters
         :param order_number: search by order number
         :param suborder_number: search by suborder number
@@ -150,27 +54,10 @@ def search_queries(order_number=None,
         :param date_submitted_end: search by ending date submitted
         :param start: starting index of the set
         :param size: size of results pool
+        :param search_type: search or print
 
         :return: elasticsearch results in json format
     """
-
-    # Removes leading and tailing whitespaces
-    if order_number is not None:
-        order_number = order_number.strip()
-
-    if suborder_number is not None:
-        suborder_number = suborder_number.strip()
-
-    if billing_name is not None:
-        billing_name = billing_name.strip()
-
-    # Removes 'all' and sets it to nothing: no parameters is all in this case
-    if status == 'all':
-        status = ''
-
-    if order_type == 'all':
-        order_type = ''
-
     query_field = {
         'billing_name': billing_name,
         'order_type': order_type,
@@ -185,6 +72,68 @@ def search_queries(order_number=None,
         'date_submitted_start': date_submitted_start,
         'date_submitted_end': date_submitted_end
     }
+
+    dsl_gen = DSLGenerator(query_fields=format_queries(query_field), date_range=format_date_range(date_range))
+    dsl = dsl_gen.no_query()
+
+    if any(query_field.values()) or any(date_range.values()):
+        dsl = dsl_gen.search()
+
+    # Search query
+    if search_type == 'search':
+        search_results = es.search(index='suborders',
+                                   doc_type='suborders',
+                                   body=dsl,
+                                   _source=[
+                                       'order_number',
+                                       'suborder_number',
+                                       'date_received',
+                                       'date_submitted',
+                                       'billing_name',
+                                       'customer_email',
+                                       'order_type',
+                                       'current_status',
+                                   ],
+                                   size=size,
+                                   from_=start,
+                                   )
+        return search_results
+    elif search_type == 'print':
+        search_results = es.search(index='suborders',
+                                   doc_type='suborders',
+                                   body=dsl,
+                                   _source=[
+                                       'suborder_number',
+                                       'order_type',
+                                   ],
+                                   size=size,
+                                   from_=start,
+                                   )
+        return search_results
+
+
+def format_queries(query_fields):
+    # Removes leading and tailing whitespaces
+    if query_fields['order_number'] is not None:
+        query_fields['order_number'] = query_fields['order_number'].strip()
+
+    if query_fields["suborder_number"] is not None:
+        query_fields["suborder_number"] = query_fields["suborder_number"].strip()
+
+    if query_fields['billing_name'] is not None:
+        query_fields['billing_name'] = query_fields['billing_name'].strip()
+
+    # Removes 'all' and sets it to nothing: no parameters is all in this case
+    if query_fields['current_status'] == 'all':
+        query_fields['current_status'] = ''
+
+    if query_fields['order_type'] == 'all':
+        query_fields['order_type'] = ''
+
+    return query_fields
+
+
+def format_date_range(date_range):
     # Remove 'Invalid date' as an option
     # Time formatting: from mm/dd/yyyy to mm/dd/yy hh:mm AM/PM
     for a in date_range:
@@ -193,31 +142,7 @@ def search_queries(order_number=None,
         if date_range[a]:
             date_range[a] = datetime.strptime(date_range[a], '%m/%d/%Y').strftime(DATETIME_FORMAT)
 
-    dsl_gen = DSLGenerator(query_fields=query_field, date_range=date_range)
-    dsl = dsl_gen.no_query()
-
-    if any(query_field.values()) or any(date_range.values()):
-        dsl = dsl_gen.search()
-
-    # Search query
-    search_results = es.search(index=current_app.config["ELASTICSEARCH_INDEX"],
-                               doc_type=current_app.config["ELASTICSEARCH_INDEX"],
-                               body=dsl,
-                               _source=[
-                                   'order_number',
-                                   'suborder_number',
-                                   'date_received',
-                                   'date_submitted',
-                                   'billing_name',
-                                   'customer_email',
-                                   'order_type',
-                                   'current_status',
-                               ],
-                               size=size,
-                               from_=start,
-                               )
-    return search_results
-
+    return date_range
 
 class DSLGenerator(object):
     """Class for generating DSL body for searching"""

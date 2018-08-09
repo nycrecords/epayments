@@ -139,8 +139,8 @@ class Suborders(db.Model):
     def es_create(self):
         """Creates Elastic Search doc"""
         es.create(
-            index=current_app.config["ELASTICSEARCH_INDEX"],
-            doc_type=current_app.config["ELASTICSEARCH_INDEX"],
+            index='suborders',
+            doc_type='suborders',
             id=self.id,
             body={
                 'order_number': self.order_number,
@@ -157,8 +157,8 @@ class Suborders(db.Model):
     def es_update(self):
         """Updates elastic search docs"""
         es.update(
-            index=current_app.config["ELASTICSEARCH_INDEX"],
-            doc_type=current_app.config["ELASTICSEARCH_INDEX"],
+            index='suborders',
+            doc_type='suborders',
             id=self.id,
             body={
                 'doc': {

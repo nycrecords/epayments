@@ -23,7 +23,7 @@ from app.models import (
     Users,
     Events
 )
-from app.search import search_queries
+from app.search.search import search_queries
 
 
 @api.route('/', methods=['GET'])
@@ -76,7 +76,8 @@ def get_orders():
                                 date_submitted_start,
                                 date_submitted_end,
                                 start,
-                                size)
+                                size,
+                                "search")
 
         # formatting results
         formatted_orders = [orders['hits']['hits'][i]['_source'] for i in range(len(orders['hits']['hits']))]

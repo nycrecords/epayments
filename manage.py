@@ -76,13 +76,8 @@ def test(coverage=False):
 @manager.command
 def es_recreate():
     """Recreates the index and request docs"""
-    from app.search import recreate
+    from app.search.search import recreate
     recreate()
-
-@manager.command
-def es_update():
-    from app.search import update_docs
-    update_docs()
 
 if __name__ == '__main__':
     manager.run()
