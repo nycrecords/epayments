@@ -88,7 +88,7 @@ class OrderForm extends React.Component {
         this.submitFormData = (e, print) => {
             e.preventDefault();
 
-            switch(print) {
+            switch (print) {
                 case 'orders':
                 case 'large_labels':
                 case 'small_labels':
@@ -184,18 +184,14 @@ class OrderForm extends React.Component {
 
                     <Form.Input label="Order Number" placeholder="Order Number" maxLength="64"
                                 onChange={(e, {value}) => {
-                                    if (/^[0-9]+$/.test(value.slice(-1)) || value === '') {
-                                        this.setState({ordernumber: value})
-                                    }
+                                    this.setState({ordernumber: value})
                                 }}
                                 value={this.state.ordernumber}
                     />
 
                     <Form.Input label="Suborder Number" placeholder="Suborder Number" maxLength="32"
                                 onChange={(e, {value}) => {
-                                    if (/^[\d -]+$/.test(value.slice(-1)) || value === '') {
-                                        this.setState({subordernumber: value})
-                                    }
+                                    this.setState({subordernumber: value})
                                 }}
                                 value={this.state.subordernumber}
 

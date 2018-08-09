@@ -436,7 +436,7 @@ class NewOrderForm extends React.Component {
                         </Grid.Row>
 
                         <Grid.Row centered>
-                            <Grid.Column width={6}>
+                            <Grid.Column width={7}>
 
                                 <Form onSubmit={this.handleSubmit}>
                                     <Form.Input label="Billing Name"
@@ -469,8 +469,8 @@ class NewOrderForm extends React.Component {
                                                 onChange={this.handleChange}
                                                 value={this.state.addressLine2}
                                     />
-                                    <Form.Group>
 
+                                    <Form.Group>
                                         <Form.Input label="City"
                                                     name="city"
                                                     placeholder="City"
