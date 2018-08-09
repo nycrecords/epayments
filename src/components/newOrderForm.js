@@ -14,7 +14,7 @@ import {
     Icon,
     Segment,
 } from 'semantic-ui-react';
-import moment from 'moment';
+import swal from 'sweetalert';
 import {csrfFetch, handleFetchErrors} from "../utils/fetch";
 import SubOrderForm from "./suborderform";
 
@@ -206,7 +206,7 @@ class NewOrderForm extends React.Component {
             this.setState({[name]: newState})
         };
         this.index = 1;
-        this.message ="";
+        this.message = "";
         this.orderList = ['Tax Photo', 'Photo Gallery', 'Property Card', 'Marriage Search',
             'Marriage Cert', 'Death Search', 'Death Cert', 'Birth Search', 'Birth Cert'];
     };
@@ -227,35 +227,30 @@ class NewOrderForm extends React.Component {
     handleSubmit = (e, value) => {
         e.preventDefault();
         this.setState({loading: true});
-
-
         for (var i = 0; i < this.state.subOrderList.length; i++) {
             if (this.state.orderType[i] === '') {
-                this.message+=("Please fill in Order Type in Suborder: " + (i + 1) + "\n");
+                this.message += ("Please fill in Order Type in Suborder: " + (i + 1) + "\n");
             }
             if (this.state.status[i] === '') {
-                this.message+=("Please fill in Status in Suborder: " + (i + 1) + "\n");
+                this.message += ("Please fill in Status in Suborder: " + (i + 1) + "\n");
             }
-
             if (this.state.orderType[i] !== '') {
                 if ((this.state.showBirthSearch[i] === true || this.state.showBirthCert === true[i]) && this.state.gender[i] === '') {
-                    this.message+=("Please fill in the Gender in Suborder: " + (i + 1) + "\n");
+                    this.message += ("Please fill in the Gender in Suborder: " + (i + 1) + "\n");
                 }
                 if (this.state.showPropertyForm[i] === true && this.state.borough[i] === '') {
-                    this.message+=("Please fill in the Borough in Suborder:" + (i + 1) + "\n");
+                    this.message += ("Please fill in the Borough in Suborder:" + (i + 1) + "\n");
                 }
                 if ((this.state.showPhotoGalleryForm[i] === true || this.state.showTaxForm[i] === true) && (this.state.printSize[i] === '')) {
-                    this.message+=("Please fill in the Printing Size in Suborder: " + (i + 1) + "\n")
+                    this.message += ("Please fill in the Printing Size in Suborder: " + (i + 1) + "\n")
                 }
                 if (this.state.showTaxForm[i] === true && this.state.collection[i] === '') {
-                    this.message+=("Please fill in the Collection in Suborder: " + (i + 1) + "\n");
+                    this.message += ("Please fill in the Collection in Suborder: " + (i + 1) + "\n");
                 }
-
-
             }
         }
-        if (this.message.length !==0) {
-            alert(this.message);
+        if (this.message.length !== 0) {
+            swal("Incomplete Form Submission",this.message,"error");
             this.message = "";
             this.setState({loading: false});
             return;
@@ -323,6 +318,8 @@ class NewOrderForm extends React.Component {
             console.error(error);
             this.setState({loading: false});
         });
+        {this.clearSelection()}
+        swal("Thank you", "Your order has been submitted", "success");
 
     };
 
