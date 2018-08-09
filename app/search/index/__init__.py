@@ -2,4 +2,10 @@ from .suborder import create_suborder_docs, create_suborder_index
 from .orders import create_order_docs, create_orders_index
 from .birth_search import create_birth_search_docs, create_birth_search_index
 from .birth_cert import create_birth_cert_docs, create_birth_cert_index
-
+from .death_search import create_death_search_docs, create_death_search_index
+from .death_cert import create_death_cert_docs, create_death_cert_index
+from .marriage_search import create_marriage_search_docs, create_marriage_search_index
+from .marriage_cert import create_marriage_cert_docs, create_marriage_cert_index
+from .tax_photo import create_tax_photo_docs, create_tax_photo_index
+from .photo_gallery import create_photo_gallery_docs, create_photo_gallery_index
+from .property_card import create_property_card_docs, create_property_card_index

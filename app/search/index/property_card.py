@@ -64,4 +64,4 @@ def create_property_card_docs():
         chunk_size=RESULTS_CHUNK_SIZE,
         raise_on_error=True
     )
-    print("Successfully created %s marriage search docs." % num_success)
+    print("Successfully created %s property card docs." % num_success)

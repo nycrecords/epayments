@@ -1,10 +1,18 @@
 from flask import current_app
-from app.models import Suborders
 from app import es
 from datetime import datetime
 from app.constants.search import DATETIME_FORMAT, ES_DATETIME_FORMAT, RESULTS_CHUNK_SIZE
 from app.search.index import (create_suborder_index, create_suborder_docs,
-                              create_order_docs, create_orders_index)
+                              create_order_docs, create_orders_index,
+                              create_birth_search_docs, create_birth_search_index,
+                              create_birth_cert_docs, create_birth_cert_index,
+                              create_death_cert_docs, create_death_cert_index,
+                              create_death_search_docs, create_death_search_index,
+                              create_marriage_search_docs, create_marriage_search_index,
+                              create_marriage_cert_docs, create_marriage_cert_index,
+                              create_tax_photo_docs, create_tax_photo_index,
+                              create_photo_gallery_docs, create_photo_gallery_index,
+                              create_property_card_index, create_property_card_docs)
 
 
 def recreate():
@@ -18,12 +26,30 @@ def create_index():
     """Creates indices """
     create_suborder_index()
     create_orders_index()
+    create_birth_search_index()
+    create_birth_cert_index()
+    create_death_search_index()
+    create_death_cert_index()
+    create_marriage_search_index()
+    create_marriage_cert_index()
+    create_tax_photo_index()
+    create_photo_gallery_index()
+    create_property_card_index()
 
 
 def create_docs():
     """Creates elasticsearch request docs for every request"""
     create_suborder_docs()
     create_order_docs()
+    create_birth_search_docs()
+    create_birth_cert_docs()
+    create_death_search_docs()
+    create_death_cert_docs()
+    create_marriage_search_docs()
+    create_marriage_cert_docs()
+    create_tax_photo_docs()
+    create_photo_gallery_docs()
+    create_property_card_docs()
 
 
 def delete_doc(suborder_id):

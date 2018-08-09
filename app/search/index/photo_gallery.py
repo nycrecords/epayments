@@ -17,10 +17,6 @@ def create_photo_gallery_index():
                         'suborder_number': {
                             'type': "keyword"
                         },
-                        'image_id': {
-                            'type': 'text'
-                        }
-
                     }
                 }
             }
@@ -60,4 +56,4 @@ def create_photo_gallery_docs():
         chunk_size=RESULTS_CHUNK_SIZE,
         raise_on_error=True
     )
-    print("Successfully created %s marriage search docs." % num_success)
+    print("Successfully created %s photo gallery docs." % num_success)
