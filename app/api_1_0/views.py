@@ -79,6 +79,7 @@ def get_orders():
                                 size,
                                 "search")
 
+
         # formatting results
         formatted_orders = [orders['hits']['hits'][i]['_source'] for i in range(len(orders['hits']['hits']))]
         suborder_total = orders['hits']['total']

@@ -3,7 +3,8 @@ from app.models import Suborders
 from app import es
 from datetime import datetime
 from app.constants.search import DATETIME_FORMAT, ES_DATETIME_FORMAT, RESULTS_CHUNK_SIZE
-from app.search.index import create_suborder_index,create_suborder_docs
+from app.search.index import (create_suborder_index, create_suborder_docs,
+                             create_order_docs,)
 
 
 def recreate():
@@ -16,11 +17,13 @@ def recreate():
 def create_index():
     """Creates indices """
     create_suborder_index()
+    # create_orders_index()
 
 
 def create_docs():
     """Creates elasticsearch request docs for every request"""
     create_suborder_docs()
+    create_order_docs()
 
 
 def delete_doc(suborder_id):
