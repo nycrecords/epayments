@@ -238,7 +238,7 @@ class NewOrderForm extends React.Component {
                 if ((this.state.showBirthSearch[i] === true || this.state.showBirthCert === true[i]) && this.state.gender[i] === '') {
                     this.message += ("Please fill in the Gender in Suborder: " + (i + 1) + "\n");
                 }
-                if (this.state.showPropertyForm[i] === true && this.state.borough[i] === '') {
+                if (this.state.showPhotoGalleryForm[i] === false && this.state.borough[i] === '') {
                     this.message += ("Please fill in the Borough in Suborder:" + (i + 1) + "\n");
                 }
                 if ((this.state.showPhotoGalleryForm[i] === true || this.state.showTaxForm[i] === true) && (this.state.printSize[i] === '')) {
@@ -250,7 +250,7 @@ class NewOrderForm extends React.Component {
             }
         }
         if (this.message.length !== 0) {
-            swal("Incomplete Form Submission",this.message,"error");
+            swal("Incomplete Form Submission", this.message, "error");
             this.message = "";
             this.setState({loading: false});
             return;
@@ -318,7 +318,9 @@ class NewOrderForm extends React.Component {
             console.error(error);
             this.setState({loading: false});
         });
-        {this.clearSelection()}
+        {
+            this.clearSelection()
+        }
         swal("Thank you", "Your order has been submitted", "success");
 
     };
@@ -418,11 +420,12 @@ class NewOrderForm extends React.Component {
                     <Grid>
                         <Grid.Row centered>
                             <Grid.Column>
-                                <Link to="/">
-                                    <Header as="h1" textAlign="center">ePayments
+                                <Header as="h1" textAlign="center">
+                                    <Link to="/">
+                                        ePayments
                                         <Container className="sub header">Department of Records</Container>
-                                    </Header>
-                                </Link>
+                                    </Link>
+                                </Header>
                             </Grid.Column>
                         </Grid.Row>
 
