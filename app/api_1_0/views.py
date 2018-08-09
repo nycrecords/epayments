@@ -349,7 +349,7 @@ def new_order():
                                                          borough=borough[index],
                                                          letter=letter[index],
                                                          comment=comment[index],
-                                                         suborder_number=sub_order.id[index])
+                                                         suborder_number=sub_order.id)
             }
             create_object(handler_for_order_type[order_type[index]])
 
