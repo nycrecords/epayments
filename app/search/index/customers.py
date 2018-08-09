@@ -36,6 +36,7 @@ def create_customers_docs():
         operations.append({
             '_op_type': 'create',
             '_id': q.id,
+            'id':q.id,
             'billing_name': q.billing_name,
             'email': q.email,
             'shipping_name': q.shipping_name,
@@ -59,4 +60,4 @@ def create_customers_docs():
         chunk_size=RESULTS_CHUNK_SIZE,
         raise_on_error=True
     )
-    print("Successfully created %s birth certificate docs." % num_success)
+    print("Successfully created %s customers docs." % num_success)
