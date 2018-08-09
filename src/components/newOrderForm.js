@@ -1,9 +1,7 @@
 import React, {} from 'react';
 import {
-    Route,
     Link
 } from 'react-router-dom';
-import { Alert } from 'reactstrap';
 import {
     Button,
     Container,
@@ -151,43 +149,54 @@ class NewOrderForm extends React.Component {
              to prevent null insert into DB if user left some fields unanswered
             */
             this.setState({
-                certified: this.state.certified.concat(['']),
-                deathPlace: this.state.deathPlace.concat(['']),
-                cemetery: this.state.cemetery.concat(['']),
-                firstName: this.state.firstName.concat(['']),
-                lastName: this.state.lastName.concat(['']),
-                birthPlace: this.state.birthPlace.concat(['']),
-                gender: this.state.gender.concat(['']),
-                fatherName: this.state.fatherName.concat(['']),
-                motherName: this.state.motherName.concat(['']),
-                middleName: this.state.middleName.concat(['']),
-                certificateNum: this.state.certificateNum.concat(['']),
-                groomLastName: this.state.groomLastName.concat(['']),
-                groomFirstName: this.state.groomFirstName.concat(['']),
-                brideLastName: this.state.brideLastName.concat(['']),
-                brideFirstName: this.state.brideFirstName.concat(['']),
-                month: this.state.month.concat(['']),
-                day: this.state.day.concat(['']),
-                year: this.state.year.concat(['']),
-                marriagePlace: this.state.marriagePlace.concat(['']),
-                letter: this.state.letter.concat([false]),
-                block: this.state.block.concat(['']),
-                lot: this.state.lot.concat(['']),
-                roll: this.state.roll.concat(['']),
-                borough: this.state.borough.concat(['']),
-                buildingNum: this.state.buildingNum.concat(['']),
-                street: this.state.street.concat(['']),
-                mail: this.state.mail.concat([false]),
-                contactNum: this.state.contactNum.concat(['']),
-                imgId: this.state.imgId.concat(['']),
-                imgTitle: this.state.imgTitle.concat(['']),
-                comment: this.state.comment.concat(['']),
-                personalUseAgreement: this.state.personalUseAgreement.concat([false]),
-                addDescription: this.state.addDescription.concat(['']),
-                collection: this.state.collection.concat(['']),
-                printSize: this.state.printSize.concat(['']),
-                numCopies: this.state.numCopies.concat(['']),
-            })
+                    certified: this.state.certified.concat(['']),
+                    deathPlace: this.state.deathPlace.concat(['']),
+                    cemetery: this.state.cemetery.concat(['']),
+                    firstName: this.state.firstName.concat(['']),
+                    lastName: this.state.lastName.concat(['']),
+                    birthPlace: this.state.birthPlace.concat(['']),
+                    gender: this.state.gender.concat(['']),
+                    fatherName: this.state.fatherName.concat(['']),
+                    motherName: this.state.motherName.concat(['']),
+                    middleName: this.state.middleName.concat(['']),
+                    certificateNum: this.state.certificateNum.concat(['']),
+                    groomLastName: this.state.groomLastName.concat(['']),
+                    groomFirstName: this.state.groomFirstName.concat(['']),
+                    brideLastName: this.state.brideLastName.concat(['']),
+                    brideFirstName: this.state.brideFirstName.concat(['']),
+                    month: this.state.month.concat(['']),
+                    day: this.state.day.concat(['']),
+                    year: this.state.year.concat(['']),
+                    marriagePlace: this.state.marriagePlace.concat(['']),
+                    letter: this.state.letter.concat([false]),
+                    block: this.state.block.concat(['']),
+                    lot: this.state.lot.concat(['']),
+                    roll: this.state.roll.concat(['']),
+                    borough: this.state.borough.concat(['']),
+                    buildingNum: this.state.buildingNum.concat(['']),
+                    street: this.state.street.concat(['']),
+                    mail: this.state.mail.concat([false]),
+                    contactNum: this.state.contactNum.concat(['']),
+                    imgId: this.state.imgId.concat(['']),
+                    imgTitle: this.state.imgTitle.concat(['']),
+                    comment: this.state.comment.concat(['']),
+                    personalUseAgreement: this.state.personalUseAgreement.concat([false]),
+                    addDescription: this.state.addDescription.concat(['']),
+                    collection: this.state.collection.concat(['']),
+                    printSize: this.state.printSize.concat(['']),
+                    numCopies: this.state.numCopies.concat(['']),
+                    status: this.state.status.concat(['']),
+                    orderType: this.state.orderType.concat(['']),
+                    showMarriageSearch: this.state.showMarriageSearch.concat([false]),
+                    showBirthSearch: this.state.showBirthSearch.concat([false]),
+                    showBirthCert: this.state.showBirthCert.concat([false]),
+                    showMarriageCert: this.state.showMarriageCert.concat([false]),
+                    showDeathCert: this.state.showDeathCert.concat([false]),
+                    showDeathSearch: this.state.showDeathSearch.concat([false]),
+                    showTaxForm: this.state.showTaxForm.concat([false]),
+                    showPhotoGalleryForm: this.state.showPhotoGalleryForm.concat([false]),
+                    showPropertyForm: this.state.showPropertyForm.concat([false]),
+        })
         };
         this.deleteSuborderValues = (index, state, name) => {
             let newState = state.slice();
@@ -221,42 +230,41 @@ class NewOrderForm extends React.Component {
         e.preventDefault();
         this.setState({loading: true});
         for (var i = 0; i < this.state.subOrderList.length; i++) {
-            if (this.state.orderType[i] == " " && this.state.status[i] == " ") {
-                <Alert color="danger"> "Please fill in Order Type and Status in Suborder: " + (i + 1))</Alert>
+            if (this.state.orderType[i] === '' && this.state.status[i] === '') {
+                alert("Please fill in Order Type and Status in Suborder: " + (i + 1))
                 this.setState({loading: false});
                 return
 
-            } else if (this.state.orderType[i] == " ") {
+            } else if (this.state.orderType[i] === '') {
                 alert("Please fill in Order Type in Suborder: " + (i + 1))
                 this.setState({loading: false});
                 return
-            } else if (this.state.status[i] == " ") {
+            } else if (this.state.status[i] === '') {
                 alert("Please fill in Status in Suborder: " + (i + 1))
                 this.setState({loading: false});
                 return
             }
 
-            if (this.state.orderType[i] != " ") {
-                if ((this.state.showBirthSearch[i] == true || this.state.showBirthCert == true[i]) && this.state.gender[i] == " ") {
+            if (this.state.orderType[i] !== '') {
+                if ((this.state.showBirthSearch[i] === true || this.state.showBirthCert === true[i]) && this.state.gender[i] === '') {
                     alert("Please fill in the Gender in Suborder: " + (i + 1))
                     this.setState({loading: false});
                     return
                 }
-                else if (this.state.showPropertyForm[i] == true && this.state.borough[i] == " ") {
+                else if (this.state.showPropertyForm[i] === true && this.state.borough[i] === '') {
                     alert("Please fill in the Borough in Suborder:" + (i + 1))
                     this.setState({loading: false});
                     return
                 }
-                else if ((this.state.showPhotoGalleryForm[i] == true || this.state.showTaxForm[i] == true) && (this.state.printSize[i] == " ")) {
+                else if ((this.state.showPhotoGalleryForm[i] === true || this.state.showTaxForm[i] === true) && (this.state.printSize[i] === '')) {
                     alert("Please fill in the Printing Size in Suborder: " + (i + 1))
                     this.setState({loading: false});
                     return
-                }else if(this.state.showTaxForm[i] == true && this.state.collection[i] == " "){
+                } else if (this.state.showTaxForm[i] === true && this.state.collection[i] === '') {
                     alert("Please fill in the Collection in Suborder: " + (i + 1))
                     this.setState({loading: false});
                     return
                 }
-
 
 
             }
@@ -327,7 +335,6 @@ class NewOrderForm extends React.Component {
     };
 
     callBack = (dataFromChild, value, index, state) => {
-        console.log(state)
         let newState = state.slice()
         newState[index] = value
         this.setState({
@@ -338,11 +345,10 @@ class NewOrderForm extends React.Component {
 
     };
     deleteSuborder = (index) => {
-        console.log("index is " + index);
         let newSubOrderList = this.state.subOrderList.slice()
         newSubOrderList.splice(index, 1);
         for (var i = index; i < newSubOrderList.length; i++) {
-            newSubOrderList[i] = newSubOrderList[i] - 1;
+            newSubOrderList[i]--;
         }
         this.setState({subOrderList: newSubOrderList})
         this.deleteSuborderValues(index, this.state.certified, "certified")
@@ -386,13 +392,14 @@ class NewOrderForm extends React.Component {
         this.deleteSuborderValues(index, this.state.showMarriageSearch, "showMarriageSearch")
         this.deleteSuborderValues(index, this.state.showBirthSearch, "showBirthSearch")
         this.deleteSuborderValues(index, this.state.showBirthCert, "showBirthCert")
-        this.deleteSuborderValues(index, this.state.showMarriageCert, "showBirthCert")
+        this.deleteSuborderValues(index, this.state.showMarriageCert, "showMarriageCert")
         this.deleteSuborderValues(index, this.state.showDeathCert, "showDeathCert")
         this.deleteSuborderValues(index, this.state.showDeathSearch, "showDeathSearch")
         this.deleteSuborderValues(index, this.state.showTaxForm, "showTaxForm")
         this.deleteSuborderValues(index, this.state.showPhotoGalleryForm, "showPhotoGalleryForm")
         this.deleteSuborderValues(index, this.state.showPropertyForm, "showPropertyForm")
         this.index--;
+        console.log(this.state)
     };
 
     render() {

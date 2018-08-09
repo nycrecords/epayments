@@ -1,5 +1,5 @@
 import React from 'react';
-import {Button, Container, Divider, Grid, Popup, Form, Loader, Icon, FormCheckbox} from 'semantic-ui-react';
+import {Button, Grid, Popup, Form, Icon} from 'semantic-ui-react';
 import TaxPhotoForm from "./taxPhotoForm"
 import PropertyCardForm from "./propertyCardForm"
 import PhotoGalleryForm from "./photoGalleryForm"
@@ -92,9 +92,7 @@ class SubOrderForm extends React.Component {
         const target = e.target;
         const value = target.value;
         const name = target.name;
-        console.log(this.props.state + "." + name);
         this.props.callBack(name, value, this.props.index, this.props.state + "." + name);
-
         this.setState({
             [name]: value
         });
@@ -123,7 +121,6 @@ class SubOrderForm extends React.Component {
                                      placeholder="Order Type"
                                      options={orderTypeOptions}
                                      onChange={(e, {value}) => {
-                                         console.log("value :" + value);
                                          this.setState({orderType: value});
                                          this.props.callBack("orderType", value, this.props.index, this.props.state.orderType);
                                          //toggles hidden forms for Tax Photo if selected
@@ -197,7 +194,6 @@ class SubOrderForm extends React.Component {
                                     maxLength="2"
                                     onChange={(e, {value}) => {
                                         if (/^[0-9]+$/.test(value.slice(-1)) || value === '') {
-                                            console.log("not an alphabet")
                                             this.setState({numCopies: value});
                                             this.props.callBack("numCopies", value, this.props.index, this.props.state.numCopies);
 
