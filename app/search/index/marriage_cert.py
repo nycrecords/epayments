@@ -1,4 +1,4 @@
-from app.models import DeathCertificate
+from app.models import MarriageCertificate
 from app import es
 from app.constants.search import RESULTS_CHUNK_SIZE
 from elasticsearch.helpers import bulk
@@ -28,7 +28,7 @@ def create_marriage_cert_index():
 def create_marriage_cert_docs():
     if not es:
         return
-    marriage_cert = DeathCertificate.query.all()
+    marriage_cert = MarriageCertificate.query.all()
 
     operations = []
 

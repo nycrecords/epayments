@@ -1,4 +1,4 @@
-from app.models import MarriageCertificate
+from app.models import MarriageSearch
 from app import es
 from app.constants.search import RESULTS_CHUNK_SIZE
 from elasticsearch.helpers import bulk
@@ -28,7 +28,7 @@ def create_marriage_search_index():
 def create_marriage_search_docs():
     if not es:
         return
-    marriage_search = MarriageCertificate.query.all()
+    marriage_search = MarriageSearch.query.all()
 
     operations = []
 
