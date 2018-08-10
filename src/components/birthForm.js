@@ -22,37 +22,41 @@ class BirthSearchForm extends React.Component {
                 <Grid.Row>
                     <Grid.Column>
                         {/*<Form.Group>*/}
-                            <Form.Input label="First Name"
-                                        name="firstName"
-                                        placeholder="First Name"
-                                        onChange={(e, {value}) => {
-                                            this.setState({firstName: value})
-                                            this.props.callBack("firstName", value, this.props.index, this.props.state.firstName)
-                                        }}
-                                        value={this.props.state.firstName[this.props.index]}
-                            />
-                            <Form.Input label="Middle Name"
-                                        name="middleName"
-                                        placeholder="Middle Name"
-                                        onChange={(e, {value}) => {
-                                            this.setState({middleName: value})
-                                            this.props.callBack("middleName", value, this.props.index, this.props.state.middleName)
-                                        }}
-                                        value={this.props.state.middleName[this.props.index]}
-                            />
-                            <Form.Input label="Last Name"
-                                        name="lastName"
-                                        placeholder="Last Name"
-                                        onChange={(e, {value}) => {
-                                            this.setState({lastName: value})
-                                            this.props.callBack("lastName", value, this.props.index, this.props.state.lastName)
-                                        }}
-                                        value={this.props.state.lastName[this.props.index]}
-                            />
+                        <Form.Input label="First Name"
+                                    name="firstName"
+                                    placeholder="First Name"
+                                    maxLength={40}
+                                    onChange={(e, {value}) => {
+                                        this.setState({firstName: value})
+                                        this.props.callBack("firstName", value, this.props.index, this.props.state.firstName)
+                                    }}
+                                    value={this.props.state.firstName[this.props.index]}
+                        />
+                        <Form.Input label="Middle Name"
+                                    name="middleName"
+                                    placeholder="Middle Name"
+                                    maxLength={40}
+                                    onChange={(e, {value}) => {
+                                        this.setState({middleName: value})
+                                        this.props.callBack("middleName", value, this.props.index, this.props.state.middleName)
+                                    }}
+                                    value={this.props.state.middleName[this.props.index]}
+                        />
+                        <Form.Input label="Last Name"
+                                    name="lastName"
+                                    placeholder="Last Name"
+                                    maxLength={25}
+                                    onChange={(e, {value}) => {
+                                        this.setState({lastName: value})
+                                        this.props.callBack("lastName", value, this.props.index, this.props.state.lastName)
+                                    }}
+                                    value={this.props.state.lastName[this.props.index]}
+                        />
                         {/*</Form.Group>*/}
                         <Form.Input label="Birth Place"
                                     name="birthPlace"
                                     placeholder="BirthPlace"
+                                    maxLength={40}
                                     onChange={(e, {value}) => {
                                         this.setState({birthPlace: value})
                                         this.props.callBack("birthPlace", value, this.props.index, this.props.state.birthPlace)
@@ -73,6 +77,7 @@ class BirthSearchForm extends React.Component {
                         <Form.Input label="Mother Name"
                                     name="motherName"
                                     placeholder="Mother Name"
+                                    maxLength={40}
                                     onChange={(e, {value}) => {
                                         this.setState({motherName: value})
                                         this.props.callBack("motherName", value, this.props.index, this.props.state.motherName)
@@ -82,6 +87,7 @@ class BirthSearchForm extends React.Component {
                         <Form.Input label="Father Name"
                                     name="fatherName"
                                     placeholder="Father Name"
+                                    maxLength={40}
                                     onChange={(e, {value}) => {
                                         this.setState({fatherName: value})
                                         this.props.callBack("fatherName", value, this.props.index, this.props.state.fatherName)
@@ -121,6 +127,7 @@ class BirthCertForm extends React.Component {
                         <Form.Input label="Certificate Number"
                                     name="certificateNum"
                                     placeholder="Certificate Number"
+                                    maxLength={40}
                                     onChange={(e, {value}) => {
                                         this.setState({certificateNum: value})
                                         this.props.callBack("certificateNum", value, this.props.index, this.props.state.certificateNum)

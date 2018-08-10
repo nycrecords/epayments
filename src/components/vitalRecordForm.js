@@ -20,41 +20,42 @@ class VitalRecordForm extends React.Component {
                 <Grid.Row>
                     <Grid.Column>
                         {/*<Form.Group>*/}
-                            <Form.Input label="Month"
-                                        name="month"
-                                        placeholder="Month"
-                                        onChange={(e, {value}) => {
+                        <Form.Input label="Month"
+                                    name="month"
+                                    placeholder="Month"
+                                    maxLength={20}
+                                    onChange={(e, {value}) => {
 
-                                            this.setState({month: value})
-                                            this.props.callBack("month", value, this.props.index, this.props.state.month)
+                                        this.setState({month: value})
+                                        this.props.callBack("month", value, this.props.index, this.props.state.month)
 
-                                        }}
-                                        value={this.props.state.month[this.props.index]}
-                            />
-                            <Form.Input label="Day"
-                                        name="day"
-                                        maxLength={2}
-                                        placeholder="Day"
-                                        onChange={(e, {value}) => {
-                                            if (/^[0-9]+$/.test(value.slice(-1)) || value === '') {
-                                                this.setState({day: value})
-                                                this.props.callBack("day", value, this.props.index, this.props.state.day)
-                                            }
-                                        }}
-                                        value={this.props.state.day[this.props.index]}
-                            />
-                            <Form.Input label="Year"
-                                        name="year"
-                                        maxLength={4}
-                                        placeholder="Year"
-                                        onChange={(e, {value}) => {
-                                            if (/^[0-9]+$/.test(value.slice(-1)) || value === '') {
-                                                this.setState({year: value})
-                                                this.props.callBack("year", value, this.props.index, this.props.state.year)
-                                            }
-                                        }}
-                                        value={this.props.state.year[this.props.index]}
-                            />
+                                    }}
+                                    value={this.props.state.month[this.props.index]}
+                        />
+                        <Form.Input label="Day"
+                                    name="day"
+                                    maxLength={2}
+                                    placeholder="Day"
+                                    onChange={(e, {value}) => {
+                                        if (/^[0-9]+$/.test(value.slice(-1)) || value === '') {
+                                            this.setState({day: value})
+                                            this.props.callBack("day", value, this.props.index, this.props.state.day)
+                                        }
+                                    }}
+                                    value={this.props.state.day[this.props.index]}
+                        />
+                        <Form.Input label="Year"
+                                    name="year"
+                                    maxLength={4}
+                                    placeholder="Year"
+                                    onChange={(e, {value}) => {
+                                        if (/^[0-9]+$/.test(value.slice(-1)) || value === '') {
+                                            this.setState({year: value})
+                                            this.props.callBack("year", value, this.props.index, this.props.state.year)
+                                        }
+                                    }}
+                                    value={this.props.state.year[this.props.index]}
+                        />
                         {/*</Form.Group>*/}
 
                         <Form.Select label="Borough"
@@ -84,6 +85,7 @@ class VitalRecordForm extends React.Component {
                         <Form.Input label="Comment"
                                     name="comment"
                                     placeholder="Comment"
+                                    maxLength={255}
                                     onChange={(e, {value}) => {
                                         this.setState({comment: value})
                                         this.props.callBack("comment", value, this.props.index, this.props.state.comment)

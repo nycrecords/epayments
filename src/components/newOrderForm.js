@@ -505,24 +505,24 @@ class NewOrderForm extends React.Component {
                                                 onChange={this.handleChange}
                                                 value={this.state.instructions}
                                     />
-                                    </Form>
-                                    <Button animated positive type="button" floated="left" onClick={() => {
-                                        this.handleEmptyStates()
-                                        this.handleClick()
-                                    }}
-                                    >
-                                        <Button.Content visible>
-                                            <Icon name='add'/>
-                                        </Button.Content>
-                                        <Button.Content hidden>
-                                            Additional Order
-                                        </Button.Content>
-                                    </Button>
-                                    <Button type='submit' positive floated="left" content="Place Order"/>
-                                    <Button type="reset" negative onClick={() => {
-                                        this.clearSelection()
-                                        this.subOrderForm.clearSelection()
-                                    }} content="Clear"/>
+                                </Form>
+                                <Button animated positive type="button" floated="left" onClick={() => {
+                                    this.handleEmptyStates()
+                                    this.handleClick()
+                                }}
+                                >
+                                    <Button.Content visible>
+                                        <Icon name='add'/>
+                                    </Button.Content>
+                                    <Button.Content hidden>
+                                        Additional Order
+                                    </Button.Content>
+                                </Button>
+                                <Button type='submit' positive floated="left" content="Place Order"/>
+                                <Button type="reset" negative onClick={() => {
+                                    this.clearSelection()
+                                    this.subOrderForm.clearSelection()
+                                }} content="Clear"/>
                             </Grid.Column>
                             <Grid.Column width={6} id="grid-column-order">
                                 <Form>

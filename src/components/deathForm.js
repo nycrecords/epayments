@@ -22,6 +22,7 @@ class DeathSearchForm extends React.Component {
                             <Form.Input label="First Name"
                                         name="firstName"
                                         placeholder="First Name"
+                                        maxLength={40}
                                         onChange={(e, {value}) => {
                                             this.setState({firstName: value})
                                             this.props.callBack("firstName", value, this.props.index, this.props.state.firstName)
@@ -31,6 +32,7 @@ class DeathSearchForm extends React.Component {
                             <Form.Input label="Middle Name"
                                         name="middleName"
                                         placeholder="Middle Name"
+                                        maxLength={40}
                                         onChange={(e, {value}) => {
                                             this.setState({middleName: value})
                                             this.props.callBack("middleName", value, this.props.index, this.props.state.middleName)
@@ -40,6 +42,7 @@ class DeathSearchForm extends React.Component {
                             <Form.Input label="Last Name"
                                         name="lastName"
                                         placeholder="Last Name"
+                                        maxLength={25}
                                         onChange={(e, {value}) => {
                                             this.setState({lastName: value})
                                             this.props.callBack("lastName", value, this.props.index, this.props.state.lastName)
@@ -50,6 +53,7 @@ class DeathSearchForm extends React.Component {
                         <Form.Input label="Cemetery"
                                     name="cemetery"
                                     placeholder="Cemetery"
+                                    maxLength={40}
                                     onChange={(e, {value}) => {
                                         this.setState({cemetery: value})
                                         this.props.callBack("cemetery", value, this.props.index, this.props.state.cemetery)
@@ -59,6 +63,7 @@ class DeathSearchForm extends React.Component {
                         <Form.Input label="Death Place"
                                     name="deathPlace"
                                     placeholder="Death Place"
+                                    maxLength={40}
                                     onChange={(e, {value}) => {
                                         this.setState({deathPlace: value})
                                         this.props.callBack("deathPlace", value, this.props.index, this.props.state.deathPlace)
@@ -95,6 +100,7 @@ class DeathCertForm extends React.Component {
                         <Form.Input label="Certificate Number"
                                     name="certificateNum"
                                     placeholder="Certificate Number"
+                                    maxLength={40}
                                     onChange={(e, {value}) => {
                                         this.setState({certificateNum: value})
                                         this.props.callBack("certificateNum", value, this.props.index, this.props.state.certificateNum)

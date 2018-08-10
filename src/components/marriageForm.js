@@ -14,6 +14,7 @@ class MarriageSearchForm extends React.Component {
             marriagePlace: '',
         }
     }
+
     render() {
         return (
             <Grid>
@@ -23,6 +24,7 @@ class MarriageSearchForm extends React.Component {
                             <Form.Input label="Groom First Name"
                                         name="groomFirstName"
                                         placeholder="Groom First Name"
+                                        maxLength={40}
                                         onChange={(e, {value}) => {
                                             this.setState({groomFirstName: value})
                                             this.props.callBack("groomFirstName", value, this.props.index, this.props.state.groomFirstName)
@@ -32,6 +34,7 @@ class MarriageSearchForm extends React.Component {
                             <Form.Input label="Groom Last Name"
                                         name="groomLastName"
                                         placeholder="Groom Last Name"
+                                        maxLength={25}
                                         onChange={(e, {value}) => {
                                             this.setState({groomLastName: value})
                                             this.props.callBack("groomLastName", value, this.props.index, this.props.state.groomLastName)
@@ -43,6 +46,7 @@ class MarriageSearchForm extends React.Component {
                             <Form.Input label="Bride First Name"
                                         name="brideFirstName"
                                         placeholder="Bride First Name"
+                                        maxLength={40}
                                         onChange={(e, {value}) => {
                                             this.setState({brideFirstName: value})
                                             this.props.callBack("brideFirstName", value, this.props.index, this.props.state.brideFirstName)
@@ -52,6 +56,7 @@ class MarriageSearchForm extends React.Component {
                             <Form.Input label="Bride Last Name"
                                         name="brideLastName"
                                         placeholder="Bride Last Name"
+                                        maxLength={25}
                                         onChange={(e, {value}) => {
                                             this.setState({brideLastName: value})
                                             this.props.callBack("brideLastName", value, this.props.index, this.props.state.brideLastName)
@@ -62,6 +67,7 @@ class MarriageSearchForm extends React.Component {
                         <Form.Input label="Marriage Place"
                                     name="marriagePlace"
                                     placeholder="Marriage Place"
+                                    maxLength={40}
                                     onChange={(e, {value}) => {
                                         this.setState({marriagePlace: value})
                                         this.props.callBack("marriagePlace", value, this.props.index, this.props.state.marriagePlace)
@@ -100,6 +106,7 @@ class MarriageCertForm extends React.Component {
                         <Form.Input label="Certificate Number"
                                     name="certificateNum"
                                     placeholder="Certificate Number"
+                                    maxLength={40}
                                     onChange={(e, {value}) => {
                                         this.setState({certificateNum: value})
                                         this.props.callBack("certificateNum", value, this.props.index, this.props.state.certificateNum)

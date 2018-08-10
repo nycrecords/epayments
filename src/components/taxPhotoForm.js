@@ -59,6 +59,7 @@ class TaxPhotoForm extends React.Component {
                         <Form.Input label="Block"
                                     name="block"
                                     placeholder="Block"
+                                    maxLength={9}
                                     onChange={(e, {value}) => {
                                         this.setState({block: value})
                                         this.props.callBack("block", value, this.props.index, this.props.state.block)
@@ -68,6 +69,7 @@ class TaxPhotoForm extends React.Component {
                         <Form.Input label="Lot"
                                     name="lot"
                                     placeholder="Lot"
+                                    maxLength={9}
                                     onChange={(e, {value}) => {
                                         this.setState({lot: value})
                                         this.props.callBack("lot", value, this.props.index, this.props.state.lot)
@@ -77,6 +79,7 @@ class TaxPhotoForm extends React.Component {
                         <Form.Input label="Roll"
                                     name="roll"
                                     placeholder="Roll#"
+                                    maxLength={9}
                                     onChange={(e, {value}) => {
                                         this.setState({roll: e.target.value})
                                         this.props.callBack("roll", value, this.props.index, this.props.state.roll)
@@ -121,6 +124,7 @@ class TaxPhotoForm extends React.Component {
                         <Form.Input label="Building Number"
                                     name="buildingNum"
                                     placeholder="Building Number"
+                                    maxLength={10}
                                     onChange={(e, {value}) => {
                                         this.setState({buildingNum: value})
                                         this.props.callBack("buildingNum", value, this.props.index, this.props.state.buildingNum)
@@ -130,6 +134,7 @@ class TaxPhotoForm extends React.Component {
                         <Form.Input label="Street"
                                     name="street"
                                     placeholder="Street"
+                                    maxLength={40}
                                     onChange={(e, {value}) => {
                                         this.setState({street: value})
                                         this.props.callBack("street", value, this.props.index, this.props.state.street)
@@ -151,6 +156,7 @@ class TaxPhotoForm extends React.Component {
                         <Form.Input label="description"
                                     name="addDescription"
                                     placeholder="Description"
+                                    maxLength={35}
                                     onChange={(e, {value}) => {
                                         this.setState({addDescription: value})
                                         this.props.callBack("addDescription", value, this.props.index, this.props.state.addDescription)
@@ -160,6 +166,7 @@ class TaxPhotoForm extends React.Component {
                         <Form.Input label="Contact Number"
                                     name="contactNum"
                                     placeholder="Contact Number"
+                                    maxLength={10}
                                     onChange={(e, {value}) => {
                                         this.setState({contactNum: value})
                                         this.props.callBack("contactNum", value, this.props.index, this.props.state.contactNum)

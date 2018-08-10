@@ -1,25 +1,27 @@
 import React from 'react'
 import {Grid, Form} from 'semantic-ui-react';
+
 class PropertyCardForm extends React.Component {
-     constructor() {
-         super();
-         this.state = {
-             certified: '',
-             block: '',
-             lot: '',
-             borough: '',
-             buildingNum: '',
-             street: '',
-             mail: false,
-             contactNum: '',
-             imgId: '',
-             imgTitle: '',
-             comment: '',
-             personalUseAgreement: false,
-             addDescription: '',
-             printSize: '',
-         }
-     }
+    constructor() {
+        super();
+        this.state = {
+            certified: '',
+            block: '',
+            lot: '',
+            borough: '',
+            buildingNum: '',
+            street: '',
+            mail: false,
+            contactNum: '',
+            imgId: '',
+            imgTitle: '',
+            comment: '',
+            personalUseAgreement: false,
+            addDescription: '',
+            printSize: '',
+        }
+    }
+
     render() {
         return (
             <Grid>
@@ -28,6 +30,7 @@ class PropertyCardForm extends React.Component {
                         <Form.Input label="Block"
                                     name="block"
                                     placeholder="Block"
+                                    maxLength={9}
                                     onChange={(e, {value}) => {
                                         this.setState({block: value})
                                         this.props.callBack("block", value, this.props.index, this.props.state.block)
@@ -37,6 +40,7 @@ class PropertyCardForm extends React.Component {
                         <Form.Input label="Lot"
                                     name="lot"
                                     placeholder="Lot"
+                                    maxLength={9}
                                     onChange={(e, {value}) => {
                                         this.setState({lot: value})
                                         this.props.callBack("lot", value, this.props.index, this.props.state.lot)
@@ -57,6 +61,7 @@ class PropertyCardForm extends React.Component {
                         />
                         <Form.Input label="Building Number"
                                     name="buildingNum"
+                                    maxLength={10}
                                     placeholder="Building Number"
                                     onChange={(e, {value}) => {
                                         this.setState({buildingNum: value})
@@ -67,6 +72,7 @@ class PropertyCardForm extends React.Component {
                         <Form.Input label="Street"
                                     name="street"
                                     placeholder="Street"
+                                    maxLength={40}
                                     onChange={(e, {value}) => {
                                         this.setState({street: value})
                                         this.props.callBack("street", value, this.props.index, this.props.state.street)
@@ -77,7 +83,7 @@ class PropertyCardForm extends React.Component {
                                        name="mail"
                                        onChange={() => {
                                            (this.state.mail === false) ?
-                                               this.props.callBack("mail", true, this.props.index, this.props.state.mail):
+                                               this.props.callBack("mail", true, this.props.index, this.props.state.mail) :
                                                this.props.callBack("mail", false, this.props.index, this.props.state.mail);
                                            (this.state.mail === false) ?
                                                this.setState({mail: true}) :
@@ -88,6 +94,7 @@ class PropertyCardForm extends React.Component {
                         <Form.Input label="description"
                                     name="addDescription"
                                     placeholder="Description"
+                                    maxLength={40}
                                     onChange={(e, {value}) => {
                                         this.setState({addDescription: value})
                                         this.props.callBack("addDescription", value, this.props.index, this.props.state.addDescription)
@@ -97,6 +104,7 @@ class PropertyCardForm extends React.Component {
                         <Form.Input label="Contact Number"
                                     name="contactNum"
                                     placeholder="Contact Number"
+                                    maxLength={35}
                                     onChange={(e, {value}) => {
                                         this.setState({contactNum: value})
                                         this.props.callBack("contactNum", value, this.props.index, this.props.state.contactNum)
@@ -106,6 +114,7 @@ class PropertyCardForm extends React.Component {
                         <Form.Input label="Certified"
                                     name="certified"
                                     placeholder="Certified"
+                                    maxLength={40}
                                     onChange={(e, {value}) => {
                                         this.setState({certified: value})
                                         this.props.callBack("certified", value, this.props.index, this.props.state.certified)

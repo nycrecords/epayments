@@ -3,19 +3,20 @@ import {Grid, Form} from 'semantic-ui-react';
 
 
 class PhotoGalleryForm extends React.Component {
-     constructor() {
-         super();
-         this.state = {
-             mail: false,
-             contactNum: ' ',
-             imgId: ' ',
-             imgTitle: ' ',
-             comment: ' ',
-             personalUseAgreement: false,
-             addDescription: ' ',
-             printSize: ' ',
-         }
-     }
+    constructor() {
+        super();
+        this.state = {
+            mail: false,
+            contactNum: ' ',
+            imgId: ' ',
+            imgTitle: ' ',
+            comment: ' ',
+            personalUseAgreement: false,
+            addDescription: ' ',
+            printSize: ' ',
+        }
+    }
+
     render() {
         return (
             <Grid>
@@ -24,6 +25,7 @@ class PhotoGalleryForm extends React.Component {
                         <Form.Input label="Image Identifier"
                                     name="imgId"
                                     placeholder="Image Identifier"
+                                    maxLength={20}
                                     onChange={(e, {value}) => {
                                         this.setState({imgId: value})
                                         this.props.callBack("imgId", value, this.props.index, this.props.state.imgId)
@@ -33,6 +35,7 @@ class PhotoGalleryForm extends React.Component {
 
                         <Form.Input label="Title/Description of Image"
                                     name="imgTitle"
+                                    maxLength={500}
                                     placeholder="Title/Description of Image"
                                     onChange={(e, {value}) => {
                                         this.setState({imgTitle: value})
@@ -44,6 +47,7 @@ class PhotoGalleryForm extends React.Component {
                         <Form.Input label="Addition Description"
                                     name="addDescription"
                                     placeholder="Addition Description"
+                                    maxLength={500}
                                     onChange={(e, {value}) => {
                                         this.setState({addDescription: value})
                                         this.props.callBack("addDescription", value, this.props.index, this.props.state.addDescription)
@@ -54,7 +58,7 @@ class PhotoGalleryForm extends React.Component {
                                        name="mail"
                                        onChange={() => {
                                            (this.state.mail === false) ?
-                                               this.props.callBack("mail", true, this.props.index, this.props.state.mail):
+                                               this.props.callBack("mail", true, this.props.index, this.props.state.mail) :
                                                this.props.callBack("mail", false, this.props.index, this.props.state.mail);
                                            (this.state.mail === false) ?
                                                this.setState({mail: true}) :
@@ -65,6 +69,7 @@ class PhotoGalleryForm extends React.Component {
                         <Form.Input label="Contact Number"
                                     name="contactNum"
                                     placeholder="Contact Number"
+                                    maxLength={10}
                                     onChange={(e, {value}) => {
                                         this.setState({contactNum: value})
                                         this.props.callBack("contactNum", value, this.props.index, this.props.state.contactNum)
@@ -75,7 +80,7 @@ class PhotoGalleryForm extends React.Component {
                                        name="personalUseAgreement"
                                        onChange={() => {
                                            (this.state.personalUseAgreement === false) ?
-                                               this.props.callBack("personalUseAgreement", true, this.props.index, this.props.state.personalUseAgreement):
+                                               this.props.callBack("personalUseAgreement", true, this.props.index, this.props.state.personalUseAgreement) :
                                                this.props.callBack("personalUseAgreement", false, this.props.index, this.props.state.personalUseAgreement);
                                            (this.state.personalUseAgreement === false) ?
                                                this.setState({personalUseAgreement: true}) :
@@ -86,6 +91,7 @@ class PhotoGalleryForm extends React.Component {
                         <Form.Input label="Comment"
                                     name="comment"
                                     placeholder="Comment"
+                                    maxLength={255}
                                     onChange={(e, {value}) => {
                                         this.setState({comment: value})
                                         this.props.callBack("comment", value, this.props.index, this.props.state.comment)
@@ -96,7 +102,6 @@ class PhotoGalleryForm extends React.Component {
                             <label>Printing Size</label>
 
                             <Form.Radio
-                                // name={"printSize"}
                                 label='8" x 10" Print'
                                 checked={this.props.state.printSize[this.props.index] === '8x10'}
                                 onChange={(e) => {
@@ -106,7 +111,6 @@ class PhotoGalleryForm extends React.Component {
                             />
 
                             <Form.Radio
-                                // name={"printSize"}
                                 label='11" x 14" Print'
                                 checked={this.props.state.printSize[this.props.index] === '11x14'}
                                 onChange={(e) => {
@@ -116,7 +120,6 @@ class PhotoGalleryForm extends React.Component {
                             />
 
                             <Form.Radio
-                                // name={"printSize"}
                                 label='16" x 20" Print'
                                 checked={this.props.state.printSize[this.props.index] === '16x20'}
                                 onChange={(e) => {
@@ -131,7 +134,7 @@ class PhotoGalleryForm extends React.Component {
             </Grid>
 
 
-    )
+        )
     }
 }
 
