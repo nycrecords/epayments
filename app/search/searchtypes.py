@@ -182,7 +182,7 @@ class SearchFunctions(object):
                                    from_=start)
         return search_results
 
-    def marriage_cert(self, dsl, start, size):
+    def marriage_search(self, dsl, start, size):
         search_results = es.search(index='marriage_search',
                                    doc_type='marriage_search',
                                    body=dsl,
@@ -204,3 +204,27 @@ class SearchFunctions(object):
                                    size=size,
                                    from_=start)
         return search_results
+
+    def tax_photo(self, dsl, start, size):
+        search_results = es.search(index='tax_photo',
+                                   doc_type='tax_photo',
+                                   body=dsl,
+                                   _source=[
+                                        'borough',
+                                        'collection',
+                                        'roll',
+                                        'block',
+                                        'lot',
+                                        'building_number',
+                                        'street',
+                                        'description',
+                                        'size',
+                                        'num_copies',
+                                        'mail',
+                                        'contact_number',
+                                        'suborder_number',
+                                   ],
+                                   size=size,
+                                   from_=start)
+        return search_results
+
