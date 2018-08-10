@@ -141,6 +141,7 @@ class NewOrderForm extends React.Component {
                 showTaxForm: [false],
                 showPhotoGalleryForm: [false],
                 showPropertyForm: [false],
+                subOrderList: [0],
             });
         };
         this.handleEmptyStates = () => {
@@ -394,11 +395,10 @@ class NewOrderForm extends React.Component {
     };
 
     render() {
+        console.log(Array.isArray((this.state.showPhotoGalleryForm)))
         console.log('current list is ' + this.state.subOrderList);
         const SubOrders = this.state.subOrderList.map((suborderIndex) =>
-            <div ref={(el) => {
-                this.addSuborder = el;
-            }}>
+
                 <Segment color={'black'} compact key={suborderIndex.toString()}>
                     <SubOrderForm
                         key={suborderIndex}
@@ -412,7 +412,6 @@ class NewOrderForm extends React.Component {
 
                     />
                 </Segment>
-            </div>
         );
 
         return (
@@ -509,16 +508,14 @@ class NewOrderForm extends React.Component {
                                                 onChange={this.handleChange}
                                                 value={this.state.instructions}
                                     />
-                                </Form>
                                 <Button animated positive type="button" floated="left" onClick={() => {
                                     this.handleEmptyStates()
                                     this.handleClick()
                                     this.addSuborder.scrollIntoView({
                                         block: "end",
-                                        inline: "nearest",
-                                        behavior: "instant",
+                                        behavior: "smooth",
                                     });
-                                    // this.addSuborder.scrollTop =this.addSuborder.scrollHeight;
+                                    this.addSuborder.scrollTop =this.addSuborder.scrollHeight;
                                 }}
                                 >
                                     <Button.Content visible>
@@ -534,13 +531,17 @@ class NewOrderForm extends React.Component {
                                 }} content="Clear"/>
                                 <br></br>
                                 <strong>Number of Suborders: {this.index}</strong>
+                                </Form>
                             </Grid.Column>
                             <Grid.Column width={6} id="grid-column-order">
+                                <div ref={(el) => {this.addSuborder = el;}}>
                                 <Form>
+
                                     <Segment.Group>
                                         {SubOrders}
                                     </Segment.Group>
                                 </Form>
+                                </div>
 
                             </Grid.Column>
                         </Grid.Row>

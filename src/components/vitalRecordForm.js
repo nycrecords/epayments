@@ -56,8 +56,6 @@ class VitalRecordForm extends React.Component {
                                     }}
                                     value={this.props.state.year[this.props.index]}
                         />
-                        {/*</Form.Group>*/}
-
                         <Form.Select label="Borough"
                                      required
                                      name="borough"
@@ -80,7 +78,6 @@ class VitalRecordForm extends React.Component {
                                                this.setState({letter: true}) :
                                                this.setState({letter: false});
                                        }}
-                                       vo
                         />
                         <Form.Input label="Comment"
                                     name="comment"
