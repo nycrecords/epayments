@@ -34,7 +34,7 @@ class Home extends React.Component {
                     suborder_count: suborder_count,
                     suborder_two: CHUNK_SIZE,
                 });
-                this.div.scrollTop = this.div.scrollHeight;
+                this.div.scrollTop = 0;
             } else {
                this.setState((prevState)=>{
                    return{

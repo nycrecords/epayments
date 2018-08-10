@@ -24,6 +24,7 @@ from app.models import (
     Events
 )
 from app.search.search import search_queries
+from app.search.searchtypes import SearchFunctions
 
 
 @api.route('/', methods=['GET'])
@@ -81,7 +82,7 @@ def get_orders():
 
 
         # formatting results
-        formatted_orders = [orders['hits']['hits'][i]['_source'] for i in range(len(orders['hits']['hits']))]
+        formatted_orders = SearchFunctions.format_results(orders)
         suborder_total = orders['hits']['total']
         order_total = orders['aggregations']['order_count']['value']
 
