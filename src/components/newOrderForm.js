@@ -436,8 +436,7 @@ class NewOrderForm extends React.Component {
                         </Grid.Row>
 
                         <Grid.Row centered>
-                            <Grid.Column width={7}>
-
+                            <Grid.Column width={5}>
                                 <Form onSubmit={this.handleSubmit}>
                                     <Form.Input label="Billing Name"
                                                 required
@@ -470,29 +469,27 @@ class NewOrderForm extends React.Component {
                                                 value={this.state.addressLine2}
                                     />
 
-                                    <Form.Group>
-                                        <Form.Input label="City"
-                                                    name="city"
-                                                    placeholder="City"
-                                                    maxLength="64"
-                                                    onChange={this.handleChange}
-                                                    value={this.state.city}
-                                        />
-                                        <Form.Input label="State"
-                                                    name="state"
-                                                    placeholder="State"
-                                                    maxLength="64"
-                                                    onChange={this.handleChange}
-                                                    value={this.state.state}
-                                        />
-                                        <Form.Input label="Zip Code"
-                                                    name="zipCode"
-                                                    placeholder="Zip Code"
-                                                    maxLength="5"
-                                                    onChange={this.handleChange}
-                                                    value={this.state.zipCode}
-                                        />
-                                    </Form.Group>
+                                    <Form.Input label="City"
+                                                name="city"
+                                                placeholder="City"
+                                                maxLength="64"
+                                                onChange={this.handleChange}
+                                                value={this.state.city}
+                                    />
+                                    <Form.Input label="State"
+                                                name="state"
+                                                placeholder="State"
+                                                maxLength="64"
+                                                onChange={this.handleChange}
+                                                value={this.state.state}
+                                    />
+                                    <Form.Input label="Zip Code"
+                                                name="zipCode"
+                                                placeholder="Zip Code"
+                                                maxLength="5"
+                                                onChange={this.handleChange}
+                                                value={this.state.zipCode}
+                                    />
 
                                     <Form.Input label="Phone"
                                                 name="phone"
@@ -508,12 +505,7 @@ class NewOrderForm extends React.Component {
                                                 onChange={this.handleChange}
                                                 value={this.state.instructions}
                                     />
-                                    <Container>
-
-                                        <Segment.Group compact>
-                                            {SubOrders}
-                                        </Segment.Group>
-                                    </Container>
+                                    </Form>
                                     <Button animated positive type="button" floated="left" onClick={() => {
                                         this.handleEmptyStates()
                                         this.handleClick()
@@ -531,6 +523,12 @@ class NewOrderForm extends React.Component {
                                         this.clearSelection()
                                         this.subOrderForm.clearSelection()
                                     }} content="Clear"/>
+                            </Grid.Column>
+                            <Grid.Column width={6} id="grid-column-order">
+                                <Form>
+                                    <Segment.Group>
+                                        {SubOrders}
+                                    </Segment.Group>
                                 </Form>
                             </Grid.Column>
                         </Grid.Row>

@@ -19,7 +19,7 @@ class VitalRecordForm extends React.Component {
             <Grid>
                 <Grid.Row>
                     <Grid.Column>
-                        <Form.Group>
+                        {/*<Form.Group>*/}
                             <Form.Input label="Month"
                                         name="month"
                                         placeholder="Month"
@@ -55,7 +55,7 @@ class VitalRecordForm extends React.Component {
                                         }}
                                         value={this.props.state.year[this.props.index]}
                             />
-                        </Form.Group>
+                        {/*</Form.Group>*/}
 
                         <Form.Select label="Borough"
                                      required
@@ -79,7 +79,7 @@ class VitalRecordForm extends React.Component {
                                                this.setState({letter: true}) :
                                                this.setState({letter: false});
                                        }}
-                                       checked={this.props.state.letter[this.props.index]}
+                                       vo
                         />
                         <Form.Input label="Comment"
                                     name="comment"

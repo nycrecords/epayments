@@ -21,7 +21,7 @@ class BirthSearchForm extends React.Component {
             <Grid>
                 <Grid.Row>
                     <Grid.Column>
-                        <Form.Group>
+                        {/*<Form.Group>*/}
                             <Form.Input label="First Name"
                                         name="firstName"
                                         placeholder="First Name"
@@ -49,7 +49,7 @@ class BirthSearchForm extends React.Component {
                                         }}
                                         value={this.props.state.lastName[this.props.index]}
                             />
-                        </Form.Group>
+                        {/*</Form.Group>*/}
                         <Form.Input label="Birth Place"
                                     name="birthPlace"
                                     placeholder="BirthPlace"

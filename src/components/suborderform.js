@@ -84,7 +84,7 @@ class SubOrderForm extends React.Component {
                 showPropertyForm: false,
 
             })
-        }
+        };
 
     }
 
