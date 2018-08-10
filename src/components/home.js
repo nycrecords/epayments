@@ -34,7 +34,7 @@ class Home extends React.Component {
                     suborder_count: suborder_count,
                     suborder_two: CHUNK_SIZE,
                 });
-                this.div.scrollTop =0;
+                this.div.scrollTop = this.div.scrollHeight;
             } else {
                this.setState((prevState)=>{
                    return{
@@ -213,7 +213,6 @@ class Home extends React.Component {
                                         (<p>No Results</p>) : (<p>End of Results</p>)}
                                     </div>)
                                 }
-
                             </div>
 
                         </Grid.Column>

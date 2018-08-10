@@ -36,7 +36,7 @@ def create_customers_docs():
         operations.append({
             '_op_type': 'create',
             '_id': q.id,
-            'id':q.id,
+            'id': q.id,
             'billing_name': q.billing_name,
             'email': q.email,
             'shipping_name': q.shipping_name,

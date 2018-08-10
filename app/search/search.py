@@ -13,6 +13,7 @@ from app.search.index import (create_suborder_index, create_suborder_docs,
                               create_tax_photo_docs, create_tax_photo_index,
                               create_photo_gallery_docs, create_photo_gallery_index,
                               create_property_card_index, create_property_card_docs)
+from app.search.searchtypes import SearchFunctions
 
 
 def recreate():
@@ -103,42 +104,15 @@ def search_queries(order_number=None,
     }
 
     dsl_gen = DSLGenerator(query_fields=format_queries(query_field), date_range=format_date_range(date_range))
-    dsl = dsl_gen.no_query()
+    dsl = dsl_gen.match_all()
 
     if any(query_field.values()) or any(date_range.values()):
         dsl = dsl_gen.search()
 
     # Search query
-    if search_type == 'search':
-        search_results = es.search(index='suborders',
-                                   doc_type='suborders',
-                                   body=dsl,
-                                   _source=[
-                                       'order_number',
-                                       'suborder_number',
-                                       'date_received',
-                                       'date_submitted',
-                                       'billing_name',
-                                       'customer_email',
-                                       'order_type',
-                                       'current_status',
-                                   ],
-                                   size=size,
-                                   from_=start,
-                                   )
-        return search_results
-    elif search_type == 'print':
-        search_results = es.search(index='suborders',
-                                   doc_type='suborders',
-                                   body=dsl,
-                                   _source=[
-                                       'suborder_number',
-                                       'order_type',
-                                   ],
-                                   size=size,
-                                   from_=start,
-                                   )
-        return search_results
+    search = SearchFunctions()
+
+    return search.search_by(search_type, dsl, start, size)
 
 
 def format_queries(query_fields):
@@ -172,6 +146,7 @@ def format_date_range(date_range):
             date_range[a] = datetime.strptime(date_range[a], '%m/%d/%Y').strftime(DATETIME_FORMAT)
 
     return date_range
+
 
 class DSLGenerator(object):
     """Class for generating DSL body for searching"""
@@ -251,7 +226,7 @@ class DSLGenerator(object):
 
         return self.__query
 
-    def no_query(self):
+    def match_all(self):
         """
         Generates a search query that searches all
         :return: prepended method __must_query
