@@ -17,9 +17,6 @@ def create_property_card_index():
                         'suborder_number': {
                             'type': "keyword"
                         },
-                        'image_id': {
-                            'type': 'text'
-                        }
 
                     }
                 }
@@ -40,19 +37,15 @@ def create_property_card_docs():
             '_op_type': 'create',
             '_id': q.id,
             'id': q.id,
-            'certificate_number': q.certificate_number,
-            'groom_last_name': q.groom_last_name,
-            'groom_first_name': q.groom_first_name,
-            'bride_last_name': q.bride_last_name,
-            'bride_first_name': q.bride_first_name,
-            'num_copies': q.num_copies,
-            'month': q.month,
-            'day': q.day,
-            'years': q.years if q.years is not None else "",
-            'marriage_place': q.marriage_place,
-            'borough': q.borough if q.borough is not None else "",
-            'letter': q.letter,
-            'comment': q.comment,
+            "borough": q.borough,
+            "block": q.block,
+            "lot": q.lot,
+            "building_number": q.building_number,
+            "street": q.street,
+            "description": q.description,
+            "certified": q.certified,
+            "mail": q.mail,
+            "contact_info": q.contact_info,
             'suborder_number': q.suborder_number
         })
 

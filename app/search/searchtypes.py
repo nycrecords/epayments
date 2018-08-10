@@ -228,3 +228,42 @@ class SearchFunctions(object):
                                    from_=start)
         return search_results
 
+    def photo_gallery(self, dsl, start, size):
+        search_results = es.search(index='photo_gallery',
+                                   doc_type='photo_gallery',
+                                   body=dsl,
+                                   _source=[
+                                        "image_id",
+                                        "description",
+                                        "additional_description",
+                                        "size",
+                                        "num_copies",
+                                        "mail",
+                                        "contact_number",
+                                        "personal_use_agreement",
+                                        "comment",
+                                        "suborder_number",
+                                   ],
+                                   size=size,
+                                   from_=start)
+        return search_results
+
+    def property_card(self, dsl, start, size):
+        search_results = es.search(index='property_card',
+                                   doc_type='property_card',
+                                   body=dsl,
+                                   _source=[
+                                        "borough",
+                                        "block",
+                                        "lot",
+                                        "building_number",
+                                        "street",
+                                        "description",
+                                        "certified",
+                                        "mail",
+                                        "contact_info",
+                                        'suborder_number',
+                                   ],
+                                   size=size,
+                                   from_=start)
+        return search_results
