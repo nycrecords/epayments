@@ -68,21 +68,22 @@ class BatchStatusModal extends React.Component {
             e.preventDefault();
             console.log(this.props.queueForUpdate);
             console.log(this.props.queueForUpdateBoolean);
-            csrfFetch('api/v1.0/statuses/', {
+            csrfFetch('api/v1.0/statuses/new', {
                 method: "POST",
                 body: JSON.stringify({
-                    queueForUpdate: this.props.queueForUpdate,
-                    queueForUpdateBoolean: this.props.queueForUpdateBoolean,
+                    queue_for_update: this.props.queueForUpdate,
+                    queue_for_update_boolean: this.props.queueForUpdateBoolean,
                     comment: this.state.comment,
                     new_status: this.state.new_status
                 })
             }).then((response) => {
+                console.log(response);
                 return response.json()
             }).then((json) => {
+                this.setState({comment: '', new_status: this.state.new_status});
                 for(var i = 0; i < this.props.queueForUpdateBoolean.length; i++) {
                     if(this.props.queueForUpdateBoolean[i]) {
                         this.props.updateStatus(this.props.queueForUpdate[i], this.state.new_status);
-                        this.setState({comment: '', new_status: this.state.new_status});
                     }
                 }
             });
@@ -101,7 +102,7 @@ class BatchStatusModal extends React.Component {
                     <Modal.Content>
                         <Modal.Description>
                             <Header>
-                                <p>Current Status - {this.props.queueForUpdate}</p>
+                                <p>Current Suborders -  { this.props.queueForUpdate.toString()}</p>
                                 <Form onSubmit={this.handleSubmit}>
                                     <Form.Select label='Change statuses to' fluid selection options={this.statuses}
                                                  onChange={(e, {value}) => {
