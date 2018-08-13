@@ -33,6 +33,9 @@ from app.models import (
 )
 
 from app.search.search import search_queries
+from app.search.searchtypes import SearchFunctions
+
+import time
 
 
 def _order_query_filters(order_number, suborder_number, order_type, status, billing_name, user, date_received_start,
@@ -225,6 +228,7 @@ def _print_orders(search_params):
     date_submitted_start = search_params.get("date_submitted_start")
     date_submitted_end = search_params.get("date_submitted_end")
 
+    time1 = time.time()
     suborders = search_queries(order_number,
                                suborder_number,
                                order_type,
@@ -239,7 +243,7 @@ def _print_orders(search_params):
                                "print")
 
     # Only want suborder_number, and order type
-    suborder = [suborders['hits']['hits'][i]['_source'] for i in range(suborders['hits']['total'])]
+    suborder = SearchFunctions.format_results(suborders)
 
     order_type_template_handler = {
         "Birth Search": 'birth_search.html',
@@ -253,33 +257,33 @@ def _print_orders(search_params):
         "Property Card": 'property_card.html',
     }
 
-    order_type_models_handler = {
-        "Birth Search": BirthSearch,
-        "Birth Cert": BirthCertificate,
-        "Marriage Search": MarriageSearch,
-        "Marriage Cert": MarriageCertificate,
-        "Death Search": DeathSearch,
-        "Death Cert": DeathCertificate,
-        "Tax Photo": TaxPhoto,
-        "Photo Gallery": PhotoGallery,
-        "Property Card": PropertyCard,
-    }
-
     html = ''
 
     for item in suborder:
-        order_info = order_type_models_handler[item['order_type']].query.filter_by(
-            suborder_number=item['suborder_number']).one().serialize
-        order_info['customer'] = item.order.customer.serialize
-        order_info['order'] = item.order.serialize
+        order_info = SearchFunctions.format_first_result(search_queries(
+            suborder_number=item['suborder_number'],
+            size=ELASTICSEARCH_MAX_SIZE,
+            search_type=item['order_type']
+        ))
 
-        order_info['order_type'] = item.order_type
+        order_info['customer'] = SearchFunctions.format_first_result(search_queries(
+            order_number=item['order_number'],
+            size=ELASTICSEARCH_MAX_SIZE,
+            search_type='customer'
+        ))
+        order_info['order'] = SearchFunctions.format_first_result(search_queries(
+            order_number=item['order_number'],
+            size=ELASTICSEARCH_MAX_SIZE,
+            search_type='order'
+        ))
+
+        order_info['order_type'] = item['order_type']
         html += render_template("orders/{}".format(order_type_template_handler[item['order_type']]),
                                 order_info=order_info)
 
-    # filter_args = _order_query_filters(order_number, suborder_number, order_type, status, billing_name, user,
-    #                                    date_received_start,
-    #                                    date_received_end)
+    filter_args = _order_query_filters(order_number, suborder_number, order_type, status, billing_name, user,
+                                       date_received_start,
+                                       date_received_end)
     #
     # suborders = Suborders.query.join(Orders, Customers).filter(*filter_args).all()
     #
@@ -322,7 +326,8 @@ def _print_orders(search_params):
     filename = 'order_sheets_{username}_{time}.pdf'.format(username=current_user.email, time=datetime.now().strftime("%Y%m%d-%H%M%S"))
     with open(join(current_app.static_folder, 'files', filename), 'w+b') as file_:
         CreatePDF(src=html, dest=file_)
-
+    time2 = time.time()
+    print(time2 - time1)
     return url_for('static', filename='files/{}'.format(filename), _external=True)
 
 

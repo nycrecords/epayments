@@ -4,11 +4,26 @@ from app import es
 class SearchFunctions(object):
 
     def search_by(self, search_type, dsl, start, size):
-        method = getattr(self, search_type)
+        order_type_handler = {
+                "Birth Search": 'birth_search',
+                "Birth Cert": 'birth_cert',
+                "Marriage Search": 'marriage_search',
+                "Marriage Cert": 'marriage_cert',
+                "Death Search": 'death_search',
+                "Death Cert": 'death_cert',
+                "Tax Photo": 'tax_photo',
+                "Photo Gallery": 'photo_gallery',
+                "Property Card": 'property_card',
+                "print": 'print',
+                'search': 'search',
+                "customer": 'customers',
+                'order': 'orders'
+                }
+        method = getattr(self, order_type_handler[search_type])
         return method(dsl, start, size)
 
     def search(self, dsl, start, size):
-        search_results = es.search(index ='suborders',
+        search_results = es.search(index='suborders',
                                    doc_type='suborders',
                                    body=dsl,
                                    _source=[
@@ -32,6 +47,24 @@ class SearchFunctions(object):
                                    _source=[
                                        'suborder_number',
                                        'order_type',
+                                       'order_number'
+                                   ],
+                                   size=size,
+                                   from_=start)
+        return search_results
+
+    def orders(self, dsl, start, size):
+        search_results = es.search(index='orders',
+                                   doc_type='orders',
+                                   body=dsl,
+                                   _source=[
+                                        'order_number',
+                                        'date_submitted',
+                                        'date_received',
+                                        'confirmation_message',
+                                        'order_types',
+                                        'client_data',
+                                        'multiple_items',
                                    ],
                                    size=size,
                                    from_=start)
@@ -271,3 +304,6 @@ class SearchFunctions(object):
     def format_results(other_word_for_not_formatted_results):
         results_len = len(other_word_for_not_formatted_results['hits']['hits'])
         return [other_word_for_not_formatted_results['hits']['hits'][i]["_source"] for i in range(results_len)]
+
+    def format_first_result(unformatted_results):
+        return unformatted_results['hits']['hits'][0]["_source"]

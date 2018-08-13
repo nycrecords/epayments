@@ -9,3 +9,4 @@ from .marriage_cert import create_marriage_cert_docs, create_marriage_cert_index
 from .tax_photo import create_tax_photo_docs, create_tax_photo_index
 from .photo_gallery import create_photo_gallery_docs, create_photo_gallery_index
 from .property_card import create_property_card_docs, create_property_card_index
+from .customers import create_customers_docs, create_customers_index

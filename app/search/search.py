@@ -12,7 +12,8 @@ from app.search.index import (create_suborder_index, create_suborder_docs,
                               create_marriage_cert_docs, create_marriage_cert_index,
                               create_tax_photo_docs, create_tax_photo_index,
                               create_photo_gallery_docs, create_photo_gallery_index,
-                              create_property_card_index, create_property_card_docs)
+                              create_property_card_index, create_property_card_docs,
+                              create_customers_docs,create_customers_index)
 from app.search.searchtypes import SearchFunctions
 
 
@@ -36,6 +37,7 @@ def create_index():
     create_tax_photo_index()
     create_photo_gallery_index()
     create_property_card_index()
+    create_customers_index()
 
 
 def create_docs():
@@ -51,7 +53,7 @@ def create_docs():
     create_tax_photo_docs()
     create_photo_gallery_docs()
     create_property_card_docs()
-
+    create_customers_docs()
 
 def delete_doc(suborder_id):
     """Delete a specific doc in the index"""
@@ -103,7 +105,9 @@ def search_queries(order_number=None,
         'date_submitted_end': date_submitted_end
     }
 
-    dsl_gen = DSLGenerator(query_fields=format_queries(query_field), date_range=format_date_range(date_range))
+    dsl_gen = DSLGenerator(query_fields=format_queries(query_field),
+                           date_range=format_date_range(date_range),
+                           search_type=search_type)
     dsl = dsl_gen.match_all()
 
     if any(query_field.values()) or any(date_range.values()):
@@ -150,7 +154,7 @@ def format_date_range(date_range):
 
 class DSLGenerator(object):
     """Class for generating DSL body for searching"""
-    def __init__(self, query_fields, date_range):
+    def __init__(self, query_fields, date_range, search_type):
         """
         Constructor for class
 
@@ -160,6 +164,7 @@ class DSLGenerator(object):
 
         self.__query_fields = query_fields
         self.__date_range = date_range
+        self.__search_type = search_type
 
         self.__filters = []
         self.__sort_filters = []
@@ -262,29 +267,38 @@ class DSLGenerator(object):
         Dictionary header of DSL body
         :return: nested dictionary
         """
-        return{
-            'sort': [
-                '_score',
+        if self.__search_type == 'search' or self.__search_type == 'print':
+            return{
+                'sort': [
+                    '_score',
 
-                {'date_received': 'desc'} if self.__query_fields['current_status'] else {'date_received': 'asc'}
-                if self.__date_range['date_received_start'] else {'date_received': 'desc'},
+                    {'date_received': 'desc'} if self.__query_fields['current_status'] else {'date_received': 'asc'}
+                    if self.__date_range['date_received_start'] else {'date_received': 'desc'},
 
-                {'date_submitted': 'asc'},
-            ],
-            'query': {
-                'bool': {
-                    'must': self.__get_filters()
+                    {'date_submitted': 'asc'},
+                ],
+                'query': {
+                    'bool': {
+                        'must': self.__get_filters()
+                    },
                 },
-            },
-            "size": 0,
-            "aggs": {
-                "order_count": {
-                    "cardinality": {
-                        "field": "order_number"
+                "size": 0,
+                "aggs": {
+                    "order_count": {
+                        "cardinality": {
+                            "field": "order_number"
+                        }
                     }
                 }
             }
-        }
+        else:
+            return{
+                'query': {
+                    'bool': {
+                        'must': self.__get_filters()
+                    }
+                }
+            }
 
     def __get_filters(self):
         """

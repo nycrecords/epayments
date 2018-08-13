@@ -92,7 +92,7 @@ def get_orders():
 
     else:
         orders = search_queries(date_received_start=date.today().strftime('%m/%d/%Y'))
-        formatted_orders = [orders['hits']['hits'][i]['_source'] for i in range(len(orders['hits']['hits']))]
+        formatted_orders = SearchFunctions.format_results(orders)
         suborder_total = orders['hits']['total']
         order_total = orders['aggregations']['order_count']['value']
 
