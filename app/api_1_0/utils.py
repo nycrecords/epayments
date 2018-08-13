@@ -1,4 +1,5 @@
 import csv
+import pdfkit
 from flask import render_template, current_app, url_for
 from flask_login import current_user
 from sqlalchemy import asc, or_, and_
@@ -228,7 +229,6 @@ def _print_orders(search_params):
     date_submitted_start = search_params.get("date_submitted_start")
     date_submitted_end = search_params.get("date_submitted_end")
 
-    time1 = time.time()
     suborders = search_queries(order_number,
                                suborder_number,
                                order_type,
@@ -260,6 +260,7 @@ def _print_orders(search_params):
     html = ''
 
     for item in suborder:
+
         order_info = SearchFunctions.format_first_result(search_queries(
             suborder_number=item['suborder_number'],
             size=ELASTICSEARCH_MAX_SIZE,
@@ -281,51 +282,12 @@ def _print_orders(search_params):
         html += render_template("orders/{}".format(order_type_template_handler[item['order_type']]),
                                 order_info=order_info)
 
-    filter_args = _order_query_filters(order_number, suborder_number, order_type, status, billing_name, user,
-                                       date_received_start,
-                                       date_received_end)
-    #
-    # suborders = Suborders.query.join(Orders, Customers).filter(*filter_args).all()
-    #
-    # order_type_template_handler = {
-    #     order_types.BIRTH_SEARCH: 'birth_search.html',
-    #     order_types.BIRTH_CERT: 'birth_cert.html',
-    #     order_types.MARRIAGE_SEARCH: 'marriage_search.html',
-    #     order_types.MARRIAGE_CERT: 'marriage_cert.html',
-    #     order_types.DEATH_SEARCH: 'death_search.html',
-    #     order_types.DEATH_CERT: 'death_cert.html',
-    #     order_types.TAX_PHOTO: 'tax_photo.html',
-    #     order_types.PHOTO_GALLERY: 'photo_gallery.html',
-    #     order_types.PROPERTY_CARD: 'property_card.html',
-    # }
-    #
-    # order_type_models_handler = {
-    #     order_types.BIRTH_SEARCH: BirthSearch,
-    #     order_types.BIRTH_CERT: BirthCertificate,
-    #     order_types.MARRIAGE_SEARCH: MarriageSearch,
-    #     order_types.MARRIAGE_CERT: MarriageCertificate,
-    #     order_types.DEATH_SEARCH: DeathSearch,
-    #     order_types.DEATH_CERT: DeathCertificate,
-    #     order_types.TAX_PHOTO: TaxPhoto,
-    #     order_types.PHOTO_GALLERY: PhotoGallery,
-    #     order_types.PROPERTY_CARD: PropertyCard,
-    # }
-    #
-    # html = ''
-    #
-    # for item in suborders:
-    #     order_info = order_type_models_handler[item.order_type].query.filter_by(
-    #         suborder_number=item.id).one().serialize
-    #     order_info['customer'] = item.order.customer.serialize
-    #     order_info['order'] = item.order.serialize
-    #
-    #     order_info['order_type'] = item.order_type
-    #     html += render_template("orders/{}".format(order_type_template_handler[item.order_type]),
-    #                             order_info=order_info)
-
+    time1 = time.time()
     filename = 'order_sheets_{username}_{time}.pdf'.format(username=current_user.email, time=datetime.now().strftime("%Y%m%d-%H%M%S"))
+
     with open(join(current_app.static_folder, 'files', filename), 'w+b') as file_:
         CreatePDF(src=html, dest=file_)
+
     time2 = time.time()
     print(time2 - time1)
     return url_for('static', filename='files/{}'.format(filename), _external=True)
