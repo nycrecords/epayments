@@ -108,7 +108,6 @@ class SubOrderForm extends React.Component {
                                     onClick={() => {
                                         this.props.deleteSuborder(this.props.index)
                                     }}>
-                                {/*<Icon name="remove"/>*/}
                             </Button>} content={"Remove"}
                         />
                         <h4>

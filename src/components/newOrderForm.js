@@ -84,65 +84,86 @@ class NewOrderForm extends React.Component {
         };
         this.handleChange = this.handleChange.bind(this);
         this.clearSelection = () => {
-            this.setState({
-                billingName: '',
-                email: '',
-                addressLine1: '',
-                addressLine2: '',
-                city: '',
-                certified: [''],
-                state: '',
-                zipCode: '',
-                phone: '',
-                instructions: '',
-                orderType: [''],
-                deathPlace: [''],
-                cemetery: [''],
-                firstName: [''],
-                lastName: [''],
-                birthPlace: [''],
-                gender: [''],
-                fatherName: [''],
-                motherName: [''],
-                middleName: [''],
-                certificateNum: [''],
-                groomLastName: [''],
-                groomFirstName: [''],
-                brideLastName: [''],
-                brideFirstName: [''],
-                month: [''],
-                day: [''],
-                year: [''],
-                marriagePlace: [''],
-                letter: [''],
-                block: [''],
-                lot: [''],
-                roll: [''],
-                borough: [''],
-                buildingNum: [''],
-                street: [''],
-                mail: [false],
-                contactNum: [''],
-                imgId: [''],
-                imgTitle: [''],
-                comment: [''],
-                personalUseAgreement: [false],
-                addDescription: [''],
-                collection: [''],
-                printSize: [''],
-                numCopies: [''],
-                status: [''],
-                showBirthCert: [false],
-                showBirthSearch: [false],
-                showDeathCert: [false],
-                showDeathSearch: [false],
-                showMarriageCert: [false],
-                showMarriageSearch: [false],
-                showTaxForm: [false],
-                showPhotoGalleryForm: [false],
-                showPropertyForm: [false],
-                subOrderList: [0],
-            });
+            swal("Clearing Form", "Are you sure you want to do this?", "warning", {
+                buttons: {
+                    no: {
+                        text: "No",
+                        value: "no",
+                    },
+                    yes: {
+                        text: "Yes",
+                        value: true,
+                    },
+                },
+            })
+                .then((value) => {
+                    if (value === "no") {
+                        return;
+                    }
+                    else {
+                        this.index = 1;
+                        this.setState({
+                            billingName: '',
+                            email: '',
+                            addressLine1: '',
+                            addressLine2: '',
+                            city: '',
+                            certified: [''],
+                            state: '',
+                            zipCode: '',
+                            phone: '',
+                            instructions: '',
+                            orderType: [''],
+                            deathPlace: [''],
+                            cemetery: [''],
+                            firstName: [''],
+                            lastName: [''],
+                            birthPlace: [''],
+                            gender: [''],
+                            fatherName: [''],
+                            motherName: [''],
+                            middleName: [''],
+                            certificateNum: [''],
+                            groomLastName: [''],
+                            groomFirstName: [''],
+                            brideLastName: [''],
+                            brideFirstName: [''],
+                            month: [''],
+                            day: [''],
+                            year: [''],
+                            marriagePlace: [''],
+                            letter: [''],
+                            block: [''],
+                            lot: [''],
+                            roll: [''],
+                            borough: [''],
+                            buildingNum: [''],
+                            street: [''],
+                            mail: [false],
+                            contactNum: [''],
+                            imgId: [''],
+                            imgTitle: [''],
+                            comment: [''],
+                            personalUseAgreement: [false],
+                            addDescription: [''],
+                            collection: [''],
+                            printSize: [''],
+                            numCopies: [''],
+                            status: [''],
+                            showBirthCert: [false],
+                            showBirthSearch: [false],
+                            showDeathCert: [false],
+                            showDeathSearch: [false],
+                            showMarriageCert: [false],
+                            showMarriageSearch: [false],
+                            showTaxForm: [false],
+                            showPhotoGalleryForm: [false],
+                            showPropertyForm: [false],
+                            subOrderList: [0],
+                        });
+
+                    }
+                });
         };
         this.handleEmptyStates = () => {
             /*Add empty index to list whenever additional suborders are prompted
@@ -332,7 +353,6 @@ class NewOrderForm extends React.Component {
         this.setState({
             [dataFromChild]: newState
         });
-        console.log("State is : " + state);
 
 
     };
@@ -391,27 +411,24 @@ class NewOrderForm extends React.Component {
         this.deleteSuborderValues(index, this.state.showPhotoGalleryForm, "showPhotoGalleryForm")
         this.deleteSuborderValues(index, this.state.showPropertyForm, "showPropertyForm")
         this.index--;
-        console.log(this.state)
     };
 
     render() {
-        console.log(Array.isArray((this.state.showPhotoGalleryForm)))
-        console.log('current list is ' + this.state.subOrderList);
         const SubOrders = this.state.subOrderList.map((suborderIndex) =>
 
-                <Segment color={'black'} compact key={suborderIndex.toString()}>
-                    <SubOrderForm
-                        key={suborderIndex}
-                        index={suborderIndex}
-                        callBack={this.callBack}
-                        state={this.state}
-                        ref={instance => {
-                            this.subOrderForm = instance
-                        }}
-                        deleteSuborder={this.deleteSuborder}
+            <Segment color={'black'} compact key={suborderIndex.toString()}>
+                <SubOrderForm
+                    key={suborderIndex}
+                    index={suborderIndex}
+                    callBack={this.callBack}
+                    state={this.state}
+                    ref={instance => {
+                        this.subOrderForm = instance
+                    }}
+                    deleteSuborder={this.deleteSuborder}
 
-                    />
-                </Segment>
+                />
+            </Segment>
         );
 
         return (
@@ -508,39 +525,41 @@ class NewOrderForm extends React.Component {
                                                 onChange={this.handleChange}
                                                 value={this.state.instructions}
                                     />
-                                <Button animated positive type="button" floated="left" onClick={() => {
-                                    this.handleEmptyStates()
-                                    this.handleClick()
-                                    this.addSuborder.scrollIntoView({
-                                        block: "end",
-                                        behavior: "smooth",
-                                    });
-                                    this.addSuborder.scrollTop =this.addSuborder.scrollHeight;
-                                }}
-                                >
-                                    <Button.Content visible>
-                                        <Icon name='add'/>
-                                    </Button.Content>
-                                    <Button.Content hidden>
-                                        Additional Order
-                                    </Button.Content>
-                                </Button>
-                                <Button type='submit' positive floated="left" content="Place Order"/>
-                                <Button type="reset" negative onClick={() => {
-                                    this.clearSelection(), this.subOrderForm.clearSelection()
-                                }} content="Clear"/>
-                                <br></br>
-                                <strong>Number of Suborders: {this.index}</strong>
+                                    <Button animated positive type="button" floated="left" onClick={() => {
+                                        this.handleEmptyStates()
+                                        this.handleClick()
+                                        this.addSuborder.scrollIntoView({
+                                            block: "end",
+                                            behavior: "smooth",
+                                        });
+                                        this.addSuborder.scrollTop = this.addSuborder.scrollHeight;
+                                    }}
+                                    >
+                                        <Button.Content visible>
+                                            <Icon name='add'/>
+                                        </Button.Content>
+                                        <Button.Content hidden>
+                                            Additional Order
+                                        </Button.Content>
+                                    </Button>
+                                    <Button type='submit' positive floated="left" content="Place Order"/>
+                                    <Button type="reset" negative onClick={() => {
+                                        this.clearSelection(), this.subOrderForm.clearSelection()
+                                    }} content="Clear"/>
+                                    <br></br>
+                                    <strong>Number of Suborders: {this.index}</strong>
                                 </Form>
                             </Grid.Column>
                             <Grid.Column width={6} id="grid-column-order">
-                                <div ref={(el) => {this.addSuborder = el;}}>
-                                <Form>
+                                <div ref={(el) => {
+                                    this.addSuborder = el;
+                                }}>
+                                    <Form>
 
-                                    <Segment.Group>
-                                        {SubOrders}
-                                    </Segment.Group>
-                                </Form>
+                                        <Segment.Group>
+                                            {SubOrders}
+                                        </Segment.Group>
+                                    </Form>
                                 </div>
 
                             </Grid.Column>
