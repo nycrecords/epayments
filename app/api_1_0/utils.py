@@ -1,5 +1,4 @@
 import csv
-import pdfkit
 from flask import render_template, current_app, url_for
 from flask_login import current_user
 from sqlalchemy import asc, or_, and_
