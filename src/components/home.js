@@ -8,6 +8,8 @@ import Order from "./order";
 import LoginModal from "./login_modal";
 import {csrfFetch, handleFetchErrors} from "../utils/fetch"
 import NewOrderForm from "./newOrderForm";
+import StatusModal from "./statusModal";
+import BatchStatusModal from "./batchStatusModal"
 
 
 class Home extends React.Component {
@@ -21,21 +23,21 @@ class Home extends React.Component {
             loading: true,
             showCSVButton: false,
             queueForUpdate: [],
-            queueForUpdateBoolean: [false]
+            queueForUpdateBoolean: []
 
 
         };
-        this.index = 0;
-        this.addStatusQueue = (order) => {
-            console.log("addStatusQueue triggers");
-            console.log(this.state.queueForUpdateBoolean === false);
-            (this.state.queueForUpdateBoolean === false) ?
-                this.setState({queueForUpdateBoolean: true}) :
-                this.setState({queueForUpdateBoolean: false});
-            // if(this.state.queueForUpdateBoolean === true && this.state.queueForUpdate.includes(order) == false ){
-            //     this.setState({queueForUpdate: this.state.queueForUpdate.concat(order)});
-            // }
-            // console.log(this.state.queueForUpdate);
+        this.addStatusQueue = (order, index) => {
+            // console.log("addStatusQueue triggers");
+            // console.log(this.state.queueForUpdateBoolean === false);
+            (this.state.queueForUpdateBoolean[index] === false || this.state.queueForUpdateBoolean[index] === "" ||
+                this.state.queueForUpdateBoolean === undefined) ?
+                this.handleListChange("queueForUpdateBoolean", true, this.state.queueForUpdateBoolean, index) :
+                this.handleListChange("queueForUpdateBoolean", false, this.state.queueForUpdateBoolean, index);
+            if (this.state.queueForUpdateBoolean[index] === true) {
+                this.handleListChange("queueForUpdate", order.suborder_number, this.state.queueForUpdate, index);
+                console.log(this.state.queueForUpdate)
+            }
 
         }
 
@@ -84,13 +86,6 @@ class Home extends React.Component {
             this.setLoadingState(true);
             this.orderForm.submitFormData(e, 'small_labels')
         };
-        this.updateMultipleStatus = (e) => {
-            {/*<StatusModal current_status={this.props.current_status}*/}
-                             {/*suborder_number={this.props.suborder_number}*/}
-                             {/*updateStatus={this.props.updateStatus}*/}
-                {/*/>*/}
-
-        };
 
         this.logOut = () => {
             this.setLoadingState(true);
@@ -111,6 +106,13 @@ class Home extends React.Component {
         };
     };
 
+    handleListChange = (name, value, state, index) => {
+        let newState = state.slice()
+        newState[index] = value
+        this.setState({
+            [name]: newState
+        });
+    }
     toggleCSV = (visible) => {
         this.setState({showCSVButton: visible});
     };
@@ -146,21 +148,23 @@ class Home extends React.Component {
 
     render() {
         const orderRows = this.state.all_orders.map((order) =>
-                <Order
-                    key={order.suborder_number}
-                    order_number={order.order_number}
-                    suborder_number={order.suborder_number}
-                    order_type={order.order_type}
-                    billing_name={order.billing_name}
-                    date_received={order.date_received.slice(0, -9)}
-                    current_status={order.current_status}
-                    updateStatus={this.updateStatus}
-                    addStatusQueue={this.addStatusQueue}
-                    order={order}
-                    queueForUpdateBoolean={this.state.queueForUpdateBoolean}
-                    queueForUpdate={this.state.queueForUpdate}
+            <Order
+                key={order.suborder_number}
 
-                />
+                order_number={order.order_number}
+                suborder_number={order.suborder_number}
+                order_type={order.order_type}
+                billing_name={order.billing_name}
+                date_received={order.date_received.slice(0, -9)}
+                current_status={order.current_status}
+                updateStatus={this.updateStatus}
+                addStatusQueue={this.addStatusQueue}
+                order={order}
+                queueForUpdateBoolean={this.state.queueForUpdateBoolean}
+                queueForUpdate={this.state.queueForUpdate}
+                index={this.state.all_orders.indexOf(order)}
+
+            />
         );
 
         const Home = () => (
@@ -199,7 +203,10 @@ class Home extends React.Component {
                                     <Button content='Order Sheets' onClick={this.printOrderSheet}/>
                                     <Button content='Big Labels' onClick={this.printBigLabels}/>
                                     <Button content='Small Labels' onClick={this.printSmallLabels}/>
-                                    <Button content='Update Multiple Status' onClick={this.updateMultipleStatus}/>
+
+                                    <BatchStatusModal queueForUpdateBoolean={this.state.queueForUpdateBoolean}
+                                                      queueForUpdateBoolean={this.state.queueForUpdate}
+                                                      updateStatus={this.updateStatus}/>
 
 
                                 </Button.Group>
@@ -211,6 +218,7 @@ class Home extends React.Component {
                                 <Divider clearing/>
                             </div>
                             {orderRows}
+
 
                         </Grid.Column>
                     </Grid>

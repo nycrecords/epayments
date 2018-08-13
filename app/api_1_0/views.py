@@ -390,6 +390,45 @@ def status_change(suborder_number):
         return jsonify(status_code=status_code), 200
 
 
+@api.route('/statuses/', methods=['GET', 'POST'])
+@login_required
+def batch_status_change():
+    """
+    GET: returns { current_status}, 200
+    POST: {queueForUpdate, queueForUpdateBoolean, new_status, comment}
+
+    Status Table
+    - ID - Integer
+    - Status - ENUM
+        1. Received || Set to this by default
+        2. Processing
+            a)Found
+            b)Printed
+        3. Mailed/Pickup
+        4. Not_Found
+           a)Letter_generated
+           b)Undeliverable - Cant move down the line
+        5. Done - End of status changes
+    :return: {status_id, suborder_number, status, comment}, 201
+    """
+    if request.method == 'POST':
+        json = request.get_json(force=True)
+        comment = json.get("comment")
+        new_status = json.get("new_status")
+        queue_for_update = json.get("queueForUpdate")
+        queue_for_update_boolean = json.get("queueForUpdateBoolean")
+
+        for index in range(len(queue_for_update_boolean)):
+
+
+        """
+            POST: {queueForUpdate, queueForUpdateBoolean, new_status, comment};
+            returns: {status_id, suborder_number, status, comment}, 201
+        """
+        status_code = update_status(suborder_number, comment, new_status)
+        return jsonify(status_code=status_code), 200
+
+
 @api.route('/history/<string:suborder_number>', methods=['GET'])
 @login_required
 def history(suborder_number):

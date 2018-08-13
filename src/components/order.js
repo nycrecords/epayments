@@ -29,9 +29,10 @@ class Order extends React.Component {
                 <br/>
                 <History suborder_number={this.props.suborder_number}/>
                 <Checkbox label="Queue For Status Update"
-                          checked={this.props.queueForUpdateBoolean === true}
+                          name="queueForUpdate"
+                          checked={this.props.queueForUpdateBoolean[this.props.index] === true}
                           onChange={() => {
-                              this.props.addStatusQueue(this.props.order);
+                              this.props.addStatusQueue(this.props.order,this.props.index);
 
                           }}
                 />
