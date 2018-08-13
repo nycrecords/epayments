@@ -1,6 +1,6 @@
 import React from 'react';
 import {BrowserRouter as Router, Route, Link} from "react-router-dom";
-import {Button, Container, Dimmer, Divider, Grid, Header, Icon, Loader, Segment} from 'semantic-ui-react';
+import {Button, Container, Dimmer, Divider, Grid, Header, Icon, Loader, Segment, Form} from 'semantic-ui-react';
 import {connect} from 'react-redux';
 import {mapDispatchToProps, mapStateToProps} from "../utils/reduxMappers";
 import OrderForm from "./order_form";
@@ -8,6 +8,7 @@ import Order from "./order";
 import LoginModal from "./login_modal";
 import {csrfFetch, handleFetchErrors} from "../utils/fetch"
 import NewOrderForm from "./newOrderForm";
+
 
 class Home extends React.Component {
     constructor() {
@@ -18,8 +19,25 @@ class Home extends React.Component {
             order_count: 0,
             suborder_count: 0,
             loading: true,
-            showCSVButton: false
+            showCSVButton: false,
+            queueForUpdate: [],
+            queueForUpdateBoolean: [false]
+
+
         };
+        this.index = 0;
+        this.addStatusQueue = (order) => {
+            console.log("addStatusQueue triggers");
+            console.log(this.state.queueForUpdateBoolean === false);
+            (this.state.queueForUpdateBoolean === false) ?
+                this.setState({queueForUpdateBoolean: true}) :
+                this.setState({queueForUpdateBoolean: false});
+            // if(this.state.queueForUpdateBoolean === true && this.state.queueForUpdate.includes(order) == false ){
+            //     this.setState({queueForUpdate: this.state.queueForUpdate.concat(order)});
+            // }
+            // console.log(this.state.queueForUpdate);
+
+        }
 
         this.addOrder = (order_count, suborder_count, orders) => {
             this.setState({
@@ -65,6 +83,13 @@ class Home extends React.Component {
         this.printSmallLabels = (e) => {
             this.setLoadingState(true);
             this.orderForm.submitFormData(e, 'small_labels')
+        };
+        this.updateMultipleStatus = (e) => {
+            {/*<StatusModal current_status={this.props.current_status}*/}
+                             {/*suborder_number={this.props.suborder_number}*/}
+                             {/*updateStatus={this.props.updateStatus}*/}
+                {/*/>*/}
+
         };
 
         this.logOut = () => {
@@ -121,17 +146,21 @@ class Home extends React.Component {
 
     render() {
         const orderRows = this.state.all_orders.map((order) =>
-            <Order
-                key={order.suborder_number}
-                order_number={order.order_number}
-                suborder_number={order.suborder_number}
-                order_type={order.order_type}
-                billing_name={order.billing_name}
-                date_received={order.date_received.slice(0, -9)}
-                current_status={order.current_status}
-                updateStatus={this.updateStatus}
+                <Order
+                    key={order.suborder_number}
+                    order_number={order.order_number}
+                    suborder_number={order.suborder_number}
+                    order_type={order.order_type}
+                    billing_name={order.billing_name}
+                    date_received={order.date_received.slice(0, -9)}
+                    current_status={order.current_status}
+                    updateStatus={this.updateStatus}
+                    addStatusQueue={this.addStatusQueue}
+                    order={order}
+                    queueForUpdateBoolean={this.state.queueForUpdateBoolean}
+                    queueForUpdate={this.state.queueForUpdate}
 
-            />
+                />
         );
 
         const Home = () => (
@@ -170,6 +199,7 @@ class Home extends React.Component {
                                     <Button content='Order Sheets' onClick={this.printOrderSheet}/>
                                     <Button content='Big Labels' onClick={this.printBigLabels}/>
                                     <Button content='Small Labels' onClick={this.printSmallLabels}/>
+                                    <Button content='Update Multiple Status' onClick={this.updateMultipleStatus}/>
 
 
                                 </Button.Group>
@@ -200,22 +230,22 @@ class Home extends React.Component {
 
         return (
             <Container>
-            {this.props.authenticated ? (
-                <Router>
-                    <div>
+                {this.props.authenticated ? (
+                    <Router>
+                        <div>
 
-                        <Link to="/Order">
-                            <Button content='Order'/>
-                        </Link>
-                        <Link to="/">
-                            <Button content='Home'/>
-                        </Link>
+                            <Link to="/Order">
+                                <Button content='Order'/>
+                            </Link>
+                            <Link to="/">
+                                <Button content='Home'/>
+                            </Link>
 
-                        <Route exact path="/" component={Home}/>
-                        <Route exact path="/Order" component={NewOrderForm}/>
-                    </div>
-                </Router>
-            ) :(
+                            <Route exact path="/" component={Home}/>
+                            <Route exact path="/Order" component={NewOrderForm}/>
+                        </div>
+                    </Router>
+                ) : (
                     <Segment id="center">
                         <Header as="h1" textAlign="center">ePayments
                             <Container className="sub header">Department of Records</Container>
@@ -223,8 +253,8 @@ class Home extends React.Component {
                         <LoginModal/>
                     </Segment>
                 )}
-            </Container>)
-
+            </Container>
+        )
 
 
     }
