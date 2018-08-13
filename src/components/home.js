@@ -205,7 +205,7 @@ class Home extends React.Component {
                                     <Button content='Small Labels' onClick={this.printSmallLabels}/>
 
                                     <BatchStatusModal queueForUpdateBoolean={this.state.queueForUpdateBoolean}
-                                                      queueForUpdateBoolean={this.state.queueForUpdate}
+                                                      queueForUpdate={this.state.queueForUpdate}
                                                       updateStatus={this.updateStatus}/>
 
 

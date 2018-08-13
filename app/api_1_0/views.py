@@ -417,16 +417,14 @@ def batch_status_change():
         new_status = json.get("new_status")
         queue_for_update = json.get("queueForUpdate")
         queue_for_update_boolean = json.get("queueForUpdateBoolean")
-
+        status_code = []
         for index in range(len(queue_for_update_boolean)):
-
-
-        """
-            POST: {queueForUpdate, queueForUpdateBoolean, new_status, comment};
-            returns: {status_id, suborder_number, status, comment}, 201
-        """
-        status_code = update_status(suborder_number, comment, new_status)
-        return jsonify(status_code=status_code), 200
+            """
+                POST: {queueForUpdate, queueForUpdateBoolean, new_status, comment};
+                returns: {status_id, suborder_number, status, comment}, 201
+            """
+        status_code.append(update_status(queue_for_update[index], comment, new_status))
+    return jsonify(status_code=status_code), 200
 
 
 @api.route('/history/<string:suborder_number>', methods=['GET'])
