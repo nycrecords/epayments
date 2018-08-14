@@ -4,8 +4,8 @@
 import React from 'react';
 import {Button, Header, Modal, Form, TextArea} from 'semantic-ui-react';
 import 'semantic-ui-css/semantic.min.css';
-import {csrfFetch} from "../utils/fetch"
-import MarriageCert from 'order_type/marriage.js'
+import MarriageCert from '../order_type/marriage'
+import MarriageSearch from '../order_type/marriage'
 
 
 class OrderModal extends React.Component {
@@ -14,19 +14,21 @@ class OrderModal extends React.Component {
 
         this.state = {
             modalOpen: false,
-            order_type:'',
-            suborder_number:this.props.suborder_number
+
         };
 
 
         this.handleOpen = (e) => {
-            e.preventDefault;
+            e.preventDefault();
 
-            switch(order_type) {
+            switch(this.props.order_type) {
                 case 'Marriage Cert':
-                    this.MarriageCert;
+                    this.marriageCert.get_info();
 
             }
+            this.setState({
+                modalOpen: true
+            });
         };
 
         this.handleClose = (e) => this.setState({
@@ -35,9 +37,22 @@ class OrderModal extends React.Component {
     }
 
     render() {
-        switch(this.state.order_type){
+        const suborderInfo = (()=> {
+            switch(this.props.order_type){
+                case 'Marriage Cert':
+                    return (
+                         <MarriageCert
+                             suborder_number={this.props.suborder_number}
+                             ref={marriageCert => this.marriageCert = marriageCert}/>
+                    );
+                case'Marriage Search':
+                    return(
+                        <MarriageSearch
+                            suborder_number={this.props.suborder_number}/>
+                    );
+            }
+        });
 
-        }
         return (
             <Modal
                 trigger={<Button onClick={this.handleOpen} compact size='small' floated='right'>More Info</Button>}

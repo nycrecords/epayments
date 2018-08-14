@@ -191,7 +191,7 @@ def more_info(suborder_number):
         order_info['customer'] = SearchFunctions.format_first_result(search_queries(order_number=suborder_info['order_number'],
                                                                                     search_type='customer'))
 
-        return jsonify(order_info=order_info, suborder_info=suborder_info), 200
+        return jsonify(order_info=order_info), 200
 
 
 @api.route('/orders/<int:order_id>', methods=['GET'])
