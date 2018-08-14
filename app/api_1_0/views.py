@@ -169,6 +169,31 @@ def history(suborder_number):
     return jsonify(history=status_history), 200
 
 
+@api.route('/more_info/<string:suborder_number>', methods=['GET','POST'])
+@login_required
+def more_info(suborder_number):
+    """
+    GET: {suborder_number
+    :param suborder_number:
+    :return: json of all the info
+    """
+
+    if request.method == 'POST':
+        suborder_info = SearchFunctions.format_first_result(search_queries(suborder_number=suborder_number,
+                                                                           search_type='print'))
+
+        order_info = SearchFunctions.format_first_result(search_queries(suborder_number=suborder_number,
+                                                                        search_type=suborder_info['order_type']))
+
+        order_info['order'] = SearchFunctions.format_first_result(search_queries(suborder_number=suborder_number,
+                                                                                 search_type='order'))
+
+        order_info['customer'] = SearchFunctions.format_first_result(search_queries(order_number=suborder_info['order_number'],
+                                                                                    search_type='customer'))
+
+        return jsonify(order_info=order_info, suborder_info=suborder_info), 200
+
+
 @api.route('/orders/<int:order_id>', methods=['GET'])
 @login_required
 def get_single_order(order_id):
