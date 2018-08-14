@@ -30,8 +30,8 @@ class Home extends React.Component {
         this.addStatusQueue = (order, index) => {
             // console.log("addStatusQueue triggers");
             // console.log(this.state.queueForUpdateBoolean === false);
-            (this.state.queueForUpdateBoolean[index] === false || this.state.queueForUpdateBoolean[index] === "" ||
-                this.state.queueForUpdateBoolean === undefined) ?
+            (this.state.queueForUpdateBoolean === undefined || this.state.queueForUpdateBoolean[index] === "" ||
+                this.state.queueForUpdateBoolean[index] === false) ?
                 this.handleListChange("queueForUpdateBoolean", true, this.state.queueForUpdateBoolean, index) :
                 this.handleListChange("queueForUpdateBoolean", false, this.state.queueForUpdateBoolean, index);
             if (this.state.queueForUpdateBoolean[index] === true) {
@@ -50,6 +50,7 @@ class Home extends React.Component {
         };
 
         this.updateStatus = (suborder_number, new_status) => {
+            debugger
             let status_obj = this.state.all_orders.find(obj => {
                 return obj.suborder_number === suborder_number;
             });

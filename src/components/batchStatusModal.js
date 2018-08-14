@@ -81,9 +81,10 @@ class BatchStatusModal extends React.Component {
                 return response.json()
             }).then((json) => {
                 this.setState({comment: '', new_status: this.state.new_status});
+                console.log(this.state.new_status)
                 for(var i = 0; i < this.props.queueForUpdateBoolean.length; i++) {
                     if(this.props.queueForUpdateBoolean[i]) {
-                        this.props.updateStatus(this.props.queueForUpdate[i], this.state.new_status);
+                        this.props.updateStatus(this.props.queueForUpdate[i].toString(), this.state.new_status);
                     }
                 }
             });
