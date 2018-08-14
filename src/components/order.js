@@ -9,6 +9,14 @@ import History from './history';
 import TaxPhotoModal from './taxPhotoModal';
 
 class Order extends React.Component {
+    constructor(props) {
+        super(props);
+
+
+
+    };
+
+
     render() {
         return (
             <div>
@@ -29,10 +37,13 @@ class Order extends React.Component {
                 <br/>
                 <History suborder_number={this.props.suborder_number}/>
                 <Checkbox label="Queue For Status Update"
-                          name="queueForUpdate"
+                          name="queue"
                           checked={this.props.queueForUpdateBoolean[this.props.index] === true}
                           onChange={() => {
-                              this.props.addStatusQueue(this.props.order,this.props.index);
+                              (this.props.queueForUpdateBoolean[this.props.index] === true)?
+                                  this.props.addStatusQueue(this.props.suborder_number, this.props.index, false):
+                                  this.props.addStatusQueue(this.props.suborder_number, this.props.index, true);
+
 
                           }}
                 />

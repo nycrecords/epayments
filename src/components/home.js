@@ -27,17 +27,15 @@ class Home extends React.Component {
 
 
         };
-        this.addStatusQueue = (order, index) => {
-            // console.log("addStatusQueue triggers");
-            // console.log(this.state.queueForUpdateBoolean === false);
-            (this.state.queueForUpdateBoolean === undefined || this.state.queueForUpdateBoolean[index] === "" ||
-                this.state.queueForUpdateBoolean[index] === false) ?
-                this.handleListChange("queueForUpdateBoolean", true, this.state.queueForUpdateBoolean, index) :
-                this.handleListChange("queueForUpdateBoolean", false, this.state.queueForUpdateBoolean, index);
-            if (this.state.queueForUpdateBoolean[index] === true) {
-                this.handleListChange("queueForUpdate", order.suborder_number, this.state.queueForUpdate, index);
-                console.log(this.state.queueForUpdate)
-            }
+        this.addStatusQueue = (suborder, index, boolean) => {
+            // (this.state.queueForUpdateBoolean === undefined || this.state.queueForUpdateBoolean[index] === "" ||
+            //     this.state.queueForUpdateBoolean[index] === false) ?
+            //     this.handleListChange("queueForUpdateBoolean", true, this.state.queueForUpdateBoolean, index) :
+            //     this.handleListChange("queueForUpdateBoolean", false, this.state.queueForUpdateBoolean, index);
+            this.handleListChange("queueForUpdateBoolean", boolean, this.state.queueForUpdateBoolean, index);
+            this.handleListChange("queueForUpdate", suborder, this.state.queueForUpdate, index);
+            console.log(this.state.queueForUpdate)
+            console.log(this.state.queueForUpdateBoolean)
 
         }
 
@@ -50,7 +48,6 @@ class Home extends React.Component {
         };
 
         this.updateStatus = (suborder_number, new_status) => {
-            debugger
             let status_obj = this.state.all_orders.find(obj => {
                 return obj.suborder_number === suborder_number;
             });
@@ -109,6 +106,9 @@ class Home extends React.Component {
         };
     };
 
+    generateQueue = () => {
+        this.setState({queueForUpdateBoolean: this.state.queueForUpdateBoolean.concat([false])})
+    };
     handleListChange = (name, value, state, index) => {
         let newState = state.slice()
         newState[index] = value
@@ -153,7 +153,6 @@ class Home extends React.Component {
         const orderRows = this.state.all_orders.map((order) =>
             <Order
                 key={order.suborder_number}
-
                 order_number={order.order_number}
                 suborder_number={order.suborder_number}
                 order_type={order.order_type}
@@ -162,13 +161,13 @@ class Home extends React.Component {
                 current_status={order.current_status}
                 updateStatus={this.updateStatus}
                 addStatusQueue={this.addStatusQueue}
-                order={order}
                 queueForUpdateBoolean={this.state.queueForUpdateBoolean}
                 queueForUpdate={this.state.queueForUpdate}
                 index={this.state.all_orders.indexOf(order)}
 
             />
-        );
+    )
+        ;
 
         const Home = () => (
             <Container>
