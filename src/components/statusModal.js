@@ -67,7 +67,7 @@ class StatusModal extends React.Component {
 
         this.handleSubmit = (e) => {
             e.preventDefault();
-            csrfFetch('api/v1.0/status/' + this.props.suborder_number, {
+            csrfFetch('api/v1.0/status/' + this.props.suborder_number.toString(), {
                 method: "POST",
                 body: JSON.stringify({
                     suborder_number: this.props.suborder_number,
@@ -75,6 +75,7 @@ class StatusModal extends React.Component {
                     new_status: this.state.new_status
                 })
             }).then((response) => {
+                console.log(response)
                 return response.json()
             }).then((json) => {
                 this.props.updateStatus(this.props.suborder_number, this.state.new_status);
