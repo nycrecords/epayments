@@ -10,7 +10,11 @@ import BirthCert from '../order_type/birth_search'
 import BirthSearch from '../order_type/birth_search'
 import DeathCert from '../order_type/death_cert'
 import DeathSearch from '../order_type/death_search'
+import TaxPhoto from '../order_type/tax_photo'
+import PhotoGallery from '../order_type/photo_gallery'
+import PropertyCard from '../order_type/property_card'
 import {csrfFetch} from "../utils/fetch"
+import Pagination from "semantic-ui-react/src/addons/Pagination/Pagination";
 
 
 
@@ -111,8 +115,23 @@ class OrderModal extends React.Component {
                     <DeathSearch order_info={this.state.order_info}/>
                 );
                 break;
+            case 'Tax Photo':
+                orderInfo=(
+                    <TaxPhoto order_info={this.state.order_info}/>
+                );
+                break;
+            case 'Property Card':
+                orderInfo=(
+                    <PropertyCard order_info={this.state.order_info}/>
+                );
+                break;
+            case 'Photo Gallery':
+                orderInfo=(
+                    <PhotoGallery order_info={this.state.order_info}/>
+                );
+                break;
             default:
-                orderInfo=(<p>YO FAM</p>);
+                orderInfo=(<p> That's not supposed to happen, Let the IT folks know</p>);
                 break;
         }
 
