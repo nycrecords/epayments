@@ -59,6 +59,43 @@ class Orders(db.Model):
             'multiple_items': self.multiple_items,
         }
 
+    # Elasticsearch
+    def es_create(self):
+        """Creates Elastic Search doc"""
+        es.create(
+            index='orders',
+            doc_type='orders',
+            id=self.id,
+            body={
+                'order_number': self.id,
+                'date_submitted': self.date_submitted.strftime(DATETIME_FORMAT),
+                'date_received': self.date_received.strftime(DATETIME_FORMAT),
+                'confirmation_message': self.confirmation_message,
+                'client_data': self.client_data,
+                'order_types': self.order_types,
+                'multiple_items': self.multiple_items,
+            }
+        )
+
+    def es_update(self):
+        """Updates elastic search docs"""
+        es.update(
+            index='orders',
+            doc_type='orders',
+            id=self.id,
+            body={
+                'doc': {
+                    'order_number': self.id,
+                    'date_submitted': self.date_submitted.strftime(DATETIME_FORMAT),
+                    'date_received': self.date_received.strftime(DATETIME_FORMAT),
+                    'confirmation_message': self.confirmation_message,
+                    'client_data': self.client_data,
+                    'order_types': self.order_types,
+                    'multiple_items': self.multiple_items,
+                }
+            }
+        )
+
 
 class Suborders(db.Model):
     """

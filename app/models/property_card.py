@@ -1,4 +1,4 @@
-from app import db
+from app import db, es
 from app.constants import borough
 
 
@@ -78,3 +78,46 @@ class PropertyCard(db.Model):
             "contact_info": self.contact_info,
             'suborder_number': self.suborder_number
         }
+
+# Elasticsearch
+    def es_create(self):
+        """Creates Elastic Search doc"""
+        es.create(
+            index='property_card',
+            doc_type='property_card',
+            id=self.id,
+            body={
+                "image_id": self.image_id,
+                "description": self.description,
+                "additional_description": self.additional_description,
+                "size": self.size,
+                "num_copies": self.num_copies,
+                "mail": self.mail,
+                "contact_number": self.contact_number,
+                "personal_use_agreement": self.personal_use_agreement,
+                "comment": self.comment,
+                "suborder_number": self.suborder_number,
+            }
+        )
+
+    def es_update(self):
+        """Updates elastic search docs"""
+        es.update(
+            index='property_card',
+            doc_type='property_card',
+            id=self.id,
+            body={
+                'doc': {
+                    "image_id": self.image_id,
+                    "description": self.description,
+                    "additional_description": self.additional_description,
+                    "size": self.size,
+                    "num_copies": self.num_copies,
+                    "mail": self.mail,
+                    "contact_number": self.contact_number,
+                    "personal_use_agreement": self.personal_use_agreement,
+                    "comment": self.comment,
+                    "suborder_number": self.suborder_number,
+                    }
+            }
+        )
