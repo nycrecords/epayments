@@ -12,15 +12,13 @@ class MarriageSearch extends React.Component{
                 {this.props.order_info['customer']['billing_name']} <br/>
                 {this.props.order_info['customer']['address']}  <br/>
                 <h2>{this.props.order_info['order_type']}</h2>
-                <strong>order_number:</strong> {this.props.order_info['customer']['order_number']}<br/>
-                <strong>order_time:</strong> {this.props.order_info['order']['date_submitted']} <br/>
-                <strong>phone:</strong> {this.props.order_info['customer']['phone']} <br/>
-                <strong>email:</strong> {this.props.order_info['customer']['email']} <br/> <br/>
+                <strong>Order number:</strong> {this.props.order_info['customer']['order_number']}<br/>
+                <strong>Order time:</strong> {this.props.order_info['order']['date_submitted']} <br/>
+                <strong>Phone:</strong> {this.props.order_info['customer']['phone']} <br/>
+                <strong>E-mail:</strong> {this.props.order_info['customer']['email']} <br/>
+                <strong>Suborder Number</strong> {this.props.order_info['suborder_number']} <br/> <br/>
 
-                <div className="-row">
-                    <div className="-fourth"> Suborder Number:</div>
-                    <div className="-two-thirds"> {this.props.order_info['suborder_number']}</div>
-                </div>
+
 
                 <div className="-row">
                     <div className="-fourth"> Groom Last Name: </div>

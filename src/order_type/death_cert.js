@@ -5,7 +5,7 @@
 import React from 'react';
 import 'semantic-ui-css/semantic.min.css';
 
-class BirthCert extends React.Component{
+class DeathCert extends React.Component{
 
     render(){
         return(
@@ -23,13 +23,6 @@ class BirthCert extends React.Component{
                     <div className="-fourth"> Certificate Number: </div>
                     <div className="-two-thirds">
                         {this.props.order_info['certificate_number'] ? this.props.order_info['certificate_number'] : "n/a"}
-                    </div>
-                </div>
-
-                <div className="-row">
-                    <div className="-fourth"> Gender: </div>
-                    <div className="-two-thirds">
-                        {this.props.order_info['gender'] ? this.props.order_info['gender'] : "n/a"}
                     </div>
                 </div>
 
@@ -123,4 +116,4 @@ class BirthCert extends React.Component{
 }
 
 
-export default BirthCert;
+export default DeathCert;
