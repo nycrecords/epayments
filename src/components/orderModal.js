@@ -15,8 +15,6 @@ import PhotoGallery from '../order_type/photo_gallery'
 import PropertyCard from '../order_type/property_card'
 import {csrfFetch} from "../utils/fetch"
 
-
-
 class OrderModal extends React.Component {
     constructor() {
         super();
@@ -69,7 +67,6 @@ class OrderModal extends React.Component {
             this.setState({
             modalOpen: false,
             });
-
     }
 
     render() {
@@ -122,7 +119,7 @@ class OrderModal extends React.Component {
                 );
                 break;
             default:
-                orderInfo=(<p> That's not supposed to happen, Let the IT folks know</p>);
+                orderInfo=(<p> That's not supposed to happen, Let the I.T. folks know</p>);
                 break;
         }
 

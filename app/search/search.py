@@ -247,8 +247,24 @@ class DSLGenerator(object):
         :return: dictionary with key of 'query' and prepended method __must
         """
         return{
-            'query': self.__must
+            'sort': [
+                '_score',
+
+                {'date_received': 'desc'} if self.__query_fields['current_status'] else {'date_received': 'asc'}
+                if self.__date_range['date_received_start'] else {'date_received': 'desc'},
+
+                {'date_submitted': 'asc'},
+            ],
+            'query': self.__must,
+            "aggs": {
+                "order_count": {
+                    "cardinality": {
+                        "field": "order_number"
+                    }
+                }
+            }
         }
+
 
     @property
     def __must(self):

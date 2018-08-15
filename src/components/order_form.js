@@ -63,7 +63,6 @@ class OrderForm extends React.Component {
                 date: '',
             });
 
-
             this.dateReceivedEnd.setState({
                 date: '',
             });
