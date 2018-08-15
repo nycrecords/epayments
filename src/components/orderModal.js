@@ -8,6 +8,8 @@ import MarriageCert from '../order_type/marriage_cert'
 import MarriageSearch from '../order_type/marriage_search'
 import BirthCert from '../order_type/birth_search'
 import BirthSearch from '../order_type/birth_search'
+import DeathCert from '../order_type/death_cert'
+import DeathSearch from '../order_type/death_search'
 import {csrfFetch} from "../utils/fetch"
 
 
@@ -97,6 +99,16 @@ class OrderModal extends React.Component {
             case 'Birth Search':
                 orderInfo=(
                     <BirthSearch order_info={this.state.order_info}/>
+                );
+                break;
+            case 'Death Cert':
+                orderInfo=(
+                    <DeathCert order_info={this.state.order_info}/>
+                );
+                break;
+            case 'Death Search':
+                orderInfo=(
+                    <DeathSearch order_info={this.state.order_info}/>
                 );
                 break;
             default:

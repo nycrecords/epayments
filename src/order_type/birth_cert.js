@@ -12,7 +12,7 @@ class BirthCert extends React.Component{
             <div className="-order-modals">
                 {this.props.order_info['customer']['billing_name']} <br/>
                 {this.props.order_info['customer']['address']}  <br/>
-                <h2>{this.props.order_info['order_type']}</h2>
+                <h2>{this.props.order_info['order_type']}ficate</h2>
                 <strong>Order number:</strong> {this.props.order_info['customer']['order_number']}<br/>
                 <strong>Order time:</strong> {this.props.order_info['order']['date_submitted']} <br/>
                 <strong>Phone:</strong> {this.props.order_info['customer']['phone']} <br/>

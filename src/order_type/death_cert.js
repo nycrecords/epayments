@@ -12,7 +12,7 @@ class DeathCert extends React.Component{
             <div className="-order-modals">
                 {this.props.order_info['customer']['billing_name']} <br/>
                 {this.props.order_info['customer']['address']}  <br/>
-                <h2>{this.props.order_info['order_type']}</h2>
+                <h2>{this.props.order_info['order_type']}ficate</h2>
                 <strong>Order number:</strong> {this.props.order_info['customer']['order_number']}<br/>
                 <strong>Order time:</strong> {this.props.order_info['order']['date_submitted']} <br/>
                 <strong>Phone:</strong> {this.props.order_info['customer']['phone']} <br/>
@@ -48,22 +48,15 @@ class DeathCert extends React.Component{
                 </div>
 
                 <div className="-row">
-                    <div className="-fourth"> Father Name: </div>
-                    <div className="-two-thirds">
-                        {this.props.order_info["father_name"] ? this.props.order_info["father_name"] : "n/a"}
-                    </div>
-                </div>
-
-                <div className="-row">
-                    <div className="-fourth"> Mother Name: </div>
-                    <div className="-two-thirds">
-                        {this.props.order_info["mother_name"] ? this.props.order_info["mother_name"] : "n/a"}
-                    </div>
-                </div>
-
-                <div className="-row">
                     <div className="-fourth"> Number of Copies: </div>
                     <div className="-two-thirds"> {this.props.order_info["num_copies"]}</div>
+                </div>
+
+                <div className="-row">
+                    <div className="-fourth"> Cemetery: </div>
+                    <div className="-two-thirds">
+                        {this.props.order_info["cemetery"] ? this.props.order_info["cemetery"]: "n/a"}
+                    </div>
                 </div>
 
                 <div className="-row">
@@ -88,9 +81,9 @@ class DeathCert extends React.Component{
                 </div>
 
                 <div className="-row">
-                    <div className="-fourth"> Birth Place: </div>
+                    <div className="-fourth"> Death Place: </div>
                     <div className="-two-thirds">
-                        {this.props.order_info['birth_place'] ? this.props.order_info['birth_place']  : 'n/a'}
+                        {this.props.order_info['birth_place'] ? this.props.order_info['death_place']  : 'n/a'}
                     </div>
                 </div>
 
