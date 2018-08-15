@@ -185,11 +185,12 @@ def more_info(suborder_number):
         order_info = SearchFunctions.format_first_result(search_queries(suborder_number=suborder_number,
                                                                         search_type=suborder_info['order_type']))
 
-        order_info['order'] = SearchFunctions.format_first_result(search_queries(suborder_number=suborder_number,
+        order_info['order'] = SearchFunctions.format_first_result(search_queries(order_number=suborder_info['order_number'],
                                                                                  search_type='order'))
 
         order_info['customer'] = SearchFunctions.format_first_result(search_queries(order_number=suborder_info['order_number'],
                                                                                     search_type='customer'))
+        order_info['order_type'] = suborder_info['order_type']
 
         return jsonify(order_info=order_info), 200
 

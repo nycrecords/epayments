@@ -281,7 +281,7 @@ class SearchFunctions(object):
                                    from_=start)
         return search_results
 
-    def property_card(dsl, start, size):
+    def property_card(self, dsl, start, size):
         search_results = es.search(index='property_card',
                                    doc_type='property_card',
                                    body=dsl,
@@ -301,9 +301,9 @@ class SearchFunctions(object):
                                    from_=start)
         return search_results
 
-    def format_results(other_word_for_not_formatted_results):
-        results_len = len(other_word_for_not_formatted_results['hits']['hits'])
-        return [other_word_for_not_formatted_results['hits']['hits'][i]["_source"] for i in range(results_len)]
+    def format_results(unformatted_results):
+        results_len = len(unformatted_results['hits']['hits'])
+        return [unformatted_results['hits']['hits'][i]["_source"] for i in range(results_len)]
 
     def format_first_result(unformatted_results):
         return unformatted_results['hits']['hits'][0]["_source"]

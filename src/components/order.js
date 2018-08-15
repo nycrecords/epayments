@@ -19,7 +19,7 @@ class Order extends React.Component {
                 />
                 <OrderModal
                     suborder_number={this.props.suborder_number}
-                    order_type = {this.props.order_type}/>
+                    order_type={this.props.order_type}/>
                 Order #: {this.props.order_number}
                 <Button color="green" compact size='small' content={this.props.current_status} floated='right'/>
                 <br/>
