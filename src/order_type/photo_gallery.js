@@ -5,7 +5,7 @@
 import React from 'react';
 import 'semantic-ui-css/semantic.min.css';
 
-class TaxPhoto extends React.Component{
+class PhotoGallery extends React.Component{
 
     render(){
         return(
@@ -84,4 +84,4 @@ class TaxPhoto extends React.Component{
 }
 
 
-export default TaxPhoto;
+export default PhotoGallery;

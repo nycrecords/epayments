@@ -14,7 +14,6 @@ import TaxPhoto from '../order_type/tax_photo'
 import PhotoGallery from '../order_type/photo_gallery'
 import PropertyCard from '../order_type/property_card'
 import {csrfFetch} from "../utils/fetch"
-import Pagination from "semantic-ui-react/src/addons/Pagination/Pagination";
 
 
 
@@ -70,14 +69,6 @@ class OrderModal extends React.Component {
             this.setState({
             modalOpen: false,
             });
-
-        this.get_info = () => {
-             switch(this.props.order_type) {
-                case 'Marriage Cert':
-                    this.marriageCert.get_info();
-
-            }
-        };
 
     }
 
