@@ -257,7 +257,7 @@ class NewOrderForm extends React.Component {
                 this.message += ("Please fill in Status in Suborder: " + (i + 1) + "\n");
             }
             if (this.state.orderType[i] !== '') {
-                if ((this.state.showBirthSearch[i] === true || this.state.showBirthCert === true[i]) && this.state.gender[i] === '') {
+                if ((this.state.showBirthSearch[i] === true || this.state.showBirthCert[i] === true) && this.state.gender[i] === '') {
                     this.message += ("Please fill in the Gender in Suborder: " + (i + 1) + "\n");
                 }
                 if (this.state.showPhotoGalleryForm[i] === false && this.state.borough[i] === '') {

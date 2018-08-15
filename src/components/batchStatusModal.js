@@ -10,9 +10,9 @@ class BatchStatusModal extends React.Component {
         this.state = {
             modalOpen: false,
             comment: '',
-            new_status: ''
+            new_status: '',
+            orders: []
         };
-
         this.handleOpen = (e) => this.setState({
             modalOpen: true,
         });
@@ -82,12 +82,21 @@ class BatchStatusModal extends React.Component {
             }).then((json) => {
                 this.setState({comment: '', new_status: this.state.new_status});
                 console.log(this.state.new_status)
-                for(var i = 0; i < this.props.queueForUpdateBoolean.length; i++) {
-                    if(this.props.queueForUpdateBoolean[i]) {
+                for (var i = 0; i < this.props.queueForUpdateBoolean.length; i++) {
+                    if (this.props.queueForUpdateBoolean[i]) {
                         this.props.updateStatus(this.props.queueForUpdate[i].toString(), this.state.new_status);
                     }
                 }
             });
+            this.handleStatus = (e) => {
+                debugger;
+                let i = 0
+                for (i; i < this.props.queueForUpdateBoolean.length; i++) {
+                    if (this.props.queueForUpdateBoolean[i] === true) {
+                        this.setState({orders: [this.state.orders].concat(this.props.queueForUpdate[i])})
+                    }
+                }
+            }
 
             this.handleClose();
         };
@@ -96,14 +105,16 @@ class BatchStatusModal extends React.Component {
     render() {
         return (
             <Modal
-                trigger={<Button onClick={this.handleOpen} compact size='small' floated='right'>Update Multiple Status</Button>}
+                trigger={<Button onClick={() => {
+                    this.handleOpen(), this.handleStatus()
+                }} compact size='small' floated='right'>Update Multiple Status</Button>}
                 open={this.state.modalOpen}
                 onClose={this.state.handleClose}>
                 <Modal.Header>
                     <Modal.Content>
                         <Modal.Description>
                             <Header>
-                                <p>Current Suborders -  { this.props.queueForUpdate.toString()}</p>
+                                <p>Current Suborders - {this.state.orders}</p>
                                 <Form onSubmit={this.handleSubmit}>
                                     <Form.Select label='Change statuses to' fluid selection options={this.statuses}
                                                  onChange={(e, {value}) => {
@@ -114,7 +125,8 @@ class BatchStatusModal extends React.Component {
                                                  value={this.state.new_status}
                                     />
                                     <Form.Field id='form-textarea-control-opinion' control={TextArea}
-                                                label='Leave an Additional Comment' placeholder='Comment' maxLength="200"
+                                                label='Leave an Additional Comment' placeholder='Comment'
+                                                maxLength="200"
                                                 onChange={(e, {value}) => {
                                                     this.setState({comment: value})
                                                 }

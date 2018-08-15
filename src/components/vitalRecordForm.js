@@ -47,6 +47,7 @@ class VitalRecordForm extends React.Component {
                         <Form.Input label="Year"
                                     name="year"
                                     maxLength={4}
+                                    required
                                     placeholder="Year"
                                     onChange={(e, {value}) => {
                                         if (/^[0-9]+$/.test(value.slice(-1)) || value === '') {

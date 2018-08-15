@@ -107,8 +107,6 @@ def update_status(suborder_number, comment, new_status):
      - 3) it will have the new status that was passed from the user
     """
     suborder = Suborders.query.filter_by(id=suborder_number).one()
-    print("suborder is " + str(suborder))
-    print("sub order is " + suborder.status)
     if new_status != suborder.status:
         prev_event = Events.query.filter(Events.suborder_number == suborder_number,
                                          Events.new_value['status'].astext == suborder.status).order_by(
