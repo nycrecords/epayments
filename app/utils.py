@@ -138,6 +138,7 @@ def import_file(file_name):
     )
     db.session.add(order)
 
+
     # 8. Get Customer Information
     # 8-a: Customer Name
     billing_name = root.find("EPaymentRes").find("BillingInfo").find("BillingName").text
@@ -172,6 +173,7 @@ def import_file(file_name):
                          order_number=order_number)
 
     db.session.add(customer)
+    customer.es_create()
     # In the XML the type of order is kept up with the ClientID
 
     clients_data_items = clients_data.split('ClientID')[1:]
@@ -303,6 +305,7 @@ def import_file(file_name):
 
             db.session.add(customer_order)
             db.session.commit()
+            customer_order.es_create()
 
         # Marriage Search
         if client_id == '10000104':
@@ -365,6 +368,7 @@ def import_file(file_name):
 
             db.session.add(customer_order)
             db.session.commit()
+            customer_order.es_create()
 
         # Death Search
         if client_id == '10000103':
@@ -428,6 +432,7 @@ def import_file(file_name):
 
             db.session.add(customer_order)
             db.session.commit()
+            customer_order.es_create()
 
         # Birth Certificate
         if client_id == '10000147':
@@ -506,6 +511,7 @@ def import_file(file_name):
 
             db.session.add(customer_order)
             db.session.commit()
+            customer_order.es_create()
 
         # Marriage Certificate
         if client_id == '10000181':
@@ -572,6 +578,7 @@ def import_file(file_name):
 
             db.session.add(customer_order)
             db.session.commit()
+            customer_order.es_create()
 
         # Death Certificate
         if client_id == '10000182':
@@ -639,6 +646,7 @@ def import_file(file_name):
 
             db.session.add(customer_order)
             db.session.commit()
+            customer_order.es_create()
 
         # Property Card
         if client_id == '10000058':
@@ -688,6 +696,7 @@ def import_file(file_name):
 
             db.session.add(customer_order)
             db.session.commit()
+            customer_order.es_create()
 
         # Tax Photo
         if client_id == '10000048':
@@ -830,8 +839,10 @@ def import_file(file_name):
                     contact_number=contact_number,
                     suborder_number=suborder_number)
                 db.session.add(customer_order)
+                customer_order.es_create()
 
             db.session.commit()
+
 
         # Photo Gallery
         if client_id == '10000060':
@@ -895,4 +906,6 @@ def import_file(file_name):
 
             db.session.add(customer_order)
             db.session.commit()
+            customer_order.es_create()
+    order.es_create()
     return True
