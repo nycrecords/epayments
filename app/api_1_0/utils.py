@@ -241,7 +241,6 @@ def _print_orders(search_params):
                                ELASTICSEARCH_MAX_SIZE,
                                "print")
 
-    # Only want suborder_number, and order type
     suborder = SearchFunctions.format_results(suborders)
 
     order_type_template_handler = {
@@ -307,15 +306,29 @@ def _print_small_labels(search_params):
     user = ''
     date_received_start = search_params.get("date_received_start")
     date_received_end = search_params.get("date_received_end")
+    date_submitted_start = search_params.get("date_submitted_start")
+    date_submitted_end = search_params.get("date_submitted_end")
 
-    filter_args = _order_query_filters(order_number, suborder_number, order_type, status, billing_name, user,
-                                       date_received_start,
-                                       date_received_end)
+    suborders = search_queries(order_number,
+                               suborder_number,
+                               order_type,
+                               status,
+                               billing_name,
+                               date_received_start,
+                               date_received_end,
+                               date_submitted_start,
+                               date_submitted_end,
+                               0,
+                               ELASTICSEARCH_MAX_SIZE,
+                               "print")
 
-    suborders = Suborders.query.join(Orders, Customers).filter(*filter_args).all()
-
-    customers = [suborder.order.customer.serialize for suborder in suborders]
-
+    suborder = SearchFunctions.format_results(suborders)
+    customers = []
+    for item in suborder:
+        customers.append(SearchFunctions.format_first_result(search_queries(
+                                    order_number=item['order_number'],
+                                    size=ELASTICSEARCH_MAX_SIZE,
+                                    search_type='customer')))
     labels = [customers[i:i + printing.SMALL_LABEL_COUNT] for i in range(0, len(customers), printing.SMALL_LABEL_COUNT)]
     html = ''
 
@@ -349,13 +362,29 @@ def _print_large_labels(search_params):
     date_received_start = search_params.get("date_received_start")
     date_received_end = search_params.get("date_received_end")
 
-    filter_args = _order_query_filters(order_number, suborder_number, order_type, status, billing_name, user,
-                                       date_received_start,
-                                       date_received_end)
+    date_submitted_start = search_params.get("date_submitted_start")
+    date_submitted_end = search_params.get("date_submitted_end")
 
-    suborders = Suborders.query.join(Orders, Customers).filter(*filter_args).all()
+    suborders = search_queries(order_number,
+                               suborder_number,
+                               order_type,
+                               status,
+                               billing_name,
+                               date_received_start,
+                               date_received_end,
+                               date_submitted_start,
+                               date_submitted_end,
+                               0,
+                               ELASTICSEARCH_MAX_SIZE,
+                               "print")
 
-    customers = [suborder.order.customer.serialize for suborder in suborders]
+    suborder = SearchFunctions.format_results(suborders)
+    customers = []
+    for item in suborder:
+        customers.append(SearchFunctions.format_first_result(search_queries(
+            order_number=item['order_number'],
+            size=ELASTICSEARCH_MAX_SIZE,
+            search_type='customer')))
 
     customers = sorted(customers, key=lambda customer: customer['billing_name'])
 
