@@ -337,10 +337,8 @@ def new_order():
             }
             create_object(handler_for_order_type[order_type[index]])
             user_email = Users.query.filter_by(email=user_info['email']).one_or_none()
-            status_str = "'"+"status"+"'"
-            status_index_str = '"' + status[index] + '"'
-            # new_value = '{"status": ' + '"' + status[index] + '"]'
-            new_value = "{" + status_str + ": " + status_index_str + "}"
+            new_value = {"status": status[index]}
+
             event = Events(suborder_number=sub_order.id, user_email=user_email,
                            type_=event_type.ORDER_CREATED,
                            timestamp=datetime.datetime.now(),

@@ -116,8 +116,6 @@ def update_status(suborder_number, comment, new_status):
 
         previous_value = {}
         new_value = {}
-        print(Events.query.filter(Events.new_value['status'].astext == suborder.status).order_by(
-            Events.timestamp.desc()).first())
         previous_value['status'] = suborder.status
         if 'comment' in prev_event.new_value:
             previous_value['comment'] = prev_event.new_value['comment']
