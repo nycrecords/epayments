@@ -71,8 +71,8 @@ class BatchStatusModal extends React.Component {
             csrfFetch('api/v1.0/statuses/new', {
                 method: "POST",
                 body: JSON.stringify({
-                    queue_for_update: this.props.queueForUpdate,
-                    queue_for_update_boolean: this.props.queueForUpdateBoolean,
+                    queueForUpdate: this.props.queueForUpdate,
+                    queueForUpdateBoolean: this.props.queueForUpdateBoolean,
                     comment: this.state.comment,
                     new_status: this.state.new_status
                 })

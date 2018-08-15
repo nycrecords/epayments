@@ -26,6 +26,7 @@ class Events(db.Model):
         event_type.UPDATE_STATUS,
         event_type.UPDATE_TAX_PHOTO,
         event_type.INITIAL_IMPORT,
+        event_type.ORDER_CREATED,
         name='event_type'), nullable=False
     )
     timestamp = db.Column(db.DateTime)

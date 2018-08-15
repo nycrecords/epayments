@@ -10,7 +10,9 @@ from app.models.customers import Customers
 from app import db_utils
 from sqlalchemy import *
 from sqlalchemy.orm import *
+
 import datetime
+import json
 from app.db_utils import (create_object)
 from app.constants import order_types
 from app.models.photo import TaxPhoto, PhotoGallery
@@ -114,27 +116,6 @@ def orders_doc(doc_type):
         return jsonify(url=url), 200
 
 
-# @api.route('/orders/new', methods=['POST'])
-# @login_required
-# def create_order_type(order_type):
-#     handler_for_order_type = {
-#         order_types.TAX_PHOTO: TaxPhoto(borough=None,
-#                                         collection=collection[index],
-#                                         roll=roll[index],
-#                                         block=block[index],
-#                                         lot=lot[index],
-#                                         building_number=building_number[index],
-#                                         street=street[index],
-#                                         description=add_description[index],
-#                                         mail=mail[index],
-#                                         contact_number=contact_number[index],
-#                                         size=print_size[index],
-#                                         num_copies=num_copies[index],
-#                                         suborder_number=sub_order.id)
-#
-#     }
-
-
 @api.route('/orders/new', methods=['POST'])
 @login_required
 def new_order():
@@ -190,8 +171,11 @@ def new_order():
         street = json.get("street")
         years = json.get("year")
         zip_code = json.get("zipCode")
-        year = datetime.datetime.now().strftime("%Y")
         today = datetime.datetime.today().strftime("%m/%d/%y")
+        year = datetime.datetime.now().strftime("%Y")
+        user_info = request.get_json(force=True)
+
+        # create_object(OrderNumberCounter())
 
         print(status)
         print(order_type)
@@ -352,6 +336,16 @@ def new_order():
                                                          suborder_number=sub_order.id)
             }
             create_object(handler_for_order_type[order_type[index]])
+            user_email = Users.query.filter_by(email=user_info['email']).one_or_none()
+            status_str = "'"+"status"+"'"
+            status_index_str = '"' + status[index] + '"'
+            # new_value = '{"status": ' + '"' + status[index] + '"]'
+            new_value = "{" + status_str + ": " + status_index_str + "}"
+            event = Events(suborder_number=sub_order.id, user_email=user_email,
+                           type_=event_type.ORDER_CREATED,
+                           timestamp=datetime.datetime.now(),
+                           previous_value=None, new_value=new_value)
+            create_object(event)
 
     return jsonify(), 200
 
@@ -417,13 +411,16 @@ def batch_status_change():
         new_status = json.get("new_status")
         queue_for_update = json.get("queueForUpdate")
         queue_for_update_boolean = json.get("queueForUpdateBoolean")
-        status_code = []
-        # for index in range(len(queue_for_update_boolean)):
-        #     """
-        #         POST: {queueForUpdate, queueForUpdateBoolean, new_status, comment};
-        #         returns: {status_id, suborder_number, status, comment}, 201
-        #     """
-        #     update_status(queue_for_update[index], comment, new_status)
+        # print(queue_for_update_boolean)
+        # print(comment)
+        # print(new_status)
+        for index in range(len(queue_for_update_boolean)):
+            """
+                POST: {queueForUpdate, queueForUpdateBoolean, new_status, comment};
+                returns: {status_id, suborder_number, status, comment}, 201
+            """
+            if queue_for_update_boolean[index]:
+                update_status(queue_for_update[index], comment, new_status)
     return jsonify(), 200
 
 
