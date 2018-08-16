@@ -8,8 +8,7 @@ import 'react-datepicker/dist/react-datepicker.css'
 import 'semantic-ui-css/semantic.min.css';
 import moment from 'moment';
 import {csrfFetch, handleFetchErrors} from "../utils/fetch"
-import {CHUNK_SIZE}from "../constants/constants"
-
+import {CHUNK_SIZE} from "../constants/constants"
 
 
 //Creates the options for the Order Type dropdown.
@@ -69,11 +68,11 @@ class OrderForm extends React.Component {
             });
 
             this.dateSubmittedStart.setState({
-                date:'',
+                date: '',
             });
 
             this.dateSubmittedEnd.setState({
-                date:'',
+                date: '',
             });
         };
 
@@ -97,14 +96,14 @@ class OrderForm extends React.Component {
             dateRef && dateRef.state.date ? dateRef.state.date.format('MM/DD/YYYY') : ''
         );
 
-        this.submitData = (e) =>{
+        this.submitData = (e) => {
             this.setStartZero(e);
         };
 
         this.submitFormData = (e, print) => {
             e.preventDefault();
 
-            switch(print) {
+            switch (print) {
                 case 'orders':
                 case 'large_labels':
                 case 'small_labels':
@@ -118,10 +117,10 @@ class OrderForm extends React.Component {
                             billing_name: this.state.billing_name,
                             date_received_start: formatDate(this.dateReceivedStart),
                             date_received_end: formatDate(this.dateReceivedEnd),
-                            date_submitted_start:formatDate(this.dateSubmittedStart),
-                            date_submitted_end:formatDate(this.dateSubmittedEnd),
-                            start:this.state.start,
-                            size:this.state.size,
+                            date_submitted_start: formatDate(this.dateSubmittedStart),
+                            date_submitted_end: formatDate(this.dateSubmittedEnd),
+                            start: this.state.start,
+                            size: this.state.size,
                         })
                     })
                         .then(handleFetchErrors)
@@ -143,10 +142,10 @@ class OrderForm extends React.Component {
                         billing_name: this.state.billing_name,
                         date_received_start: formatDate(this.dateReceivedStart),
                         date_received_end: formatDate(this.dateReceivedEnd),
-                        date_submitted_start:formatDate(this.dateSubmittedStart),
-                        date_submitted_end:formatDate(this.dateSubmittedEnd),
-                        start:this.state.start,
-                        size:this.state.size,
+                        date_submitted_start: formatDate(this.dateSubmittedStart),
+                        date_submitted_end: formatDate(this.dateSubmittedEnd),
+                        start: this.state.start,
+                        size: this.state.size,
                     };
 
                     let esc = encodeURIComponent;
@@ -177,10 +176,10 @@ class OrderForm extends React.Component {
                             billing_name: this.state.billing_name,
                             date_received_start: formatDate(this.dateReceivedStart),
                             date_received_end: formatDate(this.dateReceivedEnd),
-                            date_submitted_start:formatDate(this.dateSubmittedStart),
-                            date_submitted_end:formatDate(this.dateSubmittedEnd),
-                            start:this.state.start,
-                            size:this.state.size,
+                            date_submitted_start: formatDate(this.dateSubmittedStart),
+                            date_submitted_end: formatDate(this.dateSubmittedEnd),
+                            start: this.state.start,
+                            size: this.state.size,
 
                         })
                     })
@@ -190,9 +189,9 @@ class OrderForm extends React.Component {
                             this.props.setLoadingState(false);
                         })
                         .catch((error) => {
-                        console.error(error);
-                        this.props.setLoadingState(false);
-                    });
+                            console.error(error);
+                            this.props.setLoadingState(false);
+                        });
                     break;
 
                 case'load_more':
@@ -208,10 +207,10 @@ class OrderForm extends React.Component {
                             billing_name: this.state.billing_name,
                             date_received_start: formatDate(this.dateReceivedStart),
                             date_received_end: formatDate(this.dateReceivedEnd),
-                            date_submitted_start:formatDate(this.dateSubmittedStart),
-                            date_submitted_end:formatDate(this.dateSubmittedEnd),
-                            start:this.state.start,
-                            size:this.state.size,
+                            date_submitted_start: formatDate(this.dateSubmittedStart),
+                            date_submitted_end: formatDate(this.dateSubmittedEnd),
+                            start: this.state.start,
+                            size: this.state.size,
 
                         })
                     })
@@ -221,28 +220,28 @@ class OrderForm extends React.Component {
                             this.props.setLoadingState(false);
                         })
                         .catch((error) => {
-                        console.error(error);
-                        this.props.setLoadingState(false);
-                    });
+                            console.error(error);
+                            this.props.setLoadingState(false);
+                        });
                     break;
                 // no default
             }
         };
 
-        this.setStartZero = (e) =>{
+        this.setStartZero = (e) => {
             this.setState({
                 start: 0,
-            }, () => this.submitFormData(e ,'submit'));
+            }, () => this.submitFormData(e, 'submit'));
         };
 
         this.setStartSize = (e) => {
             this.setState({
-               start: this.state.start + CHUNK_SIZE
-            }, () => this.submitFormData(e ,'load_more') );
+                start: this.state.start + CHUNK_SIZE
+            }, () => this.submitFormData(e, 'load_more'));
         };
     }
 
-    handleItemClick = (e, { name }) => this.setState({ activeItem: name });
+    handleItemClick = (e, {name}) => this.setState({activeItem: name});
 
     render() {
         const {activeItem} = this.state;
@@ -307,19 +306,19 @@ class OrderForm extends React.Component {
                     <Menu pointing attached='top' borderless>
                         <Menu.Item
                             name='Date Received'
-                            active={activeItem ==='Date Received'}
+                            active={activeItem === 'Date Received'}
                             onClick={this.handleItemClick}
                         />
 
                         <Menu.Item position='right'
-                            name="Date Submitted"
-                            active={activeItem === 'Date Submitted'}
-                            onClick={this.handleItemClick}
+                                   name="Date Submitted"
+                                   active={activeItem === 'Date Submitted'}
+                                   onClick={this.handleItemClick}
                         />
                     </Menu>
                     <Segment attached="bottom">
                         <Form.Group>
-                            <Form.Field >
+                            <Form.Field>
                                 <Date
                                     label="Start"
                                     name="Start"
@@ -327,28 +326,32 @@ class OrderForm extends React.Component {
                                     date={this.today}
                                     ref={
                                         (date) => {
-                                            if(activeItem ==='Date Submitted'){
-                                                return this.dateSubmittedStart= date}
-                                            else{
-                                                return this.dateReceivedStart= date
-                                            }}}
+                                            if (activeItem === 'Date Submitted') {
+                                                return this.dateSubmittedStart = date
+                                            }
+                                            else {
+                                                return this.dateReceivedStart = date
+                                            }
+                                        }}
                                     className="margin-small-tb"
                                 />
                             </Form.Field>
                         </Form.Group>
                         <Form.Group>
-                            <Form.Field >
+                            <Form.Field>
                                 <Date
                                     label="End"
                                     name="End"
                                     maxDate={this.today}
                                     ref={
-                                        (date) =>{
-                                            if(activeItem === 'Date Submitted'){
-                                                return this.dateSubmittedEnd= date}
-                                            else{
-                                                return this.dateReceivedEnd= date
-                                            }}}
+                                        (date) => {
+                                            if (activeItem === 'Date Submitted') {
+                                                return this.dateSubmittedEnd = date
+                                            }
+                                            else {
+                                                return this.dateReceivedEnd = date
+                                            }
+                                        }}
                                     className="margin-small-tb"
                                 />
                             </Form.Field>

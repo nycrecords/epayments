@@ -1,10 +1,11 @@
-from flask import current_app
-from app.models import Suborders
-from app import es
 from datetime import datetime
+
+from flask import current_app
+
+from app import es
 from app.constants.search import DATETIME_FORMAT, ES_DATETIME_FORMAT, RESULTS_CHUNK_SIZE
 from app.search.index import (create_suborder_index, create_suborder_docs,
-                             create_order_docs,)
+                              create_order_docs, )
 
 
 def recreate():
@@ -17,7 +18,6 @@ def recreate():
 def create_index():
     """Creates indices """
     create_suborder_index()
-    # create_orders_index()
 
 
 def create_docs():
@@ -147,6 +147,7 @@ def format_date_range(date_range):
 
     return date_range
 
+
 class DSLGenerator(object):
     """Class for generating DSL body for searching"""
     def __init__(self, query_fields, date_range):
@@ -240,7 +241,7 @@ class DSLGenerator(object):
         """
         :return: dictionary with key of 'query' and prepended method __must
         """
-        return{
+        return {
             'query': self.__must
         }
 
@@ -249,7 +250,7 @@ class DSLGenerator(object):
         """
         :return: dictionary with key of 'bool' with nested key 'must' and values of method __get_filters
         """
-        return{
+        return {
             'bool': {
                 'must': self.__get_filters()
             }
@@ -261,7 +262,7 @@ class DSLGenerator(object):
         Dictionary header of DSL body
         :return: nested dictionary
         """
-        return{
+        return {
             'sort': [
                 '_score',
 
