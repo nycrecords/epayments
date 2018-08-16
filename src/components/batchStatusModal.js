@@ -13,6 +13,7 @@ class BatchStatusModal extends React.Component {
             new_status: '',
             orders: []
         };
+        // this.status=this.props.queueForUpdate.filter(i => i!='');
         this.handleOpen = (e) => this.setState({
             modalOpen: true,
         });
@@ -88,15 +89,6 @@ class BatchStatusModal extends React.Component {
                     }
                 }
             });
-            this.handleStatus = (e) => {
-                debugger;
-                let i = 0
-                for (i; i < this.props.queueForUpdateBoolean.length; i++) {
-                    if (this.props.queueForUpdateBoolean[i] === true) {
-                        this.setState({orders: [this.state.orders].concat(this.props.queueForUpdate[i])})
-                    }
-                }
-            }
 
             this.handleClose();
         };
@@ -106,7 +98,7 @@ class BatchStatusModal extends React.Component {
         return (
             <Modal
                 trigger={<Button onClick={() => {
-                    this.handleOpen(), this.handleStatus()
+                    this.handleOpen()
                 }} compact size='small' floated='right'>Update Multiple Status</Button>}
                 open={this.state.modalOpen}
                 onClose={this.state.handleClose}>
@@ -114,7 +106,7 @@ class BatchStatusModal extends React.Component {
                     <Modal.Content>
                         <Modal.Description>
                             <Header>
-                                <p>Current Suborders - {this.state.orders}</p>
+                                <p>Current Suborders - {this.props.queueForUpdate.filter(i => i !== '')}</p>
                                 <Form onSubmit={this.handleSubmit}>
                                     <Form.Select label='Change statuses to' fluid selection options={this.statuses}
                                                  onChange={(e, {value}) => {

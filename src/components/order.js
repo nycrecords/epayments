@@ -13,7 +13,6 @@ class Order extends React.Component {
         super(props);
 
 
-
     };
 
 
@@ -40,10 +39,13 @@ class Order extends React.Component {
                           name="queue"
                           checked={this.props.queueForUpdateBoolean[this.props.index] === true}
                           onChange={() => {
-                              (this.props.queueForUpdateBoolean[this.props.index] === true)?
-                                  this.props.addStatusQueue(this.props.suborder_number, this.props.index, false):
-                                  this.props.addStatusQueue(this.props.suborder_number, this.props.index, true);
+                              if (this.props.queueForUpdateBoolean[this.props.index] === true) {
+                                  this.props.deleteStatusQueue(this.props.index, this.props.queueForUpdate, "queueForUpdate")
+                                  this.props.handleListChange("queueForUpdateBoolean", false, this.props.queueForUpdateBoolean, this.props.index)
 
+                              } else {
+                                  this.props.addStatusQueue(this.props.suborder_number, this.props.index, true);
+                              }
 
                           }}
                 />

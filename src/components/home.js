@@ -28,16 +28,15 @@ class Home extends React.Component {
 
         };
         this.addStatusQueue = (suborder, index, boolean) => {
-            // (this.state.queueForUpdateBoolean === undefined || this.state.queueForUpdateBoolean[index] === "" ||
-            //     this.state.queueForUpdateBoolean[index] === false) ?
-            //     this.handleListChange("queueForUpdateBoolean", true, this.state.queueForUpdateBoolean, index) :
-            //     this.handleListChange("queueForUpdateBoolean", false, this.state.queueForUpdateBoolean, index);
             this.handleListChange("queueForUpdateBoolean", boolean, this.state.queueForUpdateBoolean, index);
             this.handleListChange("queueForUpdate", suborder, this.state.queueForUpdate, index);
-            console.log(this.state.queueForUpdate)
-            console.log(this.state.queueForUpdateBoolean)
-
         }
+        this.deleteStatusQueue  = (index, queue, name) => {
+            let newQueue = queue.slice();
+            newQueue[index]='';
+            this.setState({[name]: newQueue})
+            console.log(this.state.queueForUpdate);
+        };
 
         this.addOrder = (order_count, suborder_count, orders) => {
             this.setState({
@@ -106,9 +105,6 @@ class Home extends React.Component {
         };
     };
 
-    generateQueue = () => {
-        this.setState({queueForUpdateBoolean: this.state.queueForUpdateBoolean.concat([false])})
-    };
     handleListChange = (name, value, state, index) => {
         let newState = state.slice()
         newState[index] = value
@@ -161,8 +157,10 @@ class Home extends React.Component {
                 current_status={order.current_status}
                 updateStatus={this.updateStatus}
                 addStatusQueue={this.addStatusQueue}
+                handleListChange={this.handleListChange}
                 queueForUpdateBoolean={this.state.queueForUpdateBoolean}
                 queueForUpdate={this.state.queueForUpdate}
+                deleteStatusQueue={this.deleteStatusQueue}
                 index={this.state.all_orders.indexOf(order)}
 
             />
