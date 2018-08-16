@@ -52,8 +52,6 @@ class Home extends React.Component {
             });
             let idx = this.state.all_orders.indexOf(status_obj);
             let status = {"index": idx, "object": status_obj};
-            console.log(" new status is " + new_status);
-            console.log(status.object.current_status);
             status.object.current_status = new_status;
             let _all_orders = this.state.all_orders.slice();
             _all_orders[status.index] = status.object;

@@ -120,6 +120,11 @@ def orders_doc(doc_type):
 @login_required
 def new_order():
     """
+    retrieves data from order made by user
+
+    if form is submitted, an order with its corresponding suborders,
+     order type, and event are created based on user inputs
+
     :return:
     """
     if request.method == 'POST':  # makes it so we get a post method to receive the info put in on the form
@@ -395,7 +400,7 @@ def batch_status_change():
            a)Letter_generated
            b)Undeliverable - Cant move down the line
         5. Done - End of status changes
-    :return: {status_id, suborder_number, status, comment}, 201
+    :return:
     """
     if request.method == 'POST':
         json = request.get_json(force=True)
@@ -404,10 +409,6 @@ def batch_status_change():
         queue_for_update = json.get("queueForUpdate")
         queue_for_update_boolean = json.get("queueForUpdateBoolean")
         for index in range(len(queue_for_update_boolean)):
-            """
-                POST: {queueForUpdate, queueForUpdateBoolean, new_status, comment};
-                returns: {status_id, suborder_number, status, comment}, 201
-            """
             if queue_for_update_boolean[index]:
                 update_status(queue_for_update[index], comment, new_status)
     return jsonify(), 200

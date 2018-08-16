@@ -80,11 +80,10 @@ class StatusModal extends React.Component {
                     new_status: this.state.new_status
                 })
             }).then((response) => {
-                console.log(response)
+                // console.log(response);
                 return response.json()
             }).then((json) => {
                 this.props.updateStatus(this.props.suborder_number, this.state.new_status);
-                // this.setState({comment: '', new_status: this.state.new_status});
             });
 
             this.handleClose();

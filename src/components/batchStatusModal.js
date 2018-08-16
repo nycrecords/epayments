@@ -80,7 +80,6 @@ class BatchStatusModal extends React.Component {
                     new_status: this.state.new_status
                 })
             }).then((response) => {
-                console.log(response);
                 return response.json()
             }).then((json) => {
                 this.setState({
