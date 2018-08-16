@@ -190,6 +190,7 @@ class SubOrderForm extends React.Component {
                         <Form.Input label="Number of Copies"
                                     name="numCopies"
                                     placeholder="Number of Copies"
+                                    required
                                     maxLength={2}
                                     onChange={(e, {value}) => {
                                         if (/^[0-9]+$/.test(value.slice(-1)) || value === '') {
