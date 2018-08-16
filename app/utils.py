@@ -199,6 +199,7 @@ def import_file(file_name):
 
         db.session.add(suborder)
         db.session.commit()
+        suborder.es_create()
 
         # Insert into the StatusTracker Table
         insert_event = Events(suborder_number=suborder_number,

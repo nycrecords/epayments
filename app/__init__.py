@@ -4,6 +4,7 @@ from flask_sqlalchemy import SQLAlchemy
 from flask_bootstrap import Bootstrap
 from flask_apscheduler import APScheduler
 from flask_login import LoginManager
+from elasticsearch import Elasticsearch
 
 from config import config, Config
 
@@ -15,6 +16,9 @@ scheduler = APScheduler()
 login_manager = LoginManager()
 
 PYTZ_TIMEZONE = pytz.timezone(Config.TIME_ZONE)
+
+# ElasticSearch Extension
+es = Elasticsearch()
 
 
 def create_app(config_name):
@@ -33,6 +37,9 @@ def create_app(config_name):
     bootstrap.init_app(app)
     db.init_app(app)
     login_manager.init_app(app)
+
+    app.elasticsearch = Elasticsearch([app.config['ELASTICSEARCH_URL']]) \
+        if app.config['ELASTICSEARCH_URL'] else None
 
     # Base template that uses React for frontend
     from .main import main as main_blueprint

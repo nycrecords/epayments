@@ -6,18 +6,69 @@ input, label {
     display: block;
 }
 
+html, body {
+    padding-top: .5em;
+    overflow: auto;
+}
+
 .ui.selection.dropdown {
     min-width: 10%;
 }
 
-#grid-column-order {
-    max-height: 55em;
-    overflow-y: scroll;
+.-no-padding {
+    padding: 0 !important;
 }
 
-html, body {
-    padding-top: 1em;
-    overflow: auto;
+.-margin-left {
+    margin-left: .3em !important;
+}
+
+.-half {
+    width: 50%;
+    float: left;
+}
+
+.-float-right {
+    float: right;
+}
+
+.-no-margin {
+    margin: 0 !important;
+}
+
+.-no-top-padding {
+    padding-top: 0 !important;
+}
+
+.-margin-top-none {
+    margin-top: 0 !important;
+}
+
+#rail-right {
+    width: 200px !important;
+    top: 2.75em;
+    max-height: 42em;
+}
+
+#orders-properties {
+    left: 2em;
+    bottom: 2em;
+}
+
+#grid-column-order {
+    overflow-y: auto;
+    max-height: 83vh;
+    padding-right: .30em;
+}
+
+.center {
+    margin: 0 auto;
+}
+
+#grid-column-search {
+    width: 35.5%;
+    top: 2.25em;
+
 }
 
 #center {

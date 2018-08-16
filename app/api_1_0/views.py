@@ -1,12 +1,12 @@
 from datetime import date
+
 from flask import jsonify, abort, request
 from flask_login import login_user, logout_user, current_user, login_required
 from sqlalchemy import desc
-from app.api_1_0 import api_1_0 as api
 
+from app.api_1_0 import api_1_0 as api
 from app.api_1_0.utils import (
     update_status,
-    get_orders_by_fields,
     _print_orders,
     _print_large_labels,
     _print_small_labels,
@@ -23,6 +23,7 @@ from app.models import (
     Users,
     Events
 )
+from app.search.search import search_queries
 
 
 @api.route('/', methods=['GET'])
@@ -46,7 +47,7 @@ def get_orders():
 
     GET {order_number, suborder_number, order_type, billing_name, user, date_received_start, date_received_end},
 
-    Search functionality should be in utils.py
+    Search functionality should be in search.py
 
     :return {orders, 200}
     """
@@ -60,29 +61,42 @@ def get_orders():
         user = ''
         date_received_start = json.get("date_received_start")
         date_received_end = json.get("date_received_end")
+        date_submitted_start = json.get("date_submitted_start")
+        date_submitted_end = json.get("date_submitted_end")
+        start = json.get("start")
+        size = json.get("size")
 
-        if not (order_number or suborder_number or billing_name) and not date_received_start:
-            date_received_start = date.today()
-        order_count, suborder_count, orders = get_orders_by_fields(order_number,
-                                                                   suborder_number,
-                                                                   order_type,
-                                                                   status,
-                                                                   billing_name,
-                                                                   user,
-                                                                   date_received_start,
-                                                                   date_received_end)
-        return jsonify(order_count=order_count,
-                       suborder_count=suborder_count,
-                       all_orders=orders), 200
+        orders = search_queries(order_number,
+                                suborder_number,
+                                order_type,
+                                status,
+                                billing_name,
+                                date_received_start,
+                                date_received_end,
+                                date_submitted_start,
+                                date_submitted_end,
+                                start,
+                                size,
+                                "search")
+
+        # formatting results
+        formatted_orders = [orders['hits']['hits'][i]['_source'] for i in range(len(orders['hits']['hits']))]
+        suborder_total = orders['hits']['total']
+        order_total = orders['aggregations']['order_count']['value']
+
+        return jsonify(order_count=order_total,
+                       suborder_count=suborder_total,
+                       all_orders=formatted_orders,), 200
 
     else:
-        orders = []
-        order_count = 0
-        for order in Orders.query.filter(Orders.date_received == date.today()):
-            order_count += 1
-            for suborder in order.suborder:
-                orders.append(suborder.serialize)
-        return jsonify(order_count=order_count, suborder_count=len(orders), all_orders=orders), 200
+        orders = search_queries(date_received_start=date.today().strftime('%m/%d/%Y'))
+        formatted_orders = [orders['hits']['hits'][i]['_source'] for i in range(len(orders['hits']['hits']))]
+        suborder_total = orders['hits']['total']
+        order_total = orders['aggregations']['order_count']['value']
+
+        return jsonify(order_count=order_total,
+                       suborder_count=suborder_total,
+                       all_orders=formatted_orders,), 200
 
 
 @api.route('/orders/<doc_type>', methods=['GET'])

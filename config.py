@@ -24,6 +24,11 @@ class Config:
     SFTP_UPLOAD_DIRECTORY = os.environ.get('SFTP_UPLOAD_DIRECTORY')
     TIME_ZONE = os.environ.get('TIME_ZONE') or 'US/Eastern'
 
+    # Elastic Search Configurations
+    ELASTICSEARCH_URL = os.environ.get('ELASTICSEARCH_URL') or 'localhost:9200'
+    ELASTICSEARCH_ENABLED = os.environ.get("ELASTICSEARCH_ENABLED") or 'True'
+    ELASTICSEARCH_INDEX = os.environ.get("ELASTICSEARCH_INDEX") or 'suborder'
+
     @staticmethod
     def init_app(app):
         pass

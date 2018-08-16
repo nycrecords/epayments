@@ -1,10 +1,11 @@
 import csv
+from datetime import datetime
+
 from flask import render_template, current_app, url_for
 from flask_login import current_user
-from sqlalchemy import asc, or_, and_
-from xhtml2pdf.pisa import CreatePDF
-from datetime import datetime
 from os.path import join
+from sqlalchemy import asc
+from xhtml2pdf.pisa import CreatePDF
 
 from app import db
 from app.constants import (
@@ -27,7 +28,6 @@ from app.models import (
     PhotoGallery,
     TaxPhoto,
     PropertyCard,
-    Users,
     Events
 )
 
@@ -133,7 +133,7 @@ def update_status(suborder_number, comment, new_status):
 
         db.session.add(event)
         db.session.commit()
-
+        suborder.es_update()
         return 201
     else:
         return 400
@@ -251,6 +251,7 @@ def _print_orders(search_params):
     }
 
     html = ''
+
     for item in suborders:
         order_info = order_type_models_handler[item.order_type].query.filter_by(
             suborder_number=item.id).one().serialize

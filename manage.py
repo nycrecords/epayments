@@ -75,5 +75,12 @@ def test(coverage=False):
         COV.erase()
 
 
+@manager.command
+def es_recreate():
+    """Recreates the index and request docs"""
+    from app.search.search import recreate
+    recreate()
+
+
 if __name__ == '__main__':
     manager.run()
