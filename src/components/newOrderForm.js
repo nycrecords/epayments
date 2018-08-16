@@ -165,6 +165,7 @@ class NewOrderForm extends React.Component {
                     }
                 });
         };
+
         this.handleEmptyStates = () => {
             /*Add empty index to list whenever additional suborders are prompted
              to prevent null insert into DB if user left some fields unanswered
@@ -256,20 +257,23 @@ class NewOrderForm extends React.Component {
             if (this.state.status[i] === '') {
                 this.message += ("Please fill in Status in Suborder: " + (i + 1) + "\n");
             }
-            if (this.state.numCopies[i] === ''){
+            if (this.state.numCopies[i] === '') {
                 this.message += ("Please fill in Number of Copies in Suborder: " + (i + 1) + "\n");
             }
             if (this.state.orderType[i] !== '') {
-                if ((this.state.showBirthSearch[i] === true || this.state.showBirthCert[i] === true) && this.state.gender[i] === '') {
+                if ((this.state.showBirthSearch[i] === true || this.state.showBirthCert[i] === true) &&
+                    this.state.gender[i] === '') {
                     this.message += ("Please fill in the Gender in Suborder: " + (i + 1) + "\n");
                 }
-                if (this.state.year[i] === ''){
+                if (this.state.year[i] === '' && this.state.showPhotoGalleryForm[i] === false &&
+                    this.state.showPropertyForm[i] === false && this.state.showTaxForm[i] === false) {
                     this.message += ("Please fill in the Year in Suborder: " + (i + 1) + "\n");
                 }
                 if (this.state.showPhotoGalleryForm[i] === false && this.state.borough[i] === '') {
                     this.message += ("Please fill in the Borough in Suborder:" + (i + 1) + "\n");
                 }
-                if ((this.state.showPhotoGalleryForm[i] === true || this.state.showTaxForm[i] === true) && (this.state.printSize[i] === '')) {
+                if ((this.state.showPhotoGalleryForm[i] === true || this.state.showTaxForm[i] === true) &&
+                    (this.state.printSize[i] === '')) {
                     this.message += ("Please fill in the Printing Size in Suborder: " + (i + 1) + "\n")
                 }
                 if (this.state.showTaxForm[i] === true && this.state.collection[i] === '') {

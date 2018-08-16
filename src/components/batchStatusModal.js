@@ -2,6 +2,7 @@ import React from 'react';
 import {Button, Header, Modal, Form, TextArea} from 'semantic-ui-react';
 import 'semantic-ui-css/semantic.min.css';
 import {csrfFetch} from "../utils/fetch"
+import swal from 'sweetalert';
 
 class BatchStatusModal extends React.Component {
     constructor() {
@@ -82,7 +83,8 @@ class BatchStatusModal extends React.Component {
             }).then((json) => {
                 this.setState({
                     comment: '',
-                    new_status: this.state.new_status});
+                    new_status: this.state.new_status
+                });
                 console.log(this.state.new_status)
                 for (var i = 0; i < this.props.queueForUpdateBoolean.length; i++) {
                     if (this.props.queueForUpdateBoolean[i]) {
@@ -92,6 +94,7 @@ class BatchStatusModal extends React.Component {
             });
 
             this.handleClose();
+            swal("Batch Status Update Success", '', "success");
             this.props.clearQueue();
         };
     }
@@ -113,9 +116,7 @@ class BatchStatusModal extends React.Component {
                                     <Form.Select label='Change statuses to' fluid selection options={this.statuses}
                                                  onChange={(e, {value}) => {
                                                      this.setState({new_status: value})
-                                                 }
-
-                                                 }
+                                                 }}
                                                  value={this.state.new_status}
                                     />
                                     <Form.Field id='form-textarea-control-opinion' control={TextArea}
@@ -123,9 +124,7 @@ class BatchStatusModal extends React.Component {
                                                 maxLength="200"
                                                 onChange={(e, {value}) => {
                                                     this.setState({comment: value})
-                                                }
-
-                                                }
+                                                }}
                                                 value={this.state.comment}
                                     />
                                 </Form>

@@ -173,13 +173,7 @@ def new_order():
         zip_code = json.get("zipCode")
         today = datetime.datetime.today().strftime("%m/%d/%y")
         year = datetime.datetime.now().strftime("%Y")
-        user_info = request.get_json(force=True)
 
-        # create_object(OrderNumberCounter())
-
-        print(status)
-        print(order_type)
-        print(building_number)
         next_order_number = OrderNumberCounter.query.filter_by(year=year).one().next_order_number
         order_id = "EPAY-" + year + "-" + str(next_order_number)
         main_order = Orders(id=order_id,
@@ -336,7 +330,7 @@ def new_order():
                                                          suborder_number=sub_order.id)
             }
             create_object(handler_for_order_type[order_type[index]])
-            user_email = Users.query.filter_by(email=user_info['email']).one_or_none()
+            user_email = Users.query.filter_by(email=current_user.email).one_or_none().get_id()
             new_value = {"status": status[index]}
 
             event = Events(suborder_number=sub_order.id, user_email=user_email,
