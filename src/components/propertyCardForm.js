@@ -2,25 +2,6 @@ import React from 'react'
 import {Grid, Form} from 'semantic-ui-react';
 
 class PropertyCardForm extends React.Component {
-    constructor() {
-        super();
-        this.state = {
-            certified: '',
-            block: '',
-            lot: '',
-            borough: '',
-            buildingNum: '',
-            street: '',
-            mail: false,
-            contactNum: '',
-            imgId: '',
-            imgTitle: '',
-            comment: '',
-            personalUseAgreement: false,
-            addDescription: '',
-            printSize: '',
-        }
-    }
 
     render() {
         return (
@@ -32,7 +13,6 @@ class PropertyCardForm extends React.Component {
                                     placeholder="Block"
                                     maxLength={9}
                                     onChange={(e, {value}) => {
-                                        this.setState({block: value})
                                         this.props.callBack("block", value, this.props.index, this.props.state.block)
                                     }}
                                     value={this.props.state.block[this.props.index]}
@@ -42,7 +22,6 @@ class PropertyCardForm extends React.Component {
                                     placeholder="Lot"
                                     maxLength={9}
                                     onChange={(e, {value}) => {
-                                        this.setState({lot: value})
                                         this.props.callBack("lot", value, this.props.index, this.props.state.lot)
                                     }}
                                     value={this.props.state.lot[this.props.index]}
@@ -53,7 +32,6 @@ class PropertyCardForm extends React.Component {
                                      options={this.props.boroughOptions}
                                      placeholder="Borough"
                                      onChange={(e, {value}) => {
-                                         this.setState({borough: value});
                                          this.props.callBack("borough", value, this.props.index, this.props.state.borough);
 
                                      }}
@@ -64,7 +42,6 @@ class PropertyCardForm extends React.Component {
                                     maxLength={10}
                                     placeholder="Building Number"
                                     onChange={(e, {value}) => {
-                                        this.setState({buildingNum: value})
                                         this.props.callBack("buildingNum", value, this.props.index, this.props.state.buildingNum)
                                     }}
                                     value={this.props.state.buildingNum[this.props.index]}
@@ -74,7 +51,6 @@ class PropertyCardForm extends React.Component {
                                     placeholder="Street"
                                     maxLength={40}
                                     onChange={(e, {value}) => {
-                                        this.setState({street: value})
                                         this.props.callBack("street", value, this.props.index, this.props.state.street)
                                     }}
                                     value={this.props.state.street[this.props.index]}
@@ -82,12 +58,9 @@ class PropertyCardForm extends React.Component {
                         <Form.Checkbox label="Mail"
                                        name="mail"
                                        onChange={() => {
-                                           (this.state.mail === false) ?
+                                           (this.props.state.mail[this.props.index] === false) ?
                                                this.props.callBack("mail", true, this.props.index, this.props.state.mail) :
                                                this.props.callBack("mail", false, this.props.index, this.props.state.mail);
-                                           (this.state.mail === false) ?
-                                               this.setState({mail: true}) :
-                                               this.setState({mail: false})
                                        }}
                                        checked={this.props.state.mail[this.props.index]}
                         />
@@ -96,7 +69,6 @@ class PropertyCardForm extends React.Component {
                                     placeholder="Description"
                                     maxLength={40}
                                     onChange={(e, {value}) => {
-                                        this.setState({addDescription: value})
                                         this.props.callBack("addDescription", value, this.props.index, this.props.state.addDescription)
                                     }}
                                     value={this.props.state.addDescription[this.props.index]}
@@ -106,7 +78,6 @@ class PropertyCardForm extends React.Component {
                                     placeholder="Contact Number"
                                     maxLength={35}
                                     onChange={(e, {value}) => {
-                                        this.setState({contactNum: value})
                                         this.props.callBack("contactNum", value, this.props.index, this.props.state.contactNum)
                                     }}
                                     value={this.props.state.contactNum[this.props.index]}
@@ -116,7 +87,6 @@ class PropertyCardForm extends React.Component {
                                     placeholder="Certified"
                                     maxLength={40}
                                     onChange={(e, {value}) => {
-                                        this.setState({certified: value})
                                         this.props.callBack("certified", value, this.props.index, this.props.state.certified)
                                     }}
                                     value={this.props.state.certified[this.props.index]}

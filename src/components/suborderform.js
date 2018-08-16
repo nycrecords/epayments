@@ -47,27 +47,12 @@ const statusOptions = [
 class SubOrderForm extends React.Component {
     constructor() {
         super();
-        this.state = {
-            orderType: '',
-            numCopies: '',
-            status: '',
-            showBirthCert: false,
-            showBirthSearch: false,
-            showDeathCert: false,
-            showDeathSearch: false,
-            showMarriageCert: false,
-            showMarriageSearch: false,
-            showTaxForm: false,
-            showPhotoGalleryForm: false,
-            showPropertyForm: false,
-        }
         this.orderList = ['Tax Photo', 'Photo Gallery',
             'Property Card', 'Marriage Search',
             'Marriage Cert', 'Death Search',
             'Death Cert', 'Birth Search',
             'Birth Cert'];
 
-        this.handleChange = this.handleChange.bind(this);
         this.clearSelection = () => {
             this.setState({
                 orderType: '',
@@ -87,16 +72,6 @@ class SubOrderForm extends React.Component {
         };
 
     }
-
-    handleChange = (e) => {
-        const target = e.target;
-        const value = target.value;
-        const name = target.name;
-        this.props.callBack(name, value, this.props.index, this.props.state + "." + name);
-        this.setState({
-            [name]: value
-        });
-    };
 
     render() {
         return (
@@ -120,7 +95,6 @@ class SubOrderForm extends React.Component {
                                      placeholder="Order Type"
                                      options={orderTypeOptions}
                                      onChange={(e, {value}) => {
-                                         this.setState({orderType: value});
                                          this.props.callBack("orderType", value, this.props.index, this.props.state.orderType);
                                          //toggles hidden forms for Tax Photo if selected
                                          (this.orderList.indexOf(value) === 0) ?
@@ -194,7 +168,6 @@ class SubOrderForm extends React.Component {
                                     maxLength={2}
                                     onChange={(e, {value}) => {
                                         if (/^[0-9]+$/.test(value.slice(-1)) || value === '') {
-                                            this.setState({numCopies: value});
                                             this.props.callBack("numCopies", value, this.props.index, this.props.state.numCopies);
 
                                         }
@@ -208,7 +181,6 @@ class SubOrderForm extends React.Component {
                                      placeholder="Status"
                                      options={statusOptions}
                                      onChange={(e, {value}) => {
-                                         this.setState({status: value});
                                          this.props.callBack("status", value, this.props.index, this.props.state.status);
                                      }}
                                      value={this.props.state.status[this.props.index]}

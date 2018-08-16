@@ -3,31 +3,17 @@ import {Grid, Form} from 'semantic-ui-react';
 import VitalRecordForm from "./vitalRecordForm";
 
 class BirthSearchForm extends React.Component {
-    constructor() {
-        super()
-        this.state = {
-            gender: '',
-            fatherName: '',
-            motherName: '',
-            birthPlace: '',
-            lastName: '',
-            firstName: '',
-            middleName: '',
-        }
-    }
 
     render() {
         return (
             <Grid>
                 <Grid.Row>
                     <Grid.Column>
-                        {/*<Form.Group>*/}
                         <Form.Input label="First Name"
                                     name="firstName"
                                     placeholder="First Name"
                                     maxLength={40}
                                     onChange={(e, {value}) => {
-                                        this.setState({firstName: value})
                                         this.props.callBack("firstName", value, this.props.index, this.props.state.firstName)
                                     }}
                                     value={this.props.state.firstName[this.props.index]}
@@ -37,7 +23,6 @@ class BirthSearchForm extends React.Component {
                                     placeholder="Middle Name"
                                     maxLength={40}
                                     onChange={(e, {value}) => {
-                                        this.setState({middleName: value})
                                         this.props.callBack("middleName", value, this.props.index, this.props.state.middleName)
                                     }}
                                     value={this.props.state.middleName[this.props.index]}
@@ -47,18 +32,15 @@ class BirthSearchForm extends React.Component {
                                     placeholder="Last Name"
                                     maxLength={25}
                                     onChange={(e, {value}) => {
-                                        this.setState({lastName: value})
                                         this.props.callBack("lastName", value, this.props.index, this.props.state.lastName)
                                     }}
                                     value={this.props.state.lastName[this.props.index]}
                         />
-                        {/*</Form.Group>*/}
                         <Form.Input label="Birth Place"
                                     name="birthPlace"
                                     placeholder="BirthPlace"
                                     maxLength={40}
                                     onChange={(e, {value}) => {
-                                        this.setState({birthPlace: value})
                                         this.props.callBack("birthPlace", value, this.props.index, this.props.state.birthPlace)
                                     }}
                                     value={this.props.state.birthPlace[this.props.index]}
@@ -69,7 +51,6 @@ class BirthSearchForm extends React.Component {
                                      placeholder="Gender"
                                      options={this.props.genderOptions}
                                      onChange={(e, {value}) => {
-                                         this.setState({gender: value});
                                          this.props.callBack("gender", value, this.props.index, this.props.state.gender);
                                      }}
                                      value={this.props.state.gender[this.props.index]}
@@ -79,7 +60,6 @@ class BirthSearchForm extends React.Component {
                                     placeholder="Mother Name"
                                     maxLength={40}
                                     onChange={(e, {value}) => {
-                                        this.setState({motherName: value})
                                         this.props.callBack("motherName", value, this.props.index, this.props.state.motherName)
                                     }}
                                     value={this.props.state.motherName[this.props.index]}
@@ -89,7 +69,6 @@ class BirthSearchForm extends React.Component {
                                     placeholder="Father Name"
                                     maxLength={40}
                                     onChange={(e, {value}) => {
-                                        this.setState({fatherName: value})
                                         this.props.callBack("fatherName", value, this.props.index, this.props.state.fatherName)
                                     }}
                                     value={this.props.state.fatherName[this.props.index]}
@@ -104,20 +83,6 @@ class BirthSearchForm extends React.Component {
 }
 
 class BirthCertForm extends React.Component {
-    constructor() {
-        super()
-        this.state = {
-            gender: '',
-            fatherName: '',
-            motherName: '',
-            birthPlace: '',
-            lastName: '',
-            firstName: '',
-            middleName: '',
-            certificateNum: '',
-
-        }
-    }
 
     render() {
         return (
@@ -129,7 +94,6 @@ class BirthCertForm extends React.Component {
                                     placeholder="Certificate Number"
                                     maxLength={40}
                                     onChange={(e, {value}) => {
-                                        this.setState({certificateNum: value})
                                         this.props.callBack("certificateNum", value, this.props.index, this.props.state.certificateNum)
                                     }}
                                     value={this.props.state.certificateNum[this.props.index]}

@@ -350,9 +350,6 @@ class NewOrderForm extends React.Component {
             console.error(error);
             this.setState({loading: false});
         });
-        {
-            this.clearSelection()
-        }
         swal("Thank you", "Your order has been submitted", "success");
 
     };

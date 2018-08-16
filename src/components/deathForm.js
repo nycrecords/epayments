@@ -3,28 +3,16 @@ import {Grid, Form} from 'semantic-ui-react';
 import VitalRecordForm from "./vitalRecordForm";
 
 class DeathSearchForm extends React.Component {
-    constructor() {
-        super()
-        this.state = {
-            cemetery: '',
-            lastName: '',
-            firstName: '',
-            middleName: '',
-            deathPlace: '',
-        }
-    }
     render() {
         return (
             <Grid>
                 <Grid.Row>
                     <Grid.Column>
-                        {/*<Form.Group>*/}
                             <Form.Input label="First Name"
                                         name="firstName"
                                         placeholder="First Name"
                                         maxLength={40}
                                         onChange={(e, {value}) => {
-                                            this.setState({firstName: value})
                                             this.props.callBack("firstName", value, this.props.index, this.props.state.firstName)
                                         }}
                                         value={this.props.state.firstName[this.props.index]}
@@ -34,7 +22,6 @@ class DeathSearchForm extends React.Component {
                                         placeholder="Middle Name"
                                         maxLength={40}
                                         onChange={(e, {value}) => {
-                                            this.setState({middleName: value})
                                             this.props.callBack("middleName", value, this.props.index, this.props.state.middleName)
                                         }}
                                         value={this.props.state.middleName[this.props.index]}
@@ -44,18 +31,15 @@ class DeathSearchForm extends React.Component {
                                         placeholder="Last Name"
                                         maxLength={25}
                                         onChange={(e, {value}) => {
-                                            this.setState({lastName: value})
                                             this.props.callBack("lastName", value, this.props.index, this.props.state.lastName)
                                         }}
                                         value={this.props.state.lastName[this.props.index]}
                             />
-                        {/*</Form.Group>*/}
                         <Form.Input label="Cemetery"
                                     name="cemetery"
                                     placeholder="Cemetery"
                                     maxLength={40}
                                     onChange={(e, {value}) => {
-                                        this.setState({cemetery: value})
                                         this.props.callBack("cemetery", value, this.props.index, this.props.state.cemetery)
                                     }}
                                     value={this.props.state.cemetery[this.props.index]}
@@ -65,7 +49,6 @@ class DeathSearchForm extends React.Component {
                                     placeholder="Death Place"
                                     maxLength={40}
                                     onChange={(e, {value}) => {
-                                        this.setState({deathPlace: value})
                                         this.props.callBack("deathPlace", value, this.props.index, this.props.state.deathPlace)
                                     }}
                                     value={this.props.state.deathPlace[this.props.index]}
@@ -81,17 +64,6 @@ class DeathSearchForm extends React.Component {
 }
 
 class DeathCertForm extends React.Component {
-    constructor() {
-        super()
-        this.state = {
-            cemetery: '',
-            lastName: '',
-            firstName: '',
-            middleName: '',
-            deathPlace: '',
-            certificateNum: '',
-        }
-    }
     render() {
         return (
             <Grid>
@@ -102,7 +74,6 @@ class DeathCertForm extends React.Component {
                                     placeholder="Certificate Number"
                                     maxLength={40}
                                     onChange={(e, {value}) => {
-                                        this.setState({certificateNum: value})
                                         this.props.callBack("certificateNum", value, this.props.index, this.props.state.certificateNum)
                                     }}
                                     value={this.props.state.certificateNum[this.props.index]}

@@ -3,17 +3,6 @@ import {Grid, Form} from 'semantic-ui-react';
 import VitalRecordForm from "./vitalRecordForm";
 
 class MarriageSearchForm extends React.Component {
-    constructor() {
-        super()
-        this.state = {
-            certificateNum: '',
-            groomLastName: '',
-            groomFirstName: '',
-            brideLastName: '',
-            brideFirstName: '',
-            marriagePlace: '',
-        }
-    }
 
     render() {
         return (
@@ -26,7 +15,6 @@ class MarriageSearchForm extends React.Component {
                                         placeholder="Groom First Name"
                                         maxLength={40}
                                         onChange={(e, {value}) => {
-                                            this.setState({groomFirstName: value})
                                             this.props.callBack("groomFirstName", value, this.props.index, this.props.state.groomFirstName)
                                         }}
                                         value={this.props.state.groomFirstName[this.props.index]}
@@ -36,7 +24,6 @@ class MarriageSearchForm extends React.Component {
                                         placeholder="Groom Last Name"
                                         maxLength={25}
                                         onChange={(e, {value}) => {
-                                            this.setState({groomLastName: value})
                                             this.props.callBack("groomLastName", value, this.props.index, this.props.state.groomLastName)
                                         }}
                                         value={this.props.state.groomLastName[this.props.index]}
@@ -48,7 +35,6 @@ class MarriageSearchForm extends React.Component {
                                         placeholder="Bride First Name"
                                         maxLength={40}
                                         onChange={(e, {value}) => {
-                                            this.setState({brideFirstName: value})
                                             this.props.callBack("brideFirstName", value, this.props.index, this.props.state.brideFirstName)
                                         }}
                                         value={this.props.state.brideFirstName[this.props.index]}
@@ -58,7 +44,6 @@ class MarriageSearchForm extends React.Component {
                                         placeholder="Bride Last Name"
                                         maxLength={25}
                                         onChange={(e, {value}) => {
-                                            this.setState({brideLastName: value})
                                             this.props.callBack("brideLastName", value, this.props.index, this.props.state.brideLastName)
                                         }}
                                         value={this.props.state.brideLastName[this.props.index]}
@@ -69,7 +54,6 @@ class MarriageSearchForm extends React.Component {
                                     placeholder="Marriage Place"
                                     maxLength={40}
                                     onChange={(e, {value}) => {
-                                        this.setState({marriagePlace: value})
                                         this.props.callBack("marriagePlace", value, this.props.index, this.props.state.marriagePlace)
                                     }}
                                     value={this.props.state.marriagePlace[this.props.index]}
@@ -84,19 +68,6 @@ class MarriageSearchForm extends React.Component {
 }
 
 class MarriageCertForm extends React.Component {
-    constructor() {
-        super()
-        this.state = {
-            certificateNum: '',
-            groomLastName: '',
-            groomFirstName: '',
-            brideLastName: '',
-            brideFirstName: '',
-            marriagePlace: '',
-
-        }
-
-    }
 
     render() {
         return (
@@ -108,7 +79,6 @@ class MarriageCertForm extends React.Component {
                                     placeholder="Certificate Number"
                                     maxLength={40}
                                     onChange={(e, {value}) => {
-                                        this.setState({certificateNum: value})
                                         this.props.callBack("certificateNum", value, this.props.index, this.props.state.certificateNum)
                                     }}
                                     value={this.props.state.certificateNum[this.props.index]}
