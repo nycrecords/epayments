@@ -90,8 +90,8 @@ def _get_order_types(clients_data):
 
 def import_file(file_name):
     """
-        Inserts a single order from an XML file into the database.
-        :param file_name: XML file to import
+        Inserts a single order from an XML files into the database.
+        :param file_name: XML files to import
         :return: Bool
     """
     # 1. Populate the XML Parser
