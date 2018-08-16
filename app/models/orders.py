@@ -2,7 +2,6 @@ from app import db, es
 from app.constants import order_types, status
 from app.constants.search import DATETIME_FORMAT
 from sqlalchemy.dialects.postgresql import ARRAY
-from flask import current_app
 
 
 class Orders(db.Model):
@@ -170,7 +169,6 @@ class Suborders(db.Model):
             'order_type': self.order_type,
             'current_status': self.status
         }
-
 
     # Elasticsearch
     def es_create(self):

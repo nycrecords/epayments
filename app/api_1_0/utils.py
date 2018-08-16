@@ -35,8 +35,6 @@ from app.models import (
 from app.search.search import search_queries
 from app.search.searchtypes import SearchFunctions
 
-import time
-
 
 def _order_query_filters(order_number, suborder_number, order_type, status, billing_name, user, date_received_start,
                          date_received_end):
@@ -280,14 +278,10 @@ def _print_orders(search_params):
         html += render_template("orders/{}".format(order_type_template_handler[item['order_type']]),
                                 order_info=order_info)
 
-    time1 = time.time()
     filename = 'order_sheets_{username}_{time}.pdf'.format(username=current_user.email, time=datetime.now().strftime("%Y%m%d-%H%M%S"))
-
     with open(join(current_app.static_folder, 'files', filename), 'w+b') as file_:
         CreatePDF(src=html, dest=file_)
 
-    time2 = time.time()
-    print(time2 - time1)
     return url_for('static', filename='files/{}'.format(filename), _external=True)
 
 

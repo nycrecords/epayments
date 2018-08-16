@@ -1,5 +1,5 @@
 import React from 'react';
-import {Button, Container, Dimmer,Rail ,Grid, Header, Icon, Loader, Segment,} from 'semantic-ui-react';
+import {Button, Container, Dimmer, Rail, Grid, Header, Icon, Loader, Segment,} from 'semantic-ui-react';
 import {connect} from 'react-redux';
 import {mapDispatchToProps, mapStateToProps} from "../utils/reduxMappers";
 import OrderForm from "./order_form";
@@ -27,7 +27,7 @@ class Home extends React.Component {
         };
 
         this.addOrder = (order_count, suborder_count, orders, firstTime) => {
-            if(firstTime){
+            if (firstTime) {
                 this.setState({
                     all_orders: orders,
                     order_count: order_count,
@@ -36,11 +36,11 @@ class Home extends React.Component {
                 });
                 this.div.scrollTop = 0;
             } else {
-               this.setState((prevState)=>{
-                   return{
-                       all_orders: prevState.all_orders.concat(orders),
-                       suborder_two: prevState.suborder_two + CHUNK_SIZE
-                   };
+                this.setState((prevState) => {
+                    return {
+                        all_orders: prevState.all_orders.concat(orders),
+                        suborder_two: prevState.suborder_two + CHUNK_SIZE
+                    };
                 });
             }
         };
@@ -129,7 +129,7 @@ class Home extends React.Component {
                 }
             })
             .then((json) => {
-                this.addOrder(json.order_count, json.suborder_count, json.all_orders,true);
+                this.addOrder(json.order_count, json.suborder_count, json.all_orders, true);
             }).catch((error) => {
             console.error(error);
         });
@@ -163,7 +163,7 @@ class Home extends React.Component {
                             <Header as="h1" className="-half">ePayments
                                 <Container className="sub header">Department of Records</Container>
                             </Header>
-                            <Segment basic  className="-half -no-padding">
+                            <Segment basic className="-half -no-padding">
                                 <div className="-float-right">
                                     Hi {this.props.user}
                                     <Button content='Logout' onClick={this.logOut} className="-margin-left"/>
@@ -177,7 +177,7 @@ class Home extends React.Component {
                         <Grid.Column width={3}>
                         </Grid.Column>
                         <Grid.Column width={11} className="-no-padding" id="orders-properties">
-                            <Rail position="left" id="grid-column-search" >
+                            <Rail position="left" id="grid-column-search">
                                 <OrderForm addOrder={this.addOrder}
                                            setLoadingState={this.setLoadingState}
                                            toggleCSV={this.toggleCSV}
@@ -185,9 +185,9 @@ class Home extends React.Component {
                             </Rail>
 
                             <Header as="h1" dividing textAlign="center" className='-margin-top-none'>Order</Header>
-                            
-                            <Rail position="right"  id="rail-right">
-                                <p><strong>Number of Items: {this.state.suborder_count}</strong> </p>
+
+                            <Rail position="right" id="rail-right">
+                                <p><strong>Number of Items: {this.state.suborder_count}</strong></p>
 
                                 <p><strong>Number of Orders: {this.state.order_count}</strong></p>
 
@@ -204,15 +204,15 @@ class Home extends React.Component {
                             </Rail>
                             <div id="grid-column-order" ref={elem => this.div = elem}>
                                 {orderRows}
-                                { this.state.suborder_count >= this.state.suborder_two && this.state.suborder_count !== 0?(
+                                {this.state.suborder_count >= this.state.suborder_two && this.state.suborder_count !== 0 ? (
                                     <div className="center">
                                         <Button content="Load More"
-                                            onClick={this.loadMore}/>
+                                                onClick={this.loadMore}/>
                                     </div>
                                 ) : (<div className="center">
-                                    {this.state.suborder_count === 0?
+                                    {this.state.suborder_count === 0 ?
                                         (<p>No Results</p>) : (<p>End of Results</p>)}
-                                    </div>)
+                                </div>)
                                 }
                             </div>
 

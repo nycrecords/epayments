@@ -52,6 +52,7 @@ def create_test_user():
     db.session.add(user)
     db.session.commit()
 
+
 @manager.command
 def test(coverage=False):
     """Run the unit tests."""
@@ -73,11 +74,13 @@ def test(coverage=False):
         print('HTML version: files://%s/indexJS.html' % covdir)
         COV.erase()
 
+
 @manager.command
 def es_recreate():
     """Recreates the index and request docs"""
     from app.search.search import recreate
     recreate()
+
 
 if __name__ == '__main__':
     manager.run()

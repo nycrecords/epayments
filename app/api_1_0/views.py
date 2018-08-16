@@ -1,12 +1,12 @@
 from datetime import date
+
 from flask import jsonify, abort, request
 from flask_login import login_user, logout_user, current_user, login_required
 from sqlalchemy import desc
-from app.api_1_0 import api_1_0 as api
 
+from app.api_1_0 import api_1_0 as api
 from app.api_1_0.utils import (
     update_status,
-    get_orders_by_fields,
     _print_orders,
     _print_large_labels,
     _print_small_labels,
@@ -79,7 +79,6 @@ def get_orders():
                                 start,
                                 size,
                                 "search")
-
 
         # formatting results
         formatted_orders = SearchFunctions.format_results(orders)
