@@ -403,9 +403,6 @@ def batch_status_change():
         new_status = json.get("new_status")
         queue_for_update = json.get("queueForUpdate")
         queue_for_update_boolean = json.get("queueForUpdateBoolean")
-        # print(queue_for_update_boolean)
-        # print(comment)
-        # print(new_status)
         for index in range(len(queue_for_update_boolean)):
             """
                 POST: {queueForUpdate, queueForUpdateBoolean, new_status, comment};

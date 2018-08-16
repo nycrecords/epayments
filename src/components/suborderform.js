@@ -104,7 +104,7 @@ class SubOrderForm extends React.Component {
                 <Grid.Row>
                     <Grid.Column>
                         <Popup trigger={
-                            <Button floated="right" type="button" size="mini" icon='remove' color='red' compact
+                            <Button floated="right" s icon='remove' color='red' compact
                                     onClick={() => {
                                         this.props.deleteSuborder(this.props.index)
                                     }}>

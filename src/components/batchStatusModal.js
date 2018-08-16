@@ -67,8 +67,10 @@ class BatchStatusModal extends React.Component {
 
         this.handleSubmit = (e) => {
             e.preventDefault();
-            console.log(this.props.queueForUpdate);
-            console.log(this.props.queueForUpdateBoolean);
+            if (this.state.new_status === '') {
+                swal("Error", "Please include the desired status change", "error");
+                return;
+            }
             csrfFetch('api/v1.0/statuses/new', {
                 method: "POST",
                 body: JSON.stringify({
@@ -85,7 +87,6 @@ class BatchStatusModal extends React.Component {
                     comment: '',
                     new_status: this.state.new_status
                 });
-                console.log(this.state.new_status)
                 for (var i = 0; i < this.props.queueForUpdateBoolean.length; i++) {
                     if (this.props.queueForUpdateBoolean[i]) {
                         this.props.updateStatus(this.props.queueForUpdate[i].toString(), this.state.new_status);

@@ -2,6 +2,7 @@ import React from 'react';
 import {Button, Header, Modal, Form, TextArea} from 'semantic-ui-react';
 import 'semantic-ui-css/semantic.min.css';
 import {csrfFetch} from "../utils/fetch"
+import swal from 'sweetalert';
 
 
 class StatusModal extends React.Component {
@@ -67,6 +68,10 @@ class StatusModal extends React.Component {
 
         this.handleSubmit = (e) => {
             e.preventDefault();
+            if (this.state.new_status === ''){
+                swal("Error", "Please include the desired status change" , "error");
+                return;
+            }
             csrfFetch('api/v1.0/status/' + this.props.suborder_number.toString(), {
                 method: "POST",
                 body: JSON.stringify({
@@ -79,7 +84,7 @@ class StatusModal extends React.Component {
                 return response.json()
             }).then((json) => {
                 this.props.updateStatus(this.props.suborder_number, this.state.new_status);
-                this.setState({comment: '', new_status: this.state.new_status});
+                // this.setState({comment: '', new_status: this.state.new_status});
             });
 
             this.handleClose();
