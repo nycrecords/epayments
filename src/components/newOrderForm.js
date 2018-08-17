@@ -27,85 +27,22 @@ class NewOrderForm extends React.Component {
             addressLine1: '',
             addressLine2: '',
             city: '',
-            certified: [''],
             state: '',
             zipCode: '',
             phone: '',
-            instructions: '',
-            orderType: [''],
-            deathPlace: [''],
-            cemetery: [''],
-            gender: [''],
-            fatherName: [''],
-            motherName: [''],
-            birthPlace: [''],
-            lastName: [''],
-            firstName: [''],
-            middleName: [''],
-            certificateNum: [''],
-            groomLastName: [''],
-            groomFirstName: [''],
-            brideLastName: [''],
-            brideFirstName: [''],
-            month: [''],
-            day: [''],
-            year: [''],
-            marriagePlace: [''],
-            letter: [false],
-            block: [''],
-            lot: [''],
-            roll: [''],
-            borough: [''],
-            buildingNum: [''],
-            street: [''],
-            mail: [false],
-            contactNum: [''],
-            imgId: [''],
-            imgTitle: [''],
-            comment: [''],
-            personalUseAgreement: [false],
-            addDescription: [''],
-            collection: [''],
-            printSize: [''],
-            numCopies: [''],
-            status: [''],
-            showBirthCert: [false],
-            showBirthSearch: [false],
-            showDeathCert: [false],
-            showDeathSearch: [false],
-            showMarriageCert: [false],
-            showMarriageSearch: [false],
-            showTaxForm: [false],
-            showPhotoGalleryForm: [false],
-            showSubOrder: [false],
-            showPropertyForm: [false],
-            loading: false,
-            subOrderList: [0]
-        };
-        this.handleChange = this.handleChange.bind(this);
-        this.clear = () => {
-            this.index = 1;
-            this.setState({
-                billingName: '',
-                email: '',
-                addressLine1: '',
-                addressLine2: '',
-                city: '',
-                state: '',
-                zipCode: '',
-                phone: '',
-                birthPlace: [''],
-                cemetery: [''],
+            suborder: {
                 certified: [''],
-                deathPlace: [''],
-                fatherName: [''],
-                firstName: [''],
-                gender: [''],
                 instructions: '',
-                lastName: [''],
-                motherName: [''],
-                middleName: [''],
                 orderType: [''],
+                deathPlace: [''],
+                cemetery: [''],
+                gender: [''],
+                fatherName: [''],
+                motherName: [''],
+                birthPlace: [''],
+                lastName: [''],
+                firstName: [''],
+                middleName: [''],
                 certificateNum: [''],
                 groomLastName: [''],
                 groomFirstName: [''],
@@ -115,7 +52,6 @@ class NewOrderForm extends React.Component {
                 day: [''],
                 year: [''],
                 marriagePlace: [''],
-                letter: [''],
                 block: [''],
                 lot: [''],
                 roll: [''],
@@ -131,6 +67,7 @@ class NewOrderForm extends React.Component {
                 printSize: [''],
                 numCopies: [''],
                 status: [''],
+                letter: [false],
                 personalUseAgreement: [false],
                 mail: [false],
                 showBirthCert: [false],
@@ -141,11 +78,84 @@ class NewOrderForm extends React.Component {
                 showMarriageSearch: [false],
                 showTaxForm: [false],
                 showPhotoGalleryForm: [false],
+                showSubOrder: [false],
                 showPropertyForm: [false],
+            },
+            loading: false,
+            subOrderList: [0]
+        };
+        this.handleChange = this.handleChange.bind(this);
+        this.clear = () => {
+            this.index = 1;
+            this.setState({
+                billingName: '',
+                email: '',
+                addressLine1: '',
+                addressLine2: '',
+                city: '',
+                state: '',
+                zipCode: '',
+                phone: '',
+                // birthPlace: [''],
+                // cemetery: [''],
+                // certified: [''],
+                // deathPlace: [''],
+                // fatherName: [''],
+                // firstName: [''],
+                // gender: [''],
+                // instructions: '',
+                // lastName: [''],
+                // motherName: [''],
+                // middleName: [''],
+                // orderType: [''],
+                // certificateNum: [''],
+                // groomLastName: [''],
+                // groomFirstName: [''],
+                // brideLastName: [''],
+                // brideFirstName: [''],
+                // month: [''],
+                // day: [''],
+                // year: [''],
+                // marriagePlace: [''],
+                // letter: [''],
+                // block: [''],
+                // lot: [''],
+                // roll: [''],
+                // borough: [''],
+                // buildingNum: [''],
+                // street: [''],
+                // contactNum: [''],
+                // imgId: [''],
+                // imgTitle: [''],
+                // comment: [''],
+                // addDescription: [''],
+                // collection: [''],
+                // printSize: [''],
+                // numCopies: [''],
+                // status: [''],
+                // personalUseAgreement: [false],
+                // mail: [false],
+                // showBirthCert: [false],
+                // showBirthSearch: [false],
+                // showDeathCert: [false],
+                // showDeathSearch: [false],
+                // showMarriageCert: [false],
+                // showMarriageSearch: [false],
+                // showTaxForm: [false],
+                // showPhotoGalleryForm: [false],
+                // showPropertyForm: [false],
                 subOrderList: [0],
             });
+            // console.log(Object.keys(this.state.suborder));
+            Object.keys(this.state.suborder).filter(key => (typeof(this.state.suborder[key][0])) !== "boolean")
+                .map((key, index) => {
+                    // console.log(key)
+                    this.setState({suborder: {...this.state.suborder, [key]: [''] }});
+                }
+            )
 
-        }
+
+        };
         this.clearSelection = () => {
             swal("Clearing Form", "Are you sure you want to do this?", "warning", {
                 buttons: {
@@ -360,11 +370,14 @@ class NewOrderForm extends React.Component {
     };
 
     callBack = (dataFromChild, value, index, state) => {
-        let newState = state.slice()
-        newState[index] = value
-        this.setState({
-            [dataFromChild]: newState
-        });
+        //debugger
+        let newState = state.slice();
+        newState[index] = value;
+        // this.setState({
+        //     [dataFromChild]: newState
+        // });
+        this.setState({suborder: {...this.state.suborder, [dataFromChild]: newState}});
+        console.log(this.state.suborder);
 
 
     };
@@ -557,7 +570,7 @@ class NewOrderForm extends React.Component {
                                     </Button>
                                     <Button type='submit' positive floated="left" content="Place Order"/>
                                     <Button type="reset" negative onClick={() => {
-                                        this.clearSelection(), this.subOrderForm.clearSelection()
+                                        this.clearSelection()
                                     }} content="Clear"/>
                                     <br/>
                                     <strong>Number of Suborders: {this.index}</strong>
