@@ -217,7 +217,7 @@ class Home extends React.Component {
                                 <strong>Number of Items: {this.state.suborder_count}</strong>
                                 <br/>
                                 <strong>Number of Orders: {this.state.order_count}</strong>
-                                <Button content='Clear Queue' type='reset' size='mini' floated='left'
+                                <Button primary content='Clear Queue' type='reset' size='tiny' floated='left'
                                         onClick={this.clearQueue}/>
                             </div>
                             <div>

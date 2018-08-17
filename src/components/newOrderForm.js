@@ -83,6 +83,69 @@ class NewOrderForm extends React.Component {
             subOrderList: [0]
         };
         this.handleChange = this.handleChange.bind(this);
+        this.clear = () => {
+            this.index = 1;
+            this.setState({
+                billingName: '',
+                email: '',
+                addressLine1: '',
+                addressLine2: '',
+                city: '',
+                certified: [''],
+                state: '',
+                zipCode: '',
+                phone: '',
+                instructions: '',
+                orderType: [''],
+                deathPlace: [''],
+                cemetery: [''],
+                firstName: [''],
+                lastName: [''],
+                birthPlace: [''],
+                gender: [''],
+                fatherName: [''],
+                motherName: [''],
+                middleName: [''],
+                certificateNum: [''],
+                groomLastName: [''],
+                groomFirstName: [''],
+                brideLastName: [''],
+                brideFirstName: [''],
+                month: [''],
+                day: [''],
+                year: [''],
+                marriagePlace: [''],
+                letter: [''],
+                block: [''],
+                lot: [''],
+                roll: [''],
+                borough: [''],
+                buildingNum: [''],
+                street: [''],
+                contactNum: [''],
+                imgId: [''],
+                imgTitle: [''],
+                comment: [''],
+                addDescription: [''],
+                collection: [''],
+                printSize: [''],
+                numCopies: [''],
+                status: [''],
+                personalUseAgreement: [false],
+                mail: [false],
+                showBirthCert: [false],
+                showBirthSearch: [false],
+                showDeathCert: [false],
+                showDeathSearch: [false],
+                showMarriageCert: [false],
+                showMarriageSearch: [false],
+                showTaxForm: [false],
+                showPhotoGalleryForm: [false],
+                showPropertyForm: [false],
+                subOrderList: [0],
+            });
+
+        }
         this.clearSelection = () => {
             swal("Clearing Form", "Are you sure you want to do this?", "warning", {
                 buttons: {
@@ -101,66 +164,7 @@ class NewOrderForm extends React.Component {
                         return;
                     }
                     else {
-                        this.index = 1;
-                        this.setState({
-                            billingName: '',
-                            email: '',
-                            addressLine1: '',
-                            addressLine2: '',
-                            city: '',
-                            certified: [''],
-                            state: '',
-                            zipCode: '',
-                            phone: '',
-                            instructions: '',
-                            orderType: [''],
-                            deathPlace: [''],
-                            cemetery: [''],
-                            firstName: [''],
-                            lastName: [''],
-                            birthPlace: [''],
-                            gender: [''],
-                            fatherName: [''],
-                            motherName: [''],
-                            middleName: [''],
-                            certificateNum: [''],
-                            groomLastName: [''],
-                            groomFirstName: [''],
-                            brideLastName: [''],
-                            brideFirstName: [''],
-                            month: [''],
-                            day: [''],
-                            year: [''],
-                            marriagePlace: [''],
-                            letter: [''],
-                            block: [''],
-                            lot: [''],
-                            roll: [''],
-                            borough: [''],
-                            buildingNum: [''],
-                            street: [''],
-                            mail: [false],
-                            contactNum: [''],
-                            imgId: [''],
-                            imgTitle: [''],
-                            comment: [''],
-                            personalUseAgreement: [false],
-                            addDescription: [''],
-                            collection: [''],
-                            printSize: [''],
-                            numCopies: [''],
-                            status: [''],
-                            showBirthCert: [false],
-                            showBirthSearch: [false],
-                            showDeathCert: [false],
-                            showDeathSearch: [false],
-                            showMarriageCert: [false],
-                            showMarriageSearch: [false],
-                            showTaxForm: [false],
-                            showPhotoGalleryForm: [false],
-                            showPropertyForm: [false],
-                            subOrderList: [0],
-                        });
+                        this.clear();
 
                     }
                 });
@@ -351,6 +355,7 @@ class NewOrderForm extends React.Component {
             this.setState({loading: false});
         });
         swal("Thank you", "Your order has been submitted", "success");
+        this.clear()
 
     };
 
