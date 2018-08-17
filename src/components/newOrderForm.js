@@ -91,21 +91,21 @@ class NewOrderForm extends React.Component {
                 addressLine1: '',
                 addressLine2: '',
                 city: '',
-                certified: [''],
                 state: '',
                 zipCode: '',
                 phone: '',
-                instructions: '',
-                orderType: [''],
-                deathPlace: [''],
-                cemetery: [''],
-                firstName: [''],
-                lastName: [''],
                 birthPlace: [''],
-                gender: [''],
+                cemetery: [''],
+                certified: [''],
+                deathPlace: [''],
                 fatherName: [''],
+                firstName: [''],
+                gender: [''],
+                instructions: '',
+                lastName: [''],
                 motherName: [''],
                 middleName: [''],
+                orderType: [''],
                 certificateNum: [''],
                 groomLastName: [''],
                 groomFirstName: [''],
@@ -227,7 +227,7 @@ class NewOrderForm extends React.Component {
         this.deleteSuborderValues = (index, state, name) => {
             let newState = state.slice();
             newState.splice(index, 1);
-            for (var i = index; i < newState; i++) {
+            for (let i = index; i < newState; i++) {
                 newState[i] = newState[i - 1]
             }
             this.setState({[name]: newState})
@@ -246,15 +246,15 @@ class NewOrderForm extends React.Component {
             [name]: value
         });
     };
-    handleClick = () => {
+    handleAddOrder = () => {
         this.setState({subOrderList: this.state.subOrderList.concat([this.index])});
         this.index++;
-    }
+    };
 
     handleSubmit = (e, value) => {
         e.preventDefault();
         this.setState({loading: true});
-        for (var i = 0; i < this.state.subOrderList.length; i++) {
+        for (let i = 0; i < this.state.subOrderList.length; i++) {
             if (this.state.orderType[i] === '') {
                 this.message += ("Please fill in Order Type in Suborder: " + (i + 1) + "\n");
             }
@@ -371,57 +371,58 @@ class NewOrderForm extends React.Component {
     deleteSuborder = (index) => {
         let newSubOrderList = this.state.subOrderList.slice()
         newSubOrderList.splice(index, 1);
-        for (var i = index; i < newSubOrderList.length; i++) {
+        for (let i = index; i < newSubOrderList.length; i++) {
             newSubOrderList[i]--;
         }
-        this.setState({subOrderList: newSubOrderList})
-        this.deleteSuborderValues(index, this.state.certified, "certified")
-        this.deleteSuborderValues(index, this.state.deathPlace, "deathPlace")
-        this.deleteSuborderValues(index, this.state.cemetery, "cemetery")
-        this.deleteSuborderValues(index, this.state.firstName, "firstName")
-        this.deleteSuborderValues(index, this.state.lastName, "lastName")
-        this.deleteSuborderValues(index, this.state.birthPlace, "birthPlace")
-        this.deleteSuborderValues(index, this.state.gender, "gender")
-        this.deleteSuborderValues(index, this.state.fatherName, "fatherName")
-        this.deleteSuborderValues(index, this.state.motherName, "motherName")
-        this.deleteSuborderValues(index, this.state.middleName, "middleName")
-        this.deleteSuborderValues(index, this.state.certificateNum, "certificateNum")
-        this.deleteSuborderValues(index, this.state.groomLastName, "groomLastName")
-        this.deleteSuborderValues(index, this.state.groomFirstName, "groomFirstName")
-        this.deleteSuborderValues(index, this.state.brideLastName, "brideLastName")
-        this.deleteSuborderValues(index, this.state.brideFirstName, "brideFirstName")
-        this.deleteSuborderValues(index, this.state.month, "month")
-        this.deleteSuborderValues(index, this.state.day, "day")
-        this.deleteSuborderValues(index, this.state.year, "year")
-        this.deleteSuborderValues(index, this.state.marriagePlace, "marriagePlace")
-        this.deleteSuborderValues(index, this.state.letter, "letter")
-        this.deleteSuborderValues(index, this.state.block, "block")
-        this.deleteSuborderValues(index, this.state.lot, "lot")
-        this.deleteSuborderValues(index, this.state.roll, "roll")
-        this.deleteSuborderValues(index, this.state.borough, "borough")
-        this.deleteSuborderValues(index, this.state.buildingNum, "buildingNum")
-        this.deleteSuborderValues(index, this.state.street, "street")
-        this.deleteSuborderValues(index, this.state.mail, "mail")
-        this.deleteSuborderValues(index, this.state.contactNum, "contactNum")
-        this.deleteSuborderValues(index, this.state.imgId, "imgId")
-        this.deleteSuborderValues(index, this.state.imgTitle, "imgTitle")
-        this.deleteSuborderValues(index, this.state.comment, "comment")
-        this.deleteSuborderValues(index, this.state.personalUseAgreement, "personalUseAgreement")
-        this.deleteSuborderValues(index, this.state.addDescription, "addDescription")
-        this.deleteSuborderValues(index, this.state.collection, "collection")
-        this.deleteSuborderValues(index, this.state.printSize, "printSize")
-        this.deleteSuborderValues(index, this.state.numCopies, "numCopies")
-        this.deleteSuborderValues(index, this.state.orderType, "orderType")
-        this.deleteSuborderValues(index, this.state.status, "status")
-        this.deleteSuborderValues(index, this.state.showMarriageSearch, "showMarriageSearch")
-        this.deleteSuborderValues(index, this.state.showBirthSearch, "showBirthSearch")
-        this.deleteSuborderValues(index, this.state.showBirthCert, "showBirthCert")
-        this.deleteSuborderValues(index, this.state.showMarriageCert, "showMarriageCert")
-        this.deleteSuborderValues(index, this.state.showDeathCert, "showDeathCert")
-        this.deleteSuborderValues(index, this.state.showDeathSearch, "showDeathSearch")
-        this.deleteSuborderValues(index, this.state.showTaxForm, "showTaxForm")
-        this.deleteSuborderValues(index, this.state.showPhotoGalleryForm, "showPhotoGalleryForm")
-        this.deleteSuborderValues(index, this.state.showPropertyForm, "showPropertyForm")
+        console.log(this.state.certified.target.name);
+        this.setState({subOrderList: newSubOrderList});
+        this.deleteSuborderValues(index, this.state.certified, "certified");
+        this.deleteSuborderValues(index, this.state.deathPlace, "deathPlace");
+        this.deleteSuborderValues(index, this.state.cemetery, "cemetery");
+        this.deleteSuborderValues(index, this.state.firstName, "firstName");
+        this.deleteSuborderValues(index, this.state.lastName, "lastName");
+        this.deleteSuborderValues(index, this.state.birthPlace, "birthPlace");
+        this.deleteSuborderValues(index, this.state.gender, "gender");
+        this.deleteSuborderValues(index, this.state.fatherName, "fatherName");
+        this.deleteSuborderValues(index, this.state.motherName, "motherName");
+        this.deleteSuborderValues(index, this.state.middleName, "middleName");
+        this.deleteSuborderValues(index, this.state.certificateNum, "certificateNum");
+        this.deleteSuborderValues(index, this.state.groomLastName, "groomLastName");
+        this.deleteSuborderValues(index, this.state.groomFirstName, "groomFirstName");
+        this.deleteSuborderValues(index, this.state.brideLastName, "brideLastName");
+        this.deleteSuborderValues(index, this.state.brideFirstName, "brideFirstName");
+        this.deleteSuborderValues(index, this.state.month, "month");
+        this.deleteSuborderValues(index, this.state.day, "day");
+        this.deleteSuborderValues(index, this.state.year, "year");
+        this.deleteSuborderValues(index, this.state.marriagePlace, "marriagePlace");
+        this.deleteSuborderValues(index, this.state.letter, "letter");
+        this.deleteSuborderValues(index, this.state.block, "block");
+        this.deleteSuborderValues(index, this.state.lot, "lot");
+        this.deleteSuborderValues(index, this.state.roll, "roll");
+        this.deleteSuborderValues(index, this.state.borough, "borough");
+        this.deleteSuborderValues(index, this.state.buildingNum, "buildingNum");
+        this.deleteSuborderValues(index, this.state.street, "street");
+        this.deleteSuborderValues(index, this.state.mail, "mail");
+        this.deleteSuborderValues(index, this.state.contactNum, "contactNum");
+        this.deleteSuborderValues(index, this.state.imgId, "imgId");
+        this.deleteSuborderValues(index, this.state.imgTitle, "imgTitle");
+        this.deleteSuborderValues(index, this.state.comment, "comment");
+        this.deleteSuborderValues(index, this.state.personalUseAgreement, "personalUseAgreement");
+        this.deleteSuborderValues(index, this.state.addDescription, "addDescription");
+        this.deleteSuborderValues(index, this.state.collection, "collection");
+        this.deleteSuborderValues(index, this.state.printSize, "printSize");
+        this.deleteSuborderValues(index, this.state.numCopies, "numCopies");
+        this.deleteSuborderValues(index, this.state.orderType, "orderType");
+        this.deleteSuborderValues(index, this.state.status, "status");
+        this.deleteSuborderValues(index, this.state.showMarriageSearch, "showMarriageSearch");
+        this.deleteSuborderValues(index, this.state.showBirthSearch, "showBirthSearch");
+        this.deleteSuborderValues(index, this.state.showBirthCert, "showBirthCert");
+        this.deleteSuborderValues(index, this.state.showMarriageCert, "showMarriageCert");
+        this.deleteSuborderValues(index, this.state.showDeathCert, "showDeathCert");
+        this.deleteSuborderValues(index, this.state.showDeathSearch, "showDeathSearch");
+        this.deleteSuborderValues(index, this.state.showTaxForm, "showTaxForm");
+        this.deleteSuborderValues(index, this.state.showPhotoGalleryForm, "showPhotoGalleryForm");
+        this.deleteSuborderValues(index, this.state.showPropertyForm, "showPropertyForm");
         this.index--;
     };
 
@@ -539,7 +540,7 @@ class NewOrderForm extends React.Component {
                                     />
                                     <Button animated positive type="button" floated="left" onClick={() => {
                                         this.handleEmptyStates()
-                                        this.handleClick()
+                                        this.handleAddOrder()
                                         this.addSuborder.scrollIntoView({
                                             block: "end",
                                             behavior: "smooth",
@@ -558,7 +559,7 @@ class NewOrderForm extends React.Component {
                                     <Button type="reset" negative onClick={() => {
                                         this.clearSelection(), this.subOrderForm.clearSelection()
                                     }} content="Clear"/>
-                                    <br></br>
+                                    <br/>
                                     <strong>Number of Suborders: {this.index}</strong>
                                 </Form>
                             </Grid.Column>

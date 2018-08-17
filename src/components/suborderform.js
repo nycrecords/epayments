@@ -52,25 +52,6 @@ class SubOrderForm extends React.Component {
             'Marriage Cert', 'Death Search',
             'Death Cert', 'Birth Search',
             'Birth Cert'];
-
-        this.clearSelection = () => {
-            this.setState({
-                orderType: '',
-                numCopies: '',
-                status: '',
-                showBirthCert: false,
-                showBirthSearch: false,
-                showDeathCert: false,
-                showDeathSearch: false,
-                showMarriageCert: false,
-                showMarriageSearch: false,
-                showTaxForm: false,
-                showPhotoGalleryForm: false,
-                showPropertyForm: false,
-
-            })
-        };
-
     }
 
     render() {
@@ -88,7 +69,6 @@ class SubOrderForm extends React.Component {
                         <h4>
                             Suborder: {this.props.index + 1}
                         </h4>
-
                         <Form.Select label="Order Type"
                                      required
                                      name="orderType"
@@ -128,7 +108,6 @@ class SubOrderForm extends React.Component {
                                      }}
                                      value={this.props.state.orderType[this.props.index]}
                         />
-
                         {this.props.state.showTaxForm[this.props.index] &&
                         <TaxPhotoForm callBack={this.props.callBack} index={this.props.index}
                                       state={this.props.state}
@@ -159,8 +138,6 @@ class SubOrderForm extends React.Component {
                         <BirthCertForm callBack={this.props.callBack} index={this.props.index}
                                        state={this.props.state} boroughOptions={boroughOptions}
                                        genderOptions={genderOptions}/>}
-
-
                         <Form.Input label="Number of Copies"
                                     name="numCopies"
                                     placeholder="Number of Copies"
@@ -174,7 +151,6 @@ class SubOrderForm extends React.Component {
                                     }}
                                     value={this.props.state.numCopies[this.props.index]}
                         />
-
                         <Form.Select label="Status"
                                      required
                                      name="status"
