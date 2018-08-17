@@ -13,10 +13,10 @@ class VitalRecordForm extends React.Component {
                                     placeholder="Month"
                                     maxLength={20}
                                     onChange={(e, {value}) => {
-                                        this.props.callBack("month", value, this.props.index, this.props.state.month)
+                                        this.props.callBack("month", value, this.props.index, this.props.state.suborder.month)
 
                                     }}
-                                    value={this.props.state.month[this.props.index]}
+                                    value={this.props.state.suborder.month[this.props.index]}
                         />
                         <Form.Input label="Day"
                                     name="day"
@@ -24,10 +24,10 @@ class VitalRecordForm extends React.Component {
                                     placeholder="Day"
                                     onChange={(e, {value}) => {
                                         if (/^[0-9]+$/.test(value.slice(-1)) || value === '') {
-                                            this.props.callBack("day", value, this.props.index, this.props.state.day)
+                                            this.props.callBack("day", value, this.props.index, this.props.state.suborder.day)
                                         }
                                     }}
-                                    value={this.props.state.day[this.props.index]}
+                                    value={this.props.state.suborder.day[this.props.index]}
                         />
                         <Form.Input label="Year"
                                     name="year"
@@ -36,10 +36,10 @@ class VitalRecordForm extends React.Component {
                                     placeholder="Year"
                                     onChange={(e, {value}) => {
                                         if (/^[0-9]+$/.test(value.slice(-1)) || value === '') {
-                                            this.props.callBack("year", value, this.props.index, this.props.state.year)
+                                            this.props.callBack("year", value, this.props.index, this.props.state.suborder.year)
                                         }
                                     }}
-                                    value={this.props.state.year[this.props.index]}
+                                    value={this.props.state.suborder.year[this.props.index]}
                         />
                         <Form.Select label="Borough"
                                      required
@@ -47,17 +47,17 @@ class VitalRecordForm extends React.Component {
                                      options={this.props.boroughOptions}
                                      placeholder="Borough"
                                      onChange={(e, {value}) => {
-                                         this.props.callBack("borough", value, this.props.index, this.props.state.borough);
+                                         this.props.callBack("borough", value, this.props.index, this.props.state.suborder.borough);
 
                                      }}
-                                     value={this.props.state.borough[this.props.index]}
+                                     value={this.props.state.suborder.borough[this.props.index]}
                         />
                         <Form.Checkbox label="Letter"
                                        name="letter"
                                        onChange={() => {
-                                           (this.props.state.letter[this.props.index] === false) ?
-                                               this.props.callBack("letter", true, this.props.index, this.props.state.letter) :
-                                               this.props.callBack("letter", false, this.props.index, this.props.state.letter);
+                                           (this.props.state.suborder.letter[this.props.index] === false) ?
+                                               this.props.callBack("letter", true, this.props.index, this.props.state.suborder.letter) :
+                                               this.props.callBack("letter", false, this.props.index, this.props.state.suborder.letter);
                                        }}
                         />
                         <Form.Input label="Comment"
@@ -65,9 +65,9 @@ class VitalRecordForm extends React.Component {
                                     placeholder="Comment"
                                     maxLength={255}
                                     onChange={(e, {value}) => {
-                                        this.props.callBack("comment", value, this.props.index, this.props.state.comment)
+                                        this.props.callBack("comment", value, this.props.index, this.props.state.suborder.comment)
                                     }}
-                                    value={this.props.state.comment[this.props.index]}
+                                    value={this.props.state.suborder.comment[this.props.index]}
                         />
 
                     </Grid.Column>

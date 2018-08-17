@@ -15,18 +15,18 @@ class MarriageSearchForm extends React.Component {
                                         placeholder="Groom First Name"
                                         maxLength={40}
                                         onChange={(e, {value}) => {
-                                            this.props.callBack("groomFirstName", value, this.props.index, this.props.state.groomFirstName)
+                                            this.props.callBack("groomFirstName", value, this.props.index, this.props.state.suborder.groomFirstName)
                                         }}
-                                        value={this.props.state.groomFirstName[this.props.index]}
+                                        value={this.props.state.suborder.groomFirstName[this.props.index]}
                             />
                             <Form.Input label="Groom Last Name"
                                         name="groomLastName"
                                         placeholder="Groom Last Name"
                                         maxLength={25}
                                         onChange={(e, {value}) => {
-                                            this.props.callBack("groomLastName", value, this.props.index, this.props.state.groomLastName)
+                                            this.props.callBack("groomLastName", value, this.props.index, this.props.state.suborder.groomLastName)
                                         }}
-                                        value={this.props.state.groomLastName[this.props.index]}
+                                        value={this.props.state.suborder.groomLastName[this.props.index]}
                             />
                         </Form.Group>
                         <Form.Group>
@@ -35,18 +35,18 @@ class MarriageSearchForm extends React.Component {
                                         placeholder="Bride First Name"
                                         maxLength={40}
                                         onChange={(e, {value}) => {
-                                            this.props.callBack("brideFirstName", value, this.props.index, this.props.state.brideFirstName)
+                                            this.props.callBack("brideFirstName", value, this.props.index, this.props.state.suborder.brideFirstName)
                                         }}
-                                        value={this.props.state.brideFirstName[this.props.index]}
+                                        value={this.props.state.suborder.brideFirstName[this.props.index]}
                             />
                             <Form.Input label="Bride Last Name"
                                         name="brideLastName"
                                         placeholder="Bride Last Name"
                                         maxLength={25}
                                         onChange={(e, {value}) => {
-                                            this.props.callBack("brideLastName", value, this.props.index, this.props.state.brideLastName)
+                                            this.props.callBack("brideLastName", value, this.props.index, this.props.state.suborder.brideLastName)
                                         }}
-                                        value={this.props.state.brideLastName[this.props.index]}
+                                        value={this.props.state.suborder.brideLastName[this.props.index]}
                             />
                         </Form.Group>
                         <Form.Input label="Marriage Place"
@@ -54,9 +54,9 @@ class MarriageSearchForm extends React.Component {
                                     placeholder="Marriage Place"
                                     maxLength={40}
                                     onChange={(e, {value}) => {
-                                        this.props.callBack("marriagePlace", value, this.props.index, this.props.state.marriagePlace)
+                                        this.props.callBack("marriagePlace", value, this.props.index, this.props.state.suborder.marriagePlace)
                                     }}
-                                    value={this.props.state.marriagePlace[this.props.index]}
+                                    value={this.props.state.suborder.marriagePlace[this.props.index]}
                         />
                         <VitalRecordForm callBack={this.props.callBack} index={this.props.index}
                                          state={this.props.state} boroughOptions={this.props.boroughOptions}/>
@@ -79,9 +79,9 @@ class MarriageCertForm extends React.Component {
                                     placeholder="Certificate Number"
                                     maxLength={40}
                                     onChange={(e, {value}) => {
-                                        this.props.callBack("certificateNum", value, this.props.index, this.props.state.certificateNum)
+                                        this.props.callBack("certificateNum", value, this.props.index, this.props.state.suborder.certificateNum)
                                     }}
-                                    value={this.props.state.certificateNum[this.props.index]}
+                                    value={this.props.state.suborder.certificateNum[this.props.index]}
                         />
                         <MarriageSearchForm callBack={this.props.callBack} index={this.props.index}
                                             state={this.props.state} boroughOptions={this.props.boroughOptions}/>

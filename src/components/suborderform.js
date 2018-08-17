@@ -77,67 +77,72 @@ class SubOrderForm extends React.Component {
                                      onChange={(e, {value}) => {
                                          this.props.callBack("orderType", value, this.props.index, this.props.state.suborder.orderType);
                                          //toggles hidden forms for Tax Photo if selected
-                                     //     (this.orderList.indexOf(value) === 0) ?
-                                     //         this.props.callBack("showTaxForm", true, this.props.index, this.props.state.showTaxForm) :
-                                     //         this.props.callBack("showTaxForm", false, this.props.index, this.props.state.showTaxForm);
-                                     //     //toggles hidden forms for Photo Gallery if selected
-                                     //     (this.orderList.indexOf(value) === 1) ?
-                                     //         this.props.callBack("showPhotoGalleryForm", true, this.props.index, this.props.state.showPhotoGalleryForm) :
-                                     //         this.props.callBack("showPhotoGalleryForm", false, this.props.index, this.props.state.showPhotoGalleryForm);
-                                     //     (this.orderList.indexOf(value) === 2) ?
-                                     //         this.props.callBack("showPropertyForm", true, this.props.index, this.props.state.showPropertyForm) :
-                                     //         this.props.callBack("showPropertyForm", false, this.props.index, this.props.state.showPropertyForm);
-                                     //     (this.orderList.indexOf(value) === 3) ?
-                                     //         this.props.callBack("showMarriageSearch", true, this.props.index, this.props.state.showMarriageSearch) :
-                                     //         this.props.callBack("showMarriageSearch", false, this.props.index, this.props.state.showMarriageSearch);
-                                     //     (this.orderList.indexOf(value) === 4) ?
-                                     //         this.props.callBack("showMarriageCert", true, this.props.index, this.props.state.showMarriageCert) :
-                                     //         this.props.callBack("showMarriageCert", false, this.props.index, this.props.state.showMarriageCert);
-                                     //     (this.orderList.indexOf(value) === 5) ?
-                                     //         this.props.callBack("showDeathSearch", true, this.props.index, this.props.state.showDeathSearch) :
-                                     //         this.props.callBack("showDeathSearch", false, this.props.index, this.props.state.showDeathSearch);
-                                     //     (this.orderList.indexOf(value) === 6) ?
-                                     //         this.props.callBack("showDeathCert", true, this.props.index, this.props.state.showDeathCert) :
-                                     //         this.props.callBack("showDeathCert", false, this.props.index, this.props.state.showDeathCert);
-                                     //     (this.orderList.indexOf(value) === 7) ?
-                                     //         this.props.callBack("showBirthSearch", true, this.props.index, this.props.state.showBirthSearch) :
-                                     //         this.props.callBack("showBirthSearch", false, this.props.index, this.props.state.showBirthSearch);
-                                     //     (this.orderList.indexOf(value) === 8) ?
-                                     //         this.props.callBack("showBirthCert", true, this.props.index, this.props.state.showBirthCert) :
-                                     //         this.props.callBack("showBirthCert", false, this.props.index, this.props.state.showBirthCert);
+                                         /**
+                                          * the below showFrom states are commented it out b/c somehow it causes orderType to not
+                                          *     update correctly
+                                          */
+                                         // (this.orderList.indexOf(value) === 0) ?
+                                         //     this.props.callBack("showTaxForm", true, this.props.index, this.props.state.suborder.showTaxForm) :
+                                         //     this.props.callBack("showTaxForm", false, this.props.index, this.props.state.suborder.showTaxForm);
+                                         // // toggles hidden forms for Photo Gallery if selected
+                                         // (this.orderList.indexOf(value) === 1) ?
+                                         //     this.props.callBack("showPhotoGalleryForm", true, this.props.index, this.props.state.suborder.showPhotoGalleryForm) :
+                                         //     this.props.callBack("showPhotoGalleryForm", false, this.props.index, this.props.state.suborder.showPhotoGalleryForm);
+                                         // (this.orderList.indexOf(value) === 2) ?
+                                         //     this.props.callBack("showPropertyForm", true, this.props.index, this.props.state.suborder.showPropertyForm) :
+                                         //     this.props.callBack("showPropertyForm", false, this.props.index, this.props.state.suborder.showPropertyForm);
+                                         // (this.orderList.indexOf(value) === 3) ?
+                                         //     this.props.callBack("showMarriageSearch", true, this.props.index, this.props.state.suborder.showMarriageSearch) :
+                                         //     this.props.callBack("showMarriageSearch", false, this.props.index, this.props.state.suborder.showMarriageSearch);
+                                         // (this.orderList.indexOf(value) === 4) ?
+                                         //     this.props.callBack("showMarriageCert", true, this.props.index, this.props.state.suborder.showMarriageCert) :
+                                         //     this.props.callBack("showMarriageCert", false, this.props.index, this.props.state.suborder.showMarriageCert);
+                                         // (this.orderList.indexOf(value) === 5) ?
+                                         //     this.props.callBack("showDeathSearch", true, this.props.index, this.props.state.suborder.showDeathSearch) :
+                                         //     this.props.callBack("showDeathSearch", false, this.props.index, this.props.state.suborder.showDeathSearch);
+                                         // (this.orderList.indexOf(value) === 6) ?
+                                         //     this.props.callBack("showDeathCert", true, this.props.index, this.props.state.suborder.showDeathCert) :
+                                         //     this.props.callBack("showDeathCert", false, this.props.index, this.props.state.suborder.showDeathCert);
+                                         // (this.orderList.indexOf(value) === 7) ?
+                                         //     this.props.callBack("showBirthSearch", true, this.props.index, this.props.state.suborder.showBirthSearch) :
+                                         //     this.props.callBack("showBirthSearch", false, this.props.index, this.props.state.suborder.showBirthSearch);
+                                         // (this.orderList.indexOf(value) === 8) ?
+                                         //     this.props.callBack("showBirthCert", true, this.props.index, this.props.state.suborder.showBirthCert) :
+                                         //     this.props.callBack("showBirthCert", false, this.props.index, this.props.state.suborder.showBirthCert);
+                                         // console.log(this.props.state.suborder.orderType);
                                       }}
                                      value={this.props.state.suborder.orderType[this.props.index]}
                         />
-                        {/*{this.props.state.showTaxForm[this.props.index] &&*/}
-                        {/*<TaxPhotoForm callBack={this.props.callBack} index={this.props.index}*/}
-                                      {/*state={this.props.state}*/}
-                                      {/*boroughOptions={boroughOptions}/>}*/}
-                        {/*{this.props.state.showPhotoGalleryForm[this.props.index] &&*/}
-                        {/*<PhotoGalleryForm callBack={this.props.callBack} index={this.props.index}*/}
-                                          {/*state={this.props.state}/>}*/}
-                        {/*{this.props.state.showPropertyForm[this.props.index] &&*/}
-                        {/*<PropertyCardForm callBack={this.props.callBack} index={this.props.index}*/}
-                                          {/*state={this.props.state} boroughOptions={boroughOptions}/>}*/}
-                        {/*{this.props.state.showMarriageSearch[this.props.index] &&*/}
-                        {/*<MarriageSearchForm callBack={this.props.callBack} index={this.props.index}*/}
-                                            {/*state={this.props.state} boroughOptions={boroughOptions}/>}*/}
-                        {/*{this.props.state.showMarriageCert[this.props.index] &&*/}
-                        {/*<MarriageCertForm callBack={this.props.callBack} index={this.props.index}*/}
-                                          {/*state={this.props.state} boroughOptions={boroughOptions}/>}*/}
-                        {/*{this.props.state.showDeathSearch[this.props.index] &&*/}
-                        {/*<DeathSearchForm callBack={this.props.callBack} index={this.props.index}*/}
-                                         {/*state={this.props.state} boroughOptions={boroughOptions}/>}*/}
-                        {/*{this.props.state.showDeathCert[this.props.index] &&*/}
-                        {/*<DeathCertForm callBack={this.props.callBack} index={this.props.index}*/}
-                                       {/*state={this.props.state} boroughOptions={boroughOptions}/>}*/}
-                        {/*{this.props.state.showBirthSearch[this.props.index] &&*/}
-                        {/*<BirthSearchForm callBack={this.props.callBack} index={this.props.index}*/}
-                                         {/*state={this.props.state} genderOptions={genderOptions}*/}
-                                         {/*boroughOptions={boroughOptions}/>}*/}
-                        {/*{this.props.state.showBirthCert[this.props.index] &&*/}
-                        {/*<BirthCertForm callBack={this.props.callBack} index={this.props.index}*/}
-                                       {/*state={this.props.state} boroughOptions={boroughOptions}*/}
-                                       {/*genderOptions={genderOptions}/>}*/}
+                        {this.props.state.suborder.showTaxForm[this.props.index] &&
+                        <TaxPhotoForm callBack={this.props.callBack} index={this.props.index}
+                                      state={this.props.state}
+                                      boroughOptions={boroughOptions}/>}
+                        {this.props.state.suborder.showPhotoGalleryForm[this.props.index] &&
+                        <PhotoGalleryForm callBack={this.props.callBack} index={this.props.index}
+                                          state={this.props.state}/>}
+                        {this.props.state.suborder.showPropertyForm[this.props.index] &&
+                        <PropertyCardForm callBack={this.props.callBack} index={this.props.index}
+                                          state={this.props.state} boroughOptions={boroughOptions}/>}
+                        {this.props.state.suborder.showMarriageSearch[this.props.index] &&
+                        <MarriageSearchForm callBack={this.props.callBack} index={this.props.index}
+                                            state={this.props.state} boroughOptions={boroughOptions}/>}
+                        {this.props.state.suborder.showMarriageCert[this.props.index] &&
+                        <MarriageCertForm callBack={this.props.callBack} index={this.props.index}
+                                          state={this.props.state} boroughOptions={boroughOptions}/>}
+                        {this.props.state.suborder.showDeathSearch[this.props.index] &&
+                        <DeathSearchForm callBack={this.props.callBack} index={this.props.index}
+                                         state={this.props.state} boroughOptions={boroughOptions}/>}
+                        {this.props.state.suborder.showDeathCert[this.props.index] &&
+                        <DeathCertForm callBack={this.props.callBack} index={this.props.index}
+                                       state={this.props.state} boroughOptions={boroughOptions}/>}
+                        {this.props.state.suborder.showBirthSearch[this.props.index] &&
+                        <BirthSearchForm callBack={this.props.callBack} index={this.props.index}
+                                         state={this.props.state} genderOptions={genderOptions}
+                                         boroughOptions={boroughOptions}/>}
+                        {this.props.state.suborder.showBirthCert[this.props.index] &&
+                        <BirthCertForm callBack={this.props.callBack} index={this.props.index}
+                                       state={this.props.state} boroughOptions={boroughOptions}
+                                       genderOptions={genderOptions}/>}
                         <Form.Input label="Number of Copies"
                                     name="numCopies"
                                     placeholder="Number of Copies"

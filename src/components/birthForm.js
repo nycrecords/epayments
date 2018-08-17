@@ -14,36 +14,36 @@ class BirthSearchForm extends React.Component {
                                     placeholder="First Name"
                                     maxLength={40}
                                     onChange={(e, {value}) => {
-                                        this.props.callBack("firstName", value, this.props.index, this.props.state.firstName)
+                                        this.props.callBack("firstName", value, this.props.index, this.props.state.suborder.firstName)
                                     }}
-                                    value={this.props.state.firstName[this.props.index]}
+                                    value={this.props.state.suborder.firstName[this.props.index]}
                         />
                         <Form.Input label="Middle Name"
                                     name="middleName"
                                     placeholder="Middle Name"
                                     maxLength={40}
                                     onChange={(e, {value}) => {
-                                        this.props.callBack("middleName", value, this.props.index, this.props.state.middleName)
+                                        this.props.callBack("middleName", value, this.props.index, this.props.state.suborder.middleName)
                                     }}
-                                    value={this.props.state.middleName[this.props.index]}
+                                    value={this.props.state.suborder.middleName[this.props.index]}
                         />
                         <Form.Input label="Last Name"
                                     name="lastName"
                                     placeholder="Last Name"
                                     maxLength={25}
                                     onChange={(e, {value}) => {
-                                        this.props.callBack("lastName", value, this.props.index, this.props.state.lastName)
+                                        this.props.callBack("lastName", value, this.props.index, this.props.state.suborder.lastName)
                                     }}
-                                    value={this.props.state.lastName[this.props.index]}
+                                    value={this.props.state.suborder.lastName[this.props.index]}
                         />
                         <Form.Input label="Birth Place"
                                     name="birthPlace"
                                     placeholder="BirthPlace"
                                     maxLength={40}
                                     onChange={(e, {value}) => {
-                                        this.props.callBack("birthPlace", value, this.props.index, this.props.state.birthPlace)
+                                        this.props.callBack("birthPlace", value, this.props.index, this.props.state.suborder.birthPlace)
                                     }}
-                                    value={this.props.state.birthPlace[this.props.index]}
+                                    value={this.props.state.suborder.birthPlace[this.props.index]}
                         />
                         <Form.Select label="Gender"
                                      required
@@ -51,27 +51,27 @@ class BirthSearchForm extends React.Component {
                                      placeholder="Gender"
                                      options={this.props.genderOptions}
                                      onChange={(e, {value}) => {
-                                         this.props.callBack("gender", value, this.props.index, this.props.state.gender);
+                                         this.props.callBack("gender", value, this.props.index, this.props.state.suborder.gender);
                                      }}
-                                     value={this.props.state.gender[this.props.index]}
+                                     value={this.props.state.suborder.gender[this.props.index]}
                         />
                         <Form.Input label="Mother Name"
                                     name="motherName"
                                     placeholder="Mother Name"
                                     maxLength={40}
                                     onChange={(e, {value}) => {
-                                        this.props.callBack("motherName", value, this.props.index, this.props.state.motherName)
+                                        this.props.callBack("motherName", value, this.props.index, this.props.state.suborder.motherName)
                                     }}
-                                    value={this.props.state.motherName[this.props.index]}
+                                    value={this.props.state.suborder.motherName[this.props.index]}
                         />
                         <Form.Input label="Father Name"
                                     name="fatherName"
                                     placeholder="Father Name"
                                     maxLength={40}
                                     onChange={(e, {value}) => {
-                                        this.props.callBack("fatherName", value, this.props.index, this.props.state.fatherName)
+                                        this.props.callBack("fatherName", value, this.props.index, this.props.state.suborder.fatherName)
                                     }}
-                                    value={this.props.state.fatherName[this.props.index]}
+                                    value={this.props.state.suborder.fatherName[this.props.index]}
                         />
                         <VitalRecordForm callBack={this.props.callBack} index={this.props.index}
                                          state={this.props.state} boroughOptions={this.props.boroughOptions}/>
@@ -94,9 +94,9 @@ class BirthCertForm extends React.Component {
                                     placeholder="Certificate Number"
                                     maxLength={40}
                                     onChange={(e, {value}) => {
-                                        this.props.callBack("certificateNum", value, this.props.index, this.props.state.certificateNum)
+                                        this.props.callBack("certificateNum", value, this.props.index, this.props.state.suborder.certificateNum)
                                     }}
-                                    value={this.props.state.certificateNum[this.props.index]}
+                                    value={this.props.state.suborder.certificateNum[this.props.index]}
                         />
                         <BirthSearchForm callBack={this.props.callBack} index={this.props.index}
                                          state={this.props.state} boroughOptions={this.props.boroughOptions}

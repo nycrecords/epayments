@@ -30,9 +30,17 @@ class NewOrderForm extends React.Component {
             state: '',
             zipCode: '',
             phone: '',
+            instructions: '',
+            /**
+             * I changed all list/array states to be nested in order to iterate to update state
+             *      using Object.keys(this.state.suborder).map => //function//
+             * child state now calls { this.props.state.suborder.[stateName] } instead of
+             *      [this.props.state.[stateName]
+             * fully working verison is Fri Aug 17 10:11:58 2018 -0400 1f91302 name changes  [jchen249]
+             *      or the one before
+             */
             suborder: {
                 certified: [''],
-                instructions: '',
                 orderType: [''],
                 deathPlace: [''],
                 cemetery: [''],
@@ -147,12 +155,19 @@ class NewOrderForm extends React.Component {
                 subOrderList: [0],
             });
             // console.log(Object.keys(this.state.suborder));
-            Object.keys(this.state.suborder).filter(key => (typeof(this.state.suborder[key][0])) !== "boolean")
+            /**
+             * tested with console.log(this.state.suborder)
+             * and input checking
+             **/
+            Object.keys(this.state.suborder)
                 .map((key, index) => {
-                    // console.log(key)
-                    this.setState({suborder: {...this.state.suborder, [key]: [''] }});
-                }
-            )
+                        if (typeof(this.state.suborder[key][0]) !== "boolean") {
+                            this.setState({suborder: {...this.state.suborder, [key]: ['']}});
+                        } else {
+                            this.setState({suborder: {...this.state.suborder, [key]: [false]}});
+                        }
+                    }
+                )
 
 
         };
@@ -184,55 +199,74 @@ class NewOrderForm extends React.Component {
             /*Add empty index to list whenever additional suborders are prompted
              to prevent null insert into DB if user left some fields unanswered
             */
-            this.setState({
-                certified: this.state.certified.concat(['']),
-                deathPlace: this.state.deathPlace.concat(['']),
-                cemetery: this.state.cemetery.concat(['']),
-                firstName: this.state.firstName.concat(['']),
-                lastName: this.state.lastName.concat(['']),
-                birthPlace: this.state.birthPlace.concat(['']),
-                gender: this.state.gender.concat(['']),
-                fatherName: this.state.fatherName.concat(['']),
-                motherName: this.state.motherName.concat(['']),
-                middleName: this.state.middleName.concat(['']),
-                certificateNum: this.state.certificateNum.concat(['']),
-                groomLastName: this.state.groomLastName.concat(['']),
-                groomFirstName: this.state.groomFirstName.concat(['']),
-                brideLastName: this.state.brideLastName.concat(['']),
-                brideFirstName: this.state.brideFirstName.concat(['']),
-                month: this.state.month.concat(['']),
-                day: this.state.day.concat(['']),
-                year: this.state.year.concat(['']),
-                marriagePlace: this.state.marriagePlace.concat(['']),
-                letter: this.state.letter.concat([false]),
-                block: this.state.block.concat(['']),
-                lot: this.state.lot.concat(['']),
-                roll: this.state.roll.concat(['']),
-                borough: this.state.borough.concat(['']),
-                buildingNum: this.state.buildingNum.concat(['']),
-                street: this.state.street.concat(['']),
-                mail: this.state.mail.concat([false]),
-                contactNum: this.state.contactNum.concat(['']),
-                imgId: this.state.imgId.concat(['']),
-                imgTitle: this.state.imgTitle.concat(['']),
-                comment: this.state.comment.concat(['']),
-                personalUseAgreement: this.state.personalUseAgreement.concat([false]),
-                addDescription: this.state.addDescription.concat(['']),
-                collection: this.state.collection.concat(['']),
-                printSize: this.state.printSize.concat(['']),
-                numCopies: this.state.numCopies.concat(['']),
-                status: this.state.status.concat(['']),
-                orderType: this.state.orderType.concat(['']),
-                showMarriageSearch: this.state.showMarriageSearch.concat([false]),
-                showBirthSearch: this.state.showBirthSearch.concat([false]),
-                showBirthCert: this.state.showBirthCert.concat([false]),
-                showMarriageCert: this.state.showMarriageCert.concat([false]),
-                showDeathCert: this.state.showDeathCert.concat([false]),
-                showDeathSearch: this.state.showDeathSearch.concat([false]),
-                showTaxForm: this.state.showTaxForm.concat([false]),
-                showPhotoGalleryForm: this.state.showPhotoGalleryForm.concat([false]),
-                showPropertyForm: this.state.showPropertyForm.concat([false]),
-            })
+            /**
+             * adds empty string or false(boolean) onto exisitng state list
+             * only works for showPropertyFrom state for now
+             */
+            Object.keys(this.state.suborder)
+                .map((key) => {
+                        let newKey = this.state.suborder[key].slice();
+                        console.log(this.state.suborder[key][0]);
+                        if (typeof(this.state.suborder[key][0]) !== "boolean") {
+                            newKey = newKey.concat([""]);
+                            this.setState({suborder: {...this.state.suborder, [key]: newKey}});
+                        } else {
+                            // debugger;
+                            newKey = newKey.concat([false]);
+                            this.setState({suborder: {...this.state.suborder, [key]: newKey}});
+                        }
+                    }
+                )
+            console.log(this.state.suborder)
+            // this.setState({
+            //     certified: this.state.certified.concat(['']),
+            //     deathPlace: this.state.deathPlace.concat(['']),
+            //     cemetery: this.state.cemetery.concat(['']),
+            //     firstName: this.state.firstName.concat(['']),
+            //     lastName: this.state.lastName.concat(['']),
+            //     birthPlace: this.state.birthPlace.concat(['']),
+            //     gender: this.state.gender.concat(['']),
+            //     fatherName: this.state.fatherName.concat(['']),
+            //     motherName: this.state.motherName.concat(['']),
+            //     middleName: this.state.middleName.concat(['']),
+            //     certificateNum: this.state.certificateNum.concat(['']),
+            //     groomLastName: this.state.groomLastName.concat(['']),
+            //     groomFirstName: this.state.groomFirstName.concat(['']),
+            //     brideLastName: this.state.brideLastName.concat(['']),
+            //     brideFirstName: this.state.brideFirstName.concat(['']),
+            //     month: this.state.month.concat(['']),
+            //     day: this.state.day.concat(['']),
+            //     year: this.state.year.concat(['']),
+            //     marriagePlace: this.state.marriagePlace.concat(['']),
+            //     letter: this.state.letter.concat([false]),
+            //     block: this.state.block.concat(['']),
+            //     lot: this.state.lot.concat(['']),
+            //     roll: this.state.roll.concat(['']),
+            //     borough: this.state.borough.concat(['']),
+            //     buildingNum: this.state.buildingNum.concat(['']),
+            //     street: this.state.street.concat(['']),
+            //     mail: this.state.mail.concat([false]),
+            //     contactNum: this.state.contactNum.concat(['']),
+            //     imgId: this.state.imgId.concat(['']),
+            //     imgTitle: this.state.imgTitle.concat(['']),
+            //     comment: this.state.comment.concat(['']),
+            //     personalUseAgreement: this.state.personalUseAgreement.concat([false]),
+            //     addDescription: this.state.addDescription.concat(['']),
+            //     collection: this.state.collection.concat(['']),
+            //     printSize: this.state.printSize.concat(['']),
+            //     numCopies: this.state.numCopies.concat(['']),
+            //     status: this.state.status.concat(['']),
+            //     orderType: this.state.orderType.concat(['']),
+            //     showMarriageSearch: this.state.showMarriageSearch.concat([false]),
+            //     showBirthSearch: this.state.showBirthSearch.concat([false]),
+            //     showBirthCert: this.state.showBirthCert.concat([false]),
+            //     showMarriageCert: this.state.showMarriageCert.concat([false]),
+            //     showDeathCert: this.state.showDeathCert.concat([false]),
+            //     showDeathSearch: this.state.showDeathSearch.concat([false]),
+            //     showTaxForm: this.state.showTaxForm.concat([false]),
+            //     showPhotoGalleryForm: this.state.showPhotoGalleryForm.concat([false]),
+            //     showPropertyForm: this.state.showPropertyForm.concat([false]),
+            // })
         };
         this.deleteSuborderValues = (index, state, name) => {
             let newState = state.slice();
@@ -265,32 +299,32 @@ class NewOrderForm extends React.Component {
         e.preventDefault();
         this.setState({loading: true});
         for (let i = 0; i < this.state.subOrderList.length; i++) {
-            if (this.state.orderType[i] === '') {
+            if (this.state.suborder.orderType[i] === '') {
                 this.message += ("Please fill in Order Type in Suborder: " + (i + 1) + "\n");
             }
-            if (this.state.status[i] === '') {
+            if (this.state.suborder.status[i] === '') {
                 this.message += ("Please fill in Status in Suborder: " + (i + 1) + "\n");
             }
-            if (this.state.numCopies[i] === '') {
+            if (this.state.suborder.numCopies[i] === '') {
                 this.message += ("Please fill in Number of Copies in Suborder: " + (i + 1) + "\n");
             }
-            if (this.state.orderType[i] !== '') {
-                if ((this.state.showBirthSearch[i] === true || this.state.showBirthCert[i] === true) &&
-                    this.state.gender[i] === '') {
+            if (this.state.suborder.orderType[i] !== '') {
+                if ((this.state.suborder.showBirthSearch[i] === true || this.state.suborder.showBirthCert[i] === true) &&
+                    this.state.suborder.gender[i] === '') {
                     this.message += ("Please fill in the Gender in Suborder: " + (i + 1) + "\n");
                 }
-                if (this.state.year[i] === '' && this.state.showPhotoGalleryForm[i] === false &&
-                    this.state.showPropertyForm[i] === false && this.state.showTaxForm[i] === false) {
+                if (this.state.suborder.year[i] === '' && this.state.suborder.showPhotoGalleryForm[i] === false &&
+                    this.state.suborder.showPropertyForm[i] === false && this.state.suborder.showTaxForm[i] === false) {
                     this.message += ("Please fill in the Year in Suborder: " + (i + 1) + "\n");
                 }
-                if (this.state.showPhotoGalleryForm[i] === false && this.state.borough[i] === '') {
+                if (this.state.suborder.showPhotoGalleryForm[i] === false && this.state.suborder.borough[i] === '') {
                     this.message += ("Please fill in the Borough in Suborder:" + (i + 1) + "\n");
                 }
-                if ((this.state.showPhotoGalleryForm[i] === true || this.state.showTaxForm[i] === true) &&
-                    (this.state.printSize[i] === '')) {
+                if ((this.state.suborder.showPhotoGalleryForm[i] === true || this.state.suborder.showTaxForm[i] === true) &&
+                    (this.state.suborder.printSize[i] === '')) {
                     this.message += ("Please fill in the Printing Size in Suborder: " + (i + 1) + "\n")
                 }
-                if (this.state.showTaxForm[i] === true && this.state.collection[i] === '') {
+                if (this.state.suborder.showTaxForm[i] === true && this.state.suborder.collection[i] === '') {
                     this.message += ("Please fill in the Collection in Suborder: " + (i + 1) + "\n");
                 }
             }
@@ -310,48 +344,48 @@ class NewOrderForm extends React.Component {
                 addressLine1: this.state.addressLine1,
                 address_two_2: this.state.addressLine2,
                 city: this.state.city,
-                certified: this.state.certified,
                 state: this.state.state,
                 zipCode: this.state.zipCode,
                 phone: this.state.phone,
                 instructions: this.state.instructions,
-                orderType: this.state.orderType,
-                gender: this.state.gender,
-                motherName: this.state.motherName,
-                fatherName: this.state.fatherName,
-                birthPlace: this.state.birthPlace,
-                certificateNum: this.state.certificateNum,
-                groomLastName: this.state.groomFirstName,
-                groomFirstName: this.state.groomFirstName,
-                brideLastName: this.state.brideLastName,
-                brideFirstName: this.state.brideFirstName,
-                month: this.state.month,
-                day: this.state.day,
-                year: this.state.year,
-                marriagePlace: this.state.marriagePlace,
-                letter: this.state.letter,
-                deathPlace: this.state.deathPlace,
-                cemetery: this.state.cemetery,
-                firstName: this.state.firstName,
-                middleName: this.state.middleName,
-                lastName: this.state.lastName,
-                block: this.state.block,
-                lot: this.state.lot,
-                roll: this.state.roll,
-                borough: this.state.borough,
-                buildingNum: this.state.buildingNum,
-                street: this.state.street,
-                mail: this.state.mail,
-                contactNum: this.state.contactNum,
-                imgId: this.state.imgId,
-                imgTitle: this.state.imgTitle,
-                comment: this.state.comment,
-                personalUseAgreement: this.state.personalUseAgreement,
-                addDescription: this.state.addDescription,
-                collection: this.state.collection,
-                printSize: this.state.printSize,
-                numCopies: this.state.numCopies,
-                status: this.state.status
+                certified: this.state.suborder.certified,
+                orderType: this.state.suborder.orderType,
+                gender: this.state.suborder.gender,
+                motherName: this.state.suborder.motherName,
+                fatherName: this.state.suborder.fatherName,
+                birthPlace: this.state.suborder.birthPlace,
+                certificateNum: this.state.suborder.certificateNum,
+                groomLastName: this.state.suborder.groomFirstName,
+                groomFirstName: this.state.suborder.groomFirstName,
+                brideLastName: this.state.suborder.brideLastName,
+                brideFirstName: this.state.suborder.brideFirstName,
+                month: this.state.suborder.month,
+                day: this.state.suborder.day,
+                year: this.state.suborder.year,
+                marriagePlace: this.state.suborder.marriagePlace,
+                letter: this.state.suborder.letter,
+                deathPlace: this.state.suborder.deathPlace,
+                cemetery: this.state.suborder.cemetery,
+                firstName: this.state.suborder.firstName,
+                middleName: this.state.suborder.middleName,
+                lastName: this.state.suborder.lastName,
+                block: this.state.suborder.block,
+                lot: this.state.suborder.lot,
+                roll: this.state.suborder.roll,
+                borough: this.state.suborder.borough,
+                buildingNum: this.state.suborder.buildingNum,
+                street: this.state.suborder.street,
+                mail: this.state.suborder.mail,
+                contactNum: this.state.suborder.contactNum,
+                imgId: this.state.suborder.imgId,
+                imgTitle: this.state.suborder.imgTitle,
+                comment: this.state.suborder.comment,
+                personalUseAgreement: this.state.suborder.personalUseAgreement,
+                addDescription: this.state.suborder.addDescription,
+                collection: this.state.suborder.collection,
+                printSize: this.state.suborder.printSize,
+                numCopies: this.state.suborder.numCopies,
+                status: this.state.suborder.status
 
             })
         })
@@ -368,16 +402,15 @@ class NewOrderForm extends React.Component {
         this.clear()
 
     };
-
     callBack = (dataFromChild, value, index, state) => {
-        //debugger
+        //update state from child
         let newState = state.slice();
         newState[index] = value;
         // this.setState({
         //     [dataFromChild]: newState
         // });
         this.setState({suborder: {...this.state.suborder, [dataFromChild]: newState}});
-        console.log(this.state.suborder);
+        // console.log(this.state.suborder);
 
 
     };
@@ -387,55 +420,63 @@ class NewOrderForm extends React.Component {
         for (let i = index; i < newSubOrderList.length; i++) {
             newSubOrderList[i]--;
         }
-        console.log(this.state.certified.target.name);
         this.setState({subOrderList: newSubOrderList});
-        this.deleteSuborderValues(index, this.state.certified, "certified");
-        this.deleteSuborderValues(index, this.state.deathPlace, "deathPlace");
-        this.deleteSuborderValues(index, this.state.cemetery, "cemetery");
-        this.deleteSuborderValues(index, this.state.firstName, "firstName");
-        this.deleteSuborderValues(index, this.state.lastName, "lastName");
-        this.deleteSuborderValues(index, this.state.birthPlace, "birthPlace");
-        this.deleteSuborderValues(index, this.state.gender, "gender");
-        this.deleteSuborderValues(index, this.state.fatherName, "fatherName");
-        this.deleteSuborderValues(index, this.state.motherName, "motherName");
-        this.deleteSuborderValues(index, this.state.middleName, "middleName");
-        this.deleteSuborderValues(index, this.state.certificateNum, "certificateNum");
-        this.deleteSuborderValues(index, this.state.groomLastName, "groomLastName");
-        this.deleteSuborderValues(index, this.state.groomFirstName, "groomFirstName");
-        this.deleteSuborderValues(index, this.state.brideLastName, "brideLastName");
-        this.deleteSuborderValues(index, this.state.brideFirstName, "brideFirstName");
-        this.deleteSuborderValues(index, this.state.month, "month");
-        this.deleteSuborderValues(index, this.state.day, "day");
-        this.deleteSuborderValues(index, this.state.year, "year");
-        this.deleteSuborderValues(index, this.state.marriagePlace, "marriagePlace");
-        this.deleteSuborderValues(index, this.state.letter, "letter");
-        this.deleteSuborderValues(index, this.state.block, "block");
-        this.deleteSuborderValues(index, this.state.lot, "lot");
-        this.deleteSuborderValues(index, this.state.roll, "roll");
-        this.deleteSuborderValues(index, this.state.borough, "borough");
-        this.deleteSuborderValues(index, this.state.buildingNum, "buildingNum");
-        this.deleteSuborderValues(index, this.state.street, "street");
-        this.deleteSuborderValues(index, this.state.mail, "mail");
-        this.deleteSuborderValues(index, this.state.contactNum, "contactNum");
-        this.deleteSuborderValues(index, this.state.imgId, "imgId");
-        this.deleteSuborderValues(index, this.state.imgTitle, "imgTitle");
-        this.deleteSuborderValues(index, this.state.comment, "comment");
-        this.deleteSuborderValues(index, this.state.personalUseAgreement, "personalUseAgreement");
-        this.deleteSuborderValues(index, this.state.addDescription, "addDescription");
-        this.deleteSuborderValues(index, this.state.collection, "collection");
-        this.deleteSuborderValues(index, this.state.printSize, "printSize");
-        this.deleteSuborderValues(index, this.state.numCopies, "numCopies");
-        this.deleteSuborderValues(index, this.state.orderType, "orderType");
-        this.deleteSuborderValues(index, this.state.status, "status");
-        this.deleteSuborderValues(index, this.state.showMarriageSearch, "showMarriageSearch");
-        this.deleteSuborderValues(index, this.state.showBirthSearch, "showBirthSearch");
-        this.deleteSuborderValues(index, this.state.showBirthCert, "showBirthCert");
-        this.deleteSuborderValues(index, this.state.showMarriageCert, "showMarriageCert");
-        this.deleteSuborderValues(index, this.state.showDeathCert, "showDeathCert");
-        this.deleteSuborderValues(index, this.state.showDeathSearch, "showDeathSearch");
-        this.deleteSuborderValues(index, this.state.showTaxForm, "showTaxForm");
-        this.deleteSuborderValues(index, this.state.showPhotoGalleryForm, "showPhotoGalleryForm");
-        this.deleteSuborderValues(index, this.state.showPropertyForm, "showPropertyForm");
+        Object.keys(this.state.suborder)//.filter(key => (typeof(this.state.suborder[key][0])) !== "boolean")
+            .map((key,) => {
+                this.deleteSuborderValues(index,this.state.suborder[key], key);
+                }
+            )
+        /**
+         * does not work, maybe b/c handleEmpty does not work fully
+         * */
+
+        // this.deleteSuborderValues(index, this.state.certified, "certified");
+        // this.deleteSuborderValues(index, this.state.deathPlace, "deathPlace");
+        // this.deleteSuborderValues(index, this.state.cemetery, "cemetery");
+        // this.deleteSuborderValues(index, this.state.firstName, "firstName");
+        // this.deleteSuborderValues(index, this.state.lastName, "lastName");
+        // this.deleteSuborderValues(index, this.state.birthPlace, "birthPlace");
+        // this.deleteSuborderValues(index, this.state.gender, "gender");
+        // this.deleteSuborderValues(index, this.state.fatherName, "fatherName");
+        // this.deleteSuborderValues(index, this.state.motherName, "motherName");
+        // this.deleteSuborderValues(index, this.state.middleName, "middleName");
+        // this.deleteSuborderValues(index, this.state.certificateNum, "certificateNum");
+        // this.deleteSuborderValues(index, this.state.groomLastName, "groomLastName");
+        // this.deleteSuborderValues(index, this.state.groomFirstName, "groomFirstName");
+        // this.deleteSuborderValues(index, this.state.brideLastName, "brideLastName");
+        // this.deleteSuborderValues(index, this.state.brideFirstName, "brideFirstName");
+        // this.deleteSuborderValues(index, this.state.month, "month");
+        // this.deleteSuborderValues(index, this.state.day, "day");
+        // this.deleteSuborderValues(index, this.state.year, "year");
+        // this.deleteSuborderValues(index, this.state.marriagePlace, "marriagePlace");
+        // this.deleteSuborderValues(index, this.state.letter, "letter");
+        // this.deleteSuborderValues(index, this.state.block, "block");
+        // this.deleteSuborderValues(index, this.state.lot, "lot");
+        // this.deleteSuborderValues(index, this.state.roll, "roll");
+        // this.deleteSuborderValues(index, this.state.borough, "borough");
+        // this.deleteSuborderValues(index, this.state.buildingNum, "buildingNum");
+        // this.deleteSuborderValues(index, this.state.street, "street");
+        // this.deleteSuborderValues(index, this.state.mail, "mail");
+        // this.deleteSuborderValues(index, this.state.contactNum, "contactNum");
+        // this.deleteSuborderValues(index, this.state.imgId, "imgId");
+        // this.deleteSuborderValues(index, this.state.imgTitle, "imgTitle");
+        // this.deleteSuborderValues(index, this.state.comment, "comment");
+        // this.deleteSuborderValues(index, this.state.personalUseAgreement, "personalUseAgreement");
+        // this.deleteSuborderValues(index, this.state.addDescription, "addDescription");
+        // this.deleteSuborderValues(index, this.state.collection, "collection");
+        // this.deleteSuborderValues(index, this.state.printSize, "printSize");
+        // this.deleteSuborderValues(index, this.state.numCopies, "numCopies");
+        // this.deleteSuborderValues(index, this.state.orderType, "orderType");
+        // this.deleteSuborderValues(index, this.state.status, "status");
+        // this.deleteSuborderValues(index, this.state.showMarriageSearch, "showMarriageSearch");
+        // this.deleteSuborderValues(index, this.state.showBirthSearch, "showBirthSearch");
+        // this.deleteSuborderValues(index, this.state.showBirthCert, "showBirthCert");
+        // this.deleteSuborderValues(index, this.state.showMarriageCert, "showMarriageCert");
+        // this.deleteSuborderValues(index, this.state.showDeathCert, "showDeathCert");
+        // this.deleteSuborderValues(index, this.state.showDeathSearch, "showDeathSearch");
+        // this.deleteSuborderValues(index, this.state.showTaxForm, "showTaxForm");
+        // this.deleteSuborderValues(index, this.state.showPhotoGalleryForm, "showPhotoGalleryForm");
+        // this.deleteSuborderValues(index, this.state.showPropertyForm, "showPropertyForm");
         this.index--;
     };
 
