@@ -22,7 +22,8 @@ class SearchFunctions(object):
         method = getattr(self, order_type_handler[search_type])
         return method(dsl, start, size)
 
-    def search(self, dsl, start, size):
+    @staticmethod
+    def search(dsl, start, size):
         search_results = es.search(index='suborders',
                                    doc_type='suborders',
                                    body=dsl,
@@ -40,7 +41,8 @@ class SearchFunctions(object):
                                    from_=start)
         return search_results
 
-    def print(self, dsl, start, size):
+    @staticmethod
+    def print(dsl, start, size):
         search_results = es.search(index='suborders',
                                    doc_type='suborders',
                                    body=dsl,
@@ -53,7 +55,8 @@ class SearchFunctions(object):
                                    from_=start)
         return search_results
 
-    def orders(self, dsl, start, size):
+    @staticmethod
+    def orders(dsl, start, size):
         search_results = es.search(index='orders',
                                    doc_type='orders',
                                    body=dsl,
@@ -70,7 +73,8 @@ class SearchFunctions(object):
                                    from_=start)
         return search_results
 
-    def birth_cert(self, dsl, start, size):
+    @staticmethod
+    def birth_cert(dsl, start, size):
         search_results = es.search(index='birth_cert',
                                    doc_type='birth_cert',
                                    body=dsl,
@@ -96,7 +100,8 @@ class SearchFunctions(object):
                                    from_=start)
         return search_results
 
-    def birth_search(self, dsl, start, size):
+    @staticmethod
+    def birth_search(dsl, start, size):
         search_results = es.search(index='birth_search',
                                    doc_type='birth_search',
                                    body=dsl,
@@ -121,7 +126,8 @@ class SearchFunctions(object):
                                    from_=start)
         return search_results
 
-    def customers(self, dsl, start, size):
+    @staticmethod
+    def customers(dsl, start, size):
         search_results = es.search(index='customers',
                                    doc_type='customers',
                                    body=dsl,
@@ -144,7 +150,8 @@ class SearchFunctions(object):
                                    from_=start)
         return search_results
 
-    def death_cert(self, dsl, start, size):
+    @staticmethod
+    def death_cert(dsl, start, size):
         search_results = es.search(index='death_cert',
                                    doc_type='death_cert',
                                    body=dsl,
@@ -168,7 +175,8 @@ class SearchFunctions(object):
                                    from_=start)
         return search_results
 
-    def death_search(self, dsl, start, size):
+    @staticmethod
+    def death_search(dsl, start, size):
         search_results = es.search(index='death_search',
                                    doc_type='death_search',
                                    body=dsl,
@@ -191,7 +199,8 @@ class SearchFunctions(object):
                                    from_=start)
         return search_results
 
-    def marriage_cert(self, dsl, start, size):
+    @staticmethod
+    def marriage_cert(dsl, start, size):
         search_results = es.search(index='marriage_cert',
                                    doc_type='marriage_cert',
                                    body=dsl,
@@ -215,7 +224,8 @@ class SearchFunctions(object):
                                    from_=start)
         return search_results
 
-    def marriage_search(self, dsl, start, size):
+    @staticmethod
+    def marriage_search(dsl, start, size):
         search_results = es.search(index='marriage_search',
                                    doc_type='marriage_search',
                                    body=dsl,
@@ -238,7 +248,8 @@ class SearchFunctions(object):
                                    from_=start)
         return search_results
 
-    def tax_photo(self, dsl, start, size):
+    @staticmethod
+    def tax_photo(dsl, start, size):
         search_results = es.search(index='tax_photo',
                                    doc_type='tax_photo',
                                    body=dsl,
@@ -261,7 +272,8 @@ class SearchFunctions(object):
                                    from_=start)
         return search_results
 
-    def photo_gallery(self, dsl, start, size):
+    @staticmethod
+    def photo_gallery(dsl, start, size):
         search_results = es.search(index='photo_gallery',
                                    doc_type='photo_gallery',
                                    body=dsl,
@@ -281,6 +293,7 @@ class SearchFunctions(object):
                                    from_=start)
         return search_results
 
+    @staticmethod
     def property_card(dsl, start, size):
         search_results = es.search(index='property_card',
                                    doc_type='property_card',
@@ -301,9 +314,11 @@ class SearchFunctions(object):
                                    from_=start)
         return search_results
 
+    @staticmethod
     def format_results(other_word_for_not_formatted_results):
         results_len = len(other_word_for_not_formatted_results['hits']['hits'])
         return [other_word_for_not_formatted_results['hits']['hits'][i]["_source"] for i in range(results_len)]
 
+    @staticmethod
     def format_first_result(unformatted_results):
         return unformatted_results['hits']['hits'][0]["_source"]

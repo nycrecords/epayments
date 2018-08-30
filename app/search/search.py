@@ -13,7 +13,7 @@ from app.search.index import (create_suborder_index, create_suborder_docs,
                               create_tax_photo_docs, create_tax_photo_index,
                               create_photo_gallery_docs, create_photo_gallery_index,
                               create_property_card_index, create_property_card_docs,
-                              create_customers_docs,create_customers_index)
+                              create_customers_docs, create_customers_index)
 from app.search.searchtypes import SearchFunctions
 
 
@@ -54,6 +54,7 @@ def create_docs():
     create_photo_gallery_docs()
     create_property_card_docs()
     create_customers_docs()
+
 
 def delete_doc(suborder_id):
     """Delete a specific doc in the index"""
@@ -124,8 +125,8 @@ def format_queries(query_fields):
     if query_fields['order_number'] is not None:
         query_fields['order_number'] = query_fields['order_number'].strip()
 
-    if query_fields["suborder_number"] is not None:
-        query_fields["suborder_number"] = query_fields["suborder_number"].strip()
+    if query_fields['suborder_number'] is not None:
+        query_fields['suborder_number'] = query_fields['suborder_number'].strip()
 
     if query_fields['billing_name'] is not None:
         query_fields['billing_name'] = query_fields['billing_name'].strip()
@@ -154,6 +155,7 @@ def format_date_range(date_range):
 
 class DSLGenerator(object):
     """Class for generating DSL body for searching"""
+
     def __init__(self, query_fields, date_range, search_type):
         """
         Constructor for class
@@ -189,9 +191,9 @@ class DSLGenerator(object):
                     })
                 else:
                     self.__filters.append({
-                       'term': {
-                           i: self.__query_fields[i]
-                       }
+                        'term': {
+                            i: self.__query_fields[i]
+                        }
 
                     })
 
@@ -246,7 +248,7 @@ class DSLGenerator(object):
         """
         :return: dictionary with key of 'query' and prepended method __must
         """
-        return{
+        return {
             'query': self.__must
         }
 
@@ -255,7 +257,7 @@ class DSLGenerator(object):
         """
         :return: dictionary with key of 'bool' with nested key 'must' and values of method __get_filters
         """
-        return{
+        return {
             'bool': {
                 'must': self.__get_filters()
             }
@@ -268,7 +270,7 @@ class DSLGenerator(object):
         :return: nested dictionary
         """
         if self.__search_type == 'search' or self.__search_type == 'print':
-            return{
+            return {
                 'sort': [
                     '_score',
 
@@ -292,7 +294,7 @@ class DSLGenerator(object):
                 }
             }
         else:
-            return{
+            return {
                 'query': {
                     'bool': {
                         'must': self.__get_filters()
