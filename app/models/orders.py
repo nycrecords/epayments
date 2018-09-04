@@ -58,6 +58,14 @@ class Orders(db.Model):
             'multiple_items': self.multiple_items,
         }
 
+    def es_create(self):
+        es.create(
+            index='orders',
+            doc_type='orders',
+            id=self.id,
+            body=self.serialize
+        )
+
 
 class Suborders(db.Model):
     """

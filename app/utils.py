@@ -137,6 +137,7 @@ def import_file(file_name):
         multiple_items=(len(_order_types) > 1)
     )
     db.session.add(order)
+    order.es_create()
 
     # 8. Get Customer Information
     # 8-a: Customer Name
@@ -172,6 +173,8 @@ def import_file(file_name):
                          order_number=order_number)
 
     db.session.add(customer)
+    db.session.commit()
+    customer.es_create()
     # In the XML the type of order is kept up with the ClientID
 
     clients_data_items = clients_data.split('ClientID')[1:]
@@ -777,6 +780,7 @@ def import_file(file_name):
                     suborder_number="{}-1940".format(suborder_number)
                 )
                 db.session.add(customer_order_1940)
+                customer_order_1940.es_create()
 
                 # Create TaxPhoto entry for 1980 print
                 customer_order_1980 = TaxPhoto(
@@ -795,6 +799,7 @@ def import_file(file_name):
                     suborder_number="{}-1980".format(suborder_number)
                 )
                 db.session.add(customer_order_1980)
+                customer_order_1980.es_create()
 
                 insert_event = [
                     Events(suborder_number=suborder_1940.id,
@@ -830,7 +835,7 @@ def import_file(file_name):
                     contact_number=contact_number,
                     suborder_number=suborder_number)
                 db.session.add(customer_order)
-
+                customer_order.es_create()
             db.session.commit()
 
         # Photo Gallery

@@ -1,4 +1,4 @@
-from app import db
+from app import db, es
 from app.constants import borough, collection, size
 
 
@@ -103,6 +103,28 @@ class TaxPhoto(db.Model):
             'contact_number': self.contact_number,
             'suborder_number': self.suborder_number,
         }
+
+    def es_create(self):
+        es.create(
+            index='tax_photo',
+            doc_type='tax_photo',
+            id=self.suborder_number,
+            body={
+                'borough': self.borough,
+                'collection': self.collection,
+                'roll': self.roll,
+                'block': self.block,
+                'lot': self.lot,
+                'building_number': self.building_number,
+                'street': self.street,
+                'description': self.description,
+                'size': self.size,
+                'num_copies': self.num_copies,
+                'mail': self.mail,
+                'contact_number': self.contact_number,
+                'suborder_number': self.suborder_number,
+            }
+        )
 
 
 class PhotoGallery(db.Model):

@@ -1,9 +1,8 @@
-from app import db
+from app import db, es
 from app.models.orders import Orders
 
 
 class Customers(db.Model):
-
     """
     Define the Shipping class with the following columns and relationships:
 
@@ -35,19 +34,19 @@ class Customers(db.Model):
     order_number = db.Column(db.String(64), db.ForeignKey('orders.id'), nullable=False)
 
     def __init__(
-                self,
-                billing_name,
-                email,
-                shipping_name,
-                address_line_1,
-                address_line_2,
-                city,
-                state,
-                zip_code,
-                phone,
-                instructions,
-                order_number,
-                country=None
+            self,
+            billing_name,
+            email,
+            shipping_name,
+            address_line_1,
+            address_line_2,
+            city,
+            state,
+            zip_code,
+            phone,
+            instructions,
+            order_number,
+            country=None
 
     ):
         self.billing_name = billing_name
@@ -104,3 +103,25 @@ class Customers(db.Model):
             'order_number': self.order_number,
             'address': self.address
         }
+
+    def es_create(self):
+        es.create(
+            index='customers',
+            doc_type='customers',
+            id=self.id,
+            body={
+                'billing_name': self.billing_name,
+                'email': self.email,
+                'shipping_name': self.shipping_name,
+                'address_line_one': self.address_line_1,
+                'address_line_two': self.address_line_2,
+                'city': self.city,
+                'state': self.state,
+                'zip_code': self.zip_code,
+                'country': self.country,
+                'phone': self.phone,
+                'instructions': self.instructions,
+                'order_number': self.order_number,
+                'address': self.address
+            }
+        )

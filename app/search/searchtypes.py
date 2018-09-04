@@ -5,18 +5,18 @@ class SearchFunctions(object):
 
     def search_by(self, search_type, dsl, start, size):
         order_type_handler = {
-                "Birth Search": 'birth_search',
-                "Birth Cert": 'birth_cert',
-                "Marriage Search": 'marriage_search',
-                "Marriage Cert": 'marriage_cert',
-                "Death Search": 'death_search',
-                "Death Cert": 'death_cert',
-                "Tax Photo": 'tax_photo',
-                "Photo Gallery": 'photo_gallery',
-                "Property Card": 'property_card',
-                "print": 'print',
+                'Birth Search': 'birth_search',
+                'Birth Cert': 'birth_cert',
+                'Marriage Search': 'marriage_search',
+                'Marriage Cert': 'marriage_cert',
+                'Death Search': 'death_search',
+                'Death Cert': 'death_cert',
+                'Tax Photo': 'tax_photo',
+                'Photo Gallery': 'photo_gallery',
+                'Property Card': 'property_card',
+                'print': 'print',
                 'search': 'search',
-                "customer": 'customers',
+                'customer': 'customers',
                 'order': 'orders'
                 }
         method = getattr(self, order_type_handler[search_type])
@@ -278,36 +278,36 @@ class SearchFunctions(object):
                                    doc_type='photo_gallery',
                                    body=dsl,
                                    _source=[
-                                        "image_id",
-                                        "description",
-                                        "additional_description",
-                                        "size",
-                                        "num_copies",
-                                        "mail",
-                                        "contact_number",
-                                        "personal_use_agreement",
-                                        "comment",
-                                        "suborder_number",
+                                        'image_id',
+                                        'description',
+                                        'additional_description',
+                                        'size',
+                                        'num_copies',
+                                        'mail',
+                                        'contact_number',
+                                        'personal_use_agreement',
+                                        'comment',
+                                        'suborder_number',
                                    ],
                                    size=size,
                                    from_=start)
         return search_results
 
-    @staticmethod
-    def property_card(dsl, start, size):
+    # @staticmethod
+    def property_card(self, dsl, start, size):
         search_results = es.search(index='property_card',
                                    doc_type='property_card',
                                    body=dsl,
                                    _source=[
-                                        "borough",
-                                        "block",
-                                        "lot",
-                                        "building_number",
-                                        "street",
-                                        "description",
-                                        "certified",
-                                        "mail",
-                                        "contact_info",
+                                        'borough',
+                                        'block',
+                                        'lot',
+                                        'building_number',
+                                        'street',
+                                        'description',
+                                        'certified',
+                                        'mail',
+                                        'contact_info',
                                         'suborder_number',
                                    ],
                                    size=size,
@@ -317,8 +317,8 @@ class SearchFunctions(object):
     @staticmethod
     def format_results(other_word_for_not_formatted_results):
         results_len = len(other_word_for_not_formatted_results['hits']['hits'])
-        return [other_word_for_not_formatted_results['hits']['hits'][i]["_source"] for i in range(results_len)]
+        return [other_word_for_not_formatted_results['hits']['hits'][i]['_source'] for i in range(results_len)]
 
     @staticmethod
     def format_first_result(unformatted_results):
-        return unformatted_results['hits']['hits'][0]["_source"]
+        return unformatted_results['hits']['hits'][0]['_source']
