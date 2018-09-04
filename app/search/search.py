@@ -14,14 +14,14 @@ from app.search.index import (create_suborder_index, create_suborder_docs,
                               create_photo_gallery_docs, create_photo_gallery_index,
                               create_property_card_index, create_property_card_docs,
                               create_customers_docs, create_customers_index)
-from app.search.searchtypes import SearchFunctions
+from app.search.searchfunctions import SearchFunctions
 
 
 def recreate():
     """Deletes then recreates the index"""
     es.indices.delete('*', ignore=[400, 404])
     create_index()
-    # create_docs()
+    create_docs()
 
 
 def create_index():

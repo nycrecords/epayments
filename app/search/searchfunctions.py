@@ -293,8 +293,8 @@ class SearchFunctions(object):
                                    from_=start)
         return search_results
 
-    # @staticmethod
-    def property_card(self, dsl, start, size):
+    @staticmethod
+    def property_card(dsl, start, size):
         search_results = es.search(index='property_card',
                                    doc_type='property_card',
                                    body=dsl,

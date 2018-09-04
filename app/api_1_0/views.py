@@ -24,7 +24,7 @@ from app.models import (
     Events
 )
 from app.search.search import search_queries
-from app.search.searchtypes import SearchFunctions
+from app.search.searchfunctions import SearchFunctions
 
 
 @api.route('/', methods=['GET'])

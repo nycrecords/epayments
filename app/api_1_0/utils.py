@@ -1,14 +1,14 @@
 import csv
+from datetime import datetime
+
 from flask import render_template, current_app, url_for
 from flask_login import current_user
-from sqlalchemy import asc, or_, and_
-from xhtml2pdf.pisa import CreatePDF
-from datetime import datetime
 from os.path import join
+from sqlalchemy import asc
+from xhtml2pdf.pisa import CreatePDF
 
 from app import db
 from app.constants import (
-    order_types,
     event_type,
     printing
 )
@@ -19,21 +19,11 @@ from app.models import (
     Orders,
     Suborders,
     Customers,
-    BirthSearch,
-    BirthCertificate,
-    DeathSearch,
-    DeathCertificate,
-    MarriageSearch,
-    MarriageCertificate,
-    PhotoGallery,
     TaxPhoto,
-    PropertyCard,
-    Users,
     Events
 )
-
 from app.search.search import search_queries
-from app.search.searchtypes import SearchFunctions
+from app.search.searchfunctions import SearchFunctions
 
 
 def _order_query_filters(order_number, suborder_number, order_type, status, billing_name, user, date_received_start,
