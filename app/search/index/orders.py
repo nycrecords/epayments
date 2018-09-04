@@ -6,7 +6,7 @@ from elasticsearch.helpers import bulk
 
 def create_orders_index():
     es.indices.create(
-        index='order',
+        index='orders',
         body={
             "mappings": {
                 'orders': {

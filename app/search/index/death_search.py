@@ -11,13 +11,9 @@ def create_death_search_index():
             "mappings": {
                 'death_search': {
                     "properties": {
-                        'id': {
-                            'type': "keyword"
-                        },
                         'suborder_number': {
                             'type': "keyword"
-                        },
-
+                        }
                     }
                 }
             }
@@ -35,8 +31,7 @@ def create_death_search_docs():
     for q in death_search:
         operations.append({
             '_op_type': 'create',
-            '_id': q.id,
-            'id': q.id,
+            '_id': q.suborder_number,
             'first_name': q.first_name,
             'last_name': q.last_name,
             'middle_name': q.middle_name,

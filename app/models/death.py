@@ -1,4 +1,4 @@
-from app import db
+from app import db, es
 from sqlalchemy.dialects.postgresql import ARRAY
 
 
@@ -112,6 +112,28 @@ class DeathSearch(db.Model):
             'comment': self.comment,
             'suborder_number': self.suborder_number
         }
+
+    def es_create(self):
+        es.create(
+            index='death_search',
+            doc_type='death_search',
+            id=self.suborder_number,
+            body={
+                'first_name': self.first_name,
+                'last_name': self.last_name,
+                'middle_name': self.middle_name,
+                'num_copies': self.num_copies,
+                'cemetery': self.cemetery,
+                'month': self.month,
+                'day': self.day,
+                'years': self.years,
+                'death_place': self.death_place,
+                'borough': self.borough,
+                'letter': self.letter,
+                'comment': self.comment,
+                'suborder_number': self.suborder_number
+            }
+        )
 
 
 class DeathCertificate(db.Model):
@@ -229,3 +251,26 @@ class DeathCertificate(db.Model):
             'comment': self.comment,
             'suborder_number': self.suborder_number
         }
+
+    def es_create(self):
+        es.create(
+            index='death_cert',
+            doc_type='death_cert',
+            id=self.suborder_number,
+            body={
+                'certificate_number': self.certificate_number,
+                'first_name': self.first_name,
+                'last_name': self.last_name,
+                'middle_name': self.middle_name,
+                'num_copies': self.num_copies,
+                'cemetery': self.cemetery,
+                'month': self.month,
+                'day': self.day,
+                'years': self.years,
+                'death_place': self.death_place,
+                'borough': self.borough,
+                'letter': self.letter,
+                'comment': self.comment,
+                'suborder_number': self.suborder_number
+            }
+        )

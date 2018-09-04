@@ -11,13 +11,9 @@ def create_tax_photo_index():
             "mappings": {
                 'tax_photo': {
                     "properties": {
-                        'id': {
-                            'type': "keyword"
-                        },
                         'suborder_number': {
                             'type': "keyword"
-                        },
-
+                        }
                     }
                 }
             }
@@ -35,8 +31,7 @@ def create_tax_photo_docs():
     for q in tax_photo:
         operations.append({
             '_op_type': 'create',
-            '_id': q.id,
-            'id': q.id,
+            '_id': q.suborder_number,
             'borough': q.borough,
             'collection': q.collection,
             'roll': q.roll,

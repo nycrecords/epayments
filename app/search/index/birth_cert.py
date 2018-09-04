@@ -11,13 +11,9 @@ def create_birth_cert_index():
             "mappings": {
                 'birth_cert': {
                     "properties": {
-                        'id': {
-                            'type': "keyword"
-                        },
                         'suborder_number': {
                             'type': "keyword"
-                        },
-
+                        }
                     }
                 }
             }
@@ -35,8 +31,7 @@ def create_birth_cert_docs():
     for q in birth_cert:
         operations.append({
             '_op_type': 'create',
-            '_id': q.id,
-            'id': q.id,
+            '_id': q.suborder_number,
             'certificate_number': q.certificate_number,
             'first_name': q.first_name,
             'last_name': q.last_name,

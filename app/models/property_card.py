@@ -1,4 +1,4 @@
-from app import db
+from app import db, es
 from app.constants import borough
 
 
@@ -40,17 +40,17 @@ class PropertyCard(db.Model):
     suborder_number = db.Column(db.String(32), db.ForeignKey('suborders.id'), nullable=False)
 
     def __init__(
-                self,
-                borough,
-                block,
-                lot,
-                building_number,
-                street,
-                description,
-                certified,
-                mail,
-                contact_info,
-                suborder_number
+            self,
+            borough,
+            block,
+            lot,
+            building_number,
+            street,
+            description,
+            certified,
+            mail,
+            contact_info,
+            suborder_number
     ):
         self.borough = borough
         self.block = block
@@ -78,3 +78,22 @@ class PropertyCard(db.Model):
             "contact_info": self.contact_info,
             'suborder_number': self.suborder_number
         }
+
+    def es_create(self):
+        es.create(
+            index='property_card',
+            doc_type='property_card',
+            id=self.suborder_number,
+            body={
+                'borough': self.borough,
+                'block': self.block,
+                'lot': self.lot,
+                'building_number': self.building_number,
+                'street': self.street,
+                'description': self.description,
+                'certified': self.certified,
+                'mail': self.mail,
+                'contact_info': self.contact_info,
+                'suborder_number': self.suborder_number
+            }
+        )

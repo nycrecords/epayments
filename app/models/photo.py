@@ -201,3 +201,22 @@ class PhotoGallery(db.Model):
             "comment": self.comment,
             "suborder_number": self.suborder_number,
         }
+
+    def es_create(self):
+        es.create(
+            index='photo_gallery',
+            doc_type='photo_gallery',
+            id=self.suborder_number,
+            body={
+                'image_id': self.image_id,
+                'description': self.description,
+                'additional_description': self.additional_description,
+                'size': self.size,
+                'num_copies': self.num_copies,
+                'mail': self.mail,
+                'contact_number': self.contact_number,
+                'personal_use_agreement': self.personal_use_agreement,
+                'comment': self.comment,
+                'suborder_number': self.suborder_number
+            }
+        )

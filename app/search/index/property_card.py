@@ -11,13 +11,9 @@ def create_property_card_index():
             "mappings": {
                 'property_card': {
                     "properties": {
-                        'id': {
-                            'type': "keyword"
-                        },
                         'suborder_number': {
                             'type': "keyword"
-                        },
-
+                        }
                     }
                 }
             }
@@ -35,17 +31,16 @@ def create_property_card_docs():
     for q in property_card:
         operations.append({
             '_op_type': 'create',
-            '_id': q.id,
-            'id': q.id,
-            "borough": q.borough,
-            "block": q.block,
-            "lot": q.lot,
-            "building_number": q.building_number,
-            "street": q.street,
-            "description": q.description,
-            "certified": q.certified,
-            "mail": q.mail,
-            "contact_info": q.contact_info,
+            '_id': q.suborder_number,
+            'borough': q.borough,
+            'block': q.block,
+            'lot': q.lot,
+            'building_number': q.building_number,
+            'street': q.street,
+            'description': q.description,
+            'certified': q.certified,
+            'mail': q.mail,
+            'contact_info': q.contact_info,
             'suborder_number': q.suborder_number
         })
 

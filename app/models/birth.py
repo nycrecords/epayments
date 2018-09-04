@@ -1,4 +1,4 @@
-from app import db
+from app import db, es
 from app.constants import gender, order_types
 from sqlalchemy.dialects.postgresql import ARRAY
 
@@ -126,6 +126,30 @@ class BirthSearch(db.Model):
             'comment': self.comment,
             'suborder_number': self.suborder_number
         }
+
+    def es_create(self):
+        es.create(
+            index='birth_search',
+            doc_type='birth_search',
+            id=self.suborder_number,
+            body={
+                'first_name': self.first_name,
+                'last_name': self.last_name,
+                'middle_name': self.middle_name,
+                'gender': self.gender,
+                'father_name': self.father_name,
+                'mother_name': self.mother_name,
+                'num_copies': self.num_copies,
+                'month': self.month,
+                'day': self.day,
+                'years': str(self.years),
+                'birth_place': self.birth_place,
+                'borough': self.borough,
+                'letter': self.letter,
+                'comment': self.comment,
+                'suborder_number': self.suborder_number
+            }
+        )
 
 
 class BirthCertificate(db.Model):
@@ -257,3 +281,28 @@ class BirthCertificate(db.Model):
             'comment': self.comment,
             'suborder_number': self.suborder_number
         }
+
+    def es_create(self):
+        es.create(
+            index='birth_cert',
+            doc_type='birth_cert',
+            id=self.suborder_number,
+            body={
+                'certificate_number': self.certificate_number,
+                'first_name': self.first_name,
+                'last_name': self.last_name,
+                'middle_name': self.middle_name,
+                'gender': self.gender,
+                'father_name': self.father_name,
+                'mother_name': self.mother_name,
+                'num_copies': self.num_copies,
+                'month': self.month,
+                'day': self.day,
+                'years': self.years,
+                'birth_place': self.birth_place,
+                'borough': self.borough,
+                'letter': self.letter,
+                'comment': self.comment,
+                'suborder_number': self.suborder_number
+            }
+        )

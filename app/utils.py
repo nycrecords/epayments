@@ -306,6 +306,7 @@ def import_file(file_name):
 
             db.session.add(customer_order)
             db.session.commit()
+            customer_order.es_create()
 
         # Marriage Search
         if client_id == '10000104':
@@ -368,6 +369,7 @@ def import_file(file_name):
 
             db.session.add(customer_order)
             db.session.commit()
+            customer_order.es_create()
 
         # Death Search
         if client_id == '10000103':
@@ -431,6 +433,7 @@ def import_file(file_name):
 
             db.session.add(customer_order)
             db.session.commit()
+            customer_order.es_create()
 
         # Birth Certificate
         if client_id == '10000147':
@@ -509,6 +512,7 @@ def import_file(file_name):
 
             db.session.add(customer_order)
             db.session.commit()
+            customer_order.es_create()
 
         # Marriage Certificate
         if client_id == '10000181':
@@ -575,6 +579,7 @@ def import_file(file_name):
 
             db.session.add(customer_order)
             db.session.commit()
+            customer_order.es_create()
 
         # Death Certificate
         if client_id == '10000182':
@@ -642,6 +647,7 @@ def import_file(file_name):
 
             db.session.add(customer_order)
             db.session.commit()
+            customer_order.es_create()
 
         # Property Card
         if client_id == '10000058':
@@ -900,4 +906,5 @@ def import_file(file_name):
 
             db.session.add(customer_order)
             db.session.commit()
+            customer_order.es_create()
     return True

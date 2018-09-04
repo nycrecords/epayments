@@ -1,4 +1,4 @@
-from app import db
+from app import db, es
 from sqlalchemy.dialects.postgresql import ARRAY
 
 
@@ -115,6 +115,28 @@ class MarriageSearch(db.Model):
             'comment': self.comment,
             'suborder_number': self.suborder_number
         }
+
+    def es_create(self):
+        es.create(
+            index='marriage_search',
+            doc_type='marriage_search',
+            id=self.suborder_number,
+            body={
+                'groom_last_name': self.groom_last_name,
+                'groom_first_name': self.groom_first_name,
+                'bride_last_name': self.bride_last_name,
+                'bride_first_name': self.bride_first_name,
+                'num_copies': self.num_copies,
+                'month': self.month,
+                'day': self.day,
+                'years': self.years,
+                'marriage_placemp': self.marriage_place,
+                'borough': self.borough,
+                'letter': self.letter,
+                'comment': self.comment,
+                'suborder_number': self.suborder_number
+            }
+        )
 
 
 class MarriageCertificate(db.Model):
@@ -235,3 +257,26 @@ class MarriageCertificate(db.Model):
             'comment': self.comment,
             'suborder_number': self.suborder_number
         }
+
+    def es_create(self):
+        es.create(
+            index='marriage_cert',
+            doc_type='marriage_cert',
+            id=self.suborder_number,
+            body={
+                'certificate_number': self.certificate_number,
+                'groom_last_name': self.groom_last_name,
+                'groom_first_name': self.groom_first_name,
+                'bride_last_name': self.bride_last_name,
+                'bride_first_name': self.bride_first_name,
+                'num_copies': self.num_copies,
+                'month': self.month,
+                'day': self.day,
+                'years': self.years,
+                'marriage_place': self.marriage_place,
+                'borough': self.borough,
+                'letter': self.letter,
+                'comment': self.comment,
+                'suborder_number': self.suborder_number
+            }
+        )

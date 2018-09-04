@@ -11,12 +11,9 @@ def create_photo_gallery_index():
             "mappings": {
                 'photo_gallery': {
                     "properties": {
-                        'id': {
-                            'type': "keyword"
-                        },
                         'suborder_number': {
                             'type': "keyword"
-                        },
+                        }
                     }
                 }
             }
@@ -34,8 +31,7 @@ def create_photo_gallery_docs():
     for q in photo_gallery:
         operations.append({
             '_op_type': 'create',
-            '_id': q.id,
-            'id': q.id,
+            '_id': q.suborder_number,
             "image_id": q.image_id,
             "description": q.description,
             "additional_description": q.additional_description,

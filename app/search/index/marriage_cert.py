@@ -11,13 +11,9 @@ def create_marriage_cert_index():
             "mappings": {
                 'marriage_cert': {
                     "properties": {
-                        'id': {
-                            'type': "keyword"
-                        },
                         'suborder_number': {
                             'type': "keyword"
-                        },
-
+                        }
                     }
                 }
             }
@@ -35,8 +31,7 @@ def create_marriage_cert_docs():
     for q in marriage_cert:
         operations.append({
             '_op_type': 'create',
-            '_id': q.id,
-            'id': q.id,
+            '_id': q.suborder_number,
             'certificate_number': q.certificate_number,
             'groom_last_name': q.groom_last_name,
             'groom_first_name': q.groom_first_name,
