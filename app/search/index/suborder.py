@@ -1,7 +1,20 @@
-from app.models import Suborders
+from elasticsearch.helpers import bulk
+
 from app import es
 from app.constants.search import ES_DATETIME_FORMAT, DATETIME_FORMAT, RESULTS_CHUNK_SIZE
-from elasticsearch.helpers import bulk
+from app.constants import order_types
+from app.models import (
+    BirthSearch,
+    BirthCertificate,
+    DeathSearch,
+    DeathCertificate,
+    MarriageSearch,
+    MarriageCertificate,
+    PhotoGallery,
+    Suborders,
+    TaxPhoto,
+    PropertyCard
+)
 
 
 def create_suborder_index():
@@ -73,6 +86,18 @@ def create_suborder_docs():
         return
     suborders = Suborders.query.all()
 
+    order_type_models_handler = {
+        order_types.BIRTH_SEARCH: BirthSearch,
+        order_types.BIRTH_CERT: BirthCertificate,
+        order_types.MARRIAGE_SEARCH: MarriageSearch,
+        order_types.MARRIAGE_CERT: MarriageCertificate,
+        order_types.DEATH_SEARCH: DeathSearch,
+        order_types.DEATH_CERT: DeathCertificate,
+        order_types.TAX_PHOTO: TaxPhoto,
+        order_types.PHOTO_GALLERY: PhotoGallery,
+        order_types.PROPERTY_CARD: PropertyCard,
+    }
+
     operations = []
 
     for q in suborders:
@@ -83,10 +108,18 @@ def create_suborder_docs():
             'suborder_number': q.id,
             'date_received': q.order.date_received.strftime(DATETIME_FORMAT),
             'date_submitted': q.order.date_submitted.strftime(DATETIME_FORMAT),
-            'billing_name': q.order.customer.billing_name.title(),
-            'customer_email': q.order.customer.email,
+            'customer': {
+                'billing_name': q.order.customer.billing_name.title(),
+                'address': q.order.customer.address
+            },
+            # 'billing_name': q.order.customer.billing_name.title(),
+            # 'customer_email': q.order.customer.email,
             'order_type': q.order_type,
             'current_status': q.status,
+            'metadata': order_type_models_handler[q.order_type].query.filter_by(
+                suborder_number=q.id).one().serialize,
+            'multiple_items': q.order.multiple_items,
+            'order_types': q.order.order_types
         })
 
     num_success, _ = bulk(
@@ -98,4 +131,3 @@ def create_suborder_docs():
         raise_on_error=True
     )
     print("Successfully created %s suborder docs." % num_success)
-

@@ -49,7 +49,11 @@ class SearchFunctions(object):
                                    _source=[
                                        'suborder_number',
                                        'order_type',
-                                       'order_number'
+                                       'order_number',
+                                       'customer',
+                                       'metadata',
+                                       'multiple_items',
+                                       'order_types'
                                    ],
                                    size=size,
                                    from_=start)

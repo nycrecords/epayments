@@ -45,6 +45,7 @@ def reset_db():
     db.create_all()
     upgrade()
     create_test_user()
+    es_recreate()
 
 
 @manager.command

@@ -1,14 +1,17 @@
-import os
 import xml.etree.ElementTree as ET
 from datetime import datetime, date
+
+import os
 from flask import current_app
+
 from app import db, scheduler
-from app.models import Orders, Events, BirthSearch, BirthCertificate, MarriageCertificate, \
-    MarriageSearch, DeathCertificate, DeathSearch, PhotoGallery, TaxPhoto, PropertyCard, Customers, Suborders
-from app.file_utils import sftp_ctx
+from app.constants import event_type
 from app.constants import status
 from app.constants.order_types import CLIENT_ID_DICT
-from app.constants import event_type
+from app.file_utils import sftp_ctx
+from app.models import Orders, Events, BirthSearch, BirthCertificate, MarriageCertificate, \
+    MarriageSearch, DeathCertificate, DeathSearch, PhotoGallery, TaxPhoto, PropertyCard, Customers, Suborders
+from app.search.search import delete_doc
 
 
 def import_xml_folder(scheduled=False, path=None):
@@ -746,6 +749,7 @@ def import_file(file_name):
                 # Remove old Suborder
                 Suborders.query.filter_by(id=suborder_number).delete()
                 db.session.commit()
+                delete_doc(suborder_number)
 
                 # Create Suborder for 1940 Request
                 suborder_1940 = Suborders(
@@ -768,6 +772,8 @@ def import_file(file_name):
                 db.session.add(suborder_1980)
 
                 db.session.commit()
+                suborder_1940.es_create()
+                suborder_1980.es_create()
 
                 # Create TaxPhoto entry for 1940 print
                 customer_order_1940 = TaxPhoto(
@@ -783,7 +789,7 @@ def import_file(file_name):
                     num_copies=num_copies,
                     mail=mail,
                     contact_number=contact_number,
-                    suborder_number="{}-1940".format(suborder_number)
+                    suborder_number=suborder_1940.id
                 )
                 db.session.add(customer_order_1940)
                 customer_order_1940.es_create()
@@ -802,7 +808,7 @@ def import_file(file_name):
                     num_copies=num_copies,
                     mail=mail,
                     contact_number=contact_number,
-                    suborder_number="{}-1980".format(suborder_number)
+                    suborder_number=suborder_1980.id
                 )
                 db.session.add(customer_order_1980)
                 customer_order_1980.es_create()

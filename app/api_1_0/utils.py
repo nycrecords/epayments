@@ -204,6 +204,9 @@ def _print_orders(search_params):
 
     :return: PDF
     """
+    import time
+    start = time.time()
+
     order_number = search_params.get("order_number")
     suborder_number = search_params.get("suborder_number")
     order_type = search_params.get("order_type")
@@ -247,28 +250,28 @@ def _print_orders(search_params):
     html = ''
 
     for item in suborder:
-
-        order_info = SearchFunctions.format_first_result(search_queries(
-            suborder_number=item['suborder_number'],
-            size=ELASTICSEARCH_MAX_SIZE,
-            search_type=item['order_type']
-        ))
-
-        order_info['customer'] = SearchFunctions.format_first_result(search_queries(
-            order_number=item['order_number'],
-            size=ELASTICSEARCH_MAX_SIZE,
-            search_type='customer'
-        ))
-        order_info['order'] = SearchFunctions.format_first_result(search_queries(
-            order_number=item['order_number'],
-            size=ELASTICSEARCH_MAX_SIZE,
-            search_type='order'
-        ))
-
-        order_info['order_type'] = item['order_type']
+        # order_info = SearchFunctions.format_first_result(search_queries(
+        #     suborder_number=item['suborder_number'],
+        #     size=ELASTICSEARCH_MAX_SIZE,
+        #     search_type=item['order_type']
+        # ))
+        #
+        # order_info['customer'] = SearchFunctions.format_first_result(search_queries(
+        #     order_number=item['order_number'],
+        #     size=ELASTICSEARCH_MAX_SIZE,
+        #     search_type='customer'
+        # ))
+        # order_info['order'] = SearchFunctions.format_first_result(search_queries(
+        #     order_number=item['order_number'],
+        #     size=ELASTICSEARCH_MAX_SIZE,
+        #     search_type='order'
+        # ))
+        #
+        # order_info['order_type'] = item['order_type']
         html += render_template("orders/{}".format(order_type_template_handler[item['order_type']]),
-                                order_info=order_info)
-
+                                order_info=item['metadata'], customer_info=item['customer'])
+    end = time.time()
+    print(end - start)
     filename = 'order_sheets_{username}_{time}.pdf'.format(username=current_user.email, time=datetime.now().strftime("%Y%m%d-%H%M%S"))
     with open(join(current_app.static_folder, 'files', filename), 'w+b') as file_:
         CreatePDF(src=html, dest=file_)
@@ -291,14 +294,37 @@ def _print_small_labels(search_params):
     user = ''
     date_received_start = search_params.get("date_received_start")
     date_received_end = search_params.get("date_received_end")
+    date_submitted_start = search_params.get("date_submitted_start")
+    date_submitted_end = search_params.get("date_submitted_end")
 
-    filter_args = _order_query_filters(order_number, suborder_number, order_type, status, billing_name, user,
-                                       date_received_start,
-                                       date_received_end)
+    suborder_results = search_queries(order_number,
+                                      suborder_number,
+                                      order_type,
+                                      status,
+                                      billing_name,
+                                      date_received_start,
+                                      date_received_end,
+                                      date_submitted_start,
+                                      date_submitted_end,
+                                      0,
+                                      ELASTICSEARCH_MAX_SIZE,
+                                      "search")
 
-    suborders = Suborders.query.join(Orders, Customers).filter(*filter_args).all()
+    # Only want suborder_number, and order type
+    suborders = SearchFunctions.format_results(suborder_results)
 
-    customers = [suborder.order.customer.serialize for suborder in suborders]
+    order_from_suborders = list({s['order_number']: s for s in suborders}.values())
+
+    customers = []
+
+    for item in order_from_suborders:
+        customer = SearchFunctions.format_first_result(search_queries(
+            order_number=item['order_number'],
+            size=ELASTICSEARCH_MAX_SIZE,
+            search_type='customer'
+        ))
+
+        customers.append(customer)
 
     labels = [customers[i:i + printing.SMALL_LABEL_COUNT] for i in range(0, len(customers), printing.SMALL_LABEL_COUNT)]
     html = ''
@@ -332,14 +358,37 @@ def _print_large_labels(search_params):
     user = ''
     date_received_start = search_params.get("date_received_start")
     date_received_end = search_params.get("date_received_end")
+    date_submitted_start = search_params.get("date_submitted_start")
+    date_submitted_end = search_params.get("date_submitted_end")
 
-    filter_args = _order_query_filters(order_number, suborder_number, order_type, status, billing_name, user,
-                                       date_received_start,
-                                       date_received_end)
+    suborder_results = search_queries(order_number,
+                                      suborder_number,
+                                      order_type,
+                                      status,
+                                      billing_name,
+                                      date_received_start,
+                                      date_received_end,
+                                      date_submitted_start,
+                                      date_submitted_end,
+                                      0,
+                                      ELASTICSEARCH_MAX_SIZE,
+                                      "search")
 
-    suborders = Suborders.query.join(Orders, Customers).filter(*filter_args).all()
+    # Only want suborder_number, and order type
+    suborders = SearchFunctions.format_results(suborder_results)
 
-    customers = [suborder.order.customer.serialize for suborder in suborders]
+    order_from_suborders = list({s['order_number']: s for s in suborders}.values())
+
+    customers = []
+
+    for item in order_from_suborders:
+        customer = SearchFunctions.format_first_result(search_queries(
+            order_number=item['order_number'],
+            size=ELASTICSEARCH_MAX_SIZE,
+            search_type='customer'
+        ))
+
+        customers.append(customer)
 
     customers = sorted(customers, key=lambda customer: customer['billing_name'])
 
