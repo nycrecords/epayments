@@ -59,14 +59,6 @@ class Orders(db.Model):
             'multiple_items': self.multiple_items,
         }
 
-    def es_create(self):
-        es.create(
-            index='orders',
-            doc_type='orders',
-            id=self.id,
-            body=self.serialize
-        )
-
 
 class Suborders(db.Model):
     """
@@ -145,6 +137,8 @@ class Suborders(db.Model):
     # Elasticsearch
     def es_create(self):
         """Creates Elastic Search doc"""
+        customer = self.order.customer
+
         es.create(
             index='suborders',
             doc_type='suborders',
@@ -154,14 +148,27 @@ class Suborders(db.Model):
                 'suborder_number': self.id,
                 'date_submitted': self.order.date_submitted.strftime(DATETIME_FORMAT),
                 'date_received': self.order.date_received.strftime(DATETIME_FORMAT),
-                'billing_name': self.order.customer.billing_name.title(),
-                'customer_email': self.order.customer.email,
+                'customer': {
+                    'address': customer.address,
+                    'billing_name': customer.billing_name.title(),
+                    'shipping_name': customer.shipping_name.title(),
+                    'address_line_one': customer.address_line_1,
+                    'address_line_two': customer.address_line_2,
+                    'city': customer.city,
+                    'state': customer.state,
+                    'zip_code': customer.zip_code,
+                    'country': customer.country,
+                    'email': customer.email,
+                    'phone': customer.phone
+                },
                 'order_type': self.order_type,
-                'current_status': self.status
+                'current_status': self.status,
+                'multiple_items': self.order.multiple_items,
+                'order_types': self.order.order_types
             }
         )
 
-    def es_update(self):
+    def es_update(self, metadata=None):
         """Updates elastic search docs"""
         es.update(
             index='suborders',
@@ -169,14 +176,8 @@ class Suborders(db.Model):
             id=self.id,
             body={
                 'doc': {
-                    'order_number': self.order_number,
-                    'suborder_number': self.id,
-                    'date_submitted': self.order.date_submitted.strftime(DATETIME_FORMAT),
-                    'current_status': self.status,
-                    'billing_name': self.order.customer.billing_name.title(),
-                    'customer_email': self.order.customer.email,
-                    'order_type': self.order_type,
-                    'data_received': self.order.date_received.strftime(DATETIME_FORMAT)
+                    'metadata': metadata,
+                    'current_status': self.status
                 }
             }
         )

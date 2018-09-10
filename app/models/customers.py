@@ -103,25 +103,3 @@ class Customers(db.Model):
             'order_number': self.order_number,
             'address': self.address
         }
-
-    def es_create(self):
-        es.create(
-            index='customers',
-            doc_type='customers',
-            id=self.id,
-            body={
-                'billing_name': self.billing_name,
-                'email': self.email,
-                'shipping_name': self.shipping_name,
-                'address_line_one': self.address_line_1,
-                'address_line_two': self.address_line_2,
-                'city': self.city,
-                'state': self.state,
-                'zip_code': self.zip_code,
-                'country': self.country,
-                'phone': self.phone,
-                'instructions': self.instructions,
-                'order_number': self.order_number,
-                'address': self.address
-            }
-        )
