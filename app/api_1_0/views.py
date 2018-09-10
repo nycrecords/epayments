@@ -67,6 +67,10 @@ def get_orders():
         start = json.get("start")
         size = json.get("size")
 
+        multiple_items = ''
+        if order_type == 'multiple_items':
+            multiple_items = True
+
         orders = search_queries(order_number,
                                 suborder_number,
                                 order_type,
@@ -76,6 +80,7 @@ def get_orders():
                                 date_received_end,
                                 date_submitted_start,
                                 date_submitted_end,
+                                multiple_items,
                                 start,
                                 size,
                                 "search")

@@ -86,6 +86,9 @@ def create_index():
                             "type": "date",
                             "format": ES_DATETIME_FORMAT,
                         },
+                        "multiple_items": {
+                            "type": "boolean"
+                        }
                     }
                 }
             }
@@ -164,13 +167,14 @@ def delete_doc(suborder_id):
 
 def search_queries(order_number=None,
                    suborder_number=None,
-                   order_type='',
+                   order_type='all',
                    status='',
                    billing_name=None,
                    date_received_start='',
                    date_received_end='',
                    date_submitted_start='',
                    date_submitted_end='',
+                   multiple_items='',
                    start=0,
                    size=RESULTS_CHUNK_SIZE,
                    search_type='search'):
@@ -184,6 +188,7 @@ def search_queries(order_number=None,
         :param date_received_end: search by ending date
         :param date_submitted_start: search by starting date submitted
         :param date_submitted_end: search by ending date submitted
+        :param multiple_items: search by multiple items in cart
         :param start: starting index of the set
         :param size: size of results pool
         :param search_type: search or print
@@ -192,10 +197,10 @@ def search_queries(order_number=None,
     """
     query_field = {
         'billing_name': billing_name,
-        'order_type': order_type,
         'suborder_number': suborder_number,
         'order_number': order_number,
         'current_status': status,
+        'multiple_items': multiple_items
     }
 
     date_range = {
@@ -207,6 +212,7 @@ def search_queries(order_number=None,
 
     dsl_gen = DSLGenerator(query_fields=format_queries(query_field),
                            date_range=format_date_range(date_range),
+                           order_type=format_order_type(order_type),
                            search_type=search_type)
     dsl = dsl_gen.match_all()
 
@@ -234,9 +240,6 @@ def format_queries(query_fields):
     if query_fields['current_status'] == 'all':
         query_fields['current_status'] = ''
 
-    if query_fields['order_type'] == 'all':
-        query_fields['order_type'] = ''
-
     return query_fields
 
 
@@ -252,10 +255,24 @@ def format_date_range(date_range):
     return date_range
 
 
+def format_order_type(order_type):
+    if order_type == 'all':
+        return None
+
+    elif order_type == 'vital_records':
+        return order_types.VITAL_RECORDS_LIST
+
+    elif order_type == 'photos':
+        return order_types.PHOTOS_LIST
+
+    else:
+        return [order_type]
+
+
 class DSLGenerator(object):
     """Class for generating DSL body for searching"""
 
-    def __init__(self, query_fields, date_range, search_type):
+    def __init__(self, query_fields, date_range, order_type, search_type):
         """
         Constructor for class
 
@@ -267,6 +284,7 @@ class DSLGenerator(object):
         self.__date_range = date_range
         self.__search_type = search_type
 
+        self.__default_filters = [{'terms': {'order_type': order_type}}] if order_type else []
         self.__filters = []
         self.__sort_filters = []
 
@@ -275,7 +293,6 @@ class DSLGenerator(object):
         Generate dictionary of generic search query
         :return: dictionary with prepended method query
         """
-
         # Creates dictionary from the fields in __query_fields
         for i in self.__query_fields:
             if self.__query_fields[i]:
@@ -405,4 +422,4 @@ class DSLGenerator(object):
         """
         :return: values from __filters variable
         """
-        return self.__filters
+        return self.__filters + self.__default_filters

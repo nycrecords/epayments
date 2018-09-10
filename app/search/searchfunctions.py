@@ -59,10 +59,10 @@ class SearchFunctions(object):
         return search_results
 
     @staticmethod
-    def format_results(other_word_for_not_formatted_results):
-        results_len = len(other_word_for_not_formatted_results['hits']['hits'])
-        return [other_word_for_not_formatted_results['hits']['hits'][i]['_source'] for i in range(results_len)]
+    def format_results(results):
+        results_len = len(results['hits']['hits'])
+        return [results['hits']['hits'][i]['_source'] for i in range(results_len)]
 
     @staticmethod
-    def format_first_result(unformatted_results):
-        return unformatted_results['hits']['hits'][0]['_source']
+    def format_first_result(results):
+        return results['hits']['hits'][0]['_source']
