@@ -69,7 +69,9 @@ def get_orders():
 
         multiple_items = ''
         if order_type == 'multiple_items':
+            # Since multiple_items is parsed from the order_type field, we must overwrite the order_type field
             multiple_items = True
+            order_type = 'all'
 
         orders = search_queries(order_number,
                                 suborder_number,
