@@ -1,4 +1,4 @@
-from app import db, es
+from app import db
 from app.constants import borough, collection, size
 
 

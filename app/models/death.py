@@ -1,4 +1,4 @@
-from app import db, es
+from app import db
 from sqlalchemy.dialects.postgresql import ARRAY
 
 
