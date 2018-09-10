@@ -1,12 +1,12 @@
-<b>Customer Name: {{ customer_info['billing_name'] }}</b>
+<b>Customer Name: {{ order_info['customer']['billing_name'] }}</b>
 <br/>
-<b>Order Number: {{ customer_info['order_number'] }}</b>
+<b>Order Number: {{ order_info['order_number'] }}</b>
 <br/>
-{#<b>Order Time: {{ order_info['order']['date_submitted'] }}</b>#}
+<b>Order Time: {{ order_info['date_submitted'] }}</b>
 <br/>
-<b>Phone: {{ customer_info['phone'] }}</b>
+<b>Phone: {{ order_info['customer']['phone'] }}</b>
 <br/>
-<b>Email: {{ customer_info['email'] }}</b>
+<b>Email: {{ order_info['customer']['email'] }}</b>
 <br/>
 <b>Suborder Number: {{ order_info['suborder_number'] }}</b>
 <br/>

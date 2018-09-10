@@ -3,6 +3,7 @@ from app import create_app, db
 from app.models import Orders, Suborders, Customers, BirthSearch, \
     MarriageSearch, DeathSearch, BirthCertificate, MarriageCertificate, \
     DeathCertificate, PropertyCard, TaxPhoto, PhotoGallery, Events, Users
+from app.search.utils import recreate
 from flask_script import Manager, Shell
 from flask_migrate import Migrate, MigrateCommand
 
@@ -45,7 +46,7 @@ def reset_db():
     db.create_all()
     upgrade()
     create_test_user()
-    es_recreate()
+    recreate()
 
 
 @manager.command
@@ -80,7 +81,6 @@ def test(coverage=False):
 @manager.command
 def es_recreate():
     """Recreates the index and request docs"""
-    from app.search.search import recreate
     recreate()
 
 

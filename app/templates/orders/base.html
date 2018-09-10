@@ -16,8 +16,8 @@
 </head>
 <body>
 <p>
-{{ customer_info['billing_name'] }}<br/>
-Address: {{ customer_info['address'] }}
+{{ order_info['customer']['billing_name'] }}<br/>
+Address: {{ order_info['customer']['address'] }}
 </p>
 <h1>{{ order_info['order_type'] }}</h1>
 

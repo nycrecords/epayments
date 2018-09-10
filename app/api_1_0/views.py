@@ -23,7 +23,7 @@ from app.models import (
     Users,
     Events
 )
-from app.search.search import search_queries
+from app.search.utils import search_queries
 from app.search.searchfunctions import SearchFunctions
 
 
@@ -48,7 +48,7 @@ def get_orders():
 
     GET {order_number, suborder_number, order_type, billing_name, user, date_received_start, date_received_end},
 
-    Search functionality should be in search.py
+    Search functionality should be in utils.py
 
     :return {orders, 200}
     """
@@ -87,7 +87,7 @@ def get_orders():
 
         return jsonify(order_count=order_total,
                        suborder_count=suborder_total,
-                       all_orders=formatted_orders,), 200
+                       all_orders=formatted_orders), 200
 
     else:
         orders = search_queries(date_received_start=date.today().strftime('%m/%d/%Y'))
@@ -97,7 +97,7 @@ def get_orders():
 
         return jsonify(order_count=order_total,
                        suborder_count=suborder_total,
-                       all_orders=formatted_orders,), 200
+                       all_orders=formatted_orders), 200
 
 
 @api.route('/orders/<doc_type>', methods=['GET'])

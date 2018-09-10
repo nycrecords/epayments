@@ -11,7 +11,7 @@ from app.constants.order_types import CLIENT_ID_DICT
 from app.file_utils import sftp_ctx
 from app.models import Orders, Events, BirthSearch, BirthCertificate, MarriageCertificate, \
     MarriageSearch, DeathCertificate, DeathSearch, PhotoGallery, TaxPhoto, PropertyCard, Customers, Suborders
-from app.search.search import delete_doc
+from app.search.utils import delete_doc
 
 
 def import_xml_folder(scheduled=False, path=None):

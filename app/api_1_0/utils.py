@@ -22,7 +22,7 @@ from app.models import (
     TaxPhoto,
     Events
 )
-from app.search.search import search_queries
+from app.search.utils import search_queries
 from app.search.searchfunctions import SearchFunctions
 
 
@@ -204,9 +204,6 @@ def _print_orders(search_params):
 
     :return: PDF
     """
-    import time
-    start = time.time()
-
     order_number = search_params.get("order_number")
     suborder_number = search_params.get("suborder_number")
     order_type = search_params.get("order_type")
@@ -250,28 +247,9 @@ def _print_orders(search_params):
     html = ''
 
     for item in suborder:
-        # order_info = SearchFunctions.format_first_result(search_queries(
-        #     suborder_number=item['suborder_number'],
-        #     size=ELASTICSEARCH_MAX_SIZE,
-        #     search_type=item['order_type']
-        # ))
-        #
-        # order_info['customer'] = SearchFunctions.format_first_result(search_queries(
-        #     order_number=item['order_number'],
-        #     size=ELASTICSEARCH_MAX_SIZE,
-        #     search_type='customer'
-        # ))
-        # order_info['order'] = SearchFunctions.format_first_result(search_queries(
-        #     order_number=item['order_number'],
-        #     size=ELASTICSEARCH_MAX_SIZE,
-        #     search_type='order'
-        # ))
-        #
-        # order_info['order_type'] = item['order_type']
         html += render_template("orders/{}".format(order_type_template_handler[item['order_type']]),
-                                order_info=item['metadata'], customer_info=item['customer'])
-    end = time.time()
-    print(end - start)
+                                order_info=item, customer_info=item['customer'])
+
     filename = 'order_sheets_{username}_{time}.pdf'.format(username=current_user.email, time=datetime.now().strftime("%Y%m%d-%H%M%S"))
     with open(join(current_app.static_folder, 'files', filename), 'w+b') as file_:
         CreatePDF(src=html, dest=file_)
@@ -318,13 +296,7 @@ def _print_small_labels(search_params):
     customers = []
 
     for item in order_from_suborders:
-        customer = SearchFunctions.format_first_result(search_queries(
-            order_number=item['order_number'],
-            size=ELASTICSEARCH_MAX_SIZE,
-            search_type='customer'
-        ))
-
-        customers.append(customer)
+        customers.append(item['customer'])
 
     labels = [customers[i:i + printing.SMALL_LABEL_COUNT] for i in range(0, len(customers), printing.SMALL_LABEL_COUNT)]
     html = ''
@@ -382,13 +354,7 @@ def _print_large_labels(search_params):
     customers = []
 
     for item in order_from_suborders:
-        customer = SearchFunctions.format_first_result(search_queries(
-            order_number=item['order_number'],
-            size=ELASTICSEARCH_MAX_SIZE,
-            search_type='customer'
-        ))
-
-        customers.append(customer)
+        customers.append(item['customer'])
 
     customers = sorted(customers, key=lambda customer: customer['billing_name'])
 
