@@ -216,6 +216,12 @@ def _print_orders(search_params):
     date_submitted_start = search_params.get("date_submitted_start")
     date_submitted_end = search_params.get("date_submitted_end")
 
+    multiple_items = ''
+    if order_type == 'multiple_items':
+        # Since multiple_items is parsed from the order_type field, we must overwrite the order_type field
+        multiple_items = True
+        order_type = 'all'
+
     suborders = search_queries(order_number,
                                suborder_number,
                                order_type,
@@ -225,6 +231,7 @@ def _print_orders(search_params):
                                date_received_end,
                                date_submitted_start,
                                date_submitted_end,
+                               multiple_items,
                                0,
                                ELASTICSEARCH_MAX_SIZE,
                                "print")
@@ -275,6 +282,12 @@ def _print_small_labels(search_params):
     date_submitted_start = search_params.get("date_submitted_start")
     date_submitted_end = search_params.get("date_submitted_end")
 
+    multiple_items = ''
+    if order_type == 'multiple_items':
+        # Since multiple_items is parsed from the order_type field, we must overwrite the order_type field
+        multiple_items = True
+        order_type = 'all'
+
     suborder_results = search_queries(order_number,
                                       suborder_number,
                                       order_type,
@@ -284,6 +297,7 @@ def _print_small_labels(search_params):
                                       date_received_end,
                                       date_submitted_start,
                                       date_submitted_end,
+                                      multiple_items,
                                       0,
                                       ELASTICSEARCH_MAX_SIZE,
                                       "search")
@@ -333,6 +347,12 @@ def _print_large_labels(search_params):
     date_submitted_start = search_params.get("date_submitted_start")
     date_submitted_end = search_params.get("date_submitted_end")
 
+    multiple_items = ''
+    if order_type == 'multiple_items':
+        # Since multiple_items is parsed from the order_type field, we must overwrite the order_type field
+        multiple_items = True
+        order_type = 'all'
+
     suborder_results = search_queries(order_number,
                                       suborder_number,
                                       order_type,
@@ -342,6 +362,7 @@ def _print_large_labels(search_params):
                                       date_received_end,
                                       date_submitted_start,
                                       date_submitted_end,
+                                      multiple_items,
                                       0,
                                       ELASTICSEARCH_MAX_SIZE,
                                       "search")
