@@ -1,77 +1,77 @@
-{% extends "orders/base.html" %}
+{% extends 'orders/base.html' %}
 
 {% block content %}
     <br/>
     <p>
         <b>COLLECTION:</b><br/>
-        {{ order_info['collection'] }}
+        {{ order_info['metadata']['collection'] }}
         <br/>
     </p>
 
     <p>
         <b>BOROUGH:</b><br/>
-        {{ order_info['borough'] }}
+        {{ order_info['metadata']['borough'] }}
         <br/>
     </p>
 
     <p>
         <b>ROLL:</b><br/>
-        {{ order_info['roll'] or "Not Provided" }}
+        {{ order_info['metadata']['roll'] or "Not Provided" }}
         <br/>
     </p>
 
     <p>
         <b>BLOCK:</b><br/>
-        {{ order_info['block'] or "Not Provided" }}
+        {{ order_info['metadata']['block'] or "Not Provided" }}
         <br/>
     </p>
 
     <p>
         <b>LOT:</b><br/>
-        {{ order_info['lot'] or "Not Provided" }}
+        {{ order_info['metadata']['lot'] or "Not Provided" }}
         <br/>
     </p>
 
     <p>
         <b>BUILDING_NUMBER:</b><br/>
-        {{ order_info['building_number'] }}
+        {{ order_info['metadata']['building_number'] }}
         <br/>
     </p>
 
     <p>
         <b>STREET:</b><br/>
-        {{ order_info['street'] }}
+        {{ order_info['metadata']['street'] }}
         <br/>
     </p>
 
     <p>
         <b>DESCRIPTION:</b><br/>
-        {{ order_info['description'] or "Not Provided" }}
+        {{ order_info['metadata']['description'] or "Not Provided" }}
         <br/>
     </p>
 
     <p>
         <b>SIZE:</b><br/>
-        {{ order_info['size'] }}
+        {{ order_info['metadata']['size'] }}
         <br/>
     </p>
 
     <p>
         <b>NUMBER OF COPIES:</b><br/>
-        {{ order_info['num_copies'] }}
+        {{ order_info['metadata']['num_copies'] }}
         <br/>
     </p>
 
     <p>
         <b>MAIL_PICKUP:</b><br/>
-        {{ "Mail" if order_info['mail'] else "Pickup" }}
+        {{ "Mail" if order_info['metadata']['mail'] else "Pickup" }}
         <br/>
     </p>
 
-    {% if order_info['contact_number'] %}
+    {% if order_info['metadata']['contact_number'] %}
         <p>
             <b>CONTACT NUMBER:</b><br/>
-            {{ order_info['contact_number'] }}
+            {{ order_info['metadata']['contact_number'] }}
             <br/>
         </p>
     {% endif %}

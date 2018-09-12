@@ -147,7 +147,7 @@ class Home extends React.Component {
                 order_number={order.order_number}
                 suborder_number={order.suborder_number}
                 order_type={order.order_type}
-                billing_name={order.billing_name}
+                billing_name={order.customer.billing_name}
                 date_received={order.date_received.slice(0, -9)}
                 current_status={order.current_status}
                 updateStatus={this.updateStatus}
@@ -213,7 +213,6 @@ class Home extends React.Component {
                                         (<p>No Results</p>) : (<p>End of Results</p>)}
                                 </div>)
                                 }
-
                             </div>
 
                         </Grid.Column>
