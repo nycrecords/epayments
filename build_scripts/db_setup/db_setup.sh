@@ -10,6 +10,7 @@ chkconfig rh-postgresql95-postgresql on
 mkdir -p /data/postgres
 # postgres user owns the created Postgres directory
 chown -R postgres:postgres /data/postgres
+chmod 700 /data/postgres
 
 # 4. Copy script (enable postgres commands in command line) to /etc/profile.d
 cp /vagrant/build_scripts/db_setup/postgres.sh /etc/profile.d/postgres.sh

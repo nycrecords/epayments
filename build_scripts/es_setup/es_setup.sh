@@ -11,7 +11,6 @@ rpm -ivh /tmp/elasticsearch-6.3.1.rpm
 # 4. Autostart Elastic Search
 sudo chkconfig --add elasticsearch
 
-
 # 5. Configure Elastic Search
 mv /etc/elasticsearch/elasticsearch.yml /etc/elasticsearch/elasticsearch.yml.orig
 # TODO: make this sudoedit because symlink no longer works

@@ -40,17 +40,17 @@ class PropertyCard(db.Model):
     suborder_number = db.Column(db.String(32), db.ForeignKey('suborders.id'), nullable=False)
 
     def __init__(
-                self,
-                borough,
-                block,
-                lot,
-                building_number,
-                street,
-                description,
-                certified,
-                mail,
-                contact_info,
-                suborder_number
+            self,
+            borough,
+            block,
+            lot,
+            building_number,
+            street,
+            description,
+            certified,
+            mail,
+            contact_info,
+            suborder_number
     ):
         self.borough = borough
         self.block = block

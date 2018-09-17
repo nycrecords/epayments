@@ -1,14 +1,14 @@
 import csv
+from datetime import datetime
+
 from flask import render_template, current_app, url_for
 from flask_login import current_user
-from sqlalchemy import asc, or_, and_
-from xhtml2pdf.pisa import CreatePDF
-from datetime import datetime
 from os.path import join
+from sqlalchemy import asc
+from xhtml2pdf.pisa import CreatePDF
 
 from app import db
 from app.constants import (
-    order_types,
     event_type,
     printing
 )
@@ -19,21 +19,11 @@ from app.models import (
     Orders,
     Suborders,
     Customers,
-    BirthSearch,
-    BirthCertificate,
-    DeathSearch,
-    DeathCertificate,
-    MarriageSearch,
-    MarriageCertificate,
-    PhotoGallery,
     TaxPhoto,
-    PropertyCard,
-    Users,
     Events
 )
-
-from app.search.search import search_queries
-from app.search.searchtypes import SearchFunctions
+from app.search.utils import search_queries
+from app.search.searchfunctions import SearchFunctions
 
 
 def _order_query_filters(order_number, suborder_number, order_type, status, billing_name, user, date_received_start,
@@ -226,6 +216,12 @@ def _print_orders(search_params):
     date_submitted_start = search_params.get("date_submitted_start")
     date_submitted_end = search_params.get("date_submitted_end")
 
+    multiple_items = ''
+    if order_type == 'multiple_items':
+        # Since multiple_items is parsed from the order_type field, we must overwrite the order_type field
+        multiple_items = True
+        order_type = 'all'
+
     suborders = search_queries(order_number,
                                suborder_number,
                                order_type,
@@ -235,6 +231,7 @@ def _print_orders(search_params):
                                date_received_end,
                                date_submitted_start,
                                date_submitted_end,
+                               multiple_items,
                                0,
                                ELASTICSEARCH_MAX_SIZE,
                                "print")
@@ -256,27 +253,8 @@ def _print_orders(search_params):
     html = ''
 
     for item in suborder:
-
-        order_info = SearchFunctions.format_first_result(search_queries(
-            suborder_number=item['suborder_number'],
-            size=ELASTICSEARCH_MAX_SIZE,
-            search_type=item['order_type']
-        ))
-
-        order_info['customer'] = SearchFunctions.format_first_result(search_queries(
-            order_number=item['order_number'],
-            size=ELASTICSEARCH_MAX_SIZE,
-            search_type='customer'
-        ))
-        order_info['order'] = SearchFunctions.format_first_result(search_queries(
-            order_number=item['order_number'],
-            size=ELASTICSEARCH_MAX_SIZE,
-            search_type='order'
-        ))
-
-        order_info['order_type'] = item['order_type']
         html += render_template("orders/{}".format(order_type_template_handler[item['order_type']]),
-                                order_info=order_info)
+                                order_info=item, customer_info=item['customer'])
 
     filename = 'order_sheets_{username}_{time}.pdf'.format(username=current_user.email, time=datetime.now().strftime("%Y%m%d-%H%M%S"))
     with open(join(current_app.static_folder, 'files', filename), 'w+b') as file_:
@@ -303,26 +281,36 @@ def _print_small_labels(search_params):
     date_submitted_start = search_params.get("date_submitted_start")
     date_submitted_end = search_params.get("date_submitted_end")
 
-    suborders = search_queries(order_number,
-                               suborder_number,
-                               order_type,
-                               status,
-                               billing_name,
-                               date_received_start,
-                               date_received_end,
-                               date_submitted_start,
-                               date_submitted_end,
-                               0,
-                               ELASTICSEARCH_MAX_SIZE,
-                               "print")
+    multiple_items = ''
+    if order_type == 'multiple_items':
+        # Since multiple_items is parsed from the order_type field, we must overwrite the order_type field
+        multiple_items = True
+        order_type = 'all'
 
-    suborder = SearchFunctions.format_results(suborders)
+    suborder_results = search_queries(order_number,
+                                      suborder_number,
+                                      order_type,
+                                      status,
+                                      billing_name,
+                                      date_received_start,
+                                      date_received_end,
+                                      date_submitted_start,
+                                      date_submitted_end,
+                                      multiple_items,
+                                      0,
+                                      ELASTICSEARCH_MAX_SIZE,
+                                      "search")
+
+    # Only want suborder_number, and order type
+    suborders = SearchFunctions.format_results(suborder_results)
+
+    order_from_suborders = list({s['order_number']: s for s in suborders}.values())
+
     customers = []
-    for item in suborder:
-        customers.append(SearchFunctions.format_first_result(search_queries(
-                                    order_number=item['order_number'],
-                                    size=ELASTICSEARCH_MAX_SIZE,
-                                    search_type='customer')))
+
+    for item in order_from_suborders:
+        customers.append(item['customer'])
+
     labels = [customers[i:i + printing.SMALL_LABEL_COUNT] for i in range(0, len(customers), printing.SMALL_LABEL_COUNT)]
     html = ''
 
@@ -355,30 +343,38 @@ def _print_large_labels(search_params):
     user = ''
     date_received_start = search_params.get("date_received_start")
     date_received_end = search_params.get("date_received_end")
-
     date_submitted_start = search_params.get("date_submitted_start")
     date_submitted_end = search_params.get("date_submitted_end")
 
-    suborders = search_queries(order_number,
-                               suborder_number,
-                               order_type,
-                               status,
-                               billing_name,
-                               date_received_start,
-                               date_received_end,
-                               date_submitted_start,
-                               date_submitted_end,
-                               0,
-                               ELASTICSEARCH_MAX_SIZE,
-                               "print")
+    multiple_items = ''
+    if order_type == 'multiple_items':
+        # Since multiple_items is parsed from the order_type field, we must overwrite the order_type field
+        multiple_items = True
+        order_type = 'all'
 
-    suborder = SearchFunctions.format_results(suborders)
+    suborder_results = search_queries(order_number,
+                                      suborder_number,
+                                      order_type,
+                                      status,
+                                      billing_name,
+                                      date_received_start,
+                                      date_received_end,
+                                      date_submitted_start,
+                                      date_submitted_end,
+                                      multiple_items,
+                                      0,
+                                      ELASTICSEARCH_MAX_SIZE,
+                                      "search")
+
+    # Only want suborder_number, and order type
+    suborders = SearchFunctions.format_results(suborder_results)
+
+    order_from_suborders = list({s['order_number']: s for s in suborders}.values())
+
     customers = []
-    for item in suborder:
-        customers.append(SearchFunctions.format_first_result(search_queries(
-            order_number=item['order_number'],
-            size=ELASTICSEARCH_MAX_SIZE,
-            search_type='customer')))
+
+    for item in order_from_suborders:
+        customers.append(item['customer'])
 
     customers = sorted(customers, key=lambda customer: customer['billing_name'])
 

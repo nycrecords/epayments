@@ -14,7 +14,7 @@ class BirthSearch extends React.Component{
                 {this.props.order_info['customer']['address']}  <br/>
                 <h2>{this.props.order_info['order_type']}</h2>
                 <strong>Order number:</strong> {this.props.order_info['customer']['order_number']}<br/>
-                <strong>Order time:</strong> {this.props.order_info['order']['date_submitted']} <br/>
+                <strong>Order time:</strong> {this.props.order_info['date_submitted']} <br/>
                 <strong>Phone:</strong> {this.props.order_info['customer']['phone']} <br/>
                 <strong>E-mail:</strong> {this.props.order_info['customer']['email']} <br/>
                 <strong>Suborder Number</strong> {this.props.order_info['suborder_number']} <br/> <br/>

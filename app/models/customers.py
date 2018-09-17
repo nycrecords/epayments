@@ -3,7 +3,6 @@ from app.models.orders import Orders
 
 
 class Customers(db.Model):
-
     """
     Define the Shipping class with the following columns and relationships:
 
@@ -35,19 +34,19 @@ class Customers(db.Model):
     order_number = db.Column(db.String(64), db.ForeignKey('orders.id'), nullable=False)
 
     def __init__(
-                self,
-                billing_name,
-                email,
-                shipping_name,
-                address_line_1,
-                address_line_2,
-                city,
-                state,
-                zip_code,
-                phone,
-                instructions,
-                order_number,
-                country=None
+            self,
+            billing_name,
+            email,
+            shipping_name,
+            address_line_1,
+            address_line_2,
+            city,
+            state,
+            zip_code,
+            phone,
+            instructions,
+            order_number,
+            country=None
 
     ):
         self.billing_name = billing_name

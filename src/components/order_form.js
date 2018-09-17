@@ -26,8 +26,7 @@ const orderTypeOptions = [
     {key: 'taxphoto', text: 'Tax Photo', value: 'Tax Photo'},
     {key: 'photogallery', text: 'Photo Gallery', value: 'Photo Gallery'},
     {key: 'other', text: '--Other--', value: 'other', disabled: true},
-    {key: 'multipleincart', text: 'Multiple Items In Cart', value: 'multiple_items'},
-    {key: 'vitalincart', text: 'Vital Records And Photos In Cart', value: 'vital_records_and_photos'}
+    {key: 'multipleincart', text: 'Multiple Items In Cart', value: 'multiple_items'}
 ];
 
 const statusOptions = [
@@ -76,9 +75,9 @@ class OrderForm extends React.Component {
         };
 
         this.state = {
-            order_number: '',
-            suborder_number: '',
-            order_type: '',
+            ordernumber: '',
+            subordernumber: '',
+            order_type: 'all',
             status: 'all',
             billing_name: '',
             activeItem: 'Date Received',

@@ -23,8 +23,8 @@ from app.models import (
     Users,
     Events
 )
-from app.search.search import search_queries
-from app.search.searchtypes import SearchFunctions
+from app.search.utils import search_queries
+from app.search.searchfunctions import SearchFunctions
 
 
 @api.route('/', methods=['GET'])
@@ -48,7 +48,7 @@ def get_orders():
 
     GET {order_number, suborder_number, order_type, billing_name, user, date_received_start, date_received_end},
 
-    Search functionality should be in search.py
+    Search functionality should be in utils.py
 
     :return {orders, 200}
     """
@@ -67,6 +67,12 @@ def get_orders():
         start = json.get("start")
         size = json.get("size")
 
+        multiple_items = ''
+        if order_type == 'multiple_items':
+            # Since multiple_items is parsed from the order_type field, we must overwrite the order_type field
+            multiple_items = True
+            order_type = 'all'
+
         orders = search_queries(order_number,
                                 suborder_number,
                                 order_type,
@@ -76,6 +82,7 @@ def get_orders():
                                 date_received_end,
                                 date_submitted_start,
                                 date_submitted_end,
+                                multiple_items,
                                 start,
                                 size,
                                 "search")
@@ -87,7 +94,7 @@ def get_orders():
 
         return jsonify(order_count=order_total,
                        suborder_count=suborder_total,
-                       all_orders=formatted_orders,), 200
+                       all_orders=formatted_orders), 200
 
     else:
         orders = search_queries(date_received_start=date.today().strftime('%m/%d/%Y'))
@@ -97,7 +104,7 @@ def get_orders():
 
         return jsonify(order_count=order_total,
                        suborder_count=suborder_total,
-                       all_orders=formatted_orders,), 200
+                       all_orders=formatted_orders), 200
 
 
 @api.route('/orders/<doc_type>', methods=['GET'])
@@ -178,18 +185,17 @@ def more_info(suborder_number):
     """
 
     if request.method == 'POST':
-        suborder_info = SearchFunctions.format_first_result(search_queries(suborder_number=suborder_number,
-                                                                           search_type='print'))
+        order_info = SearchFunctions.format_first_result(search_queries(suborder_number=suborder_number))
 
-        order_info = SearchFunctions.format_first_result(search_queries(suborder_number=suborder_number,
-                                                                        search_type=suborder_info['order_type']))
-
-        order_info['order'] = SearchFunctions.format_first_result(search_queries(order_number=suborder_info['order_number'],
-                                                                                 search_type='order'))
-
-        order_info['customer'] = SearchFunctions.format_first_result(search_queries(order_number=suborder_info['order_number'],
-                                                                                    search_type='customer'))
-        order_info['order_type'] = suborder_info['order_type']
+        # order_info = SearchFunctions.format_first_result(search_queries(suborder_number=suborder_number,
+        #                                                                 search_type=suborder_info['order_type']))
+        #
+        # order_info['order'] = SearchFunctions.format_first_result(search_queries(order_number=suborder_info['order_number'],
+        #                                                                          search_type='order'))
+        #
+        # order_info['customer'] = SearchFunctions.format_first_result(search_queries(order_number=suborder_info['order_number'],
+        #                                                                             search_type='customer'))
+        # order_info['order_type'] = suborder_info['order_type']
 
         return jsonify(order_info=order_info), 200
 

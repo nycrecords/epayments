@@ -1,66 +1,66 @@
-{% extends "orders/base.html" %}
+{% extends 'orders/base.html' %}
 
 {% block content %}
     <br/>
     <p>
         <b>LAST NAME - GROOM:</b> <br/>
-        {{ order_info["groom_last_name"] }}
+        {{ order_info['metadata']['groom_last_name'] }}
     </p>
 
     <p>
         <b>FIRST NAME - GROOM:</b> <br/>
-        {{ order_info["groom_first_name"] }}
+        {{ order_info['metadata']['groom_first_name'] }}
     </p>
 
     <p>
         <b>LAST NAME - BRIDE:</b> <br/>
-        {{ order_info["bride_last_name"] }}
+        {{ order_info['metadata']['bride_last_name'] }}
     </p>
 
     <p>
         <b>FIRST NAME - BRIDE:</b> <br/>
-        {{ order_info["bride_first_name"] }}
+        {{ order_info['metadata']['bride_first_name'] }}
     </p>
 
     <p>
         <b>NUMBER OF COPIES:</b> <br/>
-        {{ order_info["num_copies"] }}
+        {{ order_info['metadata']['num_copies'] }}
     </p>
 
     <p>
         <b>MONTH:</b> <br/>
-        {{ order_info["month"] }}
+        {{ order_info['metadata']['month'] }}
     </p>
 
     <p>
         <b>DAY:</b> <br/>
-        {{ order_info["day"] }}
+        {{ order_info['metadata']['day'] }}
     </p>
 
     <p>
         <b>YEARS:</b> <br/>
-        {{ order_info["years"] }}
+        {{ order_info['metadata']['years'] }}
     </p>
 
     <p>
         <b>MARRIAGE PLACE:</b> <br/>
-        {{ order_info["marriage_place"] or "" }}
+        {{ order_info['metadata']['marriage_place'] or '' }}
     </p>
 
     <p>
         <b>BOROUGH:</b> <br/>
-        {{ order_info["borough"] }}
+        {{ order_info['metadata']['borough'] }}
     </p>
 
     <p>
         <b>LETTER:</b> <br/>
-        {{ "Yes" if order_info["letter"] else "No" }}
+        {{ "Yes" if order_info['metadata']['letter'] else "No" }}
     </p>
 
-    {% if order_info["comment"] %}
+    {% if order_info['metadata']['comment'] %}
         <p>
             <b>COMMENT:</b> <br/>
-            {{ order_info["comment"] }}
+            {{ order_info['metadata']['comment'] }}
         </p>
     {% endif %}
 {% endblock %}

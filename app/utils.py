@@ -1,14 +1,17 @@
-import os
 import xml.etree.ElementTree as ET
 from datetime import datetime, date
+
+import os
 from flask import current_app
+
 from app import db, scheduler
-from app.models import Orders, Events, BirthSearch, BirthCertificate, MarriageCertificate, \
-    MarriageSearch, DeathCertificate, DeathSearch, PhotoGallery, TaxPhoto, PropertyCard, Customers, Suborders
-from app.file_utils import sftp_ctx
+from app.constants import event_type
 from app.constants import status
 from app.constants.order_types import CLIENT_ID_DICT
-from app.constants import event_type
+from app.file_utils import sftp_ctx
+from app.models import Orders, Events, BirthSearch, BirthCertificate, MarriageCertificate, \
+    MarriageSearch, DeathCertificate, DeathSearch, PhotoGallery, TaxPhoto, PropertyCard, Customers, Suborders
+from app.search.utils import delete_doc
 
 
 def import_xml_folder(scheduled=False, path=None):
@@ -90,8 +93,8 @@ def _get_order_types(clients_data):
 
 def import_file(file_name):
     """
-        Inserts a single order from an XML files into the database.
-        :param file_name: XML files to import
+        Inserts a single order from an XML file into the database.
+        :param file_name: XML file to import
         :return: Bool
     """
     # 1. Populate the XML Parser
@@ -138,7 +141,6 @@ def import_file(file_name):
     )
     db.session.add(order)
 
-
     # 8. Get Customer Information
     # 8-a: Customer Name
     billing_name = root.find("EPaymentRes").find("BillingInfo").find("BillingName").text
@@ -173,9 +175,9 @@ def import_file(file_name):
                          order_number=order_number)
 
     db.session.add(customer)
-    customer.es_create()
-    # In the XML the type of order is kept up with the ClientID
+    db.session.commit()
 
+    # In the XML the type of order is kept up with the ClientID
     clients_data_items = clients_data.split('ClientID')[1:]
     clients_data_items = ['ClientID' + client for client in clients_data_items]
     for clients_data_item in clients_data_items:
@@ -305,7 +307,7 @@ def import_file(file_name):
 
             db.session.add(customer_order)
             db.session.commit()
-            customer_order.es_create()
+            suborder.es_update(customer_order.serialize)
 
         # Marriage Search
         if client_id == '10000104':
@@ -368,7 +370,7 @@ def import_file(file_name):
 
             db.session.add(customer_order)
             db.session.commit()
-            customer_order.es_create()
+            suborder.es_update(customer_order.serialize)
 
         # Death Search
         if client_id == '10000103':
@@ -432,7 +434,7 @@ def import_file(file_name):
 
             db.session.add(customer_order)
             db.session.commit()
-            customer_order.es_create()
+            suborder.es_update(customer_order.serialize)
 
         # Birth Certificate
         if client_id == '10000147':
@@ -511,7 +513,7 @@ def import_file(file_name):
 
             db.session.add(customer_order)
             db.session.commit()
-            customer_order.es_create()
+            suborder.es_update(customer_order.serialize)
 
         # Marriage Certificate
         if client_id == '10000181':
@@ -578,7 +580,7 @@ def import_file(file_name):
 
             db.session.add(customer_order)
             db.session.commit()
-            customer_order.es_create()
+            suborder.es_update(customer_order.serialize)
 
         # Death Certificate
         if client_id == '10000182':
@@ -646,7 +648,7 @@ def import_file(file_name):
 
             db.session.add(customer_order)
             db.session.commit()
-            customer_order.es_create()
+            suborder.es_update(customer_order.serialize)
 
         # Property Card
         if client_id == '10000058':
@@ -696,7 +698,6 @@ def import_file(file_name):
 
             db.session.add(customer_order)
             db.session.commit()
-            customer_order.es_create()
 
         # Tax Photo
         if client_id == '10000048':
@@ -746,6 +747,7 @@ def import_file(file_name):
                 # Remove old Suborder
                 Suborders.query.filter_by(id=suborder_number).delete()
                 db.session.commit()
+                delete_doc(suborder_number)
 
                 # Create Suborder for 1940 Request
                 suborder_1940 = Suborders(
@@ -768,6 +770,8 @@ def import_file(file_name):
                 db.session.add(suborder_1980)
 
                 db.session.commit()
+                suborder_1940.es_create()
+                suborder_1980.es_create()
 
                 # Create TaxPhoto entry for 1940 print
                 customer_order_1940 = TaxPhoto(
@@ -783,9 +787,10 @@ def import_file(file_name):
                     num_copies=num_copies,
                     mail=mail,
                     contact_number=contact_number,
-                    suborder_number="{}-1940".format(suborder_number)
+                    suborder_number=suborder_1940.id
                 )
                 db.session.add(customer_order_1940)
+                suborder.es_update(customer_order_1940.serialize)
 
                 # Create TaxPhoto entry for 1980 print
                 customer_order_1980 = TaxPhoto(
@@ -801,9 +806,10 @@ def import_file(file_name):
                     num_copies=num_copies,
                     mail=mail,
                     contact_number=contact_number,
-                    suborder_number="{}-1980".format(suborder_number)
+                    suborder_number=suborder_1980.id
                 )
                 db.session.add(customer_order_1980)
+                suborder.es_update(customer_order_1980.serialize)
 
                 insert_event = [
                     Events(suborder_number=suborder_1940.id,
@@ -839,10 +845,8 @@ def import_file(file_name):
                     contact_number=contact_number,
                     suborder_number=suborder_number)
                 db.session.add(customer_order)
-                customer_order.es_create()
-
+                suborder.es_update(customer_order.serialize)
             db.session.commit()
-
 
         # Photo Gallery
         if client_id == '10000060':
@@ -906,6 +910,5 @@ def import_file(file_name):
 
             db.session.add(customer_order)
             db.session.commit()
-            customer_order.es_create()
-    order.es_create()
+            suborder.es_update(customer_order.serialize)
     return True
