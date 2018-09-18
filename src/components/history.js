@@ -18,7 +18,6 @@ class History extends React.Component {
 
 
         this.handleClick = (e) => {
-            // debugger;
             if (this.state.activeIndex === false) {
                 this.setState({activeIndex: true});
                 csrfFetch('api/v1.0/history/' + this.props.suborder_number).then((response) => (
@@ -34,7 +33,6 @@ class History extends React.Component {
     };
 
     render() {
-        // debugger;
          const HistoryRows = this.state.all_history.map((history, index) =>
             <HistoryRow
                 key={history.id}

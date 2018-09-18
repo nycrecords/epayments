@@ -141,7 +141,6 @@ class Home extends React.Component {
     }
 
     render() {
-        // debugger;
         const orderRows = this.state.all_orders.map((order) =>
             <Order
                 key={order.suborder_number}

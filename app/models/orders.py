@@ -59,43 +59,6 @@ class Orders(db.Model):
             'multiple_items': self.multiple_items,
         }
 
-    # Elasticsearch
-    def es_create(self):
-        """Creates Elastic Search doc"""
-        es.create(
-            index='orders',
-            doc_type='orders',
-            id=self.id,
-            body={
-                'order_number': self.id,
-                'date_submitted': self.date_submitted.strftime(DATETIME_FORMAT),
-                'date_received': self.date_received.strftime(DATETIME_FORMAT),
-                'confirmation_message': self.confirmation_message,
-                'client_data': self.client_data,
-                'order_types': self.order_types,
-                'multiple_items': self.multiple_items,
-            }
-        )
-
-    def es_update(self):
-        """Updates elastic search docs"""
-        es.update(
-            index='orders',
-            doc_type='orders',
-            id=self.id,
-            body={
-                'doc': {
-                    'order_number': self.id,
-                    'date_submitted': self.date_submitted.strftime(DATETIME_FORMAT),
-                    'date_received': self.date_received.strftime(DATETIME_FORMAT),
-                    'confirmation_message': self.confirmation_message,
-                    'client_data': self.client_data,
-                    'order_types': self.order_types,
-                    'multiple_items': self.multiple_items,
-                }
-            }
-        )
-
 
 class Suborders(db.Model):
     """
@@ -170,51 +133,3 @@ class Suborders(db.Model):
             'order_type': self.order_type,
             'current_status': self.status
         }
-
-    # Elasticsearch
-    def es_create(self):
-        """Creates Elastic Search doc"""
-        customer = self.order.customer
-
-        es.create(
-            index='suborders',
-            doc_type='suborders',
-            id=self.id,
-            body={
-                'order_number': self.order_number,
-                'suborder_number': self.id,
-                'date_submitted': self.order.date_submitted.strftime(DATETIME_FORMAT),
-                'date_received': self.order.date_received.strftime(DATETIME_FORMAT),
-                'customer': {
-                    'address': customer.address,
-                    'billing_name': customer.billing_name.title(),
-                    'shipping_name': customer.shipping_name.title(),
-                    'address_line_one': customer.address_line_1,
-                    'address_line_two': customer.address_line_2,
-                    'city': customer.city,
-                    'state': customer.state,
-                    'zip_code': customer.zip_code,
-                    'country': customer.country,
-                    'email': customer.email,
-                    'phone': customer.phone
-                },
-                'order_type': self.order_type,
-                'current_status': self.status,
-                'multiple_items': self.order.multiple_items,
-                'order_types': self.order.order_types
-            }
-        )
-
-    def es_update(self, metadata=None):
-        """Updates elastic search docs"""
-        es.update(
-            index='suborders',
-            doc_type='suborders',
-            id=self.id,
-            body={
-                'doc': {
-                    'metadata': metadata,
-                    'current_status': self.status
-                }
-            }
-        )

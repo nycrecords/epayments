@@ -31,7 +31,6 @@ class OrderModal extends React.Component {
         };
 
         this.handleOpen = () => {
-            // debugger;
             csrfFetch('api/v1.0/more_info/'+ this.props.suborder_number, {
                 method: "POST",
                 body: JSON.stringify({
@@ -70,7 +69,6 @@ class OrderModal extends React.Component {
     }
 
     render() {
-        // debugger;
         let orderInfo;
         switch (this.props.order_type){
             case 'Marriage Cert':
