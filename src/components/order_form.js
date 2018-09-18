@@ -52,37 +52,40 @@ class OrderForm extends React.Component {
             this.setState({
                 order_number: '',
                 suborder_number: '',
-                status: '',
-                order_type: '',
+                status: 'all',
+                order_type: 'all',
                 billing_name: '',
             });
 
-            this.dateReceivedStart.setState({
-                date: '',
-            });
+            if (this.state.activeItem === "Date Received") {
+                this.dateReceivedStart.setState({
+                    date: null,
+                });
 
-            this.dateReceivedEnd.setState({
-                date: '',
-            });
+                this.dateReceivedEnd.setState({
+                    date: null,
+                });
+            }
+            else {
+                this.dateSubmittedStart.setState({
+                    date: null,
+                });
 
-            this.dateSubmittedStart.setState({
-                date: '',
-            });
-
-            this.dateSubmittedEnd.setState({
-                date: '',
-            });
+                this.dateSubmittedEnd.setState({
+                    date: null,
+                });
+            }
         };
 
         this.state = {
-            ordernumber: '',
-            subordernumber: '',
+            order_number: '',
+            suborder_number: '',
             order_type: 'all',
             status: 'all',
             billing_name: '',
             activeItem: 'Date Received',
             start: 0,
-            size: CHUNK_SIZE,
+            size: CHUNK_SIZE
         };
 
         this.photosValueList = ['photos', 'Tax Photo', 'Photo Gallery'];
@@ -364,4 +367,3 @@ class OrderForm extends React.Component {
 }
 
 export default OrderForm
-
