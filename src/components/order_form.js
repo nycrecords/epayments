@@ -50,40 +50,42 @@ class OrderForm extends React.Component {
 
         this.clearSelection = () => {
             this.setState({
-                ordernumber: '',
-                subordernumber: '',
-                status: '',
-                order_type: '',
+                order_number: '',
+                suborder_number: '',
+                status: 'all',
+                order_type: 'all',
                 billing_name: '',
             });
 
-            this.dateReceivedStart.setState({
-                date: '',
-            });
+            if (this.state.activeItem === "Date Received") {
+                this.dateReceivedStart.setState({
+                    date: null,
+                });
 
+                this.dateReceivedEnd.setState({
+                    date: null,
+                });
+            }
+            else {
+                this.dateSubmittedStart.setState({
+                    date: null,
+                });
 
-            this.dateReceivedEnd.setState({
-                date: '',
-            });
-
-            this.dateSubmittedStart.setState({
-                date: '',
-            });
-
-            this.dateSubmittedEnd.setState({
-                date: '',
-            });
+                this.dateSubmittedEnd.setState({
+                    date: null,
+                });
+            }
         };
 
         this.state = {
-            ordernumber: '',
-            subordernumber: '',
+            order_number: '',
+            suborder_number: '',
             order_type: 'all',
             status: 'all',
             billing_name: '',
             activeItem: 'Date Received',
             start: 0,
-            size: CHUNK_SIZE,
+            size: CHUNK_SIZE
         };
 
         this.photosValueList = ['photos', 'Tax Photo', 'Photo Gallery'];
@@ -109,8 +111,8 @@ class OrderForm extends React.Component {
                     csrfFetch('api/v1.0/print/' + print, {
                         method: "POST",
                         body: JSON.stringify({
-                            order_number: this.state.ordernumber,
-                            suborder_number: this.state.subordernumber,
+                            order_number: this.state.order_number,
+                            suborder_number: this.state.suborder_number,
                             order_type: this.state.order_type,
                             status: this.state.status,
                             billing_name: this.state.billing_name,
@@ -134,8 +136,8 @@ class OrderForm extends React.Component {
 
                 case 'csv':
                     let params = {
-                        order_number: this.state.ordernumber,
-                        suborder_number: this.state.subordernumber,
+                        order_number: this.state.order_number,
+                        suborder_number: this.state.suborder_number,
                         order_type: this.state.order_type,
                         status: this.state.status,
                         billing_name: this.state.billing_name,
@@ -168,8 +170,8 @@ class OrderForm extends React.Component {
                     csrfFetch('api/v1.0/orders', {
                         method: "POST",
                         body: JSON.stringify({
-                            order_number: this.state.ordernumber,
-                            suborder_number: this.state.subordernumber,
+                            order_number: this.state.order_number,
+                            suborder_number: this.state.suborder_number,
                             order_type: this.state.order_type,
                             status: this.state.status,
                             billing_name: this.state.billing_name,
@@ -199,8 +201,8 @@ class OrderForm extends React.Component {
                     csrfFetch('api/v1.0/orders', {
                         method: "POST",
                         body: JSON.stringify({
-                            order_number: this.state.ordernumber,
-                            suborder_number: this.state.subordernumber,
+                            order_number: this.state.order_number,
+                            suborder_number: this.state.suborder_number,
                             order_type: this.state.order_type,
                             status: this.state.status,
                             billing_name: this.state.billing_name,
@@ -258,20 +260,20 @@ class OrderForm extends React.Component {
                     <Form.Input label="Order Number" placeholder="Order Number" maxLength="64"
                                 onChange={(e, {value}) => {
                                     if (/^[0-9]+$/.test(value.slice(-1)) || value === '') {
-                                        this.setState({ordernumber: value})
+                                        this.setState({order_number: value})
                                     }
                                 }}
-                                value={this.state.ordernumber}
+                                value={this.state.order_number}
                                 className="margin-small-tb"
                     />
 
                     <Form.Input label="Suborder Number" placeholder="Suborder Number" maxLength="32"
                                 onChange={(e, {value}) => {
                                     if (/^[\d -]+$/.test(value.slice(-1)) || value === '') {
-                                        this.setState({subordernumber: value})
+                                        this.setState({suborder_number: value})
                                     }
                                 }}
-                                value={this.state.subordernumber}
+                                value={this.state.suborder_number}
                                 className="margin-small-tb"
                     />
                     <Form.Select label="Order Type" placeholder="Order Type" options={orderTypeOptions}
@@ -365,4 +367,3 @@ class OrderForm extends React.Component {
 }
 
 export default OrderForm
-

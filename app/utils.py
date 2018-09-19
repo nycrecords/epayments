@@ -790,7 +790,7 @@ def import_file(file_name):
                     suborder_number=suborder_1940.id
                 )
                 db.session.add(customer_order_1940)
-                suborder.es_update(customer_order_1940.serialize)
+                suborder_1940.es_update(customer_order_1940.serialize)
 
                 # Create TaxPhoto entry for 1980 print
                 customer_order_1980 = TaxPhoto(
@@ -809,7 +809,7 @@ def import_file(file_name):
                     suborder_number=suborder_1980.id
                 )
                 db.session.add(customer_order_1980)
-                suborder.es_update(customer_order_1980.serialize)
+                suborder_1980.es_update(customer_order_1980.serialize)
 
                 insert_event = [
                     Events(suborder_number=suborder_1940.id,

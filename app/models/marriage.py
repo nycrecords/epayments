@@ -1,5 +1,6 @@
-from app import db
 from sqlalchemy.dialects.postgresql import ARRAY
+
+from app import db
 
 
 class MarriageSearch(db.Model):

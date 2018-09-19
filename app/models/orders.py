@@ -138,7 +138,6 @@ class Suborders(db.Model):
     def es_create(self):
         """Creates Elastic Search doc"""
         customer = self.order.customer
-
         es.create(
             index='suborders',
             doc_type='suborders',

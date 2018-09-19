@@ -236,7 +236,6 @@ def _print_orders(search_params):
                                ELASTICSEARCH_MAX_SIZE,
                                "print")
 
-    # Only want suborder_number, and order type
     suborder = SearchFunctions.format_results(suborders)
 
     order_type_template_handler = {
