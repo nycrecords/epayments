@@ -22,42 +22,42 @@ class BirthSearch extends React.Component{
                 <div className="-row">
                     <div className="-fourth"> Gender: </div>
                     <div className="-two-thirds">
-                        {this.props.order_info["metadata"]["gender"] ? this.props.order_info["metadata"]["gender"] : "n/a"}
+                        {this.props.order_info["metadata"]["gender"] ? this.props.order_info["metadata"]["gender"] : ""}
                     </div>
                 </div>
 
                 <div className="-row">
                     <div className="-fourth"> Last Name: </div>
                     <div className="-two-thirds">
-                        {this.props.order_info["metadata"]["last_name"]  ? this.props.order_info["metadata"]["last_name"] : "n/a"}
+                        {this.props.order_info["metadata"]["last_name"]  ? this.props.order_info["metadata"]["last_name"] : ""}
                     </div>
                 </div>
 
                 <div className="-row">
                     <div className="-fourth"> Middle Name: </div>
                     <div className="-two-thirds">
-                        {this.props.order_info["metadata"]["middle_name"] ? this.props.order_info["metadata"]["middle_name"] : "n/a"}
+                        {this.props.order_info["metadata"]["middle_name"] ? this.props.order_info["metadata"]["middle_name"] : ""}
                     </div>
                 </div>
 
                 <div className="-row">
                     <div className="-fourth"> First Name: </div>
                     <div className="-two-thirds">
-                        {this.props.order_info["metadata"]["first_name"] ? this.props.order_info["metadata"]["first_name"] : "n/a"}
+                        {this.props.order_info["metadata"]["first_name"] ? this.props.order_info["metadata"]["first_name"] : ""}
                     </div>
                 </div>
 
                 <div className="-row">
                     <div className="-fourth"> Father Name: </div>
                     <div className="-two-thirds">
-                        {this.props.order_info["metadata"]["father_name"] ? this.props.order_info["metadata"]["father_name"] : "n/a"}
+                        {this.props.order_info["metadata"]["father_name"] ? this.props.order_info["metadata"]["father_name"] : ""}
                     </div>
                 </div>
 
                 <div className="-row">
                     <div className="-fourth"> Mother Name: </div>
                     <div className="-two-thirds">
-                        {this.props.order_info["metadata"]["mother_name"] ? this.props.order_info["metadata"]["mother_name"] : "n/a"}
+                        {this.props.order_info["metadata"]["mother_name"] ? this.props.order_info["metadata"]["mother_name"] : ""}
                     </div>
                 </div>
 
@@ -69,35 +69,35 @@ class BirthSearch extends React.Component{
                 <div className="-row">
                     <div className="-fourth"> Month: </div>
                     <div className="-two-thirds">
-                        {this.props.order_info["metadata"]["month"] ? this.props.order_info["metadata"]["month"] : "n/a"}
+                        {this.props.order_info["metadata"]["month"] ? this.props.order_info["metadata"]["month"] : ""}
                     </div>
                 </div>
 
                 <div className="-row">
                     <div className="-fourth"> Day: </div>
                     <div className="-two-thirds">
-                        {this.props.order_info["metadata"]["day"] ? this.props.order_info["metadata"]["day"] : "n/a"}
+                        {this.props.order_info["metadata"]["day"] ? this.props.order_info["metadata"]["day"] : ""}
                     </div>
                 </div>
 
                 <div className="-row">
                     <div className="-fourth"> Years: </div>
                     <div className="-two-thirds">
-                        {this.props.order_info["metadata"]["years"] ? this.props.order_info["metadata"]["years"] : "n/a"}
+                        {this.props.order_info["metadata"]["years"] ? this.props.order_info["metadata"]["years"] : ""}
                     </div>
                 </div>
 
                 <div className="-row">
                     <div className="-fourth"> Birth Place: </div>
                     <div className="-two-thirds">
-                        {this.props.order_info["metadata"]["birth_place"] ? this.props.order_info["metadata"]["birth_place"]  : "n/a"}
+                        {this.props.order_info["metadata"]["birth_place"] ? this.props.order_info["metadata"]["birth_place"]  : ""}
                     </div>
                 </div>
 
                 <div className="-row">
                     <div className="-fourth"> Borough: </div>
                     <div className="-two-thirds">
-                        {this.props.order_info["metadata"]["borough"] ? this.props.order_info["metadata"]["borough"] : "n/a"}
+                        {this.props.order_info["metadata"]["borough"] ? this.props.order_info["metadata"]["borough"] : ""}
                     </div>
                 </div>
 

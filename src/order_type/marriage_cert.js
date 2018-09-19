@@ -21,77 +21,77 @@ class MarriageCert extends React.Component{
                 <div className="-row">
                     <div className="-fourth"> Certificate Number: </div>
                     <div className="-two-thirds">
-                        {this.props.order_info["metadata"]["certificate_number"] ? this.props.order_info["metadata"]["certificate_number"] : "N/A"}
+                        {this.props.order_info["metadata"]["certificate_number"] ? this.props.order_info["metadata"]["certificate_number"] : ""}
                     </div>
                 </div>
                     
                 <div className="-row">
                     <div className="-fourth"> Groom Last Name: </div>
                     <div className="-two-thirds">
-                        {this.props.order_info["metadata"]["groom_last_name"] ? this.props.order_info["metadata"]["groom_last_name"] : "NA"}
+                        {this.props.order_info["metadata"]["groom_last_name"] ? this.props.order_info["metadata"]["groom_last_name"] : ""}
                     </div>
                 </div>
                     
                 <div className="-row">
                     <div className="-fourth"> Groom First Name: </div>
                     <div className="-two-thirds">
-                        {this.props.order_info["metadata"]["groom_first_name"] ? this.props.order_info["metadata"]["groom_first_name"] : "NA"}
+                        {this.props.order_info["metadata"]["groom_first_name"] ? this.props.order_info["metadata"]["groom_first_name"] : ""}
                     </div>
                 </div>
                 
                 <div className="-row">
                     <div className="-fourth"> Bride Last Name: </div>
                     <div className="-two-thirds">
-                        {this.props.order_info["metadata"]["bride_last_name"] ? this.props.order_info["metadata"]["bride_last_name"] : "NA"}
+                        {this.props.order_info["metadata"]["bride_last_name"] ? this.props.order_info["metadata"]["bride_last_name"] : ""}
                     </div>
                 </div>
                 
                 <div className="-row">
                     <div className="-fourth"> Bride First Name: </div>
                     <div className="-two-thirds">
-                        {this.props.order_info["metadata"]["bride_first_name"] ? this.props.order_info["metadata"]["bride_first_name"] : "NA"}
+                        {this.props.order_info["metadata"]["bride_first_name"] ? this.props.order_info["metadata"]["bride_first_name"] : ""}
                     </div>
                 </div>
                 
                 <div className="-row">
                     <div className="-fourth"> Number of Copies: </div>
                     <div className="-two-thirds">
-                        {this.props.order_info["metadata"]["num_copies"] ? this.props.order_info["metadata"]["num_copies"] : "NA"}
+                        {this.props.order_info["metadata"]["num_copies"] ? this.props.order_info["metadata"]["num_copies"] : ""}
                     </div>
                 </div>
                 
                 <div className="-row">
                     <div className="-fourth"> Month: </div>
                     <div className="-two-thirds">
-                        {this.props.order_info["metadata"]["month"] ? this.props.order_info["metadata"]["month"] : "NA"}
+                        {this.props.order_info["metadata"]["month"] ? this.props.order_info["metadata"]["month"] : ""}
                     </div>
                 </div>
                 
                 <div className="-row">
                     <div className="-fourth"> Day: </div>
                     <div className="-two-thirds">
-                        {this.props.order_info["metadata"]["day"] ? this.props.order_info["metadata"]["day"] : "NA"}
+                        {this.props.order_info["metadata"]["day"] ? this.props.order_info["metadata"]["day"] : ""}
                     </div>
                 </div>
                 
                 <div className="-row">
                     <div className="-fourth"> Years: </div>
                     <div className="-two-thirds">
-                        {this.props.order_info["metadata"]["years"] ? this.props.order_info["metadata"]["years"] : "NA"}
+                        {this.props.order_info["metadata"]["years"] ? this.props.order_info["metadata"]["years"] : ""}
                     </div>
                 </div>
                     
                 <div className="-row">
                     <div className="-fourth"> Marriage Place: </div>
                     <div className="-two-thirds">
-                        {this.props.order_info["metadata"]["marriage_place"] ? this.props.order_info["metadata"]["marriage_place"] : "N/A"}
+                        {this.props.order_info["metadata"]["marriage_place"] ? this.props.order_info["metadata"]["marriage_place"] : ""}
                     </div>
                 </div>
                     
                 <div className="-row">
                     <div className="-fourth"> Borough: </div>
                     <div className="-two-thirds">
-                        {this.props.order_info["metadata"]["borough"] ? this.props.order_info["metadata"]["borough"] : "NA"}
+                        {this.props.order_info["metadata"]["borough"] ? this.props.order_info["metadata"]["borough"] : ""}
                     </div>
                 </div>
                     

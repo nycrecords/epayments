@@ -22,28 +22,28 @@ class PhotoGallery extends React.Component{
                 <div className="-row">
                     <div className="-fourth"> Image ID: </div>
                     <div className="-two-thirds">
-                        {this.props.order_info["metadata"]["image_id"] ? this.props.order_info["metadata"]["image_id"] : "n/a"}
+                        {this.props.order_info["metadata"]["image_id"] ? this.props.order_info["metadata"]["image_id"] : ""}
                     </div>
                 </div>
 
                 <div className="-row">
                     <div className="-fourth"> Description: </div>
                     <div className="-two-thirds">
-                        {this.props.order_info["metadata"]["description"] ? this.props.order_info["metadata"]["description"]: "n/a"}
+                        {this.props.order_info["metadata"]["description"] ? this.props.order_info["metadata"]["description"]: ""}
                     </div>
                 </div>
 
                 <div className="-row">
                     <div className="-fourth"> Additional Description: </div>
                     <div className="-two-thirds">
-                        {this.props.order_info["metadata"]["additional_description"] ? this.props.order_info["metadata"]["additional_description"]: "n/a"}
+                        {this.props.order_info["metadata"]["additional_description"] ? this.props.order_info["metadata"]["additional_description"]: ""}
                     </div>
                 </div>
 
                 <div className="-row">
                     <div className="-fourth"> Size: </div>
                     <div className="-two-thirds">
-                        {this.props.order_info["metadata"]["size"] ? this.props.order_info["metadata"]["size"]: "n/a"}
+                        {this.props.order_info["metadata"]["size"] ? this.props.order_info["metadata"]["size"]: ""}
                     </div>
                 </div>
 
@@ -62,7 +62,7 @@ class PhotoGallery extends React.Component{
                 <div className="-row">
                     <div className="-fourth"> Contact Number: </div>
                     <div className="-two-thirds">
-                        {this.props.order_info["metadata"]["contact_number"] ? this.props.order_info["metadata"]["contact_number"] : "n/a"}
+                        {this.props.order_info["metadata"]["contact_number"] ? this.props.order_info["metadata"]["contact_number"] : ""}
                     </div>
                 </div>
 
