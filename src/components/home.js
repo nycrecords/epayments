@@ -1,5 +1,5 @@
 import React from 'react';
-import {BrowserRouter as Router, Route, Link} from "react-router-dom";
+import {Link} from "react-router-dom";
 import {Button, Container, Dimmer, Rail, Grid, Header, Icon, Loader, Segment} from 'semantic-ui-react';
 import {connect} from 'react-redux';
 import {mapDispatchToProps, mapStateToProps} from "../utils/reduxMappers";
@@ -7,8 +7,6 @@ import OrderForm from "./order_form";
 import Order from "./order";
 import LoginModal from "./login_modal";
 import {csrfFetch, handleFetchErrors} from "../utils/fetch"
-import NewOrderForm from "./newOrderForm";
-import StatusModal from "./statusModal";
 import BatchStatusModal from "./batchStatusModal"
 import {CHUNK_SIZE} from "../constants/constants"
 
@@ -25,7 +23,7 @@ class Home extends React.Component {
             all_orders: [],
             order_count: 0,
             suborder_count: 0,
-            loading: true,
+            loading: false,
             showCSVButton: false,
             suborder_two: 0,
             queueForUpdate: [],
@@ -127,12 +125,13 @@ class Home extends React.Component {
     };
 
     handleListChange = (name, value, state, index) => {
-        let newState = state.slice()
-        newState[index] = value
+        let newState = state.slice();
+        newState[index] = value;
         this.setState({
             [name]: newState
         });
-    }
+    };
+
     toggleCSV = (visible) => {
         this.setState({showCSVButton: visible});
     };
@@ -184,7 +183,7 @@ class Home extends React.Component {
             />
         );
 
-        const Home = () => (
+        return (
             <Container>
                 {this.props.authenticated ? (
                     <Grid padded columns={3}>
@@ -266,34 +265,6 @@ class Home extends React.Component {
                 )}
             </Container>
         );
-
-        return (
-            <Container>
-                {this.props.authenticated ? (
-                    <Router>
-                        <div>
-
-                            {/*<Link to="/Order">*/}
-                                {/*<Button content='Order'/>*/}
-                            {/*</Link>*/}
-                            {/*<Link to="/">*/}
-                                {/*<Button content='Home'/>*/}
-                            {/*</Link>*/}
-
-                            <Route exact path="/" component={Home}/>
-                            <Route exact path="/Order" component={NewOrderForm}/>
-                        </div>
-                    </Router>
-                ) : (
-                    <Segment id="center">
-                        <Header as="h1" textAlign="center">ePayments
-                            <Container className="sub header">Department of Records</Container>
-                        </Header>
-                        <LoginModal/>
-                    </Segment>
-                )}
-            </Container>
-        )
     }
 }
 

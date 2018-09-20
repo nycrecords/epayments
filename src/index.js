@@ -3,16 +3,13 @@ import ReactDOM from 'react-dom';
 import 'semantic-ui-css/semantic.min.css';
 import './css/index.css';
 import {Provider} from 'react-redux';
-import store  from './store/index'
+import store from './store/index'
 import App from './components/app.js';
-import { BrowserRouter } from 'react-router-dom'
 
 
 ReactDOM.render(
     <Provider store={store}>
-        <BrowserRouter>
-            <App />
-        </BrowserRouter>
+        <App/>
     </Provider>,
     document.getElementById('root')
 );

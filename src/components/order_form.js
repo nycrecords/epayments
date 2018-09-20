@@ -189,7 +189,6 @@ class OrderForm extends React.Component {
                         .then((json) => {
                             this.props.addOrder(json.order_count, json.suborder_count, json.all_orders, true);
                             this.props.setLoadingState(false);
-                            debugger;
                         })
                         .catch((error) => {
                             console.error(error);
