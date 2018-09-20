@@ -12,7 +12,7 @@ ALLOWED_EXTENSIONS = frozenset(['tar', 'xml'])
 
 def allowed_file(filename):
     """
-    Determine if file is allowed to be uploaded.
+    Determine if files is allowed to be uploaded.
 
     :param filename:
     :return:

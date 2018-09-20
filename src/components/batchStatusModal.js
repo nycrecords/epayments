@@ -94,7 +94,7 @@ class BatchStatusModal extends React.Component {
     render() {
         return (
             <Modal
-                trigger={<Button onClick={this.handleOpen} compact size='small' floated='right'>Update Multiple Status</Button>}
+                trigger={<Button onClick={this.handleOpen} compact size='small' floated='right'>Update Status</Button>}
                 open={this.state.modalOpen}
                 onClose={this.state.handleClose}>
                 <Modal.Header>

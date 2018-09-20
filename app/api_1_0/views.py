@@ -1,28 +1,12 @@
 from datetime import date
+
 from flask import jsonify, abort, request
 from flask_login import login_user, logout_user, current_user, login_required
 from sqlalchemy import desc
-from app.api_1_0 import api_1_0 as api
-from app import db
-from app.models.order_number_counter import OrderNumberCounter
-from app.models.orders import Orders, Suborders
-from app.models.customers import Customers
-from app import db_utils
-from sqlalchemy import *
-from sqlalchemy.orm import *
-import datetime
-from app.db_utils import (create_object)
-from app.constants import order_types
-from app.models.photo import TaxPhoto, PhotoGallery
-from app.models.property_card import PropertyCard
-from app.models.death import DeathCertificate, DeathSearch
-from app.models.marriage import MarriageCertificate, MarriageSearch
-from app.models.birth import BirthCertificate, BirthSearch
-from app.constants import order_types
 
+from app.api_1_0 import api_1_0 as api
 from app.api_1_0.utils import (
     update_status,
-    get_orders_by_fields,
     _print_orders,
     _print_large_labels,
     _print_small_labels,
@@ -39,6 +23,8 @@ from app.models import (
     Users,
     Events
 )
+from app.search.utils import search_queries
+from app.search.searchfunctions import SearchFunctions
 
 
 @api.route('/', methods=['GET'])
@@ -76,29 +62,49 @@ def get_orders():
         user = ''
         date_received_start = json.get("date_received_start")
         date_received_end = json.get("date_received_end")
+        date_submitted_start = json.get("date_submitted_start")
+        date_submitted_end = json.get("date_submitted_end")
+        start = json.get("start")
+        size = json.get("size")
 
-        if not (order_number or suborder_number or billing_name) and not date_received_start:
-            date_received_start = date.today()
-        order_count, suborder_count, orders = get_orders_by_fields(order_number,
-                                                                   suborder_number,
-                                                                   order_type,
-                                                                   status,
-                                                                   billing_name,
-                                                                   user,
-                                                                   date_received_start,
-                                                                   date_received_end)
-        return jsonify(order_count=order_count,
-                       suborder_count=suborder_count,
-                       all_orders=orders), 200
+        multiple_items = ''
+        if order_type == 'multiple_items':
+            # Since multiple_items is parsed from the order_type field, we must overwrite the order_type field
+            multiple_items = True
+            order_type = 'all'
+
+        orders = search_queries(order_number,
+                                suborder_number,
+                                order_type,
+                                status,
+                                billing_name,
+                                date_received_start,
+                                date_received_end,
+                                date_submitted_start,
+                                date_submitted_end,
+                                multiple_items,
+                                start,
+                                size,
+                                "search")
+
+        # formatting results
+        formatted_orders = SearchFunctions.format_results(orders)
+        suborder_total = orders['hits']['total']
+        order_total = orders['aggregations']['order_count']['value']
+
+        return jsonify(order_count=order_total,
+                       suborder_count=suborder_total,
+                       all_orders=formatted_orders), 200
 
     else:
-        orders = []
-        order_count = 0
-        for order in Orders.query.filter(Orders.date_received == date.today()):
-            order_count += 1
-            for suborder in order.suborder:
-                orders.append(suborder.serialize)
-        return jsonify(order_count=order_count, suborder_count=len(orders), all_orders=orders), 200
+        orders = search_queries(date_received_start=date.today().strftime('%m/%d/%Y'))
+        formatted_orders = SearchFunctions.format_results(orders)
+        suborder_total = orders['hits']['total']
+        order_total = orders['aggregations']['order_count']['value']
+
+        return jsonify(order_count=order_total,
+                       suborder_count=suborder_total,
+                       all_orders=formatted_orders), 200
 
 
 @api.route('/orders/<doc_type>', methods=['GET'])
@@ -446,6 +452,22 @@ def history(suborder_number):
                                           ).order_by(desc(Events.timestamp)).all()]
 
     return jsonify(history=status_history), 200
+
+
+@api.route('/more_info/<string:suborder_number>', methods=['GET','POST'])
+@login_required
+def more_info(suborder_number):
+    """
+    GET: {suborder_number
+    :param suborder_number:
+    :return: json of all the info
+    """
+
+    if request.method == 'POST':
+        order_info = SearchFunctions.format_first_result(search_queries(suborder_number=suborder_number,
+                                                                        search_type="print"))
+
+        return jsonify(order_info=order_info), 200
 
 
 @api.route('/orders/<int:order_id>', methods=['GET'])

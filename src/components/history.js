@@ -43,14 +43,14 @@ class History extends React.Component {
             />
 
          );
-
+        const { activeIndex } = this.state;
         return(
-            <Accordion onTitleClick={this.handleClick}>
-                <Accordion.Title>
+            <Accordion>
+                <Accordion.Title active={activeIndex === true} onClick={this.handleClick}>
                   <Icon name='dropdown' />
                     <Label color='blue' content={'History'}/>
                 </Accordion.Title>
-                <Accordion.Content>
+                <Accordion.Content active={activeIndex === true}>
                     <Table celled selectable>
                         <Table.Header>
                             <Table.Row>

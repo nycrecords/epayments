@@ -1,76 +1,76 @@
-{% extends "orders/base.html" %}
+{% extends 'orders/base.html' %}
 
 {% block content %}
     <br/>
     <p>
         <b>GENDER:</b> <br/>
-        {{ order_info["gender"] or "" }}
+        {{ order_info['metadata']['gender'] or '' }}
     </p>
 
     <p>
         <b>LAST NAME:</b> <br/>
-        {{ order_info["last_name"] }}
+        {{ order_info['metadata']['last_name'] }}
     </p>
 
     <p>
         <b>MIDDLE NAME:</b> <br/>
-        {{ order_info["middle_name"] or "" }}
+        {{ order_info['metadata']['middle_name'] or '' }}
     </p>
 
     <p>
         <b>FIRST NAME:</b> <br/>
-        {{ order_info["first_name"] or "" }}
+        {{ order_info['metadata']['first_name'] or '' }}
     </p>
 
     <p>
         <b>FATHER NAME:</b> <br/>
-        {{ order_info["father_name"] or "" }}
+        {{ order_info['metadata']['father_name'] or '' }}
     </p>
 
     <p>
         <b>MOTHER NAME:</b> <br/>
-        {{ order_info["mother_name"] or "" }}
+        {{ order_info['metadata']['mother_name'] or '' }}
     </p>
 
     <p>
         <b>NUMBER OF COPIES:</b> <br/>
-        {{ order_info["num_copies"] }}
+        {{ order_info['metadata']['num_copies'] }}
     </p>
 
     <p>
         <b>MONTH:</b> <br/>
-        {{ order_info["month"] or "" }}
+        {{ order_info['metadata']['month'] or '' }}
     </p>
 
     <p>
         <b>DAY:</b> <br/>
-        {{ order_info["day"]or "" }}
+        {{ order_info['metadata']['day']or '' }}
     </p>
 
     <p>
         <b>BIRTH PLACE:</b> <br/>
-        {{ order_info["birth_place"] or "" }}
+        {{ order_info['metadata']['birth_place'] or '' }}
     </p>
 
     <p>
         <b>YEARS:</b> <br/>
-        {{ order_info["years"] }}
+        {{ order_info['metadata']['years'] }}
     </p>
 
     <p>
         <b>BOROUGH:</b> <br/>
-        {{ order_info["borough"] }}
+        {{ order_info['metadata']['borough'] }}
     </p>
 
     <p>
         <b>LETTER:</b> <br/>
-        {{ "Yes" if order_info["letter"] else "No" }}
+        {{ "Yes" if order_info['metadata']['letter'] else "No" }}
     </p>
 
-    {% if order_info["comment"] %}
+    {% if order_info['metadata']['comment'] %}
         <p>
             <b>COMMENT:</b> <br/>
-            {{ order_info["comment"] }}
+            {{ order_info['metadata']['comment'] }}
         </p>
     {% endif %}
 

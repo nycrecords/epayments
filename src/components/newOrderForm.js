@@ -550,7 +550,7 @@ class NewOrderForm extends React.Component {
                                     <strong>Number of Suborders: {this.index}</strong>
                                 </Form>
                             </Grid.Column>
-                            <Grid.Column width={6} id="grid-column-order">
+                            <Grid.Column width={9} id="grid-column-order">
                                 <div ref={(el) => {
                                     this.addSuborder = el;
                                 }}>

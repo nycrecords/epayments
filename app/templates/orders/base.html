@@ -21,10 +21,10 @@ Address: {{ order_info['customer']['address'] }}
 </p>
 <h1>{{ order_info['order_type'] }}</h1>
 
-{% if order_info['order']['multiple_items'] %}
+{% if order_info['multiple_items'] %}
     <p>
     <b>This item was ordered with multiple items in the cart: </b>
-    {{ ', '.join(order_info['order']['order_types']) }}
+    {{ ', '.join(order_info['order_types']) }}
     </p>
 {% endif %}
 

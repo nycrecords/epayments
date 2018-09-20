@@ -1,6 +1,6 @@
 import React from 'react';
 import {BrowserRouter as Router, Route, Link} from "react-router-dom";
-import {Button, Container, Dimmer, Divider, Grid, Header, Icon, Loader, Segment, Form} from 'semantic-ui-react';
+import {Button, Container, Dimmer, Rail, Grid, Header, Icon, Loader, Segment} from 'semantic-ui-react';
 import {connect} from 'react-redux';
 import {mapDispatchToProps, mapStateToProps} from "../utils/reduxMappers";
 import OrderForm from "./order_form";
@@ -10,6 +10,11 @@ import {csrfFetch, handleFetchErrors} from "../utils/fetch"
 import NewOrderForm from "./newOrderForm";
 import StatusModal from "./statusModal";
 import BatchStatusModal from "./batchStatusModal"
+import {CHUNK_SIZE} from "../constants/constants"
+
+/***
+ * Custom Classes from index.css Starts with '-'; Overrides Bootstrap css and Semantic ui css
+ */
 
 
 class Home extends React.Component {
@@ -22,10 +27,9 @@ class Home extends React.Component {
             suborder_count: 0,
             loading: true,
             showCSVButton: false,
+            suborder_two: 0,
             queueForUpdate: [],
             queueForUpdateBoolean: []
-
-
         };
         this.addStatusQueue = (order, index) => {
             // console.log("addStatusQueue triggers");
@@ -38,15 +42,25 @@ class Home extends React.Component {
                 this.handleListChange("queueForUpdate", order.suborder_number, this.state.queueForUpdate, index);
                 console.log(this.state.queueForUpdate)
             }
+        };
 
-        }
-
-        this.addOrder = (order_count, suborder_count, orders) => {
-            this.setState({
-                all_orders: orders,
-                order_count: order_count,
-                suborder_count: suborder_count
-            });
+        this.addOrder = (order_count, suborder_count, orders, firstTime) => {
+            if (firstTime) {
+                this.setState({
+                    all_orders: orders,
+                    order_count: order_count,
+                    suborder_count: suborder_count,
+                    suborder_two: CHUNK_SIZE,
+                });
+                this.div.scrollTop = 0;
+            } else {
+                this.setState((prevState) => {
+                    return {
+                        all_orders: prevState.all_orders.concat(orders),
+                        suborder_two: prevState.suborder_two + CHUNK_SIZE
+                    };
+                });
+            }
         };
 
         this.updateStatus = (suborder_number, new_status) => {
@@ -65,6 +79,12 @@ class Home extends React.Component {
             this.setState({
                 loading: loading
             });
+        };
+
+        this.loadMore = (e) => {
+            this.setLoadingState(true);
+            this.orderForm.setStartSize(e);
+            // this.orderForm.submitFormData(e, 'load_more');
         };
 
         this.generateCSV = (e) => {
@@ -134,7 +154,7 @@ class Home extends React.Component {
                 }
             })
             .then((json) => {
-                this.addOrder(json.order_count, json.suborder_count, json.all_orders);
+                this.addOrder(json.order_count, json.suborder_count, json.all_orders, true);
             }).catch((error) => {
             console.error(error);
         });
@@ -145,16 +165,14 @@ class Home extends React.Component {
         nextProps.authenticated && this.getOrders();
     }
 
-
     render() {
         const orderRows = this.state.all_orders.map((order) =>
             <Order
                 key={order.suborder_number}
-
                 order_number={order.order_number}
                 suborder_number={order.suborder_number}
                 order_type={order.order_type}
-                billing_name={order.billing_name}
+                billing_name={order.customer.billing_name}
                 date_received={order.date_received.slice(0, -9)}
                 current_status={order.current_status}
                 updateStatus={this.updateStatus}
@@ -163,38 +181,46 @@ class Home extends React.Component {
                 queueForUpdateBoolean={this.state.queueForUpdateBoolean}
                 queueForUpdate={this.state.queueForUpdate}
                 index={this.state.all_orders.indexOf(order)}
-
             />
         );
 
         const Home = () => (
             <Container>
-
                 {this.props.authenticated ? (
-
                     <Grid padded columns={3}>
-                        <Grid.Column width={4} id="grid-column-search">
-                            <Header as="h1" textAlign="center">ePayments
+                        <Segment basic className="-no-padding -no-margin">
+                            <Header as="h1" className="-half">ePayments
                                 <Container className="sub header">Department of Records</Container>
                             </Header>
-                            <Segment padded textAlign='center'>
-                                <div>Hi {this.props.user}</div>
-                                <br/>
-                                <Button fluid content='Logout' onClick={this.logOut}/>
+                            <Segment basic className="-half -no-padding">
+                                <div className="-float-right">
+                                    Hi {this.props.user}
+                                    <Button content='Logout' onClick={this.logOut} className="-margin-left"/>
+                                </div>
                             </Segment>
-                            <OrderForm addOrder={this.addOrder} setLoadingState={this.setLoadingState}
-                                       toggleCSV={this.toggleCSV} ref={orderForm => this.orderForm = orderForm}/>
-                        </Grid.Column>
-                        <Grid.Column width={1}/>
+                        </Segment>
+
                         <Dimmer inverted active={this.state.loading}>
                             <Loader content='Loading'/>
                         </Dimmer>
-                        <Grid.Column width={11} id="grid-column-order">
-                            <Header as="h1" dividing textAlign="center">Order</Header>
+                        <Grid.Column width={3}>
+                        </Grid.Column>
+                        <Grid.Column width={11} className="-no-padding" id="orders-properties">
+                            <Rail position="left" id="grid-column-search">
+                                <OrderForm addOrder={this.addOrder}
+                                           setLoadingState={this.setLoadingState}
+                                           toggleCSV={this.toggleCSV}
+                                           ref={orderForm => this.orderForm = orderForm}/>
+                            </Rail>
 
+                            <Header as="h1" dividing textAlign="center" className='-margin-top-none'>Order</Header>
 
-                            <div>
-                                <Button.Group size='medium' floated='right'>
+                            <Rail position="right" id="rail-right">
+                                <p><strong>Number of Items: {this.state.suborder_count}</strong></p>
+
+                                <p><strong>Number of Orders: {this.state.order_count}</strong></p>
+
+                                <Button.Group vertical size='medium'>
                                     <Button icon active={true}>
                                         <Icon name='print'/>
                                     </Button>
@@ -208,18 +234,26 @@ class Home extends React.Component {
                                                       queueForUpdate={this.state.queueForUpdate}
                                                       updateStatus={this.updateStatus}/>
 
+                                    <Link to="/Order">
+                                        <Button content='Order'/>
+                                    </Link>
+
 
                                 </Button.Group>
-                                <strong>Number of Items: {this.state.suborder_count}</strong>
-                                <br/>
-                                <strong>Number of Orders: {this.state.order_count}</strong>
+                            </Rail>
+                            <div id="grid-column-order" ref={elem => this.div = elem}>
+                                {orderRows}
+                                {this.state.suborder_count >= this.state.suborder_two && this.state.suborder_count !== 0 ? (
+                                    <div className="center">
+                                        <Button content="Load More"
+                                                onClick={this.loadMore}/>
+                                    </div>
+                                ) : (<div className="center">
+                                    {this.state.suborder_count === 0 ?
+                                        (<p>No Results</p>) : (<p>End of Results</p>)}
+                                </div>)
+                                }
                             </div>
-                            <div>
-                                <Divider clearing/>
-                            </div>
-                            {orderRows}
-
-
                         </Grid.Column>
                     </Grid>
                 ) : (
@@ -231,10 +265,7 @@ class Home extends React.Component {
                     </Segment>
                 )}
             </Container>
-
-
         );
-
 
         return (
             <Container>
@@ -242,12 +273,12 @@ class Home extends React.Component {
                     <Router>
                         <div>
 
-                            <Link to="/Order">
-                                <Button content='Order'/>
-                            </Link>
-                            <Link to="/">
-                                <Button content='Home'/>
-                            </Link>
+                            {/*<Link to="/Order">*/}
+                                {/*<Button content='Order'/>*/}
+                            {/*</Link>*/}
+                            {/*<Link to="/">*/}
+                                {/*<Button content='Home'/>*/}
+                            {/*</Link>*/}
 
                             <Route exact path="/" component={Home}/>
                             <Route exact path="/Order" component={NewOrderForm}/>
@@ -263,10 +294,7 @@ class Home extends React.Component {
                 )}
             </Container>
         )
-
-
     }
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(Home);
-
