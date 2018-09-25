@@ -3,7 +3,7 @@ import {Grid, Form} from 'semantic-ui-react';
 import VitalRecordForm from "./vitalRecordForm";
 import {boroughOptions, genderOptions} from '../constants/constants';
 
-class BirthSearchForm extends React.Component {
+class BirthForm extends React.Component {
     constructor() {
         super();
 
@@ -134,9 +134,9 @@ class BirthCertForm extends React.Component {
                                     }}
                                     value={this.props.state.certificateNum[this.props.index]}
                         />
-                        <BirthSearchForm callBack={this.props.callBack} index={this.props.index}
-                                         state={this.props.state} boroughOptions={this.props.boroughOptions}
-                                         genderOptions={genderOptions}/>
+                        {/*<BirthSearchForm callBack={this.props.callBack} index={this.props.index}*/}
+                                         {/*state={this.props.state} boroughOptions={this.props.boroughOptions}*/}
+                                         {/*genderOptions={genderOptions}/>*/}
                     </Grid.Column>
                 </Grid.Row>
             </Grid>
@@ -144,4 +144,4 @@ class BirthCertForm extends React.Component {
     }
 }
 
-export {BirthSearchForm, BirthCertForm};
+export {BirthForm, BirthCertForm};

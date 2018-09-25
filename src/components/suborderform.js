@@ -3,19 +3,15 @@ import {Button, Grid, Popup, Form} from 'semantic-ui-react';
 import TaxPhotoForm from "./taxPhotoForm"
 import PropertyCardForm from "./propertyCardForm"
 import PhotoGalleryForm from "./photoGalleryForm"
-import {BirthSearchForm, BirthCertForm} from "./birthForm"
+import {BirthForm} from "./birthForm"
 import {MarriageCertForm, MarriageSearchForm} from "./marriageForm";
 import {DeathCertForm, DeathSearchForm} from "./deathForm";
 
 
 const orderTypeOptions = [
-    {key: 'birthsearch', text: 'Birth Search', value: 'Birth Search'},
-    {key: 'marriagesearch', text: 'Marriage Search', value: 'Marriage Search'},
-    {key: 'deathsearch', text: 'Death Search', value: 'Death Search'},
     {key: 'birthcert', text: 'Birth Certificate', value: 'Birth Cert'},
-    {key: 'marriagecert', text: 'Marriage Certificate', value: 'Marriage Cert'},
     {key: 'deathcert', text: 'Death Certificate', value: 'Death Cert'},
-    {key: 'propertycard', text: 'Property Card', value: 'Property Card'},
+    {key: 'marriagecert', text: 'Marriage Certificate', value: 'Marriage Cert'},
     {key: 'taxphoto', text: 'Tax Photo', value: 'Tax Photo'},
     {key: 'photogallery', text: 'Photo Gallery', value: 'Photo Gallery'},
 ];
@@ -78,51 +74,36 @@ class SubOrderForm extends React.Component {
     render() {
         let test;
         switch (this.state.orderType) {
-            case 'Birth Search':
-                test = (
-                    <BirthSearchForm index={this.props.index} handleFormChange={this.handleFormChange} />
-                );
-                break;
-            case 'Marriage Search':
-                test = (
-                    <MarriageSearchForm index={this.props.index} />
-                );
-                break;
-            case 'Death Search':
-                test = (
-                    <DeathSearchForm index={this.props.index} />
-                );
-                break;
             case 'Birth Cert':
                 test = (
-                    <DeathSearchForm index={this.props.index} />
-                );
-                break;
-            case 'Marriage Cert':
-                test = (
-                    <MarriageCertForm index={this.props.index} />
+                    <BirthForm index={this.props.index} handleFormChange={this.handleFormChange} />
                 );
                 break;
             case 'Death Cert':
                 test = (
-                    <DeathCertForm index={this.props.index} />
+                    <DeathCertForm index={this.props.index} handleFormChange={this.handleFormChange} />
                 );
                 break;
-            case 'Property Card':
+            case 'Marriage Cert':
                 test = (
-                    <PropertyCardForm index={this.props.index} />
+                    <MarriageCertForm index={this.props.index} handleFormChange={this.handleFormChange} />
                 );
                 break;
             case 'Tax Photo':
                 test = (
-                    <TaxPhotoForm index={this.props.index} />
+                    <TaxPhotoForm index={this.props.index} handleFormChange={this.handleFormChange} />
                 );
                 break;
             case 'Photo Gallery':
                 test = (
-                    <PhotoGalleryForm index={this.props.index} />
+                    <PhotoGalleryForm index={this.props.index} handleFormChange={this.handleFormChange} />
                 );
                 break;
+            // case 'Property Card':
+            //     test = (
+            //         <PropertyCardForm index={this.props.index} />
+            //     );
+            //     break;
             // no default
         }
 
