@@ -7,18 +7,6 @@ import {BirthSearchForm, BirthCertForm} from "./birthForm"
 import {MarriageCertForm, MarriageSearchForm} from "./marriageForm";
 import {DeathCertForm, DeathSearchForm} from "./deathForm";
 
-const boroughOptions = [
-    {key: 'bronx', text: 'Bronx', value: 'Bronx'},
-    {key: 'brooklyn', text: 'Brooklyn', value: 'Brooklyn'},
-    {key: 'manhattan', text: 'Manhattan', value: 'Manhattan'},
-    {key: 'queens', text: 'Queens', value: 'Queens'},
-    {key: 'statenisland', text: 'Staten Island', value: 'Staten Island'},
-];
-
-const genderOptions = [
-    {key: 'male', text: 'Male', value: 'Male'},
-    {key: 'female', text: 'Female', value: 'Female'},
-];
 
 const orderTypeOptions = [
     {key: 'birthsearch', text: 'Birth Search', value: 'Birth Search'},
@@ -51,16 +39,8 @@ class SubOrderForm extends React.Component {
             orderType: '',
             numCopies: '',
             status: '',
-            showBirthCert: false,
-            showBirthSearch: false,
-            showDeathCert: false,
-            showDeathSearch: false,
-            showMarriageCert: false,
-            showMarriageSearch: false,
-            showTaxForm: false,
-            showPhotoGalleryForm: false,
-            showPropertyForm: false,
-        }
+        };
+
         this.orderList = ['Tax Photo', 'Photo Gallery',
             'Property Card', 'Marriage Search',
             'Marriage Cert', 'Death Search',
@@ -73,32 +53,79 @@ class SubOrderForm extends React.Component {
                 orderType: '',
                 numCopies: '',
                 status: '',
-                showBirthCert: false,
-                showBirthSearch: false,
-                showDeathCert: false,
-                showDeathSearch: false,
-                showMarriageCert: false,
-                showMarriageSearch: false,
-                showTaxForm: false,
-                showPhotoGalleryForm: false,
-                showPropertyForm: false,
-
             })
         };
-
     }
 
     handleChange = (e) => {
-        const target = e.target;
-        const value = target.value;
-        const name = target.name;
-        this.props.callBack(name, value, this.props.index, this.props.state + "." + name);
         this.setState({
-            [name]: value
+            [e.target.name]: e.target.value
         });
+        this.props.handleSuborderListChange(e.target.name, e.target.value, this.props.index);
+    };
+
+    handleFormChange = (name, value) => {
+        this.props.handleSuborderListChange(name, value, this.props.index);
+    };
+
+    handleSelectChange = (e, data) => {
+        this.setState({
+            [data.name]: data.value
+        });
+        this.props.handleSuborderListChange(data.name, data.value, this.props.index);
     };
 
     render() {
+        let test;
+        switch (this.state.orderType) {
+            case 'Birth Search':
+                test = (
+                    <BirthSearchForm index={this.props.index} handleFormChange={this.handleFormChange} />
+                );
+                break;
+            case 'Marriage Search':
+                test = (
+                    <MarriageSearchForm index={this.props.index} />
+                );
+                break;
+            case 'Death Search':
+                test = (
+                    <DeathSearchForm index={this.props.index} />
+                );
+                break;
+            case 'Birth Cert':
+                test = (
+                    <DeathSearchForm index={this.props.index} />
+                );
+                break;
+            case 'Marriage Cert':
+                test = (
+                    <MarriageCertForm index={this.props.index} />
+                );
+                break;
+            case 'Death Cert':
+                test = (
+                    <DeathCertForm index={this.props.index} />
+                );
+                break;
+            case 'Property Card':
+                test = (
+                    <PropertyCardForm index={this.props.index} />
+                );
+                break;
+            case 'Tax Photo':
+                test = (
+                    <TaxPhotoForm index={this.props.index} />
+                );
+                break;
+            case 'Photo Gallery':
+                test = (
+                    <PhotoGalleryForm index={this.props.index} />
+                );
+                break;
+            // no default
+        }
+
         return (
             <Grid>
                 <Grid.Row>
@@ -119,72 +146,42 @@ class SubOrderForm extends React.Component {
                                      name="orderType"
                                      placeholder="Order Type"
                                      options={orderTypeOptions}
-                                     onChange={(e, {value}) => {
-                                         this.setState({orderType: value});
-                                         this.props.callBack("orderType", value, this.props.index, this.props.state.orderType);
-                                         //toggles hidden forms for Tax Photo if selected
-                                         (this.orderList.indexOf(value) === 0) ?
-                                             this.props.callBack("showTaxForm", true, this.props.index, this.props.state.showTaxForm) :
-                                             this.props.callBack("showTaxForm", false, this.props.index, this.props.state.showTaxForm);
-                                         //toggles hidden forms for Photo Gallery if selected
-                                         (this.orderList.indexOf(value) === 1) ?
-                                             this.props.callBack("showPhotoGalleryForm", true, this.props.index, this.props.state.showPhotoGalleryForm) :
-                                             this.props.callBack("showPhotoGalleryForm", false, this.props.index, this.props.state.showPhotoGalleryForm);
-                                         (this.orderList.indexOf(value) === 2) ?
-                                             this.props.callBack("showPropertyForm", true, this.props.index, this.props.state.showPropertyForm) :
-                                             this.props.callBack("showPropertyForm", false, this.props.index, this.props.state.showPropertyForm);
-                                         (this.orderList.indexOf(value) === 3) ?
-                                             this.props.callBack("showMarriageSearch", true, this.props.index, this.props.state.showMarriageSearch) :
-                                             this.props.callBack("showMarriageSearch", false, this.props.index, this.props.state.showMarriageSearch);
-                                         (this.orderList.indexOf(value) === 4) ?
-                                             this.props.callBack("showMarriageCert", true, this.props.index, this.props.state.showMarriageCert) :
-                                             this.props.callBack("showMarriageCert", false, this.props.index, this.props.state.showMarriageCert);
-                                         (this.orderList.indexOf(value) === 5) ?
-                                             this.props.callBack("showDeathSearch", true, this.props.index, this.props.state.showDeathSearch) :
-                                             this.props.callBack("showDeathSearch", false, this.props.index, this.props.state.showDeathSearch);
-                                         (this.orderList.indexOf(value) === 6) ?
-                                             this.props.callBack("showDeathCert", true, this.props.index, this.props.state.showDeathCert) :
-                                             this.props.callBack("showDeathCert", false, this.props.index, this.props.state.showDeathCert);
-                                         (this.orderList.indexOf(value) === 7) ?
-                                             this.props.callBack("showBirthSearch", true, this.props.index, this.props.state.showBirthSearch) :
-                                             this.props.callBack("showBirthSearch", false, this.props.index, this.props.state.showBirthSearch);
-                                         (this.orderList.indexOf(value) === 8) ?
-                                             this.props.callBack("showBirthCert", true, this.props.index, this.props.state.showBirthCert) :
-                                             this.props.callBack("showBirthCert", false, this.props.index, this.props.state.showBirthCert);
-                                     }}
-                                     value={this.props.state.orderType[this.props.index]}
+                                     onChange={this.handleSelectChange}
+                                     value={this.state.orderType}
                         />
 
-                        {this.props.state.showTaxForm[this.props.index] &&
-                        <TaxPhotoForm callBack={this.props.callBack} index={this.props.index}
-                                      state={this.props.state}
-                                      boroughOptions={boroughOptions}/>}
-                        {this.props.state.showPhotoGalleryForm[this.props.index] &&
-                        <PhotoGalleryForm callBack={this.props.callBack} index={this.props.index}
-                                          state={this.props.state}/>}
-                        {this.props.state.showPropertyForm[this.props.index] &&
-                        <PropertyCardForm callBack={this.props.callBack} index={this.props.index}
-                                          state={this.props.state} boroughOptions={boroughOptions}/>}
-                        {this.props.state.showMarriageSearch[this.props.index] &&
-                        <MarriageSearchForm callBack={this.props.callBack} index={this.props.index}
-                                            state={this.props.state} boroughOptions={boroughOptions}/>}
-                        {this.props.state.showMarriageCert[this.props.index] &&
-                        <MarriageCertForm callBack={this.props.callBack} index={this.props.index}
-                                          state={this.props.state} boroughOptions={boroughOptions}/>}
-                        {this.props.state.showDeathSearch[this.props.index] &&
-                        <DeathSearchForm callBack={this.props.callBack} index={this.props.index}
-                                         state={this.props.state} boroughOptions={boroughOptions}/>}
-                        {this.props.state.showDeathCert[this.props.index] &&
-                        <DeathCertForm callBack={this.props.callBack} index={this.props.index}
-                                       state={this.props.state} boroughOptions={boroughOptions}/>}
-                        {this.props.state.showBirthSearch[this.props.index] &&
-                        <BirthSearchForm callBack={this.props.callBack} index={this.props.index}
-                                         state={this.props.state} genderOptions={genderOptions}
-                                         boroughOptions={boroughOptions}/>}
-                        {this.props.state.showBirthCert[this.props.index] &&
-                        <BirthCertForm callBack={this.props.callBack} index={this.props.index}
-                                       state={this.props.state} boroughOptions={boroughOptions}
-                                       genderOptions={genderOptions}/>}
+                        {test}
+
+                        {/*{this.props.state.showTaxForm[this.props.index] &&*/}
+                        {/*<TaxPhotoForm callBack={this.props.callBack} index={this.props.index}*/}
+                        {/*state={this.props.state}*/}
+                        {/*boroughOptions={boroughOptions}/>}*/}
+                        {/*{this.props.state.showPhotoGalleryForm[this.props.index] &&*/}
+                        {/*<PhotoGalleryForm callBack={this.props.callBack} index={this.props.index}*/}
+                        {/*state={this.props.state}/>}*/}
+                        {/*{this.props.state.showPropertyForm[this.props.index] &&*/}
+                        {/*<PropertyCardForm callBack={this.props.callBack} index={this.props.index}*/}
+                        {/*state={this.props.state} boroughOptions={boroughOptions}/>}*/}
+                        {/*{this.props.state.showMarriageSearch[this.props.index] &&*/}
+                        {/*<MarriageSearchForm callBack={this.props.callBack} index={this.props.index}*/}
+                        {/*state={this.props.state} boroughOptions={boroughOptions}/>}*/}
+                        {/*{this.props.state.showMarriageCert[this.props.index] &&*/}
+                        {/*<MarriageCertForm callBack={this.props.callBack} index={this.props.index}*/}
+                        {/*state={this.props.state} boroughOptions={boroughOptions}/>}*/}
+                        {/*{this.props.state.showDeathSearch[this.props.index] &&*/}
+                        {/*<DeathSearchForm callBack={this.props.callBack} index={this.props.index}*/}
+                        {/*state={this.props.state} boroughOptions={boroughOptions}/>}*/}
+                        {/*{this.props.state.showDeathCert[this.props.index] &&*/}
+                        {/*<DeathCertForm callBack={this.props.callBack} index={this.props.index}*/}
+                        {/*state={this.props.state} boroughOptions={boroughOptions}/>}*/}
+                        {/*{this.props.state.showBirthSearch[this.props.index] &&*/}
+                        {/*<BirthSearchForm callBack={this.props.callBack} index={this.props.index}*/}
+                        {/*state={this.props.state} genderOptions={genderOptions}*/}
+                        {/*boroughOptions={boroughOptions}/>}*/}
+                        {/*{this.props.state.showBirthCert[this.props.index] &&*/}
+                        {/*<BirthCertForm callBack={this.props.callBack} index={this.props.index}*/}
+                        {/*state={this.props.state} boroughOptions={boroughOptions}*/}
+                        {/*genderOptions={genderOptions}/>}*/}
 
 
                         <Form.Input label="Number of Copies"
@@ -193,12 +190,16 @@ class SubOrderForm extends React.Component {
                                     maxLength={2}
                                     onChange={(e, {value}) => {
                                         if (/^[0-9]+$/.test(value.slice(-1)) || value === '') {
-                                            this.setState({numCopies: value});
-                                            this.props.callBack("numCopies", value, this.props.index, this.props.state.numCopies);
-
+                                            this.handleChange(e)
                                         }
                                     }}
-                                    value={this.props.state.numCopies[this.props.index]}
+                            // onChange={(e, {value}) => {
+                            //     if (/^[0-9]+$/.test(value.slice(-1)) || value === '') {
+                            //         this.setState({numCopies: value});
+                            //         this.props.callBack("numCopies", value, this.props.index, this.props.state.numCopies);
+                            //         }
+                            // }}
+                                    value={this.state.numCopies}
                         />
 
                         <Form.Select label="Status"
@@ -206,12 +207,10 @@ class SubOrderForm extends React.Component {
                                      name="status"
                                      placeholder="Status"
                                      options={statusOptions}
-                                     onChange={(e, {value}) => {
-                                         this.setState({status: value});
-                                         this.props.callBack("status", value, this.props.index, this.props.state.status);
-                                     }}
-                                     value={this.props.state.status[this.props.index]}
+                                     onChange={this.handleSelectChange}
+                                     value={this.state.status}
                         />
+                        <br/>
                     </Grid.Column>
                 </Grid.Row>
             </Grid>

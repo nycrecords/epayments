@@ -1,11 +1,14 @@
 import React from 'react';
 import {Grid, Form} from 'semantic-ui-react';
 import VitalRecordForm from "./vitalRecordForm";
+import {boroughOptions, genderOptions} from '../constants/constants';
 
 class BirthSearchForm extends React.Component {
     constructor() {
-        super()
+        super();
+
         this.state = {
+            certificateNum: '',
             gender: '',
             fatherName: '',
             motherName: '',
@@ -16,86 +19,83 @@ class BirthSearchForm extends React.Component {
         }
     }
 
+    handleChange = (e) => {
+        this.setState({
+            [e.target.name]: e.target.value
+        });
+        this.props.handleFormChange(e.target.name, e.target.value);
+    };
+
+    handleSelectChange = (e, data) => {
+        this.setState({
+            [data.name]: data.value
+        });
+        this.props.handleFormChange(data.name, data.value);
+    };
+
     render() {
         return (
             <Grid>
                 <Grid.Row>
                     <Grid.Column>
-                        {/*<Form.Group>*/}
+                        <Form.Input label="Certificate Number (if known)"
+                                    name="certificateNum"
+                                    placeholder="Certificate Number"
+                                    maxLength={40}
+                                    onChange={this.handleChange}
+                                    value={this.state.certificateNum}
+                        />
                         <Form.Input label="First Name"
                                     name="firstName"
                                     placeholder="First Name"
                                     maxLength={40}
-                                    onChange={(e, {value}) => {
-                                        this.setState({firstName: value})
-                                        this.props.callBack("firstName", value, this.props.index, this.props.state.firstName)
-                                    }}
-                                    value={this.props.state.firstName[this.props.index]}
+                                    onChange={this.handleChange}
+                                    value={this.state.firstName}
                         />
                         <Form.Input label="Middle Name"
                                     name="middleName"
                                     placeholder="Middle Name"
                                     maxLength={40}
-                                    onChange={(e, {value}) => {
-                                        this.setState({middleName: value})
-                                        this.props.callBack("middleName", value, this.props.index, this.props.state.middleName)
-                                    }}
-                                    value={this.props.state.middleName[this.props.index]}
+                                    onChange={this.handleChange}
+                                    value={this.state.middleName}
                         />
                         <Form.Input label="Last Name"
                                     name="lastName"
                                     placeholder="Last Name"
                                     maxLength={25}
-                                    onChange={(e, {value}) => {
-                                        this.setState({lastName: value})
-                                        this.props.callBack("lastName", value, this.props.index, this.props.state.lastName)
-                                    }}
-                                    value={this.props.state.lastName[this.props.index]}
+                                    onChange={this.handleChange}
+                                    value={this.state.lastName}
                         />
-                        {/*</Form.Group>*/}
                         <Form.Input label="Birth Place"
                                     name="birthPlace"
                                     placeholder="BirthPlace"
                                     maxLength={40}
-                                    onChange={(e, {value}) => {
-                                        this.setState({birthPlace: value})
-                                        this.props.callBack("birthPlace", value, this.props.index, this.props.state.birthPlace)
-                                    }}
-                                    value={this.props.state.birthPlace[this.props.index]}
+                                    onChange={this.handleChange}
+                                    value={this.state.birthPlace}
                         />
                         <Form.Select label="Gender"
                                      required
                                      name="gender"
                                      placeholder="Gender"
-                                     options={this.props.genderOptions}
-                                     onChange={(e, {value}) => {
-                                         this.setState({gender: value});
-                                         this.props.callBack("gender", value, this.props.index, this.props.state.gender);
-                                     }}
-                                     value={this.props.state.gender[this.props.index]}
+                                     options={genderOptions}
+                                     onChange={this.handleSelectChange}
+                                     value={this.state.gender}
                         />
                         <Form.Input label="Mother Name"
                                     name="motherName"
                                     placeholder="Mother Name"
                                     maxLength={40}
-                                    onChange={(e, {value}) => {
-                                        this.setState({motherName: value})
-                                        this.props.callBack("motherName", value, this.props.index, this.props.state.motherName)
-                                    }}
-                                    value={this.props.state.motherName[this.props.index]}
+                                    onChange={this.handleChange}
+                                    value={this.state.motherName}
                         />
                         <Form.Input label="Father Name"
                                     name="fatherName"
                                     placeholder="Father Name"
                                     maxLength={40}
-                                    onChange={(e, {value}) => {
-                                        this.setState({fatherName: value})
-                                        this.props.callBack("fatherName", value, this.props.index, this.props.state.fatherName)
-                                    }}
-                                    value={this.props.state.fatherName[this.props.index]}
+                                    onChange={this.handleChange}
+                                    value={this.state.fatherName}
                         />
-                        <VitalRecordForm callBack={this.props.callBack} index={this.props.index}
-                                         state={this.props.state} boroughOptions={this.props.boroughOptions}/>
+                        <VitalRecordForm />
                     </Grid.Column>
                 </Grid.Row>
             </Grid>
@@ -105,7 +105,8 @@ class BirthSearchForm extends React.Component {
 
 class BirthCertForm extends React.Component {
     constructor() {
-        super()
+        super();
+
         this.state = {
             gender: '',
             fatherName: '',
@@ -115,7 +116,6 @@ class BirthCertForm extends React.Component {
             firstName: '',
             middleName: '',
             certificateNum: '',
-
         }
     }
 
@@ -129,14 +129,14 @@ class BirthCertForm extends React.Component {
                                     placeholder="Certificate Number"
                                     maxLength={40}
                                     onChange={(e, {value}) => {
-                                        this.setState({certificateNum: value})
+                                        this.setState({certificateNum: value});
                                         this.props.callBack("certificateNum", value, this.props.index, this.props.state.certificateNum)
                                     }}
                                     value={this.props.state.certificateNum[this.props.index]}
                         />
                         <BirthSearchForm callBack={this.props.callBack} index={this.props.index}
                                          state={this.props.state} boroughOptions={this.props.boroughOptions}
-                                         genderOptions={this.props.genderOptions}/>
+                                         genderOptions={genderOptions}/>
                     </Grid.Column>
                 </Grid.Row>
             </Grid>

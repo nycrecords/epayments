@@ -1,9 +1,11 @@
 import React from 'react';
 import {Grid, Form} from 'semantic-ui-react';
+import {boroughOptions} from "../constants/constants";
 
 class VitalRecordForm extends React.Component {
     constructor() {
-        super()
+        super();
+
         this.state = {
             month: '',
             day: '',
@@ -25,12 +27,9 @@ class VitalRecordForm extends React.Component {
                                     placeholder="Month"
                                     maxLength={20}
                                     onChange={(e, {value}) => {
-
-                                        this.setState({month: value})
-                                        this.props.callBack("month", value, this.props.index, this.props.state.month)
-
+                                        this.setState({month: value});
                                     }}
-                                    value={this.props.state.month[this.props.index]}
+                                    value={this.state.month}
                         />
                         <Form.Input label="Day"
                                     name="day"
@@ -38,11 +37,10 @@ class VitalRecordForm extends React.Component {
                                     placeholder="Day"
                                     onChange={(e, {value}) => {
                                         if (/^[0-9]+$/.test(value.slice(-1)) || value === '') {
-                                            this.setState({day: value})
-                                            this.props.callBack("day", value, this.props.index, this.props.state.day)
+                                            this.setState({day: value});
                                         }
                                     }}
-                                    value={this.props.state.day[this.props.index]}
+                                    value={this.state.day}
                         />
                         <Form.Input label="Year"
                                     name="year"
@@ -50,23 +48,20 @@ class VitalRecordForm extends React.Component {
                                     placeholder="Year"
                                     onChange={(e, {value}) => {
                                         if (/^[0-9]+$/.test(value.slice(-1)) || value === '') {
-                                            this.setState({year: value})
-                                            this.props.callBack("year", value, this.props.index, this.props.state.year)
+                                            this.setState({year: value});
                                         }
                                     }}
-                                    value={this.props.state.year[this.props.index]}
+                                    value={this.state.year}
                         />
                         <Form.Select label="Borough"
                                      required
                                      name="borough"
-                                     options={this.props.boroughOptions}
+                                     options={boroughOptions}
                                      placeholder="Borough"
                                      onChange={(e, {value}) => {
                                          this.setState({borough: value});
-                                         this.props.callBack("borough", value, this.props.index, this.props.state.borough);
-
                                      }}
-                                     value={this.props.state.borough[this.props.index]}
+                                     value={this.state.borough}
                         />
                         <Form.Checkbox label="Letter"
                                        name="letter"
@@ -84,10 +79,9 @@ class VitalRecordForm extends React.Component {
                                     placeholder="Comment"
                                     maxLength={255}
                                     onChange={(e, {value}) => {
-                                        this.setState({comment: value})
-                                        this.props.callBack("comment", value, this.props.index, this.props.state.comment)
+                                        this.setState({comment: value});
                                     }}
-                                    value={this.props.state.comment[this.props.index]}
+                                    value={this.state.comment}
                         />
 
                     </Grid.Column>

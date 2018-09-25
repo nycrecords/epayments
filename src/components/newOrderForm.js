@@ -1,7 +1,5 @@
 import React, {} from 'react';
-import {
-    Link
-} from 'react-router-dom';
+import {Link} from 'react-router-dom';
 import {
     Button,
     Container,
@@ -21,66 +19,20 @@ import SubOrderForm from "./suborderform";
 class NewOrderForm extends React.Component {
     constructor() {
         super();
+
         this.state = {
-            billingName: '',
-            email: '',
-            addressLine1: '',
-            addressLine2: '',
-            city: '',
-            certified: [''],
-            state: '',
-            zipCode: '',
-            phone: '',
-            instructions: '',
-            orderType: [''],
-            deathPlace: [''],
-            cemetery: [''],
-            gender: [''],
-            fatherName: [''],
-            motherName: [''],
-            birthPlace: [''],
-            lastName: [''],
-            firstName: [''],
-            middleName: [''],
-            certificateNum: [''],
-            groomLastName: [''],
-            groomFirstName: [''],
-            brideLastName: [''],
-            brideFirstName: [''],
-            month: [''],
-            day: [''],
-            year: [''],
-            marriagePlace: [''],
-            letter: [false],
-            block: [''],
-            lot: [''],
-            roll: [''],
-            borough: [''],
-            buildingNum: [''],
-            street: [''],
-            mail: [false],
-            contactNum: [''],
-            imgId: [''],
-            imgTitle: [''],
-            comment: [''],
-            personalUseAgreement: [false],
-            addDescription: [''],
-            collection: [''],
-            printSize: [''],
-            numCopies: [''],
-            status: [''],
-            showBirthCert: [false],
-            showBirthSearch: [false],
-            showDeathCert: [false],
-            showDeathSearch: [false],
-            showMarriageCert: [false],
-            showMarriageSearch: [false],
-            showTaxForm: [false],
-            showPhotoGalleryForm: [false],
-            showSubOrder: [false],
-            showPropertyForm: [false],
+            orderInfo: {
+                billingName: '',
+                email: '',
+                addressLine1: '',
+                addressLine2: '',
+                city: '',
+                state: '',
+                zipCode: '',
+                phone: ''
+            },
             loading: false,
-            subOrderList: [0]
+            suborderList: [{key: 0}]
         };
         this.handleChange = this.handleChange.bind(this);
         this.clearSelection = () => {
@@ -88,7 +40,7 @@ class NewOrderForm extends React.Component {
                 buttons: {
                     no: {
                         text: "No",
-                        value: "no",
+                        value: false,
                     },
                     yes: {
                         text: "Yes",
@@ -97,128 +49,30 @@ class NewOrderForm extends React.Component {
                 },
             })
                 .then((value) => {
-                    if (value === "no") {
-                        return;
+                    if (value === false) {
+                        // return;
                     }
                     else {
                         this.index = 1;
                         this.setState({
-                            billingName: '',
-                            email: '',
-                            addressLine1: '',
-                            addressLine2: '',
-                            city: '',
-                            certified: [''],
-                            state: '',
-                            zipCode: '',
-                            phone: '',
-                            instructions: '',
-                            orderType: [''],
-                            deathPlace: [''],
-                            cemetery: [''],
-                            firstName: [''],
-                            lastName: [''],
-                            birthPlace: [''],
-                            gender: [''],
-                            fatherName: [''],
-                            motherName: [''],
-                            middleName: [''],
-                            certificateNum: [''],
-                            groomLastName: [''],
-                            groomFirstName: [''],
-                            brideLastName: [''],
-                            brideFirstName: [''],
-                            month: [''],
-                            day: [''],
-                            year: [''],
-                            marriagePlace: [''],
-                            letter: [''],
-                            block: [''],
-                            lot: [''],
-                            roll: [''],
-                            borough: [''],
-                            buildingNum: [''],
-                            street: [''],
-                            mail: [false],
-                            contactNum: [''],
-                            imgId: [''],
-                            imgTitle: [''],
-                            comment: [''],
-                            personalUseAgreement: [false],
-                            addDescription: [''],
-                            collection: [''],
-                            printSize: [''],
-                            numCopies: [''],
-                            status: [''],
-                            showBirthCert: [false],
-                            showBirthSearch: [false],
-                            showDeathCert: [false],
-                            showDeathSearch: [false],
-                            showMarriageCert: [false],
-                            showMarriageSearch: [false],
-                            showTaxForm: [false],
-                            showPhotoGalleryForm: [false],
-                            showPropertyForm: [false],
-                            subOrderList: [0],
+                            orderInfo: {
+                                billingName: '',
+                                email: '',
+                                addressLine1: '',
+                                addressLine2: '',
+                                city: '',
+                                state: '',
+                                zipCode: '',
+                                phone: ''
+                            },
+                            loading: false,
+                            suborderList: [{key: 0}],
                         });
-
+                        this.subOrderForm.clearSelection();
                     }
                 });
         };
-        this.handleEmptyStates = () => {
-            /*Add empty index to list whenever additional suborders are prompted
-             to prevent null insert into DB if user left some fields unanswered
-            */
-            this.setState({
-                certified: this.state.certified.concat(['']),
-                deathPlace: this.state.deathPlace.concat(['']),
-                cemetery: this.state.cemetery.concat(['']),
-                firstName: this.state.firstName.concat(['']),
-                lastName: this.state.lastName.concat(['']),
-                birthPlace: this.state.birthPlace.concat(['']),
-                gender: this.state.gender.concat(['']),
-                fatherName: this.state.fatherName.concat(['']),
-                motherName: this.state.motherName.concat(['']),
-                middleName: this.state.middleName.concat(['']),
-                certificateNum: this.state.certificateNum.concat(['']),
-                groomLastName: this.state.groomLastName.concat(['']),
-                groomFirstName: this.state.groomFirstName.concat(['']),
-                brideLastName: this.state.brideLastName.concat(['']),
-                brideFirstName: this.state.brideFirstName.concat(['']),
-                month: this.state.month.concat(['']),
-                day: this.state.day.concat(['']),
-                year: this.state.year.concat(['']),
-                marriagePlace: this.state.marriagePlace.concat(['']),
-                letter: this.state.letter.concat([false]),
-                block: this.state.block.concat(['']),
-                lot: this.state.lot.concat(['']),
-                roll: this.state.roll.concat(['']),
-                borough: this.state.borough.concat(['']),
-                buildingNum: this.state.buildingNum.concat(['']),
-                street: this.state.street.concat(['']),
-                mail: this.state.mail.concat([false]),
-                contactNum: this.state.contactNum.concat(['']),
-                imgId: this.state.imgId.concat(['']),
-                imgTitle: this.state.imgTitle.concat(['']),
-                comment: this.state.comment.concat(['']),
-                personalUseAgreement: this.state.personalUseAgreement.concat([false]),
-                addDescription: this.state.addDescription.concat(['']),
-                collection: this.state.collection.concat(['']),
-                printSize: this.state.printSize.concat(['']),
-                numCopies: this.state.numCopies.concat(['']),
-                status: this.state.status.concat(['']),
-                orderType: this.state.orderType.concat(['']),
-                showMarriageSearch: this.state.showMarriageSearch.concat([false]),
-                showBirthSearch: this.state.showBirthSearch.concat([false]),
-                showBirthCert: this.state.showBirthCert.concat([false]),
-                showMarriageCert: this.state.showMarriageCert.concat([false]),
-                showDeathCert: this.state.showDeathCert.concat([false]),
-                showDeathSearch: this.state.showDeathSearch.concat([false]),
-                showTaxForm: this.state.showTaxForm.concat([false]),
-                showPhotoGalleryForm: this.state.showPhotoGalleryForm.concat([false]),
-                showPropertyForm: this.state.showPropertyForm.concat([false]),
-            })
-        };
+
         this.deleteSuborderValues = (index, state, name) => {
             let newState = state.slice();
             newState.splice(index, 1);
@@ -233,64 +87,67 @@ class NewOrderForm extends React.Component {
             'Marriage Cert', 'Death Search', 'Death Cert', 'Birth Search', 'Birth Cert'];
     };
 
+    handleSuborderListChange = (name, value, index) => {
+        this.setState(prevState => {
+            const newItems = [...prevState.suborderList];
+            newItems[index][name] = value;
+            return {suborderList: newItems}
+        });
+        console.log(this.state.suborderList);
+    };
+
     handleChange = (e) => {
-        const target = e.target;
-        const value = target.value;
-        const name = target.name;
         this.setState({
-            [name]: value
+            orderInfo: {
+                ...this.state.orderInfo,
+                [e.target.name]: e.target.value
+            }
         });
     };
+
     handleClick = () => {
-        this.setState({subOrderList: this.state.subOrderList.concat([this.index])});
+        this.setState({suborderList: this.state.suborderList.concat({key: this.index})});
         this.index++;
-    }
+    };
 
     handleSubmit = (e, value) => {
         e.preventDefault();
         this.setState({loading: true});
-        for (var i = 0; i < this.state.subOrderList.length; i++) {
-            if (this.state.orderType[i] === '') {
-                this.message += ("Please fill in Order Type in Suborder: " + (i + 1) + "\n");
-            }
-            if (this.state.status[i] === '') {
-                this.message += ("Please fill in Status in Suborder: " + (i + 1) + "\n");
-            }
-            if (this.state.orderType[i] !== '') {
-                if ((this.state.showBirthSearch[i] === true || this.state.showBirthCert === true[i]) && this.state.gender[i] === '') {
-                    this.message += ("Please fill in the Gender in Suborder: " + (i + 1) + "\n");
-                }
-                if (this.state.showPhotoGalleryForm[i] === false && this.state.borough[i] === '') {
-                    this.message += ("Please fill in the Borough in Suborder:" + (i + 1) + "\n");
-                }
-                if ((this.state.showPhotoGalleryForm[i] === true || this.state.showTaxForm[i] === true) && (this.state.printSize[i] === '')) {
-                    this.message += ("Please fill in the Printing Size in Suborder: " + (i + 1) + "\n")
-                }
-                if (this.state.showTaxForm[i] === true && this.state.collection[i] === '') {
-                    this.message += ("Please fill in the Collection in Suborder: " + (i + 1) + "\n");
-                }
-            }
-        }
-        if (this.message.length !== 0) {
-            swal("Incomplete Form Submission", this.message, "error");
-            this.message = "";
-            this.setState({loading: false});
-            return;
+        // TODO: check validation
+        // for (var i = 0; i < this.state.suborderList.length; i++) {
+        //     if (this.state.orderType[i] === '') {
+        //         this.message += ("Please fill in Order Type in Suborder: " + (i + 1) + "\n");
+        //     }
+        //     if (this.state.status[i] === '') {
+        //         this.message += ("Please fill in Status in Suborder: " + (i + 1) + "\n");
+        //     }
+        //     if (this.state.orderType[i] !== '') {
+        //         if ((this.state.showBirthSearch[i] === true || this.state.showBirthCert === true[i]) && this.state.gender[i] === '') {
+        //             this.message += ("Please fill in the Gender in Suborder: " + (i + 1) + "\n");
+        //         }
+        //         if (this.state.showPhotoGalleryForm[i] === false && this.state.borough[i] === '') {
+        //             this.message += ("Please fill in the Borough in Suborder:" + (i + 1) + "\n");
+        //         }
+        //         if ((this.state.showPhotoGalleryForm[i] === true || this.state.showTaxForm[i] === true) && (this.state.printSize[i] === '')) {
+        //             this.message += ("Please fill in the Printing Size in Suborder: " + (i + 1) + "\n")
+        //         }
+        //         if (this.state.showTaxForm[i] === true && this.state.collection[i] === '') {
+        //             this.message += ("Please fill in the Collection in Suborder: " + (i + 1) + "\n");
+        //         }
+        //     }
+        // }
+        //
+        // if (this.message.length !== 0) {
+        //     swal("Incomplete Form Submission", this.message, "error");
+        //     this.message = "";
+        //     this.setState({loading: false});
+        //     return;
+        // }
 
-        }
         csrfFetch('api/v1.0/orders/new', {
             method: "POST",
             body: JSON.stringify({
-                billingName: this.state.billingName,
-                email: this.state.email,
-                addressLine1: this.state.addressLine1,
-                address_two_2: this.state.addressLine2,
-                city: this.state.city,
-                certified: this.state.certified,
-                state: this.state.state,
-                zipCode: this.state.zipCode,
-                phone: this.state.phone,
-                instructions: this.state.instructions,
+                orderInfo: this.state.orderInfo,
                 orderType: this.state.orderType,
                 gender: this.state.gender,
                 motherName: this.state.motherName,
@@ -333,6 +190,7 @@ class NewOrderForm extends React.Component {
         })
             .then(handleFetchErrors)
             .then((json) => {
+                // TODO: clear state?
                 this.setState({loading: false});
                 window.open(json.url);
 
@@ -340,93 +198,34 @@ class NewOrderForm extends React.Component {
             console.error(error);
             this.setState({loading: false});
         });
-        {
-            this.clearSelection()
-        }
         swal("Thank you", "Your order has been submitted", "success");
-
     };
 
-    callBack = (dataFromChild, value, index, state) => {
-        let newState = state.slice()
-        newState[index] = value
-        this.setState({
-            [dataFromChild]: newState
-        });
-
-
-    };
     deleteSuborder = (index) => {
-        let newSubOrderList = this.state.subOrderList.slice()
-        newSubOrderList.splice(index, 1);
-        for (var i = index; i < newSubOrderList.length; i++) {
-            newSubOrderList[i]--;
+        let newSuborderList = this.state.suborderList.slice();
+        newSuborderList.splice(index, 1);
+        for (let i = index; i < newSuborderList.length; i++) {
+            if (newSuborderList[i].key > index) {
+                newSuborderList[i].key--;
+            }
         }
-        this.setState({subOrderList: newSubOrderList})
-        this.deleteSuborderValues(index, this.state.certified, "certified")
-        this.deleteSuborderValues(index, this.state.deathPlace, "deathPlace")
-        this.deleteSuborderValues(index, this.state.cemetery, "cemetery")
-        this.deleteSuborderValues(index, this.state.firstName, "firstName")
-        this.deleteSuborderValues(index, this.state.lastName, "lastName")
-        this.deleteSuborderValues(index, this.state.birthPlace, "birthPlace")
-        this.deleteSuborderValues(index, this.state.gender, "gender")
-        this.deleteSuborderValues(index, this.state.fatherName, "fatherName")
-        this.deleteSuborderValues(index, this.state.motherName, "motherName")
-        this.deleteSuborderValues(index, this.state.middleName, "middleName")
-        this.deleteSuborderValues(index, this.state.certificateNum, "certificateNum")
-        this.deleteSuborderValues(index, this.state.groomLastName, "groomLastName")
-        this.deleteSuborderValues(index, this.state.groomFirstName, "groomFirstName")
-        this.deleteSuborderValues(index, this.state.brideLastName, "brideLastName")
-        this.deleteSuborderValues(index, this.state.brideFirstName, "brideFirstName")
-        this.deleteSuborderValues(index, this.state.month, "month")
-        this.deleteSuborderValues(index, this.state.day, "day")
-        this.deleteSuborderValues(index, this.state.year, "year")
-        this.deleteSuborderValues(index, this.state.marriagePlace, "marriagePlace")
-        this.deleteSuborderValues(index, this.state.letter, "letter")
-        this.deleteSuborderValues(index, this.state.block, "block")
-        this.deleteSuborderValues(index, this.state.lot, "lot")
-        this.deleteSuborderValues(index, this.state.roll, "roll")
-        this.deleteSuborderValues(index, this.state.borough, "borough")
-        this.deleteSuborderValues(index, this.state.buildingNum, "buildingNum")
-        this.deleteSuborderValues(index, this.state.street, "street")
-        this.deleteSuborderValues(index, this.state.mail, "mail")
-        this.deleteSuborderValues(index, this.state.contactNum, "contactNum")
-        this.deleteSuborderValues(index, this.state.imgId, "imgId")
-        this.deleteSuborderValues(index, this.state.imgTitle, "imgTitle")
-        this.deleteSuborderValues(index, this.state.comment, "comment")
-        this.deleteSuborderValues(index, this.state.personalUseAgreement, "personalUseAgreement")
-        this.deleteSuborderValues(index, this.state.addDescription, "addDescription")
-        this.deleteSuborderValues(index, this.state.collection, "collection")
-        this.deleteSuborderValues(index, this.state.printSize, "printSize")
-        this.deleteSuborderValues(index, this.state.numCopies, "numCopies")
-        this.deleteSuborderValues(index, this.state.orderType, "orderType")
-        this.deleteSuborderValues(index, this.state.status, "status")
-        this.deleteSuborderValues(index, this.state.showMarriageSearch, "showMarriageSearch")
-        this.deleteSuborderValues(index, this.state.showBirthSearch, "showBirthSearch")
-        this.deleteSuborderValues(index, this.state.showBirthCert, "showBirthCert")
-        this.deleteSuborderValues(index, this.state.showMarriageCert, "showMarriageCert")
-        this.deleteSuborderValues(index, this.state.showDeathCert, "showDeathCert")
-        this.deleteSuborderValues(index, this.state.showDeathSearch, "showDeathSearch")
-        this.deleteSuborderValues(index, this.state.showTaxForm, "showTaxForm")
-        this.deleteSuborderValues(index, this.state.showPhotoGalleryForm, "showPhotoGalleryForm")
-        this.deleteSuborderValues(index, this.state.showPropertyForm, "showPropertyForm")
+        this.setState({suborderList: newSuborderList});
         this.index--;
     };
 
     render() {
-        const SubOrders = this.state.subOrderList.map((suborderIndex) =>
+        const SubOrders = this.state.suborderList.map((suborder) =>
 
-            <Segment color={'black'} compact key={suborderIndex.toString()}>
+            <Segment color={'black'} compact key={suborder.key}>
                 <SubOrderForm
-                    key={suborderIndex}
-                    index={suborderIndex}
-                    callBack={this.callBack}
+                    key={suborder.key}
+                    index={suborder.key}
                     state={this.state}
                     ref={instance => {
                         this.subOrderForm = instance
                     }}
+                    handleSuborderListChange={this.handleSuborderListChange}
                     deleteSuborder={this.deleteSuborder}
-
                 />
             </Segment>
         );
@@ -456,7 +255,7 @@ class NewOrderForm extends React.Component {
                         </Grid.Row>
 
                         <Grid.Row centered>
-                            <Grid.Column width={5}>
+                            <Grid.Column width={3}>
                                 <Form onSubmit={this.handleSubmit}>
                                     <Form.Input label="Billing Name"
                                                 required
@@ -464,7 +263,7 @@ class NewOrderForm extends React.Component {
                                                 placeholder="Billing Name"
                                                 maxLength="64"
                                                 onChange={this.handleChange}
-                                                value={this.state.billingName}
+                                                value={this.state.orderInfo.billingName}
                                     />
                                     <Form.Input label="Email"
                                                 required
@@ -472,21 +271,21 @@ class NewOrderForm extends React.Component {
                                                 placeholder="Email"
                                                 maxLength="64"
                                                 onChange={this.handleChange}
-                                                value={this.state.email}
+                                                value={this.state.orderInfo.email}
                                     />
                                     <Form.Input label="Address line 1"
                                                 name="addressLine1"
                                                 placeholder="Address"
                                                 maxLength="64"
                                                 onChange={this.handleChange}
-                                                value={this.state.addressLine1}
+                                                value={this.state.orderInfo.addressLine1}
                                     />
                                     <Form.Input label="Address line 2"
                                                 name="addressLine2"
                                                 placeholder="Address"
                                                 maxLength="64"
                                                 onChange={this.handleChange}
-                                                value={this.state.addressLine2}
+                                                value={this.state.orderInfo.addressLine2}
                                     />
 
                                     <Form.Input label="City"
@@ -494,21 +293,21 @@ class NewOrderForm extends React.Component {
                                                 placeholder="City"
                                                 maxLength="64"
                                                 onChange={this.handleChange}
-                                                value={this.state.city}
+                                                value={this.state.orderInfo.city}
                                     />
                                     <Form.Input label="State"
                                                 name="state"
                                                 placeholder="State"
                                                 maxLength="64"
                                                 onChange={this.handleChange}
-                                                value={this.state.state}
+                                                value={this.state.orderInfo.state}
                                     />
                                     <Form.Input label="Zip Code"
                                                 name="zipCode"
                                                 placeholder="Zip Code"
                                                 maxLength="5"
                                                 onChange={this.handleChange}
-                                                value={this.state.zipCode}
+                                                value={this.state.orderInfo.zipCode}
                                     />
 
                                     <Form.Input label="Phone"
@@ -516,18 +315,10 @@ class NewOrderForm extends React.Component {
                                                 placeholder="Phone"
                                                 maxLength="64"
                                                 onChange={this.handleChange}
-                                                value={this.state.phone}
-                                    />
-                                    <Form.Input label="Instructions"
-                                                name="instructions"
-                                                placeholder="Instructions"
-                                                maxLength="64"
-                                                onChange={this.handleChange}
-                                                value={this.state.instructions}
+                                                value={this.state.orderInfo.phone}
                                     />
                                     <Button animated positive type="button" floated="left" onClick={() => {
-                                        this.handleEmptyStates()
-                                        this.handleClick()
+                                        this.handleClick();
                                         this.addSuborder.scrollIntoView({
                                             block: "end",
                                             behavior: "smooth",
@@ -543,19 +334,15 @@ class NewOrderForm extends React.Component {
                                         </Button.Content>
                                     </Button>
                                     <Button type='submit' positive floated="left" content="Place Order"/>
-                                    <Button type="reset" negative onClick={() => {
-                                        this.clearSelection(), this.subOrderForm.clearSelection()
-                                    }} content="Clear"/>
-                                    <br></br>
-                                    <strong>Number of Suborders: {this.index}</strong>
+                                    <Button type="reset" negative onClick={this.clearSelection} content="Clear"/>
                                 </Form>
+                                <strong>Number of Suborders: {this.index}</strong>
                             </Grid.Column>
-                            <Grid.Column width={9} id="grid-column-order">
+                            <Grid.Column width={7} id="grid-column-order">
                                 <div ref={(el) => {
                                     this.addSuborder = el;
                                 }}>
                                     <Form>
-
                                         <Segment.Group>
                                             {SubOrders}
                                         </Segment.Group>

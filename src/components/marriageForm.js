@@ -4,7 +4,8 @@ import VitalRecordForm from "./vitalRecordForm";
 
 class MarriageSearchForm extends React.Component {
     constructor() {
-        super()
+        super();
+
         this.state = {
             certificateNum: '',
             groomLastName: '',
@@ -29,7 +30,7 @@ class MarriageSearchForm extends React.Component {
                                             this.setState({groomFirstName: value})
                                             this.props.callBack("groomFirstName", value, this.props.index, this.props.state.groomFirstName)
                                         }}
-                                        value={this.props.state.groomFirstName[this.props.index]}
+                                        value={this.state.groomFirstName}
                             />
                             <Form.Input label="Groom Last Name"
                                         name="groomLastName"
@@ -39,7 +40,7 @@ class MarriageSearchForm extends React.Component {
                                             this.setState({groomLastName: value})
                                             this.props.callBack("groomLastName", value, this.props.index, this.props.state.groomLastName)
                                         }}
-                                        value={this.props.state.groomLastName[this.props.index]}
+                                        value={this.state.groomLastName}
                             />
                         </Form.Group>
                         <Form.Group>
@@ -51,7 +52,7 @@ class MarriageSearchForm extends React.Component {
                                             this.setState({brideFirstName: value})
                                             this.props.callBack("brideFirstName", value, this.props.index, this.props.state.brideFirstName)
                                         }}
-                                        value={this.props.state.brideFirstName[this.props.index]}
+                                        value={this.state.brideFirstName}
                             />
                             <Form.Input label="Bride Last Name"
                                         name="brideLastName"
@@ -61,7 +62,7 @@ class MarriageSearchForm extends React.Component {
                                             this.setState({brideLastName: value})
                                             this.props.callBack("brideLastName", value, this.props.index, this.props.state.brideLastName)
                                         }}
-                                        value={this.props.state.brideLastName[this.props.index]}
+                                        value={this.state.brideLastName}
                             />
                         </Form.Group>
                         <Form.Input label="Marriage Place"
@@ -72,7 +73,7 @@ class MarriageSearchForm extends React.Component {
                                         this.setState({marriagePlace: value})
                                         this.props.callBack("marriagePlace", value, this.props.index, this.props.state.marriagePlace)
                                     }}
-                                    value={this.props.state.marriagePlace[this.props.index]}
+                                    value={this.state.marriagePlace}
                         />
                         <VitalRecordForm callBack={this.props.callBack} index={this.props.index}
                                          state={this.props.state} boroughOptions={this.props.boroughOptions}/>

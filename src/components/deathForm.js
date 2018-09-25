@@ -4,7 +4,8 @@ import VitalRecordForm from "./vitalRecordForm";
 
 class DeathSearchForm extends React.Component {
     constructor() {
-        super()
+        super();
+
         this.state = {
             cemetery: '',
             lastName: '',
@@ -13,6 +14,7 @@ class DeathSearchForm extends React.Component {
             deathPlace: '',
         }
     }
+
     render() {
         return (
             <Grid>
@@ -82,7 +84,7 @@ class DeathSearchForm extends React.Component {
 
 class DeathCertForm extends React.Component {
     constructor() {
-        super()
+        super();
         this.state = {
             cemetery: '',
             lastName: '',
@@ -92,6 +94,7 @@ class DeathCertForm extends React.Component {
             certificateNum: '',
         }
     }
+
     render() {
         return (
             <Grid>
@@ -102,7 +105,7 @@ class DeathCertForm extends React.Component {
                                     placeholder="Certificate Number"
                                     maxLength={40}
                                     onChange={(e, {value}) => {
-                                        this.setState({certificateNum: value})
+                                        this.setState({certificateNum: value});
                                         this.props.callBack("certificateNum", value, this.props.index, this.props.state.certificateNum)
                                     }}
                                     value={this.props.state.certificateNum[this.props.index]}
