@@ -93,7 +93,6 @@ class NewOrderForm extends React.Component {
             newItems[index][name] = value;
             return {suborderList: newItems}
         });
-        console.log(this.state.suborderList);
     };
 
     handleChange = (e) => {
@@ -148,44 +147,7 @@ class NewOrderForm extends React.Component {
             method: "POST",
             body: JSON.stringify({
                 orderInfo: this.state.orderInfo,
-                orderType: this.state.orderType,
-                gender: this.state.gender,
-                motherName: this.state.motherName,
-                fatherName: this.state.fatherName,
-                birthPlace: this.state.birthPlace,
-                certificateNum: this.state.certificateNum,
-                groomLastName: this.state.groomFirstName,
-                groomFirstName: this.state.groomFirstName,
-                brideLastName: this.state.brideLastName,
-                brideFirstName: this.state.brideFirstName,
-                month: this.state.month,
-                day: this.state.day,
-                year: this.state.year,
-                marriagePlace: this.state.marriagePlace,
-                letter: this.state.letter,
-                deathPlace: this.state.deathPlace,
-                cemetery: this.state.cemetery,
-                firstName: this.state.firstName,
-                middleName: this.state.middleName,
-                lastName: this.state.lastName,
-                block: this.state.block,
-                lot: this.state.lot,
-                roll: this.state.roll,
-                borough: this.state.borough,
-                buildingNum: this.state.buildingNum,
-                street: this.state.street,
-                mail: this.state.mail,
-                contactNum: this.state.contactNum,
-                imgId: this.state.imgId,
-                imgTitle: this.state.imgTitle,
-                comment: this.state.comment,
-                personalUseAgreement: this.state.personalUseAgreement,
-                addDescription: this.state.addDescription,
-                collection: this.state.collection,
-                printSize: this.state.printSize,
-                numCopies: this.state.numCopies,
-                status: this.state.status
-
+                suborderList: this.state.suborderList
             })
         })
             .then(handleFetchErrors)
@@ -220,7 +182,7 @@ class NewOrderForm extends React.Component {
                 <SubOrderForm
                     key={suborder.key}
                     index={suborder.key}
-                    state={this.state}
+                    // state={this.state}
                     ref={instance => {
                         this.subOrderForm = instance
                     }}

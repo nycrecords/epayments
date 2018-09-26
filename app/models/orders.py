@@ -193,4 +193,14 @@ class Suborders(db.Model):
                     'current_status': self.status
                 }
             }
-        )
+        ) if metadata else \
+            es.update(
+                index='suborders',
+                doc_type='suborders',
+                id=self.id,
+                body={
+                    'doc': {
+                        'current_status': self.status
+                    }
+                }
+            )

@@ -1,11 +1,10 @@
 import React from 'react';
-import {Button, Grid, Popup, Form} from 'semantic-ui-react';
+import {Button, Form, Grid, Popup} from 'semantic-ui-react';
 import TaxPhotoForm from "./taxPhotoForm"
-import PropertyCardForm from "./propertyCardForm"
 import PhotoGalleryForm from "./photoGalleryForm"
 import {BirthForm} from "./birthForm"
-import {MarriageCertForm, MarriageSearchForm} from "./marriageForm";
-import {DeathCertForm, DeathSearchForm} from "./deathForm";
+import {MarriageCertForm} from "./marriageForm";
+import {DeathForm} from "./deathForm";
 
 
 const orderTypeOptions = [
@@ -33,21 +32,15 @@ class SubOrderForm extends React.Component {
         super();
         this.state = {
             orderType: '',
-            numCopies: '',
+            numCopies: '1',
             status: '',
         };
-
-        this.orderList = ['Tax Photo', 'Photo Gallery',
-            'Property Card', 'Marriage Search',
-            'Marriage Cert', 'Death Search',
-            'Death Cert', 'Birth Search',
-            'Birth Cert'];
 
         this.handleChange = this.handleChange.bind(this);
         this.clearSelection = () => {
             this.setState({
                 orderType: '',
-                numCopies: '',
+                numCopies: '1',
                 status: '',
             })
         };
@@ -81,7 +74,7 @@ class SubOrderForm extends React.Component {
                 break;
             case 'Death Cert':
                 test = (
-                    <DeathCertForm index={this.props.index} handleFormChange={this.handleFormChange} />
+                    <DeathForm index={this.props.index} handleFormChange={this.handleFormChange} />
                 );
                 break;
             case 'Marriage Cert':
@@ -114,6 +107,7 @@ class SubOrderForm extends React.Component {
                         <Popup trigger={
                             <Button floated="right" type="button" size="mini" icon='remove' color='red' compact
                                     onClick={() => {
+                                        // this.clearSelection();
                                         this.props.deleteSuborder(this.props.index)
                                     }}>
                             </Button>} content={"Remove"}
@@ -132,39 +126,6 @@ class SubOrderForm extends React.Component {
                         />
 
                         {test}
-
-                        {/*{this.props.state.showTaxForm[this.props.index] &&*/}
-                        {/*<TaxPhotoForm callBack={this.props.callBack} index={this.props.index}*/}
-                        {/*state={this.props.state}*/}
-                        {/*boroughOptions={boroughOptions}/>}*/}
-                        {/*{this.props.state.showPhotoGalleryForm[this.props.index] &&*/}
-                        {/*<PhotoGalleryForm callBack={this.props.callBack} index={this.props.index}*/}
-                        {/*state={this.props.state}/>}*/}
-                        {/*{this.props.state.showPropertyForm[this.props.index] &&*/}
-                        {/*<PropertyCardForm callBack={this.props.callBack} index={this.props.index}*/}
-                        {/*state={this.props.state} boroughOptions={boroughOptions}/>}*/}
-                        {/*{this.props.state.showMarriageSearch[this.props.index] &&*/}
-                        {/*<MarriageSearchForm callBack={this.props.callBack} index={this.props.index}*/}
-                        {/*state={this.props.state} boroughOptions={boroughOptions}/>}*/}
-                        {/*{this.props.state.showMarriageCert[this.props.index] &&*/}
-                        {/*<MarriageCertForm callBack={this.props.callBack} index={this.props.index}*/}
-                        {/*state={this.props.state} boroughOptions={boroughOptions}/>}*/}
-                        {/*{this.props.state.showDeathSearch[this.props.index] &&*/}
-                        {/*<DeathSearchForm callBack={this.props.callBack} index={this.props.index}*/}
-                        {/*state={this.props.state} boroughOptions={boroughOptions}/>}*/}
-                        {/*{this.props.state.showDeathCert[this.props.index] &&*/}
-                        {/*<DeathCertForm callBack={this.props.callBack} index={this.props.index}*/}
-                        {/*state={this.props.state} boroughOptions={boroughOptions}/>}*/}
-                        {/*{this.props.state.showBirthSearch[this.props.index] &&*/}
-                        {/*<BirthSearchForm callBack={this.props.callBack} index={this.props.index}*/}
-                        {/*state={this.props.state} genderOptions={genderOptions}*/}
-                        {/*boroughOptions={boroughOptions}/>}*/}
-                        {/*{this.props.state.showBirthCert[this.props.index] &&*/}
-                        {/*<BirthCertForm callBack={this.props.callBack} index={this.props.index}*/}
-                        {/*state={this.props.state} boroughOptions={boroughOptions}*/}
-                        {/*genderOptions={genderOptions}/>}*/}
-
-
                         <Form.Input label="Number of Copies"
                                     name="numCopies"
                                     placeholder="Number of Copies"
@@ -174,12 +135,6 @@ class SubOrderForm extends React.Component {
                                             this.handleChange(e)
                                         }
                                     }}
-                            // onChange={(e, {value}) => {
-                            //     if (/^[0-9]+$/.test(value.slice(-1)) || value === '') {
-                            //         this.setState({numCopies: value});
-                            //         this.props.callBack("numCopies", value, this.props.index, this.props.state.numCopies);
-                            //         }
-                            // }}
                                     value={this.state.numCopies}
                         />
 
