@@ -1,5 +1,5 @@
 import React from 'react';
-import {Button, Form, Grid, Popup} from 'semantic-ui-react';
+import {Button, Form, Grid, Popup, Segment} from 'semantic-ui-react';
 import TaxPhotoForm from "./taxPhotoForm"
 import PhotoGalleryForm from "./photoGalleryForm"
 import {BirthForm} from "./birthForm"
@@ -37,14 +37,23 @@ class SubOrderForm extends React.Component {
         };
 
         this.handleChange = this.handleChange.bind(this);
-        this.clearSelection = () => {
-            this.setState({
-                orderType: '',
-                numCopies: '1',
-                status: '',
-            })
-        };
+        // this.clearSelection = () => {
+        //     this.setState({
+        //         orderType: '',
+        //         numCopies: '1',
+        //         status: '',
+        //     })
+        // };
     }
+
+    clearSelection = () => {
+        this.setState({
+            orderType: '',
+            numCopies: '1',
+            status: '',
+        });
+        this.props.deleteSuborder(this.props.index);
+    };
 
     handleChange = (e) => {
         this.setState({
@@ -69,27 +78,27 @@ class SubOrderForm extends React.Component {
         switch (this.state.orderType) {
             case 'Birth Cert':
                 test = (
-                    <BirthForm index={this.props.index} handleFormChange={this.handleFormChange} />
+                    <BirthForm index={this.props.index} handleFormChange={this.handleFormChange}/>
                 );
                 break;
             case 'Death Cert':
                 test = (
-                    <DeathForm index={this.props.index} handleFormChange={this.handleFormChange} />
+                    <DeathForm index={this.props.index} handleFormChange={this.handleFormChange}/>
                 );
                 break;
             case 'Marriage Cert':
                 test = (
-                    <MarriageCertForm index={this.props.index} handleFormChange={this.handleFormChange} />
+                    <MarriageCertForm index={this.props.index} handleFormChange={this.handleFormChange}/>
                 );
                 break;
             case 'Tax Photo':
                 test = (
-                    <TaxPhotoForm index={this.props.index} handleFormChange={this.handleFormChange} />
+                    <TaxPhotoForm index={this.props.index} handleFormChange={this.handleFormChange}/>
                 );
                 break;
             case 'Photo Gallery':
                 test = (
-                    <PhotoGalleryForm index={this.props.index} handleFormChange={this.handleFormChange} />
+                    <PhotoGalleryForm index={this.props.index} handleFormChange={this.handleFormChange}/>
                 );
                 break;
             // case 'Property Card':
@@ -99,17 +108,16 @@ class SubOrderForm extends React.Component {
             //     break;
             // no default
         }
+        console.log(this.props.index);
 
         return (
+            <Segment color={'black'}>
             <Grid>
                 <Grid.Row>
                     <Grid.Column>
                         <Popup trigger={
                             <Button floated="right" type="button" size="mini" icon='remove' color='red' compact
-                                    onClick={() => {
-                                        // this.clearSelection();
-                                        this.props.deleteSuborder(this.props.index)
-                                    }}>
+                                    onClick={this.clearSelection.bind(this)}>
                             </Button>} content={"Remove"}
                         />
                         <h4>
@@ -150,6 +158,7 @@ class SubOrderForm extends React.Component {
                     </Grid.Column>
                 </Grid.Row>
             </Grid>
+            </Segment>
         );
     }
 }

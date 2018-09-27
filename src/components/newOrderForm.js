@@ -88,6 +88,7 @@ class NewOrderForm extends React.Component {
     };
 
     handleSuborderListChange = (name, value, index) => {
+        console.log(this.state.suborderList);
         this.setState(prevState => {
             const newItems = [...prevState.suborderList];
             newItems[index][name] = value;
@@ -164,22 +165,23 @@ class NewOrderForm extends React.Component {
     };
 
     deleteSuborder = (index) => {
-        let newSuborderList = this.state.suborderList.slice();
-        newSuborderList.splice(index, 1);
-        for (let i = index; i < newSuborderList.length; i++) {
-            if (newSuborderList[i].key > index) {
-                newSuborderList[i].key--;
-            }
-        }
+        debugger;
+        let newSuborderList = this.state.suborderList.filter((val) => {return val.key != index});
+        // let newSuborderList = this.state.suborderList.slice();
+
+        // newSuborderList.splice(index, 1);
+        // for (let i = index; i < newSuborderList.length; i++) {
+        //     if (newSuborderList[i].key > index) {
+        //         newSuborderList[i].key--;
+        //     }
+        // }
         this.setState({suborderList: newSuborderList});
-        this.index--;
+        // this.index--;
     };
 
     render() {
         const SubOrders = this.state.suborderList.map((suborder) =>
-
-            <Segment color={'black'} compact key={suborder.key}>
-                <SubOrderForm
+            <SubOrderForm
                     key={suborder.key}
                     index={suborder.key}
                     // state={this.state}
@@ -189,7 +191,6 @@ class NewOrderForm extends React.Component {
                     handleSuborderListChange={this.handleSuborderListChange}
                     deleteSuborder={this.deleteSuborder}
                 />
-            </Segment>
         );
 
         return (
@@ -298,7 +299,7 @@ class NewOrderForm extends React.Component {
                                     <Button type='submit' positive floated="left" content="Place Order"/>
                                     <Button type="reset" negative onClick={this.clearSelection} content="Clear"/>
                                 </Form>
-                                <strong>Number of Suborders: {this.index}</strong>
+                                <strong>Number of Suborders: {this.state.suborderList.length}</strong>
                             </Grid.Column>
                             <Grid.Column width={7} id="grid-column-order">
                                 <div ref={(el) => {
