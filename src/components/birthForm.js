@@ -1,6 +1,6 @@
 import React from 'react';
-import {Grid, Form} from 'semantic-ui-react';
-import {monthOptions, dayOptions, genderOptions} from '../constants/constants';
+import {Form, Grid} from 'semantic-ui-react';
+import {dayOptions, genderOptions, monthOptions} from '../constants/constants';
 
 class BirthForm extends React.Component {
     constructor() {
@@ -115,6 +115,7 @@ class BirthForm extends React.Component {
                                     onChange={this.handleChange}
                                     value={this.state.middleName}
                         />
+
                         <p><strong>Date of Birth</strong></p>
                         <Form.Group>
                             <Form.Select label="Month"
@@ -146,6 +147,7 @@ class BirthForm extends React.Component {
                                         value={this.state.year}
                             />
                         </Form.Group>
+
                         <p><strong>Additional Years to Search</strong></p>
                         {/* Use reduce to start map from second index since first index is used above */}
                         {this.state.years.reduce((mappedArray, year, index) => {
@@ -161,6 +163,7 @@ class BirthForm extends React.Component {
                                 return mappedArray;
                             }, []
                         )}
+
                         <Form.Input label="Place of birth"
                                     name="birthPlace"
                                     placeholder="Birth Place"
@@ -168,6 +171,7 @@ class BirthForm extends React.Component {
                                     onChange={this.handleChange}
                                     value={this.state.birthPlace}
                         />
+
                         <p><strong>BOROUGH/COUNTY Available</strong></p>
                         {this.state.boroughs.map((borough, i) =>
                             <Form.Checkbox key={i}
@@ -176,6 +180,7 @@ class BirthForm extends React.Component {
                                            onChange={this.handleBoroughChange.bind(this, i)}
                             />
                         )}
+
                         <Form.Input label="Father's Name"
                                     name="fatherName"
                                     placeholder="Father's Name"
@@ -199,6 +204,7 @@ class BirthForm extends React.Component {
                         />
                         <Form.Checkbox label='Attach "Letter of Exemplification"'
                                        name="letter"
+                                       className="letterField"
                                        onChange={this.handleLetterChange}
                         />
                     </Grid.Column>
@@ -208,45 +214,4 @@ class BirthForm extends React.Component {
     }
 }
 
-class BirthCertForm extends React.Component {
-    constructor() {
-        super();
-
-        this.state = {
-            gender: '',
-            fatherName: '',
-            motherName: '',
-            birthPlace: '',
-            lastName: '',
-            firstName: '',
-            middleName: '',
-            certificateNum: '',
-        }
-    }
-
-    render() {
-        return (
-            <Grid>
-                <Grid.Row>
-                    <Grid.Column>
-                        <Form.Input label="Certificate Number"
-                                    name="certificateNum"
-                                    placeholder="Certificate Number"
-                                    maxLength={40}
-                                    onChange={(e, {value}) => {
-                                        this.setState({certificateNum: value});
-                                        this.props.callBack("certificateNum", value, this.props.index, this.props.state.certificateNum)
-                                    }}
-                                    value={this.props.state.certificateNum[this.props.index]}
-                        />
-                        {/*<BirthSearchForm callBack={this.props.callBack} index={this.props.index}*/}
-                        {/*state={this.props.state} boroughOptions={this.props.boroughOptions}*/}
-                        {/*genderOptions={genderOptions}/>*/}
-                    </Grid.Column>
-                </Grid.Row>
-            </Grid>
-        )
-    }
-}
-
-export {BirthForm, BirthCertForm};
+export {BirthForm};

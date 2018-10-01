@@ -2,177 +2,207 @@ import React from 'react';
 import {Grid, Form} from 'semantic-ui-react';
 
 class TaxPhotoForm extends React.Component {
-     constructor() {
-         super();
-         this.state = {
-             block: '',
-             lot: '',
-             row: '',
-             borough: '',
-             buildingNum: '',
-             street: '',
-             mail: false,
-             contactNum: '',
-             comment: '',
-             addDescription: '',
-             collection: '',
-             printSize: ''
-         }
-     }
+    constructor() {
+        super();
+        this.state = {
+            collection: '',
+            borough: '',
+            buildingNum: '',
+            street: '',
+            description: '',
+            block: '',
+            lot: '',
+            roll: '',
+            size: '',
+            letter: false,
+            deliveryMethod: '',
+            contactNum: '',
+        }
+    }
+
+    handleChange = (e) => {
+        this.setState({
+            [e.target.name]: e.target.value
+        });
+        this.props.handleFormChange(e.target.name, e.target.value);
+    };
+
+    handleRadioChange = (e, {name, value}) => {
+        this.setState({
+            [name]: value
+        });
+        this.props.handleFormChange(name, value);
+    };
+
     render() {
         return (
             <Grid>
                 <Grid.Row>
                     <Grid.Column>
-                        <Form.Group inline>
+                        <Form.Group grouped>
                             <label>Collection</label>
                             <Form.Radio
-                                // name="collection"
                                 label='1940'
-                                checked={this.props.state.collection[this.props.index] === "1940"}
-                                onChange={(e) => {
-                                    this.setState({collection: "1940"})
-                                    this.props.callBack("collection", "1940", this.props.index, this.props.state.collection)
-                                }}
+                                name='collection'
+                                value='1940'
+                                checked={this.state.collection === "1940"}
+                                onChange={this.handleRadioChange}
 
                             />
                             <Form.Radio
-                                // name="collection"
                                 label='1980'
-                                checked={this.props.state.collection[this.props.index] === "1980"}
-                                onChange={(e) => {
-                                    this.setState({collection: "1980"})
-                                    this.props.callBack("collection", "1980", this.props.index, this.props.state.collection)
-                                }}
+                                name='collection'
+                                value='1980'
+                                checked={this.state.collection === "1980"}
+                                onChange={this.handleRadioChange}
                             />
                             <Form.Radio
-                                // name="collection"
                                 label='Both'
-                                checked={this.props.state.collection[this.props.index] === "Both"}
-                                onChange={(e) => {
-                                    this.setState({collection: "Both"})
-                                    this.props.callBack("collection", "Both", this.props.index, this.props.state.collection)
-                                }}
+                                name='collection'
+                                value='Both'
+                                checked={this.state.collection === "Both"}
+                                onChange={this.handleRadioChange}
                             />
                         </Form.Group>
 
+                        <Form.Group grouped>
+                            <label>Borough</label>
+                            <Form.Radio
+                                label='Brooklyn'
+                                name='borough'
+                                value='Brooklyn'
+                                checked={this.state.borough === "Brooklyn"}
+                                onChange={this.handleRadioChange}
+
+                            />
+                            <Form.Radio
+                                label='Manhattan'
+                                name='borough'
+                                value='Manhattan'
+                                checked={this.state.borough === "Manhattan"}
+                                onChange={this.handleRadioChange}
+                            />
+                            <Form.Radio
+                                label='Queens'
+                                name='borough'
+                                value='Queens'
+                                checked={this.state.borough === "Queens"}
+                                onChange={this.handleRadioChange}
+                            />
+                            <Form.Radio
+                                label='Staten Island'
+                                name='borough'
+                                value='Staten Island'
+                                checked={this.state.borough === "Staten Island"}
+                                onChange={this.handleRadioChange}
+                            />
+                            <Form.Radio
+                                label='Bronx'
+                                name='borough'
+                                value='Bronx'
+                                checked={this.state.borough === "Bronx"}
+                                onChange={this.handleRadioChange}
+                            />
+                        </Form.Group>
+
+                        <Form.Input label="Building Number"
+                                    name="buildingNum"
+                                    placeholder="Building Number"
+                                    maxLength={10}
+                                    required
+                                    onChange={this.handleChange}
+                                    value={this.state.buildingNum}
+                        />
+                        <Form.Input label="Street Name"
+                                    name="street"
+                                    placeholder="Street"
+                                    maxLength={40}
+                                    onChange={this.handleChange}
+                                    value={this.state.street}
+                        />
+                        <Form.Input label="Description"
+                                    name="description"
+                                    placeholder="Description"
+                                    maxLength={35}
+                                    onChange={this.handleChange}
+                                    value={this.state.description}
+                        />
+
+                        <p><strong>Block & Lot Information</strong></p>
                         <Form.Input label="Block"
                                     name="block"
                                     placeholder="Block"
                                     maxLength={9}
-                                    onChange={(e, {value}) => {
-                                        this.setState({block: value})
-                                        this.props.callBack("block", value, this.props.index, this.props.state.block)
-                                    }}
-                                    value={this.props.state.block[this.props.index]}
+                                    onChange={this.handleChange}
+                                    value={this.state.block}
                         />
                         <Form.Input label="Lot"
                                     name="lot"
                                     placeholder="Lot"
                                     maxLength={9}
-                                    onChange={(e, {value}) => {
-                                        this.setState({lot: value})
-                                        this.props.callBack("lot", value, this.props.index, this.props.state.lot)
-                                    }}
-                                    value={this.props.state.lot[this.props.index]}
+                                    onChange={this.handleChange}
+                                    value={this.state.lot}
                         />
-                        <Form.Input label="Roll"
+                        <Form.Input label="Roll# (1940s Only)"
                                     name="roll"
-                                    placeholder="Roll#"
+                                    placeholder="Roll"
                                     maxLength={9}
-                                    onChange={(e, {value}) => {
-                                        this.setState({roll: e.target.value})
-                                        this.props.callBack("roll", value, this.props.index, this.props.state.roll)
-                                    }}
-                                    value={this.props.state.roll[this.props.index]}
+                                    onChange={this.handleChange}
+                                    value={this.state.roll}
                         />
-                        <Form.Group inline>
-                            <label>Printing Size</label>
 
+                        <p><strong>Print Information</strong></p>
+                        <Form.Group grouped>
+                            <label>Collection</label>
                             <Form.Radio
-                                // name={"printSize"}
                                 label='8" x 10" Print'
-                                checked={this.props.state.printSize[this.props.index] === '8x10'}
-                                onChange={(e) => {
-                                    this.setState({printSize: '8x10'})
-                                    this.props.callBack("printSize", '8x10', this.props.index, this.props.state.printSize);
-                                }}
-                            />
+                                name='size'
+                                value='8x10'
+                                checked={this.state.size === "8x10"}
+                                onChange={this.handleRadioChange}
 
+                            />
                             <Form.Radio
-                                // name={"printSize"}
                                 label='11" x 14" Print'
-                                checked={this.props.state.printSize[this.props.index] === '11x14'}
-                                onChange={(e) => {
-                                    this.setState({printSize: '11x14'})
-                                    this.props.callBack("printSize", '11x14', this.props.index, this.props.state.printSize);
-                                }}
+                                name='size'
+                                value='11x14'
+                                checked={this.state.size === "11x14"}
+                                onChange={this.handleRadioChange}
                             />
                         </Form.Group>
-                        <Form.Select label="Borough"
-                                     required
-                                     name="borough"
-                                     options={this.props.boroughOptions}
-                                     placeholder="Borough"
-                                     onChange={(e, {value}) => {
-                                         this.setState({borough: value});
-                                         this.props.callBack("borough", value, this.props.index, this.props.state.borough);
 
-                                     }}
-                                     value={this.props.state.borough[this.props.index]}
-                        />
-                        <Form.Input label="Building Number"
-                                    name="buildingNum"
-                                    placeholder="Building Number"
-                                    maxLength={10}
-                                    onChange={(e, {value}) => {
-                                        this.setState({buildingNum: value})
-                                        this.props.callBack("buildingNum", value, this.props.index, this.props.state.buildingNum)
-                                    }}
-                                    value={this.props.state.buildingNum[this.props.index]}
-                        />
-                        <Form.Input label="Street"
-                                    name="street"
-                                    placeholder="Street"
-                                    maxLength={40}
-                                    onChange={(e, {value}) => {
-                                        this.setState({street: value})
-                                        this.props.callBack("street", value, this.props.index, this.props.state.street)
-                                    }}
-                                    value={this.props.state.street[this.props.index]}
-                        />
-                        <Form.Checkbox label="Mail"
-                                       name="mail"
-                                       onChange={() => {
-                                           (this.state.mail === false) ?
-                                               this.props.callBack("mail", true, this.props.index, this.props.state.mail) :
-                                               this.props.callBack("mail", false, this.props.index, this.props.state.mail);
-                                           (this.state.mail === false) ?
-                                               this.setState({mail: true}) :
-                                               this.setState({mail: false})
-                                       }}
-                                       checked={this.props.state.mail[this.props.index]}
-                        />
-                        <Form.Input label="description"
-                                    name="addDescription"
-                                    placeholder="Description"
-                                    maxLength={35}
-                                    onChange={(e, {value}) => {
-                                        this.setState({addDescription: value})
-                                        this.props.callBack("addDescription", value, this.props.index, this.props.state.addDescription)
-                                    }}
-                                    value={this.props.state.addDescription[this.props.index]}
-                        />
-                        <Form.Input label="Contact Number"
-                                    name="contactNum"
-                                    placeholder="Contact Number"
-                                    maxLength={10}
-                                    onChange={(e, {value}) => {
-                                        this.setState({contactNum: value})
-                                        this.props.callBack("contactNum", value, this.props.index, this.props.state.contactNum)
-                                    }}
-                                    value={this.props.state.contactNum[this.props.index]}
-                        />
+                        <Form.Group grouped>
+                            <label>Delivery Method</label>
+                            <Form.Radio
+                                label='Mail'
+                                name='deliveryMethod'
+                                value='mail'
+                                checked={this.state.deliveryMethod === "mail"}
+                                onChange={this.handleRadioChange}
+
+                            />
+                            <Form.Radio
+                                label='Email'
+                                name='deliveryMethod'
+                                value='email'
+                                checked={this.state.deliveryMethod === "email"}
+                                onChange={this.handleRadioChange}
+                            />
+                            <Form.Radio
+                                label='Pickup'
+                                name='deliveryMethod'
+                                value='pickup'
+                                checked={this.state.deliveryMethod === "pickup"}
+                                onChange={this.handleRadioChange}
+                            />
+                            {this.state.deliveryMethod === "pickup" && <Form.Input label="Contact Number"
+                                                                                   name="contactNum"
+                                                                                   placeholder="Contact Number"
+                                                                                   maxLength={10}
+                                                                                   onChange={this.handleChange}
+                                                                                   value={this.state.contactNum}
+                            />}
+                        </Form.Group>
                     </Grid.Column>
                 </Grid.Row>
             </Grid>

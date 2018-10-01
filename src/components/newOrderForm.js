@@ -1,20 +1,9 @@
-import React, {} from 'react';
+import React from 'react';
 import {Link} from 'react-router-dom';
-import {
-    Button,
-    Container,
-    Divider,
-    Grid,
-    Header,
-    Form,
-    Loader,
-    Dimmer,
-    Icon,
-    Segment,
-} from 'semantic-ui-react';
+import {Button, Container, Dimmer, Divider, Form, Grid, Header, Icon, Loader, Segment,} from 'semantic-ui-react';
 import swal from 'sweetalert';
 import {csrfFetch, handleFetchErrors} from "../utils/fetch";
-import SubOrderForm from "./suborderform";
+import NewSuborderForm from "./newSuborderForm";
 
 class NewOrderForm extends React.Component {
     constructor() {
@@ -68,27 +57,19 @@ class NewOrderForm extends React.Component {
                             loading: false,
                             suborderList: [{key: 0}],
                         });
-                        this.subOrderForm.clearSelection();
+                        this.newSuborderForm.clearSelection();
                     }
                 });
         };
 
-        this.deleteSuborderValues = (index, state, name) => {
-            let newState = state.slice();
-            newState.splice(index, 1);
-            for (var i = index; i < newState; i++) {
-                newState[i] = newState[i - 1]
-            }
-            this.setState({[name]: newState})
-        };
         this.index = 1;
         this.message = "";
-        this.orderList = ['Tax Photo', 'Photo Gallery', 'Property Card', 'Marriage Search',
-            'Marriage Cert', 'Death Search', 'Death Cert', 'Birth Search', 'Birth Cert'];
     };
 
-    handleSuborderListChange = (name, value, index) => {
-        console.log(this.state.suborderList);
+    handleSuborderListChange = (name, value, key) => {
+        let index = this.state.suborderList.findIndex((suborder) => {
+            return suborder.key === key;
+        });
         this.setState(prevState => {
             const newItems = [...prevState.suborderList];
             newItems[index][name] = value;
@@ -165,32 +146,24 @@ class NewOrderForm extends React.Component {
     };
 
     deleteSuborder = (index) => {
-        debugger;
-        let newSuborderList = this.state.suborderList.filter((val) => {return val.key != index});
-        // let newSuborderList = this.state.suborderList.slice();
-
-        // newSuborderList.splice(index, 1);
-        // for (let i = index; i < newSuborderList.length; i++) {
-        //     if (newSuborderList[i].key > index) {
-        //         newSuborderList[i].key--;
-        //     }
-        // }
+        let newSuborderList = this.state.suborderList.filter((val) => {
+            return val.key !== index
+        });
         this.setState({suborderList: newSuborderList});
-        // this.index--;
     };
 
     render() {
-        const SubOrders = this.state.suborderList.map((suborder) =>
-            <SubOrderForm
-                    key={suborder.key}
-                    index={suborder.key}
-                    // state={this.state}
-                    ref={instance => {
-                        this.subOrderForm = instance
-                    }}
-                    handleSuborderListChange={this.handleSuborderListChange}
-                    deleteSuborder={this.deleteSuborder}
-                />
+        const Suborders = this.state.suborderList.map((suborder, i) =>
+            <NewSuborderForm
+                key={suborder.key}
+                suborderKey={suborder.key}
+                index={i}
+                ref={instance => {
+                    this.newSuborderForm = instance
+                }}
+                handleSuborderListChange={this.handleSuborderListChange}
+                deleteSuborder={this.deleteSuborder}
+            />
         );
 
         return (
@@ -287,8 +260,7 @@ class NewOrderForm extends React.Component {
                                             behavior: "smooth",
                                         });
                                         this.addSuborder.scrollTop = this.addSuborder.scrollHeight;
-                                    }}
-                                    >
+                                    }}>
                                         <Button.Content visible>
                                             <Icon name='add'/>
                                         </Button.Content>
@@ -307,7 +279,7 @@ class NewOrderForm extends React.Component {
                                 }}>
                                     <Form>
                                         <Segment.Group>
-                                            {SubOrders}
+                                            {Suborders}
                                         </Segment.Group>
                                     </Form>
                                 </div>

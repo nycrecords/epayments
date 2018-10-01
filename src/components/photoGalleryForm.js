@@ -6,16 +6,29 @@ class PhotoGalleryForm extends React.Component {
     constructor() {
         super();
         this.state = {
-            mail: false,
-            contactNum: ' ',
-            imgId: ' ',
-            imgTitle: ' ',
-            comment: ' ',
-            personalUseAgreement: false,
-            addDescription: ' ',
-            printSize: ' ',
+            imageID: '',
+            description: '',
+            additionalDescription: '',
+            size: '',
+            deliveryMethod: '',
+            contactNum: '',
+            comment: ''
         }
     }
+
+    handleChange = (e) => {
+        this.setState({
+            [e.target.name]: e.target.value
+        });
+        this.props.handleFormChange(e.target.name, e.target.value);
+    };
+
+    handleRadioChange = (e, {name, value}) => {
+        this.setState({
+            [name]: value
+        });
+        this.props.handleFormChange(name, value);
+    };
 
     render() {
         return (
@@ -23,112 +36,97 @@ class PhotoGalleryForm extends React.Component {
                 <Grid.Row>
                     <Grid.Column>
                         <Form.Input label="Image Identifier"
-                                    name="imgId"
+                                    name="imageIdentifier"
                                     placeholder="Image Identifier"
                                     maxLength={20}
-                                    onChange={(e, {value}) => {
-                                        this.setState({imgId: value})
-                                        this.props.callBack("imgId", value, this.props.index, this.props.state.imgId)
-                                    }}
-                                    value={this.props.state.imgId[this.props.index]}
+                                    required
+                                    onChange={this.handleChange}
+                                    value={this.state.imageID}
                         />
 
                         <Form.Input label="Title/Description of Image"
-                                    name="imgTitle"
-                                    maxLength={500}
+                                    name="description"
+                                    maxLength={150}
                                     placeholder="Title/Description of Image"
-                                    onChange={(e, {value}) => {
-                                        this.setState({imgTitle: value})
-                                        this.props.callBack("imgTitle", value, this.props.index, this.props.state.imgTitle)
-                                    }}
-                                    value={this.props.state.imgTitle[this.props.index]}
+                                    onChange={this.handleChange}
+                                    value={this.state.description}
                         />
 
-                        <Form.Input label="Addition Description"
-                                    name="addDescription"
-                                    placeholder="Addition Description"
-                                    maxLength={500}
-                                    onChange={(e, {value}) => {
-                                        this.setState({addDescription: value})
-                                        this.props.callBack("addDescription", value, this.props.index, this.props.state.addDescription)
-                                    }}
-                                    value={this.props.state.addDescription[this.props.index]}
+                        <Form.Input label="Additional Description"
+                                    name="additionalDescription"
+                                    placeholder="Additional Description"
+                                    maxLength={150}
+                                    onChange={this.handleChange}
+                                    value={this.props.additionalDescription}
                         />
-                        <Form.Checkbox label="Mail"
-                                       name="mail"
-                                       onChange={() => {
-                                           (this.state.mail === false) ?
-                                               this.props.callBack("mail", true, this.props.index, this.props.state.mail) :
-                                               this.props.callBack("mail", false, this.props.index, this.props.state.mail);
-                                           (this.state.mail === false) ?
-                                               this.setState({mail: true}) :
-                                               this.setState({mail: false})
-                                       }}
-                                       checked={this.props.state.mail[this.props.index]}
-                        />
-                        <Form.Input label="Contact Number"
-                                    name="contactNum"
-                                    placeholder="Contact Number"
-                                    maxLength={10}
-                                    onChange={(e, {value}) => {
-                                        this.setState({contactNum: value})
-                                        this.props.callBack("contactNum", value, this.props.index, this.props.state.contactNum)
-                                    }}
-                                    value={this.props.state.contactNum[this.props.index]}
-                        />
-                        <Form.Checkbox label="Personal Use Agreement"
-                                       name="personalUseAgreement"
-                                       onChange={() => {
-                                           (this.state.personalUseAgreement === false) ?
-                                               this.props.callBack("personalUseAgreement", true, this.props.index, this.props.state.personalUseAgreement) :
-                                               this.props.callBack("personalUseAgreement", false, this.props.index, this.props.state.personalUseAgreement);
-                                           (this.state.personalUseAgreement === false) ?
-                                               this.setState({personalUseAgreement: true}) :
-                                               this.setState({personalUseAgreement: false})
-                                       }}
-                                       checked={this.props.state.personalUseAgreement[this.props.index]}
-                        />
+
+                        <p><strong>Print Information</strong></p>
+                        <Form.Group grouped>
+                            <label>Size</label>
+                            <Form.Radio
+                                label='8" x 10" Print'
+                                name='size'
+                                value='8x10'
+                                checked={this.state.size === "8x10"}
+                                onChange={this.handleRadioChange}
+
+                            />
+                            <Form.Radio
+                                label='11" x 14" Print'
+                                name='size'
+                                value='11x14'
+                                checked={this.state.size === "11x14"}
+                                onChange={this.handleRadioChange}
+                            />
+                            <Form.Radio
+                                label='16" x 20" Print'
+                                name='size'
+                                value='11x14'
+                                checked={this.state.size === "16x20"}
+                                onChange={this.handleRadioChange}
+                            />
+                        </Form.Group>
+
+                        <Form.Group grouped>
+                            <label>Delivery Method</label>
+                            <Form.Radio
+                                label='Mail'
+                                name='deliveryMethod'
+                                value='mail'
+                                checked={this.state.deliveryMethod === "mail"}
+                                onChange={this.handleRadioChange}
+
+                            />
+                            <Form.Radio
+                                label='Email'
+                                name='deliveryMethod'
+                                value='email'
+                                checked={this.state.deliveryMethod === "email"}
+                                onChange={this.handleRadioChange}
+                            />
+                            <Form.Radio
+                                label='Pickup'
+                                name='deliveryMethod'
+                                value='pickup'
+                                checked={this.state.deliveryMethod === "pickup"}
+                                onChange={this.handleRadioChange}
+                            />
+                            {this.state.deliveryMethod === "pickup" && <Form.Input label="Contact Number"
+                                                                                   name="contactNum"
+                                                                                   placeholder="Contact Number"
+                                                                                   maxLength={10}
+                                                                                   onChange={this.handleChange}
+                                                                                   value={this.state.contactNum}
+                            />}
+                        </Form.Group>
+
                         <Form.Input label="Comment"
                                     name="comment"
                                     placeholder="Comment"
                                     maxLength={255}
-                                    onChange={(e, {value}) => {
-                                        this.setState({comment: value})
-                                        this.props.callBack("comment", value, this.props.index, this.props.state.comment)
-                                    }}
-                                    value={this.props.state.comment[this.props.index]}
+                                    onChange={this.handleChange}
+                                    value={this.state.comment}
                         />
-                        <Form.Group inline required>
-                            <label>Printing Size</label>
-
-                            <Form.Radio
-                                label='8" x 10" Print'
-                                checked={this.props.state.printSize[this.props.index] === '8x10'}
-                                onChange={(e) => {
-                                    this.setState({printSize: '8x10'})
-                                    this.props.callBack("printSize", '8x10', this.props.index, this.props.state.printSize);
-                                }}
-                            />
-
-                            <Form.Radio
-                                label='11" x 14" Print'
-                                checked={this.props.state.printSize[this.props.index] === '11x14'}
-                                onChange={(e) => {
-                                    this.setState({printSize: '11x14'})
-                                    this.props.callBack("printSize", '11x14', this.props.index, this.props.state.printSize);
-                                }}
-                            />
-
-                            <Form.Radio
-                                label='16" x 20" Print'
-                                checked={this.props.state.printSize[this.props.index] === '16x20'}
-                                onChange={(e) => {
-                                    this.setState({printSize: '16x20'})
-                                    this.props.callBack("printSize", '16x20', this.props.index, this.props.state.printSize);
-                                }}
-                            />
-
-                        </Form.Group>
                     </Grid.Column>
                 </Grid.Row>
             </Grid>

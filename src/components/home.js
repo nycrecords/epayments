@@ -1,6 +1,6 @@
 import React from 'react';
 import {Link} from "react-router-dom";
-import {Button, Container, Dimmer, Rail, Grid, Header, Icon, Loader, Segment} from 'semantic-ui-react';
+import {Button, Container, Dimmer, Grid, Header, Icon, Loader, Rail, Segment} from 'semantic-ui-react';
 import {connect} from 'react-redux';
 import {mapDispatchToProps, mapStateToProps} from "../utils/reduxMappers";
 import OrderForm from "./order_form";
