@@ -582,7 +582,7 @@ def _create_new_birth_object(suborder, suborder_id):
                                         suborder_number=suborder_id)
     else:
         birth_object = BirthSearch(first_name=suborder.get('firstName'),
-                                   last_name=suborder['last_name'],
+                                   last_name=suborder['lastName'],
                                    middle_name=suborder.get('middleName'),
                                    gender=suborder.get('gender'),
                                    father_name=suborder.get('fatherName'),
