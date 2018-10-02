@@ -1,7 +1,7 @@
 from sqlalchemy.dialects.postgresql import ARRAY
 
 from app import db
-from app.constants import gender, order_types
+from app.constants import gender, order_types, delivery_method
 
 
 class BirthSearch(db.Model):
@@ -46,6 +46,14 @@ class BirthSearch(db.Model):
     _borough = db.Column(ARRAY(db.String(20), dimensions=1), nullable=False, name='borough')
     letter = db.Column(db.Boolean, nullable=True)
     comment = db.Column(db.String(255), nullable=True)
+    delivery_method = db.Column(
+        db.Enum(
+            delivery_method.MAIL,
+            delivery_method.EMAIL,
+            delivery_method.PICKUP,
+            name='delivery_method'
+        ), nullable=False
+    )
     suborder_number = db.Column(db.String(32), db.ForeignKey('suborders.id'), nullable=False)
 
     def __init__(
@@ -64,6 +72,7 @@ class BirthSearch(db.Model):
             borough,
             letter,
             comment,
+            _delivery_method,
             suborder_number
     ):
         self.first_name = first_name
@@ -80,6 +89,7 @@ class BirthSearch(db.Model):
         self._borough = borough
         self.letter = letter or None
         self.comment = comment or None
+        self.delivery_method = _delivery_method
         self.suborder_number = suborder_number
 
     @property
@@ -125,6 +135,7 @@ class BirthSearch(db.Model):
             'borough': self.borough,
             'letter': self.letter,
             'comment': self.comment,
+            'delivery_method': self.delivery_method,
             'suborder_number': self.suborder_number
         }
 
@@ -174,6 +185,14 @@ class BirthCertificate(db.Model):
     _borough = db.Column(ARRAY(db.String(20), dimensions=1), nullable=False, name='borough')
     letter = db.Column(db.Boolean, nullable=True)
     comment = db.Column(db.String(255), nullable=True)
+    delivery_method = db.Column(
+        db.Enum(
+            delivery_method.MAIL,
+            delivery_method.EMAIL,
+            delivery_method.PICKUP,
+            name='delivery_method'
+        ), nullable=False
+    )
     suborder_number = db.Column(db.String(32), db.ForeignKey('suborders.id'), nullable=False)
 
     def __init__(
@@ -193,6 +212,7 @@ class BirthCertificate(db.Model):
             borough,
             letter,
             comment,
+            _delivery_method,
             suborder_number
     ):
         self.certificate_number = certificate_number
@@ -210,6 +230,7 @@ class BirthCertificate(db.Model):
         self._borough = borough
         self.letter = letter or None
         self.comment = comment or None
+        self.delivery_method = _delivery_method
         self.suborder_number = suborder_number
 
     @property
@@ -256,5 +277,6 @@ class BirthCertificate(db.Model):
             'borough': self.borough,
             'letter': self.letter,
             'comment': self.comment,
+            'delivery_method': self.delivery_method,
             'suborder_number': self.suborder_number
         }

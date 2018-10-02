@@ -55,7 +55,7 @@ class NewOrderForm extends React.Component {
                                 phone: ''
                             },
                             loading: false,
-                            suborderList: [{key: 0}],
+                            suborderList: [{key: 0, numCopies: 1}],
                         });
                         this.newSuborderForm.clearSelection();
                     }
@@ -135,8 +135,24 @@ class NewOrderForm extends React.Component {
             .then(handleFetchErrors)
             .then((json) => {
                 // TODO: clear state?
-                this.setState({loading: false});
-                window.open(json.url);
+                this.index = 1;
+                        this.setState({
+                            orderInfo: {
+                                billingName: '',
+                                email: '',
+                                addressLine1: '',
+                                addressLine2: '',
+                                city: '',
+                                state: '',
+                                zipCode: '',
+                                phone: ''
+                            },
+                            loading: false,
+                            suborderList: [{key: 0, numCopies: 1}],
+                        });
+                        this.newSuborderForm.clearSelection();
+                // this.setState({loading: false});
+                // window.open(json.url);
 
             }).catch((error) => {
             console.error(error);
@@ -152,6 +168,19 @@ class NewOrderForm extends React.Component {
         this.setState({suborderList: newSuborderList});
     };
 
+    clearStateOnOrderTypeChange = (key) => {
+        // This function resets the order's suborderList values when order type is changed
+        let index = this.state.suborderList.findIndex((suborder) => {
+            return suborder.key === key;
+        });
+        this.setState(prevState => {
+            const newItems = [...prevState.suborderList];
+            newItems[index] = {key: key, numCopies: 1};
+            // newItems[index]['suborderList'] = {key: key};
+            return {suborderList: newItems}
+        });
+    };
+
     render() {
         const Suborders = this.state.suborderList.map((suborder, i) =>
             <NewSuborderForm
@@ -163,6 +192,7 @@ class NewOrderForm extends React.Component {
                 }}
                 handleSuborderListChange={this.handleSuborderListChange}
                 deleteSuborder={this.deleteSuborder}
+                clearStateOnOrderTypeChange={this.clearStateOnOrderTypeChange}
             />
         );
 

@@ -33,7 +33,8 @@ class DeathForm extends React.Component {
             fatherName: '',
             motherName: '',
             comment: '',
-            letter: false
+            letter: false,
+            deliveryMethod: ''
         }
     }
 
@@ -73,6 +74,13 @@ class DeathForm extends React.Component {
         this.setState({
             letter: !this.state.letter
         })
+    };
+
+    handleRadioChange = (e, {name, value}) => {
+        this.setState({
+            [name]: value
+        });
+        this.props.handleFormChange(name, value);
     };
 
     render() {
@@ -215,6 +223,25 @@ class DeathForm extends React.Component {
                                        className="letterField"
                                        onChange={this.handleLetterChange}
                         />
+
+                        <Form.Group grouped>
+                            <label>Delivery Method</label>
+                            <Form.Radio
+                                label='Mail'
+                                name='deliveryMethod'
+                                value='mail'
+                                checked={this.state.deliveryMethod === "mail"}
+                                onChange={this.handleRadioChange}
+
+                            />
+                            <Form.Radio
+                                label='Email'
+                                name='deliveryMethod'
+                                value='email'
+                                checked={this.state.deliveryMethod === "email"}
+                                onChange={this.handleRadioChange}
+                            />
+                        </Form.Group>
                     </Grid.Column>
                 </Grid.Row>
             </Grid>

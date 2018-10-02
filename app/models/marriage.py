@@ -1,6 +1,7 @@
 from sqlalchemy.dialects.postgresql import ARRAY
 
 from app import db
+from app.constants import delivery_method
 
 
 class MarriageSearch(db.Model):
@@ -38,6 +39,14 @@ class MarriageSearch(db.Model):
     _borough = db.Column(ARRAY(db.String(20), dimensions=1), nullable=False, name='borough')
     letter = db.Column(db.Boolean, nullable=True)
     comment = db.Column(db.String(255), nullable=True)
+    delivery_method = db.Column(
+        db.Enum(
+            delivery_method.MAIL,
+            delivery_method.EMAIL,
+            delivery_method.PICKUP,
+            name='delivery_method'
+        ), nullable=False
+    )
     suborder_number = db.Column(db.String(32), db.ForeignKey('suborders.id'), nullable=False)
 
     def __init__(
@@ -54,6 +63,7 @@ class MarriageSearch(db.Model):
             borough,
             letter,
             comment,
+            _delivery_method,
             suborder_number
     ):
         self.groom_last_name = groom_last_name
@@ -68,6 +78,7 @@ class MarriageSearch(db.Model):
         self._borough = borough
         self.letter = letter or None
         self.comment = comment or None
+        self.delivery_method = _delivery_method
         self.suborder_number = suborder_number
 
     @property
@@ -114,6 +125,7 @@ class MarriageSearch(db.Model):
             'borough': self.borough if self.borough is not None else "",
             'letter': self.letter,
             'comment': self.comment,
+            'delivery_method': self.delivery_method,
             'suborder_number': self.suborder_number
         }
 
@@ -155,6 +167,14 @@ class MarriageCertificate(db.Model):
     _borough = db.Column(ARRAY(db.String(20), dimensions=1), nullable=False, name='borough')
     letter = db.Column(db.Boolean, nullable=True)
     comment = db.Column(db.String(255), nullable=True)
+    delivery_method = db.Column(
+        db.Enum(
+            delivery_method.MAIL,
+            delivery_method.EMAIL,
+            delivery_method.PICKUP,
+            name='delivery_method'
+        ), nullable=False
+    )
     suborder_number = db.Column(db.String(32), db.ForeignKey('suborders.id'), nullable=False)
 
     def __init__(
@@ -172,6 +192,7 @@ class MarriageCertificate(db.Model):
             borough,
             letter,
             comment,
+            _delivery_method,
             suborder_number
     ):
         self.certificate_number = certificate_number
@@ -187,6 +208,7 @@ class MarriageCertificate(db.Model):
         self._borough = borough or None
         self.letter = letter or None
         self.comment = comment or None
+        self.delivery_method = _delivery_method
         self.suborder_number = suborder_number
 
     @property
@@ -234,5 +256,6 @@ class MarriageCertificate(db.Model):
             'borough': self.borough if self.borough is not None else "",
             'letter': self.letter,
             'comment': self.comment,
+            'delivery_method': self.delivery_method,
             'suborder_number': self.suborder_number
         }

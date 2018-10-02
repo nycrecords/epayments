@@ -27,7 +27,8 @@ class MarriageForm extends React.Component {
                 {label: 'Staten Island', name: 'statenIsland', checked: false}
             ],
             comment: '',
-            letter: false
+            letter: false,
+            deliveryMethod: ''
         }
     }
 
@@ -67,6 +68,13 @@ class MarriageForm extends React.Component {
         this.setState({
             letter: !this.state.letter
         })
+    };
+
+    handleRadioChange = (e, {name, value}) => {
+        this.setState({
+            [name]: value
+        });
+        this.props.handleFormChange(name, value);
     };
 
     render() {
@@ -184,11 +192,31 @@ class MarriageForm extends React.Component {
                                     onChange={this.handleChange}
                                     value={this.state.comment}
                         />
+
                         <Form.Checkbox label='Attach "Letter of Exemplification"'
                                        name="letter"
                                        className="letterField"
                                        onChange={this.handleLetterChange}
                         />
+
+                        <Form.Group grouped>
+                            <label>Delivery Method</label>
+                            <Form.Radio
+                                label='Mail'
+                                name='deliveryMethod'
+                                value='mail'
+                                checked={this.state.deliveryMethod === "mail"}
+                                onChange={this.handleRadioChange}
+
+                            />
+                            <Form.Radio
+                                label='Email'
+                                name='deliveryMethod'
+                                value='email'
+                                checked={this.state.deliveryMethod === "email"}
+                                onChange={this.handleRadioChange}
+                            />
+                        </Form.Group>
                     </Grid.Column>
                 </Grid.Row>
             </Grid>

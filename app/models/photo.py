@@ -1,5 +1,5 @@
 from app import db
-from app.constants import borough, collection, size
+from app.constants import borough, collection, size, delivery_method
 
 
 class TaxPhoto(db.Model):
@@ -51,25 +51,32 @@ class TaxPhoto(db.Model):
             size.ELEVEN_BY_FOURTEEN,
             name='size'), nullable=False)
     num_copies = db.Column(db.String(2), nullable=False)
-    mail = db.Column(db.Boolean, nullable=False)
     contact_number = db.Column(db.String(10), nullable=True)
+    delivery_method = db.Column(
+        db.Enum(
+            delivery_method.MAIL,
+            delivery_method.EMAIL,
+            delivery_method.PICKUP,
+            name='delivery_method'
+        ), nullable=False
+    )
     suborder_number = db.Column(db.String(32), db.ForeignKey('suborders.id'), nullable=False)
 
     def __init__(
             self,
             borough,
             collection,
-            roll,
-            block,
-            lot,
             building_number,
             street,
-            description,
             size,
             num_copies,
-            mail,
-            contact_number,
-            suborder_number
+            _delivery_method,
+            suborder_number,
+            roll=None,
+            block=None,
+            lot=None,
+            description=None,
+            contact_number=None
     ):
         self.borough = borough
         self.collection = collection
@@ -81,7 +88,7 @@ class TaxPhoto(db.Model):
         self.description = description
         self.size = size
         self.num_copies = num_copies
-        self.mail = mail
+        self.delivery_method = _delivery_method
         self.contact_number = contact_number
         self.suborder_number = suborder_number
 
@@ -99,7 +106,7 @@ class TaxPhoto(db.Model):
             'description': self.description,
             'size': self.size,
             'num_copies': self.num_copies,
-            'mail': self.mail,
+            'delivery_method': self.delivery_method,
             'contact_number': self.contact_number,
             'suborder_number': self.suborder_number,
         }
@@ -134,10 +141,17 @@ class PhotoGallery(db.Model):
             size.SIXTEEN_BY_TWENTY,
             name='size'), nullable=False)
     num_copies = db.Column(db.String(2), nullable=False)
-    mail = db.Column(db.Boolean, nullable=False)
     contact_number = db.Column(db.String(10), nullable=True)
     personal_use_agreement = db.Column(db.Boolean, nullable=True)
     comment = db.Column(db.String(255), nullable=True)
+    delivery_method = db.Column(
+        db.Enum(
+            delivery_method.MAIL,
+            delivery_method.EMAIL,
+            delivery_method.PICKUP,
+            name='delivery_method'
+        ), nullable=False
+    )
     suborder_number = db.Column(db.String(32), db.ForeignKey('suborders.id'), nullable=False)
 
     def __init__(
@@ -147,18 +161,18 @@ class PhotoGallery(db.Model):
             additional_description,
             size,
             num_copies,
-            mail,
+            _delivery_method,
             contact_number,
-            personal_use_agreement,
             comment,
-            suborder_number
+            suborder_number,
+            personal_use_agreement=None
     ):
         self.image_id = image_id
         self.description = description
         self.additional_description = additional_description
         self.size = size
         self.num_copies = num_copies
-        self.mail = mail
+        self.delivery_method = _delivery_method
         self.contact_number = contact_number
         self.personal_use_agreement = personal_use_agreement
         self.comment = comment
@@ -173,7 +187,7 @@ class PhotoGallery(db.Model):
             "additional_description": self.additional_description,
             "size": self.size,
             "num_copies": self.num_copies,
-            "mail": self.mail,
+            "delivery_method": self.delivery_method,
             "contact_number": self.contact_number,
             "personal_use_agreement": self.personal_use_agreement,
             "comment": self.comment,

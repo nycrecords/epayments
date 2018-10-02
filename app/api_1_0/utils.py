@@ -9,6 +9,7 @@ from xhtml2pdf.pisa import CreatePDF
 
 from app import db
 from app.constants import (
+    collection,
     event_type,
     printing
 )
@@ -27,7 +28,8 @@ from app.models import (
     Suborders,
     Customers,
     TaxPhoto,
-    Events
+    Events,
+    PhotoGallery
 )
 from app.search.searchfunctions import SearchFunctions
 from app.search.utils import search_queries
@@ -542,21 +544,13 @@ def create_new_order(order_info_dict, suborder_list):
             order_types.PHOTO_GALLERY: _create_new_photo_gallery
         }
 
-        obj = handler_for_order_type[suborder['orderType']](suborder, new_suborder.id)
+        handler_for_order_type[suborder['orderType']](suborder, new_suborder.id)
 
-        db.session.add(obj)
-        # TODO: commit obj and suborder.es_create
-
-    db.session.commit()
+        new_suborder.es_create()
 
 
 def _create_new_birth_object(suborder, suborder_id):
     certificate_number = suborder.get('certificateNum')
-
-    # boroughs = suborder.get('boroughs')
-    # borough_list = []
-    # if boroughs:
-    #     borough_list = [b['name'].upper() for b in boroughs if b['checked']]
 
     if certificate_number:
         birth_object = BirthCertificate(certificate_number=certificate_number,
@@ -571,9 +565,10 @@ def _create_new_birth_object(suborder, suborder_id):
                                         day=suborder.get('day'),
                                         years=[y['value'] for y in suborder.get('years') if y['value']],
                                         birth_place=suborder.get('birthPlace'),
-                                        borough=[b['name'].upper() for b in suborder.get('boroughs') if b['checked']],
+                                        borough=[b['name'].upper() for b in suborder['boroughs'] if b['checked']],
                                         letter=suborder.get('letter'),
                                         comment=suborder.get('comment'),
+                                        _delivery_method=suborder['deliveryMethod'],
                                         suborder_number=suborder_id)
     else:
         birth_object = BirthSearch(first_name=suborder.get('firstName'),
@@ -587,12 +582,13 @@ def _create_new_birth_object(suborder, suborder_id):
                                    day=suborder.get('day'),
                                    years=[y['value'] for y in suborder.get('years') if y['value']],
                                    birth_place=suborder.get('birthPlace'),
-                                   borough=[b['name'].upper() for b in suborder.get('boroughs') if b['checked']],
+                                   borough=[b['name'].upper() for b in suborder['boroughs'] if b['checked']],
                                    letter=suborder.get('letter'),
                                    comment=suborder.get('comment'),
+                                   _delivery_method=suborder['deliveryMethod'],
                                    suborder_number=suborder_id)
-
-    return birth_object
+    db.session.add(birth_object)
+    db.session.commit()
 
 
 def _create_new_death_object(suborder, suborder_id):
@@ -609,9 +605,10 @@ def _create_new_death_object(suborder, suborder_id):
                                         day=suborder.get('day'),
                                         years=[y['value'] for y in suborder.get('years') if y['value']],
                                         death_place=suborder.get('deathPlace'),
-                                        borough=[b['name'].upper() for b in suborder.get('boroughs') if b['checked']],
+                                        borough=[b['name'].upper() for b in suborder['boroughs'] if b['checked']],
                                         letter=suborder.get('letter'),
                                         comment=suborder.get('comment'),
+                                        _delivery_method=suborder['deliveryMethod'],
                                         suborder_number=suborder_id)
     else:
         death_object = DeathSearch(last_name=suborder['lastName'],
@@ -623,12 +620,13 @@ def _create_new_death_object(suborder, suborder_id):
                                    day=suborder.get('day'),
                                    years=[y['value'] for y in suborder.get('years') if y['value']],
                                    death_place=suborder.get('deathPlace'),
-                                   borough=[b['name'].upper() for b in suborder.get('boroughs') if b.get('checked')],
+                                   borough=[b['name'].upper() for b in suborder['boroughs'] if b['checked']],
                                    letter=suborder.get('letter'),
                                    comment=suborder.get('comment'),
+                                   _delivery_method=suborder['deliveryMethod'],
                                    suborder_number=suborder_id)
-
-    return death_object
+    db.session.add(death_object)
+    db.session.commit()
 
 
 def _create_new_marriage_object(suborder, suborder_id):
@@ -645,10 +643,10 @@ def _create_new_marriage_object(suborder, suborder_id):
                                               day=suborder.get('day'),
                                               years=[y['value'] for y in suborder.get('years') if y['value']],
                                               marriage_place=suborder.get('marriagePlace'),
-                                              borough=[b['name'].upper() for b in suborder.get('boroughs') if
-                                                       b['checked']],
+                                              borough=[b['name'].upper() for b in suborder['boroughs'] if b['checked']],
                                               letter=suborder.get('letter'),
                                               comment=suborder.get('comment'),
+                                              _delivery_method=suborder['deliveryMethod'],
                                               suborder_number=suborder_id)
     else:
         marriage_object = MarriageSearch(groom_last_name=suborder['groomLastName'],
@@ -660,18 +658,61 @@ def _create_new_marriage_object(suborder, suborder_id):
                                          day=suborder.get('day'),
                                          years=[y['value'] for y in suborder.get('years') if y['value']],
                                          marriage_place=suborder.get('marriagePlace'),
-                                         borough=[b['name'].upper() for b in suborder.get('boroughs') if
-                                                  b['checked']],
+                                         borough=[b['name'].upper() for b in suborder['boroughs'] if b['checked']],
                                          letter=suborder.get('letter'),
                                          comment=suborder.get('comment'),
+                                         _delivery_method=suborder['deliveryMethod'],
                                          suborder_number=suborder_id)
-
-    return marriage_object
+    db.session.add(marriage_object)
+    db.session.commit()
 
 
 def _create_new_tax_photo(suborder, suborder_id):
-    pass
+    new_collection = suborder['collection']
+
+    if new_collection in [collection.YEAR_1940, collection.BOTH]:
+        tax_photo_1940 = TaxPhoto(collection=collection.YEAR_1940,
+                                  borough=suborder['borough'],
+                                  roll=suborder.get('roll'),
+                                  block=suborder.get('block'),
+                                  lot=suborder.get('lot'),
+                                  building_number=suborder['buildingNum'],
+                                  street=suborder['street'],
+                                  description=suborder.get('description'),
+                                  size=suborder['size'],
+                                  num_copies=suborder['numCopies'],
+                                  _delivery_method=suborder['deliveryMethod'],
+                                  contact_number=suborder.get('contactNum'),
+                                  suborder_number=suborder_id)
+        db.session.add(tax_photo_1940)
+
+    if new_collection in [collection.YEAR_1980, collection.BOTH]:
+        tax_photo_1980 = TaxPhoto(collection=collection.YEAR_1980,
+                                  borough=suborder['borough'].title(),
+                                  block=suborder.get('block'),
+                                  lot=suborder.get('lot'),
+                                  building_number=suborder['buildingNum'],
+                                  street=suborder['street'],
+                                  description=suborder.get('description'),
+                                  size=suborder['size'],
+                                  num_copies=suborder['numCopies'],
+                                  _delivery_method=suborder['deliveryMethod'],
+                                  contact_number=suborder.get('contactNum'),
+                                  suborder_number=suborder_id)
+        db.session.add(tax_photo_1980)
+
+    db.session.commit()
 
 
 def _create_new_photo_gallery(suborder, suborder_id):
-    pass
+    photo_gallery = PhotoGallery(image_id=suborder['imageID'],
+                                 description=suborder.get('description'),
+                                 additional_description=suborder.get('additionalDescription'),
+                                 size=suborder['size'],
+                                 num_copies=suborder.get('numCopies'),
+                                 _delivery_method=suborder['deliveryMethod'],
+                                 contact_number=suborder.get('contactNum'),
+                                 comment=suborder.get('comment'),
+                                 suborder_number=suborder_id)
+    db.session.add(photo_gallery)
+    db.session.commit()

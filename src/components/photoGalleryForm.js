@@ -36,7 +36,7 @@ class PhotoGalleryForm extends React.Component {
                 <Grid.Row>
                     <Grid.Column>
                         <Form.Input label="Image Identifier"
-                                    name="imageIdentifier"
+                                    name="imageID"
                                     placeholder="Image Identifier"
                                     maxLength={20}
                                     required

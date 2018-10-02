@@ -4,12 +4,12 @@
     <br/>
     <p>
         <b>CERTIFICATE NUMBER:</b> <br/>
-        {{ order_info['metadata']['certificate_number'] or ''}}
+        {{ order_info['metadata']['certificate_number'] or '' }}
     </p>
 
     <p>
         <b>GENDER:</b> <br/>
-        {{ order_info['metadata']['gender'] or ''}}
+        {{ order_info['metadata']['gender'] or '' }}
     </p>
 
     <p>
@@ -19,22 +19,22 @@
 
     <p>
         <b>MIDDLE NAME:</b> <br/>
-        {{ order_info['metadata']['middle_name'] or ''}}
+        {{ order_info['metadata']['middle_name'] or '' }}
     </p>
 
     <p>
         <b>FIRST NAME:</b> <br/>
-        {{ order_info['metadata']['first_name'] or ''}}
+        {{ order_info['metadata']['first_name'] or '' }}
     </p>
 
     <p>
         <b>FATHER NAME:</b> <br/>
-        {{ order_info['metadata']['father_name'] or ''}}
+        {{ order_info['metadata']['father_name'] or '' }}
     </p>
 
     <p>
         <b>MOTHER NAME:</b> <br/>
-        {{ order_info['metadata']['mother_name'] or ''}}
+        {{ order_info['metadata']['mother_name'] or '' }}
     </p>
 
     <p>
@@ -44,17 +44,17 @@
 
     <p>
         <b>MONTH:</b> <br/>
-        {{ order_info['metadata']['month'] or ''}}
+        {{ order_info['metadata']['month'] or '' }}
     </p>
 
     <p>
         <b>DAY:</b> <br/>
-        {{ order_info['metadata']['day'] or ''}}
+        {{ order_info['metadata']['day'] or '' }}
     </p>
 
     <p>
         <b>BIRTH PLACE:</b> <br/>
-        {{ order_info['metadata']['birth_place'] or ''}}
+        {{ order_info['metadata']['birth_place'] or '' }}
     </p>
 
     <p>
@@ -78,6 +78,11 @@
             {{ order_info['metadata']['comment'] }}
         </p>
     {% endif %}
+
+    <p>
+        <b>DELIVERY METHOD:</b> <br/>
+        {{ order_info['metadata']['delivery_method'] }}
+    </p>
 {% endblock %}
 
 

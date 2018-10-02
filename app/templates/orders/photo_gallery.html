@@ -37,12 +37,6 @@
         <br/>
     </p>
 
-    <p>
-        <b>MAIL_PICKUP:</b>
-        <br/>
-        {{ "Mail" if order_info['metadata']['mail'] else "Pickup" }}
-    </p>
-
     {% if order_info['metadata']['contact_number'] %}
         <p>
             <b>CONTACT NUMBER:</b>
@@ -66,4 +60,9 @@
             {{ order_info['metadata']['comment'] }}
         </p>
     {% endif %}
+
+    <p>
+        <b>DELIVERY METHOD:</b> <br/>
+        {{ order_info['metadata']['delivery_method'] }}
+    </p>
 {% endblock %}

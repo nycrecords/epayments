@@ -62,8 +62,23 @@ class NewSuborderForm extends React.Component {
         this.setState({
             [data.name]: data.value
         });
+
+        // Clear current state and parent state on orderType change
+        if (data.name === 'orderType' && this.state.orderType !== '') {
+            this.setState({
+                numCopies: '1',
+                status: ''
+            });
+            this.props.clearStateOnOrderTypeChange(this.props.suborderKey);
+        }
+
         this.props.handleSuborderListChange(data.name, data.value, this.props.suborderKey);
     };
+
+    // Pass numCopies to parent
+    componentDidMount() {
+        this.props.handleSuborderListChange('numCopies', this.state.numCopies, this.props.suborderKey);
+    }
 
     render() {
         let suborderForm;
