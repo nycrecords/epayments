@@ -103,6 +103,11 @@ class DeathCert extends React.Component{
                     <div className="-fourth"> Comment: </div>
                     <div className="-two-thirds"> {this.props.order_info["metadata"]["comment"]} </div>
                 </div>
+
+                <div className="-row">
+                    <div className="-fourth"> Delivery Method: </div>
+                    <div className="-two-thirds"> {this.props.order_info["metadata"]["delivery_method"]} </div>
+                </div>
             </div>
         )
     };

@@ -88,17 +88,15 @@ class TaxPhoto extends React.Component{
                 </div>
 
                 <div className="-row">
-                    <div className="-fourth"> Mail Pickup: </div>
-                    <div className="-two-thirds">
-                        {this.props.order_info["metadata"]["mail"] ? "Mail" : "Pickup"}
-                    </div>
-                </div>
-
-                <div className="-row">
                     <div className="-fourth"> Contact Number: </div>
                     <div className="-two-thirds">
                         {this.props.order_info["metadata"]["contact_number"] ? this.props.order_info["metadata"]["contact_number"] : ""}
                     </div>
+                </div>
+
+                <div className="-row">
+                    <div className="-fourth"> Delivery Method: </div>
+                    <div className="-two-thirds"> {this.props.order_info["metadata"]["delivery_method"]} </div>
                 </div>
             </div>
         )
