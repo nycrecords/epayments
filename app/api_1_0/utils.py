@@ -535,7 +535,17 @@ def create_new_order(order_info_dict, suborder_list):
         db.session.add(new_suborder)
         db.session.commit()
 
-        # TODO: Events
+        event = Events(suborder_number=new_suborder.id,
+                       type_=event_type.INITIAL_IMPORT,
+                       user_email=current_user.email,
+                       previous_value=None,
+                       new_value={
+                           'status': new_suborder.status,
+                       })
+
+        db.session.add(event)
+        db.session.commit()
+
         handler_for_order_type = {
             order_types.BIRTH_CERT: _create_new_birth_object,
             order_types.DEATH_CERT: _create_new_death_object,

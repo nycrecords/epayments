@@ -287,6 +287,9 @@ def import_file(file_name):
             else:
                 letter = False
 
+            # Retrieve delivery method
+            delivery_method = clients_data_list[clients_data_list.index('DELIVERY') + 1].lower()
+
             customer_order = BirthSearch(
                 first_name=first_name,
                 last_name=last_name,
@@ -302,6 +305,7 @@ def import_file(file_name):
                 borough=borough,
                 letter=letter,
                 comment=comment,
+                _delivery_method=delivery_method,
                 suborder_number=suborder_number
             )
 
@@ -352,6 +356,9 @@ def import_file(file_name):
             else:
                 letter = False
 
+            # Retrieve delivery method
+            delivery_method = clients_data_list[clients_data_list.index('DELIVERY') + 1].lower()
+
             customer_order = MarriageSearch(
                 groom_last_name=groom_last_name,
                 groom_first_name=groom_first_name,
@@ -365,6 +372,7 @@ def import_file(file_name):
                 borough=borough,
                 letter=letter,
                 comment=comment,
+                _delivery_method=delivery_method,
                 suborder_number=suborder_number
             )
 
@@ -416,6 +424,9 @@ def import_file(file_name):
             else:
                 letter = False
 
+            # Retrieve delivery method
+            delivery_method = clients_data_list[clients_data_list.index('DELIVERY') + 1].lower()
+
             customer_order = DeathSearch(
                 last_name=last_name,
                 first_name=first_name,
@@ -429,6 +440,7 @@ def import_file(file_name):
                 borough=borough,
                 letter=letter,
                 comment=comment,
+                _delivery_method=delivery_method,
                 suborder_number=suborder_number
             )
 
@@ -492,6 +504,9 @@ def import_file(file_name):
             else:
                 letter = False
 
+            # Retrieve delivery method
+            delivery_method = clients_data_list[clients_data_list.index('DELIVERY') + 1].lower()
+
             customer_order = BirthCertificate(
                 certificate_number=certificate_number,
                 first_name=first_name,
@@ -508,6 +523,7 @@ def import_file(file_name):
                 borough=borough,
                 letter=letter,
                 comment=comment,
+                _delivery_method=delivery_method,
                 suborder_number=suborder_number
             )
 
@@ -561,6 +577,9 @@ def import_file(file_name):
             else:
                 letter = False
 
+            # Retrieve delivery method
+            delivery_method = clients_data_list[clients_data_list.index('DELIVERY') + 1].lower()
+
             customer_order = MarriageCertificate(
                 certificate_number=certificate_number,
                 groom_last_name=groom_last_name,
@@ -575,6 +594,7 @@ def import_file(file_name):
                 borough=borough,
                 letter=letter,
                 comment=comment,
+                _delivery_method=delivery_method,
                 suborder_number=suborder_number
             )
 
@@ -629,6 +649,9 @@ def import_file(file_name):
             else:
                 letter = False
 
+            # Retrieve delivery method
+            delivery_method = clients_data_list[clients_data_list.index('DELIVERY') + 1].lower()
+
             customer_order = DeathCertificate(
                 certificate_number=certificate_number,
                 last_name=last_name,
@@ -643,6 +666,7 @@ def import_file(file_name):
                 borough=borough,
                 letter=letter,
                 comment=comment,
+                _delivery_method=delivery_method,
                 suborder_number=suborder_number
             )
 
@@ -729,19 +753,12 @@ def import_file(file_name):
             num_copies = clients_data_list[
                 clients_data_list.index("COPIES") + 1] if "COPIES" in clients_data_list else 1
 
-            # Retrieve Mail / Pickup Status
-            if "MAIL_PICKUP" in clients_data_list:
-                if clients_data_list[clients_data_list.index("MAIL_PICKUP") + 1] == 'Mail':
-                    mail = True
-                else:
-                    mail = False
-            else:
-                # TODO: Fix this. mail column is BOOLEAN
-                mail = None
-
             # Retrieve Pickup Contact Information
             contact_number = clients_data_list[
                 clients_data_list.index("CONTACT_NUMBER") + 1] if "CONTACT_NUMBER" in clients_data_list else None
+
+            # Retrieve delivery method
+            delivery_method = clients_data_list[clients_data_list.index('DELIVERY') + 1].lower()
 
             if collection == 'Both':
                 # Remove old Suborder
@@ -785,7 +802,7 @@ def import_file(file_name):
                     description=description,
                     size=size,
                     num_copies=num_copies,
-                    mail=mail,
+                    _delivery_method=delivery_method,
                     contact_number=contact_number,
                     suborder_number=suborder_1940.id
                 )
@@ -804,7 +821,7 @@ def import_file(file_name):
                     description=description,
                     size=size,
                     num_copies=num_copies,
-                    mail=mail,
+                    _delivery_method=delivery_method,
                     contact_number=contact_number,
                     suborder_number=suborder_1980.id
                 )
@@ -841,7 +858,7 @@ def import_file(file_name):
                     description=description,
                     size=size,
                     num_copies=num_copies,
-                    mail=mail,
+                    _delivery_method=delivery_method,
                     contact_number=contact_number,
                     suborder_number=suborder_number)
                 db.session.add(customer_order)
@@ -870,16 +887,6 @@ def import_file(file_name):
             num_copies = clients_data_list[
                 clients_data_list.index("COPIES") + 1] if "COPIES" in clients_data_list else 1
 
-            # Retrieve Mail / Pickup Status
-            if "MAIL_PICKUP" in clients_data_list:
-                if clients_data_list[clients_data_list.index("MAIL_PICKUP") + 1] == 'Mail':
-                    mail = True
-                else:
-                    mail = False
-            else:
-                # TODO: Fix this. mail column is BOOLEAN
-                mail = None
-
             # Retrieve Pickup Contact Information
             contact_number = clients_data_list[
                 clients_data_list.index("CONTACT_NUMBER") + 1] if "CONTACT_NUMBER" in clients_data_list else None
@@ -896,13 +903,16 @@ def import_file(file_name):
             else:
                 personal_use_agreement = False
 
+            # Retrieve delivery method
+            delivery_method = clients_data_list[clients_data_list.index('DELIVERY') + 1].lower()
+
             customer_order = PhotoGallery(
                 image_id=image_id,
                 description=description,
                 additional_description=additional_description,
                 size=size,
                 num_copies=num_copies,
-                mail=mail,
+                _delivery_method=delivery_method,
                 contact_number=contact_number,
                 personal_use_agreement=personal_use_agreement,
                 comment=comment,

@@ -32,14 +32,6 @@ class Order extends React.Component {
                 Date Received: {this.props.date_received}
                 <br/>
                 <History suborder_number={this.props.suborder_number}/>
-                <Checkbox label="Queue For Status Update"
-                          name="queueForUpdate"
-                          checked={this.props.queueForUpdateBoolean[this.props.index] === true}
-                          onChange={() => {
-                              this.props.addStatusQueue(this.props.order,this.props.index);
-
-                          }}
-                />
                 <Divider/>
             </div>
         )

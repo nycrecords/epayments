@@ -123,27 +123,6 @@ def orders_doc(doc_type):
         return jsonify(url=url), 200
 
 
-# @api.route('/orders/new', methods=['POST'])
-# @login_required
-# def create_order_type(order_type):
-#     handler_for_order_type = {
-#         order_types.TAX_PHOTO: TaxPhoto(borough=None,
-#                                         collection=collection[index],
-#                                         roll=roll[index],
-#                                         block=block[index],
-#                                         lot=lot[index],
-#                                         building_number=building_number[index],
-#                                         street=street[index],
-#                                         description=add_description[index],
-#                                         mail=mail[index],
-#                                         contact_number=contact_number[index],
-#                                         size=print_size[index],
-#                                         num_copies=num_copies[index],
-#                                         suborder_number=sub_order.id)
-#
-#     }
-
-
 @api.route('/orders/new', methods=['POST'])
 @login_required
 def new_order():
@@ -213,6 +192,7 @@ def batch_status_change():
         5. Done - End of status changes
     :return: {status_id, suborder_number, status, comment}, 201
     """
+    # TODO: Complete this
     if request.method == 'POST':
         json = request.get_json(force=True)
         comment = json.get("comment")

@@ -7,7 +7,6 @@ import OrderForm from "./order_form";
 import Order from "./order";
 import LoginModal from "./login_modal";
 import {csrfFetch, handleFetchErrors} from "../utils/fetch"
-import BatchStatusModal from "./batchStatusModal"
 import {CHUNK_SIZE} from "../constants/constants"
 
 /***
@@ -25,21 +24,7 @@ class Home extends React.Component {
             suborder_count: 0,
             loading: false,
             showCSVButton: false,
-            suborder_two: 0,
-            queueForUpdate: [],
-            queueForUpdateBoolean: []
-        };
-        this.addStatusQueue = (order, index) => {
-            // console.log("addStatusQueue triggers");
-            // console.log(this.state.queueForUpdateBoolean === false);
-            (this.state.queueForUpdateBoolean[index] === false || this.state.queueForUpdateBoolean[index] === "" ||
-                this.state.queueForUpdateBoolean === undefined) ?
-                this.handleListChange("queueForUpdateBoolean", true, this.state.queueForUpdateBoolean, index) :
-                this.handleListChange("queueForUpdateBoolean", false, this.state.queueForUpdateBoolean, index);
-            if (this.state.queueForUpdateBoolean[index] === true) {
-                this.handleListChange("queueForUpdate", order.suborder_number, this.state.queueForUpdate, index);
-                console.log(this.state.queueForUpdate)
-            }
+            suborder_two: 0
         };
 
         this.addOrder = (order_count, suborder_count, orders, firstTime) => {
@@ -175,10 +160,7 @@ class Home extends React.Component {
                 date_received={order.date_received.slice(0, -9)}
                 current_status={order.current_status}
                 updateStatus={this.updateStatus}
-                addStatusQueue={this.addStatusQueue}
                 order={order}
-                queueForUpdateBoolean={this.state.queueForUpdateBoolean}
-                queueForUpdate={this.state.queueForUpdate}
                 index={this.state.all_orders.indexOf(order)}
             />
         );
@@ -229,15 +211,9 @@ class Home extends React.Component {
                                     <Button content='Big Labels' onClick={this.printBigLabels}/>
                                     <Button content='Small Labels' onClick={this.printSmallLabels}/>
 
-                                    <BatchStatusModal queueForUpdateBoolean={this.state.queueForUpdateBoolean}
-                                                      queueForUpdate={this.state.queueForUpdate}
-                                                      updateStatus={this.updateStatus}/>
-
                                     <Link to="/Order">
-                                        <Button content='Order'/>
+                                        <Button content='New Order'/>
                                     </Link>
-
-
                                 </Button.Group>
                             </Rail>
                             <div id="grid-column-order" ref={elem => this.div = elem}>
