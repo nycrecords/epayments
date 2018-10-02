@@ -1,4 +1,4 @@
-from datetime import date
+from datetime import date, datetime
 
 from flask import jsonify, abort, request
 from flask_login import login_user, logout_user, current_user, login_required
@@ -6,6 +6,7 @@ from sqlalchemy import desc
 
 from app.api_1_0 import api_1_0 as api
 from app.api_1_0.utils import (
+    create_new_order,
     update_status,
     _print_orders,
     _print_large_labels,
@@ -18,13 +19,15 @@ from app.constants import (
 )
 from app.constants import printing
 from app.models import (
+    Customers,
     Orders,
+    OrderNumberCounter,
     TaxPhoto,
     Users,
     Events
 )
-from app.search.utils import search_queries
 from app.search.searchfunctions import SearchFunctions
+from app.search.utils import search_queries
 
 
 @api.route('/', methods=['GET'])
@@ -149,6 +152,8 @@ def new_order():
     """
     if request.method == 'POST':  # makes it so we get a post method to receive the info put in on the form
         json = request.get_json(force=True)
+
+        create_new_order(json['orderInfo'], json['suborderList'])
         add_description = json.get("addDescription")
         address_line_1 = json.get("addressLine1")
         address_line_2 = json.get("addressLine2")

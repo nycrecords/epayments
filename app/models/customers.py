@@ -44,8 +44,8 @@ class Customers(db.Model):
             state,
             zip_code,
             phone,
-            instructions,
             order_number,
+            instructions=None,
             country=None
 
     ):
@@ -59,7 +59,7 @@ class Customers(db.Model):
         self.zip_code = zip_code
         self.country = country
         self.phone = phone or None
-        self.instructions = instructions or None
+        self.instructions = instructions
         self.order_number = order_number
 
     @property

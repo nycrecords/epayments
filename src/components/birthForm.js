@@ -71,7 +71,8 @@ class BirthForm extends React.Component {
     handleLetterChange = () => {
         this.setState({
             letter: !this.state.letter
-        })
+        });
+        this.props.handleFormChange('letter', this.state.letter)
     };
 
     render() {
