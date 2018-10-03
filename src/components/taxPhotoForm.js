@@ -41,7 +41,7 @@ class TaxPhotoForm extends React.Component {
                 <Grid.Row>
                     <Grid.Column>
                         <Form.Group grouped>
-                            <label>Collection</label>
+                            <label className='required-label'>Collection</label>
                             <Form.Radio
                                 label='1940'
                                 name={'collection' + this.props.suborderKey}
@@ -67,7 +67,7 @@ class TaxPhotoForm extends React.Component {
                         </Form.Group>
 
                         <Form.Group grouped>
-                            <label>Borough</label>
+                            <label className='required-label'>Borough</label>
                             <Form.Radio
                                 label='Brooklyn'
                                 name={'borough' + this.props.suborderKey}
@@ -155,7 +155,7 @@ class TaxPhotoForm extends React.Component {
 
                         <p><strong>Print Information</strong></p>
                         <Form.Group grouped>
-                            <label>Collection</label>
+                            <label className='required-label'>Size</label>
                             <Form.Radio
                                 label='8" x 10" Print'
                                 name={'size' + this.props.suborderKey}
@@ -174,7 +174,7 @@ class TaxPhotoForm extends React.Component {
                         </Form.Group>
 
                         <Form.Group grouped>
-                            <label>Delivery Method</label>
+                            <label className='required-label'>Delivery Method</label>
                             <Form.Radio
                                 label='Mail'
                                 name={'deliveryMethod' + this.props.suborderKey}
@@ -200,6 +200,7 @@ class TaxPhotoForm extends React.Component {
                             {this.state.deliveryMethod === "pickup" && <Form.Input label="Contact Number"
                                                                                    name="contactNum"
                                                                                    placeholder="Contact Number"
+                                                                                   required
                                                                                    maxLength={10}
                                                                                    onChange={this.handleChange}
                                                                                    value={this.state.contactNum}

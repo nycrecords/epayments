@@ -105,3 +105,8 @@ html, body {
 .letterField {
     margin-bottom: 1em!important;
 }
+
+.required-label:after {
+    content: " *";
+    color: #db2828;
+}

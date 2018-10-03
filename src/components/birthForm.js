@@ -183,7 +183,7 @@ class BirthForm extends React.Component {
                                     value={this.state.birthPlace}
                         />
 
-                        <p><strong>BOROUGH/COUNTY Available</strong></p>
+                        <p className='required-label'><strong>Borough/County</strong></p>
                         {this.state.boroughs.map((borough, i) =>
                             <Form.Checkbox key={i}
                                            label={borough.label}
@@ -220,7 +220,7 @@ class BirthForm extends React.Component {
                         />
 
                         <Form.Group grouped>
-                            <label>Delivery Method</label>
+                            <label className='required-label'>Delivery Method</label>
                             <Form.Radio
                                 label='Mail'
                                 name={'deliveryMethod' + this.props.suborderKey}

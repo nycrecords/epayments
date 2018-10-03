@@ -192,7 +192,7 @@ class DeathForm extends React.Component {
                                     value={this.state.deathPlace}
                         />
 
-                        <p><strong>BOROUGH/COUNTY Available</strong></p>
+                        <p className='required-label'><strong>Borough/County</strong></p>
                         {this.state.boroughs.map((borough, i) =>
                             <Form.Checkbox key={i}
                                            label={borough.label}
@@ -229,14 +229,13 @@ class DeathForm extends React.Component {
                         />
 
                         <Form.Group grouped>
-                            <label>Delivery Method</label>
+                            <label className='required-label'>Delivery Method</label>
                             <Form.Radio
                                 label='Mail'
                                 name={'deliveryMethod' + this.props.suborderKey}
                                 value='mail'
                                 checked={this.state.deliveryMethod === "mail"}
                                 onChange={this.handleRadioChange}
-
                             />
                             <Form.Radio
                                 label='Email'

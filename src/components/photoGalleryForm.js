@@ -63,7 +63,7 @@ class PhotoGalleryForm extends React.Component {
 
                         <p><strong>Print Information</strong></p>
                         <Form.Group grouped>
-                            <label>Size</label>
+                            <label className='required-label'>Size</label>
                             <Form.Radio
                                 label='8" x 10" Print'
                                 name={'size' + this.props.suborderKey}
@@ -89,7 +89,7 @@ class PhotoGalleryForm extends React.Component {
                         </Form.Group>
 
                         <Form.Group grouped>
-                            <label>Delivery Method</label>
+                            <label className='required-label'>Delivery Method</label>
                             <Form.Radio
                                 label='Mail'
                                 name={'deliveryMethod' + this.props.suborderKey}
@@ -116,6 +116,7 @@ class PhotoGalleryForm extends React.Component {
                                                                                    name="contactNum"
                                                                                    placeholder="Contact Number"
                                                                                    maxLength={10}
+                                                                                   required
                                                                                    onChange={this.handleChange}
                                                                                    value={this.state.contactNum}
                             />}

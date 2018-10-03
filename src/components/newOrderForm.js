@@ -64,6 +64,8 @@ class NewOrderForm extends React.Component {
 
         this.index = 1;
         this.message = "";
+        this.vitalRecordTypes = ['Birth Cert', 'Death Cert', 'Marriage Cert'];
+        this.vrpRequiredFields = ['year']
     };
 
     handleSuborderListChange = (name, value, key) => {
@@ -94,38 +96,111 @@ class NewOrderForm extends React.Component {
     handleSubmit = (e, value) => {
         e.preventDefault();
         this.setState({loading: true});
-        // TODO: check validation
+
         for (let i = 0; i < this.state.suborderList.length; i++) {
-            console.log(this.state.suborderList[i]);
-            if (this.state.suborderList[i].orderType === undefined) {
+            let orderType = this.state.suborderList[i].orderType;
+            if (!orderType) {
                 this.message += ("Please fill in Order Type in Suborder: " + (i + 1) + "\n");
             }
+            else {
+                if (this.vitalRecordTypes.indexOf(orderType) > -1) {
+                    if (orderType === 'Marriage Cert') {
+                        if (!this.state.suborderList[i].groomLastName) {
+                            this.message += ("Please fill in the Last Name of Bride/Groom/Spouse 1 in Suborder: " + (i + 1) + "\n")
+                        }
 
-            if (this.state.suborderList[i].status === undefined) {
-                this.message += ("Please fill in Status in Suborder: " + (i + 1) + "\n");
+                        if (!this.state.suborderList[i].brideLastName) {
+                            this.message += ("Please fill in the Last Name of Bride/Groom/Spouse 2 in Suborder: " + (i + 1) + "\n")
+                        }
+                    }
+                    else {
+                        if (!this.state.suborderList[i].lastName) {
+                            this.message += ("Please fill in the Last Name in Suborder: " + (i + 1) + "\n")
+                        }
+                    }
+
+                    let yearsArray = this.state.suborderList[i].years;
+                    if (!yearsArray || !yearsArray[0].value) {
+                        this.message += ("Please fill in the Year in Suborder: " + (i + 1) + "\n")
+                    }
+
+                    let boroughArray = this.state.suborderList[i].borough;
+                    if (!boroughArray || !boroughArray.some(borough => borough.checked === true)) {
+                        this.message += ("Please choose at least one Borough in Suborder: " + (i + 1) + "\n")
+                    }
+
+                    if (!this.state.suborderList[i].deliveryMethod) {
+                        this.message += ("Please choose a Delivery Method in Suborder: " + (i + 1) + "\n")
+                    }
+                }
+
+                else if (orderType === 'Tax Photo') {
+                    if (!this.state.suborderList[i].collection) {
+                        this.message += ("Please choose a Collection in Suborder: " + (i + 1) + "\n")
+                    }
+
+                    if (!this.state.suborderList[i].borough) {
+                        this.message += ("Please choose a Borough in Suborder: " + (i + 1) + "\n")
+                    }
+
+                    if (!this.state.suborderList[i].buildingNum) {
+                        this.message += ("Please fill in the Building Number in Suborder: " + (i + 1) + "\n")
+                    }
+
+                    if (!this.state.suborderList[i].street) {
+                        this.message += ("Please fill in the Street in Suborder: " + (i + 1) + "\n")
+                    }
+
+                    if (!this.state.suborderList[i].size) {
+                        this.message += ("Please choose a Size in Suborder: " + (i + 1) + "\n")
+                    }
+
+                    let deliveryMethod = this.state.suborderList[i].deliveryMethod;
+                    if (!deliveryMethod) {
+                        this.message += ("Please choose a Delivery Method in Suborder: " + (i + 1) + "\n")
+                    }
+                    else {
+                        if (deliveryMethod === 'pickup' && !this.state.suborderList[i].contactNum) {
+                            this.message += ("Please fill in the Contact Number in Suborder: " + (i + 1) + "\n")
+                        }
+                    }
+                }
+
+                else if (orderType === 'Photo Gallery') {
+                    if (!this.state.suborderList[i].imageID) {
+                        this.message += ("Please fill in the Image Identifier in Suborder: " + (i + 1) + "\n")
+                    }
+
+                    if (!this.state.suborderList[i].size) {
+                        this.message += ("Please choose a Size in Suborder: " + (i + 1) + "\n")
+                    }
+
+                    let deliveryMethod = this.state.suborderList[i].deliveryMethod;
+                    if (!deliveryMethod) {
+                        this.message += ("Please choose a Delivery Method in Suborder: " + (i + 1) + "\n")
+                    }
+                    else {
+                        if (deliveryMethod === 'pickup' && !this.state.suborderList[i].contactNum) {
+                            this.message += ("Please fill in the Contact Number in Suborder: " + (i + 1) + "\n")
+                        }
+                    }
+                }
+
+                if (!this.state.suborderList[i].status) {
+                    this.message += ("Please fill in Status in Suborder: " + (i + 1) + "\n");
+                }
+
+                if (!this.state.suborderList[i].numCopies) {
+                    this.message += ("Please fill in Status in Suborder: " + (i + 1) + "\n");
+                }
             }
 
-            // if (this.state.orderType[i] !== '') {
-            //     if ((this.state.showBirthSearch[i] === true || this.state.showBirthCert === true[i]) && this.state.gender[i] === '') {
-            //         this.message += ("Please fill in the Gender in Suborder: " + (i + 1) + "\n");
-            //     }
-            //     if (this.state.showPhotoGalleryForm[i] === false && this.state.borough[i] === '') {
-            //         this.message += ("Please fill in the Borough in Suborder:" + (i + 1) + "\n");
-            //     }
-            //     if ((this.state.showPhotoGalleryForm[i] === true || this.state.showTaxForm[i] === true) && (this.state.printSize[i] === '')) {
-            //         this.message += ("Please fill in the Printing Size in Suborder: " + (i + 1) + "\n")
-            //     }
-            //     if (this.state.showTaxForm[i] === true && this.state.collection[i] === '') {
-            //         this.message += ("Please fill in the Collection in Suborder: " + (i + 1) + "\n");
-            //     }
-            // }
-        }
-
-        if (this.message.length > 0) {
-            swal("Incomplete Form Submission", this.message, "error");
-            this.message = "";
-            this.setState({loading: false});
-            return;
+            if (this.message.length > 0) {
+                swal("Incomplete Form Submission", this.message, "error");
+                this.message = "";
+                this.setState({loading: false});
+                return;
+            }
         }
 
         csrfFetch('api/v1.0/orders/new', {
@@ -139,21 +214,21 @@ class NewOrderForm extends React.Component {
             .then((json) => {
                 // TODO: clear state?
                 this.index = 1;
-                        this.setState({
-                            orderInfo: {
-                                billingName: '',
-                                email: '',
-                                addressLine1: '',
-                                addressLine2: '',
-                                city: '',
-                                state: '',
-                                zipCode: '',
-                                phone: ''
-                            },
-                            loading: false,
-                            suborderList: [{key: 0, numCopies: 1}],
-                        });
-                        this.newSuborderForm.clearSelection();
+                this.setState({
+                    orderInfo: {
+                        billingName: '',
+                        email: '',
+                        addressLine1: '',
+                        addressLine2: '',
+                        city: '',
+                        state: '',
+                        zipCode: '',
+                        phone: ''
+                    },
+                    loading: false,
+                    suborderList: [{key: 0, numCopies: 1}],
+                });
+                this.newSuborderForm.clearSelection();
                 // this.setState({loading: false});
                 // window.open(json.url);
 
@@ -162,7 +237,8 @@ class NewOrderForm extends React.Component {
             this.setState({loading: false});
         });
         swal("Thank you", "Your order has been submitted", "success");
-    };
+    }
+    ;
 
     deleteSuborder = (index) => {
         let newSuborderList = this.state.suborderList.filter((val) => {
