@@ -219,6 +219,7 @@ class BirthForm extends React.Component {
                         />
 
                         <Form.Group grouped>
+                            <label>Delivery Method</label>
                             <Form.Radio
                                 label='Mail'
                                 name={'deliveryMethod' + this.props.suborderKey}

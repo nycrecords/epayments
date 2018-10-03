@@ -528,8 +528,18 @@ def create_new_order(order_info_dict, suborder_list):
     for suborder in suborder_list:
         next_suborder_number = order.next_suborder_number
         suborder_id = order.id + '-' + str(next_suborder_number)
+
+        order_type = suborder['orderType']
+        if not suborder.get('certificateNum'):
+            if order_type == order_types.BIRTH_CERT:
+                order_type = order_types.BIRTH_SEARCH
+            elif order_type == order_types.DEATH_CERT:
+                order_type = order_types.DEATH_SEARCH
+            elif order_type == order_types.MARRIAGE_CERT:
+                order_type = order_types.MARRIAGE_SEARCH
+
         new_suborder = Suborders(id=suborder_id,
-                                 order_type=suborder['orderType'],
+                                 order_type=order_type,
                                  order_number=order.id,
                                  _status=suborder['status'])
         db.session.add(new_suborder)
