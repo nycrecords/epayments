@@ -95,35 +95,38 @@ class NewOrderForm extends React.Component {
         e.preventDefault();
         this.setState({loading: true});
         // TODO: check validation
-        // for (var i = 0; i < this.state.suborderList.length; i++) {
-        //     if (this.state.orderType[i] === '') {
-        //         this.message += ("Please fill in Order Type in Suborder: " + (i + 1) + "\n");
-        //     }
-        //     if (this.state.status[i] === '') {
-        //         this.message += ("Please fill in Status in Suborder: " + (i + 1) + "\n");
-        //     }
-        //     if (this.state.orderType[i] !== '') {
-        //         if ((this.state.showBirthSearch[i] === true || this.state.showBirthCert === true[i]) && this.state.gender[i] === '') {
-        //             this.message += ("Please fill in the Gender in Suborder: " + (i + 1) + "\n");
-        //         }
-        //         if (this.state.showPhotoGalleryForm[i] === false && this.state.borough[i] === '') {
-        //             this.message += ("Please fill in the Borough in Suborder:" + (i + 1) + "\n");
-        //         }
-        //         if ((this.state.showPhotoGalleryForm[i] === true || this.state.showTaxForm[i] === true) && (this.state.printSize[i] === '')) {
-        //             this.message += ("Please fill in the Printing Size in Suborder: " + (i + 1) + "\n")
-        //         }
-        //         if (this.state.showTaxForm[i] === true && this.state.collection[i] === '') {
-        //             this.message += ("Please fill in the Collection in Suborder: " + (i + 1) + "\n");
-        //         }
-        //     }
-        // }
-        //
-        // if (this.message.length !== 0) {
-        //     swal("Incomplete Form Submission", this.message, "error");
-        //     this.message = "";
-        //     this.setState({loading: false});
-        //     return;
-        // }
+        for (let i = 0; i < this.state.suborderList.length; i++) {
+            console.log(this.state.suborderList[i]);
+            if (this.state.suborderList[i].orderType === undefined) {
+                this.message += ("Please fill in Order Type in Suborder: " + (i + 1) + "\n");
+            }
+
+            if (this.state.suborderList[i].status === undefined) {
+                this.message += ("Please fill in Status in Suborder: " + (i + 1) + "\n");
+            }
+
+            // if (this.state.orderType[i] !== '') {
+            //     if ((this.state.showBirthSearch[i] === true || this.state.showBirthCert === true[i]) && this.state.gender[i] === '') {
+            //         this.message += ("Please fill in the Gender in Suborder: " + (i + 1) + "\n");
+            //     }
+            //     if (this.state.showPhotoGalleryForm[i] === false && this.state.borough[i] === '') {
+            //         this.message += ("Please fill in the Borough in Suborder:" + (i + 1) + "\n");
+            //     }
+            //     if ((this.state.showPhotoGalleryForm[i] === true || this.state.showTaxForm[i] === true) && (this.state.printSize[i] === '')) {
+            //         this.message += ("Please fill in the Printing Size in Suborder: " + (i + 1) + "\n")
+            //     }
+            //     if (this.state.showTaxForm[i] === true && this.state.collection[i] === '') {
+            //         this.message += ("Please fill in the Collection in Suborder: " + (i + 1) + "\n");
+            //     }
+            // }
+        }
+
+        if (this.message.length > 0) {
+            swal("Incomplete Form Submission", this.message, "error");
+            this.message = "";
+            this.setState({loading: false});
+            return;
+        }
 
         csrfFetch('api/v1.0/orders/new', {
             method: "POST",

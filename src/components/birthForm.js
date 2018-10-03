@@ -66,14 +66,15 @@ class BirthForm extends React.Component {
         this.setState({
             boroughs: newBoroughs
         });
+        console.log(this.state.boroughs);
         this.props.handleFormChange('boroughs', this.state.boroughs);
     };
 
     handleLetterChange = () => {
         this.setState({
             letter: !this.state.letter
-        });
-        this.props.handleFormChange('letter', this.state.letter)
+        }, () =>
+        this.props.handleFormChange('letter', this.state.letter));
     };
 
     handleRadioChange = (e, {name, value}) => {
@@ -226,7 +227,6 @@ class BirthForm extends React.Component {
                                 value='mail'
                                 checked={this.state.deliveryMethod === "mail"}
                                 onChange={this.handleRadioChange}
-
                             />
                             <Form.Radio
                                 label='Email'

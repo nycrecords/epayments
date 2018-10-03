@@ -75,7 +75,8 @@ class DeathForm extends React.Component {
     handleLetterChange = () => {
         this.setState({
             letter: !this.state.letter
-        })
+        }, () =>
+        this.props.handleFormChange('letter', this.state.letter));
     };
 
     handleRadioChange = (e, {name, value}) => {
