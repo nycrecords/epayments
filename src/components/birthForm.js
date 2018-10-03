@@ -77,10 +77,11 @@ class BirthForm extends React.Component {
     };
 
     handleRadioChange = (e, {name, value}) => {
+        let stateName = name.replace(/\d+/g, '');
         this.setState({
-            [name]: value
+            [stateName]: value
         });
-        this.props.handleFormChange(name, value);
+        this.props.handleFormChange(stateName, value);
     };
 
     render() {
@@ -218,10 +219,9 @@ class BirthForm extends React.Component {
                         />
 
                         <Form.Group grouped>
-                            <label>Delivery Method</label>
                             <Form.Radio
                                 label='Mail'
-                                name='deliveryMethod'
+                                name={'deliveryMethod' + this.props.suborderKey}
                                 value='mail'
                                 checked={this.state.deliveryMethod === "mail"}
                                 onChange={this.handleRadioChange}
@@ -229,7 +229,7 @@ class BirthForm extends React.Component {
                             />
                             <Form.Radio
                                 label='Email'
-                                name='deliveryMethod'
+                                name={'deliveryMethod' + this.props.suborderKey}
                                 value='email'
                                 checked={this.state.deliveryMethod === "email"}
                                 onChange={this.handleRadioChange}

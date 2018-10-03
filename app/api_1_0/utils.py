@@ -535,6 +535,8 @@ def create_new_order(order_info_dict, suborder_list):
         db.session.add(new_suborder)
         db.session.commit()
 
+        new_suborder.es_create()
+
         event = Events(suborder_number=new_suborder.id,
                        type_=event_type.INITIAL_IMPORT,
                        user_email=current_user.email,
@@ -554,12 +556,10 @@ def create_new_order(order_info_dict, suborder_list):
             order_types.PHOTO_GALLERY: _create_new_photo_gallery
         }
 
-        handler_for_order_type[suborder['orderType']](suborder, new_suborder.id)
-
-        new_suborder.es_create()
+        handler_for_order_type[suborder['orderType']](suborder, new_suborder)
 
 
-def _create_new_birth_object(suborder, suborder_id):
+def _create_new_birth_object(suborder, new_suborder_obj):
     certificate_number = suborder.get('certificateNum')
 
     if certificate_number:
@@ -579,7 +579,7 @@ def _create_new_birth_object(suborder, suborder_id):
                                         letter=suborder.get('letter'),
                                         comment=suborder.get('comment'),
                                         _delivery_method=suborder['deliveryMethod'],
-                                        suborder_number=suborder_id)
+                                        suborder_number=new_suborder_obj.id)
     else:
         birth_object = BirthSearch(first_name=suborder.get('firstName'),
                                    last_name=suborder['lastName'],
@@ -596,12 +596,14 @@ def _create_new_birth_object(suborder, suborder_id):
                                    letter=suborder.get('letter'),
                                    comment=suborder.get('comment'),
                                    _delivery_method=suborder['deliveryMethod'],
-                                   suborder_number=suborder_id)
+                                   suborder_number=new_suborder_obj.id)
     db.session.add(birth_object)
     db.session.commit()
 
+    new_suborder_obj.es_update(birth_object.serialize)
 
-def _create_new_death_object(suborder, suborder_id):
+
+def _create_new_death_object(suborder, new_suborder_obj):
     certificate_number = suborder.get('certificateNum')
 
     if certificate_number:
@@ -619,7 +621,7 @@ def _create_new_death_object(suborder, suborder_id):
                                         letter=suborder.get('letter'),
                                         comment=suborder.get('comment'),
                                         _delivery_method=suborder['deliveryMethod'],
-                                        suborder_number=suborder_id)
+                                        suborder_number=new_suborder_obj.id)
     else:
         death_object = DeathSearch(last_name=suborder['lastName'],
                                    first_name=suborder.get('firstName'),
@@ -634,12 +636,14 @@ def _create_new_death_object(suborder, suborder_id):
                                    letter=suborder.get('letter'),
                                    comment=suborder.get('comment'),
                                    _delivery_method=suborder['deliveryMethod'],
-                                   suborder_number=suborder_id)
+                                   suborder_number=new_suborder_obj.id)
     db.session.add(death_object)
     db.session.commit()
 
+    new_suborder_obj.es_update(death_object.serialize)
 
-def _create_new_marriage_object(suborder, suborder_id):
+
+def _create_new_marriage_object(suborder, new_suborder_obj):
     certificate_number = suborder.get('certificateNum')
 
     if certificate_number:
@@ -657,7 +661,7 @@ def _create_new_marriage_object(suborder, suborder_id):
                                               letter=suborder.get('letter'),
                                               comment=suborder.get('comment'),
                                               _delivery_method=suborder['deliveryMethod'],
-                                              suborder_number=suborder_id)
+                                              suborder_number=new_suborder_obj.id)
     else:
         marriage_object = MarriageSearch(groom_last_name=suborder['groomLastName'],
                                          groom_first_name=suborder.get('groomFirstName'),
@@ -672,12 +676,14 @@ def _create_new_marriage_object(suborder, suborder_id):
                                          letter=suborder.get('letter'),
                                          comment=suborder.get('comment'),
                                          _delivery_method=suborder['deliveryMethod'],
-                                         suborder_number=suborder_id)
+                                         suborder_number=new_suborder_obj.id)
     db.session.add(marriage_object)
     db.session.commit()
 
+    new_suborder_obj.es_update(marriage_object.serialize)
 
-def _create_new_tax_photo(suborder, suborder_id):
+
+def _create_new_tax_photo(suborder, new_suborder_obj):
     new_collection = suborder['collection']
 
     if new_collection in [collection.YEAR_1940, collection.BOTH]:
@@ -693,8 +699,11 @@ def _create_new_tax_photo(suborder, suborder_id):
                                   num_copies=suborder['numCopies'],
                                   _delivery_method=suborder['deliveryMethod'],
                                   contact_number=suborder.get('contactNum'),
-                                  suborder_number=suborder_id)
+                                  suborder_number=new_suborder_obj.id)
         db.session.add(tax_photo_1940)
+        db.session.commit()
+
+        new_suborder_obj.es_update(tax_photo_1940.serialize)
 
     if new_collection in [collection.YEAR_1980, collection.BOTH]:
         tax_photo_1980 = TaxPhoto(collection=collection.YEAR_1980,
@@ -708,13 +717,14 @@ def _create_new_tax_photo(suborder, suborder_id):
                                   num_copies=suborder['numCopies'],
                                   _delivery_method=suborder['deliveryMethod'],
                                   contact_number=suborder.get('contactNum'),
-                                  suborder_number=suborder_id)
+                                  suborder_number=new_suborder_obj.id)
         db.session.add(tax_photo_1980)
+        db.session.commit()
 
-    db.session.commit()
+        new_suborder_obj.es_update(tax_photo_1980.serialize)
 
 
-def _create_new_photo_gallery(suborder, suborder_id):
+def _create_new_photo_gallery(suborder, new_suborder_obj):
     photo_gallery = PhotoGallery(image_id=suborder['imageID'],
                                  description=suborder.get('description'),
                                  additional_description=suborder.get('additionalDescription'),
@@ -723,6 +733,8 @@ def _create_new_photo_gallery(suborder, suborder_id):
                                  _delivery_method=suborder['deliveryMethod'],
                                  contact_number=suborder.get('contactNum'),
                                  comment=suborder.get('comment'),
-                                 suborder_number=suborder_id)
+                                 suborder_number=new_suborder_obj.id)
     db.session.add(photo_gallery)
     db.session.commit()
+
+    new_suborder_obj.es_update(photo_gallery.serialize)

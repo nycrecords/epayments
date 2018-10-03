@@ -28,10 +28,11 @@ class TaxPhotoForm extends React.Component {
     };
 
     handleRadioChange = (e, {name, value}) => {
+        let stateName = name.replace(/\d+/g, '');
         this.setState({
-            [name]: value
+            [stateName]: value
         });
-        this.props.handleFormChange(name, value);
+        this.props.handleFormChange(stateName, value);
     };
 
     render() {
@@ -43,7 +44,7 @@ class TaxPhotoForm extends React.Component {
                             <label>Collection</label>
                             <Form.Radio
                                 label='1940'
-                                name='collection'
+                                name={'collection' + this.props.suborderKey}
                                 value='1940'
                                 checked={this.state.collection === "1940"}
                                 onChange={this.handleRadioChange}
@@ -51,14 +52,14 @@ class TaxPhotoForm extends React.Component {
                             />
                             <Form.Radio
                                 label='1980'
-                                name='collection'
+                                name={'collection' + this.props.suborderKey}
                                 value='1980'
                                 checked={this.state.collection === "1980"}
                                 onChange={this.handleRadioChange}
                             />
                             <Form.Radio
                                 label='Both'
-                                name='collection'
+                                name={'collection' + this.props.suborderKey}
                                 value='Both'
                                 checked={this.state.collection === "Both"}
                                 onChange={this.handleRadioChange}
@@ -69,7 +70,7 @@ class TaxPhotoForm extends React.Component {
                             <label>Borough</label>
                             <Form.Radio
                                 label='Brooklyn'
-                                name='borough'
+                                name={'borough' + this.props.suborderKey}
                                 value='Brooklyn'
                                 checked={this.state.borough === "Brooklyn"}
                                 onChange={this.handleRadioChange}
@@ -77,28 +78,28 @@ class TaxPhotoForm extends React.Component {
                             />
                             <Form.Radio
                                 label='Manhattan'
-                                name='borough'
+                                name={'borough' + this.props.suborderKey}
                                 value='Manhattan'
                                 checked={this.state.borough === "Manhattan"}
                                 onChange={this.handleRadioChange}
                             />
                             <Form.Radio
                                 label='Queens'
-                                name='borough'
+                                name={'borough' + this.props.suborderKey}
                                 value='Queens'
                                 checked={this.state.borough === "Queens"}
                                 onChange={this.handleRadioChange}
                             />
                             <Form.Radio
                                 label='Staten Island'
-                                name='borough'
+                                name={'borough' + this.props.suborderKey}
                                 value='Staten Island'
                                 checked={this.state.borough === "Staten Island"}
                                 onChange={this.handleRadioChange}
                             />
                             <Form.Radio
                                 label='Bronx'
-                                name='borough'
+                                name={'borough' + this.props.suborderKey}
                                 value='Bronx'
                                 checked={this.state.borough === "Bronx"}
                                 onChange={this.handleRadioChange}
@@ -117,6 +118,7 @@ class TaxPhotoForm extends React.Component {
                                     name="street"
                                     placeholder="Street"
                                     maxLength={40}
+                                    required
                                     onChange={this.handleChange}
                                     value={this.state.street}
                         />
@@ -156,7 +158,7 @@ class TaxPhotoForm extends React.Component {
                             <label>Collection</label>
                             <Form.Radio
                                 label='8" x 10" Print'
-                                name='size'
+                                name={'size' + this.props.suborderKey}
                                 value='8x10'
                                 checked={this.state.size === "8x10"}
                                 onChange={this.handleRadioChange}
@@ -164,7 +166,7 @@ class TaxPhotoForm extends React.Component {
                             />
                             <Form.Radio
                                 label='11" x 14" Print'
-                                name='size'
+                                name={'size' + this.props.suborderKey}
                                 value='11x14'
                                 checked={this.state.size === "11x14"}
                                 onChange={this.handleRadioChange}
@@ -175,7 +177,7 @@ class TaxPhotoForm extends React.Component {
                             <label>Delivery Method</label>
                             <Form.Radio
                                 label='Mail'
-                                name='deliveryMethod'
+                                name={'deliveryMethod' + this.props.suborderKey}
                                 value='mail'
                                 checked={this.state.deliveryMethod === "mail"}
                                 onChange={this.handleRadioChange}
@@ -183,14 +185,14 @@ class TaxPhotoForm extends React.Component {
                             />
                             <Form.Radio
                                 label='Email'
-                                name='deliveryMethod'
+                                name={'deliveryMethod' + this.props.suborderKey}
                                 value='email'
                                 checked={this.state.deliveryMethod === "email"}
                                 onChange={this.handleRadioChange}
                             />
                             <Form.Radio
                                 label='Pickup'
-                                name='deliveryMethod'
+                                name={'deliveryMethod' + this.props.suborderKey}
                                 value='pickup'
                                 checked={this.state.deliveryMethod === "pickup"}
                                 onChange={this.handleRadioChange}

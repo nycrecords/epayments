@@ -24,10 +24,11 @@ class PhotoGalleryForm extends React.Component {
     };
 
     handleRadioChange = (e, {name, value}) => {
+        let stateName = name.replace(/\d+/g, '');
         this.setState({
-            [name]: value
+            [stateName]: value
         });
-        this.props.handleFormChange(name, value);
+        this.props.handleFormChange(stateName, value);
     };
 
     render() {
@@ -65,7 +66,7 @@ class PhotoGalleryForm extends React.Component {
                             <label>Size</label>
                             <Form.Radio
                                 label='8" x 10" Print'
-                                name='size'
+                                name={'size' + this.props.suborderKey}
                                 value='8x10'
                                 checked={this.state.size === "8x10"}
                                 onChange={this.handleRadioChange}
@@ -73,14 +74,14 @@ class PhotoGalleryForm extends React.Component {
                             />
                             <Form.Radio
                                 label='11" x 14" Print'
-                                name='size'
+                                name={'size' + this.props.suborderKey}
                                 value='11x14'
                                 checked={this.state.size === "11x14"}
                                 onChange={this.handleRadioChange}
                             />
                             <Form.Radio
                                 label='16" x 20" Print'
-                                name='size'
+                                name={'size' + this.props.suborderKey}
                                 value='11x14'
                                 checked={this.state.size === "16x20"}
                                 onChange={this.handleRadioChange}
@@ -91,7 +92,7 @@ class PhotoGalleryForm extends React.Component {
                             <label>Delivery Method</label>
                             <Form.Radio
                                 label='Mail'
-                                name='deliveryMethod'
+                                name={'deliveryMethod' + this.props.suborderKey}
                                 value='mail'
                                 checked={this.state.deliveryMethod === "mail"}
                                 onChange={this.handleRadioChange}
@@ -99,14 +100,14 @@ class PhotoGalleryForm extends React.Component {
                             />
                             <Form.Radio
                                 label='Email'
-                                name='deliveryMethod'
+                                name={'deliveryMethod' + this.props.suborderKey}
                                 value='email'
                                 checked={this.state.deliveryMethod === "email"}
                                 onChange={this.handleRadioChange}
                             />
                             <Form.Radio
                                 label='Pickup'
-                                name='deliveryMethod'
+                                name={'deliveryMethod' + this.props.suborderKey}
                                 value='pickup'
                                 checked={this.state.deliveryMethod === "pickup"}
                                 onChange={this.handleRadioChange}
