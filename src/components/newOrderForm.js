@@ -11,7 +11,7 @@ class NewOrderForm extends React.Component {
 
         this.state = {
             orderInfo: {
-                billingName: '',
+                name: '',
                 email: '',
                 addressLine1: '',
                 addressLine2: '',
@@ -45,7 +45,7 @@ class NewOrderForm extends React.Component {
                         this.index = 1;
                         this.setState({
                             orderInfo: {
-                                billingName: '',
+                                name: '',
                                 email: '',
                                 addressLine1: '',
                                 addressLine2: '',
@@ -308,7 +308,7 @@ class NewOrderForm extends React.Component {
                                                 placeholder="Name"
                                                 maxLength="64"
                                                 onChange={this.handleChange}
-                                                value={this.state.orderInfo.billingName}
+                                                value={this.state.orderInfo.name}
                                     />
                                     <Form.Input label="Email"
                                                 name="email"
