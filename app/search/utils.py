@@ -100,7 +100,7 @@ def create_docs():
     """Creates elasticsearch request docs for every request"""
     if not es:
         return
-    suborders = Suborders.query.all()
+    suborders = Suborders.query.limit(15000).all()
 
     order_type_models_handler = {
         order_types.BIRTH_SEARCH: BirthSearch,
@@ -152,7 +152,7 @@ def create_docs():
         operations,
         index='suborders',
         doc_type='suborders',
-        chunk_size=RESULTS_CHUNK_SIZE,
+        chunk_size=500,
         raise_on_error=True
     )
     print("Successfully created %s suborder docs." % num_success)

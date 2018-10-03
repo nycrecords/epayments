@@ -45,7 +45,7 @@ class MarriageSearch(db.Model):
             delivery_method.EMAIL,
             delivery_method.PICKUP,
             name='delivery_method'
-        ), nullable=False
+        ), nullable=True
     )
     suborder_number = db.Column(db.String(32), db.ForeignKey('suborders.id'), nullable=False)
 
@@ -173,7 +173,7 @@ class MarriageCertificate(db.Model):
             delivery_method.EMAIL,
             delivery_method.PICKUP,
             name='delivery_method'
-        ), nullable=False
+        ), nullable=True
     )
     suborder_number = db.Column(db.String(32), db.ForeignKey('suborders.id'), nullable=False)
 
