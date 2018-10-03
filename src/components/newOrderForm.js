@@ -124,7 +124,7 @@ class NewOrderForm extends React.Component {
                         this.message += ("Please fill in the Year in Suborder: " + (i + 1) + "\n")
                     }
 
-                    let boroughArray = this.state.suborderList[i].borough;
+                    let boroughArray = this.state.suborderList[i].boroughs;
                     if (!boroughArray || !boroughArray.some(borough => borough.checked === true)) {
                         this.message += ("Please choose at least one Borough in Suborder: " + (i + 1) + "\n")
                     }
