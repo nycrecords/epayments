@@ -223,6 +223,8 @@ class BirthForm extends React.Component {
                             <label className='required-label'>Delivery Method</label>
                             <Form.Radio
                                 label='Mail'
+                                // Radio buttons can't have same name across different components on the same page,
+                                // so suborderKey is used
                                 name={'deliveryMethod' + this.props.suborderKey}
                                 value='mail'
                                 checked={this.state.deliveryMethod === "mail"}

@@ -33,7 +33,7 @@ class NewSuborderForm extends React.Component {
         this.state = {
             orderType: '',
             numCopies: '1',
-            status: '',
+            status: 'Received',
         };
 
         this.handleChange = this.handleChange.bind(this);
@@ -43,7 +43,7 @@ class NewSuborderForm extends React.Component {
         this.setState({
             orderType: '',
             numCopies: '1',
-            status: '',
+            status: 'Received',
         });
     };
 
@@ -78,6 +78,7 @@ class NewSuborderForm extends React.Component {
     // Pass numCopies to parent
     componentDidMount() {
         this.props.handleSuborderListChange('numCopies', this.state.numCopies, this.props.suborderKey);
+        this.props.handleSuborderListChange('status', this.state.status, this.props.suborderKey);
     }
 
     render() {

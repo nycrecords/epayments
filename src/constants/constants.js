@@ -17,6 +17,7 @@ export const genderOptions = [
 ];
 
 export const monthOptions = [
+    {value: ''},
     {key: 'january', text: 'January', value: 'january'},
     {key: 'february', text: 'February', value: 'february'},
     {key: 'march', text: 'March', value: 'March'},
@@ -32,6 +33,7 @@ export const monthOptions = [
 ];
 
 export const dayOptions = [
+    {value: ''},
     {key: '1', text: '1', value: '1'},
     {key: '2', text: '2', value: '2'},
     {key: '3', text: '3', value: '3'},

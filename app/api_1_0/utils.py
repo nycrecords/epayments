@@ -512,8 +512,8 @@ def create_new_order(order_info_dict, suborder_list):
                    multiple_items=True if len(suborder_list) > 1 else False)
     db.session.add(order)
 
-    customer = Customers(billing_name=order_info_dict['billingName'],
-                         shipping_name=order_info_dict['billingName'],
+    customer = Customers(billing_name=order_info_dict['name'],
+                         shipping_name=order_info_dict['name'],
                          email=order_info_dict.get('email'),
                          address_line_1=order_info_dict.get('addressLine1'),
                          address_line_2=order_info_dict.get('addressLine2'),
