@@ -314,11 +314,9 @@ def _print_small_labels(search_params):
     # Only want suborder_number, and order type
     suborders = SearchFunctions.format_results(suborder_results)
 
-    order_from_suborders = list({s['order_number']: s for s in suborders}.values())
-
     customers = []
 
-    for item in order_from_suborders:
+    for item in suborders:
         customers.append(item['customer'])
 
     labels = [customers[i:i + printing.SMALL_LABEL_COUNT] for i in range(0, len(customers), printing.SMALL_LABEL_COUNT)]
@@ -380,11 +378,9 @@ def _print_large_labels(search_params):
     # Only want suborder_number, and order type
     suborders = SearchFunctions.format_results(suborder_results)
 
-    order_from_suborders = list({s['order_number']: s for s in suborders}.values())
-
     customers = []
 
-    for item in order_from_suborders:
+    for item in suborders:
         customers.append(item['customer'])
 
     customers = sorted(customers, key=lambda customer: customer['billing_name'])
