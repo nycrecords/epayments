@@ -1,0 +1,51 @@
+{% extends "orders/base.html" %}
+
+{% block content %}
+    <p>
+        <b>BOROUGH: </b><br/>
+        {{ order_info['metadata']['borough'] or "Not Provided" }}
+        <br/>
+    </p>
+    <p>
+        <b>BLOCK: </b><br/>
+        {{ order_info['metadata']['block'] or "Not Provided" }}
+        <br/>
+    </p>
+    <p>
+        <b>LOT: </b><br/>
+        {{ order_info['metadata']['lot'] or "Not Provided" }}
+        <br/>
+    </p>
+    <p>
+        <b>BUILDING_NUMBER: </b><br/>
+        {{ order_info['metadata']['building_number'] or "Not Provided" }}
+        <br/>
+    </p>
+    <p>
+        <b>STREET: </b><br/>
+        {{ order_info['metadata']['street'] or "Not Provided" }}
+        <br/>
+    </p>
+    <p>
+        <b>DESCRIPTION: </b><br/>
+        {{ order_info['metadata']['description'] or "Not Provided" }}
+        <br/>
+    </p>
+
+    <p>
+        <b>CERTIFIED: </b><br/>
+        {{ "Certified" if order_info['metadata']['mail_pickup'] else "Not Certified" }}
+        <br/>
+    </p>
+    <p>
+
+    <p>
+        <b>MAIL_PICKUP: </b><br/>
+        {{ "Mail" if order_info['metadata']['mail_pickup'] else "Pickup" }}
+        <br/>
+    </p>
+
+{% endblock %}
+
+
+

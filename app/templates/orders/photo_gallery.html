@@ -1,0 +1,68 @@
+{% extends 'orders/base.html' %}
+
+{% block content %}
+    <br/>
+    <p>
+        <b>IMAGE_IDENTIFIER:</b>
+        <br/>
+        {{ order_info['metadata']['image_id'] }}
+        <br/>
+    </p>
+
+    <p>
+        <b>DESCRIPTION:</b>
+        <br/>
+        {{ order_info['metadata']['description'] or "Not Provided" }}
+        <br/>
+    </p>
+
+    <p>
+        <b>ADDITIONAL DESCRIPTION:</b>
+        <br/>
+        {{ order_info['metadata']['additional_description'] or "Not Provided" }}
+        <br/>
+    </p>
+
+    <p>
+        <b>SIZE:</b>
+        <br/>
+        {{ order_info['metadata']['size'] }}
+        <br/>
+    </p>
+
+    <p>
+        <b>NUMBER OF COPIES:</b>
+        <br/>
+        {{ order_info['metadata']['num_copies'] }}
+        <br/>
+    </p>
+
+    {% if order_info['metadata']['contact_number'] %}
+        <p>
+            <b>CONTACT NUMBER:</b>
+            <br/>
+            {{ order_info['metadata']['contact_number'] }}
+            <br/>
+        </p>
+    {% endif %}
+
+    <p>
+        <b>PERSONAL_USE_AGREEMENT:</b>
+        <br/>
+        {{ order_info['metadata']['personal_use_agreement'] or "Not Provided" }}
+        <br/>
+    </p>
+
+    {% if order_info['metadata']['comment'] %}
+        <p>
+            <b>COMMENT:</b>
+            <br/>
+            {{ order_info['metadata']['comment'] }}
+        </p>
+    {% endif %}
+
+    <p>
+        <b>DELIVERY METHOD:</b> <br/>
+        {{ order_info['metadata']['delivery_method'].title() }}
+    </p>
+{% endblock %}

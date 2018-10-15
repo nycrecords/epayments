@@ -1,0 +1,77 @@
+{% extends 'orders/base.html' %}
+
+{% block content %}
+    <br/>
+    <p>
+        <b>COLLECTION:</b><br/>
+        {{ order_info['metadata']['collection'] }}
+        <br/>
+    </p>
+
+    <p>
+        <b>BOROUGH:</b><br/>
+        {{ order_info['metadata']['borough'] }}
+        <br/>
+    </p>
+
+    <p>
+        <b>ROLL:</b><br/>
+        {{ order_info['metadata']['roll'] or "Not Provided" }}
+        <br/>
+    </p>
+
+    <p>
+        <b>BLOCK:</b><br/>
+        {{ order_info['metadata']['block'] or "Not Provided" }}
+        <br/>
+    </p>
+
+    <p>
+        <b>LOT:</b><br/>
+        {{ order_info['metadata']['lot'] or "Not Provided" }}
+        <br/>
+    </p>
+
+    <p>
+        <b>BUILDING_NUMBER:</b><br/>
+        {{ order_info['metadata']['building_number'] }}
+        <br/>
+    </p>
+
+    <p>
+        <b>STREET:</b><br/>
+        {{ order_info['metadata']['street'] }}
+        <br/>
+    </p>
+
+    <p>
+        <b>DESCRIPTION:</b><br/>
+        {{ order_info['metadata']['description'] or "Not Provided" }}
+        <br/>
+    </p>
+
+    <p>
+        <b>SIZE:</b><br/>
+        {{ order_info['metadata']['size'] }}
+        <br/>
+    </p>
+
+    <p>
+        <b>NUMBER OF COPIES:</b><br/>
+        {{ order_info['metadata']['num_copies'] }}
+        <br/>
+    </p>
+
+    {% if order_info['metadata']['contact_number'] %}
+        <p>
+            <b>CONTACT NUMBER:</b><br/>
+            {{ order_info['metadata']['contact_number'] }}
+            <br/>
+        </p>
+    {% endif %}
+
+    <p>
+        <b>DELIVERY METHOD:</b> <br/>
+        {{ order_info['metadata']['delivery_method'].title() }}
+    </p>
+{% endblock %}
