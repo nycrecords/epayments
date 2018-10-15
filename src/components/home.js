@@ -1,5 +1,6 @@
 import React from 'react';
-import {Button, Container, Dimmer, Rail, Grid, Header, Icon, Loader, Segment,} from 'semantic-ui-react';
+import {Link} from "react-router-dom";
+import {Button, Container, Dimmer, Grid, Header, Icon, Loader, Rail, Segment} from 'semantic-ui-react';
 import {connect} from 'react-redux';
 import {mapDispatchToProps, mapStateToProps} from "../utils/reduxMappers";
 import OrderForm from "./order_form";
@@ -21,7 +22,7 @@ class Home extends React.Component {
             all_orders: [],
             order_count: 0,
             suborder_count: 0,
-            loading: true,
+            loading: false,
             showCSVButton: false,
             suborder_two: 0
         };
@@ -108,6 +109,14 @@ class Home extends React.Component {
         };
     };
 
+    handleListChange = (name, value, state, index) => {
+        let newState = state.slice();
+        newState[index] = value;
+        this.setState({
+            [name]: newState
+        });
+    };
+
     toggleCSV = (visible) => {
         this.setState({showCSVButton: visible});
     };
@@ -151,6 +160,8 @@ class Home extends React.Component {
                 date_received={order.date_received.slice(0, -9)}
                 current_status={order.current_status}
                 updateStatus={this.updateStatus}
+                order={order}
+                index={this.state.all_orders.indexOf(order)}
             />
         );
 
@@ -199,6 +210,10 @@ class Home extends React.Component {
                                     <Button content='Order Sheets' onClick={this.printOrderSheet}/>
                                     <Button content='Big Labels' onClick={this.printBigLabels}/>
                                     <Button content='Small Labels' onClick={this.printSmallLabels}/>
+
+                                    <Link to="/Order">
+                                        <Button content='New Order'/>
+                                    </Link>
                                 </Button.Group>
                             </Rail>
                             <div id="grid-column-order" ref={elem => this.div = elem}>
@@ -214,7 +229,6 @@ class Home extends React.Component {
                                 </div>)
                                 }
                             </div>
-
                         </Grid.Column>
                     </Grid>
                 ) : (
@@ -226,7 +240,7 @@ class Home extends React.Component {
                     </Segment>
                 )}
             </Container>
-        )
+        );
     }
 }
 

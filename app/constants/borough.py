@@ -5,7 +5,6 @@
     :This file will hold the borough for PHOTO TAX
 """
 
-
 BRONX = 'Bronx'
 MANHATTAN = 'Manhattan'
 STATEN_ISLAND = 'Staten Island'

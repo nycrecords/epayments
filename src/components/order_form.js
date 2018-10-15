@@ -98,11 +98,12 @@ class OrderForm extends React.Component {
         );
 
         this.submitData = (e) => {
+            e.preventDefault();
             this.setStartZero(e);
         };
 
         this.submitFormData = (e, print) => {
-            e.preventDefault();
+            // e.preventDefault();
 
             switch (print) {
                 case 'orders':
@@ -165,7 +166,7 @@ class OrderForm extends React.Component {
                     break;
 
                 // Search
-                case'submit':
+                case 'submit':
                     this.props.setLoadingState(true);
                     csrfFetch('api/v1.0/orders', {
                         method: "POST",
@@ -195,8 +196,7 @@ class OrderForm extends React.Component {
                         });
                     break;
 
-                case'load_more':
-                    debugger;
+                case 'load_more':
                     this.props.setLoadingState(true);
                     csrfFetch('api/v1.0/orders', {
                         method: "POST",
@@ -302,7 +302,6 @@ class OrderForm extends React.Component {
                                 value={this.state.billing_name}
                                 className="margin-small-tb"
                     />
-
 
                     <Menu pointing attached='top' borderless>
                         <Menu.Item

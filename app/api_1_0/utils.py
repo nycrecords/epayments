@@ -1,5 +1,5 @@
 import csv
-from datetime import datetime
+from datetime import date, datetime
 
 from flask import render_template, current_app, url_for
 from flask_login import current_user
@@ -9,21 +9,30 @@ from xhtml2pdf.pisa import CreatePDF
 
 from app import db
 from app.constants import (
+    collection,
     event_type,
     printing
 )
+from app.constants import order_types
 from app.constants.customer import EMPTY_CUSTOMER
-from app.constants.order_types import VITAL_RECORDS_LIST, PHOTOS_LIST
 from app.constants.search import ELASTICSEARCH_MAX_SIZE
 from app.models import (
+    BirthCertificate,
+    BirthSearch,
+    DeathCertificate,
+    DeathSearch,
+    MarriageCertificate,
+    MarriageSearch,
     Orders,
+    OrderNumberCounter,
     Suborders,
     Customers,
     TaxPhoto,
-    Events
+    Events,
+    PhotoGallery
 )
-from app.search.utils import search_queries
 from app.search.searchfunctions import SearchFunctions
+from app.search.utils import search_queries
 
 
 def _order_query_filters(order_number, suborder_number, order_type, status, billing_name, user, date_received_start,
@@ -51,11 +60,11 @@ def _order_query_filters(order_number, suborder_number, order_type, status, bill
                     )
                 elif value == 'vital_records':
                     filter_args.append(
-                        Suborders.order_type.in_(VITAL_RECORDS_LIST)
+                        Suborders.order_type.in_(order_types.VITAL_RECORDS_LIST)
                     )
                 elif value == 'photos':
                     filter_args.append(
-                        Suborders.order_type.in_(PHOTOS_LIST)
+                        Suborders.order_type.in_(order_types.PHOTOS_LIST)
                     )
                 elif value == 'vital_records_and_photos':
                     filter_args.append(
@@ -256,7 +265,8 @@ def _print_orders(search_params):
         html += render_template("orders/{}".format(order_type_template_handler[item['order_type']]),
                                 order_info=item, customer_info=item['customer'])
 
-    filename = 'order_sheets_{username}_{time}.pdf'.format(username=current_user.email, time=datetime.now().strftime("%Y%m%d-%H%M%S"))
+    filename = 'order_sheets_{username}_{time}.pdf'.format(username=current_user.email,
+                                                           time=datetime.now().strftime("%Y%m%d-%H%M%S"))
     with open(join(current_app.static_folder, 'files', filename), 'w+b') as file_:
         CreatePDF(src=html, dest=file_)
 
@@ -304,11 +314,9 @@ def _print_small_labels(search_params):
     # Only want suborder_number, and order type
     suborders = SearchFunctions.format_results(suborder_results)
 
-    order_from_suborders = list({s['order_number']: s for s in suborders}.values())
-
     customers = []
 
-    for item in order_from_suborders:
+    for item in suborders:
         customers.append(item['customer'])
 
     labels = [customers[i:i + printing.SMALL_LABEL_COUNT] for i in range(0, len(customers), printing.SMALL_LABEL_COUNT)]
@@ -321,7 +329,8 @@ def _print_small_labels(search_params):
 
         html += render_template('orders/small_labels.html', labels=page)
 
-    filename = 'small_labels_{username}_{time}.pdf'.format(username=current_user.email, time=datetime.now().strftime("%Y%m%d-%H%M%S"))
+    filename = 'small_labels_{username}_{time}.pdf'.format(username=current_user.email,
+                                                           time=datetime.now().strftime("%Y%m%d-%H%M%S"))
     with open(join(current_app.static_folder, 'files', filename), 'w+b') as file_:
         CreatePDF(src=html, dest=file_)
 
@@ -369,11 +378,9 @@ def _print_large_labels(search_params):
     # Only want suborder_number, and order type
     suborders = SearchFunctions.format_results(suborder_results)
 
-    order_from_suborders = list({s['order_number']: s for s in suborders}.values())
-
     customers = []
 
-    for item in order_from_suborders:
+    for item in suborders:
         customers.append(item['customer'])
 
     customers = sorted(customers, key=lambda customer: customer['billing_name'])
@@ -388,7 +395,8 @@ def _print_large_labels(search_params):
 
         html += render_template('orders/large_labels.html', labels=page)
 
-    filename = 'large_labels_{username}_{time}.pdf'.format(username=current_user.email, time=datetime.now().strftime("%Y%m%d-%H%M%S"))
+    filename = 'large_labels_{username}_{time}.pdf'.format(username=current_user.email,
+                                                           time=datetime.now().strftime("%Y%m%d-%H%M%S"))
     with open(join(current_app.static_folder, 'files', filename), 'w+b') as file_:
         CreatePDF(src=html, dest=file_)
 
@@ -408,7 +416,9 @@ def generate_csv(search_params):
                                        search_params.get('date_received_end'))
 
     if order_type == 'photos':
-        suborders = Suborders.query.join(Orders, Customers).filter(*filter_args).order_by(asc(Suborders.order_type), asc(Orders.date_submitted)).all()
+        suborders = Suborders.query.join(Orders, Customers).filter(*filter_args).order_by(asc(Suborders.order_type),
+                                                                                          asc(
+                                                                                              Orders.date_submitted)).all()
     else:
         suborders = Suborders.query.join(Orders, Customers).filter(*filter_args).all()
 
@@ -422,7 +432,7 @@ def generate_csv(search_params):
                      "Phone",
                      "Email",
                      "Customer Address",
-                     "Mail or Pickup",
+                     "Delivery Method",
                      "Size",
                      "Copy",
                      "Image Identifier",
@@ -444,7 +454,7 @@ def generate_csv(search_params):
                              suborder.tax_photo.contact_number if suborder.tax_photo.contact_number else suborder.order.customer.phone,
                              suborder.order.customer.email,
                              suborder.order.customer.address,
-                             "Mail" if suborder.tax_photo.mail else "Pickup",
+                             suborder.tax_photo.delivery_method,
                              suborder.tax_photo.size,
                              suborder.tax_photo.num_copies,
                              '',
@@ -465,7 +475,7 @@ def generate_csv(search_params):
                              suborder.photo_gallery.contact_number if suborder.photo_gallery.contact_number else suborder.order.customer.phone,
                              suborder.order.customer.email,
                              suborder.order.customer.address,
-                             "Mail" if suborder.photo_gallery.mail else "Pickup",
+                             suborder.photo_gallery.delivery_method,
                              suborder.photo_gallery.size,
                              suborder.photo_gallery.num_copies,
                              suborder.photo_gallery.image_id,
@@ -482,3 +492,255 @@ def generate_csv(search_params):
     file.close()
 
     return url_for('static', filename='files/{}'.format(filename), _external=True)
+
+
+def create_new_order(order_info_dict, suborder_list):
+    order_types_list = [suborder['orderType'] for suborder in suborder_list]
+
+    year = str(date.today().year)
+    next_order_number = OrderNumberCounter.query.filter_by(year=year).one().next_order_number
+    order_id = "EPAY-{0:s}-{1:03d}".format(year, next_order_number)
+
+    order = Orders(id=order_id,
+                   date_submitted=date.today(),
+                   date_received=date.today(),
+                   order_types=order_types_list,
+                   multiple_items=True if len(suborder_list) > 1 else False)
+    db.session.add(order)
+
+    customer = Customers(billing_name=order_info_dict['name'],
+                         shipping_name=order_info_dict['name'],
+                         email=order_info_dict.get('email'),
+                         address_line_1=order_info_dict.get('addressLine1'),
+                         address_line_2=order_info_dict.get('addressLine2'),
+                         city=order_info_dict.get('city'),
+                         state=order_info_dict.get('NY'),
+                         zip_code=order_info_dict.get('zipCode'),
+                         phone=order_info_dict.get('phone'),
+                         order_number=order.id)
+    db.session.add(customer)
+    db.session.commit()
+
+    for suborder in suborder_list:
+        next_suborder_number = order.next_suborder_number
+        suborder_id = order.id + '-' + str(next_suborder_number)
+
+        order_type = suborder['orderType']
+        if not suborder.get('certificateNum'):
+            if order_type == order_types.BIRTH_CERT:
+                order_type = order_types.BIRTH_SEARCH
+            elif order_type == order_types.DEATH_CERT:
+                order_type = order_types.DEATH_SEARCH
+            elif order_type == order_types.MARRIAGE_CERT:
+                order_type = order_types.MARRIAGE_SEARCH
+
+        new_suborder = Suborders(id=suborder_id,
+                                 order_type=order_type,
+                                 order_number=order.id,
+                                 _status=suborder['status'])
+        db.session.add(new_suborder)
+        db.session.commit()
+
+        new_suborder.es_create()
+
+        event = Events(suborder_number=new_suborder.id,
+                       type_=event_type.INITIAL_IMPORT,
+                       user_email=current_user.email,
+                       previous_value=None,
+                       new_value={
+                           'status': new_suborder.status,
+                       })
+
+        db.session.add(event)
+        db.session.commit()
+
+        handler_for_order_type = {
+            order_types.BIRTH_CERT: _create_new_birth_object,
+            order_types.DEATH_CERT: _create_new_death_object,
+            order_types.MARRIAGE_CERT: _create_new_marriage_object,
+            order_types.TAX_PHOTO: _create_new_tax_photo,
+            order_types.PHOTO_GALLERY: _create_new_photo_gallery
+        }
+
+        handler_for_order_type[suborder['orderType']](suborder, new_suborder)
+
+
+def _create_new_birth_object(suborder, new_suborder_obj):
+    certificate_number = suborder.get('certificateNum')
+
+    if certificate_number:
+        birth_object = BirthCertificate(certificate_number=certificate_number,
+                                        first_name=suborder.get('firstName'),
+                                        last_name=suborder['lastName'],
+                                        middle_name=suborder.get('middleName'),
+                                        gender=suborder.get('gender'),
+                                        father_name=suborder.get('fatherName'),
+                                        mother_name=suborder.get('motherName'),
+                                        num_copies=suborder['numCopies'],
+                                        month=suborder.get('month'),
+                                        day=suborder.get('day'),
+                                        years=[y['value'] for y in suborder.get('years') if y['value']],
+                                        birth_place=suborder.get('birthPlace'),
+                                        borough=[b['name'].upper() for b in suborder['boroughs'] if b['checked']],
+                                        letter=suborder.get('letter'),
+                                        comment=suborder.get('comment'),
+                                        _delivery_method=suborder['deliveryMethod'],
+                                        suborder_number=new_suborder_obj.id)
+    else:
+        birth_object = BirthSearch(first_name=suborder.get('firstName'),
+                                   last_name=suborder['lastName'],
+                                   middle_name=suborder.get('middleName'),
+                                   gender=suborder.get('gender'),
+                                   father_name=suborder.get('fatherName'),
+                                   mother_name=suborder.get('motherName'),
+                                   num_copies=suborder['numCopies'],
+                                   month=suborder.get('month'),
+                                   day=suborder.get('day'),
+                                   years=[y['value'] for y in suborder.get('years') if y['value']],
+                                   birth_place=suborder.get('birthPlace'),
+                                   borough=[b['name'].upper() for b in suborder['boroughs'] if b['checked']],
+                                   letter=suborder.get('letter'),
+                                   comment=suborder.get('comment'),
+                                   _delivery_method=suborder['deliveryMethod'],
+                                   suborder_number=new_suborder_obj.id)
+    db.session.add(birth_object)
+    db.session.commit()
+
+    new_suborder_obj.es_update(birth_object.serialize)
+
+
+def _create_new_death_object(suborder, new_suborder_obj):
+    certificate_number = suborder.get('certificateNum')
+
+    if certificate_number:
+        death_object = DeathCertificate(certificate_number=certificate_number,
+                                        last_name=suborder['lastName'],
+                                        first_name=suborder.get('firstName'),
+                                        middle_name=suborder.get('middleName'),
+                                        num_copies=suborder['numCopies'],
+                                        cemetery=suborder.get('cemetery'),
+                                        month=suborder.get('month'),
+                                        day=suborder.get('day'),
+                                        years=[y['value'] for y in suborder.get('years') if y['value']],
+                                        death_place=suborder.get('deathPlace'),
+                                        borough=[b['name'].upper() for b in suborder['boroughs'] if b['checked']],
+                                        letter=suborder.get('letter'),
+                                        comment=suborder.get('comment'),
+                                        _delivery_method=suborder['deliveryMethod'],
+                                        suborder_number=new_suborder_obj.id)
+    else:
+        death_object = DeathSearch(last_name=suborder['lastName'],
+                                   first_name=suborder.get('firstName'),
+                                   middle_name=suborder.get('middleName'),
+                                   num_copies=suborder['numCopies'],
+                                   cemetery=suborder.get('cemetery'),
+                                   month=suborder.get('month'),
+                                   day=suborder.get('day'),
+                                   years=[y['value'] for y in suborder.get('years') if y['value']],
+                                   death_place=suborder.get('deathPlace'),
+                                   borough=[b['name'].upper() for b in suborder['boroughs'] if b['checked']],
+                                   letter=suborder.get('letter'),
+                                   comment=suborder.get('comment'),
+                                   _delivery_method=suborder['deliveryMethod'],
+                                   suborder_number=new_suborder_obj.id)
+    db.session.add(death_object)
+    db.session.commit()
+
+    new_suborder_obj.es_update(death_object.serialize)
+
+
+def _create_new_marriage_object(suborder, new_suborder_obj):
+    certificate_number = suborder.get('certificateNum')
+
+    if certificate_number:
+        marriage_object = MarriageCertificate(certificate_number=certificate_number,
+                                              groom_last_name=suborder['groomLastName'],
+                                              groom_first_name=suborder.get('groomFirstName'),
+                                              bride_last_name=suborder['brideLastName'],
+                                              bride_first_name=suborder.get('brideFirstName'),
+                                              num_copies=suborder['numCopies'],
+                                              month=suborder.get('month'),
+                                              day=suborder.get('day'),
+                                              years=[y['value'] for y in suborder.get('years') if y['value']],
+                                              marriage_place=suborder.get('marriagePlace'),
+                                              borough=[b['name'].upper() for b in suborder['boroughs'] if b['checked']],
+                                              letter=suborder.get('letter'),
+                                              comment=suborder.get('comment'),
+                                              _delivery_method=suborder['deliveryMethod'],
+                                              suborder_number=new_suborder_obj.id)
+    else:
+        marriage_object = MarriageSearch(groom_last_name=suborder['groomLastName'],
+                                         groom_first_name=suborder.get('groomFirstName'),
+                                         bride_last_name=suborder['brideLastName'],
+                                         bride_first_name=suborder.get('brideFirstName'),
+                                         num_copies=suborder['numCopies'],
+                                         month=suborder.get('month'),
+                                         day=suborder.get('day'),
+                                         years=[y['value'] for y in suborder.get('years') if y['value']],
+                                         marriage_place=suborder.get('marriagePlace'),
+                                         borough=[b['name'].upper() for b in suborder['boroughs'] if b['checked']],
+                                         letter=suborder.get('letter'),
+                                         comment=suborder.get('comment'),
+                                         _delivery_method=suborder['deliveryMethod'],
+                                         suborder_number=new_suborder_obj.id)
+    db.session.add(marriage_object)
+    db.session.commit()
+
+    new_suborder_obj.es_update(marriage_object.serialize)
+
+
+def _create_new_tax_photo(suborder, new_suborder_obj):
+    new_collection = suborder['collection']
+
+    if new_collection in [collection.YEAR_1940, collection.BOTH]:
+        tax_photo_1940 = TaxPhoto(collection=collection.YEAR_1940,
+                                  borough=suborder['borough'],
+                                  roll=suborder.get('roll'),
+                                  block=suborder.get('block'),
+                                  lot=suborder.get('lot'),
+                                  building_number=suborder['buildingNum'],
+                                  street=suborder['street'],
+                                  description=suborder.get('description'),
+                                  size=suborder['size'],
+                                  num_copies=suborder['numCopies'],
+                                  _delivery_method=suborder['deliveryMethod'],
+                                  contact_number=suborder.get('contactNum'),
+                                  suborder_number=new_suborder_obj.id)
+        db.session.add(tax_photo_1940)
+        db.session.commit()
+
+        new_suborder_obj.es_update(tax_photo_1940.serialize)
+
+    if new_collection in [collection.YEAR_1980, collection.BOTH]:
+        tax_photo_1980 = TaxPhoto(collection=collection.YEAR_1980,
+                                  borough=suborder['borough'].title(),
+                                  block=suborder.get('block'),
+                                  lot=suborder.get('lot'),
+                                  building_number=suborder['buildingNum'],
+                                  street=suborder['street'],
+                                  description=suborder.get('description'),
+                                  size=suborder['size'],
+                                  num_copies=suborder['numCopies'],
+                                  _delivery_method=suborder['deliveryMethod'],
+                                  contact_number=suborder.get('contactNum'),
+                                  suborder_number=new_suborder_obj.id)
+        db.session.add(tax_photo_1980)
+        db.session.commit()
+
+        new_suborder_obj.es_update(tax_photo_1980.serialize)
+
+
+def _create_new_photo_gallery(suborder, new_suborder_obj):
+    photo_gallery = PhotoGallery(image_id=suborder['imageID'],
+                                 description=suborder.get('description'),
+                                 additional_description=suborder.get('additionalDescription'),
+                                 size=suborder['size'],
+                                 num_copies=suborder.get('numCopies'),
+                                 _delivery_method=suborder['deliveryMethod'],
+                                 contact_number=suborder.get('contactNum'),
+                                 comment=suborder.get('comment'),
+                                 suborder_number=new_suborder_obj.id)
+    db.session.add(photo_gallery)
+    db.session.commit()
+
+    new_suborder_obj.es_update(photo_gallery.serialize)

@@ -101,3 +101,12 @@ html, body {
     top: 50%;
     transform: translateY(120%);
 }
+
+.letterField {
+    margin-bottom: 1em!important;
+}
+
+.required-label:after {
+    content: " *";
+    color: #db2828;
+}

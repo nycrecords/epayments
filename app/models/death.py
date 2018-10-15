@@ -1,6 +1,7 @@
 from sqlalchemy.dialects.postgresql import ARRAY
 
 from app import db
+from app.constants import delivery_method
 
 
 class DeathSearch(db.Model):
@@ -38,6 +39,14 @@ class DeathSearch(db.Model):
     _borough = db.Column(ARRAY(db.String(20), dimensions=1), nullable=False, name='borough')
     letter = db.Column(db.Boolean, nullable=True)
     comment = db.Column(db.String(255), nullable=True)
+    delivery_method = db.Column(
+        db.Enum(
+            delivery_method.MAIL,
+            delivery_method.EMAIL,
+            delivery_method.PICKUP,
+            name='delivery_method'
+        ), nullable=True
+    )
     suborder_number = db.Column(db.String(32), db.ForeignKey('suborders.id'), nullable=False)
 
     def __init__(
@@ -54,6 +63,7 @@ class DeathSearch(db.Model):
             borough,
             letter,
             comment,
+            _delivery_method,
             suborder_number
     ):
         self.last_name = last_name
@@ -68,6 +78,7 @@ class DeathSearch(db.Model):
         self._borough = borough
         self.letter = letter or None
         self.comment = comment or None
+        self.delivery_method = _delivery_method
         self.suborder_number = suborder_number
 
     @property
@@ -111,6 +122,7 @@ class DeathSearch(db.Model):
             'borough': self.borough,
             'letter': self.letter,
             'comment': self.comment,
+            'delivery_method': self.delivery_method,
             'suborder_number': self.suborder_number
         }
 
@@ -152,6 +164,14 @@ class DeathCertificate(db.Model):
     _borough = db.Column(ARRAY(db.String(20), dimensions=1), nullable=False, name='borough')
     letter = db.Column(db.Boolean, nullable=True)
     comment = db.Column(db.String(255), nullable=True)
+    delivery_method = db.Column(
+        db.Enum(
+            delivery_method.MAIL,
+            delivery_method.EMAIL,
+            delivery_method.PICKUP,
+            name='delivery_method'
+        ), nullable=True
+    )
     suborder_number = db.Column(db.String(32), db.ForeignKey('suborders.id'), nullable=False)
 
     def __init__(
@@ -169,6 +189,7 @@ class DeathCertificate(db.Model):
             borough,
             letter,
             comment,
+            _delivery_method,
             suborder_number
     ):
         self.certificate_number = certificate_number
@@ -184,6 +205,7 @@ class DeathCertificate(db.Model):
         self._borough = borough
         self.letter = letter or None
         self.comment = comment or None
+        self.delivery_method = _delivery_method
         self.suborder_number = suborder_number
 
     @property
@@ -228,5 +250,6 @@ class DeathCertificate(db.Model):
             'borough': self.borough,
             'letter': self.letter,
             'comment': self.comment,
+            'delivery_method': self.delivery_method,
             'suborder_number': self.suborder_number
         }

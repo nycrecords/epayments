@@ -1,4 +1,4 @@
-from datetime import date
+from datetime import date, datetime
 
 from flask import jsonify, abort, request
 from flask_login import login_user, logout_user, current_user, login_required
@@ -6,6 +6,7 @@ from sqlalchemy import desc
 
 from app.api_1_0 import api_1_0 as api
 from app.api_1_0.utils import (
+    create_new_order,
     update_status,
     _print_orders,
     _print_large_labels,
@@ -18,13 +19,15 @@ from app.constants import (
 )
 from app.constants import printing
 from app.models import (
+    Customers,
     Orders,
+    OrderNumberCounter,
     TaxPhoto,
     Users,
     Events
 )
-from app.search.utils import search_queries
 from app.search.searchfunctions import SearchFunctions
+from app.search.utils import search_queries
 
 
 @api.route('/', methods=['GET'])
@@ -120,6 +123,20 @@ def orders_doc(doc_type):
         return jsonify(url=url), 200
 
 
+@api.route('/orders/new', methods=['POST'])
+@login_required
+def new_order():
+    """
+    :return:
+    """
+    if request.method == 'POST':  # makes it so we get a post method to receive the info put in on the form
+        json = request.get_json(force=True)
+
+        create_new_order(json['orderInfo'], json['suborderList'])
+
+    return jsonify(), 200
+
+
 @api.route('/status/<string:suborder_number>', methods=['GET', 'POST'])
 @login_required
 def status_change(suborder_number):
@@ -152,6 +169,44 @@ def status_change(suborder_number):
         """
         status_code = update_status(suborder_number, comment, new_status)
         return jsonify(status_code=status_code), 200
+
+
+@api.route('/statuses/', methods=['GET', 'POST'])
+@login_required
+def batch_status_change():
+    """
+    GET: returns { current_status}, 200
+    POST: {queueForUpdate, queueForUpdateBoolean, new_status, comment}
+
+    Status Table
+    - ID - Integer
+    - Status - ENUM
+        1. Received || Set to this by default
+        2. Processing
+            a)Found
+            b)Printed
+        3. Mailed/Pickup
+        4. Not_Found
+           a)Letter_generated
+           b)Undeliverable - Cant move down the line
+        5. Done - End of status changes
+    :return: {status_id, suborder_number, status, comment}, 201
+    """
+    # TODO: Complete this
+    if request.method == 'POST':
+        json = request.get_json(force=True)
+        comment = json.get("comment")
+        new_status = json.get("new_status")
+        queue_for_update = json.get("queueForUpdate")
+        queue_for_update_boolean = json.get("queueForUpdateBoolean")
+        status_code = []
+        for index in range(len(queue_for_update_boolean)):
+            """
+                POST: {queueForUpdate, queueForUpdateBoolean, new_status, comment};
+                returns: {status_id, suborder_number, status, comment}, 201
+            """
+        status_code.append(update_status(queue_for_update[index], comment, new_status))
+    return jsonify(status_code=status_code), 200
 
 
 @api.route('/history/<string:suborder_number>', methods=['GET'])

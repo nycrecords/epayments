@@ -22,22 +22,25 @@ class Orders(db.Model):
     id = db.Column(db.String(64), primary_key=True, nullable=False)
     date_submitted = db.Column(db.DateTime, nullable=False)
     date_received = db.Column(db.DateTime, nullable=True)
-    confirmation_message = db.Column(db.Text, nullable=False)
-    client_data = db.Column(db.Text, nullable=False)
+    confirmation_message = db.Column(db.Text, nullable=True)
+    client_data = db.Column(db.Text, nullable=True)
     order_types = db.Column(ARRAY(db.Text), nullable=True)
     multiple_items = db.Column(db.Boolean, nullable=False)
     suborder = db.relationship('Suborders', backref='suborders', lazy=True)
     customer = db.relationship('Customers', backref='customers', uselist=False)
+    _next_suborder_number = db.Column(db.Integer(), db.Sequence('suborder_seq'), name='next_suborder_number')
 
     def __init__(
             self,
             id,
             date_submitted,
             date_received,
-            confirmation_message,
-            client_data,
             order_types,
-            multiple_items):
+            multiple_items,
+            _next_suborder_number=1,
+            confirmation_message=None,
+            client_data=None,
+    ):
         self.id = id
         self.date_submitted = date_submitted
         self.date_received = date_received or None
@@ -45,6 +48,7 @@ class Orders(db.Model):
         self.client_data = client_data
         self.order_types = order_types
         self.multiple_items = multiple_items
+        self._next_suborder_number = _next_suborder_number
 
     @property
     def serialize(self):
@@ -59,6 +63,17 @@ class Orders(db.Model):
             'multiple_items': self.multiple_items,
         }
 
+    @property
+    def next_suborder_number(self):
+        from app.db_utils import update_object
+        num = self._next_suborder_number
+        update_object(
+            {'_next_suborder_number': self._next_suborder_number + 1},
+            Orders,
+            self.id
+        )
+        return num
+
 
 class Suborders(db.Model):
     """
@@ -66,7 +81,7 @@ class Suborders(db.Model):
     """
     __tablename__ = 'suborders'
     id = db.Column(db.String(32), primary_key=True, nullable=False)
-    client_id = db.Column(db.Integer, nullable=False)
+    client_id = db.Column(db.Integer, nullable=True)
     order_type = db.Column(
         db.Enum(
             order_types.BIRTH_SEARCH,
@@ -110,10 +125,10 @@ class Suborders(db.Model):
     def __init__(
             self,
             id,
-            client_id,
             order_type,
             order_number,
-            _status):
+            _status,
+            client_id=None):
         self.id = id
         self.client_id = client_id
         self.order_type = order_type
@@ -179,4 +194,14 @@ class Suborders(db.Model):
                     'current_status': self.status
                 }
             }
-        )
+        ) if metadata else \
+            es.update(
+                index='suborders',
+                doc_type='suborders',
+                id=self.id,
+                body={
+                    'doc': {
+                        'current_status': self.status
+                    }
+                }
+            )

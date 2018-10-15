@@ -2,6 +2,7 @@ from datetime import datetime
 
 from elasticsearch.helpers import bulk
 from flask import current_app
+from sqlalchemy.orm import joinedload
 
 from app import es
 from app.constants import order_types
@@ -13,6 +14,7 @@ from app.models import (
     DeathCertificate,
     MarriageSearch,
     MarriageCertificate,
+    Orders,
     PhotoGallery,
     Suborders,
     TaxPhoto,
@@ -100,7 +102,8 @@ def create_docs():
     """Creates elasticsearch request docs for every request"""
     if not es:
         return
-    suborders = Suborders.query.all()
+    suborders = Suborders.query.options(joinedload(Suborders.order)).options(
+        joinedload(Suborders.order).joinedload(Orders.customer)).all()
 
     order_type_models_handler = {
         order_types.BIRTH_SEARCH: BirthSearch,
@@ -152,7 +155,7 @@ def create_docs():
         operations,
         index='suborders',
         doc_type='suborders',
-        chunk_size=RESULTS_CHUNK_SIZE,
+        chunk_size=1000,
         raise_on_error=True
     )
     print("Successfully created %s suborder docs." % num_success)
