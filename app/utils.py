@@ -104,6 +104,10 @@ def import_file(file_name):
     # 2. Retrieve the order number.
     order_number = _get_order_number(root.find("EPaymentReq"))
 
+    if Orders.query.filter_by(id=order_number).one_or_none() is not None:
+        print("Order {} already exists".format(order_number))
+        return False
+
     # 3. Message sent to customer
     confirmation_message = root.find('ConfirmationMessage').text
 

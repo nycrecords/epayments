@@ -443,7 +443,8 @@ def generate_csv(search_params):
                      "Block",
                      "Lot",
                      "Roll",
-                     "Comment"])
+                     "Comment",
+                     "Description"])
 
     for suborder in suborders:
         if suborder.tax_photo:
@@ -466,6 +467,7 @@ def generate_csv(search_params):
                              suborder.tax_photo.lot,
                              suborder.tax_photo.roll,
                              '',
+                             suborder.tax_photo.description
                              ])
         elif suborder.photo_gallery:
             writer.writerow([suborder.order_number,
@@ -487,6 +489,7 @@ def generate_csv(search_params):
                              '',
                              '',
                              "Yes" if suborder.photo_gallery.comment else "No",
+                             ''
                              ])
 
     file.close()
