@@ -403,7 +403,7 @@ class DSLGenerator(object):
         Dictionary header of DSL body
         :return: nested dictionary
         """
-        if self.__search_type == 'search' or self.__search_type == 'print':
+        if self.__search_type in ['search', 'print', 'csv']:
             return {
                 'sort': [
                     '_score',

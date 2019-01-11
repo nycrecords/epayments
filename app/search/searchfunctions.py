@@ -5,20 +5,21 @@ class SearchFunctions(object):
 
     def search_by(self, search_type, dsl, start, size):
         order_type_handler = {
-                'Birth Search': 'birth_search',
-                'Birth Cert': 'birth_cert',
-                'Marriage Search': 'marriage_search',
-                'Marriage Cert': 'marriage_cert',
-                'Death Search': 'death_search',
-                'Death Cert': 'death_cert',
-                'Tax Photo': 'tax_photo',
-                'Photo Gallery': 'photo_gallery',
-                'Property Card': 'property_card',
-                'print': 'print',
-                'search': 'search',
-                'customer': 'customers',
-                'order': 'orders'
-                }
+            'Birth Search': 'birth_search',
+            'Birth Cert': 'birth_cert',
+            'Marriage Search': 'marriage_search',
+            'Marriage Cert': 'marriage_cert',
+            'Death Search': 'death_search',
+            'Death Cert': 'death_cert',
+            'Tax Photo': 'tax_photo',
+            'Photo Gallery': 'photo_gallery',
+            'Property Card': 'property_card',
+            'print': 'print',
+            'search': 'search',
+            'customer': 'customers',
+            'order': 'orders',
+            'csv': 'csv'
+        }
         method = getattr(self, order_type_handler[search_type])
         return method(dsl, start, size)
 
@@ -53,6 +54,23 @@ class SearchFunctions(object):
                                        'metadata',
                                        'multiple_items',
                                        'order_types'
+                                   ],
+                                   size=size,
+                                   from_=start)
+        return search_results
+
+    @staticmethod
+    def csv(dsl, start, size):
+        search_results = es.search(index='suborders',
+                                   doc_type='suborders',
+                                   body=dsl,
+                                   _source=[
+                                       'order_number',
+                                       'suborder_number',
+                                       'date_received',
+                                       'order_type',
+                                       'customer',
+                                       'metadata'
                                    ],
                                    size=size,
                                    from_=start)

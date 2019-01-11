@@ -4,7 +4,6 @@ from datetime import date, datetime
 from flask import render_template, current_app, url_for
 from flask_login import current_user
 from os.path import join
-from sqlalchemy import asc
 from xhtml2pdf.pisa import CreatePDF
 
 from app import db
@@ -406,91 +405,94 @@ def _print_large_labels(search_params):
 def generate_csv(search_params):
     order_type = search_params.get('order_type')
 
-    filter_args = _order_query_filters(search_params.get('order_number'),
-                                       search_params.get('suborder_number'),
-                                       order_type,
-                                       search_params.get('status'),
-                                       search_params.get('billing_name'),
-                                       '',
-                                       search_params.get('date_received_start'),
-                                       search_params.get('date_received_end'))
+    suborders = search_queries(
+        order_number=search_params.get('order_number'),
+        suborder_number=search_params.get('suborder_number'),
+        order_type=order_type,
+        status=search_params.get('status'),
+        billing_name=search_params.get('billing_name'),
+        date_received_start=search_params.get('date_received_start'),
+        date_received_end=search_params.get('date_received_end'),
+        date_submitted_start=search_params.get('date_submitted_start'),
+        date_submitted_end=search_params.get('date_submitted_end'),
+        search_type='csv'
+    )
 
-    if order_type == 'photos':
-        suborders = Suborders.query.join(Orders, Customers).filter(*filter_args).order_by(asc(Suborders.order_type),
-                                                                                          asc(
-                                                                                              Orders.date_submitted)).all()
-    else:
-        suborders = Suborders.query.join(Orders, Customers).filter(*filter_args).all()
+    formatted_suborder_list = SearchFunctions.format_results(suborders)
 
     filename = "orders_{}.csv".format(datetime.now().strftime("%m_%d_%Y_at_%I_%M_%p"))
     file = open(join(current_app.static_folder, 'files', filename), 'w')
     writer = csv.writer(file)
-    writer.writerow(["Order Number",
-                     "Suborder Number",
-                     "Date Received",
-                     "Customer Name",
-                     "Phone",
-                     "Email",
-                     "Customer Address",
-                     "Delivery Method",
-                     "Size",
-                     "Copy",
-                     "Image Identifier",
-                     "Building Number",
-                     "Street",
-                     "Collection",
-                     "Borough",
-                     "Block",
-                     "Lot",
-                     "Roll",
-                     "Comment",
-                     "Description"])
 
-    for suborder in suborders:
-        if suborder.tax_photo:
-            writer.writerow([suborder.order_number,
-                             suborder.id,
-                             suborder.order.date_received.strftime('%m-%d-%Y'),
-                             suborder.order.customer.billing_name,
-                             suborder.tax_photo.contact_number if suborder.tax_photo.contact_number else suborder.order.customer.phone,
-                             suborder.order.customer.email,
-                             suborder.order.customer.address,
-                             suborder.tax_photo.delivery_method,
-                             suborder.tax_photo.size,
-                             suborder.tax_photo.num_copies,
-                             '',
-                             suborder.tax_photo.building_number,
-                             suborder.tax_photo.street,
-                             suborder.tax_photo.collection,
-                             suborder.tax_photo.borough,
-                             suborder.tax_photo.block,
-                             suborder.tax_photo.lot,
-                             suborder.tax_photo.roll,
-                             '',
-                             suborder.tax_photo.description
-                             ])
-        elif suborder.photo_gallery:
-            writer.writerow([suborder.order_number,
-                             suborder.id,
-                             suborder.order.date_received.strftime('%m-%d-%Y'),
-                             suborder.order.customer.billing_name,
-                             suborder.photo_gallery.contact_number if suborder.photo_gallery.contact_number else suborder.order.customer.phone,
-                             suborder.order.customer.email,
-                             suborder.order.customer.address,
-                             suborder.photo_gallery.delivery_method,
-                             suborder.photo_gallery.size,
-                             suborder.photo_gallery.num_copies,
-                             suborder.photo_gallery.image_id,
-                             '',
-                             '',
-                             '',
-                             '',
-                             '',
-                             '',
-                             '',
-                             "Yes" if suborder.photo_gallery.comment else "No",
-                             ''
-                             ])
+    if order_type == 'photos':
+        writer.writerow([
+            "Order Number",
+            "Suborder Number",
+            "Date Received",
+            "Customer Name",
+            "Phone",
+            "Email",
+            "Customer Address",
+            "Delivery Method",
+            "Size",
+            "Copy",
+            "Image Identifier",
+            "Building Number",
+            "Street",
+            "Collection",
+            "Borough",
+            "Block",
+            "Lot",
+            "Roll",
+            "Comment",
+            "Description"
+        ])
+
+        for suborder in formatted_suborder_list:
+            writer.writerow([
+                "=\"" + suborder.get('order_number') + "\"",
+                suborder.get('suborder_number'),
+                suborder.get('date_received')[:8],
+                suborder.get('customer')['billing_name'],
+                suborder.get('customer').get('phone'),
+                suborder.get('customer').get('email'),
+                suborder.get('customer').get('address'),
+                suborder.get('metadata').get('delivery_method'),
+                suborder.get('metadata').get('size'),
+                suborder.get('metadata').get('num_copies'),
+                suborder.get('metadata').get('image_id', ''),
+                suborder.get('metadata').get('building_number', ''),
+                suborder.get('metadata').get('street', ''),
+                suborder.get('metadata').get('collection', ''),
+                suborder.get('metadata').get('borough', ''),
+                suborder.get('metadata').get('block', ''),
+                suborder.get('metadata').get('lot', ''),
+                suborder.get('metadata').get('roll', ''),
+                'Yes' if suborder.get('metadata').get('comment') else '',
+                suborder.get('metadata').get('description', '')
+            ])
+
+    elif order_type == 'vital_records':
+        writer.writerow([
+            "Order Number",
+            "Suborder Number"
+            "Date Received",
+            "Customer Name",
+            "Email",
+            "Certificate Type",
+            "Certificate Number"
+        ])
+
+        for suborder in formatted_suborder_list:
+            writer.writerow([
+                "=\"" + suborder.get('order_number') + "\"",
+                suborder.get('suborder_number'),
+                suborder.get('date_received')[:8],
+                suborder.get('customer')['billing_name'],
+                suborder.get('customer').get('email'),
+                suborder.get('order_type'),
+                suborder.get('metadata').get('certificate_number')
+            ])
 
     file.close()
 
