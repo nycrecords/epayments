@@ -281,7 +281,7 @@ class OrderForm extends React.Component {
                                      this.setState({order_type: value});
 
                                      // Toggle visibility of "Generate CSV" button
-                                     (this.photosValueList.indexOf(value) > -1) ? this.props.toggleCSV(true) : this.props.toggleCSV(false);
+                                     this.props.toggleCSV(value);
                                  }}
                                  value={this.state.order_type}
                                  className="margin-small-tb"

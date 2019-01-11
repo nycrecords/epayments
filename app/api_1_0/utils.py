@@ -475,7 +475,7 @@ def generate_csv(search_params):
     elif order_type == 'vital_records':
         writer.writerow([
             "Order Number",
-            "Suborder Number"
+            "Suborder Number",
             "Date Received",
             "Customer Name",
             "Email",
