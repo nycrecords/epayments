@@ -68,7 +68,7 @@ class StatusModal extends React.Component {
         this.handleSubmit = (e) => {
             e.preventDefault();
             csrfFetch('api/v1.0/status/' + this.props.suborder_number, {
-                method: "POST",
+                method: "PATCH",
                 body: JSON.stringify({
                     suborder_number: this.props.suborder_number,
                     comment: this.state.comment,

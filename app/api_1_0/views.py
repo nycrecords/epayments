@@ -1,6 +1,6 @@
-from datetime import date, datetime
+from datetime import date
 
-from flask import jsonify, abort, request
+from flask import jsonify, request
 from flask_login import login_user, logout_user, current_user, login_required
 from sqlalchemy import desc
 
@@ -12,19 +12,15 @@ from app.api_1_0.utils import (
     _print_large_labels,
     _print_small_labels,
     update_tax_photo,
-    generate_csv
+    generate_csv,
 )
-from app.constants import (
-    event_type
-)
+from app.constants import event_type
 from app.constants import printing
 from app.models import (
-    Customers,
-    Orders,
-    OrderNumberCounter,
+    Events,
+    Suborders,
     TaxPhoto,
     Users,
-    Events
 )
 from app.search.searchfunctions import SearchFunctions
 from app.search.utils import search_queries
@@ -110,9 +106,9 @@ def get_orders():
                        all_orders=formatted_orders), 200
 
 
-@api.route('/orders/<doc_type>', methods=['GET'])
+@api.route('/orders/<string:doc_type>', methods=['GET'])
 @login_required
-def orders_doc(doc_type):
+def orders_doc(doc_type: str):
     """
 
     :param doc_type: document type ('csv' only)
@@ -137,9 +133,9 @@ def new_order():
     return jsonify(), 200
 
 
-@api.route('/status/<string:suborder_number>', methods=['GET', 'POST'])
+@api.route('/status/<string:suborder_number>', methods=['PATCH'])
 @login_required
-def status_change(suborder_number):
+def patch(suborder_number: str):
     """
     GET: {suborder_number}; returns {suborder_number, current_status}, 200
     POST: {suborder_number, new_status, comment}
@@ -158,19 +154,22 @@ def status_change(suborder_number):
         5. Done - End of status changes
     :return: {status_id, suborder_number, status, comment}, 201
     """
-    if request.method == 'POST':
-        json = request.get_json(force=True)
-        comment = json.get("comment")
-        new_status = json.get("new_status")
+    json = request.get_json(force=True)
+    comment = json.get("comment")
+    new_status = json.get("new_status")
 
-        """
-            POST: {suborder_number, new_status, comment};
-            returns: {status_id, suborder_number, status, comment}, 201
-        """
-        status_code = update_status(suborder_number, comment, new_status)
-        return jsonify(status_code=status_code), 200
+    suborder = Suborders.query.filter_by(id=suborder_number).one_or_none()
+    if suborder is None:
+        return jsonify(error={
+            'code': 404,
+            'message': 'Suborder Not Found',
+        }), 404
+
+    status_code = update_status(suborder_number, comment, new_status)
+    return jsonify(status_code=status_code), status_code
 
 
+# TODO: WIP, Complete this
 @api.route('/statuses/', methods=['GET', 'POST'])
 @login_required
 def batch_status_change():
@@ -192,7 +191,6 @@ def batch_status_change():
         5. Done - End of status changes
     :return: {status_id, suborder_number, status, comment}, 201
     """
-    # TODO: Complete this
     if request.method == 'POST':
         json = request.get_json(force=True)
         comment = json.get("comment")
@@ -211,7 +209,7 @@ def batch_status_change():
 
 @api.route('/history/<string:suborder_number>', methods=['GET'])
 @login_required
-def history(suborder_number):
+def history(suborder_number: str):
     """
     GET: {suborder_number};
     :param suborder_number:
@@ -232,7 +230,7 @@ def history(suborder_number):
 
 @api.route('/more_info/<string:suborder_number>', methods=['GET','POST'])
 @login_required
-def more_info(suborder_number):
+def more_info(suborder_number: str):
     """
     GET: {suborder_number
     :param suborder_number:
@@ -244,21 +242,6 @@ def more_info(suborder_number):
                                                                         search_type="print"))
 
         return jsonify(order_info=order_info), 200
-
-
-@api.route('/orders/<int:order_id>', methods=['GET'])
-@login_required
-def get_single_order(order_id):
-    """
-    :param order_id:
-    :return: the orders with that specific client id that was passed
-    """
-    orders = [order.serialize for order in Orders.query.filter_by(client_id=order_id).all()]
-
-    if len(orders) == 0:
-        abort(404)
-
-    return jsonify(orders=orders), 200
 
 
 @api.route('/tax_photo/<string:suborder_number>', methods=['GET', 'POST'])
@@ -282,7 +265,7 @@ def tax_photo(suborder_number):
 
 @api.route('/print/<string:print_type>', methods=['POST'])
 @login_required
-def print_order(print_type):
+def print_order(print_type: str):
     """
     Generate a PDF for a print operation.
 

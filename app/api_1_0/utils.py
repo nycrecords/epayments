@@ -1,5 +1,6 @@
 import csv
 from datetime import date, datetime
+from typing import Dict, List, Union
 
 from flask import render_template, current_app, url_for
 from flask_login import current_user
@@ -15,6 +16,7 @@ from app.constants import (
 from app.constants import order_types
 from app.constants.customer import EMPTY_CUSTOMER
 from app.constants.search import ELASTICSEARCH_MAX_SIZE
+from app.db_utils import create_object, update_object
 from app.models import (
     BirthCertificate,
     BirthSearch,
@@ -34,83 +36,19 @@ from app.search.searchfunctions import SearchFunctions
 from app.search.utils import search_queries
 
 
-def _order_query_filters(order_number, suborder_number, order_type, status, billing_name, user, date_received_start,
-                         date_received_end):
-    # TODO: Need to refactor get_order_by_fields so that it performs a single function for code reuse.
-    filter_args = []
-    for name, value, col in [
-        ("order_number", order_number, Orders.id),
-        ("suborder_number", suborder_number, Suborders.id),
-        ("order_type", order_type, Suborders.order_type),
-        ("status", status, Suborders.status),
-        ("billing_name", billing_name, Customers.billing_name),
-        ("date_received_start", date_received_start, Orders.date_received),
-        ("date_received_end", date_received_end, Orders.date_received)
-    ]:
-        if value:
-            if name == 'order_type':
-                if value not in ['all', 'multiple_items', 'vital_records', 'photos', 'vital_records_and_photos']:
-                    filter_args.append(
-                        col.__eq__(value)
-                    )
-                elif value == 'multiple_items':
-                    filter_args.append(
-                        Orders.multiple_items.__eq__(True)
-                    )
-                elif value == 'vital_records':
-                    filter_args.append(
-                        Suborders.order_type.in_(order_types.VITAL_RECORDS_LIST)
-                    )
-                elif value == 'photos':
-                    filter_args.append(
-                        Suborders.order_type.in_(order_types.PHOTOS_LIST)
-                    )
-                elif value == 'vital_records_and_photos':
-                    filter_args.append(
-                        # and_(or_(*[Orders.order_types.any(name) for name in VITAL_RECORDS_LIST]),
-                        #      or_(*[Orders.order_types.any(name) for name in PHOTOS_LIST]))
-                    )
-            elif name == 'status':
-                if value != 'all':
-                    filter_args.append(
-                        col.__eq__(value)
-                    )
-            elif name == 'date_received_start':
-                filter_args.append(
-                    col.__ge__(value)
-                )
-            elif name == 'date_received_end':
-                filter_args.append(
-                    col.__le__(value)
-                )
-            elif name == 'billing_name':
-                filter_args.append(
-                    col.ilike(value)
-                )
-            else:
-                filter_args.append(
-                    col.__eq__(value)
-                )
+def update_status(suborder: Suborders, comment: str, new_status: str) -> int:
+    """Updates the status of a row from the Suborders table.
 
-    return filter_args
+    Args:
+        suborder: A Suborders instance.
+        comment: Any additional information about the updating of the status.
+        new_status: The value of the status to be updated to.
 
-
-def update_status(suborder_number, comment, new_status):
+    Returns:
+        An integer of the status code.
     """
-        POST: {suborder_number, new_status, comment};
-        returns: {status_id, suborder_number, status, comment}, 201
-
-    Take in the info, this function only gets called if the form is filled
-     - access the db to get the status_id for this particular order
-     - now create a new row in the db in the status table with
-     - this row should have a status_id + 1 then the highest status row
-     - 1) it will have the same suborder_number
-     - 2) it will have the comment that was passed in or None
-     - 3) it will have the new status that was passed from the user
-    """
-    suborder = Suborders.query.filter_by(id=suborder_number).one()
     if new_status != suborder.status:
-        prev_event = Events.query.filter(Events.suborder_number == suborder_number,
+        prev_event = Events.query.filter(Events.suborder_number == suborder.id,
                                          Events.new_value['status'].astext == suborder.status).order_by(
             Events.timestamp.desc()).first()
 
@@ -121,28 +59,28 @@ def update_status(suborder_number, comment, new_status):
         if 'comment' in prev_event.new_value:
             previous_value['comment'] = prev_event.new_value['comment']
 
+        update_object({'status': new_status}, Suborders, suborder.id)
+
         new_value['status'] = new_status
         if comment:
             new_value['comment'] = comment
 
-        suborder.status = new_status
-
-        event = Events(suborder_number,
+        event = Events(suborder.id,
                        event_type.UPDATE_STATUS,
                        current_user.email,
                        previous_value,
                        new_value)
 
-        db.session.add(event)
-        db.session.commit()
+        create_object(event)
         suborder.es_update()
-        return 201
+
+        return 200
     else:
         return 400
         # TODO: Raise error because new_status can't be the current status
 
 
-def update_tax_photo(suborder_number, block_no, lot_no, roll_no):
+def update_tax_photo(suborder_number: str, block_no: str, lot_no: str, roll_no: str) -> str:
     """
     This function is used for the Tax Photo API POST method,
     will update these fields from JSON sent back
@@ -184,26 +122,7 @@ def update_tax_photo(suborder_number, block_no, lot_no, roll_no):
     return message
 
 
-def get_orders_by_fields(order_number, suborder_number, order_type, status, billing_name, user, date_received_start,
-                         date_received_end):
-    """
-    Filter orders by fields received
-    get_orders_by_fields(client_id, suborder_number, order_type(Death Search or Marriage Search), billing_name
-                         user??, date_received, date_received)
-    :return:
-    """
-    filter_args = _order_query_filters(order_number, suborder_number, order_type, status, billing_name, user,
-                                       date_received_start,
-                                       date_received_end)
-    base_query = Suborders.query.join(Orders, Customers).filter(*filter_args)
-    order_count = base_query.distinct(Suborders.order_number).group_by(Suborders.order_number, Suborders.id).count()
-    suborder_list = base_query.all()
-    suborder_count = len(suborder_list)
-
-    return order_count, suborder_count, [suborder.serialize for suborder in suborder_list]
-
-
-def _print_orders(search_params):
+def _print_orders(search_params: Dict[str, str]) -> str:
     """
     Generate PDF order sheets.
 
@@ -272,7 +191,7 @@ def _print_orders(search_params):
     return url_for('static', filename='files/{}'.format(filename), _external=True)
 
 
-def _print_small_labels(search_params):
+def _print_small_labels(search_params: Dict[str, str]) -> str:
     """
 
     :param search_params:
@@ -336,7 +255,7 @@ def _print_small_labels(search_params):
     return url_for('static', filename='files/{}'.format(filename), _external=True)
 
 
-def _print_large_labels(search_params):
+def _print_large_labels(search_params: Dict[str, str]) -> str:
     """
 
     :param search_params:
@@ -402,7 +321,7 @@ def _print_large_labels(search_params):
     return url_for('static', filename='files/{}'.format(filename), _external=True)
 
 
-def generate_csv(search_params):
+def generate_csv(search_params: Dict[str, str]) -> str:
     order_type = search_params.get('order_type')
 
     suborders = search_queries(
@@ -499,7 +418,13 @@ def generate_csv(search_params):
     return url_for('static', filename='files/{}'.format(filename), _external=True)
 
 
-def create_new_order(order_info_dict, suborder_list):
+def create_new_order(order_info_dict: Dict[str, str], suborder_list: List[Dict]):
+    """
+
+    :param order_info_dict:
+    :param suborder_list:
+    :return:
+    """
     order_types_list = [suborder['orderType'] for suborder in suborder_list]
 
     year = str(date.today().year)
@@ -570,7 +495,7 @@ def create_new_order(order_info_dict, suborder_list):
         handler_for_order_type[suborder['orderType']](suborder, new_suborder)
 
 
-def _create_new_birth_object(suborder, new_suborder_obj):
+def _create_new_birth_object(suborder: Dict[str, Union[str, List[Dict]]], new_suborder_obj: Suborders):
     certificate_number = suborder.get('certificateNum')
 
     if certificate_number:
@@ -614,7 +539,7 @@ def _create_new_birth_object(suborder, new_suborder_obj):
     new_suborder_obj.es_update(birth_object.serialize)
 
 
-def _create_new_death_object(suborder, new_suborder_obj):
+def _create_new_death_object(suborder: Dict[str, Union[str, List[Dict]]], new_suborder_obj: Suborders):
     certificate_number = suborder.get('certificateNum')
 
     if certificate_number:
@@ -654,7 +579,7 @@ def _create_new_death_object(suborder, new_suborder_obj):
     new_suborder_obj.es_update(death_object.serialize)
 
 
-def _create_new_marriage_object(suborder, new_suborder_obj):
+def _create_new_marriage_object(suborder: Dict[str, Union[str, List[Dict]]], new_suborder_obj: Suborders):
     certificate_number = suborder.get('certificateNum')
 
     if certificate_number:
@@ -694,7 +619,7 @@ def _create_new_marriage_object(suborder, new_suborder_obj):
     new_suborder_obj.es_update(marriage_object.serialize)
 
 
-def _create_new_tax_photo(suborder, new_suborder_obj):
+def _create_new_tax_photo(suborder: Dict[str, str], new_suborder_obj: Suborders):
     new_collection = suborder['collection']
 
     if new_collection in [collection.YEAR_1940, collection.BOTH]:
@@ -735,7 +660,7 @@ def _create_new_tax_photo(suborder, new_suborder_obj):
         new_suborder_obj.es_update(tax_photo_1980.serialize)
 
 
-def _create_new_photo_gallery(suborder, new_suborder_obj):
+def _create_new_photo_gallery(suborder: Dict[str, str], new_suborder_obj: Suborders):
     photo_gallery = PhotoGallery(image_id=suborder['imageID'],
                                  description=suborder.get('description'),
                                  additional_description=suborder.get('additionalDescription'),
