@@ -27,7 +27,7 @@ class Home extends React.Component {
             suborder_two: 0
         };
 
-        this.photosValueList = ['photos', 'Tax Photo', 'Photo Gallery', 'vital_records'];
+        this.orderTypeWithCSV = ['photos', 'Tax Photo', 'Photo Gallery', 'vital_records'];
 
         this.addOrder = (order_count, suborder_count, orders, firstTime) => {
             if (firstTime) {
@@ -111,16 +111,16 @@ class Home extends React.Component {
         };
     };
 
-    handleListChange = (name, value, state, index) => {
-        let newState = state.slice();
-        newState[index] = value;
-        this.setState({
-            [name]: newState
-        });
-    };
+    // handleListChange = (name, value, state, index) => {
+    //     let newState = state.slice();
+    //     newState[index] = value;
+    //     this.setState({
+    //         [name]: newState
+    //     });
+    // };
 
     toggleCSV = (order_type) => {
-        (this.photosValueList.indexOf(order_type) > -1) ? this.setState({showCSVButton: true}) : this.setState({showCSVButton: false});
+        (this.orderTypeWithCSV.indexOf(order_type) > -1) ? this.setState({showCSVButton: true}) : this.setState({showCSVButton: false});
     };
 
     getOrders() {
