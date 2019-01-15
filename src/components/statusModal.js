@@ -1,7 +1,7 @@
 import React from 'react';
-import {Button, Header, Modal, Form, TextArea} from 'semantic-ui-react';
+import {Button, Form, Header, Modal, TextArea} from 'semantic-ui-react';
 import 'semantic-ui-css/semantic.min.css';
-import {csrfFetch} from "../utils/fetch"
+import {csrfFetch, handleFetchErrors} from "../utils/fetch"
 
 
 class StatusModal extends React.Component {
@@ -74,13 +74,15 @@ class StatusModal extends React.Component {
                     comment: this.state.comment,
                     new_status: this.state.new_status
                 })
-            }).then((response) => {
-                return response.json()
-            }).then((json) => {
-                this.props.updateStatus(this.props.suborder_number, this.state.new_status);
-                this.setState({comment: '', new_status: this.state.new_status});
-            });
-
+            })
+                .then(handleFetchErrors)
+                .then(() => {
+                    this.props.updateStatus(this.props.suborder_number, this.state.new_status);
+                    this.setState({comment: '', new_status: this.state.new_status});
+                })
+                .catch((error) => {
+                    console.error(error);
+                });
             this.handleClose();
         };
     }
@@ -97,21 +99,19 @@ class StatusModal extends React.Component {
                             <Header>
                                 <p>Current Status - {this.props.current_status}</p>
                                 <Form onSubmit={this.handleSubmit}>
-                                    <Form.Select fluid selection options={this.statuses} placeholder={this.props.current_status}
+                                    <Form.Select fluid selection options={this.statuses}
+                                                 placeholder={this.props.current_status}
                                                  onChange={(e, {value}) => {
                                                      this.setState({new_status: value})
-                                                 }
-
-                                                 }
+                                                 }}
                                                  value={this.state.new_status}
                                     />
                                     <Form.Field id='form-textarea-control-opinion' control={TextArea}
-                                                label='Leave an Additional Comment' placeholder='Comment' maxLength="200"
+                                                label='Leave an Additional Comment' placeholder='Comment'
+                                                maxLength="200"
                                                 onChange={(e, {value}) => {
                                                     this.setState({comment: value})
-                                                }
-
-                                                }
+                                                }}
                                                 value={this.state.comment}
                                     />
                                 </Form>

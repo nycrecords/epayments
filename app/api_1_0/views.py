@@ -125,34 +125,21 @@ def new_order():
     """
     :return:
     """
-    if request.method == 'POST':  # makes it so we get a post method to receive the info put in on the form
-        json = request.get_json(force=True)
-
-        create_new_order(json['orderInfo'], json['suborderList'])
-
+    json = request.get_json(force=True)
+    create_new_order(json['orderInfo'], json['suborderList'])
     return jsonify(), 200
 
 
 @api.route('/status/<string:suborder_number>', methods=['PATCH'])
 @login_required
-def patch(suborder_number: str):
-    """
-    GET: {suborder_number}; returns {suborder_number, current_status}, 200
-    POST: {suborder_number, new_status, comment}
+def patch(suborder_number: str) -> jsonify:
+    """Updates a suborder.
 
-    Status Table
-    - ID - Integer
-    - Status - ENUM
-        1. Received || Set to this by default
-        2. Processing
-            a)Found
-            b)Printed
-        3. Mailed/Pickup
-        4. Not_Found
-           a)Letter_generated
-           b)Undeliverable - Cant move down the line
-        5. Done - End of status changes
-    :return: {status_id, suborder_number, status, comment}, 201
+    Args:
+        suborder_number: Primary key ID of the suborder.
+
+    Returns:
+        JSON response.
     """
     json = request.get_json(force=True)
     comment = json.get("comment")
@@ -165,8 +152,14 @@ def patch(suborder_number: str):
             'message': 'Suborder Not Found',
         }), 404
 
-    status_code = update_status(suborder_number, comment, new_status)
-    return jsonify(status_code=status_code), status_code
+    if suborder.status != new_status:
+        update_status(suborder, comment, new_status)
+        return jsonify(), 200
+
+    return jsonify(error={
+        'code': 404,
+        'message': 'Bad Request',
+    }), 400
 
 
 # TODO: WIP, Complete this

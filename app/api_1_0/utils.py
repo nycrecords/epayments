@@ -36,48 +36,39 @@ from app.search.searchfunctions import SearchFunctions
 from app.search.utils import search_queries
 
 
-def update_status(suborder: Suborders, comment: str, new_status: str) -> int:
+def update_status(suborder: Suborders, comment: str, new_status: str):
     """Updates the status of a row from the Suborders table.
 
     Args:
         suborder: A Suborders instance.
         comment: Any additional information about the updating of the status.
         new_status: The value of the status to be updated to.
-
-    Returns:
-        An integer of the status code.
     """
-    if new_status != suborder.status:
-        prev_event = Events.query.filter(Events.suborder_number == suborder.id,
-                                         Events.new_value['status'].astext == suborder.status).order_by(
-            Events.timestamp.desc()).first()
+    prev_event = Events.query.filter(Events.suborder_number == suborder.id,
+                                     Events.new_value['status'].astext == suborder.status).order_by(
+        Events.timestamp.desc()).first()
 
-        previous_value = {}
-        new_value = {}
+    previous_value = {}
+    new_value = {}
 
-        previous_value['status'] = suborder.status
-        if 'comment' in prev_event.new_value:
-            previous_value['comment'] = prev_event.new_value['comment']
+    previous_value['status'] = suborder.status
+    if 'comment' in prev_event.new_value:
+        previous_value['comment'] = prev_event.new_value['comment']
 
-        update_object({'status': new_status}, Suborders, suborder.id)
+    update_object({'status': new_status}, Suborders, suborder.id)
 
-        new_value['status'] = new_status
-        if comment:
-            new_value['comment'] = comment
+    new_value['status'] = new_status
+    if comment:
+        new_value['comment'] = comment
 
-        event = Events(suborder.id,
-                       event_type.UPDATE_STATUS,
-                       current_user.email,
-                       previous_value,
-                       new_value)
+    event = Events(suborder.id,
+                   event_type.UPDATE_STATUS,
+                   current_user.email,
+                   previous_value,
+                   new_value)
 
-        create_object(event)
-        suborder.es_update()
-
-        return 200
-    else:
-        return 400
-        # TODO: Raise error because new_status can't be the current status
+    create_object(event)
+    suborder.es_update()
 
 
 def update_tax_photo(suborder_number: str, block_no: str, lot_no: str, roll_no: str) -> str:
