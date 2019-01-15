@@ -94,7 +94,7 @@ class Home extends React.Component {
 
         this.logOut = () => {
             this.setLoadingState(true);
-            csrfFetch('api/v1.0/logout', {
+            csrfFetch('api/v1/logout', {
                 method: "DELETE",
             })
                 .then(handleFetchErrors)
@@ -124,7 +124,7 @@ class Home extends React.Component {
     };
 
     getOrders() {
-        csrfFetch('api/v1.0/orders')
+        csrfFetch('api/v1/orders')
             .then(response => {
                 // check response status to logout user if backend session expired
                 switch (response.status) {

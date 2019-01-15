@@ -261,13 +261,10 @@ def format_date_range(date_range):
 def format_order_type(order_type):
     if order_type == 'all':
         return None
-
     elif order_type == 'vital_records':
         return order_types.VITAL_RECORDS_LIST
-
     elif order_type == 'photos':
         return order_types.PHOTOS_LIST
-
     else:
         return [order_type]
 

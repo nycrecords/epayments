@@ -31,7 +31,7 @@ class OrderModal extends React.Component {
         };
 
         this.handleOpen = () => {
-            csrfFetch('api/v1.0/more_info/'+ this.props.suborder_number, {
+            csrfFetch('api/v1/more_info/'+ this.props.suborder_number, {
                 method: "POST",
                 body: JSON.stringify({
                     suborder_number: this.props.suborder_number,

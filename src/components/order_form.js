@@ -109,7 +109,7 @@ class OrderForm extends React.Component {
                 case 'orders':
                 case 'large_labels':
                 case 'small_labels':
-                    csrfFetch('api/v1.0/print/' + print, {
+                    csrfFetch('api/v1/print/' + print, {
                         method: "POST",
                         body: JSON.stringify({
                             order_number: this.state.order_number,
@@ -154,7 +154,7 @@ class OrderForm extends React.Component {
                     let query = Object.keys(params)
                         .map(k => esc(k) + '=' + esc(params[k]))
                         .join('&');
-                    csrfFetch('api/v1.0/orders/csv?' + query)
+                    csrfFetch('api/v1/orders/csv?' + query)
                         .then(handleFetchErrors)
                         .then((json) => {
                             this.props.setLoadingState(false);
@@ -168,7 +168,7 @@ class OrderForm extends React.Component {
                 // Search
                 case 'submit':
                     this.props.setLoadingState(true);
-                    csrfFetch('api/v1.0/orders', {
+                    csrfFetch('api/v1/orders', {
                         method: "POST",
                         body: JSON.stringify({
                             order_number: this.state.order_number,
@@ -198,7 +198,7 @@ class OrderForm extends React.Component {
 
                 case 'load_more':
                     this.props.setLoadingState(true);
-                    csrfFetch('api/v1.0/orders', {
+                    csrfFetch('api/v1/orders', {
                         method: "POST",
                         body: JSON.stringify({
                             order_number: this.state.order_number,

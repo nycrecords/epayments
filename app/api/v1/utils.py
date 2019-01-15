@@ -66,7 +66,6 @@ def update_status(suborder: Suborders, comment: str, new_status: str):
                    current_user.email,
                    previous_value,
                    new_value)
-
     create_object(event)
     suborder.es_update()
 
@@ -84,7 +83,7 @@ def update_tax_photo(suborder_number: str, block_no: str, lot_no: str, roll_no: 
     """
     tax_photo = TaxPhoto.query.filter_by(suborder_number=suborder_number).one()
 
-    message = "No changes were made"
+    message = 'No changes were made'
     new_value = {}
     previous_value = {}
 
@@ -109,30 +108,30 @@ def update_tax_photo(suborder_number: str, block_no: str, lot_no: str, roll_no: 
 
         db.session.add(event)
         db.session.commit()
-        message = "Tax Photo Info Updated"
+        message = 'Tax Photo Info Updated'
     return message
 
 
 def _print_orders(search_params: Dict[str, str]) -> str:
     """
-    Generate PDF order sheets.
+    Generates a PDF order sheets.
 
     :param search_params: JSON Fields from the search form
     :type search_params: JSON
 
     :return: PDF
     """
-    order_number = search_params.get("order_number")
-    suborder_number = search_params.get("suborder_number")
-    order_type = search_params.get("order_type")
-    status = search_params.get("status")
-    billing_name = search_params.get("billing_name")
-    # user = str(request.form["user"])
+    order_number = search_params.get('order_number')
+    suborder_number = search_params.get('suborder_number')
+    order_type = search_params.get('order_type')
+    status = search_params.get('status')
+    billing_name = search_params.get('billing_name')
+    # user = str(request.form['user'])
     user = ''
-    date_received_start = search_params.get("date_received_start")
-    date_received_end = search_params.get("date_received_end")
-    date_submitted_start = search_params.get("date_submitted_start")
-    date_submitted_end = search_params.get("date_submitted_end")
+    date_received_start = search_params.get('date_received_start')
+    date_received_end = search_params.get('date_received_end')
+    date_submitted_start = search_params.get('date_submitted_start')
+    date_submitted_end = search_params.get('date_submitted_end')
 
     multiple_items = ''
     if order_type == 'multiple_items':
@@ -152,30 +151,30 @@ def _print_orders(search_params: Dict[str, str]) -> str:
                                multiple_items,
                                0,
                                ELASTICSEARCH_MAX_SIZE,
-                               "print")
+                               'print')
 
     suborder = SearchFunctions.format_results(suborders)
 
     order_type_template_handler = {
-        "Birth Search": 'birth_search.html',
-        "Birth Cert": 'birth_cert.html',
-        "Marriage Search": 'marriage_search.html',
-        "Marriage Cert": 'marriage_cert.html',
-        "Death Search": 'death_search.html',
-        "Death Cert": 'death_cert.html',
-        "Tax Photo": 'tax_photo.html',
-        "Photo Gallery": 'photo_gallery.html',
-        "Property Card": 'property_card.html',
+        'Birth Search': 'birth_search.html',
+        'Birth Cert': 'birth_cert.html',
+        'Marriage Search': 'marriage_search.html',
+        'Marriage Cert': 'marriage_cert.html',
+        'Death Search': 'death_search.html',
+        'Death Cert': 'death_cert.html',
+        'Tax Photo': 'tax_photo.html',
+        'Photo Gallery': 'photo_gallery.html',
+        'Property Card': 'property_card.html',
     }
 
     html = ''
 
     for item in suborder:
-        html += render_template("orders/{}".format(order_type_template_handler[item['order_type']]),
+        html += render_template('orders/{}'.format(order_type_template_handler[item['order_type']]),
                                 order_info=item, customer_info=item['customer'])
 
     filename = 'order_sheets_{username}_{time}.pdf'.format(username=current_user.email,
-                                                           time=datetime.now().strftime("%Y%m%d-%H%M%S"))
+                                                           time=datetime.now().strftime('%Y%m%d-%H%M%S'))
     with open(join(current_app.static_folder, 'files', filename), 'w+b') as file_:
         CreatePDF(src=html, dest=file_)
 
@@ -188,17 +187,17 @@ def _print_small_labels(search_params: Dict[str, str]) -> str:
     :param search_params:
     :return:
     """
-    order_number = search_params.get("order_number")
-    suborder_number = search_params.get("suborder_number")
-    order_type = search_params.get("order_type")
-    status = search_params.get("status")
-    billing_name = search_params.get("billing_name")
-    # user = str(request.form["user"])
+    order_number = search_params.get('order_number')
+    suborder_number = search_params.get('suborder_number')
+    order_type = search_params.get('order_type')
+    status = search_params.get('status')
+    billing_name = search_params.get('billing_name')
+    # user = str(request.form['user'])
     user = ''
-    date_received_start = search_params.get("date_received_start")
-    date_received_end = search_params.get("date_received_end")
-    date_submitted_start = search_params.get("date_submitted_start")
-    date_submitted_end = search_params.get("date_submitted_end")
+    date_received_start = search_params.get('date_received_start')
+    date_received_end = search_params.get('date_received_end')
+    date_submitted_start = search_params.get('date_submitted_start')
+    date_submitted_end = search_params.get('date_submitted_end')
 
     multiple_items = ''
     if order_type == 'multiple_items':
@@ -218,7 +217,7 @@ def _print_small_labels(search_params: Dict[str, str]) -> str:
                                       multiple_items,
                                       0,
                                       ELASTICSEARCH_MAX_SIZE,
-                                      "search")
+                                      'search')
 
     # Only want suborder_number, and order type
     suborders = SearchFunctions.format_results(suborder_results)
@@ -239,7 +238,7 @@ def _print_small_labels(search_params: Dict[str, str]) -> str:
         html += render_template('orders/small_labels.html', labels=page)
 
     filename = 'small_labels_{username}_{time}.pdf'.format(username=current_user.email,
-                                                           time=datetime.now().strftime("%Y%m%d-%H%M%S"))
+                                                           time=datetime.now().strftime('%Y%m%d-%H%M%S'))
     with open(join(current_app.static_folder, 'files', filename), 'w+b') as file_:
         CreatePDF(src=html, dest=file_)
 
@@ -252,17 +251,17 @@ def _print_large_labels(search_params: Dict[str, str]) -> str:
     :param search_params:
     :return:
     """
-    order_number = search_params.get("order_number")
-    suborder_number = search_params.get("suborder_number")
-    order_type = search_params.get("order_type")
-    status = search_params.get("status")
-    billing_name = search_params.get("billing_name")
-    # user = str(request.form["user"])
+    order_number = search_params.get('order_number')
+    suborder_number = search_params.get('suborder_number')
+    order_type = search_params.get('order_type')
+    status = search_params.get('status')
+    billing_name = search_params.get('billing_name')
+    # user = str(request.form['user'])
     user = ''
-    date_received_start = search_params.get("date_received_start")
-    date_received_end = search_params.get("date_received_end")
-    date_submitted_start = search_params.get("date_submitted_start")
-    date_submitted_end = search_params.get("date_submitted_end")
+    date_received_start = search_params.get('date_received_start')
+    date_received_end = search_params.get('date_received_end')
+    date_submitted_start = search_params.get('date_submitted_start')
+    date_submitted_end = search_params.get('date_submitted_end')
 
     multiple_items = ''
     if order_type == 'multiple_items':
@@ -282,7 +281,7 @@ def _print_large_labels(search_params: Dict[str, str]) -> str:
                                       multiple_items,
                                       0,
                                       ELASTICSEARCH_MAX_SIZE,
-                                      "search")
+                                      'search')
 
     # Only want suborder_number, and order type
     suborders = SearchFunctions.format_results(suborder_results)
@@ -305,7 +304,7 @@ def _print_large_labels(search_params: Dict[str, str]) -> str:
         html += render_template('orders/large_labels.html', labels=page)
 
     filename = 'large_labels_{username}_{time}.pdf'.format(username=current_user.email,
-                                                           time=datetime.now().strftime("%Y%m%d-%H%M%S"))
+                                                           time=datetime.now().strftime('%Y%m%d-%H%M%S'))
     with open(join(current_app.static_folder, 'files', filename), 'w+b') as file_:
         CreatePDF(src=html, dest=file_)
 
@@ -313,6 +312,14 @@ def _print_large_labels(search_params: Dict[str, str]) -> str:
 
 
 def generate_csv(search_params: Dict[str, str]) -> str:
+    """Generates CSV from search result.
+
+    Args:
+        search_params: Dictionary of attributes to search by.
+
+    Returns:
+        URL string of CSV.
+    """
     order_type = search_params.get('order_type')
 
     suborders = search_queries(
@@ -330,38 +337,37 @@ def generate_csv(search_params: Dict[str, str]) -> str:
 
     formatted_suborder_list = SearchFunctions.format_results(suborders)
 
-    filename = "orders_{}.csv".format(datetime.now().strftime("%m_%d_%Y_at_%I_%M_%p"))
+    filename = 'orders_{}.csv'.format(datetime.now().strftime('%m_%d_%Y_at_%I_%M_%p'))
     file = open(join(current_app.static_folder, 'files', filename), 'w')
     writer = csv.writer(file)
 
     if order_type == 'photos':
         writer.writerow([
-            "Order Number",
-            "Suborder Number",
-            "Date Received",
-            "Customer Name",
-            "Phone",
-            "Email",
-            "Customer Address",
-            "Delivery Method",
-            "Size",
-            "Copy",
-            "Image Identifier",
-            "Building Number",
-            "Street",
-            "Collection",
-            "Borough",
-            "Block",
-            "Lot",
-            "Roll",
-            "Comment",
-            "Description"
+            'Order Number',
+            'Suborder Number',
+            'Date Received',
+            'Customer Name',
+            'Phone',
+            'Email',
+            'Customer Address',
+            'Delivery Method',
+            'Size',
+            'Copy',
+            'Image Identifier',
+            'Building Number',
+            'Street',
+            'Collection',
+            'Borough',
+            'Block',
+            'Lot',
+            'Roll',
+            'Comment',
+            'Description'
         ])
-
         for suborder in formatted_suborder_list:
             writer.writerow([
-                "=\"" + suborder.get('order_number') + "\"",
-                suborder.get('suborder_number'),
+                '="{}"'.format(suborder['order_number']),
+                suborder.get['suborder_number'],
                 suborder.get('date_received')[:8],
                 suborder.get('customer')['billing_name'],
                 suborder.get('customer').get('phone'),
@@ -384,19 +390,18 @@ def generate_csv(search_params: Dict[str, str]) -> str:
 
     elif order_type == 'vital_records':
         writer.writerow([
-            "Order Number",
-            "Suborder Number",
-            "Date Received",
-            "Customer Name",
-            "Email",
-            "Certificate Type",
-            "Certificate Number"
+            'Order Number',
+            'Suborder Number',
+            'Date Received',
+            'Customer Name',
+            'Email',
+            'Certificate Type',
+            'Certificate Number'
         ])
-
         for suborder in formatted_suborder_list:
             writer.writerow([
-                "=\"" + suborder.get('order_number') + "\"",
-                suborder.get('suborder_number'),
+                '="{}"'.format(suborder['order_number']),
+                suborder['suborder_number'],
                 suborder.get('date_received')[:8],
                 suborder.get('customer')['billing_name'],
                 suborder.get('customer').get('email'),
@@ -405,7 +410,6 @@ def generate_csv(search_params: Dict[str, str]) -> str:
             ])
 
     file.close()
-
     return url_for('static', filename='files/{}'.format(filename), _external=True)
 
 
@@ -420,7 +424,7 @@ def create_new_order(order_info_dict: Dict[str, str], suborder_list: List[Dict])
 
     year = str(date.today().year)
     next_order_number = OrderNumberCounter.query.filter_by(year=year).one().next_order_number
-    order_id = "EPAY-{0:s}-{1:03d}".format(year, next_order_number)
+    order_id = 'EPAY-{0:s}-{1:03d}'.format(year, next_order_number)
 
     order = Orders(id=order_id,
                    date_submitted=date.today(),
@@ -444,7 +448,7 @@ def create_new_order(order_info_dict: Dict[str, str], suborder_list: List[Dict])
 
     for suborder in suborder_list:
         next_suborder_number = order.next_suborder_number
-        suborder_id = order.id + '-' + str(next_suborder_number)
+        suborder_id = '{} - {}'.format(order_id, next_suborder_number)
 
         order_type = suborder['orderType']
         if not suborder.get('certificateNum'):

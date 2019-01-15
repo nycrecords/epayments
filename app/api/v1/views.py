@@ -4,8 +4,8 @@ from flask import jsonify, request
 from flask_login import login_user, logout_user, current_user, login_required
 from sqlalchemy import desc
 
-from app.api_1_0 import api_1_0 as api
-from app.api_1_0.utils import (
+from app.api.v1 import api_v1 as api
+from app.api.v1.utils import (
     create_new_order,
     update_status,
     _print_orders,
@@ -68,9 +68,8 @@ def get_orders():
 
         multiple_items = ''
         if order_type == 'multiple_items':
-            # Since multiple_items is parsed from the order_type field, we must overwrite the order_type field
             multiple_items = True
-            order_type = 'all'
+            order_type = 'all'  # Overwrite order_type value from 'multiple_items' to 'all' for search
 
         orders = search_queries(order_number,
                                 suborder_number,
@@ -109,10 +108,13 @@ def get_orders():
 @api.route('/orders/<string:doc_type>', methods=['GET'])
 @login_required
 def orders_doc(doc_type: str):
-    """
+    """Handles the export of data.
 
-    :param doc_type: document type ('csv' only)
-    :return:
+    Args:
+        doc_type: The type of document to export data into.
+
+    Returns:
+        JSON response containing the URL of the generated CSV if successful.
     """
     if doc_type.lower() == 'csv':
         url = generate_csv(request.args)
@@ -221,7 +223,7 @@ def history(suborder_number: str):
     return jsonify(history=status_history), 200
 
 
-@api.route('/more_info/<string:suborder_number>', methods=['GET','POST'])
+@api.route('/more_info/<string:suborder_number>', methods=['GET', 'POST'])
 @login_required
 def more_info(suborder_number: str):
     """

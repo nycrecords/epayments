@@ -1,7 +1,7 @@
 import React from 'react'
-import {Button, Header, Modal, Form} from 'semantic-ui-react'
+import {Button, Form, Header, Modal} from 'semantic-ui-react'
 import {connect} from 'react-redux'
-import {mapStateToProps, mapDispatchToProps} from "../utils/reduxMappers";
+import {mapDispatchToProps, mapStateToProps} from "../utils/reduxMappers";
 import {csrfFetch} from "../utils/fetch"
 
 
@@ -26,7 +26,7 @@ class LoginModal extends React.Component {
 
         this.handleSubmit = (e) => {
             e.preventDefault();
-            csrfFetch('api/v1.0/login', {
+            csrfFetch('api/v1/login', {
                 method: 'post',
                 body: JSON.stringify({
                     email: this.state.email,
@@ -42,40 +42,39 @@ class LoginModal extends React.Component {
                     alert(json.message);
                 }
             });
-
             this.handleClose();
         };
     }
 
     render() {
         return (
-                <Modal trigger={<Button primary fluid onClick={this.handleOpen}>Log In</Button>}
-                       open={this.state.modalOpen}
-                       onClose={this.state.handleClose}>
-                    {this.props.authenticated && <Header>Logged In</Header>}
-                  <Header icon='user' content='Enter your Credentials' />
-                  <Modal.Content>
-                      <Form>
-                          <Form.Input label="Email" placeholder="Email" maxLength="64"
-                                onChange={(e, {value}) => {
+            <Modal trigger={<Button primary fluid onClick={this.handleOpen}>Log In</Button>}
+                   open={this.state.modalOpen}
+                   onClose={this.state.handleClose}>
+                {this.props.authenticated && <Header>Logged In</Header>}
+                <Header icon='user' content='Enter your Credentials'/>
+                <Modal.Content>
+                    <Form>
+                        <Form.Input label="Email" placeholder="Email" maxLength="64"
+                                    onChange={(e, {value}) => {
                                         this.setState({email: value})
-                                }}
-                                value={this.state.email}
-                          />
-                          <Form.Input label="Password" placeholder="Password" maxLength="64"
-                                      type='password'
-                                onChange={(e, {value}) => {
+                                    }}
+                                    value={this.state.email}
+                        />
+                        <Form.Input label="Password" placeholder="Password" maxLength="64"
+                                    type='password'
+                                    onChange={(e, {value}) => {
                                         this.setState({password: value})
-                                }}
-                                value={this.state.password}
-                          />
-                          <Button type='submit' positive onClick={this.handleSubmit} floated='right'>Log In</Button>
-                          <Button type='button' negative onClick={this.handleClose} floated='right'>Cancel</Button>
-                          <br/>
-                      </Form>
-                      <br/>
-                  </Modal.Content>
-                </Modal>
+                                    }}
+                                    value={this.state.password}
+                        />
+                        <Button type='submit' positive onClick={this.handleSubmit} floated='right'>Log In</Button>
+                        <Button type='button' negative onClick={this.handleClose} floated='right'>Cancel</Button>
+                        <br/>
+                    </Form>
+                    <br/>
+                </Modal.Content>
+            </Modal>
         )
     }
 }
