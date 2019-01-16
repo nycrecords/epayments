@@ -43,6 +43,12 @@ const statusOptions = [
     {key: 'done', text: 'Done', value: 'Done'}
 ];
 
+const deliveryMethodOptions = [
+    {key: 'all', text: 'All', value: 'all'},
+    {key: 'mail', text: 'Mail', value: 'mail'},
+    {key: 'email', text: 'Email', value: 'email'}
+];
+
 //Creates the Search Form for the left side of the website.
 class OrderForm extends React.Component {
     constructor() {
@@ -81,6 +87,7 @@ class OrderForm extends React.Component {
             order_number: '',
             suborder_number: '',
             order_type: 'all',
+            delivery_method: 'all',
             status: 'all',
             billing_name: '',
             activeItem: 'Date Received',
@@ -115,6 +122,7 @@ class OrderForm extends React.Component {
                             order_number: this.state.order_number,
                             suborder_number: this.state.suborder_number,
                             order_type: this.state.order_type,
+                            delivery_method: this.state.delivery_method,
                             status: this.state.status,
                             billing_name: this.state.billing_name,
                             date_received_start: formatDate(this.dateReceivedStart),
@@ -140,6 +148,7 @@ class OrderForm extends React.Component {
                         order_number: this.state.order_number,
                         suborder_number: this.state.suborder_number,
                         order_type: this.state.order_type,
+                        delivery_method: this.state.delivery_method,
                         status: this.state.status,
                         billing_name: this.state.billing_name,
                         date_received_start: formatDate(this.dateReceivedStart),
@@ -174,6 +183,7 @@ class OrderForm extends React.Component {
                             order_number: this.state.order_number,
                             suborder_number: this.state.suborder_number,
                             order_type: this.state.order_type,
+                            delivery_method: this.state.delivery_method,
                             status: this.state.status,
                             billing_name: this.state.billing_name,
                             date_received_start: formatDate(this.dateReceivedStart),
@@ -204,6 +214,7 @@ class OrderForm extends React.Component {
                             order_number: this.state.order_number,
                             suborder_number: this.state.suborder_number,
                             order_type: this.state.order_type,
+                            delivery_method: this.state.delivery_method,
                             status: this.state.status,
                             billing_name: this.state.billing_name,
                             date_received_start: formatDate(this.dateReceivedStart),
@@ -284,6 +295,13 @@ class OrderForm extends React.Component {
                                      this.props.toggleCSV(value);
                                  }}
                                  value={this.state.order_type}
+                                 className="margin-small-tb"
+                    />
+                    <Form.Select label="Delivery Method" options={deliveryMethodOptions}
+                                 onChange={(e, {value}) => {
+                                     this.setState({delivery_method: value});
+                                 }}
+                                 value={this.state.delivery_method}
                                  className="margin-small-tb"
                     />
                     <Form.Select label="Status" placeholder="Status" options={statusOptions}

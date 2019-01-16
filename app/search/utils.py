@@ -171,6 +171,7 @@ def delete_doc(suborder_id):
 def search_queries(order_number=None,
                    suborder_number=None,
                    order_type='all',
+                   delivery_method='',
                    status='',
                    billing_name=None,
                    date_received_start='',
@@ -203,14 +204,15 @@ def search_queries(order_number=None,
         'suborder_number': suborder_number,
         'order_number': order_number,
         'current_status': status,
-        'multiple_items': multiple_items
+        'multiple_items': multiple_items,
+        'metadata.delivery_method': delivery_method,
     }
 
     date_range = {
         'date_received_start': date_received_start,
         'date_received_end': date_received_end,
         'date_submitted_start': date_submitted_start,
-        'date_submitted_end': date_submitted_end
+        'date_submitted_end': date_submitted_end,
     }
 
     dsl_gen = DSLGenerator(query_fields=format_queries(query_field),
@@ -242,6 +244,9 @@ def format_queries(query_fields):
     # Removes 'all' and sets it to nothing: no parameters is all in this case
     if query_fields['current_status'] == 'all':
         query_fields['current_status'] = ''
+
+    if query_fields['metadata.delivery_method'] == 'all':
+        query_fields['metadata.delivery_method'] = ''
 
     return query_fields
 

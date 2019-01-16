@@ -124,10 +124,9 @@ def _print_orders(search_params: Dict[str, str]) -> str:
     order_number = search_params.get('order_number')
     suborder_number = search_params.get('suborder_number')
     order_type = search_params.get('order_type')
+    delivery_method = json.get('delivery_method')
     status = search_params.get('status')
     billing_name = search_params.get('billing_name')
-    # user = str(request.form['user'])
-    user = ''
     date_received_start = search_params.get('date_received_start')
     date_received_end = search_params.get('date_received_end')
     date_submitted_start = search_params.get('date_submitted_start')
@@ -142,6 +141,7 @@ def _print_orders(search_params: Dict[str, str]) -> str:
     suborders = search_queries(order_number,
                                suborder_number,
                                order_type,
+                               delivery_method,
                                status,
                                billing_name,
                                date_received_start,
@@ -171,7 +171,8 @@ def _print_orders(search_params: Dict[str, str]) -> str:
 
     for item in suborder:
         html += render_template('orders/{}'.format(order_type_template_handler[item['order_type']]),
-                                order_info=item, customer_info=item['customer'])
+                                order_info=item,
+                                customer_info=item['customer'])
 
     filename = 'order_sheets_{username}_{time}.pdf'.format(username=current_user.email,
                                                            time=datetime.now().strftime('%Y%m%d-%H%M%S'))
@@ -190,10 +191,9 @@ def _print_small_labels(search_params: Dict[str, str]) -> str:
     order_number = search_params.get('order_number')
     suborder_number = search_params.get('suborder_number')
     order_type = search_params.get('order_type')
+    delivery_method = json.get('delivery_method')
     status = search_params.get('status')
     billing_name = search_params.get('billing_name')
-    # user = str(request.form['user'])
-    user = ''
     date_received_start = search_params.get('date_received_start')
     date_received_end = search_params.get('date_received_end')
     date_submitted_start = search_params.get('date_submitted_start')
@@ -208,6 +208,7 @@ def _print_small_labels(search_params: Dict[str, str]) -> str:
     suborder_results = search_queries(order_number,
                                       suborder_number,
                                       order_type,
+                                      delivery_method,
                                       status,
                                       billing_name,
                                       date_received_start,
@@ -254,10 +255,9 @@ def _print_large_labels(search_params: Dict[str, str]) -> str:
     order_number = search_params.get('order_number')
     suborder_number = search_params.get('suborder_number')
     order_type = search_params.get('order_type')
+    delivery_method = json.get('delivery_method')
     status = search_params.get('status')
     billing_name = search_params.get('billing_name')
-    # user = str(request.form['user'])
-    user = ''
     date_received_start = search_params.get('date_received_start')
     date_received_end = search_params.get('date_received_end')
     date_submitted_start = search_params.get('date_submitted_start')
@@ -272,6 +272,7 @@ def _print_large_labels(search_params: Dict[str, str]) -> str:
     suborder_results = search_queries(order_number,
                                       suborder_number,
                                       order_type,
+                                      delivery_method,
                                       status,
                                       billing_name,
                                       date_received_start,
@@ -326,6 +327,7 @@ def generate_csv(search_params: Dict[str, str]) -> str:
         order_number=search_params.get('order_number'),
         suborder_number=search_params.get('suborder_number'),
         order_type=order_type,
+        delivery_method=search_params.get('delivery_method'),
         status=search_params.get('status'),
         billing_name=search_params.get('billing_name'),
         date_received_start=search_params.get('date_received_start'),
@@ -367,7 +369,7 @@ def generate_csv(search_params: Dict[str, str]) -> str:
         for suborder in formatted_suborder_list:
             writer.writerow([
                 '="{}"'.format(suborder['order_number']),
-                suborder.get['suborder_number'],
+                suborder['suborder_number'],
                 suborder.get('date_received')[:8],
                 suborder.get('customer')['billing_name'],
                 suborder.get('customer').get('phone'),
@@ -402,7 +404,7 @@ def generate_csv(search_params: Dict[str, str]) -> str:
             writer.writerow([
                 '="{}"'.format(suborder['order_number']),
                 suborder['suborder_number'],
-                suborder.get('date_received')[:8],
+                suborder.get('date_received')[:8],  # Remove time from string
                 suborder.get('customer')['billing_name'],
                 suborder.get('customer').get('email'),
                 suborder.get('order_type'),

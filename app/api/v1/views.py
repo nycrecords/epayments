@@ -26,11 +26,6 @@ from app.search.searchfunctions import SearchFunctions
 from app.search.utils import search_queries
 
 
-@api.route('/', methods=['GET'])
-def info():
-    return jsonify({'version': 'v1.0'})
-
-
 @api.route('/orders', methods=['GET', 'POST'])
 @login_required
 def get_orders():
@@ -53,18 +48,18 @@ def get_orders():
     """
     if request.method == 'POST':  # makes it so we get a post method to receive the info put in on the form
         json = request.get_json(force=True)
-        order_number = json.get("order_number")
-        suborder_number = json.get("suborder_number")
-        order_type = json.get("order_type")
-        status = json.get("status")
-        billing_name = json.get("billing_name")
-        user = ''
-        date_received_start = json.get("date_received_start")
-        date_received_end = json.get("date_received_end")
-        date_submitted_start = json.get("date_submitted_start")
-        date_submitted_end = json.get("date_submitted_end")
-        start = json.get("start")
-        size = json.get("size")
+        order_number = json.get('order_number')
+        suborder_number = json.get('suborder_number')
+        order_type = json.get('order_type')
+        delivery_method = json.get('delivery_method')
+        status = json.get('status')
+        billing_name = json.get('billing_name')
+        date_received_start = json.get('date_received_start')
+        date_received_end = json.get('date_received_end')
+        date_submitted_start = json.get('date_submitted_start')
+        date_submitted_end = json.get('date_submitted_end')
+        start = json.get('start')
+        size = json.get('size')
 
         multiple_items = ''
         if order_type == 'multiple_items':
@@ -74,6 +69,7 @@ def get_orders():
         orders = search_queries(order_number,
                                 suborder_number,
                                 order_type,
+                                delivery_method,
                                 status,
                                 billing_name,
                                 date_received_start,
@@ -83,7 +79,7 @@ def get_orders():
                                 multiple_items,
                                 start,
                                 size,
-                                "search")
+                                'search')
 
         # formatting results
         formatted_orders = SearchFunctions.format_results(orders)
@@ -144,8 +140,8 @@ def patch(suborder_number: str) -> jsonify:
         JSON response.
     """
     json = request.get_json(force=True)
-    comment = json.get("comment")
-    new_status = json.get("new_status")
+    comment = json.get('comment')
+    new_status = json.get('new_status')
 
     suborder = Suborders.query.filter_by(id=suborder_number).one_or_none()
     if suborder is None:
@@ -188,10 +184,10 @@ def batch_status_change():
     """
     if request.method == 'POST':
         json = request.get_json(force=True)
-        comment = json.get("comment")
-        new_status = json.get("new_status")
-        queue_for_update = json.get("queueForUpdate")
-        queue_for_update_boolean = json.get("queueForUpdateBoolean")
+        comment = json.get('comment')
+        new_status = json.get('new_status')
+        queue_for_update = json.get('queueForUpdate')
+        queue_for_update_boolean = json.get('queueForUpdateBoolean')
         status_code = []
         for index in range(len(queue_for_update_boolean)):
             """
@@ -234,7 +230,7 @@ def more_info(suborder_number: str):
 
     if request.method == 'POST':
         order_info = SearchFunctions.format_first_result(search_queries(suborder_number=suborder_number,
-                                                                        search_type="print"))
+                                                                        search_type='print'))
 
         return jsonify(order_info=order_info), 200
 
@@ -250,9 +246,9 @@ def tax_photo(suborder_number):
 
     else:
         json = request.get_json(force=True)
-        block_no = json.get("block_no")
-        lot_no = json.get("lot_no")
-        roll_no = json.get("roll_no")
+        block_no = json.get('block_no')
+        lot_no = json.get('lot_no')
+        roll_no = json.get('roll_no')
 
         message = update_tax_photo(suborder_number, block_no, lot_no, roll_no)
         return jsonify(message=message), 200
@@ -276,7 +272,7 @@ def print_order(print_type: str):
 
     url = handler_for_type[print_type](search_params)
 
-    return jsonify({"url": url}), 200
+    return jsonify({'url': url}), 200
 
 
 @api.route('/login', methods=['POST'])
@@ -293,8 +289,8 @@ def login():
     if user is None:
         return jsonify(
             {
-                "authenticated": False,
-                "message": "Invalid username or password entered"
+                'authenticated': False,
+                'message': 'Invalid username or password entered'
             }
         ), 401
 
@@ -303,8 +299,8 @@ def login():
     if not valid_password:
         return jsonify(
             {
-                "authenticated": False,
-                "message": "Invalid username or password entered"
+                'authenticated': False,
+                'message': 'Invalid username or password entered'
             }
         ), 401
 
@@ -312,8 +308,8 @@ def login():
 
     return jsonify(
         {
-            "authenticated": True,
-            "email": current_user.email
+            'authenticated': True,
+            'email': current_user.email
         }
     ), 200
 
@@ -322,4 +318,4 @@ def login():
 @login_required
 def logout():
     logout_user()
-    return jsonify({"authenticated": False}), 200
+    return jsonify({'authenticated': False}), 200
