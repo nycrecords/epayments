@@ -124,7 +124,7 @@ def _print_orders(search_params: Dict[str, str]) -> str:
     order_number = search_params.get('order_number')
     suborder_number = search_params.get('suborder_number')
     order_type = search_params.get('order_type')
-    delivery_method = json.get('delivery_method')
+    delivery_method = search_params.get('delivery_method')
     status = search_params.get('status')
     billing_name = search_params.get('billing_name')
     date_received_start = search_params.get('date_received_start')
@@ -191,7 +191,7 @@ def _print_small_labels(search_params: Dict[str, str]) -> str:
     order_number = search_params.get('order_number')
     suborder_number = search_params.get('suborder_number')
     order_type = search_params.get('order_type')
-    delivery_method = json.get('delivery_method')
+    delivery_method = search_params.get('delivery_method')
     status = search_params.get('status')
     billing_name = search_params.get('billing_name')
     date_received_start = search_params.get('date_received_start')
@@ -255,7 +255,7 @@ def _print_large_labels(search_params: Dict[str, str]) -> str:
     order_number = search_params.get('order_number')
     suborder_number = search_params.get('suborder_number')
     order_type = search_params.get('order_type')
-    delivery_method = json.get('delivery_method')
+    delivery_method = search_params.get('delivery_method')
     status = search_params.get('status')
     billing_name = search_params.get('billing_name')
     date_received_start = search_params.get('date_received_start')
@@ -397,6 +397,7 @@ def generate_csv(search_params: Dict[str, str]) -> str:
             'Date Received',
             'Customer Name',
             'Email',
+            'Delivery Method',
             'Certificate Type',
             'Certificate Number'
         ])
@@ -407,6 +408,7 @@ def generate_csv(search_params: Dict[str, str]) -> str:
                 suborder.get('date_received')[:8],  # Remove time from string
                 suborder.get('customer')['billing_name'],
                 suborder.get('customer').get('email'),
+                suborder.get('metadata').get('delivery_method'),
                 suborder.get('order_type'),
                 suborder.get('metadata').get('certificate_number')
             ])

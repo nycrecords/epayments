@@ -2,6 +2,7 @@ import React from 'react';
 import {Button, Form, Header, Modal, TextArea} from 'semantic-ui-react';
 import 'semantic-ui-css/semantic.min.css';
 import {csrfFetch, handleFetchErrors} from "../utils/fetch"
+import {statusOptions} from '../constants/constants'
 
 
 class StatusModal extends React.Component {
@@ -11,7 +12,7 @@ class StatusModal extends React.Component {
         this.state = {
             modalOpen: false,
             comment: '',
-            new_status: ''
+            status: ''
         };
 
         this.handleOpen = (e) => this.setState({
@@ -21,49 +22,6 @@ class StatusModal extends React.Component {
         this.handleClose = (e) => this.setState({
             modalOpen: false,
         });
-        this.statuses = [
-            {
-                text: 'Received',
-                value: 'Received',
-            },
-            {
-                text: 'Processing',
-                value: 'Processing',
-            },
-            {
-                text: 'Found',
-                value: 'Found',
-            },
-            {
-                text: 'Printed',
-                value: 'Printed',
-            },
-            {
-                text: 'Mailed/Pickup',
-                value: 'Mailed/Pickup',
-            },
-            {
-                text: 'Not Found',
-                value: 'Not_Found',
-            },
-            {
-                text: 'Letter Generated',
-                value: 'Letter_Generated',
-            },
-            {
-                text: 'Undeliverable',
-                value: 'Undeliverable',
-            },
-            {
-                text: 'Refunded',
-                value: 'Refunded',
-            },
-            {
-                text: 'Done',
-                value: 'Done',
-            }
-
-        ];
 
         this.handleSubmit = (e) => {
             e.preventDefault();
@@ -72,19 +30,23 @@ class StatusModal extends React.Component {
                 body: JSON.stringify({
                     suborder_number: this.props.suborder_number,
                     comment: this.state.comment,
-                    new_status: this.state.new_status
+                    status: this.state.status
                 })
             })
                 .then(handleFetchErrors)
                 .then(() => {
-                    this.props.updateStatus(this.props.suborder_number, this.state.new_status);
-                    this.setState({comment: '', new_status: this.state.new_status});
+                    this.props.updateStatus(this.props.suborder_number, this.state.status);
+                    this.setState({comment: '', status: this.state.status});
                 })
                 .catch((error) => {
                     console.error(error);
                 });
             this.handleClose();
         };
+    }
+
+    componentDidMount() {
+        this.setState({status: this.props.current_status});
     }
 
     render() {
@@ -97,14 +59,13 @@ class StatusModal extends React.Component {
                     <Modal.Content>
                         <Modal.Description>
                             <Header>
-                                <p>Current Status - {this.props.current_status}</p>
+                                <p>Current Status - {this.state.status}</p>
                                 <Form onSubmit={this.handleSubmit}>
-                                    <Form.Select fluid selection options={this.statuses}
-                                                 placeholder={this.props.current_status}
+                                    <Form.Select fluid selection options={statusOptions.slice(1)}
                                                  onChange={(e, {value}) => {
-                                                     this.setState({new_status: value})
+                                                     this.setState({status: value})
                                                  }}
-                                                 value={this.state.new_status}
+                                                 value={this.state.status}
                                     />
                                     <Form.Field id='form-textarea-control-opinion' control={TextArea}
                                                 label='Leave an Additional Comment' placeholder='Comment'

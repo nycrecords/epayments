@@ -1,53 +1,12 @@
-/**
- * Created by sinsang on 4/25/17.
- */
 import React from 'react';
-import {Form, Menu, Button, Container, Segment} from 'semantic-ui-react';
+import {Button, Container, Form, Menu, Segment} from 'semantic-ui-react';
 import Date from './datepicker'
 import 'react-datepicker/dist/react-datepicker.css'
 import 'semantic-ui-css/semantic.min.css';
 import moment from 'moment';
 import {csrfFetch, handleFetchErrors} from "../utils/fetch"
-import {CHUNK_SIZE} from "../constants/constants"
+import {CHUNK_SIZE, deliveryMethodOptions, orderTypeOptions, statusOptions} from "../constants/constants"
 
-
-//Creates the options for the Order Type dropdown.
-const orderTypeOptions = [
-    {key: 'all', text: 'All', value: 'all'},
-    {key: 'vitalrecords', text: '--Vital Records--', value: 'vital_records'},
-    {key: 'birthsearch', text: 'Birth Search', value: 'Birth Search'},
-    {key: 'marriagesearch', text: 'Marriage Search', value: 'Marriage Search'},
-    {key: 'deathsearch', text: 'Death Search', value: 'Death Search'},
-    {key: 'birthcert', text: 'Birth Certificate', value: 'Birth Cert'},
-    {key: 'marriagecert', text: 'Marriage Certificate', value: 'Marriage Cert'},
-    {key: 'deathcert', text: 'Death Certificate', value: 'Death Cert'},
-    {key: 'propertycard', text: 'Property Card', value: 'Property Card'},
-    {key: 'photos', text: '--Photos--', value: 'photos'},
-    {key: 'taxphoto', text: 'Tax Photo', value: 'Tax Photo'},
-    {key: 'photogallery', text: 'Photo Gallery', value: 'Photo Gallery'},
-    {key: 'other', text: '--Other--', value: 'other', disabled: true},
-    {key: 'multipleincart', text: 'Multiple Items In Cart', value: 'multiple_items'}
-];
-
-const statusOptions = [
-    {key: 'all', text: 'All', value: 'all'},
-    {key: 'received', text: 'Received', value: 'Received'},
-    {key: 'processing', text: 'Processing', value: 'Processing'},
-    {key: 'found', text: 'Found', value: 'Found'},
-    {key: 'printed', text: 'Printed', value: 'Printed'},
-    {key: 'mailed/pickup', text: 'Mailed/Pickup', value: 'Mailed/Pickup'},
-    {key: 'not_found', text: 'Not Found', value: 'Not_Found'},
-    {key: 'letter_generated', text: 'Letter Generated', value: 'Letter_Generated'},
-    {key: 'undeliverable', text: 'Undeliverable', value: 'Undeliverable'},
-    {key: 'refunded', text: 'Refunded', value: 'Refunded'},
-    {key: 'done', text: 'Done', value: 'Done'}
-];
-
-const deliveryMethodOptions = [
-    {key: 'all', text: 'All', value: 'all'},
-    {key: 'mail', text: 'Mail', value: 'mail'},
-    {key: 'email', text: 'Email', value: 'email'}
-];
 
 //Creates the Search Form for the left side of the website.
 class OrderForm extends React.Component {

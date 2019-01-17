@@ -86,9 +86,11 @@ def get_orders():
         suborder_total = orders['hits']['total']
         order_total = orders['aggregations']['order_count']['value']
 
-        return jsonify(order_count=order_total,
-                       suborder_count=suborder_total,
-                       all_orders=formatted_orders), 200
+        return jsonify(
+            order_count=order_total,
+            suborder_count=suborder_total,
+            all_orders=formatted_orders,
+        ), 200
 
     else:
         orders = search_queries(date_received_start=date.today().strftime('%m/%d/%Y'))
@@ -96,9 +98,11 @@ def get_orders():
         suborder_total = orders['hits']['total']
         order_total = orders['aggregations']['order_count']['value']
 
-        return jsonify(order_count=order_total,
-                       suborder_count=suborder_total,
-                       all_orders=formatted_orders), 200
+        return jsonify(
+            order_count=order_total,
+            suborder_count=suborder_total,
+            all_orders=formatted_orders,
+        ), 200
 
 
 @api.route('/orders/<string:doc_type>', methods=['GET'])
@@ -240,10 +244,11 @@ def more_info(suborder_number: str):
 def tax_photo(suborder_number):
     if request.method == 'GET':
         t_photo = TaxPhoto.query.filter_by(suborder_number=suborder_number).one()
-        return jsonify(block_no=t_photo.block,
-                       lot_no=t_photo.lot,
-                       roll_no=t_photo.roll), 200
-
+        return jsonify(
+            block_no=t_photo.block,
+            lot_no=t_photo.lot,
+            roll_no=t_photo.roll,
+        ), 200
     else:
         json = request.get_json(force=True)
         block_no = json.get('block_no')
@@ -269,9 +274,7 @@ def print_order(print_type: str):
         printing.SMALL_LABELS: _print_small_labels,
         printing.LARGE_LABELS: _print_large_labels
     }
-
     url = handler_for_type[print_type](search_params)
-
     return jsonify({'url': url}), 200
 
 
