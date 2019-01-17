@@ -5,27 +5,8 @@ import PhotoGalleryForm from "./photoGalleryForm"
 import {BirthForm} from "./birthForm"
 import {MarriageForm} from "./marriageForm";
 import {DeathForm} from "./deathForm";
+import {createOrderTypeOptions, statusOptions} from "../constants/constants";
 
-
-const orderTypeOptions = [
-    {key: 'birthcert', text: 'Birth Certificate', value: 'Birth Cert'},
-    {key: 'deathcert', text: 'Death Certificate', value: 'Death Cert'},
-    {key: 'marriagecert', text: 'Marriage Certificate', value: 'Marriage Cert'},
-    {key: 'taxphoto', text: 'Tax Photo', value: 'Tax Photo'},
-    {key: 'photogallery', text: 'Photo Gallery', value: 'Photo Gallery'},
-];
-const statusOptions = [
-    {key: 'received', text: 'Received', value: 'Received'},
-    {key: 'processing', text: 'Processing', value: 'Processing'},
-    {key: 'found', text: 'Found', value: 'Found'},
-    {key: 'printed', text: 'Printed', value: 'Printed'},
-    {key: 'mailed/pickup', text: 'Mailed/Pickup', value: 'Mailed/Pickup'},
-    {key: 'not_found', text: 'Not Found', value: 'Not_Found'},
-    {key: 'letter_generated', text: 'Letter Generated', value: 'Letter_Generated'},
-    {key: 'undeliverable', text: 'Undeliverable', value: 'Undeliverable'},
-    {key: 'refunded', text: 'Refunded', value: 'Refunded'},
-    {key: 'done', text: 'Done', value: 'Done'}
-];
 
 class NewSuborderForm extends React.Component {
     constructor() {
@@ -138,7 +119,7 @@ class NewSuborderForm extends React.Component {
                                          required
                                          name="orderType"
                                          placeholder="Order Type"
-                                         options={orderTypeOptions}
+                                         options={createOrderTypeOptions}
                                          onChange={this.handleSelectChange}
                                          value={this.state.orderType}
                             />

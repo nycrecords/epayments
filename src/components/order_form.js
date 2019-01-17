@@ -5,7 +5,7 @@ import 'react-datepicker/dist/react-datepicker.css'
 import 'semantic-ui-css/semantic.min.css';
 import moment from 'moment';
 import {csrfFetch, handleFetchErrors} from "../utils/fetch"
-import {CHUNK_SIZE, deliveryMethodOptions, orderTypeOptions, statusOptions} from "../constants/constants"
+import {CHUNK_SIZE, deliveryMethodOptions, searchOrderTypeOptions, statusOptions} from "../constants/constants"
 
 
 //Creates the Search Form for the left side of the website.
@@ -246,7 +246,7 @@ class OrderForm extends React.Component {
                                 value={this.state.suborder_number}
                                 className="margin-small-tb"
                     />
-                    <Form.Select label="Order Type" placeholder="Order Type" options={orderTypeOptions}
+                    <Form.Select label="Order Type" placeholder="Order Type" options={searchOrderTypeOptions}
                                  onChange={(e, {value}) => {
                                      this.setState({order_type: value});
 

@@ -64,7 +64,15 @@ export const dayOptions = [
     {key: '31', text: '31', value: '31'}
 ];
 
-export const orderTypeOptions = [
+export const createOrderTypeOptions = [
+    {key: 'birthcert', text: 'Birth Certificate', value: 'Birth Cert'},
+    {key: 'deathcert', text: 'Death Certificate', value: 'Death Cert'},
+    {key: 'marriagecert', text: 'Marriage Certificate', value: 'Marriage Cert'},
+    {key: 'taxphoto', text: 'Tax Photo', value: 'Tax Photo'},
+    {key: 'photogallery', text: 'Photo Gallery', value: 'Photo Gallery'},
+];
+
+export const searchOrderTypeOptions = [
     {key: 'all', text: 'All', value: 'all'},
     {key: 'vitalrecords', text: '--Vital Records--', value: 'vital_records'},
     {key: 'birthsearch', text: 'Birth Search', value: 'Birth Search'},

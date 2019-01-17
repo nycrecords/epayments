@@ -32,20 +32,20 @@ class Orders(db.Model):
 
     def __init__(
             self,
-            id,
+            _id,
             date_submitted,
             date_received,
-            order_types,
+            _order_types,
             multiple_items,
             _next_suborder_number=1,
             confirmation_message=None,
             client_data=None):
-        self.id = id
+        self.id = _id
         self.date_submitted = date_submitted
         self.date_received = date_received or None
         self.confirmation_message = confirmation_message
         self.client_data = client_data
-        self.order_types = order_types
+        self.order_types = _order_types
         self.multiple_items = multiple_items
         self._next_suborder_number = _next_suborder_number
 
@@ -101,6 +101,7 @@ class Suborders(db.Model):
             status.FOUND,
             status.PRINTED,
             status.MAILED_PICKUP,
+            status.EMAILED,
             status.NOT_FOUND,
             status.LETTER_GENERATED,
             status.UNDELIVERABLE,

@@ -15,13 +15,12 @@
     5. Done - End of status changes
     
 """
-
-
 RECEIVED = 'Received'
 PROCESSING = 'Processing'
 FOUND = 'Found'
 PRINTED = 'Printed'
 MAILED_PICKUP = 'Mailed/Pickup'
+EMAILED = 'Emailed'
 NOT_FOUND = 'Not_Found'
 LETTER_GENERATED = 'Letter_Generated'
 UNDELIVERABLE = 'Undeliverable'
