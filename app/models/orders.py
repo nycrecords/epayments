@@ -183,7 +183,7 @@ class Suborders(db.Model):
         )
 
     def es_update(self, metadata=None):
-        """Updates an elasticsearch document given the metadata."""
+        """Updates an elasticsearch document."""
         es.update(
             index='suborders',
             doc_type='suborders',

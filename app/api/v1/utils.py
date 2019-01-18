@@ -114,12 +114,13 @@ def update_tax_photo(suborder_number: str, block_no: str, lot_no: str, roll_no: 
 
 def _print_orders(search_params: Dict[str, str]) -> str:
     """
-    Generates a PDF order sheets.
+    Generates a PDF of order sheets.
 
-    :param search_params: JSON Fields from the search form
-    :type search_params: JSON
+    Args:
+        search_params: Dictionary of attributes to search by.
 
-    :return: PDF
+    Returns:
+        URL string of the PDF.
     """
     order_number = search_params.get('order_number')
     suborder_number = search_params.get('suborder_number')
@@ -319,7 +320,7 @@ def generate_csv(search_params: Dict[str, str]) -> str:
         search_params: Dictionary of attributes to search by.
 
     Returns:
-        URL string of CSV.
+        URL string of the CSV.
     """
     order_type = search_params.get('order_type')
 
@@ -334,7 +335,7 @@ def generate_csv(search_params: Dict[str, str]) -> str:
         date_received_end=search_params.get('date_received_end'),
         date_submitted_start=search_params.get('date_submitted_start'),
         date_submitted_end=search_params.get('date_submitted_end'),
-        search_type='csv'
+        search_type='csv',
     )
 
     formatted_suborder_list = SearchFunctions.format_results(suborders)
@@ -364,7 +365,7 @@ def generate_csv(search_params: Dict[str, str]) -> str:
             'Lot',
             'Roll',
             'Comment',
-            'Description'
+            'Description',
         ])
         for suborder in formatted_suborder_list:
             writer.writerow([
@@ -387,7 +388,7 @@ def generate_csv(search_params: Dict[str, str]) -> str:
                 suborder.get('metadata').get('lot', ''),
                 suborder.get('metadata').get('roll', ''),
                 'Yes' if suborder.get('metadata').get('comment') else '',
-                suborder.get('metadata').get('description', '')
+                suborder.get('metadata').get('description', ''),
             ])
 
     elif order_type == 'vital_records':
@@ -401,7 +402,7 @@ def generate_csv(search_params: Dict[str, str]) -> str:
             'Certificate Type',
             'Certificate Number',
             'Borough',
-            'Year',
+            'Years',
         ])
         for suborder in formatted_suborder_list:
             writer.writerow([
@@ -414,7 +415,7 @@ def generate_csv(search_params: Dict[str, str]) -> str:
                 suborder.get('order_type'),
                 suborder.get('metadata').get('certificate_number'),
                 suborder.get('metadata').get('borough'),
-                suborder.get('metadata').get('years')
+                suborder.get('metadata').get('years'),
             ])
 
     file.close()
@@ -434,10 +435,10 @@ def create_new_order(order_info_dict: Dict[str, str], suborder_list: List[Dict])
     next_order_number = OrderNumberCounter.query.filter_by(year=year).one().next_order_number
     order_id = 'EPAY-{0:s}-{1:03d}'.format(year, next_order_number)
 
-    order = Orders(id=order_id,
+    order = Orders(_id=order_id,
                    date_submitted=date.today(),
                    date_received=date.today(),
-                   order_types=order_types_list,
+                   _order_types=order_types_list,
                    multiple_items=True if len(suborder_list) > 1 else False)
     db.session.add(order)
 
