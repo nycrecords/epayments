@@ -145,7 +145,7 @@ def patch(suborder_number: str) -> jsonify:
     """
     json = request.get_json(force=True)
     comment = json.get('comment')
-    new_status = json.get('new_status')
+    new_status = json.get('status')
 
     suborder = Suborders.query.filter_by(id=suborder_number).one_or_none()
     if suborder is None:

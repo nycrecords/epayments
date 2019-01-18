@@ -399,7 +399,9 @@ def generate_csv(search_params: Dict[str, str]) -> str:
             'Email',
             'Delivery Method',
             'Certificate Type',
-            'Certificate Number'
+            'Certificate Number',
+            'Borough',
+            'Year',
         ])
         for suborder in formatted_suborder_list:
             writer.writerow([
@@ -410,7 +412,9 @@ def generate_csv(search_params: Dict[str, str]) -> str:
                 suborder.get('customer').get('email'),
                 suborder.get('metadata').get('delivery_method'),
                 suborder.get('order_type'),
-                suborder.get('metadata').get('certificate_number')
+                suborder.get('metadata').get('certificate_number'),
+                suborder.get('metadata').get('borough'),
+                suborder.get('metadata').get('years')
             ])
 
     file.close()

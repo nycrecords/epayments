@@ -39,6 +39,9 @@ def upgrade():
 def downgrade():
     # Convert 'Emailed' status to 'Mailed/Pickup'
     op.execute('UPDATE suborders SET status = \'Mailed/Pickup\' WHERE status = \'Emailed\'')
+    op.execute('UPDATE events SET new_value = jsonb_set(new_value, \'{status}\', \'"Mailed/Pickup"\'::jsonb) WHERE new_value->>\'status\' = \'Emailed\'')
+    op.execute('UPDATE events SET previous_value = jsonb_set(previous_value, \'{status}\', \'"Mailed/Pickup"\'::jsonb) WHERE previous_value->>\'status\' = \'Emailed\'')
+
     # Create a tempoary "_event_type" type, convert and drop the "new" type
     tmp_status.create(op.get_bind(), checkfirst=False)
     op.execute('ALTER TABLE suborders ALTER COLUMN status TYPE _status'
