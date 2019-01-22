@@ -1,6 +1,6 @@
 from datetime import date
 
-from flask import jsonify, request
+from flask import jsonify, request, Response
 from flask_login import login_user, logout_user, current_user, login_required
 from sqlalchemy import desc
 
@@ -26,9 +26,10 @@ from app.search.searchfunctions import SearchFunctions
 from app.search.utils import search_queries
 
 
+# noinspection PyTypeChecker,PyTypeChecker
 @api.route('/orders', methods=['GET', 'POST'])
 @login_required
-def get_orders():
+def get_orders() -> Response:
     """
     Retrieves the data for orders to be displayed.
 
@@ -104,10 +105,11 @@ def get_orders():
         ), 200
 
 
+# noinspection PyTypeChecker,PyTypeChecker
 @api.route('/orders/<string:doc_type>', methods=['GET'])
 @login_required
-def orders_doc(doc_type: str):
-    """Handles the export of data.
+def orders_doc(doc_type: str) -> Response:
+    """Handles the export of data given the doc_type. Currently only supports 'csv'.
 
     Args:
         doc_type: The type of document to export data into.
@@ -120,9 +122,10 @@ def orders_doc(doc_type: str):
         return jsonify(url=url), 200
 
 
+# noinspection PyTypeChecker,PyTypeChecker
 @api.route('/orders/new', methods=['POST'])
 @login_required
-def new_order():
+def new_order() -> Response:
     """
     :return:
     """
@@ -131,9 +134,10 @@ def new_order():
     return jsonify(), 200
 
 
+# noinspection PyTypeChecker,PyTypeChecker
 @api.route('/status/<string:suborder_number>', methods=['PATCH'])
 @login_required
-def patch(suborder_number: str) -> jsonify:
+def patch(suborder_number: str) -> Response:
     """Updates a suborder.
 
     Args:
@@ -201,9 +205,10 @@ def batch_status_change():
     return jsonify(status_code=status_code), 200
 
 
+# noinspection PyTypeChecker,PyTypeChecker
 @api.route('/history/<string:suborder_number>', methods=['GET'])
 @login_required
-def history(suborder_number: str):
+def history(suborder_number: str) -> Response:
     """
     GET: {suborder_number};
     :param suborder_number:
@@ -222,9 +227,10 @@ def history(suborder_number: str):
     return jsonify(history=status_history), 200
 
 
+# noinspection PyTypeChecker,PyTypeChecker
 @api.route('/more_info/<string:suborder_number>', methods=['GET', 'POST'])
 @login_required
-def more_info(suborder_number: str):
+def more_info(suborder_number: str) -> Response:
     """
     GET: {suborder_number
     :param suborder_number:
@@ -238,9 +244,10 @@ def more_info(suborder_number: str):
         return jsonify(order_info=order_info), 200
 
 
+# noinspection PyTypeChecker,PyTypeChecker
 @api.route('/tax_photo/<string:suborder_number>', methods=['GET', 'POST'])
 @login_required
-def tax_photo(suborder_number):
+def tax_photo(suborder_number) -> Response:
     """TODO (@gzhou): docstring
     """
     if request.method == 'GET':
@@ -260,9 +267,10 @@ def tax_photo(suborder_number):
         return jsonify(message=message), 200
 
 
+# noinspection PyTypeChecker,PyTypeChecker
 @api.route('/print/<string:print_type>', methods=['POST'])
 @login_required
-def print_order(print_type: str):
+def print_order(print_type: str) -> Response:
     """
     Generate a PDF for a print operation.
 
@@ -279,8 +287,9 @@ def print_order(print_type: str):
     return jsonify({'url': url}), 200
 
 
+# noinspection PyTypeChecker,PyTypeChecker
 @api.route('/login', methods=['POST'])
-def login():
+def login() -> Response:
     """
     Login a user through the API.
 
@@ -318,8 +327,9 @@ def login():
     ), 200
 
 
+# noinspection PyTypeChecker,PyTypeChecker
 @api.route('/logout', methods=['DELETE'])
 @login_required
-def logout():
+def logout() -> Response:
     logout_user()
     return jsonify({'authenticated': False}), 200
