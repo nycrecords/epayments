@@ -415,7 +415,7 @@ def generate_csv(search_params: Dict[str, str]) -> str:
                 suborder.get('order_type'),
                 suborder.get('metadata').get('certificate_number'),
                 suborder.get('metadata').get('borough'),
-                suborder.get('metadata').get('years'),
+                '="{}"'.format(suborder.get('metadata').get('years')),
             ])
 
     file.close()
