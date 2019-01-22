@@ -78,8 +78,7 @@ def get_orders():
                                 date_submitted_end,
                                 multiple_items,
                                 start,
-                                size,
-                                'search')
+                                size)
 
         # formatting results
         formatted_orders = SearchFunctions.format_results(orders)
@@ -164,7 +163,7 @@ def patch(suborder_number: str) -> jsonify:
     }), 400
 
 
-# TODO: WIP, Complete this
+# TODO (@gzhou): WIP, Complete this
 @api.route('/statuses/', methods=['GET', 'POST'])
 @login_required
 def batch_status_change():
@@ -242,6 +241,8 @@ def more_info(suborder_number: str):
 @api.route('/tax_photo/<string:suborder_number>', methods=['GET', 'POST'])
 @login_required
 def tax_photo(suborder_number):
+    """TODO (@gzhou): docstring
+    """
     if request.method == 'GET':
         t_photo = TaxPhoto.query.filter_by(suborder_number=suborder_number).one()
         return jsonify(

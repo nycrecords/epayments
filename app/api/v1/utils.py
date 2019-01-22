@@ -344,7 +344,7 @@ def generate_csv(search_params: Dict[str, str]) -> str:
     file = open(join(current_app.static_folder, 'files', filename), 'w')
     writer = csv.writer(file)
 
-    if order_type == 'photos':
+    if order_type == order_types.PHOTOS:
         writer.writerow([
             'Order Number',
             'Suborder Number',
@@ -391,7 +391,7 @@ def generate_csv(search_params: Dict[str, str]) -> str:
                 suborder.get('metadata').get('description', ''),
             ])
 
-    elif order_type == 'vital_records':
+    elif order_type == order_types.VITAL_RECORDS:
         writer.writerow([
             'Order Number',
             'Suborder Number',

@@ -13,6 +13,8 @@ DEATH_CERT = "Death Cert"
 TAX_PHOTO = "Tax Photo"
 PHOTO_GALLERY = "Photo Gallery"
 PROPERTY_CARD = "Property Card"
+PHOTOS = 'photos'
+VITAL_RECORDS = 'vital_records'
 
 VITAL_RECORDS_LIST = [
     BIRTH_CERT,
