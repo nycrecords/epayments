@@ -171,6 +171,7 @@ def delete_doc(suborder_id):
 def search_queries(order_number=None,
                    suborder_number=None,
                    order_type='all',
+                   delivery_method='',
                    status='',
                    billing_name=None,
                    date_received_start='',
@@ -203,14 +204,15 @@ def search_queries(order_number=None,
         'suborder_number': suborder_number,
         'order_number': order_number,
         'current_status': status,
-        'multiple_items': multiple_items
+        'multiple_items': multiple_items,
+        'metadata.delivery_method': delivery_method,
     }
 
     date_range = {
         'date_received_start': date_received_start,
         'date_received_end': date_received_end,
         'date_submitted_start': date_submitted_start,
-        'date_submitted_end': date_submitted_end
+        'date_submitted_end': date_submitted_end,
     }
 
     dsl_gen = DSLGenerator(query_fields=format_queries(query_field),
@@ -243,6 +245,9 @@ def format_queries(query_fields):
     if query_fields['current_status'] == 'all':
         query_fields['current_status'] = ''
 
+    if query_fields['metadata.delivery_method'] == 'all':
+        query_fields['metadata.delivery_method'] = ''
+
     return query_fields
 
 
@@ -261,13 +266,10 @@ def format_date_range(date_range):
 def format_order_type(order_type):
     if order_type == 'all':
         return None
-
     elif order_type == 'vital_records':
         return order_types.VITAL_RECORDS_LIST
-
     elif order_type == 'photos':
         return order_types.PHOTOS_LIST
-
     else:
         return [order_type]
 
@@ -403,7 +405,7 @@ class DSLGenerator(object):
         Dictionary header of DSL body
         :return: nested dictionary
         """
-        if self.__search_type == 'search' or self.__search_type == 'print':
+        if self.__search_type in ['search', 'print', 'csv']:
             return {
                 'sort': [
                     '_score',

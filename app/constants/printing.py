@@ -4,10 +4,9 @@
     :synopsis: Defines constants used for printing from the application.
 """
 
-
-ORDERS='orders'
-SMALL_LABELS='small_labels'
-LARGE_LABELS='large_labels'
+ORDERS = 'orders'
+SMALL_LABELS = 'small_labels'
+LARGE_LABELS = 'large_labels'
 
 LARGE_LABEL_COUNT = 10
 

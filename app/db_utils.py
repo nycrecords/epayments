@@ -21,9 +21,9 @@ def create_object(obj):
         db.session.add(obj)
         db.session.commit()
     except Exception as e:
+        db.session.rollback()
         print("Failed to CREATE {} : {}".format(obj, e))
         print(sys.exc_info())
-        db.session.rollback()
     # else:
     #     # create elasticsearch doc
     #     if (not isinstance(obj, Storie)

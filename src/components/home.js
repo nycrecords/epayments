@@ -27,6 +27,8 @@ class Home extends React.Component {
             suborder_two: 0
         };
 
+        this.orderTypeWithCSV = ['photos', 'Tax Photo', 'Photo Gallery', 'vital_records'];
+
         this.addOrder = (order_count, suborder_count, orders, firstTime) => {
             if (firstTime) {
                 this.setState({
@@ -92,7 +94,7 @@ class Home extends React.Component {
 
         this.logOut = () => {
             this.setLoadingState(true);
-            csrfFetch('api/v1.0/logout', {
+            csrfFetch('api/v1/logout', {
                 method: "DELETE",
             })
                 .then(handleFetchErrors)
@@ -109,20 +111,20 @@ class Home extends React.Component {
         };
     };
 
-    handleListChange = (name, value, state, index) => {
-        let newState = state.slice();
-        newState[index] = value;
-        this.setState({
-            [name]: newState
-        });
-    };
+    // handleListChange = (name, value, state, index) => {
+    //     let newState = state.slice();
+    //     newState[index] = value;
+    //     this.setState({
+    //         [name]: newState
+    //     });
+    // };
 
-    toggleCSV = (visible) => {
-        this.setState({showCSVButton: visible});
+    toggleCSV = (order_type) => {
+        (this.orderTypeWithCSV.indexOf(order_type) > -1) ? this.setState({showCSVButton: true}) : this.setState({showCSVButton: false});
     };
 
     getOrders() {
-        csrfFetch('api/v1.0/orders')
+        csrfFetch('api/v1/orders')
             .then(response => {
                 // check response status to logout user if backend session expired
                 switch (response.status) {

@@ -1,10 +1,10 @@
 import pytz
-from flask import Flask
-from flask_sqlalchemy import SQLAlchemy
-from flask_bootstrap import Bootstrap
-from flask_apscheduler import APScheduler
-from flask_login import LoginManager
 from elasticsearch import Elasticsearch
+from flask import Flask
+from flask_apscheduler import APScheduler
+from flask_bootstrap import Bootstrap
+from flask_login import LoginManager
+from flask_sqlalchemy import SQLAlchemy
 
 from config import config, Config
 
@@ -46,7 +46,7 @@ def create_app(config_name):
     app.register_blueprint(main_blueprint)
 
     # API CALL GOES HERE
-    from .api_1_0 import api_1_0 as api_1_0_blueprint
-    app.register_blueprint(api_1_0_blueprint, url_prefix='/api/v1.0')
+    from .api.v1 import api_v1
+    app.register_blueprint(api_v1, url_prefix='/api/v1')
 
     return app

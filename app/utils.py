@@ -135,12 +135,12 @@ def import_file(file_name):
 
     # 7. Add Orders Object to DB Session
     order = Orders(
-        id=order_number,
+        _id=order_number,
         date_submitted=date_submitted,
         date_received=date_received,
         confirmation_message=confirmation_message,
         client_data=clients_data,
-        order_types=_order_types,
+        _order_types=_order_types,
         multiple_items=(len(_order_types) > 1)
     )
     db.session.add(order)
