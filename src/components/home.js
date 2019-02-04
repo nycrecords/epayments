@@ -6,6 +6,7 @@ import {mapDispatchToProps, mapStateToProps} from "../utils/reduxMappers";
 import OrderForm from "./order_form";
 import Order from "./order";
 import LoginModal from "./login_modal";
+import ChangePasswordModal from "./changePasswordModal";
 import {csrfFetch, handleFetchErrors} from "../utils/fetch"
 import {CHUNK_SIZE} from "../constants/constants"
 
@@ -178,6 +179,7 @@ class Home extends React.Component {
                             <Segment basic className="-half -no-padding">
                                 <div className="-float-right">
                                     Hi {this.props.user}
+                                    <ChangePasswordModal/>
                                     <Button content='Logout' onClick={this.logOut} className="-margin-left"/>
                                 </div>
                             </Segment>
