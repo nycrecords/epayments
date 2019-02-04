@@ -324,7 +324,7 @@ def generate_csv(search_params: Dict[str, str]) -> str:
     """
     order_type = search_params.get('order_type')
 
-    suborders = search_queries(
+    suborder_results = search_queries(
         order_number=search_params.get('order_number'),
         suborder_number=search_params.get('suborder_number'),
         order_type=order_type,
@@ -337,8 +337,6 @@ def generate_csv(search_params: Dict[str, str]) -> str:
         date_submitted_end=search_params.get('date_submitted_end'),
         search_type='csv',
     )
-
-    formatted_suborder_list = SearchFunctions.format_results(suborders)
 
     filename = 'orders_{}.csv'.format(datetime.now().strftime('%m_%d_%Y_at_%I_%M_%p'))
     file = open(join(current_app.static_folder, 'files', filename), 'w')
@@ -367,28 +365,28 @@ def generate_csv(search_params: Dict[str, str]) -> str:
             'Comment',
             'Description',
         ])
-        for suborder in formatted_suborder_list:
+        for suborder in suborder_results:
             writer.writerow([
-                '="{}"'.format(suborder['order_number']),
-                suborder['suborder_number'],
-                suborder.get('date_received')[:8],
-                suborder.get('customer')['billing_name'],
-                suborder.get('customer').get('phone'),
-                suborder.get('customer').get('email'),
-                suborder.get('customer').get('address'),
-                suborder.get('metadata').get('delivery_method'),
-                suborder.get('metadata').get('size'),
-                suborder.get('metadata').get('num_copies'),
-                suborder.get('metadata').get('image_id', ''),
-                suborder.get('metadata').get('building_number', ''),
-                suborder.get('metadata').get('street', ''),
-                suborder.get('metadata').get('collection', ''),
-                suborder.get('metadata').get('borough', ''),
-                suborder.get('metadata').get('block', ''),
-                suborder.get('metadata').get('lot', ''),
-                suborder.get('metadata').get('roll', ''),
-                'Yes' if suborder.get('metadata').get('comment') else '',
-                suborder.get('metadata').get('description', ''),
+                '="{}"'.format(suborder['_source']['order_number']),
+                suborder['_source']['suborder_number'],
+                suborder['_source'].get('date_received')[:8],
+                suborder['_source'].get('customer')['billing_name'],
+                suborder['_source'].get('customer').get('phone'),
+                suborder['_source'].get('customer').get('email'),
+                suborder['_source'].get('customer').get('address'),
+                suborder['_source'].get('metadata').get('delivery_method'),
+                suborder['_source'].get('metadata').get('size'),
+                suborder['_source'].get('metadata').get('num_copies'),
+                suborder['_source'].get('metadata').get('image_id', ''),
+                suborder['_source'].get('metadata').get('building_number', ''),
+                suborder['_source'].get('metadata').get('street', ''),
+                suborder['_source'].get('metadata').get('collection', ''),
+                suborder['_source'].get('metadata').get('borough', ''),
+                suborder['_source'].get('metadata').get('block', ''),
+                suborder['_source'].get('metadata').get('lot', ''),
+                suborder['_source'].get('metadata').get('roll', ''),
+                'Yes' if suborder['_source'].get('metadata').get('comment') else '',
+                suborder['_source'].get('metadata').get('description', ''),
             ])
 
     elif order_type == order_types.VITAL_RECORDS:
@@ -404,18 +402,20 @@ def generate_csv(search_params: Dict[str, str]) -> str:
             'Borough',
             'Years',
         ])
-        for suborder in formatted_suborder_list:
+        for suborder in suborder_results:
+            if suborder['_source'].get('metadata') is None:
+                print(suborder)
             writer.writerow([
-                '="{}"'.format(suborder['order_number']),
-                suborder['suborder_number'],
-                suborder.get('date_received')[:8],  # Remove time from string
-                suborder.get('customer')['billing_name'],
-                suborder.get('customer').get('email'),
-                suborder.get('metadata').get('delivery_method'),
-                suborder.get('order_type'),
-                suborder.get('metadata').get('certificate_number'),
-                suborder.get('metadata').get('borough'),
-                '="{}"'.format(suborder.get('metadata').get('years')),
+                '="{}"'.format(suborder['_source']['order_number']),
+                suborder['_source']['suborder_number'],
+                suborder['_source'].get('date_received')[:8],  # Remove time from string
+                suborder['_source'].get('customer')['billing_name'],
+                suborder['_source'].get('customer').get('email'),
+                suborder['_source'].get('metadata').get('delivery_method'),
+                suborder['_source'].get('order_type'),
+                suborder['_source'].get('metadata').get('certificate_number'),
+                suborder['_source'].get('metadata').get('borough'),
+                '="{}"'.format(suborder['_source'].get('metadata').get('years')),
             ])
 
     file.close()
