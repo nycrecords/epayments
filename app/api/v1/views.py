@@ -4,6 +4,7 @@ from flask import jsonify, request, Response
 from flask_login import login_user, logout_user, current_user, login_required
 from sqlalchemy import desc
 
+from app import db
 from app.api.v1 import api_v1 as api
 from app.api.v1.utils import (
     create_new_order,
@@ -333,3 +334,47 @@ def login() -> Response:
 def logout() -> Response:
     logout_user()
     return jsonify({'authenticated': False}), 200
+
+
+# noinspection PyTypeChecker,PyTypeChecker
+@api.route('/password', methods=['PATCH'])
+@login_required
+def change_password() -> Response:
+    password_data = request.get_json(force=True)
+
+    if password_data['password'] != password_data['confirm_password']:
+        return jsonify(
+            error={
+                'message': 'Passwords do not match.'
+            }), 400
+
+    for key, value in password_data.items():
+        if not value:
+            return jsonify(
+                error={
+                    'code': 400,
+                    'message': 'Passwords cannot be empty.',
+                }), 400
+        if len(value) < 6:
+            return jsonify(
+                error={
+                    'code': 400,
+                    'message': 'Password must contain at least 6 characters.',
+                }), 400
+        if len(value) > 12:
+            return jsonify(
+                error={
+                    'code': 400,
+                    'message': 'Password must contain less than 12 characters.',
+                }), 400
+
+    user = Users.query.filter_by(email=current_user.email).one_or_none()
+    user.password = password_data['password']
+    db.session.add(user)
+    db.session.commit()
+
+    return jsonify(
+        {
+            'message': 'Password successfully changed.'
+        }
+    ), 200
