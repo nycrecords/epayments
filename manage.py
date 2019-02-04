@@ -1,15 +1,19 @@
+from getpass import getpass
+
 import os
+from flask_migrate import Migrate, MigrateCommand
+from flask_script import Manager, Shell
+
 from app import create_app, db
 from app.models import Orders, Suborders, Customers, BirthSearch, \
     MarriageSearch, DeathSearch, BirthCertificate, MarriageCertificate, \
     DeathCertificate, PropertyCard, TaxPhoto, PhotoGallery, Events, Users
 from app.search.utils import recreate
-from flask_script import Manager, Shell
-from flask_migrate import Migrate, MigrateCommand
 
 COV = None
 if os.environ.get('FLASK_COVERAGE'):
     import coverage
+
     COV = coverage.coverage(branch=True, include='app/*')
     COV.start()
 
@@ -54,6 +58,25 @@ def create_test_user():
     user = Users('test@email.com', '1234')
     db.session.add(user)
     db.session.commit()
+
+
+@manager.command
+def create_user():
+    """
+    Command line tool to create a user in the database.
+    :return: message indicating either error or success
+    """
+    email = input("Enter your email: ")
+    password = getpass("Enter your desired password: ")
+    confirm_password = getpass("Re-enter your password: ")
+    if password != confirm_password:
+        return print("Passwords are not the same. Please try again.")
+
+    user = Users(email=email, password=password)
+    db.session.add(user)
+    db.session.commit()
+
+    return print("Successfully created user, " + email)
 
 
 @manager.command
