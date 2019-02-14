@@ -10,7 +10,7 @@ load_dotenv(dotenv_path)
 
 class Config:
     SQLALCHEMY_TRACK_MODIFICATIONS = True
-    SECRET_KEY = 'HELLO ARNIS'
+    SECRET_KEY = os.environ.get('SECRET_KEY') or 'hard to guess string'
     SQLALCHEMY_DATABASE_URI = os.environ.get('DATABASE_URL') or 'postgresql://developer@127.0.0.1:5432/epayments'
     REMOTE_FILE_PATH = os.environ.get('REMOTE_FILE_PATH')
     LOCAL_FILE_PATH = (os.environ.get('LOCAL_FILE_PATH') or
@@ -41,11 +41,11 @@ class DevelopmentConfig(Config):
 
 class TestingConfig(Config):
     TESTING = True
-    SQLALCHEMY_DATABASE_URI = 'postgresql://developer:@localhost:5432/epayments'
+    SQLALCHEMY_DATABASE_URI = 'postgresql://developer:@localhost:5432/epayments_test'
 
 
 class ProductionConfig(Config):
-    SQLALCHEMY_DATABASE_URI = 'postgresql://epayments_v2:@localhost:5432/epayments_v2'
+    SQLALCHEMY_DATABASE_URI = 'postgresql://epayments_v2:@localhost:5432/epayments'
 
 
 config = {

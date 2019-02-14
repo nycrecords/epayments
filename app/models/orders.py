@@ -32,21 +32,20 @@ class Orders(db.Model):
 
     def __init__(
             self,
-            id,
+            _id,
             date_submitted,
             date_received,
-            order_types,
+            _order_types,
             multiple_items,
             _next_suborder_number=1,
             confirmation_message=None,
-            client_data=None,
-    ):
-        self.id = id
+            client_data=None):
+        self.id = _id
         self.date_submitted = date_submitted
         self.date_received = date_received or None
         self.confirmation_message = confirmation_message
         self.client_data = client_data
-        self.order_types = order_types
+        self.order_types = _order_types
         self.multiple_items = multiple_items
         self._next_suborder_number = _next_suborder_number
 
@@ -70,7 +69,7 @@ class Orders(db.Model):
         update_object(
             {'_next_suborder_number': self._next_suborder_number + 1},
             Orders,
-            self.id
+            self.id,
         )
         return num
 
@@ -102,6 +101,7 @@ class Suborders(db.Model):
             status.FOUND,
             status.PRINTED,
             status.MAILED_PICKUP,
+            status.EMAILED,
             status.NOT_FOUND,
             status.LETTER_GENERATED,
             status.UNDELIVERABLE,
@@ -114,12 +114,12 @@ class Suborders(db.Model):
     tax_photo = db.relationship(
         'TaxPhoto',
         primaryjoin='Suborders.id==TaxPhoto.suborder_number',
-        uselist=False
+        uselist=False,
     )
     photo_gallery = db.relationship(
         'PhotoGallery',
         primaryjoin='Suborders.id==PhotoGallery.suborder_number',
-        uselist=False
+        uselist=False,
     )
 
     def __init__(
@@ -146,12 +146,12 @@ class Suborders(db.Model):
             'billing_name': self.order.customer.billing_name,
             'customer_email': self.order.customer.email,
             'order_type': self.order_type,
-            'current_status': self.status
+            'current_status': self.status,
         }
 
     # Elasticsearch
     def es_create(self):
-        """Creates Elastic Search doc"""
+        """Creates an elasticsearch document."""
         customer = self.order.customer
         es.create(
             index='suborders',
@@ -173,17 +173,17 @@ class Suborders(db.Model):
                     'zip_code': customer.zip_code,
                     'country': customer.country,
                     'email': customer.email,
-                    'phone': customer.phone
+                    'phone': customer.phone,
                 },
                 'order_type': self.order_type,
                 'current_status': self.status,
                 'multiple_items': self.order.multiple_items,
-                'order_types': self.order.order_types
+                'order_types': self.order.order_types,
             }
         )
 
     def es_update(self, metadata=None):
-        """Updates elastic search docs"""
+        """Updates an elasticsearch document."""
         es.update(
             index='suborders',
             doc_type='suborders',
@@ -191,7 +191,7 @@ class Suborders(db.Model):
             body={
                 'doc': {
                     'metadata': metadata,
-                    'current_status': self.status
+                    'current_status': self.status,
                 }
             }
         ) if metadata else \

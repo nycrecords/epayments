@@ -203,7 +203,7 @@ class NewOrderForm extends React.Component {
             }
         }
 
-        csrfFetch('api/v1.0/orders/new', {
+        csrfFetch('api/v1/orders/new', {
             method: "POST",
             body: JSON.stringify({
                 orderInfo: this.state.orderInfo,

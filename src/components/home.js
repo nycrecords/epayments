@@ -6,6 +6,7 @@ import {mapDispatchToProps, mapStateToProps} from "../utils/reduxMappers";
 import OrderForm from "./order_form";
 import Order from "./order";
 import LoginModal from "./login_modal";
+import ChangePasswordModal from "./changePasswordModal";
 import {csrfFetch, handleFetchErrors} from "../utils/fetch"
 import {CHUNK_SIZE} from "../constants/constants"
 
@@ -26,6 +27,8 @@ class Home extends React.Component {
             showCSVButton: false,
             suborder_two: 0
         };
+
+        this.orderTypeWithCSV = ['photos', 'Tax Photo', 'Photo Gallery', 'vital_records'];
 
         this.addOrder = (order_count, suborder_count, orders, firstTime) => {
             if (firstTime) {
@@ -92,7 +95,7 @@ class Home extends React.Component {
 
         this.logOut = () => {
             this.setLoadingState(true);
-            csrfFetch('api/v1.0/logout', {
+            csrfFetch('api/v1/logout', {
                 method: "DELETE",
             })
                 .then(handleFetchErrors)
@@ -109,20 +112,20 @@ class Home extends React.Component {
         };
     };
 
-    handleListChange = (name, value, state, index) => {
-        let newState = state.slice();
-        newState[index] = value;
-        this.setState({
-            [name]: newState
-        });
-    };
+    // handleListChange = (name, value, state, index) => {
+    //     let newState = state.slice();
+    //     newState[index] = value;
+    //     this.setState({
+    //         [name]: newState
+    //     });
+    // };
 
-    toggleCSV = (visible) => {
-        this.setState({showCSVButton: visible});
+    toggleCSV = (order_type) => {
+        (this.orderTypeWithCSV.indexOf(order_type) > -1) ? this.setState({showCSVButton: true}) : this.setState({showCSVButton: false});
     };
 
     getOrders() {
-        csrfFetch('api/v1.0/orders')
+        csrfFetch('api/v1/orders')
             .then(response => {
                 // check response status to logout user if backend session expired
                 switch (response.status) {
@@ -176,6 +179,7 @@ class Home extends React.Component {
                             <Segment basic className="-half -no-padding">
                                 <div className="-float-right">
                                     Hi {this.props.user}
+                                    <ChangePasswordModal/>
                                     <Button content='Logout' onClick={this.logOut} className="-margin-left"/>
                                 </div>
                             </Segment>

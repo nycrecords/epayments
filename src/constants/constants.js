@@ -1,6 +1,3 @@
-/**
- * Created by walwong on 8/6/18.
- */
 export const CHUNK_SIZE = 150;
 
 export const boroughOptions = [
@@ -18,8 +15,8 @@ export const genderOptions = [
 
 export const monthOptions = [
     {value: ''},
-    {key: 'january', text: 'January', value: 'january'},
-    {key: 'february', text: 'February', value: 'february'},
+    {key: 'january', text: 'January', value: 'January'},
+    {key: 'february', text: 'February', value: 'February'},
     {key: 'march', text: 'March', value: 'March'},
     {key: 'april', text: 'April', value: 'April'},
     {key: 'may', text: 'May', value: 'May'},
@@ -65,4 +62,50 @@ export const dayOptions = [
     {key: '29', text: '29', value: '29'},
     {key: '30', text: '30', value: '30'},
     {key: '31', text: '31', value: '31'}
+];
+
+export const createOrderTypeOptions = [
+    {key: 'birthcert', text: 'Birth Certificate', value: 'Birth Cert'},
+    {key: 'deathcert', text: 'Death Certificate', value: 'Death Cert'},
+    {key: 'marriagecert', text: 'Marriage Certificate', value: 'Marriage Cert'},
+    {key: 'taxphoto', text: 'Tax Photo', value: 'Tax Photo'},
+    {key: 'photogallery', text: 'Photo Gallery', value: 'Photo Gallery'},
+];
+
+export const searchOrderTypeOptions = [
+    {key: 'all', text: 'All', value: 'all'},
+    {key: 'vitalrecords', text: '--Vital Records--', value: 'vital_records'},
+    {key: 'birthsearch', text: 'Birth Search', value: 'Birth Search'},
+    {key: 'marriagesearch', text: 'Marriage Search', value: 'Marriage Search'},
+    {key: 'deathsearch', text: 'Death Search', value: 'Death Search'},
+    {key: 'birthcert', text: 'Birth Certificate', value: 'Birth Cert'},
+    {key: 'marriagecert', text: 'Marriage Certificate', value: 'Marriage Cert'},
+    {key: 'deathcert', text: 'Death Certificate', value: 'Death Cert'},
+    {key: 'propertycard', text: 'Property Card', value: 'Property Card'},
+    {key: 'photos', text: '--Photos--', value: 'photos'},
+    {key: 'taxphoto', text: 'Tax Photo', value: 'Tax Photo'},
+    {key: 'photogallery', text: 'Photo Gallery', value: 'Photo Gallery'},
+    {key: 'other', text: '--Other--', value: 'other', disabled: true},
+    {key: 'multipleincart', text: 'Multiple Items In Cart', value: 'multiple_items'}
+];
+
+export const statusOptions = [
+    {key: 'all', text: 'All', value: 'all'},
+    {key: 'received', text: 'Received', value: 'Received'},
+    {key: 'processing', text: 'Processing', value: 'Processing'},
+    {key: 'found', text: 'Found', value: 'Found'},
+    {key: 'printed', text: 'Printed', value: 'Printed'},
+    {key: 'mailed/pickup', text: 'Mailed/Pickup', value: 'Mailed/Pickup'},
+    {key: 'emailed', text: 'Emailed', value: 'Emailed'},
+    {key: 'not_found', text: 'Not Found', value: 'Not_Found'},
+    {key: 'letter_generated', text: 'Letter Generated', value: 'Letter_Generated'},
+    {key: 'undeliverable', text: 'Undeliverable', value: 'Undeliverable'},
+    {key: 'refunded', text: 'Refunded', value: 'Refunded'},
+    {key: 'done', text: 'Done', value: 'Done'}
+];
+
+export const deliveryMethodOptions = [
+    {key: 'all', text: 'All', value: 'all'},
+    {key: 'mail', text: 'Mail', value: 'mail'},
+    {key: 'email', text: 'Email', value: 'email'}
 ];

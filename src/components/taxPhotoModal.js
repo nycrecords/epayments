@@ -1,5 +1,5 @@
 import React from 'react';
-import {Button, Header, Modal, Form} from 'semantic-ui-react';
+import {Button, Form, Header, Modal} from 'semantic-ui-react';
 import 'semantic-ui-css/semantic.min.css';
 import {csrfFetch} from "../utils/fetch"
 
@@ -16,7 +16,7 @@ class TaxPhotoModal extends React.Component {
         };
 
         this.handleOpen = (e) => {
-            csrfFetch('api/v1.0/tax_photo/' + this.props.suborder_number).then((response) => (
+            csrfFetch('api/v1/tax_photo/' + this.props.suborder_number).then((response) => (
                 response.json()
             )).then((json) => {
                 this.setState({
@@ -34,7 +34,7 @@ class TaxPhotoModal extends React.Component {
 
         this.handleSubmit = (e) => {
             e.preventDefault();
-            csrfFetch('api/v1.0/tax_photo/' + this.props.suborder_number, {
+            csrfFetch('api/v1/tax_photo/' + this.props.suborder_number, {
                 method: "POST",
                 body: JSON.stringify({
                     suborder_number: this.props.suborder_number,
@@ -46,9 +46,7 @@ class TaxPhotoModal extends React.Component {
                 return response.json()
             }).then((json) => {
                 alert(json.message)
-                // this.props.updateStatus(this.props.suborder_number, this.state.new_status)
             });
-
             this.handleClose();
         };
     }
@@ -56,29 +54,37 @@ class TaxPhotoModal extends React.Component {
     render() {
         return (
             <Modal
-                trigger={<Button onClick={this.handleOpen} compact size='small' floated='right'>Update Block/Lot/Roll</Button>}
                 open={this.state.modalOpen}
-                onClose={this.state.handleClose}>
+                onClose={this.state.handleClose}
+                trigger={
+                    <Button onClick={this.handleOpen} compact size='small' floated='right'>
+                        Update Block/Lot/Roll
+                    </Button>
+                }
+            >
                 <Modal.Header>
                     <Modal.Content>
                         <Modal.Description>
                             <Header>
                                 <p>Update the Block/Lot/Roll #</p>
                                 <Form onSubmit={this.handleSubmit}>
-                                    <Form.Input label="Block #" maxLength="9"
+                                    <Form.Input label="Block #"
+                                                maxLength="9"
                                                 onChange={(e, {value}) => {
                                                     this.setState({block_no: value})
                                                 }}
                                                 value={this.state.block_no}
                                     />
-                                    <Form.Input label="Lot #" maxLength="9"
+                                    <Form.Input label="Lot #"
+                                                maxLength="9"
                                                 onChange={(e, {value}) => {
                                                     this.setState({lot_no: value})
                                                 }}
                                                 value={this.state.lot_no}
                                     />
                                     {/* 1940s Only */}
-                                    <Form.Input label="Roll #" maxLength="9"
+                                    <Form.Input label="Roll #"
+                                                maxLength="9"
                                                 onChange={(e, {value}) => {
                                                     this.setState({roll_no: value})
                                                 }}
