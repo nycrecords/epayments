@@ -39,6 +39,7 @@ class TaxPhoto(db.Model):
             borough.BROOKLYN,
             borough.QUEENS,
             name='borough'), default=borough.MANHATTAN, nullable=False)
+    image_id = db.Column(db.String(35), nullable=False)
     roll = db.Column(db.String(9), nullable=True)
     block = db.Column(db.String(9), nullable=True)
     lot = db.Column(db.String(9), nullable=True)
@@ -66,6 +67,7 @@ class TaxPhoto(db.Model):
             self,
             borough,
             collection,
+            image_id,
             building_number,
             street,
             size,
@@ -80,6 +82,7 @@ class TaxPhoto(db.Model):
     ):
         self.borough = borough
         self.collection = collection
+        self.image_id = image_id
         self.roll = roll
         self.block = block
         self.lot = lot
@@ -98,6 +101,7 @@ class TaxPhoto(db.Model):
         return {
             'borough': self.borough,
             'collection': self.collection,
+            'image_id': self.image_id,
             'roll': self.roll,
             'block': self.block,
             'lot': self.lot,
