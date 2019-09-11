@@ -361,7 +361,6 @@ def generate_csv(search_params: Dict[str, str]) -> str:
             'Borough',
             'Block',
             'Lot',
-            'Roll',
             'Comment',
             'Description',
         ])
@@ -384,7 +383,6 @@ def generate_csv(search_params: Dict[str, str]) -> str:
                 suborder['_source'].get('metadata').get('borough', ''),
                 suborder['_source'].get('metadata').get('block', ''),
                 suborder['_source'].get('metadata').get('lot', ''),
-                suborder['_source'].get('metadata').get('roll', ''),
                 'Yes' if suborder['_source'].get('metadata').get('comment') else '',
                 suborder['_source'].get('metadata').get('description', ''),
             ])

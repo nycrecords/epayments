@@ -797,11 +797,14 @@ def import_file(file_name):
                 suborder_1940.es_create()
                 suborder_1980.es_create()
 
+                image_id_1940 = image_id if image_id.startswith('nynyma') else ''
+                image_id_1980 = image_id if image_id_1940 == '' else ''
+
                 # Create TaxPhoto entry for 1940 print
                 customer_order_1940 = TaxPhoto(
                     borough=borough,
                     collection="1940",
-                    image_id=image_id,
+                    image_id=image_id_1940,
                     roll=roll,
                     block=block,
                     lot=lot,
@@ -821,7 +824,7 @@ def import_file(file_name):
                 customer_order_1980 = TaxPhoto(
                     borough=borough,
                     collection="1980",
-                    image_id=image_id,
+                    image_id=image_id_1980,
                     roll=None,
                     block=block,
                     lot=lot,
