@@ -821,6 +821,7 @@ def import_file(file_name):
                 customer_order_1980 = TaxPhoto(
                     borough=borough,
                     collection="1980",
+                    image_id=image_id,
                     roll=None,
                     block=block,
                     lot=lot,
@@ -858,6 +859,7 @@ def import_file(file_name):
                 customer_order = TaxPhoto(
                     borough=borough,
                     collection=collection,
+                    image_id=image_id,
                     roll=roll,
                     block=block,
                     lot=lot,
