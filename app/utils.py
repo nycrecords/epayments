@@ -729,6 +729,9 @@ def import_file(file_name):
 
         # Tax Photo
         if client_id == '10000048':
+            # Retrieve Photo ID
+            image_id = clients_data_list[clients_data_list.index("IMAGE_IDENTIFIER") + 1]
+
             # Retrieve Collection Information (1940's, 1980's, Both)
             collection = clients_data_list[clients_data_list.index("Collection") + 1]
 
@@ -794,10 +797,14 @@ def import_file(file_name):
                 suborder_1940.es_create()
                 suborder_1980.es_create()
 
+                image_id_1940 = image_id if image_id.startswith('nynyma') else ''
+                image_id_1980 = image_id if image_id_1940 == '' else ''
+
                 # Create TaxPhoto entry for 1940 print
                 customer_order_1940 = TaxPhoto(
                     borough=borough,
                     collection="1940",
+                    image_id=image_id_1940,
                     roll=roll,
                     block=block,
                     lot=lot,
@@ -817,6 +824,7 @@ def import_file(file_name):
                 customer_order_1980 = TaxPhoto(
                     borough=borough,
                     collection="1980",
+                    image_id=image_id_1980,
                     roll=None,
                     block=block,
                     lot=lot,
@@ -854,6 +862,7 @@ def import_file(file_name):
                 customer_order = TaxPhoto(
                     borough=borough,
                     collection=collection,
+                    image_id=image_id,
                     roll=roll,
                     block=block,
                     lot=lot,

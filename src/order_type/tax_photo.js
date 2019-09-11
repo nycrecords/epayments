@@ -20,6 +20,13 @@ class TaxPhoto extends React.Component{
                 <strong>Suborder Number</strong> {this.props.order_info["suborder_number"]} <br/> <br/>
 
                 <div className="-row">
+                    <div className="-fourth"> Image ID: </div>
+                    <div className="-two-thirds">
+                        {this.props.order_info["metadata"]["image_id"] ? this.props.order_info["metadata"]["image_id"] : ""}
+                    </div>
+                </div>
+
+                <div className="-row">
                     <div className="-fourth"> Collection: </div>
                     <div className="-two-thirds">
                         {this.props.order_info["metadata"]["collection"] ? this.props.order_info["metadata"]["collection"] : ""}
