@@ -730,7 +730,9 @@ def import_file(file_name):
         # Tax Photo
         if client_id == '10000048':
             # Retrieve Photo ID
-            image_id = clients_data_list[clients_data_list.index("IMAGE_IDENTIFIER") + 1]
+            image_id = None
+            if "IMAGE_IDENTIFIER" in clients_data_list:
+                image_id = clients_data_list[clients_data_list.index("IMAGE_IDENTIFIER") + 1]
 
             # Retrieve Collection Information (1940's, 1980's, Both)
             collection = clients_data_list[clients_data_list.index("Collection") + 1]
@@ -797,8 +799,13 @@ def import_file(file_name):
                 suborder_1940.es_create()
                 suborder_1980.es_create()
 
-                image_id_1940 = image_id if image_id.startswith('nynyma') else None
-                image_id_1980 = image_id if image_id_1940 is None else None
+                # This is to handle "Both" collection choices
+                image_id_1940 = None
+                image_id_1980 = None
+                if image_id is not None and image_id.startswith('nynyma'):
+                    image_id_1940 = image_id
+                else:
+                    image_id_1980 = image_id
 
                 # Create TaxPhoto entry for 1940 print
                 customer_order_1940 = TaxPhoto(
