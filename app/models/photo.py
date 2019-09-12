@@ -39,7 +39,7 @@ class TaxPhoto(db.Model):
             borough.BROOKLYN,
             borough.QUEENS,
             name='borough'), default=borough.MANHATTAN, nullable=False)
-    image_id = db.Column(db.String(35), nullable=False)
+    image_id = db.Column(db.String(35), nullable=True)
     roll = db.Column(db.String(9), nullable=True)
     block = db.Column(db.String(9), nullable=True)
     lot = db.Column(db.String(9), nullable=True)
