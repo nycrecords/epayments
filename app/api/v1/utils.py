@@ -627,6 +627,7 @@ def _create_new_tax_photo(suborder: Dict[str, str], new_suborder_obj: Suborders)
     if new_collection in [collection.YEAR_1940, collection.BOTH]:
         tax_photo_1940 = TaxPhoto(collection=collection.YEAR_1940,
                                   borough=suborder['borough'],
+                                  image_id=suborder['imageID'],
                                   roll=suborder.get('roll'),
                                   block=suborder.get('block'),
                                   lot=suborder.get('lot'),
@@ -646,6 +647,7 @@ def _create_new_tax_photo(suborder: Dict[str, str], new_suborder_obj: Suborders)
     if new_collection in [collection.YEAR_1980, collection.BOTH]:
         tax_photo_1980 = TaxPhoto(collection=collection.YEAR_1980,
                                   borough=suborder['borough'].title(),
+                                  image_id=suborder['imageID'],
                                   block=suborder.get('block'),
                                   lot=suborder.get('lot'),
                                   building_number=suborder['buildingNum'],

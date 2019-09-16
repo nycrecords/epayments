@@ -106,6 +106,15 @@ class TaxPhotoForm extends React.Component {
                             />
                         </Form.Group>
 
+                        <Form.Input label="Image Identifier"
+                                    name="imageID"
+                                    placeholder="Image Identifier"
+                                    maxLength={35}
+                                    required
+                                    onChange={this.handleChange}
+                                    value={this.state.imageID}
+                        />
+
                         <Form.Input label="Building Number"
                                     name="buildingNum"
                                     placeholder="Building Number"
