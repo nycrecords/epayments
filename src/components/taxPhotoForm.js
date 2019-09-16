@@ -110,7 +110,6 @@ class TaxPhotoForm extends React.Component {
                                     name="imageID"
                                     placeholder="Image Identifier"
                                     maxLength={35}
-                                    required
                                     onChange={this.handleChange}
                                     value={this.state.imageID}
                         />

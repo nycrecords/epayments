@@ -143,10 +143,6 @@ class NewOrderForm extends React.Component {
                         this.message += ("Please choose a Borough in Suborder: " + (i + 1) + "\n")
                     }
 
-                    if (!this.state.suborderList[i].imageID) {
-                        this.message += ("Please fill in the Image Identifier in Suborder: " + (i + 1) + "\n")
-                    }
-
                     if (!this.state.suborderList[i].buildingNum) {
                         this.message += ("Please fill in the Building Number in Suborder: " + (i + 1) + "\n")
                     }
