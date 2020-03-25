@@ -16,6 +16,13 @@ class Config:
     LOCAL_FILE_PATH = (os.environ.get('LOCAL_FILE_PATH') or
                        os.path.join(os.path.abspath(os.path.dirname(__file__)), 'data/'))
 
+    MAIL_SERVER = os.environ.get("MAIL_SERVER") or "localhost"
+    MAIL_PORT = os.environ.get("MAIL_PORT") or 2525
+    MAIL_USE_TLS = os.environ.get("MAIL_USE_TLS") or False
+    MAIL_USERNAME = os.environ.get("MAIL_USERNAME") or None
+    MAIL_PASSWORD = os.environ.get("MAIL_PASSWORD") or None
+    MAIL_SENDER = os.environ.get("MAIL_SENDER") or "donotreply@records.nyc.gov"
+
     USE_SFTP = os.environ.get('USE_SFTP') == 'True'
     SFTP_HOSTNAME = os.environ.get('SFTP_HOSTNAME')
     SFTP_PORT = os.environ.get('SFTP_PORT')

@@ -8,6 +8,7 @@ from app import db, scheduler
 from app.constants import event_type
 from app.constants import status
 from app.constants.order_types import CLIENT_ID_DICT
+from app.email_utils import send_email
 from app.file_utils import sftp_ctx
 from app.models import Orders, Events, BirthSearch, BirthCertificate, MarriageCertificate, \
     MarriageSearch, DeathCertificate, DeathSearch, PhotoGallery, TaxPhoto, PropertyCard, Customers, Suborders
@@ -941,4 +942,14 @@ def import_file(file_name):
             db.session.add(customer_order)
             db.session.commit()
             suborder.es_update(customer_order.serialize)
+
+        for o in order.suborder:
+            if o.deliver_method == delivery_method.MAIL:
+                send_email(
+                    customer.email,
+                    "Subject",
+                    "email_templates/convert_mail_to_email",
+                    order=order,
+                )
+
     return True

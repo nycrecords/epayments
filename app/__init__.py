@@ -4,6 +4,7 @@ from flask import Flask
 from flask_apscheduler import APScheduler
 from flask_bootstrap import Bootstrap
 from flask_login import LoginManager
+from flask_mail import Mail
 from flask_sqlalchemy import SQLAlchemy
 
 from config import config, Config
@@ -11,6 +12,7 @@ from config import config, Config
 # Flask extensions
 bootstrap = Bootstrap()
 db = SQLAlchemy()
+mail = Mail()
 scheduler = APScheduler()
 
 login_manager = LoginManager()
@@ -36,6 +38,7 @@ def create_app(config_name):
 
     bootstrap.init_app(app)
     db.init_app(app)
+    mail.init_app(app)
     login_manager.init_app(app)
 
     app.elasticsearch = Elasticsearch([app.config['ELASTICSEARCH_URL']]) \
