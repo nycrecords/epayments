@@ -7,8 +7,6 @@ email address for vital digital copy
 <p>
     Please find your order information below:
 </p>
-<p>
-    {{ order.confirmation_message }}
-</p>
+{{ order.confirmation_message.replace('\r\n', '<br />').replace('\n\r', '<br />').replace('\r', '<br />').replace('\n', '<br />') | safe }}
 </body>
 </html>
