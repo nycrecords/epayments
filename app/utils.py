@@ -965,7 +965,7 @@ def import_file(file_name):
         if mail_order:
             send_email(
                 customer.email,
-                "Subject",
+                "Department of Records and Information Services - Your Municipal Archives Online Order ({})".format(order.id),
                 "email_templates/convert_mail_to_email",
                 order=order,
             )
