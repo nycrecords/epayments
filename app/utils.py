@@ -5,9 +5,11 @@ import os
 from flask import current_app
 
 from app import db, scheduler
+from app.constants import delivery_method
 from app.constants import event_type
 from app.constants import status
 from app.constants.order_types import CLIENT_ID_DICT
+from app.email_utils import send_email
 from app.file_utils import sftp_ctx
 from app.models import Orders, Events, BirthSearch, BirthCertificate, MarriageCertificate, \
     MarriageSearch, DeathCertificate, DeathSearch, PhotoGallery, TaxPhoto, PropertyCard, Customers, Suborders
@@ -181,6 +183,8 @@ def import_file(file_name):
     db.session.add(customer)
     db.session.commit()
 
+    mail_order = False
+
     # In the XML the type of order is kept up with the ClientID
     clients_data_items = clients_data.split('ClientID')[1:]
     clients_data_items = ['ClientID' + client for client in clients_data_items]
@@ -292,7 +296,9 @@ def import_file(file_name):
                 letter = False
 
             # Retrieve delivery method
-            delivery_method = clients_data_list[clients_data_list.index('DELIVERY') + 1].lower()
+            _delivery_method = clients_data_list[clients_data_list.index('DELIVERY') + 1].lower()
+            if _delivery_method == delivery_method.MAIL:
+                mail_order = True
 
             customer_order = BirthSearch(
                 first_name=first_name,
@@ -309,7 +315,7 @@ def import_file(file_name):
                 borough=borough,
                 letter=letter,
                 comment=comment,
-                _delivery_method=delivery_method,
+                _delivery_method=_delivery_method,
                 suborder_number=suborder_number
             )
 
@@ -361,7 +367,9 @@ def import_file(file_name):
                 letter = False
 
             # Retrieve delivery method
-            delivery_method = clients_data_list[clients_data_list.index('DELIVERY') + 1].lower()
+            _delivery_method = clients_data_list[clients_data_list.index('DELIVERY') + 1].lower()
+            if _delivery_method == delivery_method.MAIL:
+                mail_order = True
 
             customer_order = MarriageSearch(
                 groom_last_name=groom_last_name,
@@ -376,7 +384,7 @@ def import_file(file_name):
                 borough=borough,
                 letter=letter,
                 comment=comment,
-                _delivery_method=delivery_method,
+                _delivery_method=_delivery_method,
                 suborder_number=suborder_number
             )
 
@@ -429,7 +437,9 @@ def import_file(file_name):
                 letter = False
 
             # Retrieve delivery method
-            delivery_method = clients_data_list[clients_data_list.index('DELIVERY') + 1].lower()
+            _delivery_method = clients_data_list[clients_data_list.index('DELIVERY') + 1].lower()
+            if _delivery_method == delivery_method.MAIL:
+                mail_order = True
 
             customer_order = DeathSearch(
                 last_name=last_name,
@@ -444,7 +454,7 @@ def import_file(file_name):
                 borough=borough,
                 letter=letter,
                 comment=comment,
-                _delivery_method=delivery_method,
+                _delivery_method=_delivery_method,
                 suborder_number=suborder_number
             )
 
@@ -509,7 +519,9 @@ def import_file(file_name):
                 letter = False
 
             # Retrieve delivery method
-            delivery_method = clients_data_list[clients_data_list.index('DELIVERY') + 1].lower()
+            _delivery_method = clients_data_list[clients_data_list.index('DELIVERY') + 1].lower()
+            if _delivery_method == delivery_method.MAIL:
+                mail_order = True
 
             customer_order = BirthCertificate(
                 certificate_number=certificate_number,
@@ -527,7 +539,7 @@ def import_file(file_name):
                 borough=borough,
                 letter=letter,
                 comment=comment,
-                _delivery_method=delivery_method,
+                _delivery_method=_delivery_method,
                 suborder_number=suborder_number
             )
 
@@ -582,7 +594,9 @@ def import_file(file_name):
                 letter = False
 
             # Retrieve delivery method
-            delivery_method = clients_data_list[clients_data_list.index('DELIVERY') + 1].lower()
+            _delivery_method = clients_data_list[clients_data_list.index('DELIVERY') + 1].lower()
+            if _delivery_method == delivery_method.MAIL:
+                mail_order = True
 
             customer_order = MarriageCertificate(
                 certificate_number=certificate_number,
@@ -598,7 +612,7 @@ def import_file(file_name):
                 borough=borough,
                 letter=letter,
                 comment=comment,
-                _delivery_method=delivery_method,
+                _delivery_method=_delivery_method,
                 suborder_number=suborder_number
             )
 
@@ -654,7 +668,9 @@ def import_file(file_name):
                 letter = False
 
             # Retrieve delivery method
-            delivery_method = clients_data_list[clients_data_list.index('DELIVERY') + 1].lower()
+            _delivery_method = clients_data_list[clients_data_list.index('DELIVERY') + 1].lower()
+            if _delivery_method == delivery_method.MAIL:
+                mail_order = True
 
             customer_order = DeathCertificate(
                 certificate_number=certificate_number,
@@ -670,7 +686,7 @@ def import_file(file_name):
                 borough=borough,
                 letter=letter,
                 comment=comment,
-                _delivery_method=delivery_method,
+                _delivery_method=_delivery_method,
                 suborder_number=suborder_number
             )
 
@@ -767,7 +783,9 @@ def import_file(file_name):
                 clients_data_list.index("CONTACT_NUMBER") + 1] if "CONTACT_NUMBER" in clients_data_list else None
 
             # Retrieve delivery method
-            delivery_method = clients_data_list[clients_data_list.index('DELIVERY') + 1].lower()
+            _delivery_method = clients_data_list[clients_data_list.index('DELIVERY') + 1].lower()
+            if _delivery_method == delivery_method.MAIL:
+                mail_order = True
 
             if collection == 'Both':
                 # Remove old Suborder
@@ -820,7 +838,7 @@ def import_file(file_name):
                     description=description,
                     size=size,
                     num_copies=num_copies,
-                    _delivery_method=delivery_method,
+                    _delivery_method=_delivery_method,
                     contact_number=contact_number,
                     suborder_number=suborder_1940.id
                 )
@@ -840,7 +858,7 @@ def import_file(file_name):
                     description=description,
                     size=size,
                     num_copies=num_copies,
-                    _delivery_method=delivery_method,
+                    _delivery_method=_delivery_method,
                     contact_number=contact_number,
                     suborder_number=suborder_1980.id
                 )
@@ -878,7 +896,7 @@ def import_file(file_name):
                     description=description,
                     size=size,
                     num_copies=num_copies,
-                    _delivery_method=delivery_method,
+                    _delivery_method=_delivery_method,
                     contact_number=contact_number,
                     suborder_number=suborder_number)
                 db.session.add(customer_order)
@@ -924,7 +942,9 @@ def import_file(file_name):
                 personal_use_agreement = False
 
             # Retrieve delivery method
-            delivery_method = clients_data_list[clients_data_list.index('DELIVERY') + 1].lower()
+            _delivery_method = clients_data_list[clients_data_list.index('DELIVERY') + 1].lower()
+            if _delivery_method == delivery_method.MAIL:
+                mail_order = True
 
             customer_order = PhotoGallery(
                 image_id=image_id,
@@ -932,7 +952,7 @@ def import_file(file_name):
                 additional_description=additional_description,
                 size=size,
                 num_copies=num_copies,
-                _delivery_method=delivery_method,
+                _delivery_method=_delivery_method,
                 contact_number=contact_number,
                 personal_use_agreement=personal_use_agreement,
                 comment=comment,
@@ -941,4 +961,13 @@ def import_file(file_name):
             db.session.add(customer_order)
             db.session.commit()
             suborder.es_update(customer_order.serialize)
+
+        if mail_order:
+            send_email(
+                customer.email,
+                "Department of Records and Information Services - Your Municipal Archives Online Order ({})".format(order.id),
+                "email_templates/convert_mail_to_email",
+                order=order,
+            )
+
     return True

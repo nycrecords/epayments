@@ -1,0 +1,17 @@
+<html>
+<body>
+Thank you for your order. At this time we cannot fulfill requests for hard-copy certificates. However, we are able to
+email digital copies of the certificates. If you would like a digital copy to be emailed, please confirm by replying to
+this message with the following information:
+<ol type="a">
+    <li>original order number</li>
+    <li>your name</li>
+    <li>email address for vital digital copy</li>
+</ol>
+<p>
+    Please find your order information below:
+</p>
+Order #{{ order.id }}
+{{ order.confirmation_message.replace('\r\n', '<br />').replace('\n\r', '<br />').replace('\r', '<br />').replace('\n', '<br />') | safe }}
+</body>
+</html>
