@@ -20,7 +20,7 @@ login_manager = LoginManager()
 PYTZ_TIMEZONE = pytz.timezone(Config.TIME_ZONE)
 
 # ElasticSearch Extension
-es = Elasticsearch()
+es = Elasticsearch(Config.ELASTICSEARCH_URL)
 
 
 def create_app(config_name):
