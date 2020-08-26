@@ -65,6 +65,8 @@ class DeathSearch(db.Model):
             years,
             death_place,
             borough,
+            father_name,
+            mother_name,
             letter,
             comment,
             _delivery_method,
@@ -80,6 +82,8 @@ class DeathSearch(db.Model):
         self._years = years or None
         self.death_place = death_place or None
         self._borough = borough
+        self.father_name = father_name
+        self.mother_name = mother_name
         self.letter = letter or None
         self.comment = comment or None
         self.delivery_method = _delivery_method
@@ -197,6 +201,8 @@ class DeathCertificate(db.Model):
             years,
             death_place,
             borough,
+            father_name,
+            mother_name,
             letter,
             comment,
             _delivery_method,
@@ -213,6 +219,8 @@ class DeathCertificate(db.Model):
         self._years = years
         self.death_place = death_place or None
         self._borough = borough
+        self.father_name = father_name
+        self.mother_name = mother_name
         self.letter = letter or None
         self.comment = comment or None
         self.delivery_method = _delivery_method
