@@ -215,8 +215,14 @@ def search_queries(order_number=None,
         'date_submitted_end': date_submitted_end,
     }
 
+    formatted_date_range = format_date_range(date_range)
+
+    # Set time of formatted date_submitted_end to be 11:59 PM if start and end date are not empty string and are the same
+    if date_submitted_start and date_submitted_end and (date_submitted_start == date_submitted_end):
+        formatted_date_range['date_submitted_end'] = formatted_date_range['date_submitted_end'].split(" ")[0] + " 11:59 PM"
+
     dsl_gen = DSLGenerator(query_fields=format_queries(query_field),
-                           date_range=format_date_range(date_range),
+                           date_range=formatted_date_range,
                            order_type=format_order_type(order_type),
                            search_type=search_type)
     dsl = dsl_gen.match_all()
