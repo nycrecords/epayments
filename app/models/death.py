@@ -19,6 +19,8 @@ class DeathSearch(db.Model):
     year -- Column: array[]
     death_place -- Column: String(40)
     borough -- Column: String/Array
+    father_name -- Column: String(30)
+    mother_name -- Column: String(30)
     letter -- Column: bool
     comment -- Column: String(255)
     suborder_number -- Column: BigInteger, foreignKey
@@ -37,6 +39,8 @@ class DeathSearch(db.Model):
     _years = db.Column(ARRAY(db.String(4), dimensions=1), nullable=False, name='years')
     death_place = db.Column(db.String(40), nullable=True)
     _borough = db.Column(ARRAY(db.String(20), dimensions=1), nullable=False, name='borough')
+    father_name = db.Column(db.String(30), nullable=True)
+    mother_name = db.Column(db.String(30), nullable=True)
     letter = db.Column(db.Boolean, nullable=True)
     comment = db.Column(db.String(255), nullable=True)
     delivery_method = db.Column(
@@ -61,6 +65,8 @@ class DeathSearch(db.Model):
             years,
             death_place,
             borough,
+            father_name,
+            mother_name,
             letter,
             comment,
             _delivery_method,
@@ -76,6 +82,8 @@ class DeathSearch(db.Model):
         self._years = years or None
         self.death_place = death_place or None
         self._borough = borough
+        self.father_name = father_name
+        self.mother_name = mother_name
         self.letter = letter or None
         self.comment = comment or None
         self.delivery_method = _delivery_method
@@ -120,6 +128,8 @@ class DeathSearch(db.Model):
             'years': self.years,
             'death_place': self.death_place,
             'borough': self.borough,
+            'father_name': self.father_name,
+            'mother_name': self.mother_name,
             'letter': self.letter,
             'comment': self.comment,
             'delivery_method': self.delivery_method,
@@ -143,6 +153,8 @@ class DeathCertificate(db.Model):
     year -- Column: array[]
     death_place -- Column: String(40)
     borough -- Column: String/Array
+    father_name -- Column: String(30)
+    mother_name -- Column: String(30)
     letter -- Column: bool
     comment -- Column: String(255)
     suborder_number -- Column: BigInteger, foreignKey
@@ -162,6 +174,8 @@ class DeathCertificate(db.Model):
     _years = db.Column(ARRAY(db.String(4), dimensions=1), nullable=False, name='years')
     death_place = db.Column(db.String(40), nullable=True)
     _borough = db.Column(ARRAY(db.String(20), dimensions=1), nullable=False, name='borough')
+    father_name = db.Column(db.String(30), nullable=True)
+    mother_name = db.Column(db.String(30), nullable=True)
     letter = db.Column(db.Boolean, nullable=True)
     comment = db.Column(db.String(255), nullable=True)
     delivery_method = db.Column(
@@ -187,6 +201,8 @@ class DeathCertificate(db.Model):
             years,
             death_place,
             borough,
+            father_name,
+            mother_name,
             letter,
             comment,
             _delivery_method,
@@ -203,6 +219,8 @@ class DeathCertificate(db.Model):
         self._years = years
         self.death_place = death_place or None
         self._borough = borough
+        self.father_name = father_name
+        self.mother_name = mother_name
         self.letter = letter or None
         self.comment = comment or None
         self.delivery_method = _delivery_method
@@ -248,6 +266,8 @@ class DeathCertificate(db.Model):
             'years': self.years,
             'death_place': self.death_place,
             'borough': self.borough,
+            'father_name': self.father_name,
+            'mother_name': self.mother_name,
             'letter': self.letter,
             'comment': self.comment,
             'delivery_method': self.delivery_method,

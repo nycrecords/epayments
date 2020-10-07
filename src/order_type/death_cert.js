@@ -95,6 +95,20 @@ class DeathCert extends React.Component{
                 </div>
 
                 <div className="-row">
+                    <div className="-fourth"> Father Name: </div>
+                    <div className="-two-thirds">
+                        {this.props.order_info["metadata"]["father_name"] ? this.props.order_info["metadata"]["father_name"] : ""}
+                    </div>
+                </div>
+
+                <div className="-row">
+                    <div className="-fourth"> Mother Name: </div>
+                    <div className="-two-thirds">
+                        {this.props.order_info["metadata"]["mother_name"] ? this.props.order_info["metadata"]["mother_name"] : ""}
+                    </div>
+                </div>
+
+                <div className="-row">
                     <div className="-fourth"> Letter: </div>
                     <div className="-two-thirds"> {this.props.order_info["metadata"]["letter"] ? "Yes" : "No"} </div>
                 </div>

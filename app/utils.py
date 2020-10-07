@@ -418,6 +418,14 @@ def import_file(file_name):
             borough = borough.split(',')
             borough = list(filter(bool, borough))
 
+            # Retrieve Fathers Name
+            father_name = clients_data_list[
+                clients_data_list.index("FATHER_NAME") + 1] if "FATHER_NAME" in clients_data_list else None
+
+            # Retrieve Mother's Name
+            mother_name = clients_data_list[
+                clients_data_list.index("MOTHER_NAME") + 1] if "MOTHER_NAME" in clients_data_list else None
+
             # Retrieve Comments
             comment = clients_data_list[
                 clients_data_list.index("ADD_COMMENT") + 1] if "ADD_COMMENT" in clients_data_list else None
@@ -442,6 +450,8 @@ def import_file(file_name):
                 years=years,
                 death_place=death_place,
                 borough=borough,
+                father_name=father_name,
+                mother_name=mother_name,
                 letter=letter,
                 comment=comment,
                 _delivery_method=_delivery_method,
@@ -643,6 +653,14 @@ def import_file(file_name):
             borough = borough.split(',')
             borough = list(filter(bool, borough))
 
+            # Retrieve Fathers Name
+            father_name = clients_data_list[
+                clients_data_list.index("FATHER_NAME") + 1] if "FATHER_NAME" in clients_data_list else None
+
+            # Retrieve Mother's Name
+            mother_name = clients_data_list[
+                clients_data_list.index("MOTHER_NAME") + 1] if "MOTHER_NAME" in clients_data_list else None
+
             # Retrieve Comments
             comment = clients_data_list[
                 clients_data_list.index("ADD_COMMENT") + 1] if "ADD_COMMENT" in clients_data_list else None
@@ -668,6 +686,8 @@ def import_file(file_name):
                 years=years,
                 death_place=death_place,
                 borough=borough,
+                father_name=father_name,
+                mother_name=mother_name,
                 letter=letter,
                 comment=comment,
                 _delivery_method=_delivery_method,

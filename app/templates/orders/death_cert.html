@@ -58,6 +58,16 @@
     </p>
 
     <p>
+        <b>FATHER NAME:</b> <br/>
+        {{ order_info['metadata']['father_name'] or '' }}
+    </p>
+
+    <p>
+        <b>MOTHER NAME:</b> <br/>
+        {{ order_info['metadata']['mother_name'] or '' }}
+    </p>
+
+    <p>
         <b>LETTER:</b> <br/>
         {{ "Yes" if order_info['metadata']['letter'] else "No" }}
     </p>
