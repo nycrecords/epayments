@@ -16,13 +16,17 @@
     
 """
 RECEIVED = 'Received'
+MICROFILM = 'Microfilm'
+OFFSITE = 'Offsite'
 PROCESSING = 'Processing'
-FOUND = 'Found'
-PRINTED = 'Printed'
-MAILED_PICKUP = 'Mailed/Pickup'
-EMAILED = 'Emailed'
 NOT_FOUND = 'Not_Found'
-LETTER_GENERATED = 'Letter_Generated'
 UNDELIVERABLE = 'Undeliverable'
-REFUNDED = 'Refunded'
+REFUND = 'Refund'
 DONE = 'Done'
+
+# FOUND = 'Found'
+# PRINTED = 'Printed'
+# MAILED_PICKUP = 'Mailed/Pickup'
+# EMAILED = 'Emailed'
+# LETTER_GENERATED = 'Letter_Generated'
+# REFUNDED = 'Refunded'

@@ -97,15 +97,12 @@ class Suborders(db.Model):
     status = db.Column(
         db.Enum(
             status.RECEIVED,
+            status.MICROFILM,
+            status.OFFSITE,
             status.PROCESSING,
-            status.FOUND,
-            status.PRINTED,
-            status.MAILED_PICKUP,
-            status.EMAILED,
             status.NOT_FOUND,
-            status.LETTER_GENERATED,
             status.UNDELIVERABLE,
-            status.REFUNDED,
+            status.REFUND,
             status.DONE,
             name='status'), nullable=True)
 
