@@ -35,8 +35,6 @@ def upgrade():
                ' USING status::TEXT::status')
     tmp_status.drop(op.get_bind(), checkfirst=False)
 
-
-def downgrade():
     # Convert 'Processing' status to 'Microfilm'
     op.execute('UPDATE suborders SET status = \'Microfilm\' WHERE status = \'Processing\'')
     op.execute(
@@ -79,7 +77,23 @@ def downgrade():
     op.execute(
         'UPDATE events SET previous_value = jsonb_set(previous_value, \'{status}\', \'"Not_Found"\'::jsonb) WHERE previous_value->>\'status\' = \'Letter_Generated\'')
 
-    # Create a temporary "_event_type" type, convert and drop the "new" type
+
+def downgrade():
+    # Convert 'Microfilm' status to 'Processing'
+    op.execute('UPDATE suborders SET status = \'Processing\' WHERE status = \'Microfilm\'')
+    op.execute(
+        'UPDATE events SET new_value = jsonb_set(new_value, \'{status}\', \'"Processing"\'::jsonb) WHERE new_value->>\'status\' = \'Microfilm\'')
+    op.execute(
+        'UPDATE events SET previous_value = jsonb_set(previous_value, \'{status}\', \'"Processing"\'::jsonb) WHERE previous_value->>\'status\' = \'Microfilm\'')
+
+    # Convert 'Letter_Generated' status to 'Not_Found'
+    op.execute('UPDATE suborders SET status = \'Not_Found\' WHERE status = \'Letter_Generated\'')
+    op.execute(
+        'UPDATE events SET new_value = jsonb_set(new_value, \'{status}\', \'"Not_Found"\'::jsonb) WHERE new_value->>\'status\' = \'Letter_Generated\'')
+    op.execute(
+        'UPDATE events SET previous_value = jsonb_set(previous_value, \'{status}\', \'"Not_Found"\'::jsonb) WHERE previous_value->>\'status\' = \'Letter_Generated\'')
+
+    # Create a temporary "_status_type" type, convert and drop the "new" type
     tmp_status.create(op.get_bind(), checkfirst=False)
     op.execute('ALTER TABLE suborders ALTER COLUMN status TYPE _status'
                ' USING status::TEXT::_status')

@@ -92,15 +92,12 @@ export const searchOrderTypeOptions = [
 export const statusOptions = [
     {key: 'all', text: 'All', value: 'all'},
     {key: 'received', text: 'Received', value: 'Received'},
+    {key: 'microfilm', text: 'Microfilm', value: 'Microfilm'},
+    {key: 'offsite', text: 'Offsite', value: 'Offsite'},
     {key: 'processing', text: 'Processing', value: 'Processing'},
-    {key: 'found', text: 'Found', value: 'Found'},
-    {key: 'printed', text: 'Printed', value: 'Printed'},
-    {key: 'mailed/pickup', text: 'Mailed/Pickup', value: 'Mailed/Pickup'},
-    {key: 'emailed', text: 'Emailed', value: 'Emailed'},
     {key: 'not_found', text: 'Not Found', value: 'Not_Found'},
-    {key: 'letter_generated', text: 'Letter Generated', value: 'Letter_Generated'},
     {key: 'undeliverable', text: 'Undeliverable', value: 'Undeliverable'},
-    {key: 'refunded', text: 'Refunded', value: 'Refunded'},
+    {key: 'refund', text: 'Refund', value: 'Refund'},
     {key: 'done', text: 'Done', value: 'Done'}
 ];
 

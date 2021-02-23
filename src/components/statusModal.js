@@ -1,5 +1,5 @@
 import React from 'react';
-import {Button, Form, Header, Modal, TextArea} from 'semantic-ui-react';
+import {Button, Form, Modal, TextArea} from 'semantic-ui-react';
 import 'semantic-ui-css/semantic.min.css';
 import {csrfFetch, handleFetchErrors} from "../utils/fetch"
 import {statusOptions} from '../constants/constants'
@@ -56,10 +56,21 @@ class StatusModal extends React.Component {
                 open={this.state.modalOpen}
                 onClose={this.state.handleClose}>
                 <Modal.Header>
+                    <p>Current Status - {this.state.status}</p>
+                </Modal.Header>
                     <Modal.Content>
+                        <div>
+                            Received - When an order is imported<br/>
+                            Microfilm - When an order needs to be printed from the Microfilm<br/>
+                            Offsite - has been to be ordered to be fulfilled<br/>
+                            Processing- For photo orders only<br/>
+                            Not Found - A Not Found Letter was sent to the customer<br/>
+                            Undeliverable - When an order is returned as undeliverable by USPS / Email<br/>
+                            Refund - The order has been sent to Administration for a refund<br/>
+                            Done - The order has been completed. No more work is needed<br/>
+                        </div>
+                        <br/>
                         <Modal.Description>
-                            <Header>
-                                <p>Current Status - {this.state.status}</p>
                                 <Form onSubmit={this.handleSubmit}>
                                     <Form.Select fluid selection options={statusOptions.slice(1)}
                                                  onChange={(e, {value}) => {
@@ -76,10 +87,9 @@ class StatusModal extends React.Component {
                                                 value={this.state.comment}
                                     />
                                 </Form>
-                            </Header>
+
                         </Modal.Description>
                     </Modal.Content>
-                </Modal.Header>
                 <Modal.Actions>
                     <Button negative onClick={this.handleClose}>Cancel</Button>
                     <Button type='submit' positive onClick={this.handleSubmit} content="Confirm"/>
