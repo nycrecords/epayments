@@ -31,17 +31,18 @@ class StatusDefinitionsModal extends React.Component {
                 <Modal.Header>Status Definitions</Modal.Header>
                 <Modal.Content>
                     <div>
-                        Received - When an order is imported<br/>
-                        Microfilm - When an order needs to be printed from the Microfilm<br/>
-                        Offsite - has been to be ordered to be fulfilled<br/>
-                        Processing- For photo orders only<br/>
-                        Not Found - A Not Found Letter was sent to the customer<br/>
-                        Undeliverable - When an order is returned as undeliverable by USPS / Email<br/>
-                        Refund - The order has been sent to Administration for a refund<br/>
-                        Done - The order has been completed. No more work is needed<br/>
+                        <strong>Received</strong> - When an order is imported<br/>
+                        <strong>Microfilm</strong> - When an order needs to be printed from the Microfilm<br/>
+                        <strong>Offsite</strong> - Has to be ordered from Offsite to be fulfilled<br/>
+                        <strong>Processing</strong> - For photo orders only<br/>
+                        <strong>Not Found</strong> - A Not Found Letter was sent to the customer<br/>
+                        <strong>Undeliverable</strong> - When an order is returned as undeliverable by USPS / Email<br/>
+                        <strong>Refund</strong> - The order has been sent to Administration for a refund<br/>
+                        <strong>Done</strong> - The order has been completed. No more work is needed<br/>
                     </div>
-                    <Button type='button' negative onClick={this.handleClose} floated='right'>Close</Button>
                     <br/>
+                    <Button type='button' negative onClick={this.handleClose} floated='right'>Close</Button>
+                    <br/><br/>
                 </Modal.Content>
             </Modal>
         )
