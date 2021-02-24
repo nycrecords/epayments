@@ -9,6 +9,7 @@ import LoginModal from "./login_modal";
 import ChangePasswordModal from "./changePasswordModal";
 import {csrfFetch, handleFetchErrors} from "../utils/fetch"
 import {CHUNK_SIZE} from "../constants/constants"
+import StatusDefinitionsModal from "./statusDefinitionsModal";
 
 /***
  * Custom Classes from index.css Starts with '-'; Overrides Bootstrap css and Semantic ui css
@@ -218,6 +219,7 @@ class Home extends React.Component {
                                     <Link to="/Order">
                                         <Button content='New Order'/>
                                     </Link>
+                                    <StatusDefinitionsModal/>
                                 </Button.Group>
                             </Rail>
                             <div id="grid-column-order" ref={elem => this.div = elem}>

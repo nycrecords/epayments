@@ -1,5 +1,5 @@
 import React from 'react';
-import {Button, Form, Header, Modal, TextArea} from 'semantic-ui-react';
+import {Button, Form, Modal, TextArea} from 'semantic-ui-react';
 import 'semantic-ui-css/semantic.min.css';
 import {csrfFetch, handleFetchErrors} from "../utils/fetch"
 import {statusOptions} from '../constants/constants'
@@ -56,10 +56,22 @@ class StatusModal extends React.Component {
                 open={this.state.modalOpen}
                 onClose={this.state.handleClose}>
                 <Modal.Header>
+                    <p>Current Status - {this.state.status}</p>
+                </Modal.Header>
                     <Modal.Content>
+                        <div>
+                            <strong>Received</strong> - When an order is imported<br/>
+                            <strong>Microfilm</strong> - When an order needs to be printed from the Microfilm<br/>
+                            <strong>Offsite</strong> - Has to be ordered from Offsite to be fulfilled<br/>
+                            <strong>Processing</strong> - For photo orders only<br/>
+                            <strong>Not Found</strong> - A Not Found Letter was sent to the customer<br/>
+                            <strong>Undeliverable</strong> - When an order is returned as undeliverable by USPS /
+                            Email<br/>
+                            <strong>Refund</strong> - The order has been sent to Administration for a refund<br/>
+                            <strong>Done</strong> - The order has been completed. No more work is needed<br/>
+                        </div>
+                        <br/>
                         <Modal.Description>
-                            <Header>
-                                <p>Current Status - {this.state.status}</p>
                                 <Form onSubmit={this.handleSubmit}>
                                     <Form.Select fluid selection options={statusOptions.slice(1)}
                                                  onChange={(e, {value}) => {
@@ -76,10 +88,9 @@ class StatusModal extends React.Component {
                                                 value={this.state.comment}
                                     />
                                 </Form>
-                            </Header>
+
                         </Modal.Description>
                     </Modal.Content>
-                </Modal.Header>
                 <Modal.Actions>
                     <Button negative onClick={this.handleClose}>Cancel</Button>
                     <Button type='submit' positive onClick={this.handleSubmit} content="Confirm"/>
