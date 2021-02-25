@@ -50,6 +50,9 @@ def upgrade():
     # Convert 'Letter_Generated' status to 'Not_Found'
     op.execute('UPDATE suborders SET status = \'Not_Found\' WHERE status = \'Letter_Generated\'')
 
+    # Convert 'Refunded' status to 'Refund'
+    op.execute('UPDATE suborders SET status = \'Refund\' WHERE status = \'Refunded\'')
+
     # Create and convert to the "new" type type
     new_status.create(op.get_bind(), checkfirst=False)
     op.execute('ALTER TABLE suborders ALTER COLUMN status TYPE status'
