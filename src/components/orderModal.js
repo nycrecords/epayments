@@ -6,7 +6,7 @@ import {Button, Modal} from 'semantic-ui-react';
 import 'semantic-ui-css/semantic.min.css';
 import MarriageCert from '../order_type/marriage_cert'
 import MarriageSearch from '../order_type/marriage_search'
-import BirthCert from '../order_type/birth_search'
+import BirthCert from '../order_type/birth_cert'
 import BirthSearch from '../order_type/birth_search'
 import DeathCert from '../order_type/death_cert'
 import DeathSearch from '../order_type/death_search'

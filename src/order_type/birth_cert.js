@@ -122,5 +122,4 @@ class BirthCert extends React.Component{
     };
 }
 
-
 export default BirthCert;
