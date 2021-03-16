@@ -52,7 +52,7 @@ def update_status(suborder: Suborders, comment: str, new_status: str):
     new_value = {}
 
     previous_value['status'] = suborder.status
-    if 'comment' in prev_event.new_value:
+    if prev_event is not None and 'comment' in prev_event.new_value:
         previous_value['comment'] = prev_event.new_value['comment']
 
     update_object({'status': new_status}, Suborders, suborder.id)

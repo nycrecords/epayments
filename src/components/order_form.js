@@ -229,9 +229,7 @@ class OrderForm extends React.Component {
 
                     <Form.Input label="Order Number" placeholder="Order Number" maxLength="64"
                                 onChange={(e, {value}) => {
-                                    if (/^[0-9]+$/.test(value.slice(-1)) || value === '') {
-                                        this.setState({order_number: value})
-                                    }
+                                    this.setState({order_number: value});
                                 }}
                                 value={this.state.order_number}
                                 className="margin-small-tb"
@@ -239,9 +237,7 @@ class OrderForm extends React.Component {
 
                     <Form.Input label="Suborder Number" placeholder="Suborder Number" maxLength="32"
                                 onChange={(e, {value}) => {
-                                    if (/^[\d -]+$/.test(value.slice(-1)) || value === '') {
-                                        this.setState({suborder_number: value})
-                                    }
+                                    this.setState({suborder_number: value});
                                 }}
                                 value={this.state.suborder_number}
                                 className="margin-small-tb"
