@@ -52,7 +52,7 @@ def update_status(suborder: Suborders, comment: str, new_status: str):
     new_value = {}
 
     previous_value['status'] = suborder.status
-    if 'comment' in prev_event.new_value:
+    if prev_event is not None and 'comment' in prev_event.new_value:
         previous_value['comment'] = prev_event.new_value['comment']
 
     update_object({'status': new_status}, Suborders, suborder.id)
@@ -556,6 +556,8 @@ def _create_new_death_object(suborder: Dict[str, Union[str, List[Dict]]], new_su
                                         years=[y['value'] for y in suborder.get('years') if y['value']],
                                         death_place=suborder.get('deathPlace'),
                                         borough=[b['name'].upper() for b in suborder['boroughs'] if b['checked']],
+                                        father_name=suborder.get('fatherName'),
+                                        mother_name=suborder.get('motherName'),
                                         letter=suborder.get('letter'),
                                         comment=suborder.get('comment'),
                                         _delivery_method=suborder['deliveryMethod'],
@@ -571,6 +573,8 @@ def _create_new_death_object(suborder: Dict[str, Union[str, List[Dict]]], new_su
                                    years=[y['value'] for y in suborder.get('years') if y['value']],
                                    death_place=suborder.get('deathPlace'),
                                    borough=[b['name'].upper() for b in suborder['boroughs'] if b['checked']],
+                                   father_name=suborder.get('fatherName'),
+                                   mother_name=suborder.get('motherName'),
                                    letter=suborder.get('letter'),
                                    comment=suborder.get('comment'),
                                    _delivery_method=suborder['deliveryMethod'],
