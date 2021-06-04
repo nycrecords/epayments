@@ -35,11 +35,11 @@ manager.add_command('shell', Shell(make_context=make_shell_context))
 manager.add_command('db', MigrateCommand)
 
 
-# @manager.command
-# def import_xml():
-#     """Import XML files"""
-#     from app.utils import import_xml_folder
-#     import_xml_folder()
+@manager.command
+def daily_import(filepath=""):
+    """Import XML files"""
+    from app.utils import import_xml
+    import_xml(filepath)
 
 
 @manager.command
