@@ -21,13 +21,13 @@ def allowed_file(filename):
            filename.rsplit('.', 1)[1] in ALLOWED_EXTENSIONS
 
 
-def import_xml(filename):
+def import_xml(filename, sftp=False):
     """ 
     Import XML File(s).
     :param filename: File to import
     :return: Bool
     """
-    data_path = "data/files/DOR/"
+    data_path = current_app.config['TAR_DATA_PATH'] + 'temp' if sftp else current_app.config['TAR_DATA_PATH']
 
     directory_name = make_directory(filename, data_path)
 

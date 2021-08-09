@@ -15,6 +15,7 @@ class Config:
     REMOTE_FILE_PATH = os.environ.get('REMOTE_FILE_PATH')
     LOCAL_FILE_PATH = (os.environ.get('LOCAL_FILE_PATH') or
                        os.path.join(os.path.abspath(os.path.dirname(__file__)), 'data/'))
+    TAR_DATA_PATH = os.environ.get('TAR_DATA_PATH', 'data/files/DOR/')
 
     MAIL_SERVER = os.environ.get("MAIL_SERVER") or "localhost"
     MAIL_PORT = os.environ.get("MAIL_PORT") or 2525

@@ -35,11 +35,17 @@ manager.add_command('shell', Shell(make_context=make_shell_context))
 manager.add_command('db', MigrateCommand)
 
 
-# @manager.command
-# def import_xml():
-#     """Import XML files"""
-#     from app.utils import import_xml_folder
-#     import_xml_folder()
+@manager.command
+@manager.option(
+    "--filepath",
+    dest="filepath",
+    action="store_true",
+    help="Specify filepath of DOR.tar file."
+)
+def daily_import(filepath=""):
+    """Import XML files"""
+    from app.main.utils import import_xml
+    import_xml(filepath, sftp=True)
 
 
 @manager.command
