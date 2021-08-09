@@ -1,7 +1,9 @@
 import xml.etree.ElementTree as ET
+from time import localtime, strftime
 from datetime import datetime, date
 
 import os
+import smtplib
 from flask import current_app
 
 from app import db, scheduler
@@ -24,7 +26,6 @@ def import_xml_folder(scheduled=False, path=None):
     """
 
     with scheduler.app.app_context():
-        file_path = current_app.config['REMOTE_FILE_PATH']
         local_path = path or current_app.config['LOCAL_FILE_PATH']
 
         if scheduled:
@@ -57,13 +58,25 @@ def import_xml_folder(scheduled=False, path=None):
                         else:
                             print("Failed to Import {}".format(file_))
         else:
+            sender = 'appdev@records.nyc.gov'
+            receivers = ['epayments@records.nyc.gov']
+
+            email = f"""\
+Subject: ePayments Import %s
+From: DORIS AppDev <appdev@records.nyc.gov>
+To: ePayments Staff <epayments@records.nyc.gov>
+
+""" % strftime("%Y-%m-%d %H-%M-%S", localtime())
+
             for file_ in os.listdir(local_path):
                 if not file_.startswith('.'):
-                    file_ = os.path.join(local_path, file_)
-                    if import_file(file_):
-                        print("Imported {}".format(file_))
+                    file_path = os.path.join(local_path, file_)
+                    if import_file(file_path):
+                        email += "Successfully Imported {}".format(file_) + "\n"
                     else:
-                        print("Failed to Import {}".format(file_))
+                        email += "Failed to Import {}".format(file_) + "\n"
+            smtpObj = smtplib.SMTP(current_app.config['MAIL_SERVER'], current_app.config['MAIL_PORT'])
+            smtpObj.sendmail(sender, receivers, email)
 
 
 def _get_order_number(node):
