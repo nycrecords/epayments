@@ -12,7 +12,7 @@ from app.constants import status
 from app.constants.order_types import CLIENT_ID_DICT
 from app.file_utils import sftp_ctx
 from app.models import Orders, Events, BirthSearch, BirthCertificate, MarriageCertificate, \
-    MarriageSearch, DeathCertificate, DeathSearch, PhotoGallery, TaxPhoto, PropertyCard, Customers, Suborders
+    MarriageSearch, DeathCertificate, DeathSearch, PhotoGallery, TaxPhoto, PropertyCard, Customers, Suborders, OCME
 from app.search.utils import delete_doc
 
 
@@ -71,7 +71,14 @@ To: ePayments Staff <epayments@records.nyc.gov>
             for file_ in os.listdir(local_path):
                 if not file_.startswith('.'):
                     file_path = os.path.join(local_path, file_)
-                    if import_file(file_path):
+                    et = ET.parse(file_path)
+                    tree = et.getroot()
+
+                    date_submitted = datetime.fromtimestamp(
+                        os.path.getmtime(file_path)
+                    )
+
+                    if import_file(tree, date_submitted):
                         email += "Successfully Imported {}".format(file_) + "\n"
                     else:
                         email += "Failed to Import {}".format(file_) + "\n"
@@ -104,25 +111,25 @@ def _get_order_types(clients_data):
     return [CLIENT_ID_DICT[suborder[0]] for suborder in clients_data_suborders]
 
 
-def import_file(file_name):
+def import_file(tree, date_submitted):
     """
         Inserts a single order from an XML file into the database.
         :param file_name: XML file to import
         :return: Bool
     """
     # 1. Populate the XML Parser
-    tree = ET.parse(file_name)
-    root = tree.getroot()
+    # tree = ET.parse(file_name)
+    # root = tree.getroot()
 
     # 2. Retrieve the order number.
-    order_number = _get_order_number(root.find("EPaymentReq"))
+    order_number = _get_order_number(tree.find("EPaymentReq"))
 
     if Orders.query.filter_by(id=order_number).one_or_none() is not None:
         print("Order {} already exists".format(order_number))
         return False
 
     # 3. Message sent to customer
-    confirmation_message = root.find('ConfirmationMessage').text
+    confirmation_message = tree.find('ConfirmationMessage').text
 
     # 4. Get Order Date Information in EST.
     date_received = date.today()
@@ -136,12 +143,12 @@ def import_file(file_name):
     # )
 
     # For servers where RHEL environment is EST
-    date_submitted = datetime.fromtimestamp(
-        os.path.getmtime(file_name)
-    )
+    # date_submitted = datetime.fromtimestamp(
+    #     os.path.getmtime(file_name)
+    # )
 
     # 5. Get Client Data information
-    clients_data = root.find('ClientsData').text
+    clients_data = tree.find('ClientsData').text
 
     # 6. Get Order Types
     _order_types = _get_order_types(clients_data)
@@ -160,13 +167,13 @@ def import_file(file_name):
 
     # 8. Get Customer Information
     # 8-a: Customer Name
-    billing_name = root.find("EPaymentRes").find("BillingInfo").find("BillingName").text
+    billing_name = tree.find("EPaymentRes").find("BillingInfo").find("BillingName").text
 
     # 8-b: Customer Email: Email for person who placed order
-    customer_email = root.find("EPaymentReq").find("CustomerEmail").text
+    customer_email = tree.find("EPaymentReq").find("CustomerEmail").text
 
     # 8-c: Get Shipping Information
-    shipping_add = root.find("EPaymentRes").find("ShippingAdd")
+    shipping_add = tree.find("EPaymentRes").find("ShippingAdd")
     ship_to_name = shipping_add.find("ShipToName").text
     ship_to_street_add = shipping_add.find("ShipToStreetAdd").text
     ship_to_street_add_2 = shipping_add.find("ShipToStreetAdd2").text
@@ -248,7 +255,8 @@ def import_file(file_name):
         #     "10000181": "Marriage Cert",
         #     "10000103": "Death Search",
         #     "10000182": "Death Cert",
-        #     "10000058": "Property Card"
+        #     "10000110": "Property Card",
+        #     "10000120": "OCME",
         # }
 
         # Birth Search
@@ -712,53 +720,60 @@ def import_file(file_name):
             suborder.es_update(customer_order.serialize)
 
         # Property Card
-        if client_id == '10000058':
+        if client_id == '10000110':
             # Retrieve Building Address
-            borough = clients_data_list[
-                clients_data_list.index("BOROUGH") + 1] if "BOROUGH" in clients_data_list else None
-            block = clients_data_list[clients_data_list.index("BLOCK") + 1] if "BLOCK" in clients_data_list else None
-            lot = clients_data_list[clients_data_list.index("LOT") + 1] if "LOT" in clients_data_list else None
+            borough = clients_data_list[clients_data_list.index("BOROUGH") + 1]
+            block = clients_data_list[clients_data_list.index("BLOCK") + 1]
+            lot = clients_data_list[clients_data_list.index("LOT") + 1]
             building_number = clients_data_list[
                 clients_data_list.index("STREET_NUMBER") + 1] if "STREET_NUMBER" in clients_data_list else None
             street = clients_data_list[clients_data_list.index("STREET") + 1] if "STREET" in clients_data_list else None
 
-            # Retrieve Building Description
-            description = clients_data_list[clients_data_list.index("DESCRIPTION") + 1] if "DESCRIPTION" in \
-                                                                                           clients_data_list else None
+            # Retrieve Number of Copies
+            num_copies = clients_data_list[clients_data_list.index("COPIES") + 1]
 
-            # Retrieve Certification Value (True or False)
-            certified = clients_data_list[
-                clients_data_list.index("COPY_OPTIONS") + 1] if "COPY_OPTIONS" in clients_data_list else None
-
-            # Retrieve Mail / Pickup Status
-            if "MAIL_PICKUP" in clients_data_list:
-                if clients_data_list[clients_data_list.index("MAIL_PICKUP") + 1] == 'Mail':
-                    mail = True
-                else:
-                    mail = False
+            # Retrieve Raised Seal
+            if clients_data_list[clients_data_list.index("RAISEDSEAL") + 1] == "Yes":
+                raised_seal = True
+                raised_seal_copies = clients_data_list[clients_data_list.index("RAISEDSEAL_COPIES") + 1]
             else:
-                # TODO: Fix this. mail column is BOOLEAN
-                mail = None
+                raised_seal = False
+                raised_seal_copies = None
 
-            # Retrieve Pickup Contact Information
-            contact_info = clients_data_list[
-                clients_data_list.index("CONTACT_EMAIL") + 1] if "CONTACT_EMAIL" in clients_data_list else None
+            # Retrieve delivery method
+            _delivery_method = clients_data_list[clients_data_list.index('DELIVERY') + 1].lower()
 
-            customer_order = PropertyCard(
+            if _delivery_method == "print and mail":
+                _delivery_method = "mail"
+            elif _delivery_method == "print and pick up":
+                _delivery_method = "pickup"
+
+            # Retrieve Pickup Number Information
+            contact_number = clients_data_list[
+                clients_data_list.index("PICKUP_PHONE") + 1] if "PICKUP_PHONE" in clients_data_list else None
+
+            # Retrieve Pickup Email Information
+            contact_email = clients_data_list[
+                clients_data_list.index("PICKUP_EMAIL") + 1] if "PICKUP_EMAIL" in clients_data_list else None
+
+            property_card = PropertyCard(
                 borough=borough,
                 block=block,
                 lot=lot,
                 building_number=building_number,
                 street=street,
-                description=description,
-                certified=certified,
-                mail=mail,
-                contact_info=contact_info,
+                num_copies=num_copies,
+                raised_seal=raised_seal,
+                raised_seal_copies=raised_seal_copies,
+                delivery_method=_delivery_method,
+                contact_number=contact_number,
+                contact_email=contact_email,
                 suborder_number=suborder_number
             )
 
-            db.session.add(customer_order)
+            db.session.add(property_card)
             db.session.commit()
+            suborder.es_update(property_card.serialize)
 
         # Tax Photo
         if client_id == '10000048':
@@ -959,6 +974,9 @@ def import_file(file_name):
             # Retrieve delivery method
             _delivery_method = clients_data_list[clients_data_list.index('DELIVERY') + 1].lower()
 
+            if _delivery_method == "print and mail":
+                _delivery_method = "mail"
+
             customer_order = PhotoGallery(
                 image_id=image_id,
                 description=description,
@@ -974,5 +992,73 @@ def import_file(file_name):
             db.session.add(customer_order)
             db.session.commit()
             suborder.es_update(customer_order.serialize)
+
+        # OCME
+        if client_id == "10000120":
+            # Retrieve the borough
+            borough = clients_data_list[clients_data_list.index("BOROUGH") + 1]
+
+            month = clients_data_list[clients_data_list.index("MONTH") + 1]
+            day = clients_data_list[clients_data_list.index("DAY") + 1]
+            year = clients_data_list[clients_data_list.index("YEAR") + 1]
+
+            first_name = clients_data_list[clients_data_list.index("FIRSTNAME") + 1]
+            last_name = clients_data_list[clients_data_list.index("LASTNAME") + 1]
+            middle_name = clients_data_list[
+                clients_data_list.index("MIDDLENAME") + 1] if "MIDDLENAME" in clients_data_list else None
+
+            age = clients_data_list[
+                clients_data_list.index("AGE") + 1] if "AGE" in clients_data_list else None
+
+            certificate_number = clients_data_list[
+                clients_data_list.index("CERTIFICATE_NUMBER") + 1] if "CERTIFICATE_NUMBER" in clients_data_list else None
+
+            # Retrieve Number of Copies
+            num_copies = clients_data_list[clients_data_list.index("COPIES") + 1]
+
+            # Retrieve Exemplification Letter Requested
+            if clients_data_list[clients_data_list.index("RAISEDSEAL") + 1] == "Yes":
+                raised_seal = True
+                raised_seal_copies = clients_data_list[clients_data_list.index("RAISEDSEAL_COPIES") + 1]
+            else:
+                raised_seal = False
+                raised_seal_copies = None
+
+            # Retrieve delivery method
+            _delivery_method = clients_data_list[clients_data_list.index('DELIVERY') + 1].lower()
+
+            if _delivery_method == "print and mail":
+                _delivery_method = "mail"
+            elif _delivery_method == "print and pick up":
+                _delivery_method = "pickup"
+
+            # Retrieve Pickup Number Information
+            contact_number = clients_data_list[
+                clients_data_list.index("PICKUP_PHONE") + 1] if "PICKUP_PHONE" in clients_data_list else None
+
+            # Retrieve Pickup Email Information
+            contact_email = clients_data_list[
+                clients_data_list.index("PICKUP_EMAIL") + 1] if "PICKUP_EMAIL" in clients_data_list else None
+
+            ocme = OCME(
+                borough=borough,
+                date=datetime(int(year), int(month), int(day)),
+                first_name=first_name,
+                middle_name=middle_name,
+                last_name=last_name,
+                age=age,
+                certificate_number=certificate_number,
+                num_copies=num_copies,
+                raised_seal=raised_seal,
+                raised_seal_copies=raised_seal_copies,
+                delivery_method=_delivery_method,
+                contact_number=contact_number,
+                contact_email=contact_email,
+                suborder_number=suborder_number
+            )
+
+            db.session.add(ocme)
+            db.session.commit()
+            suborder.es_update(ocme.serialize)
 
     return True

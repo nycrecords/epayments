@@ -84,7 +84,7 @@ def get_orders() -> Response:
 
         # formatting results
         formatted_orders = SearchFunctions.format_results(orders)
-        suborder_total = orders['hits']['total']
+        suborder_total = orders['hits']['total']["value"]
         order_total = orders['aggregations']['order_count']['value']
 
         return jsonify(
@@ -96,7 +96,7 @@ def get_orders() -> Response:
     else:
         orders = search_queries(date_received_start=date.today().strftime('%m/%d/%Y'))
         formatted_orders = SearchFunctions.format_results(orders)
-        suborder_total = orders['hits']['total']
+        suborder_total = orders['hits']['total']["value"]
         order_total = orders['aggregations']['order_count']['value']
 
         return jsonify(

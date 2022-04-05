@@ -13,6 +13,7 @@ import DeathSearch from '../order_type/death_search'
 import TaxPhoto from '../order_type/tax_photo'
 import PhotoGallery from '../order_type/photo_gallery'
 import PropertyCard from '../order_type/property_card'
+import OCME from '../order_type/ocme'
 import {csrfFetch} from "../utils/fetch"
 
 class OrderModal extends React.Component {
@@ -114,6 +115,11 @@ class OrderModal extends React.Component {
             case 'Photo Gallery':
                 orderInfo=(
                     <PhotoGallery order_info={this.state.order_info}/>
+                );
+                break;
+            case 'OCME':
+                orderInfo=(
+                    <OCME order_info={this.state.order_info}/>
                 );
                 break;
             default:

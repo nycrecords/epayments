@@ -26,8 +26,9 @@ class SearchFunctions(object):
     @staticmethod
     def search(dsl, start, size):
         search_results = es.search(index='suborders',
-                                   doc_type='suborders',
-                                   body=dsl,
+                                   aggs=dsl["aggs"],
+                                   query=dsl["query"],
+                                   sort=dsl["sort"],
                                    _source=[
                                        'order_number',
                                        'suborder_number',
@@ -43,8 +44,9 @@ class SearchFunctions(object):
     @staticmethod
     def print(dsl, start, size):
         search_results = es.search(index='suborders',
-                                   doc_type='suborders',
-                                   body=dsl,
+                                   aggs=dsl["aggs"],
+                                   query=dsl["query"],
+                                   sort=dsl["sort"],
                                    _source=[
                                        'suborder_number',
                                        'order_type',

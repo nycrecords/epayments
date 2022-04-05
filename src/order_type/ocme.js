@@ -1,11 +1,7 @@
-/**
- * Created by walwong on 8/15/18.
- */
-
 import React from "react";
 import "semantic-ui-css/semantic.min.css";
 
-class PropertyCard extends React.Component{
+class OCME extends React.Component{
 
     render(){
         return(
@@ -27,30 +23,45 @@ class PropertyCard extends React.Component{
                 </div>
 
                 <div className="-row">
-                    <div className="-fourth"> Block: </div>
+                    <div className="-fourth"> Date: </div>
                     <div className="-two-thirds">
-                        {this.props.order_info["metadata"]["block"]}
+                        {this.props.order_info["metadata"]["date"]}
                     </div>
                 </div>
 
                 <div className="-row">
-                    <div className="-fourth"> Lot: </div>
+                    <div className="-fourth"> First Name: </div>
                     <div className="-two-thirds">
-                        {this.props.order_info["metadata"]["lot"]}
+                        {this.props.order_info["metadata"]["first_name"]}
+                    </div>
+                </div>
+
+
+                <div className="-row">
+                    <div className="-fourth"> Middle Name: </div>
+                    <div className="-two-thirds">
+                        {this.props.order_info["metadata"]["middle_name"] ? this.props.order_info["metadata"]["middle_name"] : ""}
                     </div>
                 </div>
 
                 <div className="-row">
-                    <div className="-fourth"> Building Number: </div>
+                    <div className="-fourth"> Last Name: </div>
                     <div className="-two-thirds">
-                        {this.props.order_info["metadata"]["building_number"] ? this.props.order_info["metadata"]["building_number"]: ""}
+                        {this.props.order_info["metadata"]["last_name"]}
                     </div>
                 </div>
 
                 <div className="-row">
-                    <div className="-fourth"> Street: </div>
+                    <div className="-fourth"> Age: </div>
                     <div className="-two-thirds">
-                        {this.props.order_info["metadata"]["street"] ? this.props.order_info["metadata"]["street"]: ""}
+                        {this.props.order_info["metadata"]["age"]  ? this.props.order_info["metadata"]["age"] : ""}
+                    </div>
+                </div>
+
+                <div className="-row">
+                    <div className="-fourth"> Certificate Number: </div>
+                    <div className="-two-thirds">
+                        {this.props.order_info["metadata"]["certificate_number"] ? this.props.order_info["metadata"]["certificate_number"] : ""}
                     </div>
                 </div>
 
@@ -101,4 +112,4 @@ class PropertyCard extends React.Component{
 }
 
 
-export default PropertyCard;
+export default OCME;

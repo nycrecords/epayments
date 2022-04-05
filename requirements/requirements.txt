@@ -2,7 +2,6 @@ alembic==0.9.6
 APScheduler==3.4.0
 asn1crypto==0.24.0
 bcrypt==3.1.5
-cffi==1.11.5
 Click==7.0
 cryptography==2.4.2
 dominate==2.3.1
@@ -23,7 +22,6 @@ Mako==1.0.7
 MarkupSafe==1.1.0
 olefile==0.44
 paramiko==2.3.3
-Pillow==4.3.0
 # psycopg2==2.6.1
 pyasn1==0.4.5
 pycparser==2.19
@@ -33,7 +31,6 @@ python-dateutil==2.6.1
 python-dotenv==0.7.1
 python-editor==1.0.3
 pytz==2017.3
-reportlab==3.4.0
 six==1.12.0
 SQLAlchemy==1.1.15
 tzlocal==1.4

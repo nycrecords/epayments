@@ -25,7 +25,7 @@ from app.search.searchfunctions import SearchFunctions
 
 def recreate():
     """Deletes then recreates the index"""
-    es.indices.delete('*', ignore=[400, 404])
+    es.indices.delete(index='suborders', ignore=[400, 404])
     create_index()
     create_docs()
 
@@ -36,61 +36,62 @@ def create_index():
         index='suborders',
         body={
             "settings": {
-                "analysis": {
-                    "tokenizer": {
-                        "ngram_tokenizer": {
-                            "type": "ngram",
-                            "min_gram": 3,
-                            "max_gram": 6,
-                        }
+                "index": {
+                    "analysis": {
+                        "tokenizer": {
+                            "ngram_tokenizer": {
+                                "type": "ngram",
+                                "min_gram": 3,
+                                "max_gram": 6,
+                            }
+                        },
+                        "analyzer": {
+                            "ngram_tokenizer_analyzer": {
+                                "type": "custom",
+                                "tokenizer": "ngram_tokenizer",
+                                "filter": [
+                                    "lowercase"
+                                ]
+                            }
+                        },
                     },
-                    "analyzer": {
-                        "ngram_tokenizer_analyzer": {
-                            "type": "custom",
-                            "tokenizer": "ngram_tokenizer",
-                            "filter": [
-                                "lowercase"
-                            ]
-                        }
-                    }
+                    "max_ngram_diff": 3
                 }
             },
             "mappings": {
-                'suborders': {
-                    "properties": {
-                        "customer.billing_name": {
-                            "type": "text",
-                            "analyzer": "ngram_tokenizer_analyzer",
-                            "fields": {
-                                "exact": {
-                                    "type": "text",
-                                    "analyzer": "standard",
-                                },
+                "properties": {
+                    "customer.billing_name": {
+                        "type": "text",
+                        "analyzer": "ngram_tokenizer_analyzer",
+                        "fields": {
+                            "exact": {
+                                "type": "text",
+                                "analyzer": "standard",
                             },
                         },
-                        "suborder_number": {
-                            "type": 'keyword',
-                        },
-                        "order_number": {
-                            "type": 'keyword',
-                        },
-                        "order_type": {
-                            "type": 'keyword',
-                        },
-                        "current_status": {
-                            "type": 'keyword'
-                        },
-                        "date_received": {
-                            "type": "date",
-                            "format": ES_DATETIME_FORMAT,
-                        },
-                        "date_submitted": {
-                            "type": "date",
-                            "format": ES_DATETIME_FORMAT,
-                        },
-                        "multiple_items": {
-                            "type": "boolean"
-                        }
+                    },
+                    "suborder_number": {
+                        "type": 'keyword',
+                    },
+                    "order_number": {
+                        "type": 'keyword',
+                    },
+                    "order_type": {
+                        "type": 'keyword',
+                    },
+                    "current_status": {
+                        "type": 'keyword'
+                    },
+                    "date_received": {
+                        "type": "date",
+                        "format": ES_DATETIME_FORMAT,
+                    },
+                    "date_submitted": {
+                        "type": "date",
+                        "format": ES_DATETIME_FORMAT,
+                    },
+                    "multiple_items": {
+                        "type": "boolean"
                     }
                 }
             }
@@ -120,41 +121,43 @@ def create_docs():
     operations = []
 
     for q in suborders:
-        customer = q.order.customer
+        try:
+            customer = q.order.customer
 
-        operations.append({
-            '_op_type': 'create',
-            '_id': q.id,
-            'order_number': q.order_number,
-            'suborder_number': q.id,
-            'date_received': q.order.date_received.strftime(DATETIME_FORMAT),
-            'date_submitted': q.order.date_submitted.strftime(DATETIME_FORMAT),
-            'customer': {
-                'address': customer.address,
-                'billing_name': customer.billing_name.title(),
-                'shipping_name': customer.shipping_name.title(),
-                'address_line_one': customer.address_line_1,
-                'address_line_two': customer.address_line_2,
-                'city': customer.city,
-                'state': customer.state,
-                'zip_code': customer.zip_code,
-                'country': customer.country,
-                'email': customer.email,
-                'phone': customer.phone
-            },
-            'order_type': q.order_type,
-            'current_status': q.status,
-            'metadata': order_type_models_handler[q.order_type].query.filter_by(
-                suborder_number=q.id).one().serialize,
-            'multiple_items': q.order.multiple_items,
-            'order_types': q.order.order_types
-        })
+            operations.append({
+                '_op_type': 'create',
+                '_id': q.id,
+                'order_number': q.order_number,
+                'suborder_number': q.id,
+                'date_received': q.order.date_received.strftime(DATETIME_FORMAT),
+                'date_submitted': q.order.date_submitted.strftime(DATETIME_FORMAT),
+                'customer': {
+                    'address': customer.address,
+                    'billing_name': customer.billing_name.title(),
+                    'shipping_name': customer.shipping_name.title(),
+                    'address_line_one': customer.address_line_1,
+                    'address_line_two': customer.address_line_2,
+                    'city': customer.city,
+                    'state': customer.state,
+                    'zip_code': customer.zip_code,
+                    'country': customer.country,
+                    'email': customer.email,
+                    'phone': customer.phone
+                },
+                'order_type': q.order_type,
+                'current_status': q.status,
+                'metadata': order_type_models_handler[q.order_type].query.filter_by(
+                    suborder_number=q.id).one().serialize,
+                'multiple_items': q.order.multiple_items,
+                'order_types': q.order.order_types
+            })
+        except:
+            pass
 
     num_success, _ = bulk(
         es,
         operations,
         index='suborders',
-        doc_type='suborders',
         chunk_size=1000,
         raise_on_error=True
     )
@@ -308,7 +311,7 @@ class DSLGenerator(object):
         for i in self.__query_fields:
             if self.__query_fields[i]:
                 # only search parameter that isn't searched by exact value
-                if i is 'billing_name':
+                if i == 'billing_name':
                     self.__filters.append({
                         'match': {
                             "customer.billing_name": {

@@ -33,7 +33,7 @@ def create_app(config_name):
     """
     app = Flask(__name__)
     app.config.from_object(config[config_name])
-    config[config_name].init_app(app)
+    # config[config_name].init_app(app)
     scheduler.init_app(app)
 
     bootstrap.init_app(app)
@@ -41,8 +41,7 @@ def create_app(config_name):
     mail.init_app(app)
     login_manager.init_app(app)
 
-    app.elasticsearch = Elasticsearch([app.config['ELASTICSEARCH_URL']]) \
-        if app.config['ELASTICSEARCH_URL'] else None
+    app.elasticsearch = Elasticsearch(Config.ELASTICSEARCH_URL)
 
     # Base template that uses React for frontend
     from .main import main as main_blueprint

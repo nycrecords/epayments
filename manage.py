@@ -1,8 +1,8 @@
-from getpass import getpass
-
+import click
 import os
-from flask_migrate import Migrate, MigrateCommand
-from flask_script import Manager, Shell
+from flask.cli import FlaskGroup
+from flask_migrate import Migrate
+from getpass import getpass
 
 from app import create_app, db
 from app.models import Orders, Suborders, Customers, BirthSearch, \
@@ -18,7 +18,6 @@ if os.environ.get('FLASK_COVERAGE'):
     COV.start()
 
 app = create_app(os.getenv('FLASK_CONFIG') or 'default')
-manager = Manager(app)
 migrate = Migrate(app, db)
 
 
@@ -31,24 +30,19 @@ def make_shell_context():
                 PropertyCard=PropertyCard, TaxPhoto=TaxPhoto, PhotoGallery=PhotoGallery, Users=Users)
 
 
-manager.add_command('shell', Shell(make_context=make_shell_context))
-manager.add_command('db', MigrateCommand)
-
-
-@manager.command
-@manager.option(
+@app.cli.command()
+@click.option(
     "--filepath",
-    dest="filepath",
-    action="store_true",
-    help="Specify filepath of DOR.tar file."
+    default="",
+    prompt="Specify filepath of DOR.tar file."
 )
-def daily_import(filepath=""):
+def daily_import(filepath):
     """Import XML files"""
     from app.main.utils import import_xml
     import_xml(filepath, sftp=True)
 
 
-@manager.command
+@app.cli.command()
 def reset_db():
     """Empties the database and generates it again with db_setup"""
     from flask_migrate import upgrade
@@ -59,14 +53,14 @@ def reset_db():
     recreate()
 
 
-@manager.command
+@app.cli.command()
 def create_test_user():
     user = Users('test@email.com', '1234')
     db.session.add(user)
     db.session.commit()
 
 
-@manager.command
+@app.cli.command()
 def create_user():
     """
     Command line tool to create a user in the database.
@@ -85,7 +79,7 @@ def create_user():
     return print("Successfully created user, " + email)
 
 
-@manager.command
+@app.cli.command()
 def test(coverage=False):
     """Run the unit tests."""
     if coverage and not os.environ.get('FLASK_COVERAGE'):
@@ -107,11 +101,8 @@ def test(coverage=False):
         COV.erase()
 
 
-@manager.command
+@app.cli.command()
 def es_recreate():
-    """Recreates the index and request docs"""
+    """Recreates the index and docs"""
     recreate()
 
-
-if __name__ == '__main__':
-    manager.run()
