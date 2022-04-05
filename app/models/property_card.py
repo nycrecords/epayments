@@ -1,5 +1,7 @@
+from sqlalchemy.dialects import postgresql
+
 from app import db
-from app.constants import borough
+from app.constants import borough, delivery_method
 
 
 class PropertyCard(db.Model):
@@ -18,25 +20,33 @@ class PropertyCard(db.Model):
     suborder_number -- Column: BigInteger, foreignKey
 
     """
-
     __tablename__ = 'property_card'
     id = db.Column(db.Integer, primary_key=True)
     borough = db.Column(
-        db.Enum(
+        postgresql.ENUM(
             borough.BRONX,
             borough.MANHATTAN,
             borough.STATEN_ISLAND,
             borough.BROOKLYN,
             borough.QUEENS,
-            name='borough'), default=None, nullable=True)
-    block = db.Column(db.String(9), nullable=True)
-    lot = db.Column(db.String(9), nullable=True)
+            name='borough'), default=None, nullable=False)
+    block = db.Column(db.String(9), nullable=False)
+    lot = db.Column(db.String(9), nullable=False)
     building_number = db.Column(db.String(10), nullable=True)
     street = db.Column(db.String(40), nullable=True)
-    description = db.Column(db.String(40), nullable=True)
-    certified = db.Column(db.String(40), nullable=True)
-    mail = db.Column(db.Boolean, nullable=True)
-    contact_info = db.Column(db.String(35), nullable=True)
+    num_copies = db.Column(db.String(1), nullable=False)
+    raised_seal = db.Column(db.Boolean, nullable=False)
+    raised_seal_copies = db.Column(db.String(1), nullable=True)
+    delivery_method = db.Column(
+        postgresql.ENUM(
+            delivery_method.MAIL,
+            delivery_method.EMAIL,
+            delivery_method.PICKUP,
+            name="delivery_method",
+            create_type=False,
+        ), nullable=False)
+    contact_number = db.Column(db.String(64), nullable=True)
+    contact_email = db.Column(db.String(256), nullable=True)
     suborder_number = db.Column(db.String(32), db.ForeignKey('suborders.id'), nullable=False)
 
     def __init__(
@@ -46,21 +56,25 @@ class PropertyCard(db.Model):
             lot,
             building_number,
             street,
-            description,
-            certified,
-            mail,
-            contact_info,
+            num_copies,
+            raised_seal,
+            raised_seal_copies,
+            delivery_method,
+            contact_number,
+            contact_email,
             suborder_number
     ):
         self.borough = borough
         self.block = block
         self.lot = lot
-        self.building_number = building_number
-        self.street = street
-        self.description = description
-        self.certified = certified
-        self.mail = mail
-        self.contact_info = contact_info or None
+        self.building_number = building_number or None
+        self.street = street or None
+        self.num_copies = num_copies
+        self.raised_seal = raised_seal
+        self.raised_seal_copies = raised_seal_copies or None
+        self.delivery_method = delivery_method
+        self.contact_number = contact_number or None
+        self.contact_email = contact_email or None
         self.suborder_number = suborder_number
 
     @property
@@ -72,9 +86,11 @@ class PropertyCard(db.Model):
             "lot": self.lot,
             "building_number": self.building_number,
             "street": self.street,
-            "description": self.description,
-            "certified": self.certified,
-            "mail": self.mail,
-            "contact_info": self.contact_info,
-            'suborder_number': self.suborder_number
+            "num_copies": self.num_copies,
+            "raised_seal": self.raised_seal,
+            "raised_seal_copies": self.raised_seal_copies,
+            "delivery_method": self.delivery_method,
+            "contact_number": self.contact_number,
+            "contact_email": self.contact_email,
+            "suborder_number": self.suborder_number
         }
