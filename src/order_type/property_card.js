@@ -66,7 +66,7 @@ class PropertyCard extends React.Component{
 
                 {this.props.order_info["metadata"]["raised_seal"] &&
                     <div className="-row">
-                        <div className="-fourth"> Raised Seal Copies:</div>
+                        <div className="-fourth"> Raised Seal Copies: </div>
                         <div className="-two-thirds">
                             {this.props.order_info["metadata"]["raised_seal_copies"] ? this.props.order_info["metadata"]["raised_seal_copies"] : ""}
                         </div>
@@ -80,7 +80,7 @@ class PropertyCard extends React.Component{
 
                 {this.props.order_info["metadata"]["contact_number"] &&
                     <div className="-row">
-                        <div className="-fourth"> Contact Number:</div>
+                        <div className="-fourth"> Contact Number: </div>
                         <div className="-two-thirds">
                             {this.props.order_info["metadata"]["contact_number"]}
                         </div>
@@ -89,7 +89,7 @@ class PropertyCard extends React.Component{
 
                 {this.props.order_info["metadata"]["contact_email"] &&
                     <div className="-row">
-                        <div className="-fourth"> Contact Number:</div>
+                        <div className="-fourth"> Contact Email: </div>
                         <div className="-two-thirds">
                             {this.props.order_info["metadata"]["contact_email"]}
                         </div>

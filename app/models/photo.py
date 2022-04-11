@@ -41,10 +41,10 @@ class TaxPhoto(db.Model):
             name='borough'), default=borough.MANHATTAN, nullable=False)
     image_id = db.Column(db.String(35), nullable=True)
     roll = db.Column(db.String(9), nullable=True)
-    block = db.Column(db.String(9), nullable=True)
-    lot = db.Column(db.String(9), nullable=True)
     building_number = db.Column(db.String(10), nullable=False)
     street = db.Column(db.String(40), nullable=False)
+    block = db.Column(db.String(9), nullable=True)
+    lot = db.Column(db.String(9), nullable=True)
     description = db.Column(db.String(35), nullable=True)
     size = db.Column(
         db.Enum(
@@ -53,6 +53,7 @@ class TaxPhoto(db.Model):
             name='size'), nullable=False)
     num_copies = db.Column(db.String(2), nullable=False)
     contact_number = db.Column(db.String(10), nullable=True)
+    contact_email = db.Column(db.String(256), nullable=True)
     delivery_method = db.Column(
         db.Enum(
             delivery_method.MAIL,
@@ -78,7 +79,8 @@ class TaxPhoto(db.Model):
             block=None,
             lot=None,
             description=None,
-            contact_number=None
+            contact_number=None,
+            contact_email=None,
     ):
         self.borough = borough
         self.collection = collection
@@ -93,6 +95,7 @@ class TaxPhoto(db.Model):
         self.num_copies = num_copies
         self.delivery_method = _delivery_method
         self.contact_number = contact_number
+        self.contact_email = contact_email
         self.suborder_number = suborder_number
 
     @property
@@ -112,6 +115,7 @@ class TaxPhoto(db.Model):
             'num_copies': self.num_copies,
             'delivery_method': self.delivery_method,
             'contact_number': self.contact_number,
+            'contact_email': self.contact_email,
             'suborder_number': self.suborder_number,
         }
 
@@ -146,6 +150,7 @@ class PhotoGallery(db.Model):
             name='size'), nullable=False)
     num_copies = db.Column(db.String(2), nullable=False)
     contact_number = db.Column(db.String(10), nullable=True)
+    contact_email = db.Column(db.String(256), nullable=True)
     personal_use_agreement = db.Column(db.Boolean, nullable=True)
     comment = db.Column(db.String(255), nullable=True)
     delivery_method = db.Column(
@@ -161,14 +166,15 @@ class PhotoGallery(db.Model):
     def __init__(
             self,
             image_id,
-            description,
-            additional_description,
             size,
             num_copies,
             _delivery_method,
             contact_number,
-            comment,
+            contact_email,
             suborder_number,
+            description=None,
+            additional_description=None,
+            comment=None,
             personal_use_agreement=None
     ):
         self.image_id = image_id
@@ -178,6 +184,7 @@ class PhotoGallery(db.Model):
         self.num_copies = num_copies
         self.delivery_method = _delivery_method
         self.contact_number = contact_number
+        self.contact_email = contact_email
         self.personal_use_agreement = personal_use_agreement
         self.comment = comment
         self.suborder_number = suborder_number
@@ -193,6 +200,7 @@ class PhotoGallery(db.Model):
             "num_copies": self.num_copies,
             "delivery_method": self.delivery_method,
             "contact_number": self.contact_number,
+            "contact_email": self.contact_email,
             "personal_use_agreement": self.personal_use_agreement,
             "comment": self.comment,
             "suborder_number": self.suborder_number,

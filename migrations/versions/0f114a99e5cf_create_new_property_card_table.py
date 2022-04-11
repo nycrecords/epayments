@@ -16,12 +16,12 @@ down_revision = '8f60a888c179'
 branch_labels = None
 depends_on = None
 
-conn = op.get_bind()
-inspector = Inspector.from_engine(conn)
-tables = inspector.get_table_names()
-
 
 def upgrade():
+    conn = op.get_bind()
+    inspector = Inspector.from_engine(conn)
+    tables = inspector.get_table_names()
+
     if 'property_card_new' in tables:
         op.rename_table('property_card_new', 'property_card')
     else:

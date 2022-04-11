@@ -76,6 +76,24 @@ class PhotoGallery extends React.Component{
                     <div className="-fourth"> Delivery Method: </div>
                     <div className="-two-thirds"> {this.props.order_info["metadata"]["delivery_method"]} </div>
                 </div>
+
+                {this.props.order_info["metadata"]["contact_number"] &&
+                    <div className="-row">
+                        <div className="-fourth"> Contact Number: </div>
+                        <div className="-two-thirds">
+                            {this.props.order_info["metadata"]["contact_number"]}
+                        </div>
+                    </div>
+                }
+
+                {this.props.order_info["metadata"]["contact_email"] &&
+                    <div className="-row">
+                        <div className="-fourth"> Contact Email: </div>
+                        <div className="-two-thirds">
+                            {this.props.order_info["metadata"]["contact_email"]}
+                        </div>
+                    </div>
+                }
             </div>
         )
     };

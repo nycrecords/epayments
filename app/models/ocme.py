@@ -56,31 +56,31 @@ class OCME(db.Model):
             borough,
             date,
             first_name,
-            middle_name,
             last_name,
-            age,
-            certificate_number,
             num_copies,
             raised_seal,
-            raised_seal_copies,
             delivery_method,
-            contact_number,
-            contact_email,
             suborder_number,
+            middle_name=None,
+            age=None,
+            certificate_number=None,
+            raised_seal_copies=None,
+            contact_number=None,
+            contact_email=None,
     ):
         self.borough = borough
         self.date = date
         self.first_name = first_name
-        self.middle_name = middle_name or None
+        self.middle_name = middle_name
         self.last_name = last_name
-        self.age = age or None
-        self.certificate_number = certificate_number or None
+        self.age = age
+        self.certificate_number = certificate_number
         self.num_copies = num_copies
         self.raised_seal = raised_seal
-        self.raised_seal_copies = raised_seal_copies or None
+        self.raised_seal_copies = raised_seal_copies
         self.delivery_method = delivery_method
-        self.contact_number = contact_number or None
-        self.contact_email = contact_email or None
+        self.contact_number = contact_number
+        self.contact_email = contact_email
         self.suborder_number = suborder_number
 
     @property

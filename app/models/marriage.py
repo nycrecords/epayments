@@ -27,17 +27,30 @@ class MarriageSearch(db.Model):
 
     __tablename__ = 'marriage_search'
     id = db.Column(db.Integer, primary_key=True)
-    groom_last_name = db.Column(db.String(25), nullable=False)
-    groom_first_name = db.Column(db.String(40), nullable=True)
     bride_last_name = db.Column(db.String(25), nullable=False)
+    bride_middle_name = db.Column(db.String(40), nullable=True)
     bride_first_name = db.Column(db.String(40), nullable=True)
-    num_copies = db.Column(db.String(40), nullable=False)
+    alt_bride_last_name = db.Column(db.String(25), nullable=True)
+    alt_bride_middle_name = db.Column(db.String(40), nullable=True)
+    alt_bride_first_name = db.Column(db.String(40), nullable=True)
+    groom_last_name = db.Column(db.String(25), nullable=False)
+    groom_middle_name = db.Column(db.String(40), nullable=True)
+    groom_first_name = db.Column(db.String(40), nullable=True)
+    alt_groom_last_name = db.Column(db.String(25), nullable=True)
+    alt_groom_middle_name = db.Column(db.String(40), nullable=True)
+    alt_groom_first_name = db.Column(db.String(40), nullable=True)
     month = db.Column(db.String(20), nullable=True)
     day = db.Column(db.String(2), nullable=True)
     _years = db.Column(ARRAY(db.String(4), dimensions=1), nullable=False, name='years')
     marriage_place = db.Column(db.String(40), nullable=True)
     _borough = db.Column(ARRAY(db.String(20), dimensions=1), nullable=False, name='borough')
-    letter = db.Column(db.Boolean, nullable=True)
+    num_copies = db.Column(db.String(40), nullable=False)
+    exemplification = db.Column(db.Boolean, nullable=True)
+    exemplification_copies = db.Column(db.String(1), nullable=True)
+    raised_seal = db.Column(db.Boolean, nullable=False)
+    raised_seal_copies = db.Column(db.String(1), nullable=True)
+    no_amends = db.Column(db.Boolean, nullable=False)
+    no_amends_copies = db.Column(db.String(1), nullable=True)
     comment = db.Column(db.String(255), nullable=True)
     delivery_method = db.Column(
         db.Enum(
@@ -51,33 +64,59 @@ class MarriageSearch(db.Model):
 
     def __init__(
             self,
-            groom_last_name,
-            groom_first_name,
             bride_last_name,
-            bride_first_name,
+            groom_last_name,
+            _years,
+            _borough,
             num_copies,
-            month,
-            day,
-            years,
-            marriage_place,
-            borough,
-            letter,
-            comment,
+            raised_seal,
+            no_amends,
             _delivery_method,
-            suborder_number
+            suborder_number,
+            bride_middle_name=None,
+            bride_first_name=None,
+            alt_bride_last_name=None,
+            alt_bride_middle_name=None,
+            alt_bride_first_name=None,
+            groom_middle_name=None,
+            groom_first_name=None,
+            alt_groom_last_name=None,
+            alt_groom_middle_name=None,
+            alt_groom_first_name=None,
+            month=None,
+            day=None,
+            marriage_place=None,
+            exemplification=None,
+            exemplification_copies=None,
+            raised_seal_copies=None,
+            no_amends_copies=None,
+            comment=None,
     ):
-        self.groom_last_name = groom_last_name
-        self.groom_first_name = groom_first_name
         self.bride_last_name = bride_last_name
+        self.bride_middle_name = bride_middle_name
         self.bride_first_name = bride_first_name
+        self.alt_bride_last_name = alt_bride_last_name
+        self.alt_bride_middle_name = alt_bride_middle_name
+        self.alt_bride_first_name = alt_bride_first_name
+        self.groom_last_name = groom_last_name
+        self.groom_middle_name = groom_middle_name
+        self.groom_first_name = groom_first_name
+        self.alt_groom_last_name = alt_groom_last_name
+        self.alt_groom_middle_name = alt_groom_middle_name
+        self.alt_groom_first_name = alt_groom_first_name
+        self.month = month
+        self.day = day
+        self._years = _years
+        self.marriage_place = marriage_place
+        self._borough = _borough
         self.num_copies = num_copies
-        self.month = month or None
-        self.day = day or None
-        self._years = years
-        self.marriage_place = marriage_place or None
-        self._borough = borough
-        self.letter = letter or None
-        self.comment = comment or None
+        self.exemplification = exemplification
+        self.exemplification_copies = exemplification_copies
+        self.raised_seal = raised_seal
+        self.raised_seal_copies = raised_seal_copies
+        self.no_amends = no_amends
+        self.no_amends_copies = no_amends_copies
+        self.comment = comment
         self.delivery_method = _delivery_method
         self.suborder_number = suborder_number
 
@@ -113,17 +152,30 @@ class MarriageSearch(db.Model):
     def serialize(self):
         """Return object data in easily serializable format"""
         return {
-            'groom_last_name': self.groom_last_name,
-            'groom_first_name': self.groom_first_name,
             'bride_last_name': self.bride_last_name,
+            'bride_middle_name': self.bride_middle_name,
             'bride_first_name': self.bride_first_name,
-            'num_copies': self.num_copies,
+            'alt_bride_last_name': self.alt_bride_last_name,
+            'alt_bride_middle_name': self.alt_bride_middle_name,
+            'alt_bride_first_name': self.alt_bride_first_name,
+            'groom_last_name': self.groom_last_name,
+            'groom_middle_name': self.groom_middle_name,
+            'groom_first_name': self.groom_first_name,
+            'alt_groom_last_name': self.alt_groom_last_name,
+            'alt_groom_middle_name': self.alt_groom_middle_name,
+            'alt_groom_first_name': self.alt_groom_first_name,
             'month': self.month,
             'day': self.day,
-            'years': self.years if self.years is not None else "",
+            '_years': self._years,
             'marriage_place': self.marriage_place,
-            'borough': self.borough if self.borough is not None else "",
-            'letter': self.letter,
+            '_borough': self._borough,
+            'num_copies': self.num_copies,
+            'exemplification': self.exemplification,
+            'exemplification_copies': self.exemplification_copies,
+            'raised_seal': self.raised_seal,
+            'raised_seal_copies': self.raised_seal_copies,
+            'no_amends': self.no_amends,
+            'no_amends_copies': self.no_amends_copies,
             'comment': self.comment,
             'delivery_method': self.delivery_method,
             'suborder_number': self.suborder_number

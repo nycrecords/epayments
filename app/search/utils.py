@@ -167,7 +167,6 @@ def create_docs():
 def delete_doc(suborder_id):
     """Delete a specific doc in the index"""
     es.delete(index=current_app.config['ELASTICSEARCH_INDEX'],
-              doc_type=current_app.config["ELASTICSEARCH_INDEX"],
               id=suborder_id)
 
 

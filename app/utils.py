@@ -344,61 +344,96 @@ def import_file(tree, date_submitted):
             groom_last_name = clients_data_list[clients_data_list.index("LASTNAME_G") + 1]
             groom_first_name = clients_data_list[
                 clients_data_list.index("FIRSTNAME_G") + 1] if "FIRSTNAME_G" in clients_data_list else None
+            groom_middle_name = clients_data_list[
+                clients_data_list.index("MIDDLENAME_G") + 1] if "MIDDLENAME_G" in clients_data_list else None
+            alt_groom_last_name = clients_data_list[clients_data_list.index("ALTLASTNAME_G") + 1]
+            alt_groom_first_name = clients_data_list[
+                clients_data_list.index("ALTFIRSTNAME_G") + 1] if "ALTFIRSTNAME_G" in clients_data_list else None
+            alt_groom_middle_name = clients_data_list[
+                clients_data_list.index("ALTMIDDLENAME_G") + 1] if "ALTMIDDLENAME_G" in clients_data_list else None
 
             # Retreive the Bride's Information (First and Last Name
             bride_last_name = clients_data_list[clients_data_list.index("LASTNAME_B") + 1]
             bride_first_name = clients_data_list[
                 clients_data_list.index("FIRSTNAME_B") + 1] if "FIRSTNAME_B" in clients_data_list else None
-
-            # Retrieve Number of Copies
-            num_copies = clients_data_list[
-                clients_data_list.index("COPY_REQ") + 1] if "COPY_REQ" in clients_data_list else 1
+            bride_middle_name = clients_data_list[
+                clients_data_list.index("MIDDLENAME_B") + 1] if "MIDDLENAME_B" in clients_data_list else None
+            alt_bride_last_name = clients_data_list[clients_data_list.index("ALTLASTNAME_B") + 1]
+            alt_bride_first_name = clients_data_list[
+                clients_data_list.index("ALTFIRSTNAME_B") + 1] if "ALTFIRSTNAME_B" in clients_data_list else None
+            alt_bride_middle_name = clients_data_list[
+                clients_data_list.index("ALTMIDDLENAME_B") + 1] if "ALTMIDDLENAME_B" in clients_data_list else None
 
             # Retrieve the Marriage Date (Month, Day, Years)
             month = clients_data_list[clients_data_list.index("MONTH") + 1] if "MONTH" in clients_data_list else None
             day = clients_data_list[clients_data_list.index("DAY") + 1] if "DAY" in clients_data_list else None
-            years = clients_data_list[clients_data_list.index("YEAR_") + 1] if "YEAR_" in clients_data_list else None
+            years = clients_data_list[clients_data_list.index("YEAR") + 1]
             if years:
                 years = years.split(',')
                 years = list(filter(bool, years))
-
-            # Retrieve Marriage Location
-            marriage_place = clients_data_list[
-                clients_data_list.index("MARRIAGE_PLACE") + 1] if "MARRIAGE_PLACE" in clients_data_list else None
 
             # Retrieve Marriage Borough
             borough = clients_data_list[clients_data_list.index("BOROUGH") + 1]
             borough = borough.split(',')
             borough = list(filter(bool, borough))
 
-            # Retrieve Comments
-            comment = clients_data_list[
-                clients_data_list.index("ADD_COMMENT") + 1] if "ADD_COMMENT" in clients_data_list else None
+            # Retrieve Number of Copies
+            num_copies = clients_data_list[
+                clients_data_list.index("COPY_REQ") + 1] if "COPY_REQ" in clients_data_list else 1
 
             # Retrieve Exemplification Letter Requested
-            if clients_data_list[clients_data_list.index("LETTER") + 1] if "LETTER" in clients_data_list else None:
-                letter = True
+            if clients_data_list[clients_data_list.index("EXEMPLIFICATION_LETTER") + 1] == "Yes":
+                exemplification = True
+                exemplification_copies = clients_data_list[clients_data_list.index("LOE_COPIES") + 1]
             else:
-                letter = False
+                exemplification = False
+                exemplification_copies = None
+
+            # Retrieve Raised Seal Requested
+            if clients_data_list[clients_data_list.index("RAISEDSEAL") + 1] == "Yes":
+                raised_seal = True
+                raised_seal_copies = clients_data_list[clients_data_list.index("RAISEDSEAL_COPIES") + 1]
+            else:
+                raised_seal = False
+                raised_seal_copies = None
+
+            # Retrieve No Amends Requested
+            if clients_data_list[clients_data_list.index("NOAMENDS_LETTER") + 1] == "Yes":
+                no_amends = True
+                no_amends_copies = clients_data_list[clients_data_list.index("NOAMENDS_COPIES") + 1]
+            else:
+                no_amends = False
+                no_amends_copies = None
 
             # Retrieve delivery method
             _delivery_method = clients_data_list[clients_data_list.index('DELIVERY') + 1].lower()
 
             customer_order = MarriageSearch(
-                groom_last_name=groom_last_name,
-                groom_first_name=groom_first_name,
                 bride_last_name=bride_last_name,
+                bride_middle_name=bride_middle_name,
                 bride_first_name=bride_first_name,
-                num_copies=num_copies,
+                alt_bride_last_name=alt_bride_last_name,
+                alt_bride_middle_name=alt_bride_middle_name,
+                alt_bride_first_name=alt_bride_first_name,
+                groom_last_name=groom_last_name,
+                groom_middle_name=groom_middle_name,
+                groom_first_name=groom_first_name,
+                alt_groom_last_name=alt_groom_last_name,
+                alt_groom_middle_name=alt_groom_middle_name,
+                alt_groom_first_name=alt_groom_first_name,
                 month=month,
                 day=day,
-                years=years,
-                marriage_place=marriage_place,
-                borough=borough,
-                letter=letter,
-                comment=comment,
+                _years=years,
+                _borough=borough,
+                num_copies=num_copies,
+                exemplification=exemplification,
+                exemplification_copies=exemplification_copies,
+                raised_seal=raised_seal,
+                raised_seal_copies=raised_seal_copies,
+                no_amends=no_amends,
+                no_amends_copies=no_amends_copies,
                 _delivery_method=_delivery_method,
-                suborder_number=suborder_number
+                suborder_number=suborder_number,
             )
 
             db.session.add(customer_order)
@@ -782,42 +817,28 @@ def import_file(tree, date_submitted):
             if "IMAGE_IDENTIFIER" in clients_data_list:
                 image_id = clients_data_list[clients_data_list.index("IMAGE_IDENTIFIER") + 1]
 
-            # Retrieve Collection Information (1940's, 1980's, Both)
-            collection = clients_data_list[clients_data_list.index("Collection") + 1]
+            # Retrieve Collection Information (1940 or 1980 or 1940,1980)
+            collection = clients_data_list[clients_data_list.index("COLLECTION") + 1]
 
             # Retrieve Borough Information
             borough = clients_data_list[clients_data_list.index("BOROUGH") + 1]
-
-            # Retrieve Roll Information
-            roll = clients_data_list[clients_data_list.index("ROLL") + 1] if "ROLL" in clients_data_list else None
-
-            # Retrieve Block and Lot of Building
-            block = clients_data_list[clients_data_list.index("BLOCK") + 1] if "BLOCK" in clients_data_list else None
-            lot = clients_data_list[clients_data_list.index("LOT") + 1] if "LOT" in clients_data_list else None
 
             # Retrieve Street Address
             building_number = clients_data_list[clients_data_list.index("STREET_NUMBER") + 1]
             street = clients_data_list[clients_data_list.index("STREET") + 1]
 
-            # Retrieve Building  Description
-            description = clients_data_list[
-                clients_data_list.index("DESCRIPTION") + 1] if "DESCRIPTION" in clients_data_list else None
-
-            # Retrieve Print Size
-            size = clients_data_list[clients_data_list.index("TYPE") + 1]
-
-            # Retrieve Number of Copies
-            num_copies = clients_data_list[
-                clients_data_list.index("COPIES") + 1] if "COPIES" in clients_data_list else 1
+            # Retrieve Block and Lot of Building
+            block = clients_data_list[clients_data_list.index("BLOCK") + 1] if "BLOCK" in clients_data_list else None
+            lot = clients_data_list[clients_data_list.index("LOT") + 1] if "LOT" in clients_data_list else None
 
             # Retrieve Pickup Contact Information
             contact_number = clients_data_list[
-                clients_data_list.index("CONTACT_NUMBER") + 1] if "CONTACT_NUMBER" in clients_data_list else None
+                clients_data_list.index("PICKUP_PHONE") + 1] if "PICKUP_PHONE" in clients_data_list else None
 
-            # Retrieve delivery method
-            _delivery_method = clients_data_list[clients_data_list.index('DELIVERY') + 1].lower()
+            contact_email = clients_data_list[
+                clients_data_list.index("PICKUP_EMAIL") + 1] if "PICKUP_EMAIL" in clients_data_list else None
 
-            if collection == 'Both':
+            if collection == '1940,1980':
                 # Remove old Suborder
                 Suborders.query.filter_by(id=suborder_number).delete()
                 db.session.commit()
@@ -847,48 +868,55 @@ def import_file(tree, date_submitted):
                 suborder_1940.es_create()
                 suborder_1980.es_create()
 
-                # This is to handle "Both" collection choices
-                image_id_1940 = None
-                image_id_1980 = None
-                if image_id is not None and image_id.startswith('nynyma'):
-                    image_id_1940 = image_id
-                else:
-                    image_id_1980 = image_id
+                # Retrieve Print Size
+                size_1940 = clients_data_list[clients_data_list.index("SIZE_1") + 1]
+
+                # Retrieve Number of Copies
+                num_copies_1940 = clients_data_list[clients_data_list.index("COPIES_1") + 1]
+
+                # Retrieve delivery method
+                delivery_method_1940 = clients_data_list[clients_data_list.index('DELIVERY_1') + 1].lower()
 
                 # Create TaxPhoto entry for 1940 print
                 customer_order_1940 = TaxPhoto(
                     borough=borough,
                     collection="1940",
-                    image_id=image_id_1940,
-                    roll=roll,
+                    image_id=image_id,
                     block=block,
                     lot=lot,
                     building_number=building_number,
                     street=street,
-                    description=description,
-                    size=size,
-                    num_copies=num_copies,
-                    _delivery_method=_delivery_method,
+                    size=size_1940,
+                    num_copies=num_copies_1940,
+                    _delivery_method=delivery_method_1940,
                     contact_number=contact_number,
+                    contact_email=contact_email,
                     suborder_number=suborder_1940.id
                 )
                 db.session.add(customer_order_1940)
                 suborder_1940.es_update(customer_order_1940.serialize)
 
+                # Retrieve Print Size
+                size_1980 = clients_data_list[clients_data_list.index("SIZE_2") + 1]
+
+                # Retrieve Number of Copies
+                num_copies_1980 = clients_data_list[clients_data_list.index("COPIES_2") + 1]
+
+                # Retrieve delivery method
+                delivery_method_1980 = clients_data_list[clients_data_list.index('DELIVERY_2') + 1].lower()
+
                 # Create TaxPhoto entry for 1980 print
                 customer_order_1980 = TaxPhoto(
                     borough=borough,
                     collection="1980",
-                    image_id=image_id_1980,
-                    roll=None,
+                    image_id=image_id,
                     block=block,
                     lot=lot,
                     building_number=building_number,
                     street=street,
-                    description=description,
-                    size=size,
-                    num_copies=num_copies,
-                    _delivery_method=_delivery_method,
+                    size=size_1980,
+                    num_copies=num_copies_1980,
+                    _delivery_method=delivery_method_1980,
                     contact_number=contact_number,
                     suborder_number=suborder_1980.id
                 )
@@ -898,14 +926,12 @@ def import_file(tree, date_submitted):
                 insert_event = [
                     Events(suborder_number=suborder_1940.id,
                            type_=event_type.INITIAL_IMPORT,
-                           # user_email=current_user.email,
                            previous_value=None,
                            new_value={
                                'status': status.RECEIVED,
                            }),
                     Events(suborder_number=suborder_1980.id,
                            type_=event_type.INITIAL_IMPORT,
-                           # user_email=current_user.email,
                            previous_value=None,
                            new_value={
                                'status': status.RECEIVED,
@@ -914,16 +940,23 @@ def import_file(tree, date_submitted):
                 db.session.bulk_save_objects(insert_event)
 
             else:
+                # Retrieve Print Size
+                size = clients_data_list[clients_data_list.index("SIZE_1") + 1]
+
+                # Retrieve Number of Copies
+                num_copies = clients_data_list[clients_data_list.index("COPIES_1") + 1]
+
+                # Retrieve delivery method
+                _delivery_method = clients_data_list[clients_data_list.index('DELIVERY_1') + 1].lower()
+
                 customer_order = TaxPhoto(
                     borough=borough,
                     collection=collection,
                     image_id=image_id,
-                    roll=roll,
                     block=block,
                     lot=lot,
                     building_number=building_number,
                     street=street,
-                    description=description,
                     size=size,
                     num_copies=num_copies,
                     _delivery_method=_delivery_method,
@@ -938,16 +971,6 @@ def import_file(tree, date_submitted):
             # Retrieve Photo ID
             image_id = clients_data_list[clients_data_list.index("IMAGE_IDENTIFIER") + 1]
 
-            # Retrieve Photo Description
-            description = clients_data_list[
-                clients_data_list.index("IMAGE_DESCRIPTION") + 1] \
-                if "IMAGE_DESCRIPTION" in clients_data_list else None
-
-            # Retrieve Additional Description
-            additional_description = clients_data_list[
-                clients_data_list.index("ADDITIONAL_DESCRIPTION") + 1] \
-                if "ADDITIONAL_DESCRIPTION" in clients_data_list else None
-
             # Retrieve Print size
             size = clients_data_list[clients_data_list.index("SIZE") + 1]
 
@@ -955,13 +978,16 @@ def import_file(tree, date_submitted):
             num_copies = clients_data_list[
                 clients_data_list.index("COPIES") + 1] if "COPIES" in clients_data_list else 1
 
+            # Retrieve delivery method
+            _delivery_method = clients_data_list[clients_data_list.index('DELIVERY') + 1].lower()
+
             # Retrieve Pickup Contact Information
             contact_number = clients_data_list[
-                clients_data_list.index("CONTACT_NUMBER") + 1] if "CONTACT_NUMBER" in clients_data_list else None
+                clients_data_list.index("PICKUP_PHONE") + 1] if "PICKUP_PHONE" in clients_data_list else None
 
-            # Retrieve Comment
-            comment = clients_data_list[
-                clients_data_list.index("COMMENTS") + 1] if "COMMENTS" in clients_data_list else None
+            # Retrieve Pickup Contact Information
+            contact_email = clients_data_list[
+                clients_data_list.index("PICKUP_EMAIL") + 1] if "PICKUP_EMAIL" in clients_data_list else None
 
             # Retrieve Personal Use Agreement
             if clients_data_list[
@@ -971,27 +997,19 @@ def import_file(tree, date_submitted):
             else:
                 personal_use_agreement = False
 
-            # Retrieve delivery method
-            _delivery_method = clients_data_list[clients_data_list.index('DELIVERY') + 1].lower()
-
-            if _delivery_method == "print and mail":
-                _delivery_method = "mail"
-
-            customer_order = PhotoGallery(
+            photo_gallery = PhotoGallery(
                 image_id=image_id,
-                description=description,
-                additional_description=additional_description,
                 size=size,
                 num_copies=num_copies,
                 _delivery_method=_delivery_method,
                 contact_number=contact_number,
+                contact_email=contact_email,
                 personal_use_agreement=personal_use_agreement,
-                comment=comment,
                 suborder_number=suborder_number)
 
-            db.session.add(customer_order)
+            db.session.add(photo_gallery)
             db.session.commit()
-            suborder.es_update(customer_order.serialize)
+            suborder.es_update(photo_gallery.serialize)
 
         # OCME
         if client_id == "10000120":
