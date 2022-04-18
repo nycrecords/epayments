@@ -66,8 +66,8 @@ class MarriageSearch(db.Model):
             self,
             bride_last_name,
             groom_last_name,
-            _years,
-            _borough,
+            years,
+            borough,
             num_copies,
             raised_seal,
             no_amends,
@@ -106,9 +106,9 @@ class MarriageSearch(db.Model):
         self.alt_groom_first_name = alt_groom_first_name
         self.month = month
         self.day = day
-        self._years = _years
+        self.years = years
         self.marriage_place = marriage_place
-        self._borough = _borough
+        self.borough = borough
         self.num_copies = num_copies
         self.exemplification = exemplification
         self.exemplification_copies = exemplification_copies
@@ -166,9 +166,9 @@ class MarriageSearch(db.Model):
             'alt_groom_first_name': self.alt_groom_first_name,
             'month': self.month,
             'day': self.day,
-            '_years': self._years,
+            'years': self.years,
             'marriage_place': self.marriage_place,
-            '_borough': self._borough,
+            'borough': self.borough,
             'num_copies': self.num_copies,
             'exemplification': self.exemplification,
             'exemplification_copies': self.exemplification_copies,
@@ -207,17 +207,30 @@ class MarriageCertificate(db.Model):
     __tablename__ = 'marriage_cert'
     id = db.Column(db.Integer, primary_key=True)
     certificate_number = db.Column(db.String(40))
-    groom_last_name = db.Column(db.String(25), nullable=False)
-    groom_first_name = db.Column(db.String(40), nullable=True)
     bride_last_name = db.Column(db.String(25), nullable=False)
+    bride_middle_name = db.Column(db.String(40), nullable=True)
     bride_first_name = db.Column(db.String(40), nullable=True)
-    num_copies = db.Column(db.String(40), nullable=False)
+    alt_bride_last_name = db.Column(db.String(25), nullable=True)
+    alt_bride_middle_name = db.Column(db.String(40), nullable=True)
+    alt_bride_first_name = db.Column(db.String(40), nullable=True)
+    groom_last_name = db.Column(db.String(25), nullable=False)
+    groom_middle_name = db.Column(db.String(40), nullable=True)
+    groom_first_name = db.Column(db.String(40), nullable=True)
+    alt_groom_last_name = db.Column(db.String(25), nullable=True)
+    alt_groom_middle_name = db.Column(db.String(40), nullable=True)
+    alt_groom_first_name = db.Column(db.String(40), nullable=True)
     month = db.Column(db.String(20), nullable=True)
     day = db.Column(db.String(2), nullable=True)
     _years = db.Column(ARRAY(db.String(4), dimensions=1), nullable=True, name='years')
     marriage_place = db.Column(db.String(40), nullable=True)
     _borough = db.Column(ARRAY(db.String(20), dimensions=1), nullable=False, name='borough')
-    letter = db.Column(db.Boolean, nullable=True)
+    num_copies = db.Column(db.String(40), nullable=False)
+    exemplification = db.Column(db.Boolean, nullable=True)
+    exemplification_copies = db.Column(db.String(1), nullable=True)
+    raised_seal = db.Column(db.Boolean, nullable=False)
+    raised_seal_copies = db.Column(db.String(1), nullable=True)
+    no_amends = db.Column(db.Boolean, nullable=False)
+    no_amends_copies = db.Column(db.String(1), nullable=True)
     comment = db.Column(db.String(255), nullable=True)
     delivery_method = db.Column(
         db.Enum(
@@ -253,13 +266,13 @@ class MarriageCertificate(db.Model):
         self.bride_last_name = bride_last_name
         self.bride_first_name = bride_first_name
         self.num_copies = num_copies
-        self.month = month or None
-        self.day = day or None
-        self._years = years or None
-        self.marriage_place = marriage_place or None
-        self._borough = borough or None
-        self.letter = letter or None
-        self.comment = comment or None
+        self.month = month
+        self.day = day
+        self.years = years
+        self.marriage_place = marriage_place
+        self.borough = borough
+        self.letter = letter
+        self.comment = comment
         self.delivery_method = _delivery_method
         self.suborder_number = suborder_number
 
@@ -303,9 +316,9 @@ class MarriageCertificate(db.Model):
             'num_copies': self.num_copies,
             'month': self.month,
             'day': self.day,
-            'years': self.years if self.years is not None else "",
+            'years': self.years,
             'marriage_place': self.marriage_place,
-            'borough': self.borough if self.borough is not None else "",
+            'borough': self.borough,
             'letter': self.letter,
             'comment': self.comment,
             'delivery_method': self.delivery_method,

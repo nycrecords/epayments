@@ -29,14 +29,14 @@ class TaxPhoto extends React.Component{
                 <div className="-row">
                     <div className="-fourth"> Collection: </div>
                     <div className="-two-thirds">
-                        {this.props.order_info["metadata"]["collection"] ? this.props.order_info["metadata"]["collection"] : ""}
+                        {this.props.order_info["metadata"]["collection"]}
                     </div>
                 </div>
 
                 <div className="-row">
                     <div className="-fourth"> Borough: </div>
                     <div className="-two-thirds">
-                        {this.props.order_info["metadata"]["borough"]  ? this.props.order_info["metadata"]["borough"] : ""}
+                        {this.props.order_info["metadata"]["borough"]}
                     </div>
                 </div>
 
@@ -64,14 +64,14 @@ class TaxPhoto extends React.Component{
                 <div className="-row">
                     <div className="-fourth"> Building Number: </div>
                     <div className="-two-thirds">
-                        {this.props.order_info["metadata"]["building_number"] ? this.props.order_info["metadata"]["building_number"]: ""}
+                        {this.props.order_info["metadata"]["building_number"]}
                     </div>
                 </div>
 
                 <div className="-row">
                     <div className="-fourth"> Street: </div>
                     <div className="-two-thirds">
-                        {this.props.order_info["metadata"]["street"] ? this.props.order_info["metadata"]["street"]: ""}
+                        {this.props.order_info["metadata"]["street"]}
                     </div>
                 </div>
 
@@ -85,7 +85,7 @@ class TaxPhoto extends React.Component{
                 <div className="-row">
                     <div className="-fourth"> Size: </div>
                     <div className="-two-thirds">
-                        {this.props.order_info["metadata"]["size"] ? this.props.order_info["metadata"]["size"]: ""}
+                        {this.props.order_info["metadata"]["size"]}
                     </div>
                 </div>
 

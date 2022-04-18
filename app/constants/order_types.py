@@ -15,6 +15,7 @@ TAX_PHOTO = "Tax Photo"
 PHOTO_GALLERY = "Photo Gallery"
 PROPERTY_CARD = "Property Card"
 OCME = "OCME"
+HVR = "HVR"
 PHOTOS = 'photos'
 VITAL_RECORDS = 'vital_records'
 
@@ -46,4 +47,5 @@ CLIENT_ID_DICT = {
     "10000060": "Photo Gallery",
     "10000110": "Property Card",
     "10000120": "OCME",
+    "10000107": "HVR",
 }

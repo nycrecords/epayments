@@ -32,17 +32,26 @@ class DeathSearch(db.Model):
     last_name = db.Column(db.String(25), nullable=False)
     first_name = db.Column(db.String(40), nullable=True)
     middle_name = db.Column(db.String(40), nullable=True)
+    alt_last_name = db.Column(db.String(25), nullable=True)
+    alt_first_name = db.Column(db.String(40), nullable=True)
+    alt_middle_name = db.Column(db.String(40), nullable=True)
     num_copies = db.Column(db.String(40), nullable=False)
     cemetery = db.Column(db.String(40), nullable=True)
     month = db.Column(db.String(20), nullable=True)
     day = db.Column(db.String(2), nullable=True)
     _years = db.Column(ARRAY(db.String(4), dimensions=1), nullable=False, name='years')
+    age_at_death = db.Column(db.String(3), nullable=True)
     death_place = db.Column(db.String(40), nullable=True)
     _borough = db.Column(ARRAY(db.String(20), dimensions=1), nullable=False, name='borough')
-    father_name = db.Column(db.String(30), nullable=True)
-    mother_name = db.Column(db.String(30), nullable=True)
-    letter = db.Column(db.Boolean, nullable=True)
+    father_name = db.Column(db.String(105), nullable=True)
+    mother_name = db.Column(db.String(105), nullable=True)
     comment = db.Column(db.String(255), nullable=True)
+    exemplification = db.Column(db.Boolean, nullable=True)
+    exemplification_copies = db.Column(db.String(1), nullable=True)
+    raised_seal = db.Column(db.Boolean, nullable=False)
+    raised_seal_copies = db.Column(db.String(1), nullable=True)
+    no_amends = db.Column(db.Boolean, nullable=False)
+    no_amends_copies = db.Column(db.String(1), nullable=True)
     delivery_method = db.Column(
         db.Enum(
             delivery_method.MAIL,
@@ -56,36 +65,54 @@ class DeathSearch(db.Model):
     def __init__(
             self,
             last_name,
-            first_name,
-            middle_name,
             num_copies,
-            cemetery,
-            month,
-            day,
             years,
-            death_place,
             borough,
-            father_name,
-            mother_name,
-            letter,
-            comment,
+            exemplification,
+            raised_seal,
+            no_amends,
             _delivery_method,
-            suborder_number
+            suborder_number,
+            first_name=None,
+            middle_name=None,
+            alt_last_name=None,
+            alt_first_name=None,
+            alt_middle_name=None,
+            cemetery=None,
+            month=None,
+            day=None,
+            age_at_death=None,
+            death_place=None,
+            father_name=None,
+            mother_name=None,
+            comment=None,
+            exemplification_copies=None,
+            raised_seal_copies=None,
+            no_amends_copies=None,
     ):
         self.last_name = last_name
         self.first_name = first_name
         self.middle_name = middle_name
-        self.num_copies = num_copies or None
-        self.cemetery = cemetery or None
-        self.month = month or None
-        self.day = day or None
-        self._years = years or None
-        self.death_place = death_place or None
+        self.alt_last_name = alt_last_name
+        self.alt_first_name = alt_first_name
+        self.alt_middle_name = alt_middle_name
+        self.num_copies = num_copies
+        self.cemetery = cemetery
+        self.month = month
+        self.day = day
+        self._years = years
+        self.age_at_death = age_at_death
+        self.death_place = death_place
         self._borough = borough
         self.father_name = father_name
         self.mother_name = mother_name
-        self.letter = letter or None
-        self.comment = comment or None
+        self.comment = comment
+        self.exemplification = exemplification
+        self.exemplification_copies = exemplification_copies
+        self.raised_seal = raised_seal
+        self.raised_seal_copies = raised_seal_copies
+        self.no_amends = no_amends
+        self.no_amends_copies = no_amends_copies
         self.delivery_method = _delivery_method
         self.suborder_number = suborder_number
 
@@ -121,17 +148,26 @@ class DeathSearch(db.Model):
             'first_name': self.first_name,
             'last_name': self.last_name,
             'middle_name': self.middle_name,
+            'alt_last_name': self.alt_last_name,
+            'alt_first_name': self.alt_first_name,
+            'alt_middle_name': self.alt_middle_name,
             'num_copies': self.num_copies,
             'cemetery': self.cemetery,
             'month': self.month,
             'day': self.day,
             'years': self.years,
+            'age_at_death': self.age_at_death,
             'death_place': self.death_place,
             'borough': self.borough,
             'father_name': self.father_name,
             'mother_name': self.mother_name,
-            'letter': self.letter,
             'comment': self.comment,
+            'exemplification': self.exemplification,
+            'exemplification_copies': self.exemplification_copies,
+            'raised_seal': self.raised_seal,
+            'raised_seal_copies': self.raised_seal_copies,
+            'no_amends': self.no_amends,
+            'no_amends_copies': self.no_amends_copies,
             'delivery_method': self.delivery_method,
             'suborder_number': self.suborder_number
         }
@@ -167,17 +203,26 @@ class DeathCertificate(db.Model):
     last_name = db.Column(db.String(25), nullable=False)
     first_name = db.Column(db.String(40), nullable=True)
     middle_name = db.Column(db.String(40), nullable=True)
+    alt_last_name = db.Column(db.String(25), nullable=True)
+    alt_first_name = db.Column(db.String(40), nullable=True)
+    alt_middle_name = db.Column(db.String(40), nullable=True)
     num_copies = db.Column(db.String(40), nullable=True)
     cemetery = db.Column(db.String(40), nullable=True)
     month = db.Column(db.String(20), nullable=True)
     day = db.Column(db.String(2), nullable=True)
     _years = db.Column(ARRAY(db.String(4), dimensions=1), nullable=False, name='years')
+    age_at_death = db.Column(db.String(3), nullable=True)
     death_place = db.Column(db.String(40), nullable=True)
     _borough = db.Column(ARRAY(db.String(20), dimensions=1), nullable=False, name='borough')
-    father_name = db.Column(db.String(30), nullable=True)
-    mother_name = db.Column(db.String(30), nullable=True)
-    letter = db.Column(db.Boolean, nullable=True)
+    father_name = db.Column(db.String(105), nullable=True)
+    mother_name = db.Column(db.String(105), nullable=True)
     comment = db.Column(db.String(255), nullable=True)
+    exemplification = db.Column(db.Boolean, nullable=True)
+    exemplification_copies = db.Column(db.String(1), nullable=True)
+    raised_seal = db.Column(db.Boolean, nullable=False)
+    raised_seal_copies = db.Column(db.String(1), nullable=True)
+    no_amends = db.Column(db.Boolean, nullable=False)
+    no_amends_copies = db.Column(db.String(1), nullable=True)
     delivery_method = db.Column(
         db.Enum(
             delivery_method.MAIL,
@@ -192,37 +237,56 @@ class DeathCertificate(db.Model):
             self,
             certificate_number,
             last_name,
-            first_name,
-            middle_name,
             num_copies,
-            cemetery,
-            month,
-            day,
             years,
-            death_place,
             borough,
-            father_name,
-            mother_name,
-            letter,
-            comment,
+            exemplification,
+            raised_seal,
+            no_amends,
             _delivery_method,
-            suborder_number
+            suborder_number,
+            first_name=None,
+            middle_name=None,
+            alt_last_name=None,
+            alt_first_name=None,
+            alt_middle_name=None,
+            cemetery=None,
+            month=None,
+            day=None,
+            age_at_death=None,
+            death_place=None,
+            father_name=None,
+            mother_name=None,
+            comment=None,
+            exemplification_copies=None,
+            raised_seal_copies=None,
+            no_amends_copies=None,
+
     ):
         self.certificate_number = certificate_number
         self.last_name = last_name
         self.first_name = first_name
         self.middle_name = middle_name
-        self.num_copies = num_copies or None
-        self.cemetery = cemetery or None
-        self.month = month or None
-        self.day = day or None
+        self.alt_last_name = alt_last_name
+        self.alt_first_name = alt_first_name
+        self.alt_middle_name = alt_middle_name
+        self.num_copies = num_copies
+        self.cemetery = cemetery
+        self.month = month
+        self.day = day
         self._years = years
-        self.death_place = death_place or None
+        self.age_at_death = age_at_death
+        self.death_place = death_place
         self._borough = borough
         self.father_name = father_name
         self.mother_name = mother_name
-        self.letter = letter or None
-        self.comment = comment or None
+        self.comment = comment
+        self.exemplification = exemplification
+        self.exemplification_copies = exemplification_copies
+        self.raised_seal = raised_seal
+        self.raised_seal_copies = raised_seal_copies
+        self.no_amends = no_amends
+        self.no_amends_copies = no_amends_copies
         self.delivery_method = _delivery_method
         self.suborder_number = suborder_number
 
@@ -259,17 +323,26 @@ class DeathCertificate(db.Model):
             'first_name': self.first_name,
             'last_name': self.last_name,
             'middle_name': self.middle_name,
+            'alt_last_name': self.alt_last_name,
+            'alt_first_name': self.alt_first_name,
+            'alt_middle_name': self.alt_middle_name,
             'num_copies': self.num_copies,
             'cemetery': self.cemetery,
             'month': self.month,
             'day': self.day,
             'years': self.years,
+            'age_at_death': self.age_at_death,
             'death_place': self.death_place,
             'borough': self.borough,
             'father_name': self.father_name,
             'mother_name': self.mother_name,
-            'letter': self.letter,
             'comment': self.comment,
+            'exemplification': self.exemplification,
+            'exemplification_copies': self.exemplification_copies,
+            'raised_seal': self.raised_seal,
+            'raised_seal_copies': self.raised_seal_copies,
+            'no_amends': self.no_amends,
+            'no_amends_copies': self.no_amends_copies,
             'delivery_method': self.delivery_method,
             'suborder_number': self.suborder_number
         }

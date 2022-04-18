@@ -12,8 +12,11 @@ from app.models import (
     BirthCertificate,
     DeathSearch,
     DeathCertificate,
+    HVR,
     MarriageSearch,
     MarriageCertificate,
+    NoAmends,
+    OCME,
     Orders,
     PhotoGallery,
     Suborders,
@@ -113,9 +116,12 @@ def create_docs():
         order_types.MARRIAGE_CERT: MarriageCertificate,
         order_types.DEATH_SEARCH: DeathSearch,
         order_types.DEATH_CERT: DeathCertificate,
+        order_types.NO_AMENDS: NoAmends,
         order_types.TAX_PHOTO: TaxPhoto,
         order_types.PHOTO_GALLERY: PhotoGallery,
         order_types.PROPERTY_CARD: PropertyCard,
+        order_types.HVR: HVR,
+        order_types.OCME: OCME,
     }
 
     operations = []

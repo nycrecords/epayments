@@ -18,12 +18,10 @@ class MarriageSearch extends React.Component{
                 <strong>E-mail:</strong> {this.props.order_info["customer"]["email"]} <br/>
                 <strong>Suborder Number</strong> {this.props.order_info["suborder_number"]} <br/> <br/>
 
-
-
                 <div className="-row">
                     <div className="-fourth"> Groom Last Name: </div>
                     <div className="-two-thirds">
-                        {this.props.order_info["metadata"]["groom_last_name"] ? this.props.order_info["metadata"]["groom_last_name"] : ""}
+                        {this.props.order_info["metadata"]["groom_last_name"]}
                     </div>
                 </div>
 
@@ -35,9 +33,16 @@ class MarriageSearch extends React.Component{
                 </div>
 
                 <div className="-row">
+                    <div className="-fourth"> Groom Middle Name: </div>
+                    <div className="-two-thirds">
+                        {this.props.order_info["metadata"]["groom_middle_name"] ? this.props.order_info["metadata"]["groom_middle_name"] : ""}
+                    </div>
+                </div>
+
+                <div className="-row">
                     <div className="-fourth"> Bride Last Name: </div>
                     <div className="-two-thirds">
-                        {this.props.order_info["metadata"]["bride_last_name"] ? this.props.order_info["metadata"]["bride_last_name"] : ""}
+                        {this.props.order_info["metadata"]["bride_last_name"]}
                     </div>
                 </div>
 
@@ -49,9 +54,51 @@ class MarriageSearch extends React.Component{
                 </div>
 
                 <div className="-row">
-                    <div className="-fourth"> Number of Copies: </div>
+                    <div className="-fourth"> Bride Middle Name: </div>
                     <div className="-two-thirds">
-                        {this.props.order_info["metadata"]["num_copies"] ? this.props.order_info["metadata"]["num_copies"] : ""}
+                        {this.props.order_info["metadata"]["bride_middle_name"] ? this.props.order_info["metadata"]["bride_middle_name"] : ""}
+                    </div>
+                </div>
+
+                <div className="-row">
+                    <div className="-fourth"> Alt Groom Last Name: </div>
+                    <div className="-two-thirds">
+                        {this.props.order_info["metadata"]["alt_groom_last_name"] ? this.props.order_info["metadata"]["alt_groom_last_name"] : ""}
+                    </div>
+                </div>
+
+                <div className="-row">
+                    <div className="-fourth"> Alt Groom First Name: </div>
+                    <div className="-two-thirds">
+                        {this.props.order_info["metadata"]["alt_groom_first_name"] ? this.props.order_info["metadata"]["alt_groom_first_name"] : ""}
+                    </div>
+                </div>
+
+                <div className="-row">
+                    <div className="-fourth"> Alt Groom Middle Name: </div>
+                    <div className="-two-thirds">
+                        {this.props.order_info["metadata"]["alt_groom_middle_name"] ? this.props.order_info["metadata"]["alt_groom_middle_name"] : ""}
+                    </div>
+                </div>
+
+                <div className="-row">
+                    <div className="-fourth"> Alt Bride Last Name: </div>
+                    <div className="-two-thirds">
+                        {this.props.order_info["metadata"]["alt_bride_last_name"] ? this.props.order_info["metadata"]["alt_bride_last_name"] : ""}
+                    </div>
+                </div>
+
+                <div className="-row">
+                    <div className="-fourth"> Alt Bride First Name: </div>
+                    <div className="-two-thirds">
+                        {this.props.order_info["metadata"]["alt_bride_first_name"] ? this.props.order_info["metadata"]["alt_bride_first_name"] : ""}
+                    </div>
+                </div>
+
+                <div className="-row">
+                    <div className="-fourth"> Alt Bride Middle Name: </div>
+                    <div className="-two-thirds">
+                        {this.props.order_info["metadata"]["alt_bride_middle_name"] ? this.props.order_info["metadata"]["alt_bride_middle_name"] : ""}
                     </div>
                 </div>
 
@@ -72,7 +119,7 @@ class MarriageSearch extends React.Component{
                 <div className="-row">
                     <div className="-fourth"> Years: </div>
                     <div className="-two-thirds">
-                        {this.props.order_info["metadata"]["years"] ? this.props.order_info["metadata"]["years"] : ""}
+                        {this.props.order_info["metadata"]["years"]}
                     </div>
                 </div>
 
@@ -86,19 +133,60 @@ class MarriageSearch extends React.Component{
                 <div className="-row">
                     <div className="-fourth"> Borough: </div>
                     <div className="-two-thirds">
-                        {this.props.order_info["metadata"]["borough"] ? this.props.order_info["metadata"]["borough"] : ""}
+                        {this.props.order_info["metadata"]["borough"]}
                     </div>
                 </div>
 
                 <div className="-row">
-                    <div className="-fourth"> Letter: </div>
-                    <div className="-two-thirds"> {this.props.order_info["metadata"]["letter"] ? "Yes" : "No"} </div>
+                    <div className="-fourth"> Number of Copies: </div>
+                    <div className="-two-thirds">
+                        {this.props.order_info["metadata"]["num_copies"]}
+                    </div>
                 </div>
 
                 <div className="-row">
-                    <div className="-fourth"> Comment: </div>
-                    <div className="-two-thirds"> {this.props.order_info["metadata"]["comment"]} </div>
+                    <div className="-fourth"> Exemplification:</div>
+                    <div
+                        className="-two-thirds"> {this.props.order_info["metadata"]["exemplification"] ? "Yes" : "No"}</div>
                 </div>
+
+                {this.props.order_info["metadata"]["exemplification"] &&
+                <div className="-row">
+                    <div className="-fourth"> Exemplification Copies:</div>
+                    <div className="-two-thirds">
+                        {this.props.order_info["metadata"]["exemplification_copies"] ? this.props.order_info["metadata"]["exemplification_copies"] : ""}
+                    </div>
+                </div>
+                }
+
+                <div className="-row">
+                    <div className="-fourth"> Raised Seal:</div>
+                    <div
+                        className="-two-thirds"> {this.props.order_info["metadata"]["raised_seal"] ? "Yes" : "No"}</div>
+                </div>
+
+                {this.props.order_info["metadata"]["raised_seal"] &&
+                <div className="-row">
+                    <div className="-fourth"> Raised Seal Copies:</div>
+                    <div className="-two-thirds">
+                        {this.props.order_info["metadata"]["raised_seal_copies"] ? this.props.order_info["metadata"]["raised_seal_copies"] : ""}
+                    </div>
+                </div>
+                }
+
+                <div className="-row">
+                    <div className="-fourth"> No Amends:</div>
+                    <div className="-two-thirds"> {this.props.order_info["metadata"]["no_amends"] ? "Yes" : "No"}</div>
+                </div>
+
+                {this.props.order_info["metadata"]["no_amends"] &&
+                <div className="-row">
+                    <div className="-fourth"> No Amends Copies:</div>
+                    <div className="-two-thirds">
+                        {this.props.order_info["metadata"]["no_amends_copies"] ? this.props.order_info["metadata"]["no_amends_copies"] : ""}
+                    </div>
+                </div>
+                }
 
                 <div className="-row">
                     <div className="-fourth"> Delivery Method: </div>

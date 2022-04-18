@@ -1,4 +1,5 @@
 import pytz
+from datetime import date
 from elasticsearch import Elasticsearch
 from flask import Flask
 from flask_apscheduler import APScheduler
@@ -8,6 +9,7 @@ from flask_mail import Mail
 from flask_sqlalchemy import SQLAlchemy
 
 from config import config, Config
+from app.lib.nycholidays import NYCHolidays
 
 # Flask extensions
 bootstrap = Bootstrap()
@@ -21,6 +23,8 @@ PYTZ_TIMEZONE = pytz.timezone(Config.TIME_ZONE)
 
 # ElasticSearch Extension
 es = Elasticsearch(Config.ELASTICSEARCH_URL)
+
+nyc_holidays = NYCHolidays(years=[year for year in range(date.today().year, date.today().year + 1)])
 
 
 def create_app(config_name):

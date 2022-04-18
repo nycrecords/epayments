@@ -18,10 +18,10 @@ def index():
         "DO-Auth-Key": "4a51fbce615443edb6ca4e3f2c3622ad"
     }
     params = {
-        "start": "2022-02-24T00:00:00",
-        "end": "2022-02-25T00:00:00"
-        # "start": "2022-03-28T00:00:00",
-        # "end": "2022-03-29T00:00:00"
+        # "start": "2022-02-24T00:00:00",
+        # "end": "2022-02-25T00:00:00"
+        "start": "2022-04-11T00:00:00",
+        "end": "2022-04-16T00:00:00"
     }
     response = requests.get("https://dorisorders-stg.csc.nycnet/dorisorders/api/system/dorfiles", headers=headers, params=params, verify=False)
     files_list = response.json()["files"]
@@ -29,7 +29,19 @@ def index():
         resp = requests.get(item["xmlFile"]["url"], verify=False)
         tree = ElementTree.fromstring(resp.text)
         date_submitted = datetime.strptime(item["xmlFile"]["name"].split("DOR")[1].split("_")[0], "%Y%m%d%H%M%S")
-        # import_file(tree, date_submitted)
+        if "fileUploads" in item:
+            uploads_list = item['fileUploads']
+
+            for upload in uploads_list:
+                r = requests.get(upload["files"][0]["url"])
+                directory = os.path.join(current_app.config["NO_AMENDS_FILE_PATH"], upload["orderNo"])
+                os.makedirs(directory, exist_ok=True)
+
+                file = os.path.join(directory, upload["files"][0]["name"])
+
+                with open(file, "wb") as f:
+                    f.write(r.content)
+        import_file(tree, date_submitted)
     return render_template('index.html')
 
 

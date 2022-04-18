@@ -1,18 +1,20 @@
-import xml.etree.ElementTree as ET
-from time import localtime, strftime
-from datetime import datetime, date
-
 import os
 import smtplib
+import xml.etree.ElementTree as ET
+from datetime import datetime
+from time import localtime, strftime
+
 from flask import current_app
 
 from app import db, scheduler
 from app.constants import event_type
 from app.constants import status
 from app.constants.order_types import CLIENT_ID_DICT
+from app.date_utils import calculate_date_received
 from app.file_utils import sftp_ctx
-from app.models import Orders, Events, BirthSearch, BirthCertificate, MarriageCertificate, \
-    MarriageSearch, DeathCertificate, DeathSearch, PhotoGallery, TaxPhoto, PropertyCard, Customers, Suborders, OCME
+from app.models import Orders, Events, BirthSearch, BirthCertificate, HVR, MarriageCertificate, \
+    MarriageSearch, DeathCertificate, DeathSearch, PhotoGallery, TaxPhoto, PropertyCard, Customers, Suborders, OCME, \
+    NoAmends
 from app.search.utils import delete_doc
 
 
@@ -132,20 +134,7 @@ def import_file(tree, date_submitted):
     confirmation_message = tree.find('ConfirmationMessage').text
 
     # 4. Get Order Date Information in EST.
-    date_received = date.today()
-
-    # For DEV where vagrant RHEL environment is UTC
-    # date_submitted = utc_to_local(
-    #     datetime.fromtimestamp(
-    #         os.path.getmtime(file_name)
-    #     ),
-    #     'US/Eastern'
-    # )
-
-    # For servers where RHEL environment is EST
-    # date_submitted = datetime.fromtimestamp(
-    #     os.path.getmtime(file_name)
-    # )
+    date_received = calculate_date_received()
 
     # 5. Get Client Data information
     clients_data = tree.find('ClientsData').text
@@ -257,6 +246,8 @@ def import_file(tree, date_submitted):
         #     "10000182": "Death Cert",
         #     "10000110": "Property Card",
         #     "10000120": "OCME",
+        #     "10000106": "No Amends",
+        #     "10000107": "HVR",
         # }
 
         # Birth Search
@@ -264,10 +255,16 @@ def import_file(tree, date_submitted):
             # Retrieve the Certificate Name (First Name, Last Name, Middle Name)
             first_name = clients_data_list[
                 clients_data_list.index("FIRSTNAME") + 1] if "FIRSTNAME" in clients_data_list else None
-            last_name = clients_data_list[
-                clients_data_list.index("LASTNAME") + 1] if "LASTNAME" in clients_data_list else None
+            last_name = clients_data_list[clients_data_list.index("LASTNAME") + 1]
             middle_name = clients_data_list[
                 clients_data_list.index("MIDDLENAME") + 1] if "MIDDLENAME" in clients_data_list else None
+
+            alt_first_name = clients_data_list[
+                clients_data_list.index("ALTFIRSTNAME") + 1] if "ALTFIRSTNAME" in clients_data_list else None
+            alt_last_name = clients_data_list[
+                clients_data_list.index("ALTLASTNAME") + 1] if "ALTLASTNAME" in clients_data_list else None
+            alt_middle_name = clients_data_list[
+                clients_data_list.index("ALTMIDDLENAME") + 1] if "ALTMIDDLENAME" in clients_data_list else None
 
             # Pull the gender type
             gender = clients_data_list[
@@ -275,42 +272,52 @@ def import_file(tree, date_submitted):
 
             # Retrieve Fathers Name
             father_name = clients_data_list[
-                clients_data_list.index("FATHER_NAME") + 1] if "FATHER_NAME" in clients_data_list else None
+                clients_data_list.index("FATHERNAME") + 1] if "FATHERNAME" in clients_data_list else None
 
             # Retrieve Mother's Name
             mother_name = clients_data_list[
-                clients_data_list.index("MOTHER_NAME") + 1] if "MOTHER_NAME" in clients_data_list else None
+                clients_data_list.index("MOTHERNAME") + 1] if "MOTHERNAME" in clients_data_list else None
 
             # Retrieve Number of Copies
             num_copies = clients_data_list[
-                clients_data_list.index("ADDITIONAL_COPY") + 1] if "ADDITIONAL_COPY" in clients_data_list else 1
+                clients_data_list.index("COPIES") + 1] if "COPIES" in clients_data_list else 1
 
             # Retrieve the Birth Date (Month, Day, Years)
             month = clients_data_list[clients_data_list.index("MONTH") + 1] if "MONTH" in clients_data_list else None
             day = clients_data_list[clients_data_list.index("DAY") + 1] if "DAY" in clients_data_list else None
-            years = clients_data_list[clients_data_list.index("YEAR_") + 1] if "YEAR_" in clients_data_list else None
+            years = clients_data_list[clients_data_list.index("YEAR") + 1]
             if years:
                 years = years.split(',')
                 years = list(filter(bool, years))
-
-            # Retrieve Birth Place
-            birth_place = clients_data_list[
-                clients_data_list.index("BIRTH_PLACE") + 1] if "BIRTH_PLACE" in clients_data_list else None
 
             # Retrieve Birth Borough
             borough = clients_data_list[clients_data_list.index("BOROUGH") + 1]
             borough = borough.split(',')
             borough = list(filter(bool, borough))
 
-            # Retrieve Comments
-            comment = clients_data_list[
-                clients_data_list.index("ADD_COMMENT") + 1] if "ADD_COMMENT" in clients_data_list else None
-
             # Retrieve Exemplification Letter Requested
-            if clients_data_list[clients_data_list.index("LETTER") + 1] if "LETTER" in clients_data_list else None:
-                letter = True
+            if clients_data_list[clients_data_list.index("EXEMPLIFICATION_LETTER") + 1] == "Yes":
+                exemplification = True
+                exemplification_copies = clients_data_list[clients_data_list.index("LOE_COPIES") + 1]
             else:
-                letter = False
+                exemplification = False
+                exemplification_copies = None
+
+            # Retrieve Raised Seal Requested
+            if clients_data_list[clients_data_list.index("RAISEDSEAL") + 1] == "Yes":
+                raised_seal = True
+                raised_seal_copies = clients_data_list[clients_data_list.index("RAISEDSEAL_COPIES") + 1]
+            else:
+                raised_seal = False
+                raised_seal_copies = None
+
+            # Retrieve No Amends Requested
+            if clients_data_list[clients_data_list.index("NOAMENDS_LETTER") + 1] == "Yes":
+                no_amends = True
+                no_amends_copies = clients_data_list[clients_data_list.index("NOAMENDS_COPIES") + 1]
+            else:
+                no_amends = False
+                no_amends_copies = None
 
             # Retrieve delivery method
             _delivery_method = clients_data_list[clients_data_list.index('DELIVERY') + 1].lower()
@@ -319,6 +326,9 @@ def import_file(tree, date_submitted):
                 first_name=first_name,
                 last_name=last_name,
                 middle_name=middle_name,
+                alt_first_name=alt_first_name,
+                alt_last_name=alt_last_name,
+                alt_middle_name=alt_middle_name,
                 gender=gender,
                 father_name=father_name,
                 mother_name=mother_name,
@@ -326,10 +336,13 @@ def import_file(tree, date_submitted):
                 month=month,
                 day=day,
                 years=years,
-                birth_place=birth_place,
                 borough=borough,
-                letter=letter,
-                comment=comment,
+                exemplification=exemplification,
+                exemplification_copies=exemplification_copies,
+                raised_seal=raised_seal,
+                raised_seal_copies=raised_seal_copies,
+                no_amends=no_amends,
+                no_amends_copies=no_amends_copies,
                 _delivery_method=_delivery_method,
                 suborder_number=suborder_number
             )
@@ -423,8 +436,8 @@ def import_file(tree, date_submitted):
                 alt_groom_first_name=alt_groom_first_name,
                 month=month,
                 day=day,
-                _years=years,
-                _borough=borough,
+                years=years,
+                borough=borough,
                 num_copies=num_copies,
                 exemplification=exemplification,
                 exemplification_copies=exemplification_copies,
@@ -449,25 +462,24 @@ def import_file(tree, date_submitted):
             middle_name = clients_data_list[
                 clients_data_list.index("MIDDLENAME") + 1] if "MIDDLENAME" in clients_data_list else None
 
-            # Retrieve Number of Copies
-            num_copies = clients_data_list[
-                clients_data_list.index("COPY_REQ") + 1] if "COPY_REQ" in clients_data_list else 1
+            alt_first_name = clients_data_list[
+                clients_data_list.index("ALTFIRSTNAME") + 1] if "ALTFIRSTNAME" in clients_data_list else None
+            alt_last_name = clients_data_list[
+                clients_data_list.index("ALTLASTNAME") + 1] if "ALTLASTNAME" in clients_data_list else None
+            alt_middle_name = clients_data_list[
+                clients_data_list.index("ALTMIDDLENAME") + 1] if "ALTMIDDLENAME" in clients_data_list else None
+
+            # Retrieve age at death
+            age_at_death = clients_data_list[
+                clients_data_list.index("AGE_AT_DEATH") + 1] if "AGE_AT_DEATH" in clients_data_list else None
 
             # Retrieve the Marriage Date (Month, Day, Years)
             month = clients_data_list[clients_data_list.index("MONTH") + 1] if "MONTH" in clients_data_list else None
             day = clients_data_list[clients_data_list.index("DAY") + 1] if "DAY" in clients_data_list else None
-            years = clients_data_list[clients_data_list.index("YEAR_") + 1] if "YEAR_" in clients_data_list else None
+            years = clients_data_list[clients_data_list.index("YEAR") + 1]
             if years:
                 years = years.split(',')
                 years = list(filter(bool, years))
-
-            # Retrieve the Cemetery
-            cemetery = clients_data_list[
-                clients_data_list.index("CEMETERY") + 1] if "CEMETERY" in clients_data_list else None
-
-            # Retrieve the Place of Death
-            death_place = clients_data_list[
-                clients_data_list.index("DEATH_PLACE") + 1] if "DEATH_PLACE" in clients_data_list else None
 
             # Retrieve Marriage Borough
             borough = clients_data_list[clients_data_list.index("BOROUGH") + 1]
@@ -482,15 +494,33 @@ def import_file(tree, date_submitted):
             mother_name = clients_data_list[
                 clients_data_list.index("MOTHER_NAME") + 1] if "MOTHER_NAME" in clients_data_list else None
 
-            # Retrieve Comments
-            comment = clients_data_list[
-                clients_data_list.index("ADD_COMMENT") + 1] if "ADD_COMMENT" in clients_data_list else None
+            # Retrieve Number of Copies
+            num_copies = clients_data_list[
+                clients_data_list.index("COPIES") + 1]
 
             # Retrieve Exemplification Letter Requested
-            if clients_data_list[clients_data_list.index("LETTER") + 1] if "LETTER" in clients_data_list else None:
-                letter = True
+            if clients_data_list[clients_data_list.index("EXEMPLIFICATION_LETTER") + 1] == "Yes":
+                exemplification = True
+                exemplification_copies = clients_data_list[clients_data_list.index("LOE_COPIES") + 1]
             else:
-                letter = False
+                exemplification = False
+                exemplification_copies = None
+
+            # Retrieve Raised Seal Requested
+            if clients_data_list[clients_data_list.index("RAISEDSEAL") + 1] == "Yes":
+                raised_seal = True
+                raised_seal_copies = clients_data_list[clients_data_list.index("RAISEDSEAL_COPIES") + 1]
+            else:
+                raised_seal = False
+                raised_seal_copies = None
+
+            # Retrieve No Amends Requested
+            if clients_data_list[clients_data_list.index("NOAMENDS_LETTER") + 1] == "Yes":
+                no_amends = True
+                no_amends_copies = clients_data_list[clients_data_list.index("NOAMENDS_COPIES") + 1]
+            else:
+                no_amends = False
+                no_amends_copies = None
 
             # Retrieve delivery method
             _delivery_method = clients_data_list[clients_data_list.index('DELIVERY') + 1].lower()
@@ -500,16 +530,22 @@ def import_file(tree, date_submitted):
                 first_name=first_name,
                 middle_name=middle_name,
                 num_copies=num_copies,
-                cemetery=cemetery,
+                alt_first_name=alt_first_name,
+                alt_last_name=alt_last_name,
+                alt_middle_name=alt_middle_name,
+                age_at_death=age_at_death,
                 month=month,
                 day=day,
                 years=years,
-                death_place=death_place,
                 borough=borough,
                 father_name=father_name,
                 mother_name=mother_name,
-                letter=letter,
-                comment=comment,
+                exemplification=exemplification,
+                exemplification_copies=exemplification_copies,
+                raised_seal=raised_seal,
+                raised_seal_copies=raised_seal_copies,
+                no_amends=no_amends,
+                no_amends_copies=no_amends_copies,
                 _delivery_method=_delivery_method,
                 suborder_number=suborder_number
             )
@@ -526,53 +562,56 @@ def import_file(tree, date_submitted):
             # Retrieve the Certificate Name (First Name, Last Name, Middle Name)
             first_name = clients_data_list[
                 clients_data_list.index("FIRSTNAME") + 1] if "FIRSTNAME" in clients_data_list else None
-            last_name = clients_data_list[
-                clients_data_list.index("LASTNAME") + 1] if "LASTNAME" in clients_data_list else None
+            last_name = clients_data_list[clients_data_list.index("LASTNAME") + 1]
             middle_name = clients_data_list[
                 clients_data_list.index("MIDDLENAME") + 1] if "MIDDLENAME" in clients_data_list else None
 
-            # Pull the gender type
-            gender = clients_data_list[
-                clients_data_list.index("GENDER") + 1] if "GENDER" in clients_data_list else None
-
-            # Retrieve Fathers Name
-            father_name = clients_data_list[
-                clients_data_list.index("FATHER_NAME") + 1] if "FATHER_NAME" in clients_data_list else None
-
-            # Retrieve Mother's Name
-            mother_name = clients_data_list[
-                clients_data_list.index("MOTHER_NAME") + 1] if "MOTHER_NAME" in clients_data_list else None
+            alt_first_name = clients_data_list[
+                clients_data_list.index("ALTFIRSTNAME") + 1] if "ALTFIRSTNAME" in clients_data_list else None
+            alt_last_name = clients_data_list[
+                clients_data_list.index("ALTLASTNAME") + 1] if "ALTLASTNAME" in clients_data_list else None
+            alt_middle_name = clients_data_list[
+                clients_data_list.index("ALTMIDDLENAME") + 1] if "ALTMIDDLENAME" in clients_data_list else None
 
             # Retrieve Number of Copies
-            num_copies = clients_data_list[
-                clients_data_list.index("ADDITIONAL_COPY") + 1] if "ADDITIONAL_COPY" in clients_data_list else 1
+            num_copies = clients_data_list[clients_data_list.index("COPIES") + 1]
 
             # Retrieve the Birth Date (Month, Day, Years)
             month = clients_data_list[clients_data_list.index("MONTH") + 1] if "MONTH" in clients_data_list else None
             day = clients_data_list[clients_data_list.index("DAY") + 1] if "DAY" in clients_data_list else None
-            years = clients_data_list[clients_data_list.index("YEAR1") + 1] if "YEAR1" in clients_data_list else None
+            years = clients_data_list[clients_data_list.index("YEAR") + 1] if "YEAR" in clients_data_list else None
             if years:
                 years = years.split(',')
                 years = list(filter(bool, years))
-
-            # Retrieve Birth Place
-            birth_place = clients_data_list[
-                clients_data_list.index("BIRTH_PLACE") + 1] if "BIRTH_PLACE" in clients_data_list else None
 
             # Retrieve Birth Borough
             borough = clients_data_list[clients_data_list.index("BOROUGH") + 1]
             borough = borough.split(',')
             borough = list(filter(bool, borough))
 
-            # Retrieve Comments
-            comment = clients_data_list[
-                clients_data_list.index("ADD_COMMENT") + 1] if "ADD_COMMENT" in clients_data_list else None
-
             # Retrieve Exemplification Letter Requested
-            if clients_data_list[clients_data_list.index("LETTER") + 1] if "LETTER" in clients_data_list else None:
-                letter = True
+            if clients_data_list[clients_data_list.index("EXEMPLIFICATION_LETTER") + 1] == "Yes":
+                exemplification = True
+                exemplification_copies = clients_data_list[clients_data_list.index("LOE_COPIES") + 1]
             else:
-                letter = False
+                exemplification = False
+                exemplification_copies = None
+
+            # Retrieve Raised Seal Requested
+            if clients_data_list[clients_data_list.index("RAISEDSEAL") + 1] == "Yes":
+                raised_seal = True
+                raised_seal_copies = clients_data_list[clients_data_list.index("RAISEDSEAL_COPIES") + 1]
+            else:
+                raised_seal = False
+                raised_seal_copies = None
+
+            # Retrieve No Amends Requested
+            if clients_data_list[clients_data_list.index("NOAMENDS_LETTER") + 1] == "Yes":
+                no_amends = True
+                no_amends_copies = clients_data_list[clients_data_list.index("NOAMENDS_COPIES") + 1]
+            else:
+                no_amends = False
+                no_amends_copies = None
 
             # Retrieve delivery method
             _delivery_method = clients_data_list[clients_data_list.index('DELIVERY') + 1].lower()
@@ -582,17 +621,20 @@ def import_file(tree, date_submitted):
                 first_name=first_name,
                 last_name=last_name,
                 middle_name=middle_name,
-                gender=gender,
-                father_name=father_name,
-                mother_name=mother_name,
+                alt_first_name=alt_first_name,
+                alt_last_name=alt_last_name,
+                alt_middle_name=alt_middle_name,
                 num_copies=num_copies,
                 month=month,
                 day=day,
                 years=years,
-                birth_place=birth_place,
                 borough=borough,
-                letter=letter,
-                comment=comment,
+                exemplification=exemplification,
+                exemplification_copies=exemplification_copies,
+                raised_seal=raised_seal,
+                raised_seal_copies=raised_seal_copies,
+                no_amends=no_amends,
+                no_amends_copies=no_amends_copies,
                 _delivery_method=_delivery_method,
                 suborder_number=suborder_number
             )
@@ -684,48 +726,57 @@ def import_file(tree, date_submitted):
             middle_name = clients_data_list[
                 clients_data_list.index("MIDDLENAME") + 1] if "MIDDLENAME" in clients_data_list else None
 
-            # Retrieve Number of Copies
-            num_copies = clients_data_list[
-                clients_data_list.index("COPY_REQ") + 1] if "COPY_REQ" in clients_data_list else 1
+            alt_first_name = clients_data_list[
+                clients_data_list.index("ALTFIRSTNAME") + 1] if "ALTFIRSTNAME" in clients_data_list else None
+            alt_last_name = clients_data_list[
+                clients_data_list.index("ALTLASTNAME") + 1] if "ALTLASTNAME" in clients_data_list else None
+            alt_middle_name = clients_data_list[
+                clients_data_list.index("ALTMIDDLENAME") + 1] if "ALTMIDDLENAME" in clients_data_list else None
+
+            # Retrieve age at death
+            age_at_death = clients_data_list[
+                clients_data_list.index("AGE_AT_DEATH") + 1] if "AGE_AT_DEATH" in clients_data_list else None
 
             # Retrieve the Marriage Date (Month, Day, Years)
             month = clients_data_list[clients_data_list.index("MONTH") + 1] if "MONTH" in clients_data_list else None
             day = clients_data_list[clients_data_list.index("DAY") + 1] if "DAY" in clients_data_list else None
-            years = clients_data_list[clients_data_list.index("YEAR") + 1] if "YEAR" in clients_data_list else None
+            years = clients_data_list[clients_data_list.index("YEAR") + 1]
             if years:
                 years = years.split(',')
                 years = list(filter(bool, years))
 
-            # Retrieve the Cemetery
-            cemetery = clients_data_list[
-                clients_data_list.index("CEMETERY") + 1] if "CEMETERY" in clients_data_list else None
-
-            # Retrieve the Place of Death
-            death_place = clients_data_list[
-                clients_data_list.index("DEATH_PLACE") + 1] if "DEATH_PLACE" in clients_data_list else None
-
-            # Retrieve Marriage Borough
+            # Retrieve borough
             borough = clients_data_list[clients_data_list.index("BOROUGH") + 1]
             borough = borough.split(',')
             borough = list(filter(bool, borough))
 
-            # Retrieve Fathers Name
-            father_name = clients_data_list[
-                clients_data_list.index("FATHER_NAME") + 1] if "FATHER_NAME" in clients_data_list else None
-
-            # Retrieve Mother's Name
-            mother_name = clients_data_list[
-                clients_data_list.index("MOTHER_NAME") + 1] if "MOTHER_NAME" in clients_data_list else None
-
-            # Retrieve Comments
-            comment = clients_data_list[
-                clients_data_list.index("ADD_COMMENT") + 1] if "ADD_COMMENT" in clients_data_list else None
+            # Retrieve Number of Copies
+            num_copies = clients_data_list[
+                clients_data_list.index("COPIES") + 1]
 
             # Retrieve Exemplification Letter Requested
-            if clients_data_list[clients_data_list.index("LETTER") + 1] if "LETTER" in clients_data_list else None:
-                letter = True
+            if clients_data_list[clients_data_list.index("EXEMPLIFICATION_LETTER") + 1] == "Yes":
+                exemplification = True
+                exemplification_copies = clients_data_list[clients_data_list.index("LOE_COPIES") + 1]
             else:
-                letter = False
+                exemplification = False
+                exemplification_copies = None
+
+            # Retrieve Raised Seal Requested
+            if clients_data_list[clients_data_list.index("RAISEDSEAL") + 1] == "Yes":
+                raised_seal = True
+                raised_seal_copies = clients_data_list[clients_data_list.index("RAISEDSEAL_COPIES") + 1]
+            else:
+                raised_seal = False
+                raised_seal_copies = None
+
+            # Retrieve No Amends Requested
+            if clients_data_list[clients_data_list.index("NOAMENDS_LETTER") + 1] == "Yes":
+                no_amends = True
+                no_amends_copies = clients_data_list[clients_data_list.index("NOAMENDS_COPIES") + 1]
+            else:
+                no_amends = False
+                no_amends_copies = None
 
             # Retrieve delivery method
             _delivery_method = clients_data_list[clients_data_list.index('DELIVERY') + 1].lower()
@@ -735,17 +786,21 @@ def import_file(tree, date_submitted):
                 last_name=last_name,
                 first_name=first_name,
                 middle_name=middle_name,
+                alt_first_name=alt_first_name,
+                alt_last_name=alt_last_name,
+                alt_middle_name=alt_middle_name,
+                age_at_death=age_at_death,
                 num_copies=num_copies,
-                cemetery=cemetery,
                 month=month,
                 day=day,
                 years=years,
-                death_place=death_place,
                 borough=borough,
-                father_name=father_name,
-                mother_name=mother_name,
-                letter=letter,
-                comment=comment,
+                exemplification=exemplification,
+                exemplification_copies=exemplification_copies,
+                raised_seal=raised_seal,
+                raised_seal_copies=raised_seal_copies,
+                no_amends=no_amends,
+                no_amends_copies=no_amends_copies,
                 _delivery_method=_delivery_method,
                 suborder_number=suborder_number
             )
@@ -777,11 +832,6 @@ def import_file(tree, date_submitted):
 
             # Retrieve delivery method
             _delivery_method = clients_data_list[clients_data_list.index('DELIVERY') + 1].lower()
-
-            if _delivery_method == "print and mail":
-                _delivery_method = "mail"
-            elif _delivery_method == "print and pick up":
-                _delivery_method = "pickup"
 
             # Retrieve Pickup Number Information
             contact_number = clients_data_list[
@@ -1045,11 +1095,6 @@ def import_file(tree, date_submitted):
             # Retrieve delivery method
             _delivery_method = clients_data_list[clients_data_list.index('DELIVERY') + 1].lower()
 
-            if _delivery_method == "print and mail":
-                _delivery_method = "mail"
-            elif _delivery_method == "print and pick up":
-                _delivery_method = "pickup"
-
             # Retrieve Pickup Number Information
             contact_number = clients_data_list[
                 clients_data_list.index("PICKUP_PHONE") + 1] if "PICKUP_PHONE" in clients_data_list else None
@@ -1078,5 +1123,87 @@ def import_file(tree, date_submitted):
             db.session.add(ocme)
             db.session.commit()
             suborder.es_update(ocme.serialize)
+
+        # No Amends
+        if client_id == '10000106':
+            # Retrieve Number of Copies
+            num_copies = clients_data_list[clients_data_list.index("COPIES") + 1]
+
+            # Retrieve delivery method
+            _delivery_method = clients_data_list[clients_data_list.index('DELIVERY') + 1].lower()
+
+            # Retrieve delivery method
+            file_name = clients_data_list[clients_data_list.index('FILE') + 1]
+
+            no_amends = NoAmends(
+                num_copies=num_copies,
+                filename=file_name,
+                delivery_method=_delivery_method,
+                suborder_number=suborder_number,
+            )
+
+            db.session.add(no_amends)
+            db.session.commit()
+            suborder.es_update(no_amends.serialize)
+
+        # HVR
+        if client_id == '10000107':
+            # Retrieve link
+            link = clients_data_list[clients_data_list.index("LINK") + 1]
+
+            # Retrieve record id
+            record_id = clients_data_list[clients_data_list.index("RECORDID") + 1]
+
+            # Retrieve type
+            _type = clients_data_list[clients_data_list.index("TYPE") + 1]
+
+            # Retrieve Number of Copies
+            num_copies = clients_data_list[clients_data_list.index("COPIES") + 1]
+
+            # Retrieve Exemplification Letter Requested
+            if clients_data_list[clients_data_list.index("EXEMPLIFICATION_LETTER") + 1] == "Yes":
+                exemplification = True
+                exemplification_copies = clients_data_list[clients_data_list.index("LOE_COPIES") + 1]
+            else:
+                exemplification = False
+                exemplification_copies = None
+
+            # Retrieve Raised Seal Requested
+            if clients_data_list[clients_data_list.index("RAISEDSEAL") + 1] == "Yes":
+                raised_seal = True
+                raised_seal_copies = clients_data_list[clients_data_list.index("RAISEDSEAL_COPIES") + 1]
+            else:
+                raised_seal = False
+                raised_seal_copies = None
+
+            # Retrieve No Amends Requested
+            if clients_data_list[clients_data_list.index("NOAMENDS_LETTER") + 1] == "Yes":
+                no_amends = True
+                no_amends_copies = clients_data_list[clients_data_list.index("NOAMENDS_COPIES") + 1]
+            else:
+                no_amends = False
+                no_amends_copies = None
+
+            # Retrieve delivery method
+            _delivery_method = clients_data_list[clients_data_list.index('DELIVERY') + 1].lower()
+
+            hvr = HVR(
+                link=link,
+                record_id=record_id,
+                _type=_type,
+                num_copies=num_copies,
+                exemplification=exemplification,
+                exemplification_copies=exemplification_copies,
+                raised_seal=raised_seal,
+                raised_seal_copies=raised_seal_copies,
+                no_amends=no_amends,
+                no_amends_copies=no_amends_copies,
+                _delivery_method=_delivery_method,
+                suborder_number=suborder_number,
+            )
+
+            db.session.add(hvr)
+            db.session.commit()
+            suborder.es_update(hvr.serialize)
 
     return True

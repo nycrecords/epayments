@@ -22,7 +22,7 @@ class PhotoGallery extends React.Component{
                 <div className="-row">
                     <div className="-fourth"> Image ID: </div>
                     <div className="-two-thirds">
-                        {this.props.order_info["metadata"]["image_id"] ? this.props.order_info["metadata"]["image_id"] : ""}
+                        {this.props.order_info["metadata"]["image_id"]}
                     </div>
                 </div>
 
@@ -43,7 +43,7 @@ class PhotoGallery extends React.Component{
                 <div className="-row">
                     <div className="-fourth"> Size: </div>
                     <div className="-two-thirds">
-                        {this.props.order_info["metadata"]["size"] ? this.props.order_info["metadata"]["size"]: ""}
+                        {this.props.order_info["metadata"]["size"]}
                     </div>
                 </div>
 

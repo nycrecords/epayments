@@ -94,6 +94,7 @@ class Suborders(db.Model):
             order_types.PHOTO_GALLERY,
             order_types.PROPERTY_CARD,
             order_types.OCME,
+            order_types.HVR,
             name='order_type'), nullable=False)
     order_number = db.Column(db.String(64), db.ForeignKey('orders.id'), nullable=False)
     status = db.Column(

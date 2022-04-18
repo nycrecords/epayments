@@ -18,7 +18,7 @@ depends_on = None
 old_options = (
     "Birth Search", "Birth Cert", "Marriage Search", "Marriage Cert", "Death Search", "Death Cert", "Tax Photo",
     "Photo Gallery", "Property Card")
-new_options = old_options + ("No Amends", "OCME")
+new_options = old_options + ("No Amends", "OCME", "HVR")
 
 old_type = sa.Enum(*old_options, name="order_type")
 new_type = sa.Enum(*new_options, name="order_type")
