@@ -382,7 +382,7 @@ def change_password() -> Response:
 
 
 # noinspection PyTypeChecker,PyTypeChecker
-@api.route('/uploads/<string:suborder_number>', methods=['GET'])
+@api.route('/uploads/<string:suborder_number>', methods=['GET', 'POST'])
 def download(suborder_number):
     no_amends = NoAmends.query.filter_by(suborder_number=suborder_number).one()
     directory = os.path.join(current_app.config["NO_AMENDS_FILE_PATH"], no_amends.suborder_number)

@@ -27,3 +27,10 @@ yarn-debug.log*
 yarn-error.log*
 app/static/files/*
 .vscode
+
+# Development database
+*.db
+postgres-data/
+
+# Development Elasticsearch
+elasticsearch-data

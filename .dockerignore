@@ -1,0 +1,5 @@
+.pytest_cache
+.vagrant
+elasticsearch-data
+postgres-data
+data/*

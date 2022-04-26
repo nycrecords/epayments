@@ -39,6 +39,10 @@ class Config:
     ELASTICSEARCH_ENABLED = os.environ.get("ELASTICSEARCH_ENABLED") or 'True'
     ELASTICSEARCH_INDEX = os.environ.get("ELASTICSEARCH_INDEX") or 'suborders'
 
+    # Import API Configurations
+    IMPORT_URL = os.environ.get("IMPORT_URL")
+    IMPORT_API_KEY = os.environ.get("IMPORT_API_KEY")
+
     @staticmethod
     def init_app(app):
         pass

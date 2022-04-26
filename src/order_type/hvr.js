@@ -17,7 +17,8 @@ class HVR extends React.Component {
                 <div className="-row">
                     <div className="-fourth"> Link:</div>
                     <div className="-two-thirds"><a
-                        href={this.props.order_info["metadata"]["link"]}>{this.props.order_info["metadata"]["link"]}</a>
+                        href={this.props.order_info["metadata"]["link"]}
+                        target="_blank">{this.props.order_info["metadata"]["link"]}</a>
                     </div>
                 </div>
 
