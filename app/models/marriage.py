@@ -245,33 +245,59 @@ class MarriageCertificate(db.Model):
     def __init__(
             self,
             certificate_number,
-            groom_last_name,
-            groom_first_name,
             bride_last_name,
-            bride_first_name,
-            num_copies,
-            month,
-            day,
-            years,
-            marriage_place,
+            groom_last_name,
             borough,
-            letter,
-            comment,
+            num_copies,
+            raised_seal,
+            no_amends,
             _delivery_method,
-            suborder_number
+            suborder_number,
+            bride_middle_name=None,
+            bride_first_name=None,
+            alt_bride_last_name=None,
+            alt_bride_middle_name=None,
+            alt_bride_first_name=None,
+            groom_middle_name=None,
+            groom_first_name=None,
+            alt_groom_last_name=None,
+            alt_groom_middle_name=None,
+            alt_groom_first_name=None,
+            month=None,
+            day=None,
+            years=None,
+            marriage_place=None,
+            exemplification=None,
+            exemplification_copies=None,
+            raised_seal_copies=None,
+            no_amends_copies=None,
+            comment=None,
     ):
         self.certificate_number = certificate_number
-        self.groom_last_name = groom_last_name
-        self.groom_first_name = groom_first_name
         self.bride_last_name = bride_last_name
+        self.bride_middle_name = bride_middle_name
         self.bride_first_name = bride_first_name
-        self.num_copies = num_copies
+        self.alt_bride_last_name = alt_bride_last_name
+        self.alt_bride_middle_name = alt_bride_middle_name
+        self.alt_bride_first_name = alt_bride_first_name
+        self.groom_last_name = groom_last_name
+        self.groom_middle_name = groom_middle_name
+        self.groom_first_name = groom_first_name
+        self.alt_groom_last_name = alt_groom_last_name
+        self.alt_groom_middle_name = alt_groom_middle_name
+        self.alt_groom_first_name = alt_groom_first_name
         self.month = month
         self.day = day
         self.years = years
         self.marriage_place = marriage_place
         self.borough = borough
-        self.letter = letter
+        self.num_copies = num_copies
+        self.exemplification = exemplification
+        self.exemplification_copies = exemplification_copies
+        self.raised_seal = raised_seal
+        self.raised_seal_copies = raised_seal_copies
+        self.no_amends = no_amends
+        self.no_amends_copies = no_amends_copies
         self.comment = comment
         self.delivery_method = _delivery_method
         self.suborder_number = suborder_number
@@ -309,17 +335,30 @@ class MarriageCertificate(db.Model):
         """Return object data in easily serializable format"""
         return {
             'certificate_number': self.certificate_number,
-            'groom_last_name': self.groom_last_name,
-            'groom_first_name': self.groom_first_name,
             'bride_last_name': self.bride_last_name,
+            'bride_middle_name': self.bride_middle_name,
             'bride_first_name': self.bride_first_name,
-            'num_copies': self.num_copies,
+            'alt_bride_last_name': self.alt_bride_last_name,
+            'alt_bride_middle_name': self.alt_bride_middle_name,
+            'alt_bride_first_name': self.alt_bride_first_name,
+            'groom_last_name': self.groom_last_name,
+            'groom_middle_name': self.groom_middle_name,
+            'groom_first_name': self.groom_first_name,
+            'alt_groom_last_name': self.alt_groom_last_name,
+            'alt_groom_middle_name': self.alt_groom_middle_name,
+            'alt_groom_first_name': self.alt_groom_first_name,
             'month': self.month,
             'day': self.day,
             'years': self.years,
             'marriage_place': self.marriage_place,
             'borough': self.borough,
-            'letter': self.letter,
+            'num_copies': self.num_copies,
+            'exemplification': self.exemplification,
+            'exemplification_copies': self.exemplification_copies,
+            'raised_seal': self.raised_seal,
+            'raised_seal_copies': self.raised_seal_copies,
+            'no_amends': self.no_amends,
+            'no_amends_copies': self.no_amends_copies,
             'comment': self.comment,
             'delivery_method': self.delivery_method,
             'suborder_number': self.suborder_number

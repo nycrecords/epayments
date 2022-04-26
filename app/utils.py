@@ -488,11 +488,11 @@ def import_file(tree, date_submitted):
 
             # Retrieve Fathers Name
             father_name = clients_data_list[
-                clients_data_list.index("FATHER_NAME") + 1] if "FATHER_NAME" in clients_data_list else None
+                clients_data_list.index("FATHERNAME") + 1] if "FATHERNAME" in clients_data_list else None
 
             # Retrieve Mother's Name
             mother_name = clients_data_list[
-                clients_data_list.index("MOTHER_NAME") + 1] if "MOTHER_NAME" in clients_data_list else None
+                clients_data_list.index("MOTHERNAME") + 1] if "MOTHERNAME" in clients_data_list else None
 
             # Retrieve Number of Copies
             num_copies = clients_data_list[
@@ -645,67 +645,102 @@ def import_file(tree, date_submitted):
 
         # Marriage Certificate
         if client_id == '10000181':
-            # Retreive the Certificate Number
+            # Retrieve the Certificate Number
             certificate_number = clients_data_list[clients_data_list.index("CERTIFICATE_NUMBER") + 1]
 
             # Retrieve the Groom's Information (First and Last Name)
             groom_last_name = clients_data_list[clients_data_list.index("LASTNAME_G") + 1]
             groom_first_name = clients_data_list[
                 clients_data_list.index("FIRSTNAME_G") + 1] if "FIRSTNAME_G" in clients_data_list else None
+            groom_middle_name = clients_data_list[
+                clients_data_list.index("MIDDLENAME_G") + 1] if "MIDDLENAME_G" in clients_data_list else None
+            alt_groom_last_name = clients_data_list[clients_data_list.index("ALTLASTNAME_G") + 1]
+            alt_groom_first_name = clients_data_list[
+                clients_data_list.index("ALTFIRSTNAME_G") + 1] if "ALTFIRSTNAME_G" in clients_data_list else None
+            alt_groom_middle_name = clients_data_list[
+                clients_data_list.index("ALTMIDDLENAME_G") + 1] if "ALTMIDDLENAME_G" in clients_data_list else None
 
             # Retreive the Bride's Information (First and Last Name
             bride_last_name = clients_data_list[clients_data_list.index("LASTNAME_B") + 1]
             bride_first_name = clients_data_list[
                 clients_data_list.index("FIRSTNAME_B") + 1] if "FIRSTNAME_B" in clients_data_list else None
-
-            # Retrieve Number of Copies
-            num_copies = clients_data_list[
-                clients_data_list.index("COPY_REQ") + 1] if "COPY_REQ" in clients_data_list else 1
+            bride_middle_name = clients_data_list[
+                clients_data_list.index("MIDDLENAME_B") + 1] if "MIDDLENAME_B" in clients_data_list else None
+            alt_bride_last_name = clients_data_list[clients_data_list.index("ALTLASTNAME_B") + 1]
+            alt_bride_first_name = clients_data_list[
+                clients_data_list.index("ALTFIRSTNAME_B") + 1] if "ALTFIRSTNAME_B" in clients_data_list else None
+            alt_bride_middle_name = clients_data_list[
+                clients_data_list.index("ALTMIDDLENAME_B") + 1] if "ALTMIDDLENAME_B" in clients_data_list else None
 
             # Retrieve the Marriage Date (Month, Day, Years)
             month = clients_data_list[clients_data_list.index("MONTH") + 1] if "MONTH" in clients_data_list else None
             day = clients_data_list[clients_data_list.index("DAY") + 1] if "DAY" in clients_data_list else None
-            years = clients_data_list[clients_data_list.index("YEAR") + 1] if "YEAR" in clients_data_list else None
+            years = clients_data_list[clients_data_list.index("YEAR") + 1]
             if years:
                 years = years.split(',')
                 years = list(filter(bool, years))
-
-            # Retrieve Marriage Location
-            marriage_place = clients_data_list[
-                clients_data_list.index("MARRIAGE_PLACE") + 1] if "MARRIAGE_PLACE" in clients_data_list else None
 
             # Retrieve Marriage Borough
             borough = clients_data_list[clients_data_list.index("BOROUGH") + 1]
             borough = borough.split(',')
             borough = list(filter(bool, borough))
 
-            # Retrieve Comments
-            comment = clients_data_list[
-                clients_data_list.index("ADD_COMMENT") + 1] if "ADD_COMMENT" in clients_data_list else None
+            # Retrieve Number of Copies
+            num_copies = clients_data_list[
+                clients_data_list.index("COPY_REQ") + 1] if "COPY_REQ" in clients_data_list else 1
 
             # Retrieve Exemplification Letter Requested
-            if clients_data_list[clients_data_list.index("LETTER") + 1] if "LETTER" in clients_data_list else None:
-                letter = True
+            if clients_data_list[clients_data_list.index("EXEMPLIFICATION_LETTER") + 1] == "Yes":
+                exemplification = True
+                exemplification_copies = clients_data_list[clients_data_list.index("LOE_COPIES") + 1]
             else:
-                letter = False
+                exemplification = False
+                exemplification_copies = None
+
+            # Retrieve Raised Seal Requested
+            if clients_data_list[clients_data_list.index("RAISEDSEAL") + 1] == "Yes":
+                raised_seal = True
+                raised_seal_copies = clients_data_list[clients_data_list.index("RAISEDSEAL_COPIES") + 1]
+            else:
+                raised_seal = False
+                raised_seal_copies = None
+
+            # Retrieve No Amends Requested
+            if clients_data_list[clients_data_list.index("NOAMENDS_LETTER") + 1] == "Yes":
+                no_amends = True
+                no_amends_copies = clients_data_list[clients_data_list.index("NOAMENDS_COPIES") + 1]
+            else:
+                no_amends = False
+                no_amends_copies = None
 
             # Retrieve delivery method
             _delivery_method = clients_data_list[clients_data_list.index('DELIVERY') + 1].lower()
 
             customer_order = MarriageCertificate(
                 certificate_number=certificate_number,
-                groom_last_name=groom_last_name,
-                groom_first_name=groom_first_name,
                 bride_last_name=bride_last_name,
+                bride_middle_name=bride_middle_name,
                 bride_first_name=bride_first_name,
-                num_copies=num_copies,
+                alt_bride_last_name=alt_bride_last_name,
+                alt_bride_middle_name=alt_bride_middle_name,
+                alt_bride_first_name=alt_bride_first_name,
+                groom_last_name=groom_last_name,
+                groom_middle_name=groom_middle_name,
+                groom_first_name=groom_first_name,
+                alt_groom_last_name=alt_groom_last_name,
+                alt_groom_middle_name=alt_groom_middle_name,
+                alt_groom_first_name=alt_groom_first_name,
                 month=month,
                 day=day,
                 years=years,
-                marriage_place=marriage_place,
                 borough=borough,
-                letter=letter,
-                comment=comment,
+                num_copies=num_copies,
+                exemplification=exemplification,
+                exemplification_copies=exemplification_copies,
+                raised_seal=raised_seal,
+                raised_seal_copies=raised_seal_copies,
+                no_amends=no_amends,
+                no_amends_copies=no_amends_copies,
                 _delivery_method=_delivery_method,
                 suborder_number=suborder_number
             )

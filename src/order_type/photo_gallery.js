@@ -53,13 +53,6 @@ class PhotoGallery extends React.Component{
                 </div>
 
                 <div className="-row">
-                    <div className="-fourth"> Contact Number: </div>
-                    <div className="-two-thirds">
-                        {this.props.order_info["metadata"]["contact_number"] ? this.props.order_info["metadata"]["contact_number"] : ""}
-                    </div>
-                </div>
-
-                <div className="-row">
                     <div className="-fourth"> Personal Use Agreement: </div>
                     <div className="-two-thirds">
                         {this.props.order_info["metadata"]["personal_use_agreement"] ? "True" : "False" }
