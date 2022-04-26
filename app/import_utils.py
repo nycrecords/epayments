@@ -38,4 +38,4 @@ def import_from_api(start_date, end_date):
 
                 with open(file, "wb") as f:
                     f.write(r.content)
-        import_file(tree, date_submitted)
+        # import_file(tree, date_submitted)

@@ -7,25 +7,8 @@ class NoAmends extends React.Component{
     constructor() {
         super();
 
-        this.downloadFile = (e) => {
-            e.preventDefault()
-
-            // csrfFetch('api/v1/uploads/' + this.props.suborder_number, {
-            //     method: "GET"
-            // }).then(res => res.blob())
-            //     .then(blob => {
-            //         const url = URL.createObjectURL(blob)
-            //         window.open(url)
-            //     })
-
-            csrfFetch('api/v1/uploads/' + this.props.suborder_number, {
-                method: "GET",
-                responseType: "blob"
-            }).then(res => res.blob())
-                .then(blob => {
-                    const url = URL.createObjectURL(blob)
-                    window.open(url)
-                })
+        this.downloadFile = () => {
+            window.open("/api/v1/uploads/" + this.props.suborder_number, "_blank")
         }
     }
 
