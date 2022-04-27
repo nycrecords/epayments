@@ -1111,7 +1111,7 @@ def import_file(tree, date_submitted):
                 clients_data_list.index("MIDDLENAME") + 1] if "MIDDLENAME" in clients_data_list else None
 
             age = clients_data_list[
-                clients_data_list.index("AGE") + 1] if "AGE" in clients_data_list else None
+                clients_data_list.index("AGE_AT_DEATH") + 1] if "AGE_AT_DEATH" in clients_data_list else None
 
             certificate_number = clients_data_list[
                 clients_data_list.index("CERTIFICATE_NUMBER") + 1] if "CERTIFICATE_NUMBER" in clients_data_list else None
