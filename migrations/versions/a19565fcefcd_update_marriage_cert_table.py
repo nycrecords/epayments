@@ -26,9 +26,17 @@ def upgrade():
     op.add_column('marriage_cert', sa.Column('alt_groom_middle_name', sa.String(length=40), nullable=True))
     op.add_column('marriage_cert', sa.Column('alt_groom_first_name', sa.String(length=40), nullable=True))
     op.add_column('marriage_cert', sa.Column('exemplification_copies', sa.String(length=1), nullable=True))
-    op.add_column('marriage_cert', sa.Column('raised_seal', sa.Boolean(), nullable=False))
+
+    op.add_column('marriage_cert', sa.Column('raised_seal', sa.Boolean(), nullable=True))
+    op.execute("UPDATE marriage_cert SET raised_seal = false")
+    op.alter_column('marriage_cert', 'raised_seal', nullable=False)
+
     op.add_column('marriage_cert', sa.Column('raised_seal_copies', sa.String(length=1), nullable=True))
-    op.add_column('marriage_cert', sa.Column('no_amends', sa.Boolean(), nullable=False))
+
+    op.add_column('marriage_cert', sa.Column('no_amends', sa.Boolean(), nullable=True))
+    op.execute("UPDATE marriage_cert SET no_amends = false")
+    op.alter_column('marriage_cert', 'no_amends', nullable=False)
+
     op.add_column('marriage_cert', sa.Column('no_amends_copies', sa.String(length=1), nullable=True))
     op.alter_column('marriage_cert', 'letter', nullable=True, new_column_name='exemplification')
 

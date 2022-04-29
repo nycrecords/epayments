@@ -27,9 +27,17 @@ def upgrade():
     op.add_column('marriage_search', sa.Column('alt_groom_first_name', sa.String(length=40), nullable=True))
     op.alter_column('marriage_search', 'letter', nullable=True, new_column_name='exemplification')
     op.add_column('marriage_search', sa.Column('exemplification_copies', sa.String(length=1), nullable=True))
-    op.add_column('marriage_search', sa.Column('raised_seal', sa.Boolean(), nullable=False))
+
+    op.add_column('marriage_search', sa.Column('raised_seal', sa.Boolean(), nullable=True))
+    op.execute("UPDATE marriage_search SET raised_seal = false")
+    op.alter_column('marriage_search', 'raised_seal', nullable=False)
+
     op.add_column('marriage_search', sa.Column('raised_seal_copies', sa.String(length=1), nullable=True))
-    op.add_column('marriage_search', sa.Column('no_amends', sa.Boolean(), nullable=False))
+
+    op.add_column('marriage_search', sa.Column('no_amends', sa.Boolean(), nullable=True))
+    op.execute("UPDATE marriage_search SET no_amends = false")
+    op.alter_column('marriage_search', 'no_amends', nullable=False)
+
     op.add_column('marriage_search', sa.Column('no_amends_copies', sa.String(length=1), nullable=True))
 
 

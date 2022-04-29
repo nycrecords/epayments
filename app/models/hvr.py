@@ -4,7 +4,7 @@ from app import db
 from app.constants import delivery_method
 
 
-class HVR(db.Model):
+class Hvr(db.Model):
     """
 
     """

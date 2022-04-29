@@ -12,7 +12,7 @@ from app.constants import status
 from app.constants.order_types import CLIENT_ID_DICT
 from app.date_utils import calculate_date_received
 from app.file_utils import sftp_ctx
-from app.models import Orders, Events, BirthSearch, BirthCertificate, HVR, MarriageCertificate, \
+from app.models import Orders, Events, BirthSearch, BirthCertificate, Hvr, MarriageCertificate, \
     MarriageSearch, DeathCertificate, DeathSearch, PhotoGallery, TaxPhoto, PropertyCard, Customers, Suborders, OCME, \
     NoAmends
 from app.search.utils import delete_doc
@@ -391,8 +391,7 @@ def import_file(tree, date_submitted):
             borough = list(filter(bool, borough))
 
             # Retrieve Number of Copies
-            num_copies = clients_data_list[
-                clients_data_list.index("COPY_REQ") + 1] if "COPY_REQ" in clients_data_list else 1
+            num_copies = clients_data_list[clients_data_list.index("COPIES") + 1]
 
             # Retrieve Exemplification Letter Requested
             if clients_data_list[clients_data_list.index("EXEMPLIFICATION_LETTER") + 1] == "Yes":
@@ -686,8 +685,7 @@ def import_file(tree, date_submitted):
             borough = list(filter(bool, borough))
 
             # Retrieve Number of Copies
-            num_copies = clients_data_list[
-                clients_data_list.index("COPY_REQ") + 1] if "COPY_REQ" in clients_data_list else 1
+            num_copies = clients_data_list[clients_data_list.index("COPIES") + 1]
 
             # Retrieve Exemplification Letter Requested
             if clients_data_list[clients_data_list.index("EXEMPLIFICATION_LETTER") + 1] == "Yes":
@@ -1003,6 +1001,7 @@ def import_file(tree, date_submitted):
                     num_copies=num_copies_1980,
                     _delivery_method=delivery_method_1980,
                     contact_number=contact_number,
+                    contact_email=contact_email,
                     suborder_number=suborder_1980.id
                 )
                 db.session.add(customer_order_1980)
@@ -1057,7 +1056,7 @@ def import_file(tree, date_submitted):
             image_id = clients_data_list[clients_data_list.index("IMAGE_IDENTIFIER") + 1]
 
             # Retrieve Print size
-            size = clients_data_list[clients_data_list.index("SIZE") + 1]
+            size = clients_data_list[clients_data_list.index("SIZE") + 1]  if "SIZE" in clients_data_list else None
 
             # Retrieve Number of Copies
             num_copies = clients_data_list[
@@ -1222,7 +1221,7 @@ def import_file(tree, date_submitted):
             # Retrieve delivery method
             _delivery_method = clients_data_list[clients_data_list.index('DELIVERY') + 1].lower()
 
-            hvr = HVR(
+            hvr = Hvr(
                 link=link,
                 record_id=record_id,
                 _type=_type,

@@ -30,6 +30,7 @@ class TaxPhoto(db.Model):
             collection.YEAR_1940,
             collection.YEAR_1980,
             collection.BOTH,
+            collection.LUNA,
             name='collection'), default=collection.BOTH, nullable=False)
     borough = db.Column(
         db.Enum(
@@ -147,7 +148,7 @@ class PhotoGallery(db.Model):
             size.EIGHT_BY_TEN,
             size.ELEVEN_BY_FOURTEEN,
             size.SIXTEEN_BY_TWENTY,
-            name='size'), nullable=False)
+            name='size'), nullable=True)
     num_copies = db.Column(db.String(2), nullable=False)
     contact_number = db.Column(db.String(10), nullable=True)
     contact_email = db.Column(db.String(256), nullable=True)

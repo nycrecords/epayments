@@ -41,9 +41,17 @@ def upgrade():
     op.add_column('birth_cert', sa.Column('alt_last_name', sa.String(length=25), nullable=True))
     op.add_column('birth_cert', sa.Column('alt_middle_name', sa.String(length=40), nullable=True))
     op.add_column('birth_cert', sa.Column('exemplification_copies', sa.String(length=1), nullable=True))
-    op.add_column('birth_cert', sa.Column('raised_seal', sa.Boolean(), nullable=False))
+
+    op.add_column('birth_cert', sa.Column('raised_seal', sa.Boolean(), nullable=True))
+    op.execute("UPDATE birth_cert SET raised_seal = false")
+    op.alter_column('birth_cert', 'raised_seal', nullable=False)
+
     op.add_column('birth_cert', sa.Column('raised_seal_copies', sa.String(length=1), nullable=True))
-    op.add_column('birth_cert', sa.Column('no_amends', sa.Boolean(), nullable=False))
+
+    op.add_column('birth_cert', sa.Column('no_amends', sa.Boolean(), nullable=True))
+    op.execute("UPDATE birth_cert SET no_amends = false")
+    op.alter_column('birth_cert', 'no_amends', nullable=False)
+
     op.add_column('birth_cert', sa.Column('no_amends_copies', sa.String(length=1), nullable=True))
     op.alter_column('birth_cert', 'letter', nullable=True, new_column_name='exemplification')
 
@@ -51,9 +59,17 @@ def upgrade():
     op.add_column('birth_search', sa.Column('alt_last_name', sa.String(length=25), nullable=True))
     op.add_column('birth_search', sa.Column('alt_middle_name', sa.String(length=40), nullable=True))
     op.add_column('birth_search', sa.Column('exemplification_copies', sa.String(length=1), nullable=True))
-    op.add_column('birth_search', sa.Column('raised_seal', sa.Boolean(), nullable=False))
+
+    op.add_column('birth_search', sa.Column('raised_seal', sa.Boolean(), nullable=True))
+    op.execute("UPDATE birth_search SET raised_seal = false")
+    op.alter_column('birth_search', 'raised_seal', nullable=False)
+
     op.add_column('birth_search', sa.Column('raised_seal_copies', sa.String(length=1), nullable=True))
-    op.add_column('birth_search', sa.Column('no_amends', sa.Boolean(), nullable=False))
+
+    op.add_column('birth_search', sa.Column('no_amends', sa.Boolean(), nullable=True))
+    op.execute("UPDATE birth_search SET no_amends = false")
+    op.alter_column('birth_search', 'no_amends', nullable=False)
+
     op.add_column('birth_search', sa.Column('no_amends_copies', sa.String(length=1), nullable=True))
     op.alter_column('birth_search', 'letter', nullable=True, new_column_name='exemplification')
 
@@ -62,20 +78,41 @@ def upgrade():
     op.add_column('death_cert', sa.Column('alt_middle_name', sa.String(length=40), nullable=True))
     op.add_column('death_cert', sa.Column('age_at_death', sa.String(length=3), nullable=True))
     op.add_column('death_cert', sa.Column('exemplification_copies', sa.String(length=1), nullable=True))
-    op.add_column('death_cert', sa.Column('raised_seal', sa.Boolean(), nullable=False))
+
+    op.add_column('death_cert', sa.Column('raised_seal', sa.Boolean(), nullable=True))
+    op.execute("UPDATE death_cert SET raised_seal = false")
+    op.alter_column('death_cert', 'raised_seal', nullable=False)
+
     op.add_column('death_cert', sa.Column('raised_seal_copies', sa.String(length=1), nullable=True))
-    op.add_column('death_cert', sa.Column('no_amends', sa.Boolean(), nullable=False))
+
+    op.add_column('death_cert', sa.Column('no_amends', sa.Boolean(), nullable=True))
+    op.execute("UPDATE death_cert SET no_amends = false")
+    op.alter_column('death_cert', 'no_amends', nullable=False)
+
     op.add_column('death_cert', sa.Column('no_amends_copies', sa.String(length=1), nullable=True))
     op.alter_column('death_cert', 'letter', nullable=True, new_column_name='exemplification')
+
+    op.alter_column('death_cert', 'father_name', existing_type=sa.String(length=30), type_=sa.String(length=105))
+    op.alter_column('death_cert', 'mother_name', existing_type=sa.String(length=30), type_=sa.String(length=105))
+    op.alter_column('death_search', 'father_name', existing_type=sa.String(length=30), type_=sa.String(length=105))
+    op.alter_column('death_search', 'mother_name', existing_type=sa.String(length=30), type_=sa.String(length=105))
 
     op.add_column('death_search', sa.Column('alt_last_name', sa.String(length=25), nullable=True))
     op.add_column('death_search', sa.Column('alt_first_name', sa.String(length=40), nullable=True))
     op.add_column('death_search', sa.Column('alt_middle_name', sa.String(length=40), nullable=True))
     op.add_column('death_search', sa.Column('age_at_death', sa.String(length=3), nullable=True))
     op.add_column('death_search', sa.Column('exemplification_copies', sa.String(length=1), nullable=True))
-    op.add_column('death_search', sa.Column('raised_seal', sa.Boolean(), nullable=False))
+
+    op.add_column('death_search', sa.Column('raised_seal', sa.Boolean(), nullable=True))
+    op.execute("UPDATE death_search SET raised_seal = false")
+    op.alter_column('death_search', 'raised_seal', nullable=False)
+
     op.add_column('death_search', sa.Column('raised_seal_copies', sa.String(length=1), nullable=True))
-    op.add_column('death_search', sa.Column('no_amends', sa.Boolean(), nullable=False))
+
+    op.add_column('death_search', sa.Column('no_amends', sa.Boolean(), nullable=True))
+    op.execute("UPDATE death_search SET no_amends = false")
+    op.alter_column('death_search', 'no_amends', nullable=False)
+
     op.add_column('death_search', sa.Column('no_amends_copies', sa.String(length=1), nullable=True))
     op.alter_column('death_search', 'letter', nullable=True, new_column_name='exemplification')
 
@@ -122,4 +159,4 @@ def downgrade():
     op.drop_column('birth_cert', 'alt_middle_name')
     op.drop_column('birth_cert', 'alt_last_name')
     op.drop_column('birth_cert', 'alt_first_name')
-    op.drop_table('HVR')
+    op.drop_table('hvr')

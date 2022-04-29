@@ -12,7 +12,7 @@ from app.models import (
     BirthCertificate,
     DeathSearch,
     DeathCertificate,
-    HVR,
+    Hvr,
     MarriageSearch,
     MarriageCertificate,
     NoAmends,
@@ -120,7 +120,7 @@ def create_docs():
         order_types.TAX_PHOTO: TaxPhoto,
         order_types.PHOTO_GALLERY: PhotoGallery,
         order_types.PROPERTY_CARD: PropertyCard,
-        order_types.HVR: HVR,
+        order_types.HVR: Hvr,
         order_types.OCME: OCME,
     }
 

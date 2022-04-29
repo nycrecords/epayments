@@ -1,7 +1,6 @@
 import os
 from getpass import getpass
 
-import click
 from flask_migrate import Migrate
 
 from app import create_app, db
@@ -31,15 +30,19 @@ def make_shell_context():
 
 
 @app.cli.command()
-@click.option(
-    "--filepath",
-    default="",
-    prompt="Specify filepath of DOR.tar file."
-)
-def daily_import(filepath):
+def daily_import():
     """Import XML files"""
-    from app.main.utils import import_xml
-    import_xml(filepath, sftp=True)
+    from datetime import date, datetime, timedelta
+    from app.import_utils import import_from_api
+
+    # Set variables for import method
+    today = date.today()
+    yesterday = date.today() - timedelta(days=1)
+    start_date = datetime.combine(yesterday, datetime.min.time()).isoformat()
+    end_date = datetime.combine(today, datetime.min.time()).isoformat()
+
+    import_from_api(start_date, end_date)
+
 
 
 @app.cli.command()
