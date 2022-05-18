@@ -359,7 +359,8 @@ def import_file(tree, date_submitted):
                 clients_data_list.index("FIRSTNAME_G") + 1] if "FIRSTNAME_G" in clients_data_list else None
             groom_middle_name = clients_data_list[
                 clients_data_list.index("MIDDLENAME_G") + 1] if "MIDDLENAME_G" in clients_data_list else None
-            alt_groom_last_name = clients_data_list[clients_data_list.index("ALTLASTNAME_G") + 1]
+            alt_groom_last_name = clients_data_list[
+                clients_data_list.index("ALTLASTNAME_G") + 1] if "ALTLASTNAME_G" in clients_data_list else None
             alt_groom_first_name = clients_data_list[
                 clients_data_list.index("ALTFIRSTNAME_G") + 1] if "ALTFIRSTNAME_G" in clients_data_list else None
             alt_groom_middle_name = clients_data_list[
@@ -371,7 +372,8 @@ def import_file(tree, date_submitted):
                 clients_data_list.index("FIRSTNAME_B") + 1] if "FIRSTNAME_B" in clients_data_list else None
             bride_middle_name = clients_data_list[
                 clients_data_list.index("MIDDLENAME_B") + 1] if "MIDDLENAME_B" in clients_data_list else None
-            alt_bride_last_name = clients_data_list[clients_data_list.index("ALTLASTNAME_B") + 1]
+            alt_bride_last_name = clients_data_list[
+                clients_data_list.index("ALTLASTNAME_B") + 1] if "ALTLASTNAME_B" in clients_data_list else None
             alt_bride_first_name = clients_data_list[
                 clients_data_list.index("ALTFIRSTNAME_B") + 1] if "ALTFIRSTNAME_B" in clients_data_list else None
             alt_bride_middle_name = clients_data_list[
@@ -653,7 +655,8 @@ def import_file(tree, date_submitted):
                 clients_data_list.index("FIRSTNAME_G") + 1] if "FIRSTNAME_G" in clients_data_list else None
             groom_middle_name = clients_data_list[
                 clients_data_list.index("MIDDLENAME_G") + 1] if "MIDDLENAME_G" in clients_data_list else None
-            alt_groom_last_name = clients_data_list[clients_data_list.index("ALTLASTNAME_G") + 1]
+            alt_groom_last_name = clients_data_list[
+                clients_data_list.index("ALTLASTNAME_G") + 1] if "ALTLASTNAME_G" in clients_data_list else None
             alt_groom_first_name = clients_data_list[
                 clients_data_list.index("ALTFIRSTNAME_G") + 1] if "ALTFIRSTNAME_G" in clients_data_list else None
             alt_groom_middle_name = clients_data_list[
@@ -665,7 +668,8 @@ def import_file(tree, date_submitted):
                 clients_data_list.index("FIRSTNAME_B") + 1] if "FIRSTNAME_B" in clients_data_list else None
             bride_middle_name = clients_data_list[
                 clients_data_list.index("MIDDLENAME_B") + 1] if "MIDDLENAME_B" in clients_data_list else None
-            alt_bride_last_name = clients_data_list[clients_data_list.index("ALTLASTNAME_B") + 1]
+            alt_bride_last_name = clients_data_list[
+                clients_data_list.index("ALTLASTNAME_B") + 1] if "ALTLASTNAME_B" in clients_data_list else None
             alt_bride_first_name = clients_data_list[
                 clients_data_list.index("ALTFIRSTNAME_B") + 1] if "ALTFIRSTNAME_B" in clients_data_list else None
             alt_bride_middle_name = clients_data_list[
@@ -952,7 +956,8 @@ def import_file(tree, date_submitted):
                 suborder_1980.es_create()
 
                 # Retrieve Print Size
-                size_1940 = clients_data_list[clients_data_list.index("SIZE_1") + 1]
+                size_1940 = clients_data_list[
+                    clients_data_list.index("SIZE_1") + 1] if "SIZE_1" in clients_data_list else None
 
                 # Retrieve Number of Copies
                 num_copies_1940 = clients_data_list[clients_data_list.index("COPIES_1") + 1]
@@ -980,7 +985,7 @@ def import_file(tree, date_submitted):
                 suborder_1940.es_update(customer_order_1940.serialize)
 
                 # Retrieve Print Size
-                size_1980 = clients_data_list[clients_data_list.index("SIZE_2") + 1]
+                size_1980 = clients_data_list[clients_data_list.index("SIZE_2") + 1] if "SIZE_2" in clients_data_list else None
 
                 # Retrieve Number of Copies
                 num_copies_1980 = clients_data_list[clients_data_list.index("COPIES_2") + 1]
@@ -1025,7 +1030,7 @@ def import_file(tree, date_submitted):
 
             else:
                 # Retrieve Print Size
-                size = clients_data_list[clients_data_list.index("SIZE_1") + 1]
+                size = clients_data_list[clients_data_list.index("SIZE_1") + 1] if "SIZE_1" in clients_data_list else None
 
                 # Retrieve Number of Copies
                 num_copies = clients_data_list[clients_data_list.index("COPIES_1") + 1]
@@ -1045,6 +1050,7 @@ def import_file(tree, date_submitted):
                     num_copies=num_copies,
                     _delivery_method=_delivery_method,
                     contact_number=contact_number,
+                    contact_email=contact_email,
                     suborder_number=suborder_number)
                 db.session.add(customer_order)
                 suborder.es_update(customer_order.serialize)
@@ -1056,7 +1062,7 @@ def import_file(tree, date_submitted):
             image_id = clients_data_list[clients_data_list.index("IMAGE_IDENTIFIER") + 1]
 
             # Retrieve Print size
-            size = clients_data_list[clients_data_list.index("SIZE") + 1]  if "SIZE" in clients_data_list else None
+            size = clients_data_list[clients_data_list.index("SIZE") + 1] if "SIZE" in clients_data_list else None
 
             # Retrieve Number of Copies
             num_copies = clients_data_list[

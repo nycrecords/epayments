@@ -51,7 +51,7 @@ class TaxPhoto(db.Model):
         db.Enum(
             size.EIGHT_BY_TEN,
             size.ELEVEN_BY_FOURTEEN,
-            name='size'), nullable=False)
+            name='size'), nullable=True)
     num_copies = db.Column(db.String(2), nullable=False)
     contact_number = db.Column(db.String(10), nullable=True)
     contact_email = db.Column(db.String(256), nullable=True)
