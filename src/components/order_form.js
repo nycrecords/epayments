@@ -95,7 +95,7 @@ class OrderForm extends React.Component {
                         .then(handleFetchErrors)
                         .then((json) => {
                             this.props.setLoadingState(false);
-                            location.href = json.url;
+                            window.open(json.url);
                         }).catch((error) => {
                         console.error(error);
                         this.props.setLoadingState(false);
@@ -126,7 +126,7 @@ class OrderForm extends React.Component {
                         .then(handleFetchErrors)
                         .then((json) => {
                             this.props.setLoadingState(false);
-                            location.href = json.url;
+                            window.open(json.url);
                         }).catch((error) => {
                         console.error(error);
                         this.props.setLoadingState(false);
