@@ -33,7 +33,7 @@ python-dateutil==2.6.1
 python-dotenv==0.7.1
 python-editor==1.0.3
 pytz==2017.3
-reportlab==3.4.0
+reportlab==3.5.55
 six==1.12.0
 SQLAlchemy==1.1.15
 tzlocal==1.4
