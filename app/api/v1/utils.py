@@ -166,6 +166,7 @@ def _print_orders(search_params: Dict[str, str]) -> str:
         'Tax Photo': 'tax_photo.html',
         'Photo Gallery': 'photo_gallery.html',
         'Property Card': 'property_card.html',
+        "OCME": "ocme.html",
     }
 
     html = ''
@@ -339,7 +340,7 @@ def generate_csv(search_params: Dict[str, str]) -> str:
     )
 
     filename = 'orders_{}.csv'.format(datetime.now().strftime('%m_%d_%Y_at_%I_%M_%p'))
-    file = open(join(current_app.static_folder, 'files', filename), 'w')
+    file = open(join(current_app.config["PRINT_FILE_PATH"], filename), 'w')
     writer = csv.writer(file)
 
     if order_type == order_types.PHOTOS:
@@ -364,7 +365,7 @@ def generate_csv(search_params: Dict[str, str]) -> str:
             'Comment',
             'Description',
         ])
-        for suborder in suborder_results:
+        for suborder in suborder_results['hits']['hits']:
             writer.writerow([
                 '="{}"'.format(suborder['_source']['order_number']),
                 suborder['_source']['suborder_number'],
@@ -400,7 +401,7 @@ def generate_csv(search_params: Dict[str, str]) -> str:
             'Borough',
             'Years',
         ])
-        for suborder in suborder_results:
+        for suborder in suborder_results['hits']['hits']:
             if suborder['_source'].get('metadata') is None:
                 print(suborder)
             writer.writerow([

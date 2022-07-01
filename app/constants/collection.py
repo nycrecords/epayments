@@ -8,3 +8,4 @@
 YEAR_1940 = '1940'
 YEAR_1980 = '1980'
 BOTH = 'Both'
+LUNA = 'Luna'

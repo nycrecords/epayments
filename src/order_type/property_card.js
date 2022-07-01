@@ -22,58 +22,79 @@ class PropertyCard extends React.Component{
                 <div className="-row">
                     <div className="-fourth"> Borough: </div>
                     <div className="-two-thirds">
-                        {this.props.order_info["borough"]  ? this.props.order_info["borough"] : ""}
+                        {this.props.order_info["metadata"]["borough"]}
                     </div>
                 </div>
 
                 <div className="-row">
                     <div className="-fourth"> Block: </div>
                     <div className="-two-thirds">
-                        {this.props.order_info["block"] ? this.props.order_info["block"] : ""}
+                        {this.props.order_info["metadata"]["block"]}
                     </div>
                 </div>
 
                 <div className="-row">
                     <div className="-fourth"> Lot: </div>
                     <div className="-two-thirds">
-                        {this.props.order_info["lot"] ? this.props.order_info["lot"]: ""}
+                        {this.props.order_info["metadata"]["lot"]}
                     </div>
                 </div>
 
                 <div className="-row">
                     <div className="-fourth"> Building Number: </div>
                     <div className="-two-thirds">
-                        {this.props.order_info["building_number"] ? this.props.order_info["building_number"]: ""}
+                        {this.props.order_info["metadata"]["building_number"] ? this.props.order_info["metadata"]["building_number"]: ""}
                     </div>
                 </div>
 
                 <div className="-row">
                     <div className="-fourth"> Street: </div>
                     <div className="-two-thirds">
-                        {this.props.order_info["street"] ? this.props.order_info["street"]: ""}
+                        {this.props.order_info["metadata"]["street"] ? this.props.order_info["metadata"]["street"]: ""}
                     </div>
                 </div>
 
                 <div className="-row">
-                    <div className="-fourth"> Description: </div>
-                    <div className="-two-thirds">
-                        {this.props.order_info["description"] ? this.props.order_info["description"]: ""}
-                    </div>
+                    <div className="-fourth"> Number of Copies: </div>
+                    <div className="-two-thirds"> {this.props.order_info["metadata"]["num_copies"]}</div>
                 </div>
 
                 <div className="-row">
-                    <div className="-fourth"> Certified: </div>
-                    <div className="-two-thirds">
-                        {this.props.order_info["mail"] ? "Certified" : "Not Certified"}
-                    </div>
+                    <div className="-fourth"> Raised Seal: </div>
+                    <div className="-two-thirds"> {this.props.order_info["metadata"]["raised_seal"] ? "Yes" : "No"}</div>
                 </div>
 
-                <div className="-row">
-                    <div className="-fourth"> Mail Pickup: </div>
-                    <div className="-two-thirds">
-                        {this.props.order_info["mail"] ? "Mail" : "Pickup"}
+                {this.props.order_info["metadata"]["raised_seal"] &&
+                    <div className="-row">
+                        <div className="-fourth"> Raised Seal Copies: </div>
+                        <div className="-two-thirds">
+                            {this.props.order_info["metadata"]["raised_seal_copies"] ? this.props.order_info["metadata"]["raised_seal_copies"] : ""}
+                        </div>
                     </div>
+                }
+
+                <div className="-row">
+                    <div className="-fourth"> Delivery Method: </div>
+                    <div className="-two-thirds"> {this.props.order_info["metadata"]["delivery_method"]} </div>
                 </div>
+
+                {this.props.order_info["metadata"]["contact_number"] &&
+                    <div className="-row">
+                        <div className="-fourth"> Contact Number: </div>
+                        <div className="-two-thirds">
+                            {this.props.order_info["metadata"]["contact_number"]}
+                        </div>
+                    </div>
+                }
+
+                {this.props.order_info["metadata"]["contact_email"] &&
+                    <div className="-row">
+                        <div className="-fourth"> Contact Email: </div>
+                        <div className="-two-thirds">
+                            {this.props.order_info["metadata"]["contact_email"]}
+                        </div>
+                    </div>
+                }
             </div>
         )
     };

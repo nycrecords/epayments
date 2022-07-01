@@ -1,6 +1,6 @@
+import os
 from datetime import date
-
-from flask import jsonify, request, Response
+from flask import current_app, jsonify, request, Response, send_file, send_from_directory
 from flask_login import login_user, logout_user, current_user, login_required
 from sqlalchemy import desc
 
@@ -19,6 +19,7 @@ from app.constants import event_type
 from app.constants import printing
 from app.models import (
     Events,
+    NoAmends,
     Suborders,
     TaxPhoto,
     Users,
@@ -84,7 +85,7 @@ def get_orders() -> Response:
 
         # formatting results
         formatted_orders = SearchFunctions.format_results(orders)
-        suborder_total = orders['hits']['total']
+        suborder_total = orders['hits']['total']["value"]
         order_total = orders['aggregations']['order_count']['value']
 
         return jsonify(
@@ -96,7 +97,7 @@ def get_orders() -> Response:
     else:
         orders = search_queries(date_received_start=date.today().strftime('%m/%d/%Y'))
         formatted_orders = SearchFunctions.format_results(orders)
-        suborder_total = orders['hits']['total']
+        suborder_total = orders['hits']['total']["value"]
         order_total = orders['aggregations']['order_count']['value']
 
         return jsonify(
@@ -378,3 +379,11 @@ def change_password() -> Response:
             'message': 'Password successfully changed.'
         }
     ), 200
+
+
+# noinspection PyTypeChecker,PyTypeChecker
+@api.route('/uploads/<string:suborder_number>', methods=['GET', 'POST'])
+def download(suborder_number):
+    no_amends = NoAmends.query.filter_by(suborder_number=suborder_number).one()
+    directory = os.path.join(current_app.config["NO_AMENDS_FILE_PATH"], no_amends.suborder_number)
+    return send_from_directory(directory, no_amends.filename, as_attachment=True)

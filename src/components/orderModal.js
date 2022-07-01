@@ -10,9 +10,12 @@ import BirthCert from '../order_type/birth_cert'
 import BirthSearch from '../order_type/birth_search'
 import DeathCert from '../order_type/death_cert'
 import DeathSearch from '../order_type/death_search'
+import NoAmends from '../order_type/no_amends'
 import TaxPhoto from '../order_type/tax_photo'
 import PhotoGallery from '../order_type/photo_gallery'
 import PropertyCard from '../order_type/property_card'
+import OCME from '../order_type/ocme'
+import HVR from '../order_type/hvr'
 import {csrfFetch} from "../utils/fetch"
 
 class OrderModal extends React.Component {
@@ -101,6 +104,11 @@ class OrderModal extends React.Component {
                     <DeathSearch order_info={this.state.order_info}/>
                 );
                 break;
+            case 'No Amends':
+                orderInfo=(
+                    <NoAmends order_info={this.state.order_info} suborder_number={this.props.suborder_number}/>
+                );
+                break;
             case 'Tax Photo':
                 orderInfo=(
                     <TaxPhoto order_info={this.state.order_info}/>
@@ -114,6 +122,16 @@ class OrderModal extends React.Component {
             case 'Photo Gallery':
                 orderInfo=(
                     <PhotoGallery order_info={this.state.order_info}/>
+                );
+                break;
+            case 'OCME':
+                orderInfo=(
+                    <OCME order_info={this.state.order_info}/>
+                );
+                break;
+            case 'HVR':
+                orderInfo=(
+                    <HVR order_info={this.state.order_info}/>
                 );
                 break;
             default:

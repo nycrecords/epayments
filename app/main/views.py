@@ -1,9 +1,11 @@
-from flask import render_template, make_response, jsonify, redirect, url_for, request, current_app
-from werkzeug.utils import secure_filename
-from app.main import main
-from app.main.utils import allowed_file, import_xml
 import os
 from datetime import datetime
+
+from flask import render_template, redirect, url_for, request, current_app, send_from_directory
+
+from app.main import main
+from app.main.utils import allowed_file, import_xml
+from app.import_utils import import_from_api
 
 
 @main.route('/', methods=['GET', 'POST'])
@@ -23,4 +25,15 @@ def import_tar():
             file_.save(filename)
             import_xml(filename)
             return redirect(url_for('main.index'))
+
+        start_date = request.form["start-date"]
+        end_date = request.form["end-date"]
+        if start_date and end_date:
+            import_from_api(start_date, end_date)
     return render_template('main/import.html')
+
+
+# noinspection PyTypeChecker,PyTypeChecker
+@main.route('/static/files/<string:filename>', methods=['GET', 'POST'])
+def download(filename):
+    return send_from_directory(current_app.config["PRINT_FILE_PATH"], filename, as_attachment=True)

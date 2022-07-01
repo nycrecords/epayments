@@ -1,4 +1,5 @@
 import pytz
+from datetime import date
 from elasticsearch import Elasticsearch
 from flask import Flask
 from flask_apscheduler import APScheduler
@@ -8,6 +9,7 @@ from flask_mail import Mail
 from flask_sqlalchemy import SQLAlchemy
 
 from config import config, Config
+from app.lib.nycholidays import NYCHolidays
 
 # Flask extensions
 bootstrap = Bootstrap()
@@ -22,6 +24,8 @@ PYTZ_TIMEZONE = pytz.timezone(Config.TIME_ZONE)
 # ElasticSearch Extension
 es = Elasticsearch(Config.ELASTICSEARCH_URL)
 
+nyc_holidays = NYCHolidays(years=[year for year in range(date.today().year, date.today().year + 1)])
+
 
 def create_app(config_name):
     """
@@ -33,7 +37,7 @@ def create_app(config_name):
     """
     app = Flask(__name__)
     app.config.from_object(config[config_name])
-    config[config_name].init_app(app)
+    # config[config_name].init_app(app)
     scheduler.init_app(app)
 
     bootstrap.init_app(app)
@@ -41,8 +45,7 @@ def create_app(config_name):
     mail.init_app(app)
     login_manager.init_app(app)
 
-    app.elasticsearch = Elasticsearch([app.config['ELASTICSEARCH_URL']]) \
-        if app.config['ELASTICSEARCH_URL'] else None
+    app.elasticsearch = Elasticsearch(Config.ELASTICSEARCH_URL)
 
     # Base template that uses React for frontend
     from .main import main as main_blueprint

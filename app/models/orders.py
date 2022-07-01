@@ -2,7 +2,7 @@ from sqlalchemy.dialects.postgresql import ARRAY
 
 from app import db, es
 from app.constants import order_types, status
-from app.constants.search import DATETIME_FORMAT
+from app.constants.search import DATETIME_FORMAT, ES_DATETIME_FORMAT
 
 
 class Orders(db.Model):
@@ -89,9 +89,12 @@ class Suborders(db.Model):
             order_types.MARRIAGE_CERT,
             order_types.DEATH_SEARCH,
             order_types.DEATH_CERT,
+            order_types.NO_AMENDS,
             order_types.TAX_PHOTO,
             order_types.PHOTO_GALLERY,
             order_types.PROPERTY_CARD,
+            order_types.OCME,
+            order_types.HVR,
             name='order_type'), nullable=False)
     order_number = db.Column(db.String(64), db.ForeignKey('orders.id'), nullable=False)
     status = db.Column(
@@ -150,11 +153,10 @@ class Suborders(db.Model):
     def es_create(self):
         """Creates an elasticsearch document."""
         customer = self.order.customer
-        es.create(
+        es.index(
             index='suborders',
-            doc_type='suborders',
             id=self.id,
-            body={
+            document={
                 'order_number': self.order_number,
                 'suborder_number': self.id,
                 'date_submitted': self.order.date_submitted.strftime(DATETIME_FORMAT),
@@ -183,22 +185,16 @@ class Suborders(db.Model):
         """Updates an elasticsearch document."""
         es.update(
             index='suborders',
-            doc_type='suborders',
             id=self.id,
-            body={
-                'doc': {
+            doc={
                     'metadata': metadata,
                     'current_status': self.status,
-                }
             }
         ) if metadata else \
             es.update(
                 index='suborders',
-                doc_type='suborders',
                 id=self.id,
-                body={
-                    'doc': {
-                        'current_status': self.status
-                    }
+                doc={
+                    'current_status': self.status
                 }
             )

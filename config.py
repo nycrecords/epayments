@@ -11,11 +11,15 @@ load_dotenv(dotenv_path)
 class Config:
     SQLALCHEMY_TRACK_MODIFICATIONS = True
     SECRET_KEY = os.environ.get('SECRET_KEY') or 'hard to guess string'
-    SQLALCHEMY_DATABASE_URI = os.environ.get('DATABASE_URL') or 'postgresql://developer@127.0.0.1:5432/epayments'
+    SQLALCHEMY_DATABASE_URI = os.environ.get('DATABASE_URL')
     REMOTE_FILE_PATH = os.environ.get('REMOTE_FILE_PATH')
     LOCAL_FILE_PATH = (os.environ.get('LOCAL_FILE_PATH') or
                        os.path.join(os.path.abspath(os.path.dirname(__file__)), 'data/'))
     TAR_DATA_PATH = os.environ.get('TAR_DATA_PATH', 'data/files/DOR/')
+    PRINT_FILE_PATH = os.environ.get('PRINT_FILE_PATH',
+                                     os.path.join(os.path.abspath(os.path.dirname(__file__)),'data/files/'))
+    NO_AMENDS_FILE_PATH = os.environ.get('NO_AMENDS_FILE_PATH',
+                                         os.path.join(os.path.abspath(os.path.dirname(__file__)), 'data/no_amends/'))
 
     MAIL_SERVER = os.environ.get("MAIL_SERVER") or "localhost"
     MAIL_PORT = os.environ.get("MAIL_PORT") or 2525
@@ -33,9 +37,13 @@ class Config:
     TIME_ZONE = os.environ.get('TIME_ZONE') or 'US/Eastern'
 
     # Elastic Search Configurations
-    ELASTICSEARCH_URL = os.environ.get('ELASTICSEARCH_URL') or 'localhost:9200'
+    ELASTICSEARCH_URL = os.environ.get('ELASTICSEARCH_URL') or 'https://localhost:9200'
     ELASTICSEARCH_ENABLED = os.environ.get("ELASTICSEARCH_ENABLED") or 'True'
     ELASTICSEARCH_INDEX = os.environ.get("ELASTICSEARCH_INDEX") or 'suborders'
+
+    # Import API Configurations
+    IMPORT_URL = os.environ.get("IMPORT_URL")
+    IMPORT_API_KEY = os.environ.get("IMPORT_API_KEY")
 
     @staticmethod
     def init_app(app):

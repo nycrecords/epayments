@@ -29,7 +29,7 @@ class DeathCert extends React.Component{
                 <div className="-row">
                     <div className="-fourth"> Last Name: </div>
                     <div className="-two-thirds">
-                        {this.props.order_info["metadata"]["last_name"]  ? this.props.order_info["metadata"]["last_name"] : ""}
+                        {this.props.order_info["metadata"]["last_name"]}
                     </div>
                 </div>
 
@@ -48,14 +48,30 @@ class DeathCert extends React.Component{
                 </div>
 
                 <div className="-row">
-                    <div className="-fourth"> Number of Copies: </div>
-                    <div className="-two-thirds"> {this.props.order_info["metadata"]["num_copies"]}</div>
+                    <div className="-fourth"> Alt Last Name: </div>
+                    <div className="-two-thirds">
+                        {this.props.order_info["metadata"]["alt_last_name"]  ? this.props.order_info["metadata"]["alt_last_name"] : ""}
+                    </div>
                 </div>
 
                 <div className="-row">
-                    <div className="-fourth"> Cemetery: </div>
+                    <div className="-fourth"> Alt Middle Name: </div>
                     <div className="-two-thirds">
-                        {this.props.order_info["metadata"]["cemetery"] ? this.props.order_info["metadata"]["cemetery"]: ""}
+                        {this.props.order_info["metadata"]["alt_middle_name"] ? this.props.order_info["metadata"]["alt_middle_name"] : ""}
+                    </div>
+                </div>
+
+                <div className="-row">
+                    <div className="-fourth"> Alt First Name: </div>
+                    <div className="-two-thirds">
+                        {this.props.order_info["metadata"]["alt_first_name"] ? this.props.order_info["metadata"]["alt_first_name"] : ""}
+                    </div>
+                </div>
+
+                <div className="-row">
+                    <div className="-fourth"> Age at Death: </div>
+                    <div className="-two-thirds">
+                        {this.props.order_info["metadata"]["age_at_death"] ? this.props.order_info["metadata"]["age_at_death"]: ""}
                     </div>
                 </div>
 
@@ -76,21 +92,21 @@ class DeathCert extends React.Component{
                 <div className="-row">
                     <div className="-fourth"> Years: </div>
                     <div className="-two-thirds">
-                        {this.props.order_info["metadata"]["years"] ? this.props.order_info["metadata"]["years"] : ""}
+                        {this.props.order_info["metadata"]["years"]}
                     </div>
                 </div>
 
                 <div className="-row">
                     <div className="-fourth"> Death Place: </div>
                     <div className="-two-thirds">
-                        {this.props.order_info["metadata"]["birth_place"] ? this.props.order_info["metadata"]["death_place"]  : ""}
+                        {this.props.order_info["metadata"]["death_place"] ? this.props.order_info["metadata"]["death_place"]  : ""}
                     </div>
                 </div>
 
                 <div className="-row">
                     <div className="-fourth"> Borough: </div>
                     <div className="-two-thirds">
-                        {this.props.order_info["metadata"]["borough"] ? this.props.order_info["metadata"]["borough"] : ""}
+                        {this.props.order_info["metadata"]["borough"]}
                     </div>
                 </div>
 
@@ -109,14 +125,53 @@ class DeathCert extends React.Component{
                 </div>
 
                 <div className="-row">
-                    <div className="-fourth"> Letter: </div>
-                    <div className="-two-thirds"> {this.props.order_info["metadata"]["letter"] ? "Yes" : "No"} </div>
+                    <div className="-fourth"> Number of Copies: </div>
+                    <div className="-two-thirds"> {this.props.order_info["metadata"]["num_copies"]}</div>
                 </div>
 
                 <div className="-row">
-                    <div className="-fourth"> Comment: </div>
-                    <div className="-two-thirds"> {this.props.order_info["metadata"]["comment"]} </div>
+                    <div className="-fourth"> Exemplification:</div>
+                    <div
+                        className="-two-thirds"> {this.props.order_info["metadata"]["exemplification"] ? "Yes" : "No"}</div>
                 </div>
+
+                {this.props.order_info["metadata"]["exemplification"] &&
+                <div className="-row">
+                    <div className="-fourth"> Exemplification Copies:</div>
+                    <div className="-two-thirds">
+                        {this.props.order_info["metadata"]["exemplification_copies"] ? this.props.order_info["metadata"]["exemplification_copies"] : ""}
+                    </div>
+                </div>
+                }
+
+                <div className="-row">
+                    <div className="-fourth"> Raised Seal:</div>
+                    <div
+                        className="-two-thirds"> {this.props.order_info["metadata"]["raised_seal"] ? "Yes" : "No"}</div>
+                </div>
+
+                {this.props.order_info["metadata"]["raised_seal"] &&
+                <div className="-row">
+                    <div className="-fourth"> Raised Seal Copies:</div>
+                    <div className="-two-thirds">
+                        {this.props.order_info["metadata"]["raised_seal_copies"] ? this.props.order_info["metadata"]["raised_seal_copies"] : ""}
+                    </div>
+                </div>
+                }
+
+                <div className="-row">
+                    <div className="-fourth"> No Amends:</div>
+                    <div className="-two-thirds"> {this.props.order_info["metadata"]["no_amends"] ? "Yes" : "No"}</div>
+                </div>
+
+                {this.props.order_info["metadata"]["no_amends"] &&
+                <div className="-row">
+                    <div className="-fourth"> No Amends Copies:</div>
+                    <div className="-two-thirds">
+                        {this.props.order_info["metadata"]["no_amends_copies"] ? this.props.order_info["metadata"]["no_amends_copies"] : ""}
+                    </div>
+                </div>
+                }
 
                 <div className="-row">
                     <div className="-fourth"> Delivery Method: </div>

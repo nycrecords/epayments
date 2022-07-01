@@ -8,3 +8,6 @@ from .customers import Customers
 from .events import Events
 from .users import Users
 from .order_number_counter import OrderNumberCounter
+from .ocme import OCME
+from .no_amends import NoAmends
+from .hvr import Hvr

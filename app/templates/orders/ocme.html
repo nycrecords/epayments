@@ -1,0 +1,77 @@
+{% extends 'orders/base.html' %}
+
+{% block content %}
+
+    <p>
+        <b>BOROUGH:</b> <br/>
+        {{ order_info['metadata']['borough'] }}
+    </p>
+
+    <p>
+        <b>DATE:</b> <br/>
+        {{ order_info['metadata']['date'] }}
+    </p>
+
+    <p>
+        <b>FIRST NAME:</b> <br/>
+        {{ order_info['metadata']['first_name']}}
+    </p>
+
+    <p>
+        <b>MIDDLE NAME:</b> <br/>
+        {{ order_info['metadata']['middle_name'] or '' }}
+    </p>
+
+    <p>
+        <b>LAST NAME:</b> <br/>
+        {{ order_info['metadata']['last_name'] }}
+    </p>
+
+    <p>
+        <b>AGE:</b> <br/>
+        {{ order_info['metadata']['age'] or '' }}
+    </p>
+
+    <p>
+        <b>CERTIFICATE NUMBER:</b> <br/>
+        {{ order_info['metadata']['certificate_number'] or '' }}
+    </p>
+
+    <p>
+        <b>NUMBER OF COPIES:</b> <br/>
+        {{ order_info['metadata']['num_copies'] }}
+    </p>
+
+    <p>
+        <b>RAISED SEAL:</b> <br/>
+        {{ "Yes" if order_info['metadata']['raised_seal'] else "No" }}
+    </p>
+
+    {% if order_info['metadata']['raised_seal'] %}
+        <p>
+            <b>RAISED SEAL COPIES:</b> <br/>
+            {{ order_info['metadata']['raised_seal_copies'] or '' }}
+        </p>
+    {% endif %}
+
+    {% if order_info['metadata']['contact_number'] %}
+        <p>
+            <b>RAISED SEAL COPIES:</b> <br/>
+            {{ order_info['metadata']['contact_number'] }}
+        </p>
+    {% endif %}
+
+    {% if order_info['metadata']['contact_email'] %}
+        <p>
+            <b>RAISED SEAL COPIES:</b> <br/>
+            {{ order_info['metadata']['contact_email'] }}
+        </p>
+    {% endif %}
+
+    <p>
+        <b>DELIVERY METHOD:</b> <br/>
+        {{ order_info['metadata']['delivery_method'].title() }}
+    </p>
+{% endblock %}
+
+
