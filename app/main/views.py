@@ -1,7 +1,7 @@
 import os
 from datetime import datetime
 
-from flask import render_template, redirect, url_for, request, current_app
+from flask import render_template, redirect, url_for, request, current_app, send_from_directory
 
 from app.main import main
 from app.main.utils import allowed_file, import_xml
@@ -31,3 +31,9 @@ def import_tar():
         if start_date and end_date:
             import_from_api(start_date, end_date)
     return render_template('main/import.html')
+
+
+# noinspection PyTypeChecker,PyTypeChecker
+@main.route('/static/files/<string:filename>', methods=['GET', 'POST'])
+def download(filename):
+    return send_from_directory(current_app.config["PRINT_FILE_PATH"], filename, as_attachment=True)

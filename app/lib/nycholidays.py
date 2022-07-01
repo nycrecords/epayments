@@ -46,7 +46,7 @@ class NYCHolidays(HolidayBase):
         elif year >= 1888:
             self[date(year, 5, 30)] = "Memorial Day"
 
-        # Independence Day
+        # Juneteenth Day
         if year > 2021:
             name = "Juneteenth Day"
             self[date(year, 6, 19)] = name

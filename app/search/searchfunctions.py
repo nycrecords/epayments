@@ -64,9 +64,9 @@ class SearchFunctions(object):
     @staticmethod
     def csv(dsl, start, size):
         search_results = es.search(index='suborders',
-                                   doc_type='suborders',
-                                   scroll='1m',
-                                   body=dsl,
+                                   aggs=dsl["aggs"],
+                                   query=dsl["query"],
+                                   sort=dsl["sort"],
                                    _source=[
                                        'order_number',
                                        'suborder_number',
@@ -78,19 +78,7 @@ class SearchFunctions(object):
                                    size=size,
                                    from_=start)
 
-        sid = search_results['_scroll_id']
-        scroll_size = search_results['hits']['total']
-
-        scroll_results = search_results['hits']['hits']
-
-        while scroll_size > 0:
-            results = es.scroll(scroll='1m', body={"scroll": "1m", "scroll_id": sid})
-
-            scroll_size = len(results['hits']['hits'])
-
-            scroll_results += results['hits']['hits']
-
-        return scroll_results
+        return search_results
 
     @staticmethod
     def format_results(results):

@@ -140,7 +140,7 @@ class PhotoGallery(db.Model):
 
     __tablename = 'photo_gallery'
     id = db.Column(db.Integer, primary_key=True)
-    image_id = db.Column(db.String(20), nullable=False)
+    image_id = db.Column(db.String(35), nullable=False)
     description = db.Column(db.String(500), nullable=True)
     additional_description = db.Column(db.String(500), nullable=True)
     size = db.Column(

@@ -16,6 +16,8 @@ class Config:
     LOCAL_FILE_PATH = (os.environ.get('LOCAL_FILE_PATH') or
                        os.path.join(os.path.abspath(os.path.dirname(__file__)), 'data/'))
     TAR_DATA_PATH = os.environ.get('TAR_DATA_PATH', 'data/files/DOR/')
+    PRINT_FILE_PATH = os.environ.get('PRINT_FILE_PATH',
+                                     os.path.join(os.path.abspath(os.path.dirname(__file__)),'data/files/'))
     NO_AMENDS_FILE_PATH = os.environ.get('NO_AMENDS_FILE_PATH',
                                          os.path.join(os.path.abspath(os.path.dirname(__file__)), 'data/no_amends/'))
 
