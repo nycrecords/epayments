@@ -1,16 +1,19 @@
 import os
 from datetime import datetime
 
-from flask import render_template, redirect, url_for, request, current_app, send_from_directory
-
+from flask import render_template, redirect, url_for, request, current_app, send_from_directory, flash
+from flask_login import login_user, current_user, logout_user
 from app.main import main
 from app.main.utils import allowed_file, import_xml
 from app.import_utils import import_from_api
+from app.models import Users
 
 
 @main.route('/', methods=['GET', 'POST'])
 def index():
     """Default route for the application."""
+    if not current_user.is_authenticated:
+        return redirect(url_for("main.newlogin"))
     return render_template('index.html')
 
 
@@ -34,6 +37,50 @@ def import_tar():
 
 
 # noinspection PyTypeChecker,PyTypeChecker
-# @main.route('/static/files/<string:filename>', methods=['GET', 'POST'])
-# def download(filename):
-#     return send_from_directory(current_app.config["PRINT_FILE_PATH"], filename, as_attachment=True)
+@main.route('/static/files/<string:filename>', methods=['GET', 'POST'])
+def download(filename):
+    return send_from_directory(current_app.config["PRINT_FILE_PATH"], filename, as_attachment=True)
+
+
+@main.route('/newlogin', methods=['GET'])
+def newlogin():
+    """ Initial load in the login page """
+    return render_template('newlogin.html')
+
+
+@main.route('/newlogin', methods=['POST'])
+def newloginAuth():
+    """
+    Authenticates the user and logs in the user
+
+    email: request email
+    password: request password
+
+    Returns: redirects to ePayments page on successful authorization
+    if form fields are missing, an error will be displayed
+    """
+
+    email = request.form['email']
+    password = request.form['password']
+
+    user = Users.query.filter_by(email=email).one_or_none()
+    if user is None:
+        error = 'Invalid Email'
+        flash(error, 'danger')
+    else:
+        valid_password = user.verify_password(password)
+        if not valid_password:
+            error = 'Invalid Password'
+            flash(error, 'danger')
+        else:
+            login_user(user)
+            return redirect(url_for('main.index'))
+
+    return render_template('newlogin.html')
+
+
+@main.route('/newlogout')
+def newlogout():
+    logout_user()
+    flash('Logout Successful', 'success')
+    return redirect(url_for('main.index'))
