@@ -1,7 +1,7 @@
 import os
 from datetime import datetime
 
-from flask import render_template, redirect, url_for, request, current_app, send_from_directory, flash
+from flask import render_template, redirect, url_for, request, current_app, send_from_directory, flash, jsonify
 from flask_login import login_user, current_user, logout_user
 from app.main import main
 from app.main.utils import allowed_file, import_xml
@@ -84,3 +84,20 @@ def newlogout():
     logout_user()
     flash('Logout Successful', 'success')
     return redirect(url_for('main.index'))
+
+
+@main.route('/listorders', methods=['GET', 'POST'])
+def listorders():
+    json = request.get_json(force=True)
+    data = {
+        'order_table': ''
+    }
+
+    all_orders = json.get('all_orders')
+    order_count = json.get('order_count')
+    suborder_count = json.get('suborder_count')
+    data['order_table'] = render_template('order_table.html',
+                                          orders=all_orders,
+                                          order_count=order_count,
+                                          suborder_count=suborder_count)
+    return jsonify(data)

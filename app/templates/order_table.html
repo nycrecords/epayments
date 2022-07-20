@@ -1,0 +1,29 @@
+{% if orders %}
+    <div>Total orders: {{ order_count }}</div>
+    <div>Total suborders: {{ suborder_count }}</div>
+
+    <div class="overflow-auto" style="height: 60vh">
+        <table id='order_table' class="table table-striped table-bordered text-center">
+            <thead class="thead-dark">
+            <tr>
+                <th scope="col">Status</th>
+                <th scope="col">Date Received</th>
+                <th scope="col">Order Num</th>
+                <th scope="col">Order Type</th>
+                <th scope="col">Suborder Num</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for order in orders %}
+                <tr>
+                    <td>{{ order['current_status'] }}</td>
+                    <td>{{ order['date_received'] }}</td>
+                    <td>{{ order['order_number'] }}</td>
+                    <td>{{ order['order_type'] }}</td>
+                    <td>{{ order['suborder_number'] }}</td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+{% endif %}
