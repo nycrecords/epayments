@@ -16,8 +16,7 @@ class SearchOrderForm(FlaskForm):
     delivery_method = SelectField('Delivery Method', choices=delivery_method.DROPDOWN)
     status = SelectField('Status', choices=status.DROPDOWN)
     billing_name = StringField('Billing Name')
-    submit_field = SubmitField('Apply')
-    clear_field = SubmitField('Clear')
+    email = StringField('Email')
 
     def __init__(self, *args, **kwargs):
         super(SearchOrderForm, self).__init__(*args, **kwargs)

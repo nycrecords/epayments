@@ -15,6 +15,7 @@ def index():
     """Default route for the application."""
     if not current_user.is_authenticated:
         return redirect(url_for("main.newlogin"))
+
     form = SearchOrderForm()
     return render_template('index.html', form=form)
 
@@ -96,23 +97,14 @@ def listorders():
     }
 
     all_orders = json.get('all_orders')
-    order_count = json.get('order_count')
-    suborder_count = json.get('suborder_count')
     data['order_table'] = render_template('order_table.html',
-                                          orders=all_orders,
-                                          order_count=order_count,
-                                          suborder_count=suborder_count)
+                                          orders=all_orders)
     return jsonify(data)
 
-# @main.route('/search-orders', methods=['GET'])
+
+# @main.route('/search-orders', methods=['POST'])
 # def search_orders():
-#     form = SearchOrderForm()
-#
-#     # set form data
-#     form.order_number.data = request.args.get('order_number', '')
-#     form.suborder_number.data = request.args.get('suborder_number')
-#     form.delivery_method.data = request.args.get('delivery_method', '')
-#     form.status.data = request.args.get('status', '')
-#     form.billing_name.data = request.args.get('billing_name', '')
+#     # form has the data
+#     form = SearchOrderForm(request.form)
 #
 #     return render_template('index.html', form=form)
