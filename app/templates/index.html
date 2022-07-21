@@ -28,57 +28,56 @@
     <section id="search">
         <div class="row justify-content-center text-center">
 
-            <div class="col-3">
+            <div class="col-2">
                 <div class="container">
                     <h5>Search Parameters</h5>
 
                     <form id="search_form" method="POST" class="text-left">
                         <div class="mb-2">
                             {{ form.order_number.label(class="control-label", for="order_number") }}
-                            {{ form.order_number(class="form-control") }}
+                            {{ form.order_number(class="form-control rounded") }}
                         </div>
 
                         <div class="mb-2">
                             {{ form.suborder_number.label(class="control-label", for="suborder_number") }}
-                            {{ form.suborder_number(class="form-control") }}
+                            {{ form.suborder_number(class="form-control rounded") }}
                         </div>
 
                         <div class="mb-2">
                             {{ form.order_type.label(class="control-label", for="order_type") }}
-                            {{ form.order_type(class="form-control") }}
+                            {{ form.order_type(class="form-control rounded") }}
                         </div>
 
                         <div class="mb-2">
                             {{ form.delivery_method.label(class="control-label", for="delivery_method") }}
-                            {{ form.delivery_method(class="form-control") }}
+                            {{ form.delivery_method(class="form-control rounded") }}
                         </div>
 
                         <div class="mb-2">
                             {{ form.status.label(class="control-label", for="status") }}
-                            {{ form.status(class="form-control") }}
+                            {{ form.status(class="form-control rounded") }}
                         </div>
 
                         <div class="mb-2">
                             {{ form.billing_name.label(class="control-label", for="billing_name") }}
-                            {{ form.billing_name(class="form-control") }}
+                            {{ form.billing_name(class="form-control rounded") }}
                         </div>
                         <span>
                             {{ form.clear_field(class="btn btn-danger") }}
                             {{ form.submit_field(class="btn btn-success") }}
                         </span>
-
                     </form>
                 </div>
             </div>
 
-            <div class="col-9">
-                <div id="orders" class="shadow p-2 mb-5">
-                    <h5 class="">Search Results</h5>
-                    <div id="order_table"></div>
+            <div class="col-10">
+                <div class="container-fluid">
+                    <div id="orders" class="shadow p-2 mb-5">
+                        <h5 class="">Search Results</h5>
+                        <div id="order_table"></div>
+                    </div>
                 </div>
             </div>
-
-
         </div>
     </section>
 
@@ -137,12 +136,10 @@
             // results is a json file
             console.log(data);
         }
-
     </script>
 
     <!-- NYC template JS (RTL, search and language toggle, back to top)  -->
     <script src="/static/js/main.js"></script>
     <script src="/static/js/responsive-table.js"></script>
 </body>
-
 </html>

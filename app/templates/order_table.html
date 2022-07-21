@@ -11,6 +11,12 @@
                 <th scope="col">Order Num</th>
                 <th scope="col">Order Type</th>
                 <th scope="col">Suborder Num</th>
+                <th scope="col">Address</th>
+                <th scope="col">Billing Name</th>
+                <th scope="col">Country</th>
+                <th scope="col">Email</th>
+                <th scope="col">Phone Number</th>
+                <th scope="col">Shipping Name</th>
             </tr>
             </thead>
             <tbody>
@@ -21,6 +27,12 @@
                     <td>{{ order['order_number'] }}</td>
                     <td>{{ order['order_type'] }}</td>
                     <td>{{ order['suborder_number'] }}</td>
+                    <td>{{ order['customer']['address'] }}</td>
+                    <td>{{ order['customer']['billing_name'] }}</td>
+                    <td>{{ order['customer']['country'] }}</td>
+                    <td>{{ order['customer']['email'] }}</td>
+                    <td>{{ order['customer']['phone'] }}</td>
+                    <td>{{ order['customer']['shipping_name'] }}</td>
                 </tr>
             {% endfor %}
             </tbody>
