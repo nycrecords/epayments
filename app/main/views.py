@@ -7,6 +7,7 @@ from app.main import main
 from app.main.utils import allowed_file, import_xml
 from app.import_utils import import_from_api
 from app.models import Users
+from app.main.forms import SearchOrderForm
 
 
 @main.route('/', methods=['GET', 'POST'])
@@ -14,7 +15,8 @@ def index():
     """Default route for the application."""
     if not current_user.is_authenticated:
         return redirect(url_for("main.newlogin"))
-    return render_template('index.html')
+    form = SearchOrderForm()
+    return render_template('index.html', form=form)
 
 
 @main.route('/import', methods=['GET', 'POST'])
@@ -101,3 +103,16 @@ def listorders():
                                           order_count=order_count,
                                           suborder_count=suborder_count)
     return jsonify(data)
+
+# @main.route('/search-orders', methods=['GET'])
+# def search_orders():
+#     form = SearchOrderForm()
+#
+#     # set form data
+#     form.order_number.data = request.args.get('order_number', '')
+#     form.suborder_number.data = request.args.get('suborder_number')
+#     form.delivery_method.data = request.args.get('delivery_method', '')
+#     form.status.data = request.args.get('status', '')
+#     form.billing_name.data = request.args.get('billing_name', '')
+#
+#     return render_template('index.html', form=form)
