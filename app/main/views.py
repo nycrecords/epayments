@@ -93,18 +93,10 @@ def newlogout():
 def listorders():
     json = request.get_json(force=True)
     data = {
-        'order_table': ''
+        'order_rows': ''
     }
 
     all_orders = json.get('all_orders')
-    data['order_table'] = render_template('order_table.html',
+    data['order_rows'] = render_template('order_table.html',
                                           orders=all_orders)
     return jsonify(data)
-
-
-# @main.route('/search-orders', methods=['POST'])
-# def search_orders():
-#     # form has the data
-#     form = SearchOrderForm(request.form)
-#
-#     return render_template('index.html', form=form)

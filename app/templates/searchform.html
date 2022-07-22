@@ -1,0 +1,95 @@
+<div class="container">
+    <form id="search_form" method="POST" class="text-left">
+        <div>
+            {{ form.order_number.label(class="control-label font-weight-bold mb-0", for="order_number") }}
+            {{ form.order_number(class="form-control form-control-sm rounded mt-0") }}
+        </div>
+
+        <div>
+            {{ form.suborder_number.label(class="control-label font-weight-bold mb-0", for="suborder_number") }}
+            {{ form.suborder_number(class="form-control form-control-sm rounded mt-0") }}
+        </div>
+
+        <div>
+            {{ form.order_type.label(class="control-label font-weight-bold mb-0", for="order_type") }}
+            {{ form.order_type(class="form-control form-control-sm rounded mt-0") }}
+        </div>
+
+        <div>
+            {{ form.delivery_method.label(class="control-label font-weight-bold mb-0", for="delivery_method") }}
+            {{ form.delivery_method(class="form-control form-control-sm rounded mt-0") }}
+        </div>
+
+        <div>
+            {{ form.status.label(class="control-label font-weight-bold mb-0", for="status") }}
+            {{ form.status(class="form-control form-control-sm rounded mt-0") }}
+        </div>
+
+        <div>
+            {{ form.billing_name.label(class="control-label font-weight-bold mb-0", for="billing_name") }}
+            {{ form.billing_name(class="form-control form-control-sm rounded mt-0") }}
+        </div>
+
+        <div>
+            {{ form.email.label(class="control-label font-weight-bold mb-0", for="billing_name") }}
+            {{ form.email(class="form-control form-control-sm rounded mt-0") }}
+        </div>
+
+        <div class="py-2">
+            <div class="shadow p-1 rounded overflow-auto">
+                <div class="nav nav-pills device-md py-1" role="tablist">
+                    <a class="nav-item nav-link rounded active" id="tab_received_btn" href="#tab_received" data-toggle="tab"
+                       aria-controls="tab_received" aria-selected="true" role="tab">
+                        Received
+                    </a>
+
+                    <a class="nav-item nav-link rounded" id="tab_submitted_btn" href="#tab_submitted" data-toggle="tab"
+                       aria-controls="tab_submitted" aria-selected="false" role="tab">
+                        Submitted
+                    </a>
+                </div>
+
+                <div class="tab-content" id="tabs_content">
+                    <div class="tab-pane fade show active" id="tab_received" aria-labelledby="tab_received_btn"
+                         role="tabpanel">
+                        <div>
+                            {{ form.date_received_start.label(class="control-label font-weight-bold mb-0", for="date_received_start") }}
+                            {{ form.date_received_start(class="form-control form-control-sm rounded mt-0") }}
+                        </div>
+
+                        <div>
+                            {{ form.date_received_end.label(class="control-label font-weight-bold mb-0", for="date_received_end") }}
+                            {{ form.date_received_end(class="form-control form-control-sm rounded mt-0") }}
+                        </div>
+                    </div>
+
+                    <div class="tab-pane fade" id="tab_submitted" aria-labelledby="tab_submitted_btn" role="tabpanel">
+                        <div>
+                            {{ form.date_submitted_start.label(class="control-label font-weight-bold mb-0", for="date_submitted_start") }}
+                            {{ form.date_submitted_start(class="form-control form-control-sm rounded mt-0") }}
+                        </div>
+
+                        <div>
+                            {{ form.date_submitted_end.label(class="control-label font-weight-bold mb-0", for="date_submitted_end") }}
+                            {{ form.date_submitted_end(class="form-control form-control-sm rounded mt-0") }}
+                        </div>
+                    </div>
+                </div>
+                <!-- tab_content -->
+            </div>
+            <!-- nav_tabs -->
+        </div>
+        <!-- py-2 -->
+    </form>
+    <!-- search_form -->
+
+    <div id='form_buttons' class="row py-1">
+        <div class="col text-left">
+            <button id='clear_button' type="submit" class="btn btn-danger rounded" role="button">Clear</button>
+        </div>
+        <div class="col text-right">
+            <button id='search_button' type="submit" class="btn btn-success rounded" role="button">Search</button>
+        </div>
+    </div>
+
+</div>

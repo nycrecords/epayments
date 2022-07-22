@@ -1,10 +1,11 @@
 MAIL = 'mail'
 EMAIL = 'email'
 PICKUP = 'pickup'
+ALL = 'all'
 
 DROPDOWN = [
-    ("", "All"),
-    (MAIL, 'Mail'),
-    (EMAIL, 'Email'),
-    (PICKUP, 'Pickup')
+    (ALL, "all"),
+    (MAIL, 'mail'),
+    (EMAIL, 'email'),
+    (PICKUP, 'pickup')
 ]

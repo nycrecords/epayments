@@ -18,6 +18,7 @@ OCME = "OCME"
 HVR = "HVR"
 PHOTOS = 'photos'
 VITAL_RECORDS = 'vital_records'
+ALL = 'all'
 
 VITAL_RECORDS_LIST = [
     BIRTH_CERT,
@@ -52,7 +53,7 @@ CLIENT_ID_DICT = {
 
 
 DROPDOWN = [
-    ("", "All"),
+    (ALL, "all"),
     (BIRTH_SEARCH, "Birth Search"),
     (BIRTH_CERT, "Birth Cert"),
     (MARRIAGE_SEARCH, "Marriage Search"),

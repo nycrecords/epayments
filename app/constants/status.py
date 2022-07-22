@@ -23,9 +23,10 @@ NOT_FOUND = 'Not_Found'
 UNDELIVERABLE = 'Undeliverable'
 REFUND = 'Refund'
 DONE = 'Done'
+ALL = 'all'
 
 DROPDOWN = [
-    ("", "All"),
+    (ALL, "all"),
     (RECEIVED, 'Received'),
     (MICROFILM, 'Microfilm'),
     (OFFSITE, 'Offsite'),

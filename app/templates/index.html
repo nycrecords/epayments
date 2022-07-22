@@ -11,6 +11,10 @@
 
     <!-- NYC Theme CSS -->
     <link rel="stylesheet" href="/static/css/theme.css">
+
+    <!-- datepicker -->
+    <link rel="stylesheet" href="//code.jquery.com/ui/1.13.2/themes/base/jquery-ui.css">
+
 </head>
 <body>
 
@@ -24,70 +28,32 @@
         </div>
     </section>
 
-
     <section id="search">
         <div class="row">
 
             <div class="col-2">
-                <div class="container">
-                    <h5>Search Parameters</h5>
-
-                    <form id="search_form" method="POST" class="text-left"}}>
-                        <div class="mb-2">
-                            {{ form.order_number.label(class="control-label font-weight-bold", for="order_number") }}
-                            {{ form.order_number(class="form-control rounded") }}
-                        </div>
-
-                        <div class="mb-2">
-                            {{ form.suborder_number.label(class="control-label font-weight-bold", for="suborder_number") }}
-                            {{ form.suborder_number(class="form-control rounded") }}
-                        </div>
-
-                        <div class="mb-2">
-                            {{ form.order_type.label(class="control-label font-weight-bold", for="order_type") }}
-                            {{ form.order_type(class="form-control rounded") }}
-                        </div>
-
-                        <div class="mb-2">
-                            {{ form.delivery_method.label(class="control-label font-weight-bold", for="delivery_method") }}
-                            {{ form.delivery_method(class="form-control rounded") }}
-                        </div>
-
-                        <div class="mb-2">
-                            {{ form.status.label(class="control-label font-weight-bold", for="status") }}
-                            {{ form.status(class="form-control rounded") }}
-                        </div>
-
-                        <div class="mb-2">
-                            {{ form.billing_name.label(class="control-label font-weight-bold", for="billing_name") }}
-                            {{ form.billing_name(class="form-control rounded") }}
-                        </div>
-
-                        <div class="mb-2">
-                            {{ form.email.label(class="control-label font-weight-bold", for="billing_name") }}
-                            {{ form.email(class="form-control rounded") }}
-                        </div>
-                    </form>
-                    <div id='form_buttons' class="container">
-                        <button id='clear_button' type="submit" class="btn btn-danger" role="button">Clear</button>
-                        <button id='search_button' type="submit" class="btn btn-success" role="button">Submit</button>
-                    </div>
-                </div>
+                {% include "searchform.html" %}
             </div>
+            <!-- search form div -->
 
             <div class="col-8">
                 <div class="container-fluid">
                     <div id="orders" class="shadow p-2 mb-5">
                         <h5 class="text-center">Search Results</h5>
-                        <div id="order_table"></div>
+                        <div id="order_rows"></div>
                     </div>
                 </div>
             </div>
+            <!-- order rows div -->
 
             <div class="col-2">
-                <div id="total_orders"></div>
-                <div id="total_suborders"></div>
+                <div class="container">
+                    <div id="total_orders"></div>
+                    <div id="total_suborders"></div>
+                </div>
             </div>
+            <!-- order counts -->
+
         </div>
     </section>
 
@@ -95,77 +61,13 @@
     <script src="https://code.jquery.com/jquery-3.3.1.min.js"
             integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
 
+    <!-- bootstrap javascript -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.1.3/dist/js/bootstrap.min.js"
+            integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy"
+            crossorigin="anonymous"></script>
 
-    <script>
-        $("#applybtn").click(function() {
-            getOrders();
-        })
-
-        $("#search_button").click(function() {
-            getOrders();
-        })
-
-        $("#clear_button").click(function() {
-            clearForm();
-        })
-
-        function clearForm(){
-            $("#order_number").val("");
-            $("#suborder_number").val("");
-            $("#order_type").val("All");
-            $("#delivery_method").val("All");
-            $("#status").val("All");
-            $("#billing_name").val("");
-            $("#email").val("");
-
-        }
-
-        // gets the orders with specified fields
-        function getOrders() {
-            $.ajax({
-                type: "POST",
-                url: "api/v1/orders",
-                data: JSON.stringify({
-                    'order_number': '',
-                    'suborder_number': '',
-                    'order_type': 'all',
-                    'delivery_method': 'all',
-                    'status': 'all',
-                    'billing_name': '',
-                    'date_received_start': '07/18/2022',
-                    'date_received_end': '07/18/2022',
-                    'date_submitted_start': '',
-                    'date_submitted_end': '',
-                    'start': 0,
-                    'size': 150
-                }),
-                datatype: "json",
-                success: function (result) {
-                    createOrderTable(result);
-                }
-            });
-        }
-
-        // create and populate order_list table with search results
-        function createOrderTable(data) {
-            $.ajax({
-                type: 'POST',
-                url: "/listorders",
-                data: JSON.stringify({
-                    'all_orders': data['all_orders']
-                }),
-                datatype: "json",
-                success: function (response) {
-                    $('#total_orders').append('Total orders: ' + data['order_count'])
-                    $('#total_suborders').append('Total suborders: ' + data['suborder_count'])
-                    $('#order_table').html(response['order_table'])
-                }
-            });
-
-            // results is a json file
-            console.log(data);
-        }
-    </script>
+    <!-- script for search form -->
+    <script src="/static/js/search-form.js"></script>
 
     <!-- NYC template JS (RTL, search and language toggle, back to top)  -->
     <script src="/static/js/main.js"></script>
