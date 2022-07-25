@@ -107,5 +107,6 @@ export const statusOptions = [
 export const deliveryMethodOptions = [
     {key: 'all', text: 'All', value: 'all'},
     {key: 'mail', text: 'Mail', value: 'mail'},
+    {key: 'pickup', text: 'Pickup', value: 'pickup'},
     {key: 'email', text: 'Email', value: 'email'}
 ];
