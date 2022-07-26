@@ -100,3 +100,47 @@ def listorders():
     data['order_rows'] = render_template('order_table.html',
                                           orders=all_orders)
     return jsonify(data)
+
+
+@main.route('/listinfo', methods=['POST'])
+def listinfo():
+    json = request.get_json(force=True)
+    data = {
+        'info_tab': ''
+    }
+
+    order_info = json.get('order_info')
+    order_type = order_info['order_type']
+    match order_type:
+        case 'Birth Search':
+            info_tab = render_template('orders/birth_search.html', order_info=order_info)
+        case 'Birth Cert':
+            info_tab = render_template('orders/birth_cert.html', order_info=order_info)
+        case 'Marriage Search':
+            info_tab = render_template('orders/marriage_search.html', order_info=order_info)
+        case 'Marriage Cert':
+            info_tab = render_template('orders/marriage_cert.html', order_info=order_info)
+        case 'Death Search':
+            info_tab = render_template('orders/death_search.html', order_info=order_info)
+        case 'Death Cert':
+            info_tab = render_template('orders/death_cert.html', order_info=order_info)
+        case 'Tax Photo':
+            info_tab = render_template('orders/tax_photo.html', order_info=order_info)
+        case 'Photo Gallery':
+            info_tab = render_template('orders/photo_gallery.html', order_info=order_info)
+        case 'Property Card':
+            info_tab = render_template('orders/property_card.html', order_info=order_info)
+        case 'OCME':
+            info_tab = render_template('orders/ocme.html', order_info=order_info)
+        case 'HVR':
+            info_tab = render_template('orders/HVR.html', order_info=order_info)
+
+    data['info_tab'] = info_tab
+    return jsonify(data)
+
+
+@main.route('/listhistory', methods=['POST'])
+def listhistory():
+    json = request.get_json(force=True)
+    data = {'history_tab': render_template('history_row.html', history=json['history'])}
+    return jsonify(data)

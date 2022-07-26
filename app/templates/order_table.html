@@ -1,6 +1,6 @@
 {% if orders %}
 
-    <div class="overflow-auto" style="height: 60vh">
+    <div class="overflow-auto h6 small"style="height: 84vh">
         {% for order in orders %}
             <div class="container">
                 <div class="row">
@@ -9,7 +9,7 @@
                             <li class="list-group-item">Order#: {{ order['order_number'] }}</li>
                             <li class="list-group-item">Suborder#: {{ order['suborder_number'] }}</li>
                             <li class="list-group-item">Order Type: {{ order['order_type'] }}</li>
-                            <li class="list-group-item">Date Received: {{ order['date_received'] }}</li>
+                            <li class="list-group-item">Date Received: {{ order['date_received'].split(' ')[0] }}</li>
                         </ul>
                     </div>
                     <div class="col-6 py-1">
@@ -23,16 +23,18 @@
                     <div class="container mb-2">
                         <div class="rounded overflow-auto">
                             <div class="nav nav-tabs device-md" role="tablist">
-                                <a class="nav-item nav-link rounded active" id="tab_history_btn_{{ order['suborder_number'] }}"
-                                        href="#tab_history_{{ order['suborder_number'] }}" data-toggle="tab"
-                                        aria-controls="tab_received" aria-selected="true" role="tab">
+                                <a class="nav-item nav-link rounded active"
+                                   id="tab_history_btn_{{ order['suborder_number'] }}"
+                                   href="#tab_history_{{ order['suborder_number'] }}" data-toggle="tab"
+                                   aria-controls="tab_history_{{ order['suborder_number'] }}" aria-expanded="false" role="tab">
                                     History
                                 </a>
 
-                                <a class="nav-item nav-link rounded" id="tab_moreinfo_btn_{{ order['suborder_number'] }}"
-                                        href="#tab_moreinfo_{{ order['suborder_number'] }}"
-                                        data-toggle="tab"
-                                        aria-controls="tab_submitted" aria-selected="false" role="tab">
+                                <a class="nav-item nav-link rounded"
+                                   id="tab_moreinfo_btn_{{ order['suborder_number'] }}"
+                                   href="#tab_moreinfo_{{ order['suborder_number'] }}"
+                                   data-toggle="tab"
+                                   aria-controls="tab_submitted" aria-selected="false" role="tab">
                                     More Info
                                 </a>
                             </div>
@@ -42,16 +44,24 @@
                                      aria-labelledby="tab_history_btn_{{ order['suborder_number'] }}"
                                      role="tabpanel">
                                     <div>
-                                        TODO
+                                        <table class="table table-bordered small mb-0">
+                                            <thead class="thead-light">
+                                                <tr>
+                                                    <th scope="col">Date</th>
+                                                    <th scope="col">Previous Status</th>
+                                                    <th scope="col">Updated Status</th>
+                                                    <th scope="col">Comment</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody id="history_{{ order['suborder_number'] }}"></tbody>
+                                        </table>
                                     </div>
                                 </div>
 
                                 <div class="tab-pane fade" id="tab_moreinfo_{{ order['suborder_number'] }}"
                                      aria-labelledby="tab_moreinfo_btn_{{ order['suborder_number'] }}"
                                      role="tabpanel">
-                                    <div>
-                                        TODO2
-                                    </div>
+                                    <div id="info_{{ order['suborder_number'] }}"></div>
                                 </div>
                             </div>
                             <!-- tab_content -->
@@ -72,24 +82,66 @@
 {% endif %}
 
 <script>
-    $('#tab_moreinfo_btn').click(function () {
-        console.log('nice')
-    })
 
-    let moreInfoBtn = document.querySelectorAll("[id^='tab_moreinfo_btn']");
-    moreInfoBtn.forEach(function(btn){
-        let btnID = btn.getAttribute('id')
-        let idArray = btnID.split('_')
-        let suborder_number = idArray[idArray.length-1]
-        $('#'+btnID).click(function(){
-            $.ajax({
-                type: 'POST',
-                url: 'api/v1/more_info/'+suborder_number,
-                success: function(result) {
-                    console.log(result)
-                }
-            })
-        })
-    });
+    setMoreInfoBtn();
+    setHistoryBtn();
+
+    function setMoreInfoBtn() {
+        let moreInfoBtn = document.querySelectorAll("[id^='tab_moreinfo_btn']");
+        moreInfoBtn.forEach(function (btn) {
+            let btnID = btn.getAttribute('id');
+            let idArray = btnID.split('_');
+            let suborder_number = idArray[idArray.length - 1];
+            $('#' + btnID).click(function () {
+                $.ajax({
+                    type: 'POST',
+                    url: 'api/v1/more_info/' + suborder_number,
+                    success: function (result) {
+                        $.ajax({
+                            type: 'POST',
+                            url: 'listinfo',
+                            data: JSON.stringify({
+                                'order_info': result['order_info']
+                            }),
+                            datatype: 'json',
+                            success: function (result) {
+                                $('#info_' + suborder_number).html(result['info_tab'])
+                            }
+                        });
+                    }
+                });
+            });
+        });
+    }
+
+    function setHistoryBtn() {
+        let historyBtn = document.querySelectorAll("[id^='tab_history_btn']");
+        historyBtn.forEach(function (btn) {
+            let btnID = btn.getAttribute('id');
+            let idArray = btnID.split('_');
+            let suborder_number = idArray[idArray.length - 1];
+            $('#' + btnID).click(function () {
+                $.ajax({
+                    type: 'GET',
+                    url: 'api/v1/history/' + suborder_number,
+                    success: function (result) {
+                        $.ajax({
+                            type: 'POST',
+                            url: 'listhistory',
+                            data: JSON.stringify({
+                                'history': result['history']
+                            }),
+                            datatype: 'json',
+                            success: function (result) {
+                                $('#history_'+suborder_number).html(result['history_tab'])
+                            }
+                        });
+
+                    }
+                });
+            });
+        });
+    }
+
 </script>
 

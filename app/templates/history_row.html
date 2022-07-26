@@ -1,0 +1,8 @@
+{% for row in history %}
+    <tr>
+        <td>{{ row['timestamp'] }}</td>
+        <td>{{ row['previous_status'] }}</td>
+        <td>{{ row['new_status'] }}</td>
+        <td>{{ row['comment'] }}</td>
+    </tr>
+{% endfor %}
