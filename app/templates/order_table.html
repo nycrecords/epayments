@@ -23,29 +23,31 @@
                     <div class="container mb-2">
                         <div class="rounded overflow-auto">
                             <div class="nav nav-tabs device-md" role="tablist">
-                                <a class="nav-item nav-link rounded active" id="tab_history_btn"
-                                   href="#tab_history" data-toggle="tab"
-                                   aria-controls="tab_received" aria-selected="true" role="tab">
+                                <a class="nav-item nav-link rounded active" id="tab_history_btn_{{ order['suborder_number'] }}"
+                                        href="#tab_history_{{ order['suborder_number'] }}" data-toggle="tab"
+                                        aria-controls="tab_received" aria-selected="true" role="tab">
                                     History
                                 </a>
 
-                                <a class="nav-item nav-link rounded" id="tab_moreinfo_btn" href="#tab_moreinfo"
-                                   data-toggle="tab"
-                                   aria-controls="tab_submitted" aria-selected="false" role="tab">
+                                <a class="nav-item nav-link rounded" id="tab_moreinfo_btn_{{ order['suborder_number'] }}"
+                                        href="#tab_moreinfo_{{ order['suborder_number'] }}"
+                                        data-toggle="tab"
+                                        aria-controls="tab_submitted" aria-selected="false" role="tab">
                                     More Info
                                 </a>
                             </div>
 
                             <div class="tab-content" id="tabs_content">
-                                <div class="tab-pane fade show active" id="tab_history"
-                                     aria-labelledby="tab_history_btn"
+                                <div class="tab-pane fade show active" id="tab_history_{{ order['suborder_number'] }}"
+                                     aria-labelledby="tab_history_btn_{{ order['suborder_number'] }}"
                                      role="tabpanel">
                                     <div>
                                         TODO
                                     </div>
                                 </div>
 
-                                <div class="tab-pane fade" id="tab_moreinfo" aria-labelledby="tab_moreinfo_btn"
+                                <div class="tab-pane fade" id="tab_moreinfo_{{ order['suborder_number'] }}"
+                                     aria-labelledby="tab_moreinfo_btn_{{ order['suborder_number'] }}"
                                      role="tabpanel">
                                     <div>
                                         TODO2
@@ -68,4 +70,26 @@
         <h6 class="text-center">No Results</h6>
     </div>
 {% endif %}
+
+<script>
+    $('#tab_moreinfo_btn').click(function () {
+        console.log('nice')
+    })
+
+    let moreInfoBtn = document.querySelectorAll("[id^='tab_moreinfo_btn']");
+    moreInfoBtn.forEach(function(btn){
+        let btnID = btn.getAttribute('id')
+        let idArray = btnID.split('_')
+        let suborder_number = idArray[idArray.length-1]
+        $('#'+btnID).click(function(){
+            $.ajax({
+                type: 'POST',
+                url: 'api/v1/more_info/'+suborder_number,
+                success: function(result) {
+                    console.log(result)
+                }
+            })
+        })
+    });
+</script>
 
