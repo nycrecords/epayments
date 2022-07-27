@@ -5,11 +5,11 @@
             <div class="container">
                 <div class="row">
                     <div class="col-6 py-1">
-                        <div>Order#: {{ order['order_number'] }}</div>
-                        <div>Suborder#: {{ order['suborder_number'] }}</div>
-                        <div>Order Type: {{ order['order_type'] }}</div>
-                        <div>Date Received: {{ order['date_received'].split(' ')[0] }}</div>
-                        <div>Email: {{ order['customer']['email'] }}</div>
+                        <div><strong>Order#: </strong>{{ order['order_number'] }}</div>
+                        <div><strong>Suborder#: </strong>{{ order['suborder_number'] }}</div>
+                        <div><strong>Order Type: </strong>{{ order['order_type'] }}</div>
+                        <div><strong>Date Received: </strong>{{ order['date_received'].split(' ')[0] }}</div>
+                        <div><strong>Email: </strong>{{ order['customer']['email'] }}</div>
                     </div>
                     <div class="col-6 py-1">
                         <div id="status_{{ order['suborder_number'] }}"
@@ -36,7 +36,8 @@
                                         More Info
                                     </button>
 
-                                    <button class="btn btn-secondary btn-sm rounded" type="button" data-toggle="collapse"
+                                    <button class="btn btn-secondary btn-sm rounded" type="button"
+                                            data-toggle="collapse"
                                             data-target="#update_status_{{ order['suborder_number'] }}"
                                             aria-expanded="false"
                                             aria-controls="update_status_{{ order['suborder_number'] }}"
@@ -79,13 +80,24 @@
                                                            class="sm font-weight-bold">Update Status</label>
                                                     <select class="form-control form-control-sm rounded"
                                                             id="updated_status_{{ order['suborder_number'] }}">
-                                                        <option>Microfilm: ___</option>
-                                                        <option>Offsite: ___</option>
-                                                        <option>Processing: ___</option>
-                                                        <option>Not_Found: ___</option>
-                                                        <option>Undeliverable: ___</option>
-                                                        <option>Refund: ___</option>
-                                                        <option>Done: ___</option>
+                                                        <option>Microfilm: When an order needs to be printed from the
+                                                            Microfilm
+                                                        </option>
+                                                        <option>Offsite: Has to be ordered from Offsite to be
+                                                            fulfilled
+                                                        </option>
+                                                        <option>Processing: For photo orders only</option>
+                                                        <option>Not_Found: A Not Found letter was sent to the customer
+                                                        </option>
+                                                        <option>Undeliverable: When an order is returned as
+                                                            undeliverable by USPS
+                                                        </option>
+                                                        <option>Refund: The order has been sent to Administration for a
+                                                            refund
+                                                        </option>
+                                                        <option>Done: The order has been completed. No more work is
+                                                            needed.
+                                                        </option>
                                                     </select>
                                                 </div>
                                                 <div class="mb-2">
