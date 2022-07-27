@@ -97,8 +97,7 @@ def listorders():
     }
 
     all_orders = json.get('all_orders')
-    data['order_rows'] = render_template('order_table.html',
-                                          orders=all_orders)
+    data['order_rows'] = render_template('order_table.html', orders=all_orders)
     return jsonify(data)
 
 
