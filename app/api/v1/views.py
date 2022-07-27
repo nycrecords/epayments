@@ -63,6 +63,7 @@ def get_orders() -> Response:
         date_submitted_end = json.get('date_submitted_end')
         start = json.get('start')
         size = json.get('size')
+        email = json.get('email')
 
         multiple_items = ''
         if order_type == 'multiple_items':
@@ -75,6 +76,7 @@ def get_orders() -> Response:
                                 delivery_method,
                                 status,
                                 billing_name,
+                                email,
                                 date_received_start,
                                 date_received_end,
                                 date_submitted_start,

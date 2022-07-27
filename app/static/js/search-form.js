@@ -71,6 +71,7 @@ function getOrders() {
             'delivery_method': $("#delivery_method").val(),
             'status': $("#status").val(),
             'billing_name': $("#billing_name").val(),
+            'email' : $("#email").val(),
             'date_received_start': c_drs,
             'date_received_end': c_dre,
             'date_submitted_start': c_srs,

@@ -182,6 +182,7 @@ def search_queries(order_number=None,
                    delivery_method='',
                    status='',
                    billing_name=None,
+                   email=None,
                    date_received_start='',
                    date_received_end='',
                    date_submitted_start='',
@@ -214,6 +215,7 @@ def search_queries(order_number=None,
         'current_status': status,
         'multiple_items': multiple_items,
         'metadata.delivery_method': delivery_method,
+        'email': email
     }
 
     date_range = {
@@ -254,6 +256,9 @@ def format_queries(query_fields):
 
     if query_fields['billing_name'] is not None:
         query_fields['billing_name'] = query_fields['billing_name'].strip()
+
+    if query_fields['email'] is not None:
+        query_fields['email'] = query_fields['email'].strip()
 
     # Removes 'all' and sets it to nothing: no parameters is all in this case
     if query_fields['current_status'] == 'all':
@@ -321,6 +326,16 @@ class DSLGenerator(object):
                         'match': {
                             "customer.billing_name": {
                                 'query': self.__query_fields[i],
+                                'operator': 'and'
+                            }
+                        }
+                    })
+                elif i == 'email':
+                    self.__filters.append({
+                        'match': {
+                            'customer.email': {
+                                'query': self.__query_fields[i],
+                                'operator': 'and'
                             }
                         }
                     })
