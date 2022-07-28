@@ -6,13 +6,13 @@
                 <div class="row">
                     <div class="col-6 py-1">
                         <div><strong>Order#: </strong>{{ order['order_number'] }}</div>
-                        <div><strong>Suborder#: </strong>{{ order['suborder_number'] }}</div>
+                        <div id="suborder_{{ loop.index }}"><strong>Suborder#: </strong>{{ order['suborder_number'] }}</div>
                         <div><strong>Order Type: </strong>{{ order['order_type'] }}</div>
                         <div><strong>Date Received: </strong>{{ order['date_received'].split(' ')[0] }}</div>
                         <div><strong>Email: </strong>{{ order['customer']['email'] }}</div>
                     </div>
                     <div class="col-6 py-1">
-                        <div id="status_{{ order['suborder_number'] }}"
+                        <div id="status_{{ loop.index }}"
                              class="list-group-item">{{ order['current_status'] }}</div>
                     </div>
                 </div>
@@ -20,34 +20,34 @@
                 <div class="row">
                     <div class="container">
                         <div class="rounded overflow-auto">
-                            <div id="collapse_{{ order['suborder_number'] }}">
+                            <div id="collapse_{{ loop.index }}">
                                 <p class="mb-1">
                                     <button class="btn btn-primary btn-sm rounded" type="button" data-toggle="collapse"
-                                            data-target="#history_{{ order['suborder_number'] }}" aria-expanded="false"
-                                            aria-controls="history_{{ order['suborder_number'] }}"
-                                            id="history_btn_{{ order['suborder_number'] }}">
+                                            data-target="#history_{{ loop.index }}" aria-expanded="false"
+                                            aria-controls="history_{{ loop.index }}"
+                                            id="history_btn_{{ loop.index }}">
                                         History
                                     </button>
 
                                     <button class="btn btn-info btn-sm rounded" type="button" data-toggle="collapse"
-                                            data-target="#moreinfo_{{ order['suborder_number'] }}" aria-expanded="false"
-                                            aria-controls="moreinfo_{{ order['suborder_number'] }}"
-                                            id="moreinfo_btn_{{ order['suborder_number'] }}">
+                                            data-target="#moreinfo_{{ loop.index }}" aria-expanded="false"
+                                            aria-controls="moreinfo_{{ loop.index }}"
+                                            id="moreinfo_btn_{{ loop.index }}">
                                         More Info
                                     </button>
 
                                     <button class="btn btn-secondary btn-sm rounded" type="button"
                                             data-toggle="collapse"
-                                            data-target="#update_status_{{ order['suborder_number'] }}"
+                                            data-target="#update_status_{{ loop.index }}"
                                             aria-expanded="false"
-                                            aria-controls="update_status_{{ order['suborder_number'] }}"
-                                            id="update_status_btn_{{ order['suborder_number'] }}">
+                                            aria-controls="update_status_{{ loop.index }}"
+                                            id="update_status_btn_{{ loop.index }}">
                                         Update Status
                                     </button>
                                 </p>
 
-                                <div class="collapse" id="history_{{ order['suborder_number'] }}"
-                                     data-parent="#collapse_{{ order['suborder_number'] }}">
+                                <div class="collapse" id="history_{{ loop.index }}"
+                                     data-parent="#collapse_{{ loop.index }}">
                                     <div class="card card-body">
                                         <table class="table table-bordered small mb-0">
                                             <thead class="thead-light">
@@ -58,28 +58,28 @@
                                                 <th scope="col">Comment</th>
                                             </tr>
                                             </thead>
-                                            <tbody id="history_body_{{ order['suborder_number'] }}"></tbody>
+                                            <tbody id="history_body_{{ loop.index }}"></tbody>
                                         </table>
                                     </div>
                                 </div>
 
-                                <div class="collapse" id="moreinfo_{{ order['suborder_number'] }}"
-                                     data-parent="#collapse_{{ order['suborder_number'] }}">
+                                <div class="collapse" id="moreinfo_{{ loop.index }}"
+                                     data-parent="#collapse_{{ loop.index }}">
                                     <div class="card card-body">
-                                        <div id="info_{{ order['suborder_number'] }}"></div>
+                                        <div id="info_{{ loop.index }}"></div>
                                     </div>
                                 </div>
 
-                                <div class="collapse" id="update_status_{{ order['suborder_number'] }}"
-                                     data-parent="#collapse_{{ order['suborder_number'] }}">
+                                <div class="collapse" id="update_status_{{ loop.index }}"
+                                     data-parent="#collapse_{{ loop.index }}">
                                     <div class="card card-body">
-                                        <div id="info_{{ order['suborder_number'] }}">
+                                        <div id="info_{{ loop.index }}">
                                             <form class="h6 small">
                                                 <div class="mb-2">
-                                                    <label for="updated_status_{{ order['suborder_number'] }}"
+                                                    <label for="updated_status_{{ loop.index }}"
                                                            class="sm font-weight-bold">Update Status</label>
                                                     <select class="form-control form-control-sm rounded"
-                                                            id="updated_status_{{ order['suborder_number'] }}">
+                                                            id="updated_status_{{ loop.index }}">
                                                         <option>Microfilm: When an order needs to be printed from the
                                                             Microfilm
                                                         </option>
@@ -101,15 +101,15 @@
                                                     </select>
                                                 </div>
                                                 <div class="mb-2">
-                                                    <label for="update_comment_{{ order['suborder_number'] }}"
+                                                    <label for="update_comment_{{ loop.index }}"
                                                            class="sm font-weight-bold">Comment</label>
                                                     <textarea class="form-control form-control-sm rounded"
-                                                              id="update_comment_{{ order['suborder_number'] }}"
+                                                              id="update_comment_{{ loop.index }}"
                                                               rows="3"></textarea>
                                                 </div>
                                             </form>
                                             <div class="col text-right">
-                                                <button id="update_btn_{{ order['suborder_number'] }}" type="submit"
+                                                <button id="update_btn_{{ loop.index }}" type="submit"
                                                         class="btn btn-success btn-sm rounded" role="button">Update
                                                 </button>
                                             </div>
@@ -143,11 +143,11 @@
         let updateBtn = document.querySelectorAll("[id^='update_btn_']");
         updateBtn.forEach(function (btn) {
             let btnID = btn.getAttribute('id');
-            let idArray = btnID.split('_');
-            let suborder_number = idArray[idArray.length - 1];
+            let row_num = btnID.split('_')[2];
+            let suborder_number = $('#suborder_' + row_num).text().split(' ')[1];
             $('#' + btnID).click(function () {
-                let update_status = $('#updated_status_' + suborder_number).val().split(':')[0];
-                let current_status = $('#status_' + suborder_number).text();
+                let update_status = $('#updated_status_' + row_num).val().split(':')[0];
+                let current_status = $('#status_' + row_num).text();
                 if (current_status === update_status) {
                     alert('Status was the same. Could not update')
                 } else {
@@ -156,14 +156,14 @@
                         url: 'api/v1/status/' + suborder_number,
                         data: JSON.stringify({
                             'status': update_status,
-                            'comment': $('#update_comment_' + suborder_number).val()
+                            'comment': $('#update_comment_' + row_num).val()
                         }),
                         datatype: 'json',
                         success: function () {
                             alert("Status Has Been Updated");
-                            $('#updated_status_' + suborder_number).val('');
-                            $('#update_comment_' + suborder_number).val('');
-                            $('#status_' + suborder_number).text(update_status)
+                            $('#updated_status_' + row_num).val('');
+                            $('#update_comment_' + row_num).val('');
+                            $('#status_' + row_num).text(update_status)
                         },
                     });
                 }
@@ -175,8 +175,8 @@
         let moreInfoBtn = document.querySelectorAll("[id^='moreinfo_btn']");
         moreInfoBtn.forEach(function (btn) {
             let btnID = btn.getAttribute('id');
-            let idArray = btnID.split('_');
-            let suborder_number = idArray[idArray.length - 1];
+            let row_num = btnID.split('_')[2];
+            let suborder_number = $('#suborder_' + row_num).text().split(' ')[1];
             $('#' + btnID).click(function () {
                 $.ajax({
                     type: 'POST',
@@ -190,7 +190,7 @@
                             }),
                             datatype: 'json',
                             success: function (result) {
-                                $('#info_' + suborder_number).html(result['info_tab'])
+                                $('#info_' + row_num).html(result['info_tab'])
                             }
                         });
                     }
@@ -203,8 +203,8 @@
         let historyBtn = document.querySelectorAll("[id^='history_btn']");
         historyBtn.forEach(function (btn) {
             let btnID = btn.getAttribute('id');
-            let idArray = btnID.split('_');
-            let suborder_number = idArray[idArray.length - 1];
+            let row_num = btnID.split('_')[2];
+            let suborder_number = $('#suborder_' + row_num).text().split(' ')[1];
             $('#' + btnID).click(function () {
                 $.ajax({
                     type: 'GET',
@@ -218,7 +218,7 @@
                             }),
                             datatype: 'json',
                             success: function (result) {
-                                $('#history_body_' + suborder_number).html(result['history_tab'])
+                                $('#history_body_' + row_num).html(result['history_tab'])
                             }
                         });
 

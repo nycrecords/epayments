@@ -24,6 +24,44 @@
             <div class="mb-2">
                 <a href="{{ url_for("main.newlogout") }}" class="btn btn-primary">Logout</a>
                 <button id='applybtn' type="submit" class="btn btn-success" role="button">Apply</button>
+                <!-- Button trigger modal -->
+                <button type="button" class="btn btn-secondary" data-toggle="modal" data-target="#change_pass_modal">
+                    Password Change
+                </button>
+
+                <!-- Modal -->
+                <div class="modal fade" id="change_pass_modal" tabindex="-1" role="dialog"
+                     aria-labelledby="exampleModalLabel"
+                     aria-hidden="true">
+                    <div class="modal-dialog" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header text-center justify-content-center">
+                                <h5 class="modal-title" id="password_modal">Password Change</h5>
+                            </div>
+                            <div class="modal-body text-left">
+                                <div>
+                                    <label for="new_pass" class="font-weight-bold">New Password</label>
+                                    <input type="password" class="form-control rounded-pill" id="new_pass"
+                                           name="new_password"
+                                           placeholder="New Password" required>
+                                </div>
+                                <div>
+                                    <label for="confirm_pass" class="font-weight-bold">Confirm Password</label>
+                                    <input type="password" class="form-control rounded-pill" id="confirm_pass"
+                                           name="confirm_pass"
+                                           placeholder="Re-enter New Password" required>
+                                </div>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-danger rounded" data-dismiss="modal" id="modal_close">
+                                    Close
+                                </button>
+                                <button type="button" class="btn btn-success rounded" id="pass_submit">Save</button>
+                            </div>
+                        </div>
+                        <!-- modal -->
+                    </div>
+                </div>
             </div>
         </div>
     </section>
@@ -71,5 +109,28 @@
     <!-- NYC template JS (RTL, search and language toggle, back to top)  -->
     <script src="/static/js/main.js"></script>
     <script src="/static/js/responsive-table.js"></script>
+
+    <script>
+        $('#pass_submit').click(function () {
+            $.ajax({
+                type: "PATCH",
+                url: "api/v1/password",
+                data: JSON.stringify({
+                    'password': $('#new_pass').val(),
+                    'confirm_password': $('#confirm_pass').val()
+                }),
+                datatype: "json",
+                success: function (result) {
+                    alert(result['message'])
+                    $('#modal_close').click()
+                },
+                error: function (result) {
+                    alert(result['responseJSON']['error']['message'])
+                }
+            });
+        })
+    </script>
+
+
 </body>
 </html>
