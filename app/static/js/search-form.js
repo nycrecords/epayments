@@ -96,8 +96,8 @@ function createOrderTable(data) {
         }),
         datatype: "json",
         success: function (response) {
-            $('#total_orders').html('Total orders: ' + data['order_count']);
-            $('#total_suborders').html('Total suborders: ' + data['suborder_count']);
+            $('#total_orders').html('<strong>Total orders: </strong>' + data['order_count']);
+            $('#total_suborders').html('<strong>Total suborders: </strong>' + data['suborder_count']);
             $('#order_rows').html(response['order_rows']);
         }
     });

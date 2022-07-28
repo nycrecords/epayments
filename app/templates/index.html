@@ -25,21 +25,20 @@
                 <p>
                     Hi {{ user }}
                     <button type="button" class="btn btn-light" data-toggle="modal" data-target="#change_pass_modal">
-                    Change Password
+                        Change Password
                     </button>
                     <a href="{{ url_for("main.newlogout") }}" class="btn btn-primary">Logout</a>
                     <button id='applybtn' type="submit" class="btn btn-success" role="button">Apply</button>
                 </p>
 
-
-                <!-- Modal -->
+                <!-- Change Password Modal -->
                 <div class="modal fade" id="change_pass_modal" tabindex="-1" role="dialog"
-                     aria-labelledby="exampleModalLabel"
+                     aria-labelledby="password_modal"
                      aria-hidden="true">
                     <div class="modal-dialog" role="document">
                         <div class="modal-content">
                             <div class="modal-header text-center justify-content-center">
-                                <h5 class="modal-title" id="password_modal">Password Change</h5>
+                                <h5 class="modal-title">Password Change</h5>
                             </div>
                             <div class="modal-body text-left">
                                 <div>
@@ -56,8 +55,8 @@
                                 </div>
                             </div>
                             <div class="modal-footer">
-                                <button type="button" class="btn btn-danger rounded" data-dismiss="modal" id="modal_close">
-                                    Close
+                                <button type="button" class="btn btn-danger rounded" data-dismiss="modal"
+                                        id="modal_close">Close
                                 </button>
                                 <button type="button" class="btn btn-success rounded" id="pass_submit">Save</button>
                             </div>
@@ -72,7 +71,7 @@
     <section id="search">
         <div class="row">
 
-            <div id="left_side" class="col-2">
+            <div id="left_side" class="col-2 pr-0">
                 {% include "searchform.html" %}
             </div>
             <!-- search form div -->
@@ -86,7 +85,7 @@
             </div>
             <!-- order rows div -->
 
-            <div id="right_side" class="col-2">
+            <div id="right_side" class="col-2 pl-0">
                 <div class="container">
                     <div id="order_counts">
                         <div id="total_orders"></div>
@@ -115,6 +114,7 @@
     <script src="/static/js/main.js"></script>
     <script src="/static/js/responsive-table.js"></script>
 
+    <!-- change password script -->
     <script>
         $('#pass_submit').click(function () {
             $.ajax({
