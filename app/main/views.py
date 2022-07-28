@@ -17,7 +17,7 @@ def index():
         return redirect(url_for("main.newlogin"))
 
     form = SearchOrderForm()
-    return render_template('index.html', form=form)
+    return render_template('index.html', user=current_user.get_id(), form=form)
 
 
 @main.route('/import', methods=['GET', 'POST'])

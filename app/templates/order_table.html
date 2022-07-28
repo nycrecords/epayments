@@ -80,23 +80,26 @@
                                                            class="sm font-weight-bold">Update Status</label>
                                                     <select class="form-control form-control-sm rounded"
                                                             id="updated_status_{{ loop.index }}">
-                                                        <option>Microfilm: When an order needs to be printed from the
-                                                            Microfilm
+                                                        <option value="Received">Received</option>
+                                                        <option value="Microfilm">Microfilm: When an order needs to be
+                                                            printed from the Microfilm
                                                         </option>
-                                                        <option>Offsite: Has to be ordered from Offsite to be
-                                                            fulfilled
+                                                        <option value="Offsite">Offsite: Has to be ordered from Offsite
+                                                            to be fulfilled
                                                         </option>
-                                                        <option>Processing: For photo orders only</option>
-                                                        <option>Not_Found: A Not Found letter was sent to the customer
+                                                        <option value="Processing">Processing: For photo orders only
                                                         </option>
-                                                        <option>Undeliverable: When an order is returned as
-                                                            undeliverable by USPS
+                                                        <option value="Not_Found">Not Found: A Not Found letter was sent
+                                                            to the customer
                                                         </option>
-                                                        <option>Refund: The order has been sent to Administration for a
-                                                            refund
+                                                        <option value="Undeliverable">Undeliverable: When an order is
+                                                            returned as undeliverable by USPS
                                                         </option>
-                                                        <option>Done: The order has been completed. No more work is
-                                                            needed.
+                                                        <option value="Refund">Refund: The order has been sent to
+                                                            Administration for a refund
+                                                        </option>
+                                                        <option value="Done">Done: The order has been completed. No more
+                                                            work is needed.
                                                         </option>
                                                     </select>
                                                 </div>
@@ -135,20 +138,24 @@
 
 <script>
 
-    setMoreInfoBtn();
-    setHistoryBtn();
-    setUpdateBtn();
+    setMoreInfoBtns();
+    setHistoryBtns();
+    setUpdateBtns();
 
-    function setUpdateBtn() {
+    function setUpdateBtns() {
         let updateBtn = document.querySelectorAll("[id^='update_btn_']");
         updateBtn.forEach(function (btn) {
             let btnID = btn.getAttribute('id');
             let row_num = btnID.split('_')[2];
             let suborder_number = $('#suborder_' + row_num).text().split(' ')[1];
+            // set initial update status option
+            let curr_status = $('#status_' + row_num).text();
+            $('#updated_status_' + row_num).val(curr_status).change();
+
             $('#' + btnID).click(function () {
-                let update_status = $('#updated_status_' + row_num).val().split(':')[0];
-                let current_status = $('#status_' + row_num).text();
-                if (current_status === update_status) {
+                curr_status = $('#status_' + row_num).text();
+                let update_status = $('#updated_status_' + row_num).val();
+                if (curr_status === update_status) {
                     alert('Status was the same. Could not update')
                 } else {
                     $.ajax({
@@ -161,9 +168,8 @@
                         datatype: 'json',
                         success: function () {
                             alert("Status Has Been Updated");
-                            $('#updated_status_' + row_num).val('');
                             $('#update_comment_' + row_num).val('');
-                            $('#status_' + row_num).text(update_status)
+                            $('#status_' + row_num).text(update_status);
                         },
                     });
                 }
@@ -171,7 +177,7 @@
         });
     }
 
-    function setMoreInfoBtn() {
+    function setMoreInfoBtns() {
         let moreInfoBtn = document.querySelectorAll("[id^='moreinfo_btn']");
         moreInfoBtn.forEach(function (btn) {
             let btnID = btn.getAttribute('id');
@@ -190,7 +196,7 @@
                             }),
                             datatype: 'json',
                             success: function (result) {
-                                $('#info_' + row_num).html(result['info_tab'])
+                                $('#info_' + row_num).html(result['info_tab']);
                             }
                         });
                     }
@@ -199,7 +205,7 @@
         });
     }
 
-    function setHistoryBtn() {
+    function setHistoryBtns() {
         let historyBtn = document.querySelectorAll("[id^='history_btn']");
         historyBtn.forEach(function (btn) {
             let btnID = btn.getAttribute('id');
@@ -218,14 +224,12 @@
                             }),
                             datatype: 'json',
                             success: function (result) {
-                                $('#history_body_' + row_num).html(result['history_tab'])
+                                $('#history_body_' + row_num).html(result['history_tab']);
                             }
                         });
-
                     }
                 });
             });
         });
     }
 </script>
-

@@ -90,7 +90,7 @@ function getOrders() {
 function createOrderTable(data) {
     $.ajax({
         type: 'POST',
-        url: "/listorders",
+        url: "listorders",
         data: JSON.stringify({
             'all_orders': data['all_orders']
         }),

@@ -22,12 +22,15 @@
         <div class="container justify-content-center text-center">
             <h1>ePayments</h1>
             <div class="mb-2">
-                <a href="{{ url_for("main.newlogout") }}" class="btn btn-primary">Logout</a>
-                <button id='applybtn' type="submit" class="btn btn-success" role="button">Apply</button>
-                <!-- Button trigger modal -->
-                <button type="button" class="btn btn-secondary" data-toggle="modal" data-target="#change_pass_modal">
-                    Password Change
-                </button>
+                <p>
+                    Hi {{ user }}
+                    <button type="button" class="btn btn-light" data-toggle="modal" data-target="#change_pass_modal">
+                    Change Password
+                    </button>
+                    <a href="{{ url_for("main.newlogout") }}" class="btn btn-primary">Logout</a>
+                    <button id='applybtn' type="submit" class="btn btn-success" role="button">Apply</button>
+                </p>
+
 
                 <!-- Modal -->
                 <div class="modal fade" id="change_pass_modal" tabindex="-1" role="dialog"
@@ -69,12 +72,12 @@
     <section id="search">
         <div class="row">
 
-            <div class="col-2">
+            <div id="left_side" class="col-2">
                 {% include "searchform.html" %}
             </div>
             <!-- search form div -->
 
-            <div class="col-8">
+            <div id='middle' class="col-8">
                 <div class="container-fluid">
                     <div id="orders" class="shadow p-1">
                         <div id="order_rows"></div>
@@ -83,10 +86,12 @@
             </div>
             <!-- order rows div -->
 
-            <div id="order_counts" class="col-2">
+            <div id="right_side" class="col-2">
                 <div class="container">
-                    <div id="total_orders"></div>
-                    <div id="total_suborders"></div>
+                    <div id="order_counts">
+                        <div id="total_orders"></div>
+                        <div id="total_suborders"></div>
+                    </div>
                 </div>
             </div>
             <!-- order counts -->
@@ -121,16 +126,15 @@
                 }),
                 datatype: "json",
                 success: function (result) {
-                    alert(result['message'])
-                    $('#modal_close').click()
+                    alert(result['message']);
+                    $('#modal_close').click();
                 },
                 error: function (result) {
-                    alert(result['responseJSON']['error']['message'])
+                    alert(result['responseJSON']['error']['message']);
                 }
             });
         })
     </script>
-
 
 </body>
 </html>
