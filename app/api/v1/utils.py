@@ -128,6 +128,7 @@ def _print_orders(search_params: Dict[str, str]) -> str:
     delivery_method = search_params.get('delivery_method')
     status = search_params.get('status')
     billing_name = search_params.get('billing_name')
+    email = search_params.get('email')
     date_received_start = search_params.get('date_received_start')
     date_received_end = search_params.get('date_received_end')
     date_submitted_start = search_params.get('date_submitted_start')
@@ -145,6 +146,7 @@ def _print_orders(search_params: Dict[str, str]) -> str:
                                delivery_method,
                                status,
                                billing_name,
+                               email,
                                date_received_start,
                                date_received_end,
                                date_submitted_start,
@@ -196,6 +198,7 @@ def _print_small_labels(search_params: Dict[str, str]) -> str:
     delivery_method = search_params.get('delivery_method')
     status = search_params.get('status')
     billing_name = search_params.get('billing_name')
+    email = search_params.get('email')
     date_received_start = search_params.get('date_received_start')
     date_received_end = search_params.get('date_received_end')
     date_submitted_start = search_params.get('date_submitted_start')
@@ -213,6 +216,7 @@ def _print_small_labels(search_params: Dict[str, str]) -> str:
                                       delivery_method,
                                       status,
                                       billing_name,
+                                      email,
                                       date_received_start,
                                       date_received_end,
                                       date_submitted_start,
@@ -260,6 +264,7 @@ def _print_large_labels(search_params: Dict[str, str]) -> str:
     delivery_method = search_params.get('delivery_method')
     status = search_params.get('status')
     billing_name = search_params.get('billing_name')
+    email = search_params.get('email')
     date_received_start = search_params.get('date_received_start')
     date_received_end = search_params.get('date_received_end')
     date_submitted_start = search_params.get('date_submitted_start')
@@ -277,6 +282,7 @@ def _print_large_labels(search_params: Dict[str, str]) -> str:
                                       delivery_method,
                                       status,
                                       billing_name,
+                                      email,
                                       date_received_start,
                                       date_received_end,
                                       date_submitted_start,

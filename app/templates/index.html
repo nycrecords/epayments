@@ -66,6 +66,7 @@
                 </div>
             </div>
         </div>
+
     </section>
 
     <section id="search">
@@ -91,11 +92,31 @@
                         <div id="total_orders"></div>
                         <div id="total_suborders"></div>
                     </div>
+
+                    <div id="print_btns">
+                        <div class="text-center"><i class="fas fa-print"></i></div>
+                        <div>
+                            <button id="order_sheets" class="btn btn-light btn-block rounded" type="submit"
+                                    role="button">Order Sheets
+                            </button>
+                        </div>
+                        <div>
+                            <button id="large_labels" class="btn btn-light btn-block rounded" type="submit"
+                                    role="button">Large Labels
+                            </button>
+                        </div>
+                        <div>
+                            <button id="small_labels" class="btn btn-light btn-block rounded" type="submit"
+                                    role="button">Small Labels
+                            </button>
+                        </div>
+                    </div>
+                    <!-- print btns -->
                 </div>
             </div>
-            <!-- order counts -->
-
+            <!-- right side -->
         </div>
+
     </section>
 
 
@@ -107,34 +128,15 @@
             integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy"
             crossorigin="anonymous"></script>
 
-    <!-- script for search form -->
-    <script src="/static/js/search-form.js"></script>
-
     <!-- NYC template JS (RTL, search and language toggle, back to top)  -->
     <script src="/static/js/main.js"></script>
     <script src="/static/js/responsive-table.js"></script>
 
-    <!-- change password script -->
-    <script>
-        $('#pass_submit').click(function () {
-            $.ajax({
-                type: "PATCH",
-                url: "api/v1/password",
-                data: JSON.stringify({
-                    'password': $('#new_pass').val(),
-                    'confirm_password': $('#confirm_pass').val()
-                }),
-                datatype: "json",
-                success: function (result) {
-                    alert(result['message']);
-                    $('#modal_close').click();
-                },
-                error: function (result) {
-                    alert(result['responseJSON']['error']['message']);
-                }
-            });
-        })
-    </script>
+    <!-- script for search form -->
+    <script src="/static/js/search-form.js"></script>
+
+    <!-- index buttons script -->
+    <script src="/static/js/index-buttons.js"></script>
 
 </body>
 </html>

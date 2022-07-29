@@ -197,6 +197,7 @@ def search_queries(order_number=None,
         :param order_type:  search by order type
         :param status: search by status
         :param billing_name: search by billing name
+        :param email: search by email
         :param date_received_start: search by starting date
         :param date_received_end: search by ending date
         :param date_submitted_start: search by starting date submitted
@@ -207,6 +208,10 @@ def search_queries(order_number=None,
         :param search_type: search or print
 
         :return: elasticsearch results in json format
+
+    Args:
+        delivery_method:
+        delivery_method:
     """
     query_field = {
         'billing_name': billing_name,

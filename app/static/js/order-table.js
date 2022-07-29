@@ -13,7 +13,6 @@ function renameStatus() {
         let row_num = elem_id.split('_')[1]
         let status_info =  $('#updated_status_' + row_num + ' ' + 'option:selected').text();
         $('#' + elem_id).html(status_info);
-        console.log(status_info);
     });
 }
 
