@@ -110,29 +110,22 @@ def listinfo():
 
     order_info = json.get('order_info')
     order_type = order_info['order_type']
-    match order_type:
-        case 'Birth Search':
-            info_tab = render_template('orders/birth_search.html', order_info=order_info)
-        case 'Birth Cert':
-            info_tab = render_template('orders/birth_cert.html', order_info=order_info)
-        case 'Marriage Search':
-            info_tab = render_template('orders/marriage_search.html', order_info=order_info)
-        case 'Marriage Cert':
-            info_tab = render_template('orders/marriage_cert.html', order_info=order_info)
-        case 'Death Search':
-            info_tab = render_template('orders/death_search.html', order_info=order_info)
-        case 'Death Cert':
-            info_tab = render_template('orders/death_cert.html', order_info=order_info)
-        case 'Tax Photo':
-            info_tab = render_template('orders/tax_photo.html', order_info=order_info)
-        case 'Photo Gallery':
-            info_tab = render_template('orders/photo_gallery.html', order_info=order_info)
-        case 'Property Card':
-            info_tab = render_template('orders/property_card.html', order_info=order_info)
-        case 'OCME':
-            info_tab = render_template('orders/ocme.html', order_info=order_info)
-        case 'HVR':
-            info_tab = render_template('orders/HVR.html', order_info=order_info)
+    order_type_template_handler = {
+        'Birth Search': 'birth_search.html',
+        'Birth Cert': 'birth_cert.html',
+        'Marriage Search': 'marriage_search.html',
+        'Marriage Cert': 'marriage_cert.html',
+        'Death Search': 'death_search.html',
+        'Death Cert': 'death_cert.html',
+        'Tax Photo': 'tax_photo.html',
+        'Photo Gallery': 'photo_gallery.html',
+        'Property Card': 'property_card.html',
+        'OCME': 'ocme.html',
+        'HVR': 'hvr.html'
+    }
+
+    info_tab = render_template('orders/{}'.format(order_type_template_handler[order_type]),
+                               order_info=order_info)
 
     data['info_tab'] = info_tab
     return jsonify(data)
