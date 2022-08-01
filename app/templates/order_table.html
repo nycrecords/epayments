@@ -1,6 +1,6 @@
 {% if orders %}
 
-    <div class="overflow-auto h6 small" style="height: 84vh">
+    <div class="overflow-auto h6 small" style="height: 75vh">
         {% for order in orders %}
             <div class="container">
                 <div class="row">
@@ -51,7 +51,7 @@
                                 <div class="collapse" id="history_{{ loop.index }}"
                                      data-parent="#collapse_{{ loop.index }}">
                                     <div class="card card-body">
-                                        <table class="table table-bordered small mb-0">
+                                        <table class="table table-bordered table-striped small mb-0">
                                             <thead class="thead-light">
                                             <tr>
                                                 <th scope="col">Date</th>

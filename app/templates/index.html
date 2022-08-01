@@ -28,7 +28,6 @@
                         Change Password
                     </button>
                     <a href="{{ url_for("main.newlogout") }}" class="btn btn-primary">Logout</a>
-                    <button id='applybtn' type="submit" class="btn btn-success" role="button">Apply</button>
                 </p>
 
                 <!-- Change Password Modal -->
@@ -80,6 +79,8 @@
             <div id='middle' class="col-8">
                 <div class="container-fluid">
                     <div id="orders" class="shadow p-1">
+                        <h5 class="text-center">Search Results</h5>
+                        <hr class="mb-1">
                         <div id="order_rows"></div>
                     </div>
                 </div>

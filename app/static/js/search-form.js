@@ -1,8 +1,4 @@
 $(document).ready(function () {
-    $("#applybtn").click(function () {
-        getOrders2();
-    })
-
     $("#search_button").click(function () {
         getOrders();
     })
@@ -25,32 +21,6 @@ function clearForm() {
     $("#date_received_end").val("");
     $("#date_submitted_start").val("");
     $("#date_submitted_end").val("");
-}
-
-// for testing purposes
-function getOrders2() {
-    $.ajax({
-        type: "POST",
-        url: "api/v1/orders",
-        data: JSON.stringify({
-            'order_number': '',
-            'suborder_number': '',
-            'order_type': 'all',
-            'delivery_method': 'all',
-            'status': 'all',
-            'billing_name': '',
-            'date_received_start': '07/18/2022',
-            'date_received_end': '07/18/2022',
-            'date_submitted_start': '',
-            'date_submitted_end': '',
-            'start': 0,
-            'size': 150
-        }),
-        datatype: "json",
-        success: function (result) {
-            createOrderTable(result);
-        }
-    });
 }
 
 // gets the orders with specified fields
