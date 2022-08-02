@@ -53,7 +53,7 @@ CLIENT_ID_DICT = {
 
 
 DROPDOWN = [
-    (ALL, "all"),
+    (ALL, "All"),
     (BIRTH_SEARCH, "Birth Search"),
     (BIRTH_CERT, "Birth Cert"),
     (MARRIAGE_SEARCH, "Marriage Search"),
@@ -66,6 +66,6 @@ DROPDOWN = [
     (PROPERTY_CARD, "Property Card"),
     (OCME, "OCME"),
     (HVR, "HVR"),
-    (PHOTOS, 'photos'),
-    (VITAL_RECORDS, 'vital_records')
+    (PHOTOS, 'Photos'),
+    (VITAL_RECORDS, 'Vital Records')
 ]

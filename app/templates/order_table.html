@@ -3,15 +3,16 @@
     <div class="overflow-auto h6 small" style="height: 75vh">
         {% for order in orders %}
             <div class="container">
-                <div class="row">
+                <div class="row pt-1">
                     <div class="col-6 py-1">
                         <div><strong>Order#: </strong>{{ order['order_number'] }}</div>
                         <div id="suborder_{{ loop.index }}" data-value="{{ order['suborder_number'] }}">
                             <strong>Suborder#: </strong>{{ order['suborder_number'] }}
                         </div>
                         <div><strong>Order Type: </strong>{{ order['order_type'] }}</div>
-                        <div><strong>Date Received: </strong>{{ order['date_received'].split(' ')[0] }}</div>
+                        <div><strong>Billing Name: </strong>{{ order['customer']['billing_name'] }}</div>
                         <div><strong>Email: </strong>{{ order['customer']['email'] }}</div>
+                        <div><strong>Date Received: </strong>{{ order['date_received'].split(' ')[0] }}</div>
                     </div>
                     <div class="col-6 py-1">
                         <div id="status_{{ loop.index }}"
@@ -19,7 +20,7 @@
                     </div>
                 </div>
                 <!-- top row with meta data -->
-                <div class="row">
+                <div class="row pb-1">
                     <div class="container">
                         <div class="rounded overflow-auto">
                             <div id="collapse_{{ loop.index }}">

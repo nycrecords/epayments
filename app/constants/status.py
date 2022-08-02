@@ -26,12 +26,12 @@ DONE = 'Done'
 ALL = 'all'
 
 DROPDOWN = [
-    (ALL, "all"),
+    (ALL, "All"),
     (RECEIVED, 'Received'),
     (MICROFILM, 'Microfilm'),
     (OFFSITE, 'Offsite'),
     (PROCESSING, 'Processing'),
-    (NOT_FOUND, 'Not_Found'),
+    (NOT_FOUND, 'Not Found'),
     (UNDELIVERABLE, 'Undeliverable'),
     (REFUND, 'Refund'),
     (DONE, 'Done'),

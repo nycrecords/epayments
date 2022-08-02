@@ -38,7 +38,7 @@ function getOrders() {
             'order_number': $("#order_number").val(),
             'suborder_number': $("#suborder_number").val(),
             'order_type': $("#order_type").val(),
-            'delivery_method': $("#delivery_method").val(),
+            'delivery_method': $("#delivery_method").val().toLowerCase(),
             'status': $("#status").val(),
             'billing_name': $("#billing_name").val(),
             'email' : $("#email").val(),

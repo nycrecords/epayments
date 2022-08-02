@@ -3,6 +3,7 @@ from wtforms import StringField, SubmitField, IntegerField, SelectField
 from wtforms.fields.html5 import DateField
 from wtforms.validators import Required
 from app.constants import status, delivery_method, order_types
+from datetime import datetime
 
 
 class NameForm(FlaskForm):
@@ -18,10 +19,10 @@ class SearchOrderForm(FlaskForm):
     status = SelectField('Status', choices=status.DROPDOWN)
     billing_name = StringField('Billing Name')
     email = StringField('Email')
-    date_received_start = DateField('Received Start Date', format='%m/%d/%y')
-    date_received_end = DateField('Received End Date', format='%m/%d/%y')
-    date_submitted_start = DateField('Submitted Start Date', format='%m/%d/%y')
-    date_submitted_end = DateField('Submitted End Date', format='%m/%d/%y')
+    date_received_start = DateField('Received Start Date', format='%Y-%m-%d', default=datetime.today())
+    date_received_end = DateField('Received End Date', format='%Y-%m-%d')
+    date_submitted_start = DateField('Submitted Start Date', format='%Y-%m-%d')
+    date_submitted_end = DateField('Submitted End Date', format='%Y-%m-%d')
 
     def __init__(self, *args, **kwargs):
         super(SearchOrderForm, self).__init__(*args, **kwargs)

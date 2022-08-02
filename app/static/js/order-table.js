@@ -11,8 +11,13 @@ function renameStatus() {
     status.forEach(function (elem) {
         let elem_id = elem.getAttribute('id')
         let row_num = elem_id.split('_')[1]
-        let status_info =  $('#updated_status_' + row_num + ' ' + 'option:selected').text();
-        $('#' + elem_id).html(status_info);
+        let status_info =  $('#updated_status_' + row_num + ' ' + 'option:selected').text().split(':');
+
+        let status = "<strong>" + status_info[0] + "</strong>";
+        if (status_info[0] !== 'Received')
+            status += ":" + status_info[1];
+
+        $('#' + elem_id).html(status);
     });
 }
 
