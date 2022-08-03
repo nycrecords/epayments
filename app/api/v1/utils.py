@@ -338,6 +338,7 @@ def generate_csv(search_params: Dict[str, str]) -> str:
         delivery_method=search_params.get('delivery_method'),
         status=search_params.get('status'),
         billing_name=search_params.get('billing_name'),
+        email=search_params.get('email'),
         date_received_start=search_params.get('date_received_start'),
         date_received_end=search_params.get('date_received_end'),
         date_submitted_start=search_params.get('date_submitted_start'),
@@ -422,6 +423,25 @@ def generate_csv(search_params: Dict[str, str]) -> str:
                 suborder['_source'].get('metadata').get('borough'),
                 '="{}"'.format(suborder['_source'].get('metadata').get('years')),
             ])
+    # elif order_type == order_types.BIRTH_SEARCH:
+        # writer.writerow([
+        #
+        # ])
+        # for suborder in suborder_results['hits']['hits']:
+
+    # elif order_type == order_types.BIRTH_CERT:
+    # elif order_type == order_types.MARRIAGE_SEARCH:
+    # elif order_type == order_types.MARRIAGE_CERT:
+    # elif order_type == order_types.DEATH_SEARCH:
+    # elif order_type == order_types.DEATH_CERT:
+    # elif order_type == order_types.NO_AMENDS:
+    # elif order_type == order_types.TAX_PHOTO:
+    # elif order_type == order_types.PHOTO_GALLERY:
+    # elif order_type == order_types.PROPERTY_CARD:
+    # elif order_type == order_types.OCME:
+    # elif order_type == order_types.HVR:
+
+
 
     file.close()
     return url_for('static', filename='files/{}'.format(filename), _external=True)

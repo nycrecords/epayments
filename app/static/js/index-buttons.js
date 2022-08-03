@@ -1,12 +1,14 @@
 $(document).ready(function () {
-    setPassSaveBtn()
-    setDownloadBtns()
+    setPassSaveBtn();
+    setDownloadBtns();
+    showCSVBtn();
 })
 
 function setDownloadBtns() {
-    setOrderBtn()
-    setLargeLabelBtn()
-    setSmallLabelBtn()
+    setOrderBtn();
+    setLargeLabelBtn();
+    setSmallLabelBtn();
+    setCSVBtn();
 }
 
 function printAjaxCall(type) {
@@ -75,5 +77,51 @@ function setPassSaveBtn() {
                 alert(result['responseJSON']['error']['message']);
             }
         });
+    });
+}
+
+function showCSVBtn() {
+    // initial disable when loaded
+    $('#csv').hide();
+    // change csv accessibility everytime order_type is changed
+    $('#order_type').on('change', function () {
+        if ($('#order_type').val() === 'all') {
+            $('#csv').hide();
+        } else {
+            $('#csv').show();
+        }
+    });
+}
+
+function setCSVBtn() {
+    $('#csv').click(function () {
+        let c_drs = convertDate($('#date_received_start').val());
+        let c_dre = convertDate($('#date_received_end').val());
+        let c_srs = convertDate($('#date_submitted_start').val());
+        let c_sre = convertDate($('#date_submitted_end').val());
+
+        $.ajax({
+            type: "GET",
+            url: "api/v1/orders/csv?",
+            data: {
+                'order_number': $("#order_number").val(),
+                'suborder_number': $("#suborder_number").val(),
+                'order_type': $("#order_type").val(),
+                'delivery_method': $("#delivery_method").val(),
+                'status': $("#status").val(),
+                'billing_name': $("#billing_name").val(),
+                'email': $("#email").val(),
+                'date_received_start': c_drs,
+                'date_received_end': c_dre,
+                'date_submitted_start': c_srs,
+                'date_submitted_end': c_sre,
+            },
+            dataType: "json",
+            contentType: "application/json",
+            success: function (result) {
+                console.log(result)
+                window.open(result['url']);
+            }
+        })
     });
 }
