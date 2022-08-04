@@ -346,9 +346,36 @@ def generate_csv(search_params: Dict[str, str]) -> str:
         search_type='csv',
     )
 
-    filename = 'orders_{}.csv'.format(datetime.now().strftime('%m_%d_%Y_at_%I_%M_%p'))
+    filename = 'orders_{}_{}.csv'.format(order_type, datetime.now().strftime('%m_%d_%Y_at_%I_%M_%p'))
     file = open(join(current_app.config["PRINT_FILE_PATH"], filename), 'w')
     writer = csv.writer(file)
+
+    header_init = ['Order Number',
+                   'Suborder Number',
+                   'Date Received',
+                   'Order Type',
+                   'Status',
+                   'Phone',
+                   'Email',
+                   'Billing Name',
+                   'Address line 1',
+                   'Address line 2',
+                   'City',
+                   'State',
+                   'Zip Code',
+                   'Country',
+                   ]
+
+    header_last = ['Number of Copies',
+                   'Exemplification',
+                   'Exemplication Copies',
+                   'Raised Seal',
+                   'Raised Seal Copies',
+                   'No Amends',
+                   'No Amends Copies',
+                   'Comment',
+                   'Delivery Method'
+                   ]
 
     if order_type == order_types.PHOTOS:
         writer.writerow([
@@ -423,25 +450,401 @@ def generate_csv(search_params: Dict[str, str]) -> str:
                 suborder['_source'].get('metadata').get('borough'),
                 '="{}"'.format(suborder['_source'].get('metadata').get('years')),
             ])
-    # elif order_type == order_types.BIRTH_SEARCH:
-        # writer.writerow([
-        #
-        # ])
-        # for suborder in suborder_results['hits']['hits']:
 
-    # elif order_type == order_types.BIRTH_CERT:
-    # elif order_type == order_types.MARRIAGE_SEARCH:
-    # elif order_type == order_types.MARRIAGE_CERT:
-    # elif order_type == order_types.DEATH_SEARCH:
-    # elif order_type == order_types.DEATH_CERT:
-    # elif order_type == order_types.NO_AMENDS:
-    # elif order_type == order_types.TAX_PHOTO:
-    # elif order_type == order_types.PHOTO_GALLERY:
-    # elif order_type == order_types.PROPERTY_CARD:
-    # elif order_type == order_types.OCME:
-    # elif order_type == order_types.HVR:
+    elif order_type == order_types.BIRTH_SEARCH or order_type == order_types.BIRTH_CERT:
+        # only difference between the two is a certificate column
+        add_header = ['Gender',
+                      'First Name',
+                      'Middle Name',
+                      'Last Name',
+                      'Father Name',
+                      'Mother Name',
+                      'Alt First Name',
+                      'Alt Middle Name',
+                      'Alt Last Name',
+                      'Month',
+                      'Day',
+                      'Year',
+                      'Birth Place',
+                      'Borough'
+                      ]
+        header = header_init + add_header + header_last
 
+        if order_type == order_types.BIRTH_CERT:
+            header.insert(13, 'Certificate Number')
 
+        writer.writerow(header)
+
+        for suborder in suborder_results['hits']['hits']:
+            row_content = [
+                '="{}"'.format(suborder['_source']['order_number']),
+                suborder['_source']['suborder_number'],
+                suborder['_source'].get('date_received')[:8],
+                suborder['_source']['order_type'],
+                suborder['_source']['current_status'],
+                suborder['_source'].get('customer').get('phone'),
+                suborder['_source'].get('customer').get('email'),
+                suborder['_source'].get('customer')['billing_name'],
+                suborder['_source'].get('customer').get('address_line_one'),
+                suborder['_source'].get('customer').get('address_line_two'),
+                suborder['_source'].get('customer').get('city'),
+                suborder['_source'].get('customer').get('state'),
+                suborder['_source'].get('customer').get('zip_code'),
+                suborder['_source'].get('customer').get('country'),
+                suborder['_source'].get('metadata').get('gender'),
+                suborder['_source'].get('metadata').get('first_name'),
+                suborder['_source'].get('metadata').get('middle_name', ''),
+                suborder['_source'].get('metadata').get('last_name'),
+                suborder['_source'].get('metadata').get('father_name', ''),
+                suborder['_source'].get('metadata').get('mother_name', ''),
+                suborder['_source'].get('metadata').get('alt_first_name', ''),
+                suborder['_source'].get('metadata').get('alt_middle_name', ''),
+                suborder['_source'].get('metadata').get('alt_last_name', ''),
+                suborder['_source'].get('metadata').get('month'),
+                suborder['_source'].get('metadata').get('day'),
+                suborder['_source'].get('metadata').get('year'),
+                suborder['_source'].get('metadata').get('birth_place', ''),
+                suborder['_source'].get('metadata').get('borough', ''),
+                suborder['_source'].get('metadata').get('num_copies'),
+                suborder['_source'].get('metadata').get('exemplification'),
+                suborder['_source'].get('metadata').get('exemplification_copies'),
+                suborder['_source'].get('metadata').get('raised_seal'),
+                suborder['_source'].get('metadata').get('raised_seal_copies'),
+                suborder['_source'].get('metadata').get('no_amends'),
+                suborder['_source'].get('metadata').get('no_amends_copies'),
+                'Yes' if suborder['_source'].get('metadata').get('comment') else '',
+                suborder['_source'].get('metadata').get('delivery_method'),
+            ]
+            if order_type == order_types.BIRTH_CERT:
+                row_content.insert(13, suborder['_source'].get('metadata').get('certificate_number'))
+
+            writer.writerow(row_content)
+
+    elif order_type == order_types.MARRIAGE_SEARCH or order_type == order_types.MARRIAGE_CERT:
+        # only difference between the two is a certificate column
+        add_header = ['Groom First Name',
+                      'Groom Middle Name',
+                      'Groom Last Name',
+                      'Bride First Name',
+                      'Bride Middle Name',
+                      'Bride Last Name',
+                      'Alt Groom First Name',
+                      'Alt Groom Middle Name',
+                      'Alt Groom Last Name',
+                      'Alt Bride First Name',
+                      'Alt Bride Middle Name',
+                      'Alt Bride Last Name',
+                      'Month',
+                      'Day',
+                      'Year',
+                      'Marriage Place',
+                      'Borough',
+                      ]
+        header = header_init + add_header + header_last
+
+        if order_type == order_types.MARRIAGE_CERT:
+            header.insert(13, 'Certificate Number')
+
+        writer.writerow(header)
+
+        for suborder in suborder_results['hits']['hits']:
+            row_content = [
+                '="{}"'.format(suborder['_source']['order_number']),
+                suborder['_source']['suborder_number'],
+                suborder['_source'].get('date_received')[:8],
+                suborder['_source']['order_type'],
+                suborder['_source']['current_status'],
+                suborder['_source'].get('customer').get('phone'),
+                suborder['_source'].get('customer').get('email'),
+                suborder['_source'].get('customer')['billing_name'],
+                suborder['_source'].get('customer').get('address_line_one'),
+                suborder['_source'].get('customer').get('address_line_two'),
+                suborder['_source'].get('customer').get('city'),
+                suborder['_source'].get('customer').get('state'),
+                suborder['_source'].get('customer').get('zip_code'),
+                suborder['_source'].get('customer').get('country'),
+                suborder['_source'].get('metadata').get('groom_first_name'),
+                suborder['_source'].get('metadata').get('groom_middle_name', ''),
+                suborder['_source'].get('metadata').get('groom_last_name'),
+                suborder['_source'].get('metadata').get('bride_first_name'),
+                suborder['_source'].get('metadata').get('bride_middle_name', ''),
+                suborder['_source'].get('metadata').get('bride_last_name'),
+                suborder['_source'].get('metadata').get('alt_groom_first_name', ''),
+                suborder['_source'].get('metadata').get('alt_groom_middle_name', ''),
+                suborder['_source'].get('metadata').get('alt_groom_last_name', ''),
+                suborder['_source'].get('metadata').get('alt_bride_first_name', ''),
+                suborder['_source'].get('metadata').get('alt_bride_middle_name', ''),
+                suborder['_source'].get('metadata').get('alt_bride_last_name', ''),
+                suborder['_source'].get('metadata').get('month'),
+                suborder['_source'].get('metadata').get('day'),
+                suborder['_source'].get('metadata').get('year'),
+                suborder['_source'].get('metadata').get('marriage_place', ''),
+                suborder['_source'].get('metadata').get('borough', ''),
+                suborder['_source'].get('metadata').get('num_copies'),
+                suborder['_source'].get('metadata').get('exemplification'),
+                suborder['_source'].get('metadata').get('exemplification_copies'),
+                suborder['_source'].get('metadata').get('raised_seal'),
+                suborder['_source'].get('metadata').get('raised_seal_copies'),
+                suborder['_source'].get('metadata').get('no_amends'),
+                suborder['_source'].get('metadata').get('no_amends_copies'),
+                'Yes' if suborder['_source'].get('metadata').get('comment') else '',
+                suborder['_source'].get('metadata').get('delivery_method'),
+            ]
+            if order_type == order_types.MARRIAGE_CERT:
+                row_content.insert(13, suborder['_source'].get('metadata').get('certificate_number'))
+
+            writer.writerow(row_content)
+
+    elif order_type == order_types.DEATH_SEARCH or order_type == order_types.DEATH_CERT:
+        # only difference between the two is a certificate column
+        add_header = ['Gender',
+                      'First Name',
+                      'Middle Name',
+                      'Last Name',
+                      'Father Name',
+                      'Mother Name',
+                      'Alt First Name',
+                      'Alt Middle Name',
+                      'Alt Last Name',
+                      'Cemetery',
+                      'Age at Death',
+                      'Month',
+                      'Day',
+                      'Year',
+                      'Death Place',
+                      'Borough',
+                      ]
+
+        header = header_init + add_header + header_last
+
+        if order_type == order_types.DEATH_CERT:
+            header.insert(13, 'Certificate Number')
+
+        writer.writerow(header)
+
+        for suborder in suborder_results['hits']['hits']:
+            row_content = [
+                '="{}"'.format(suborder['_source']['order_number']),
+                suborder['_source']['suborder_number'],
+                suborder['_source'].get('date_received')[:8],
+                suborder['_source']['order_type'],
+                suborder['_source']['current_status'],
+                suborder['_source'].get('customer').get('phone'),
+                suborder['_source'].get('customer').get('email'),
+                suborder['_source'].get('customer')['billing_name'],
+                suborder['_source'].get('customer').get('address_line_one'),
+                suborder['_source'].get('customer').get('address_line_two'),
+                suborder['_source'].get('customer').get('city'),
+                suborder['_source'].get('customer').get('state'),
+                suborder['_source'].get('customer').get('zip_code'),
+                suborder['_source'].get('customer').get('country'),
+                suborder['_source'].get('metadata').get('gender'),
+                suborder['_source'].get('metadata').get('first_name'),
+                suborder['_source'].get('metadata').get('middle_name', ''),
+                suborder['_source'].get('metadata').get('last_name'),
+                suborder['_source'].get('metadata').get('father_name', ''),
+                suborder['_source'].get('metadata').get('mother_name', ''),
+                suborder['_source'].get('metadata').get('alt_first_name', ''),
+                suborder['_source'].get('metadata').get('alt_middle_name', ''),
+                suborder['_source'].get('metadata').get('alt_last_name', ''),
+                suborder['_source'].get('metadata').get('cemetery', ''),
+                suborder['_source'].get('metadata').get('age_at_death', ''),
+                suborder['_source'].get('metadata').get('month'),
+                suborder['_source'].get('metadata').get('day'),
+                suborder['_source'].get('metadata').get('year'),
+                suborder['_source'].get('metadata').get('death_place', ''),
+                suborder['_source'].get('metadata').get('borough', ''),
+                suborder['_source'].get('metadata').get('num_copies'),
+                suborder['_source'].get('metadata').get('exemplification'),
+                suborder['_source'].get('metadata').get('exemplification_copies'),
+                suborder['_source'].get('metadata').get('raised_seal'),
+                suborder['_source'].get('metadata').get('raised_seal_copies'),
+                suborder['_source'].get('metadata').get('no_amends'),
+                suborder['_source'].get('metadata').get('no_amends_copies'),
+                'Yes' if suborder['_source'].get('metadata').get('comment') else '',
+                suborder['_source'].get('metadata').get('delivery_method'),
+            ]
+
+            if order_type == order_types.DEATH_CERT:
+                row_content.insert(13, suborder['_source'].get('metadata').get('certificate_number'))
+
+            writer.writerow(row_content)
+
+    elif order_type == order_types.NO_AMENDS:
+        add_header = ['Number of Copies',
+                      'Filename',
+                      'Delivery Method']
+
+        header = header_init + add_header
+        writer.writerow(header)
+
+        for suborder in suborder_results['hits']['hits']:
+            row_content = [
+                '="{}"'.format(suborder['_source']['order_number']),
+                suborder['_source']['suborder_number'],
+                suborder['_source'].get('date_received')[:8],
+                suborder['_source']['order_type'],
+                suborder['_source']['current_status'],
+                suborder['_source'].get('customer').get('phone'),
+                suborder['_source'].get('customer').get('email'),
+                suborder['_source'].get('customer')['billing_name'],
+                suborder['_source'].get('customer').get('address_line_one'),
+                suborder['_source'].get('customer').get('address_line_two'),
+                suborder['_source'].get('customer').get('city'),
+                suborder['_source'].get('customer').get('state'),
+                suborder['_source'].get('customer').get('zip_code'),
+                suborder['_source'].get('customer').get('country'),
+                suborder['_source'].get('metadata').get('num_copies'),
+                suborder['_source'].get('metadata').get('filename'),
+                suborder['_source'].get('metadata').get('delivery_method'),
+            ]
+
+            writer.writerow(row_content)
+
+    elif order_type == order_types.PROPERTY_CARD:
+        add_header = ['Borough',
+                      'Block',
+                      'Lot',
+                      'Building Name',
+                      'Street',
+                      'Number of Copies',
+                      'Raised Seal',
+                      'Raised Seal Copies',
+                      'Delivery Method',
+                      'Contact Number',
+                      'Contact Email'
+                      ]
+
+        header = header_init + add_header
+        writer.writerow(header)
+
+        for suborder in suborder_results['hits']['hits']:
+            print(suborder)
+            print('ss')
+            row_content = [
+                '="{}"'.format(suborder['_source']['order_number']),
+                suborder['_source']['suborder_number'],
+                suborder['_source'].get('date_received')[:8],
+                suborder['_source']['order_type'],
+                suborder['_source']['current_status'],
+                suborder['_source'].get('customer').get('phone'),
+                suborder['_source'].get('customer').get('email'),
+                suborder['_source'].get('customer')['billing_name'],
+                suborder['_source'].get('customer').get('address_line_one'),
+                suborder['_source'].get('customer').get('address_line_two'),
+                suborder['_source'].get('customer').get('city'),
+                suborder['_source'].get('customer').get('state'),
+                suborder['_source'].get('customer').get('zip_code'),
+                suborder['_source'].get('customer').get('country'),
+                suborder['_source'].get('metadata').get('borough'),
+                suborder['_source'].get('metadata').get('block'),
+                suborder['_source'].get('metadata').get('lot'),
+                suborder['_source'].get('metadata').get('building_name'),
+                suborder['_source'].get('metadata').get('street'),
+                suborder['_source'].get('metadata').get('num_copies'),
+                suborder['_source'].get('metadata').get('raised_seal'),
+                suborder['_source'].get('metadata').get('raised_seal_copies'),
+                suborder['_source'].get('metadata').get('delivery_method'),
+                suborder['_source'].get('metadata').get('contact_number'),
+                suborder['_source'].get('metadata').get('contact_email'),
+            ]
+
+            writer.writerow(row_content)
+
+    elif order_type == order_types.OCME:
+        add_header = ['Certificate',
+                      'Borough',
+                      'Date',
+                      'First Name',
+                      'Middle Name',
+                      'Last Name',
+                      'Age',
+                      'Number of Copies',
+                      'Raised Seal',
+                      'Raised Seal Copies',
+                      'Delivery Method',
+                      'Contact Number',
+                      'Contact Email'
+                      ]
+
+        header = header_init + add_header
+        write.writerow(header)
+
+        for suborder in suborder_results['hits']['hits']:
+            row_content = [
+                '="{}"'.format(suborder['_source']['order_number']),
+                suborder['_source']['suborder_number'],
+                suborder['_source'].get('date_received')[:8],
+                suborder['_source']['order_type'],
+                suborder['_source']['current_status'],
+                suborder['_source'].get('customer').get('phone'),
+                suborder['_source'].get('customer').get('email'),
+                suborder['_source'].get('customer')['billing_name'],
+                suborder['_source'].get('customer').get('address_line_one'),
+                suborder['_source'].get('customer').get('address_line_two'),
+                suborder['_source'].get('customer').get('city'),
+                suborder['_source'].get('customer').get('state'),
+                suborder['_source'].get('customer').get('zip_code'),
+                suborder['_source'].get('customer').get('country'),
+                suborder['_source'].get('metadata').get('certificate_number'),
+                suborder['_source'].get('metadata').get('borough'),
+                suborder['_source'].get('metadata').get('date'),
+                suborder['_source'].get('metadata').get('first_name'),
+                suborder['_source'].get('metadata').get('middle_name'),
+                suborder['_source'].get('metadata').get('last_name'),
+                suborder['_source'].get('metadata').get('age'),
+                suborder['_source'].get('metadata').get('num_copies'),
+                suborder['_source'].get('metadata').get('raised_seal'),
+                suborder['_source'].get('metadata').get('raised_seal_copies'),
+                suborder['_source'].get('metadata').get('delivery_method'),
+                suborder['_source'].get('metadata').get('contact_number'),
+                suborder['_source'].get('metadata').get('contact_email'),
+            ]
+
+            writer.writerow(row_content)
+
+    elif order_type == order_types.HVR:
+        add_header = ['Link',
+                      'Record ID',
+                      'Type'
+                      ]
+
+        header = header_init + add_header + header_last
+        writer.writerow(header)
+
+        for suborder in suborder_results['hits']['hits']:
+            row_content = [
+                '="{}"'.format(suborder['_source']['order_number']),
+                suborder['_source']['suborder_number'],
+                suborder['_source'].get('date_received')[:8],
+                suborder['_source']['order_type'],
+                suborder['_source']['current_status'],
+                suborder['_source'].get('customer').get('phone'),
+                suborder['_source'].get('customer').get('email'),
+                suborder['_source'].get('customer')['billing_name'],
+                suborder['_source'].get('customer').get('address_line_one'),
+                suborder['_source'].get('customer').get('address_line_two'),
+                suborder['_source'].get('customer').get('city'),
+                suborder['_source'].get('customer').get('state'),
+                suborder['_source'].get('customer').get('zip_code'),
+                suborder['_source'].get('customer').get('country'),
+                suborder['_source'].get('customer').get('link'),
+                suborder['_source'].get('customer').get('record_id'),
+                suborder['_source'].get('customer').get('type'),
+                suborder['_source'].get('metadata').get('num_copies'),
+                suborder['_source'].get('metadata').get('exemplification'),
+                suborder['_source'].get('metadata').get('exemplification_copies'),
+                suborder['_source'].get('metadata').get('raised_seal'),
+                suborder['_source'].get('metadata').get('raised_seal_copies'),
+                suborder['_source'].get('metadata').get('no_amends'),
+                suborder['_source'].get('metadata').get('no_amends_copies'),
+                'Yes' if suborder['_source'].get('metadata').get('comment') else '',
+                suborder['_source'].get('metadata').get('delivery_method'),
+            ]
+            if order_type == order_types.BIRTH_CERT:
+                row_content.insert(13, suborder['_source'].get('metadata').get('certificate_number'))
+
+            writer.writerow(row_content)
 
     file.close()
     return url_for('static', filename='files/{}'.format(filename), _external=True)

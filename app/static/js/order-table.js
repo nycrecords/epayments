@@ -71,6 +71,7 @@ function setMoreInfoBtns() {
                     type: 'POST',
                     url: 'api/v1/more_info/' + suborder_number,
                     success: function (result) {
+                        console.log(result)
                         $.ajax({
                             type: 'POST',
                             url: 'listinfo',

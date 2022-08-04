@@ -121,7 +121,8 @@ def listinfo():
         'Photo Gallery': 'photo_gallery.html',
         'Property Card': 'property_card.html',
         'OCME': 'ocme.html',
-        'HVR': 'hvr.html'
+        'HVR': 'hvr.html',
+        'No Amends': 'no_amends.html'
     }
 
     info_tab = render_template('orders/{}'.format(order_type_template_handler[order_type]),
