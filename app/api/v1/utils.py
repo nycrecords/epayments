@@ -1,4 +1,5 @@
 import csv
+import xlsxwriter
 from datetime import date, datetime
 from typing import Dict, List, Union
 
@@ -346,9 +347,14 @@ def generate_csv(search_params: Dict[str, str]) -> str:
         search_type='csv',
     )
 
-    filename = 'orders_{}_{}.csv'.format(order_type, datetime.now().strftime('%m_%d_%Y_at_%I_%M_%p'))
-    file = open(join(current_app.config["PRINT_FILE_PATH"], filename), 'w')
-    writer = csv.writer(file)
+    filename = 'orders_{}_{}.xlsx'.format(order_type, datetime.now().strftime('%m_%d_%Y_at_%I_%M_%p'))
+    path = join(current_app.config["PRINT_FILE_PATH"], filename)
+    wb = xlsxwriter.Workbook(path)
+    ws = wb.add_worksheet()
+
+    # header formats
+    header_format = wb.add_format({'bold': 1})
+    header_format.set_bg_color('#FFFF00')
 
     header_init = ['Order Number',
                    'Suborder Number',
@@ -365,7 +371,6 @@ def generate_csv(search_params: Dict[str, str]) -> str:
                    'Zip Code',
                    'Country',
                    ]
-
     header_last = ['Number of Copies',
                    'Exemplification',
                    'Exemplication Copies',
@@ -377,107 +382,34 @@ def generate_csv(search_params: Dict[str, str]) -> str:
                    'Delivery Method'
                    ]
 
-    if order_type == order_types.PHOTOS:
-        writer.writerow([
-            'Order Number',
-            'Suborder Number',
-            'Date Received',
-            'Customer Name',
-            'Phone',
-            'Email',
-            'Customer Address',
-            'Delivery Method',
-            'Size',
-            'Copy',
-            'Image Identifier',
-            'Building Number',
-            'Street',
-            'Collection',
-            'Borough',
-            'Block',
-            'Lot',
-            'Comment',
-            'Description',
-        ])
-        for suborder in suborder_results['hits']['hits']:
-            writer.writerow([
-                '="{}"'.format(suborder['_source']['order_number']),
-                suborder['_source']['suborder_number'],
-                suborder['_source'].get('date_received')[:8],
-                suborder['_source'].get('customer')['billing_name'],
-                suborder['_source'].get('customer').get('phone'),
-                suborder['_source'].get('customer').get('email'),
-                suborder['_source'].get('customer').get('address'),
-                suborder['_source'].get('metadata').get('delivery_method'),
-                suborder['_source'].get('metadata').get('size'),
-                suborder['_source'].get('metadata').get('num_copies'),
-                suborder['_source'].get('metadata').get('image_id', ''),
-                suborder['_source'].get('metadata').get('building_number', ''),
-                suborder['_source'].get('metadata').get('street', ''),
-                suborder['_source'].get('metadata').get('collection', ''),
-                suborder['_source'].get('metadata').get('borough', ''),
-                suborder['_source'].get('metadata').get('block', ''),
-                suborder['_source'].get('metadata').get('lot', ''),
-                'Yes' if suborder['_source'].get('metadata').get('comment') else '',
-                suborder['_source'].get('metadata').get('description', ''),
-            ])
-
-    elif order_type == order_types.VITAL_RECORDS:
-        writer.writerow([
-            'Order Number',
-            'Suborder Number',
-            'Date Received',
-            'Customer Name',
-            'Email',
-            'Delivery Method',
-            'Certificate Type',
-            'Certificate Number',
-            'Borough',
-            'Years',
-        ])
-        for suborder in suborder_results['hits']['hits']:
-            if suborder['_source'].get('metadata') is None:
-                print(suborder)
-            writer.writerow([
-                '="{}"'.format(suborder['_source']['order_number']),
-                suborder['_source']['suborder_number'],
-                suborder['_source'].get('date_received')[:8],  # Remove time from string
-                suborder['_source'].get('customer')['billing_name'],
-                suborder['_source'].get('customer').get('email'),
-                suborder['_source'].get('metadata').get('delivery_method'),
-                suborder['_source'].get('order_type'),
-                suborder['_source'].get('metadata').get('certificate_number'),
-                suborder['_source'].get('metadata').get('borough'),
-                '="{}"'.format(suborder['_source'].get('metadata').get('years')),
-            ])
-
-    elif order_type == order_types.BIRTH_SEARCH or order_type == order_types.BIRTH_CERT:
-        # only difference between the two is a certificate column
-        add_header = ['Gender',
-                      'First Name',
-                      'Middle Name',
-                      'Last Name',
-                      'Father Name',
-                      'Mother Name',
-                      'Alt First Name',
-                      'Alt Middle Name',
-                      'Alt Last Name',
-                      'Month',
-                      'Day',
-                      'Year',
-                      'Birth Place',
-                      'Borough'
-                      ]
-        header = header_init + add_header + header_last
-
+    contents = []
+    header_data = []
+    if order_type in (order_types.BIRTH_SEARCH, order_types.BIRTH_CERT):
+        add_header = [
+            'Gender',
+            'First Name',
+            'Middle Name',
+            'Last Name',
+            'Father Name',
+            'Mother Name',
+            'Alt First Name',
+            'Alt Middle Name',
+            'Alt Last Name',
+            'Month',
+            'Day',
+            'Year',
+            'Birth Place',
+            'Borough'
+        ]
         if order_type == order_types.BIRTH_CERT:
-            header.insert(13, 'Certificate Number')
+            add_header.insert(0, 'Certificate Number')
 
-        writer.writerow(header)
+        header_data = header_init + add_header + header_last
 
+        # get all row content and put into contents
         for suborder in suborder_results['hits']['hits']:
             row_content = [
-                '="{}"'.format(suborder['_source']['order_number']),
+                suborder['_source']['order_number'],
                 suborder['_source']['suborder_number'],
                 suborder['_source'].get('date_received')[:8],
                 suborder['_source']['order_type'],
@@ -516,40 +448,39 @@ def generate_csv(search_params: Dict[str, str]) -> str:
                 suborder['_source'].get('metadata').get('delivery_method'),
             ]
             if order_type == order_types.BIRTH_CERT:
-                row_content.insert(13, suborder['_source'].get('metadata').get('certificate_number'))
+                row_content.insert(14, suborder['_source'].get('metadata').get('certificate_number'))
 
-            writer.writerow(row_content)
+            contents.append(row_content)
 
-    elif order_type == order_types.MARRIAGE_SEARCH or order_type == order_types.MARRIAGE_CERT:
+    elif order_type in (order_types.MARRIAGE_SEARCH, order_types.MARRIAGE_CERT):
         # only difference between the two is a certificate column
-        add_header = ['Groom First Name',
-                      'Groom Middle Name',
-                      'Groom Last Name',
-                      'Bride First Name',
-                      'Bride Middle Name',
-                      'Bride Last Name',
-                      'Alt Groom First Name',
-                      'Alt Groom Middle Name',
-                      'Alt Groom Last Name',
-                      'Alt Bride First Name',
-                      'Alt Bride Middle Name',
-                      'Alt Bride Last Name',
-                      'Month',
-                      'Day',
-                      'Year',
-                      'Marriage Place',
-                      'Borough',
-                      ]
-        header = header_init + add_header + header_last
-
+        add_header = [
+            'Groom First Name',
+            'Groom Middle Name',
+            'Groom Last Name',
+            'Bride First Name',
+            'Bride Middle Name',
+            'Bride Last Name',
+            'Alt Groom First Name',
+            'Alt Groom Middle Name',
+            'Alt Groom Last Name',
+            'Alt Bride First Name',
+            'Alt Bride Middle Name',
+            'Alt Bride Last Name',
+            'Month',
+            'Day',
+            'Year',
+            'Marriage Place',
+            'Borough',
+        ]
         if order_type == order_types.MARRIAGE_CERT:
-            header.insert(13, 'Certificate Number')
+            add_header.insert(0, 'Certificate Number')
 
-        writer.writerow(header)
+        header_data = header_init + add_header + header_last
 
         for suborder in suborder_results['hits']['hits']:
             row_content = [
-                '="{}"'.format(suborder['_source']['order_number']),
+                suborder['_source']['order_number'],
                 suborder['_source']['suborder_number'],
                 suborder['_source'].get('date_received')[:8],
                 suborder['_source']['order_type'],
@@ -591,40 +522,37 @@ def generate_csv(search_params: Dict[str, str]) -> str:
                 suborder['_source'].get('metadata').get('delivery_method'),
             ]
             if order_type == order_types.MARRIAGE_CERT:
-                row_content.insert(13, suborder['_source'].get('metadata').get('certificate_number'))
+                row_content.insert(14, suborder['_source'].get('metadata').get('certificate_number'))
 
-            writer.writerow(row_content)
+            contents.append(row_content)
 
-    elif order_type == order_types.DEATH_SEARCH or order_type == order_types.DEATH_CERT:
+    elif order_type in (order_types.DEATH_SEARCH, order_types.DEATH_CERT):
         # only difference between the two is a certificate column
-        add_header = ['Gender',
-                      'First Name',
-                      'Middle Name',
-                      'Last Name',
-                      'Father Name',
-                      'Mother Name',
-                      'Alt First Name',
-                      'Alt Middle Name',
-                      'Alt Last Name',
-                      'Cemetery',
-                      'Age at Death',
-                      'Month',
-                      'Day',
-                      'Year',
-                      'Death Place',
-                      'Borough',
-                      ]
-
-        header = header_init + add_header + header_last
-
+        add_header = [
+            'First Name',
+            'Middle Name',
+            'Last Name',
+            'Father Name',
+            'Mother Name',
+            'Alt First Name',
+            'Alt Middle Name',
+            'Alt Last Name',
+            'Cemetery',
+            'Age at Death',
+            'Month',
+            'Day',
+            'Year',
+            'Death Place',
+            'Borough',
+        ]
         if order_type == order_types.DEATH_CERT:
-            header.insert(13, 'Certificate Number')
+            add_header.insert(0, 'Certificate Number')
 
-        writer.writerow(header)
+        header_data = header_init + add_header + header_last
 
         for suborder in suborder_results['hits']['hits']:
             row_content = [
-                '="{}"'.format(suborder['_source']['order_number']),
+                suborder['_source']['order_number'],
                 suborder['_source']['suborder_number'],
                 suborder['_source'].get('date_received')[:8],
                 suborder['_source']['order_type'],
@@ -638,7 +566,6 @@ def generate_csv(search_params: Dict[str, str]) -> str:
                 suborder['_source'].get('customer').get('state'),
                 suborder['_source'].get('customer').get('zip_code'),
                 suborder['_source'].get('customer').get('country'),
-                suborder['_source'].get('metadata').get('gender'),
                 suborder['_source'].get('metadata').get('first_name'),
                 suborder['_source'].get('metadata').get('middle_name', ''),
                 suborder['_source'].get('metadata').get('last_name'),
@@ -664,23 +591,23 @@ def generate_csv(search_params: Dict[str, str]) -> str:
                 'Yes' if suborder['_source'].get('metadata').get('comment') else '',
                 suborder['_source'].get('metadata').get('delivery_method'),
             ]
-
             if order_type == order_types.DEATH_CERT:
-                row_content.insert(13, suborder['_source'].get('metadata').get('certificate_number'))
+                row_content.insert(14, suborder['_source'].get('metadata').get('certificate_number'))
 
-            writer.writerow(row_content)
+            contents.append(row_content)
 
     elif order_type == order_types.NO_AMENDS:
-        add_header = ['Number of Copies',
-                      'Filename',
-                      'Delivery Method']
+        add_header = [
+            'Number of Copies',
+            'Filename',
+            'Delivery Method'
+        ]
 
-        header = header_init + add_header
-        writer.writerow(header)
+        header_data = header_init + add_header
 
         for suborder in suborder_results['hits']['hits']:
             row_content = [
-                '="{}"'.format(suborder['_source']['order_number']),
+                suborder['_source']['order_number'],
                 suborder['_source']['suborder_number'],
                 suborder['_source'].get('date_received')[:8],
                 suborder['_source']['order_type'],
@@ -699,30 +626,28 @@ def generate_csv(search_params: Dict[str, str]) -> str:
                 suborder['_source'].get('metadata').get('delivery_method'),
             ]
 
-            writer.writerow(row_content)
+            contents.append(row_content)
 
     elif order_type == order_types.PROPERTY_CARD:
-        add_header = ['Borough',
-                      'Block',
-                      'Lot',
-                      'Building Name',
-                      'Street',
-                      'Number of Copies',
-                      'Raised Seal',
-                      'Raised Seal Copies',
-                      'Delivery Method',
-                      'Contact Number',
-                      'Contact Email'
-                      ]
+        add_header = [
+            'Borough',
+            'Block',
+            'Lot',
+            'Building Name',
+            'Street',
+            'Number of Copies',
+            'Raised Seal',
+            'Raised Seal Copies',
+            'Delivery Method',
+            'Contact Number',
+            'Contact Email'
+        ]
 
-        header = header_init + add_header
-        writer.writerow(header)
+        header_data = header_init + add_header
 
         for suborder in suborder_results['hits']['hits']:
-            print(suborder)
-            print('ss')
             row_content = [
-                '="{}"'.format(suborder['_source']['order_number']),
+                suborder['_source']['order_number'],
                 suborder['_source']['suborder_number'],
                 suborder['_source'].get('date_received')[:8],
                 suborder['_source']['order_type'],
@@ -749,30 +674,30 @@ def generate_csv(search_params: Dict[str, str]) -> str:
                 suborder['_source'].get('metadata').get('contact_email'),
             ]
 
-            writer.writerow(row_content)
+            contents.append(row_content)
 
     elif order_type == order_types.OCME:
-        add_header = ['Certificate',
-                      'Borough',
-                      'Date',
-                      'First Name',
-                      'Middle Name',
-                      'Last Name',
-                      'Age',
-                      'Number of Copies',
-                      'Raised Seal',
-                      'Raised Seal Copies',
-                      'Delivery Method',
-                      'Contact Number',
-                      'Contact Email'
-                      ]
+        add_header = [
+            'Certificate',
+            'Borough',
+            'Date',
+            'First Name',
+            'Middle Name',
+            'Last Name',
+            'Age',
+            'Number of Copies',
+            'Raised Seal',
+            'Raised Seal Copies',
+            'Delivery Method',
+            'Contact Number',
+            'Contact Email'
+        ]
 
-        header = header_init + add_header
-        write.writerow(header)
+        header_data = header_init + add_header
 
         for suborder in suborder_results['hits']['hits']:
             row_content = [
-                '="{}"'.format(suborder['_source']['order_number']),
+                suborder['_source']['order_number'],
                 suborder['_source']['suborder_number'],
                 suborder['_source'].get('date_received')[:8],
                 suborder['_source']['order_type'],
@@ -801,20 +726,20 @@ def generate_csv(search_params: Dict[str, str]) -> str:
                 suborder['_source'].get('metadata').get('contact_email'),
             ]
 
-            writer.writerow(row_content)
+            conent.append(row_content)
 
     elif order_type == order_types.HVR:
-        add_header = ['Link',
-                      'Record ID',
-                      'Type'
-                      ]
+        add_header = [
+            'Link',
+            'Record ID',
+            'Type'
+        ]
 
-        header = header_init + add_header + header_last
-        writer.writerow(header)
+        header_data = header_init + add_header + header_last
 
         for suborder in suborder_results['hits']['hits']:
             row_content = [
-                '="{}"'.format(suborder['_source']['order_number']),
+                suborder['_source']['order_number'],
                 suborder['_source']['suborder_number'],
                 suborder['_source'].get('date_received')[:8],
                 suborder['_source']['order_type'],
@@ -841,12 +766,106 @@ def generate_csv(search_params: Dict[str, str]) -> str:
                 'Yes' if suborder['_source'].get('metadata').get('comment') else '',
                 suborder['_source'].get('metadata').get('delivery_method'),
             ]
-            if order_type == order_types.BIRTH_CERT:
-                row_content.insert(13, suborder['_source'].get('metadata').get('certificate_number'))
 
-            writer.writerow(row_content)
+            contents.append(row_content)
 
-    file.close()
+    elif order_type == order_types.PHOTOS:
+        add_header = [
+            'Order Number',
+            'Suborder Number',
+            'Date Received',
+            'Customer Name',
+            'Phone',
+            'Email',
+            'Customer Address',
+            'Delivery Method',
+            'Size',
+            'Copy',
+            'Image Identifier',
+            'Building Number',
+            'Street',
+            'Collection',
+            'Borough',
+            'Block',
+            'Lot',
+            'Comment',
+            'Description',
+        ]
+
+        header_data = add_header
+
+        for suborder in suborder_results['hits']['hits']:
+            row_content = [
+                suborder['_source']['order_number'],
+                suborder['_source']['suborder_number'],
+                suborder['_source'].get('date_received')[:8],
+                suborder['_source'].get('customer')['billing_name'],
+                suborder['_source'].get('customer').get('phone'),
+                suborder['_source'].get('customer').get('email'),
+                suborder['_source'].get('customer').get('address'),
+                suborder['_source'].get('metadata').get('delivery_method'),
+                suborder['_source'].get('metadata').get('size'),
+                suborder['_source'].get('metadata').get('num_copies'),
+                suborder['_source'].get('metadata').get('image_id', ''),
+                suborder['_source'].get('metadata').get('building_number', ''),
+                suborder['_source'].get('metadata').get('street', ''),
+                suborder['_source'].get('metadata').get('collection', ''),
+                suborder['_source'].get('metadata').get('borough', ''),
+                suborder['_source'].get('metadata').get('block', ''),
+                suborder['_source'].get('metadata').get('lot', ''),
+                'Yes' if suborder['_source'].get('metadata').get('comment') else '',
+                suborder['_source'].get('metadata').get('description', ''),
+            ]
+
+            contents.append(row_content)
+
+    elif order_type == order_types.VITAL_RECORDS:
+        add_header = [
+            'Order Number',
+            'Suborder Number',
+            'Date Received',
+            'Customer Name',
+            'Email',
+            'Delivery Method',
+            'Certificate Type',
+            'Certificate Number',
+            'Borough',
+            'Years',
+        ]
+
+        header_data = add_header
+
+        for suborder in suborder_results['hits']['hits']:
+            if suborder['_source'].get('metadata') is None:
+                print(suborder)
+            row_content = [
+                suborder['_source']['order_number'],
+                suborder['_source']['suborder_number'],
+                suborder['_source'].get('date_received')[:8],  # Remove time from string
+                suborder['_source'].get('customer')['billing_name'],
+                suborder['_source'].get('customer').get('email'),
+                suborder['_source'].get('metadata').get('delivery_method'),
+                suborder['_source'].get('order_type'),
+                suborder['_source'].get('metadata').get('certificate_number'),
+                suborder['_source'].get('metadata').get('borough'),
+                suborder['_source'].get('metadata').get('years'),
+            ]
+            contents.append(row_content)
+
+    # populate worksheet after header_data and contents is filled
+    # write headers
+    for col, data in enumerate(header_data):
+        ws.write(0, col, data, header_format)
+
+    # write in the worksheet
+    row = 1  # row starts at 1 (after header)
+    for row_content in contents:
+        for col, data in enumerate(row_content):
+            ws.write(row, col, data)
+        row += 1
+
+    wb.close()
+
     return url_for('static', filename='files/{}'.format(filename), _external=True)
 
 

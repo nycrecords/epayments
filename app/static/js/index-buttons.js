@@ -82,19 +82,19 @@ function setPassSaveBtn() {
 
 function showCSVBtn() {
     // initial disable when loaded
-    $('#csv').hide();
+    $('#xlsx').hide();
     // change csv accessibility everytime order_type is changed
     $('#order_type').on('change', function () {
         if ($('#order_type').val() === 'all') {
-            $('#csv').hide();
+            $('#xlsx').hide();
         } else {
-            $('#csv').show();
+            $('#xlsx').show();
         }
     });
 }
 
 function setCSVBtn() {
-    $('#csv').click(function () {
+    $('#xlsx').click(function () {
         let c_drs = convertDate($('#date_received_start').val());
         let c_dre = convertDate($('#date_received_end').val());
         let c_srs = convertDate($('#date_submitted_start').val());
