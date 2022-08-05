@@ -1,4 +1,3 @@
-import csv
 import xlsxwriter
 from datetime import date, datetime
 from typing import Dict, List, Union
@@ -858,7 +857,7 @@ def generate_csv(search_params: Dict[str, str]) -> str:
         ws.write(0, col, data, header_format)
 
     # write in the worksheet
-    row = 1  # row starts at 1 (after header)
+    row = 1  # row starts after header
     for row_content in contents:
         for col, data in enumerate(row_content):
             ws.write(row, col, data)

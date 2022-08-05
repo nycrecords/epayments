@@ -78,7 +78,6 @@ def newloginAuth():
         else:
             login_user(user)
             return redirect(url_for('main.index'))
-
     return render_template('newlogin.html')
 
 
@@ -92,22 +91,13 @@ def newlogout():
 @main.route('/listorders', methods=['GET', 'POST'])
 def listorders():
     json = request.get_json(force=True)
-    data = {
-        'order_rows': ''
-    }
-
     all_orders = json.get('all_orders')
-    data['order_rows'] = render_template('order_table.html', orders=all_orders)
-    return jsonify(data)
+    return jsonify(order_rows=render_template('order_table.html', orders=all_orders))
 
 
 @main.route('/listinfo', methods=['POST'])
 def listinfo():
     json = request.get_json(force=True)
-    data = {
-        'info_tab': ''
-    }
-
     order_info = json.get('order_info')
     order_type = order_info['order_type']
     order_type_template_handler = {
@@ -124,16 +114,11 @@ def listinfo():
         'HVR': 'hvr.html',
         'No Amends': 'no_amends.html'
     }
-
-    info_tab = render_template('orders/{}'.format(order_type_template_handler[order_type]),
-                               order_info=order_info)
-
-    data['info_tab'] = info_tab
-    return jsonify(data)
+    return jsonify(info_tab=render_template('orders/{}'.format(order_type_template_handler[order_type]),
+                               order_info=order_info))
 
 
 @main.route('/listhistory', methods=['POST'])
 def listhistory():
     json = request.get_json(force=True)
-    data = {'history_tab': render_template('history_row.html', history=json['history'])}
-    return jsonify(data)
+    return jsonify(history_tab=render_template('history_row.html', history=json['history']))

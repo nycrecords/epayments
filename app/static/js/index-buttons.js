@@ -1,14 +1,14 @@
 $(document).ready(function () {
     setPassSaveBtn();
     setDownloadBtns();
-    showCSVBtn();
+    showXLSXBtn();
 })
 
 function setDownloadBtns() {
     setOrderBtn();
     setLargeLabelBtn();
     setSmallLabelBtn();
-    setCSVBtn();
+    setXLSXBtn();
 }
 
 function printAjaxCall(type) {
@@ -80,7 +80,7 @@ function setPassSaveBtn() {
     });
 }
 
-function showCSVBtn() {
+function showXLSXBtn() {
     // initial disable when loaded
     $('#xlsx').hide();
     // change csv accessibility everytime order_type is changed
@@ -93,7 +93,7 @@ function showCSVBtn() {
     });
 }
 
-function setCSVBtn() {
+function setXLSXBtn() {
     $('#xlsx').click(function () {
         let c_drs = convertDate($('#date_received_start').val());
         let c_dre = convertDate($('#date_received_end').val());
@@ -102,7 +102,7 @@ function setCSVBtn() {
 
         $.ajax({
             type: "GET",
-            url: "api/v1/orders/csv?",
+            url: "api/v1/orders/csv",
             data: {
                 'order_number': $("#order_number").val(),
                 'suborder_number': $("#suborder_number").val(),
@@ -116,8 +116,6 @@ function setCSVBtn() {
                 'date_submitted_start': c_srs,
                 'date_submitted_end': c_sre,
             },
-            dataType: "json",
-            contentType: "application/json",
             success: function (result) {
                 console.log(result)
                 window.open(result['url']);
