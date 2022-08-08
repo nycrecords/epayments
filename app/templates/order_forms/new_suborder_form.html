@@ -1,0 +1,64 @@
+<div class="row py-1">
+    <div class="col">
+        <h5>Suborder: {{ num }}</h5>
+        <form id="new_order_form_{{ num }}">
+            <div>
+                <label for="new_order_type_{{ num }}"
+                       class="sm font-weight-bold mb-0">Order Type</label>
+                <select class="form-control form-control-sm rounded-sm"
+                        id="new_order_type_{{ num }}">
+                    <option disabled selected value> -- Select an order type --</option>
+                    <option value="Birth Cert">Birth Cert</option>
+                    <option value="Death Cert">Death Cert</option>
+                    <option value="Marriage Cert">Marriage Cert</option>
+                    <option value="Photo Gallery">Photo Gallery</option>
+                    <option value="Tax Photo">Tax Photo</option>
+                </select>
+            </div>
+
+            <div id="new_order_fields_{{ num }}"></div>
+
+            <div>
+                <label for="new_order_copies_{{ num }}"
+                       class="sm font-weight-bold mb-0">Number of Copies</label>
+                <input class="form-control form-control-sm rounded-sm mt-0"
+                       id="new_order_copies_{{ num }}"
+                       type="text">
+            </div>
+
+            <div>
+                <label for="new_order_status_{{ num }}"
+                       class="sm font-weight-bold mb-0">Status</label>
+                <select class="form-control form-control-sm rounded-sm mt-0"
+                        id="new_order_status_{{ num }}">
+                    <option disabled selected value> -- Select a status --</option>
+                    <option value="Received">Received</option>
+                    <option value="Microfilm">Microfilm: When an order needs to be
+                        printed from the Microfilm
+                    </option>
+                    <option value="Offsite">Offsite: Has to be ordered from Offsite
+                        to be fulfilled
+                    </option>
+                    <option value="Processing">Processing: For photo orders only
+                    </option>
+                    <option value="Not_Found">Not Found: A Not Found letter was sent
+                        to the customer
+                    </option>
+                    <option value="Undeliverable">Undeliverable: When an order is
+                        returned as undeliverable by USPS
+                    </option>
+                    <option value="Refund">Refund: The order has been sent to
+                        Administration for a refund
+                    </option>
+                    <option value="Done">Done: The order has been completed. No more
+                        work is needed.
+                    </option>
+                </select>
+            </div>
+        </form>
+    </div>
+</div>
+<hr class="mt-2" style="border: solid black">
+
+<!-- new suborder script -->
+<script src="/static/js/new_suborder_form.js"></script>

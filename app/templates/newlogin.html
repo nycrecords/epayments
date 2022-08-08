@@ -184,7 +184,7 @@
                         {% with messages = get_flashed_messages(with_categories=true) %}
                             {% if messages %}
                                 {% for category, message in messages %}
-                                    <div class="alert-{{ category }} alert rounded-pill" role="alert">{{ message }}</div>
+                                    <div class="alert-{{ category }} alert rounded-sm" role="alert">{{ message }}</div>
                                 {% endfor %}
                             {% endif %}
                         {% endwith %}
@@ -194,18 +194,18 @@
                         <form method="post">
                             <div class="mb-2">
                                 <label for="email">Email Address</label>
-                                <input type="email" class="form-control rounded-pill" id="email" name="email"
+                                <input type="email" class="form-control rounded-sm" id="email" name="email"
                                        placeholder="Email" required>
                             </div>
 
                             <div class="mb-2">
                                 <label for="password">Password</label>
-                                <input type="password" class="form-control rounded-pill" id="password" name="password"
+                                <input type="password" class="form-control rounded-sm" id="password" name="password"
                                        placeholder="Password" required>
                             </div>
 
                             <div class="mb-2">
-                                <input type="submit" class="btn btn-block btn-secondary rounded-pill" value="Login">
+                                <input type="submit" class="btn btn-block btn-secondary rounded-sm" value="Login">
                             </div>
                         </form>
                     </div>

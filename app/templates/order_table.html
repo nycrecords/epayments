@@ -22,24 +22,24 @@
                 <!-- top row with meta data -->
                 <div class="row pb-1">
                     <div class="container">
-                        <div class="rounded overflow-auto">
+                        <div>
                             <div id="collapse_{{ loop.index }}">
                                 <p class="mb-1">
-                                    <button class="btn btn-primary btn-sm rounded" type="button" data-toggle="collapse"
+                                    <button class="btn btn-primary btn-sm rounded-sm" type="button" data-toggle="collapse"
                                             data-target="#history_{{ loop.index }}" aria-expanded="false"
                                             aria-controls="history_{{ loop.index }}"
                                             id="history_btn_{{ loop.index }}">
                                         History
                                     </button>
 
-                                    <button class="btn btn-info btn-sm rounded" type="button" data-toggle="collapse"
+                                    <button class="btn btn-info btn-sm rounded-sm" type="button" data-toggle="collapse"
                                             data-target="#moreinfo_{{ loop.index }}" aria-expanded="false"
                                             aria-controls="moreinfo_{{ loop.index }}"
                                             id="moreinfo_btn_{{ loop.index }}">
                                         More Info
                                     </button>
 
-                                    <button class="btn btn-secondary btn-sm rounded" type="button"
+                                    <button class="btn btn-secondary btn-sm rounded-sm" type="button"
                                             data-toggle="collapse"
                                             data-target="#update_status_{{ loop.index }}"
                                             aria-expanded="false"
@@ -81,7 +81,7 @@
                                                 <div class="mb-2">
                                                     <label for="updated_status_{{ loop.index }}"
                                                            class="sm font-weight-bold">Update Status</label>
-                                                    <select class="form-control form-control-sm rounded"
+                                                    <select class="form-control form-control-sm rounded-sm"
                                                             id="updated_status_{{ loop.index }}">
                                                         <option value="Received">Received</option>
                                                         <option value="Microfilm">Microfilm: When an order needs to be
@@ -109,14 +109,14 @@
                                                 <div class="mb-2">
                                                     <label for="update_comment_{{ loop.index }}"
                                                            class="sm font-weight-bold">Comment</label>
-                                                    <textarea class="form-control form-control-sm rounded"
+                                                    <textarea class="form-control form-control-sm rounded-sm"
                                                               id="update_comment_{{ loop.index }}"
                                                               rows="3"></textarea>
                                                 </div>
                                             </form>
                                             <div class="text-right">
                                                 <button id="update_btn_{{ loop.index }}" type="submit"
-                                                        class="btn btn-success btn-sm rounded" role="button">Update
+                                                        class="btn btn-success btn-sm rounded-sm" role="button">Update
                                                 </button>
                                             </div>
                                         </div>
@@ -124,7 +124,7 @@
                                 </div>
                             </div>
                         </div>
-                        <!-- nav_tabs -->
+                        <!-- collapse tabs -->
                     </div>
                 </div>
                 <!-- bottom row with nav tabs -->
@@ -140,4 +140,4 @@
 {% endif %}
 
 <!-- script for order table -->
-<script src="/static/js/order-table.js"></script>
+<script src="/static/js/order_table.js"></script>

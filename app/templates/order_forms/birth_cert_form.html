@@ -1,0 +1,160 @@
+<div>
+    <label for="new_order_bc_{{ num }}"
+           class="sm font-weight-bold mb-0">Certificate Number (if known)</label>
+    <input class="form-control form-control-sm rounded-sm mt-0"
+           id="new_order_bc_{{ num }}"
+           type="text">
+</div>
+
+<div>
+    <label for="new_order_bc_gender_{{ num }}"
+           class="sm font-weight-bold mb-0">Gender</label>
+    <input class="form-control form-control-sm rounded-sm mt-0"
+           id="new_order_bc_gender_{{ num }}"
+           type="text">
+</div>
+
+<div>
+    <label for="new_order_bc_lname_{{ num }}"
+           class="sm font-weight-bold mb-0">Last Name</label>
+    <input class="form-control form-control-sm rounded-sm mt-0"
+           id="new_order_bc_lname_{{ num }}"
+           type="text">
+</div>
+
+<div>
+    <label for="new_order_bc_fname_{{ num }}"
+           class="sm font-weight-bold mb-0">First Name</label>
+    <input class="form-control form-control-sm rounded-sm mt-0"
+           id="new_order_bc_fname_{{ num }}"
+           type="text">
+</div>
+
+<div>
+    <label for="new_order_bc_mname_{{ num }}"
+           class="sm font-weight-bold mb-0">Middle Name</label>
+    <input class="form-control form-control-sm rounded-sm mt-0"
+           id="new_order_bc_mname_{{ num }}"
+           type="text">
+</div>
+
+<div class="py-1">
+    <h5 class="mt-1">Date of Birth</h5>
+    <div class="row">
+        <div class="col-2">
+            <div>
+                <label for="new_order_bc_month_{{ num }}"
+                       class="sm font-weight-bold mb-0">Month</label>
+                <input class="form-control form-control-sm rounded-sm mt-0"
+                       id="new_order_bc_month_{{ num }}" type="text">
+            </div>
+        </div>
+
+        <div class="col-2">
+            <div>
+                <label for="new_order_bc_day_{{ num }}"
+                       class="sm font-weight-bold mb-0">Day</label>
+                <input class="form-control form-control-sm rounded-sm mt-0"
+                       id="new_order_bc_day_{{ num }}" type="text">
+            </div>
+        </div>
+
+        <div class="col-2">
+            <div>
+                <label for="new_order_bc_year_{{ num }}"
+                       class="sm font-weight-bold mb-0">Year</label>
+                <input class="form-control form-control-sm rounded-sm mt-0"
+                       id="new_order_bc_year_{{ num }}" type="text">
+            </div>
+        </div>
+    </div>
+</div>
+
+<div>
+    <label for="new_order_bc_addYears_{{ num }}"
+           class="sm font-weight-bold mb-0">Additional Years To Search (comma separated)</label>
+    <input class="form-control form-control-sm rounded-sm mt-0"
+           id="new_order_bc_addYears_{{ num }}"
+           type="text">
+</div>
+
+<div>
+    <label for="new_order_bc_bp_{{ num }}"
+           class="sm font-weight-bold mb-0">Place of Birth</label>
+    <input class="form-control form-control-sm rounded-sm mt-0"
+           id="new_order_bc_bp_{{ num }}"
+           type="text">
+</div>
+
+<div class="py-1">
+    <h5>Borough/County</h5>
+    <div>
+        <input name="borough" type="radio" value="Manhattan" id="new_order_rb1_{{ num }}"/>
+        <label for="new_order_rb1_{{ num }}">Manhattan</label>
+    </div>
+
+    <div>
+        <input name="borough" type="radio" value="Brooklyn" id="new_order_rb2_{{ num }}"/>
+        <label for="new_order_rb2_{{ num }}">Brooklyn</label>
+    </div>
+
+    <div>
+        <input name="borough" type="radio" value="Bronx" id="new_order_rb3_{{ num }}"/>
+        <label for="new_order_rb3_{{ num }}">Bronx</label>
+    </div>
+
+    <div>
+        <input name="borough" type="radio" value="Queens" id="new_order_rb4_{{ num }}"/>
+        <label for="new_order_rb4_{{ num }}">Queens</label>
+    </div>
+
+    <div>
+        <input name="borough" type="radio" value="Staten Island" id="new_order_rb5_{{ num }}"/>
+        <label for="new_order_rb5_{{ num }}">Staten Island</label>
+    </div>
+</div>
+
+
+<div>
+    <label for="new_order_bc_father_{{ num }}"
+           class="sm font-weight-bold mb-0">Father's Name</label>
+    <input class="form-control form-control-sm rounded-sm mt-0"
+           id="new_order_bc_father_{{ num }}"
+           type="text">
+</div>
+
+<div>
+    <label for="new_order_bc_mother_{{ num }}"
+           class="sm font-weight-bold mb-0">Mother's Name</label>
+    <input class="form-control form-control-sm rounded-sm mt-0"
+           id="new_order_bc_mother_{{ num }}"
+           type="text">
+</div>
+
+<div>
+    <label for="new_order_bc_comment_{{ num }}"
+           class="sm font-weight-bold mb-0">Comment</label>
+    <input class="form-control form-control-sm rounded-sm mt-0"
+           id="new_order_bc_comment_{{ num }}"
+           type="text">
+</div>
+
+<div class="pt-1">
+    <input name="exemplification_{{ num }}" type="radio" value="Letter of Exemplification"
+           id="new_order_exp_{{ num }}"/>
+    <label for="new_order_exp_{{ num }}">Attach "Letter of Exemplification</label>
+</div>
+
+<div class="py-1">
+    <h5>Delivery Method</h5>
+    <div>
+        <input name="dmethod_{{ num }}" type="radio" value="mail" id="new_order_dmethod1_{{ num }}"/>
+        <label for="new_order_dmethod1_{{ num }}">Mail</label>
+    </div>
+
+    <div>
+        <input name="dmethod_{{ num }}" type="radio" value="email" id="new_order_dmethod2_{{ num }}"/>
+        <label for="new_order_dmethod2_{{ num }}">Email</label>
+    </div>
+
+</div>

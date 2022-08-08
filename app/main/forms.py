@@ -26,3 +26,20 @@ class SearchOrderForm(FlaskForm):
 
     def __init__(self, *args, **kwargs):
         super(SearchOrderForm, self).__init__(*args, **kwargs)
+
+
+class NewOrderForm(FlaskForm):
+    name = StringField('Name')
+    email = StringField('Email')
+    address_line_1 = StringField('Address line 1')
+    address_line_2 = StringField('Address line 2')
+    city = StringField('City')
+    state = StringField('State')
+    zip_code = IntegerField('Zip Code')
+    phone = IntegerField('Phone')
+    # order_type = SelectField('Order Type', choices=order_types.DROPDOWN)
+    # num_copies = IntegerField('Number of Copies')
+    # status = SelectField('Status', choices=status.DROPDOWN)
+
+    def __init__(self, *args, **kwargs):
+        super(NewOrderForm, self).__init__(*args, **kwargs)

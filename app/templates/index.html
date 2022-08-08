@@ -12,9 +12,6 @@
     <!-- NYC Theme CSS -->
     <link rel="stylesheet" href="/static/css/theme.css">
 
-    <!-- datepicker -->
-    <link rel="stylesheet" href="//code.jquery.com/ui/1.13.2/themes/base/jquery-ui.css">
-
 </head>
 <body>
 
@@ -28,9 +25,8 @@
                         Change Password
                     </button>
                     <a href="{{ url_for("main.newlogout") }}" class="btn btn-primary">Logout</a>
-                </p>
+                </div>
 
-                <!-- Change Password Modal -->
                 <div class="modal fade" id="change_pass_modal" tabindex="-1" role="dialog"
                      aria-labelledby="password_modal"
                      aria-hidden="true">
@@ -42,95 +38,105 @@
                             <div class="modal-body text-left">
                                 <div>
                                     <label for="new_pass" class="font-weight-bold">New Password</label>
-                                    <input type="password" class="form-control rounded-pill" id="new_pass"
+                                    <input type="password" class="form-control rounded-sm" id="new_pass"
                                            name="new_password"
                                            placeholder="New Password" required>
                                 </div>
                                 <div>
                                     <label for="confirm_pass" class="font-weight-bold">Confirm Password</label>
-                                    <input type="password" class="form-control rounded-pill" id="confirm_pass"
+                                    <input type="password" class="form-control rounded-sm" id="confirm_pass"
                                            name="confirm_pass"
                                            placeholder="Re-enter New Password" required>
                                 </div>
                             </div>
                             <div class="modal-footer">
-                                <button type="button" class="btn btn-danger rounded" data-dismiss="modal"
+                                <button type="button" class="btn btn-danger rounded-sm" data-dismiss="modal"
                                         id="modal_close">Close
                                 </button>
-                                <button type="button" class="btn btn-success rounded" id="pass_submit">Save</button>
+                                <button type="button" class="btn btn-success rounded-sm" id="pass_submit_btn">Save</button>
                             </div>
                         </div>
                         <!-- modal -->
                     </div>
                 </div>
+                <!-- Change Password Modal -->
             </div>
         </div>
 
     </section>
 
     <section id="search">
-        <div class="row">
+        <div class="container-fluid">
+            <div class="row">
 
-            <div id="left_side" class="col-2 pr-0">
-                {% include "searchform.html" %}
-            </div>
-            <!-- search form div -->
+                <div id="left_side" class="col-2 pr-0">
+                    {% include "searchform.html" %}
+                </div>
+                <!-- search form div -->
 
-            <div id='middle' class="col-8">
-                <div class="container-fluid">
-                    <div id="orders">
-                        <h5 class="text-center">Search Results</h5>
-                        <hr class="mb-1">
-                        <div id="order_rows"></div>
+                <div id='middle' class="col-8">
+                    <div class="container-fluid">
+                        <div id="orders">
+                            <h5 class="text-center">Search Results</h5>
+                            <hr class="mb-1">
+                            <div id="order_rows"></div>
+                        </div>
                     </div>
                 </div>
-            </div>
-            <!-- order rows div -->
+                <!-- order rows div -->
 
-            <div id="right_side" class="col-2 pl-0">
-                <div class="container">
-                    <div id="order_counts" class="pb-2">
-                        <div id="total_orders"></div>
-                        <div id="total_suborders"></div>
+                <div id="right_side" class="col-2 pl-0">
+                    <div class="container">
+                        <div id="order_counts" class="pb-2">
+                            <div id="total_orders"></div>
+                            <div id="total_suborders"></div>
+                        </div>
+
+                        <div id="util_btns">
+                            <div class="text-center pb-1"><i class="fas fa-tools"></i></div>
+
+                            <div class="pb-1">
+                                <a id="new_order_btn" href="{{ url_for("main.newOrder") }}"
+                                   class="btn btn-light btn-block rounded-sm">
+                                    New Order
+                                </a>
+                            </div>
+
+                            <div class="pb-1">
+                                <button id="order_sheets_btn" class="btn btn-light btn-block rounded-sm" type="submit"
+                                        role="button">Order Sheets
+                                </button>
+                            </div>
+
+                            <div class="pb-1">
+                                <button id="large_labels_btn" class="btn btn-light btn-block rounded-sm" type="submit"
+                                        role="button">Large Labels
+                                </button>
+                            </div>
+
+                            <div class="pb-1">
+                                <button id="small_labels_btn" class="btn btn-light btn-block rounded-sm" type="submit"
+                                        role="button">Small Labels
+                                </button>
+                            </div>
+
+                            <div class="pb-1">
+                                <button id="xlsx_btn" class="btn btn-light btn-block rounded-sm" type="submit"
+                                        role="button">XLSX
+                                </button>
+                            </div>
+
+                        </div>
+                        <!-- print btns -->
                     </div>
-
-                    <div id="print_btns">
-                        <div class="text-center pb-1"><i class="fas fa-print"></i></div>
-
-                        <div class="pb-1">
-                            <button id="order_sheets" class="btn btn-light btn-block rounded" type="submit"
-                                    role="button">Order Sheets
-                            </button>
-                        </div>
-
-                        <div class="pb-1">
-                            <button id="large_labels" class="btn btn-light btn-block rounded" type="submit"
-                                    role="button">Large Labels
-                            </button>
-                        </div>
-
-                        <div class="pb-1">
-                            <button id="small_labels" class="btn btn-light btn-block rounded" type="submit"
-                                    role="button">Small Labels
-                            </button>
-                        </div>
-
-                        <div class="pb-1">
-                            <button id="xlsx" class="btn btn-light btn-block rounded" type="submit"
-                                    role="button">XLSX
-                            </button>
-                        </div>
-
-                    </div>
-                    <!-- print btns -->
                 </div>
+                <!-- right side -->
             </div>
-            <!-- right side -->
         </div>
 
     </section>
 
-
+     <!-- JQUERY -->
     <script src="https://code.jquery.com/jquery-3.3.1.min.js"
             integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
 
@@ -144,10 +150,10 @@
     <script src="/static/js/responsive-table.js"></script>
 
     <!-- script for search form -->
-    <script src="/static/js/search-form.js"></script>
+    <script src="/static/js/search_form.js"></script>
 
     <!-- index buttons script -->
-    <script src="/static/js/index-buttons.js"></script>
+    <script src="/static/js/index_buttons.js"></script>
 
 </body>
 </html>

@@ -9,15 +9,14 @@ $(document).ready(function () {
 function renameStatus() {
     let status = document.querySelectorAll("[id^='status_']");
     status.forEach(function (elem) {
-        let elem_id = elem.getAttribute('id')
-        let row_num = elem_id.split('_')[1]
+        let row_num = elem.id.split('_')[1]
         let status_info =  $('#updated_status_' + row_num + ' ' + 'option:selected').text().split(':');
 
         let status = "<strong>" + status_info[0] + "</strong>";
         if (status_info[0] !== 'Received')
             status += ":" + status_info[1];
 
-        $('#' + elem_id).html(status);
+        $('#' + elem.id).html(status);
     });
 }
 
@@ -25,14 +24,13 @@ function renameStatus() {
 function setUpdateBtns() {
     let updateBtn = document.querySelectorAll("[id^='update_btn_']");
     updateBtn.forEach(function (btn) {
-        let btn_id = btn.getAttribute('id');
-        let row_num = btn_id.split('_')[2];
+        let row_num = btn.id.split('_')[2];
         let suborder_number = $('#suborder_' + row_num).attr("data-value");
         // set initial update status option
         let curr_status = $('#status_' + row_num).text();
         $('#updated_status_' + row_num).val(curr_status).change();
 
-        $('#' + btn_id).click(function () {
+        $('#' + btn.id).click(function () {
             curr_status = $('#status_' + row_num).text();
             let update_status = $('#updated_status_' + row_num).val();
             if (curr_status === update_status) {
@@ -61,11 +59,10 @@ function setUpdateBtns() {
 function setMoreInfoBtns() {
     let moreInfoBtn = document.querySelectorAll("[id^='moreinfo_btn']");
     moreInfoBtn.forEach(function (btn) {
-        let btn_id = btn.getAttribute('id');
-        let id_array = btn_id.split('_');
+        let id_array = btn.id.split('_');
         let row_num = id_array[2];
         let suborder_number = $('#suborder_' + row_num).attr("data-value");
-        $('#' + btn_id).click(function () {
+        $('#' + btn.id).click(function () {
             if (!$('#' + id_array[0] + '_' + row_num).is(":visible")) {
                 $.ajax({
                     type: 'POST',
@@ -94,11 +91,10 @@ function setMoreInfoBtns() {
 function setHistoryBtns() {
     let historyBtn = document.querySelectorAll("[id^='history_btn']");
     historyBtn.forEach(function (btn) {
-        let btn_id = btn.getAttribute('id');
-        let id_array = btn_id.split('_');
+        let id_array = btn.id.split('_');
         let row_num = id_array[2];
         let suborder_number = $('#suborder_' + row_num).attr("data-value");
-        $('#' + btn_id).click(function () {
+        $('#' + btn.id).click(function () {
             if (!$('#' + id_array[0] + '_' + row_num).is(":visible")) {
                 $.ajax({
                     type: 'GET',

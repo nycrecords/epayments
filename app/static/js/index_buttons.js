@@ -42,25 +42,25 @@ function printAjaxCall(type) {
 }
 
 function setLargeLabelBtn() {
-    $('#large_labels').click(function () {
+    $('#large_labels_btn').click(function () {
         printAjaxCall('large_labels');
     });
 }
 
 function setSmallLabelBtn() {
-    $('#small_labels').click(function () {
+    $('#small_labels_btn').click(function () {
         printAjaxCall('small_labels');
     });
 }
 
 function setOrderBtn() {
-    $('#order_sheets').click(function () {
+    $('#order_sheets_btn').click(function () {
         printAjaxCall('orders')
     });
 }
 
 function setPassSaveBtn() {
-    $('#pass_submit').click(function () {
+    $('#pass_submit_btn').click(function () {
         $.ajax({
             type: "PATCH",
             url: "api/v1/password",
@@ -82,19 +82,19 @@ function setPassSaveBtn() {
 
 function showXLSXBtn() {
     // initial disable when loaded
-    $('#xlsx').hide();
+    $('#xlsx_btn').hide();
     // change csv accessibility everytime order_type is changed
     $('#order_type').on('change', function () {
         if ($('#order_type').val() === 'all') {
-            $('#xlsx').hide();
+            $('#xlsx_btn').hide();
         } else {
-            $('#xlsx').show();
+            $('#xlsx_btn').show();
         }
     });
 }
 
 function setXLSXBtn() {
-    $('#xlsx').click(function () {
+    $('#xlsx_btn').click(function () {
         let c_drs = convertDate($('#date_received_start').val());
         let c_dre = convertDate($('#date_received_end').val());
         let c_srs = convertDate($('#date_submitted_start').val());
