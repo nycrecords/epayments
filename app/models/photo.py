@@ -53,7 +53,7 @@ class TaxPhoto(db.Model):
             size.ELEVEN_BY_FOURTEEN,
             name='size'), nullable=True)
     num_copies = db.Column(db.String(2), nullable=False)
-    contact_number = db.Column(db.String(10), nullable=True)
+    contact_number = db.Column(db.String(64), nullable=True)
     contact_email = db.Column(db.String(256), nullable=True)
     delivery_method = db.Column(
         db.Enum(
@@ -150,7 +150,7 @@ class PhotoGallery(db.Model):
             size.SIXTEEN_BY_TWENTY,
             name='size'), nullable=True)
     num_copies = db.Column(db.String(2), nullable=False)
-    contact_number = db.Column(db.String(10), nullable=True)
+    contact_number = db.Column(db.String(64), nullable=True)
     contact_email = db.Column(db.String(256), nullable=True)
     personal_use_agreement = db.Column(db.Boolean, nullable=True)
     comment = db.Column(db.String(255), nullable=True)
