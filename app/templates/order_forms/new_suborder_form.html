@@ -2,7 +2,7 @@
     <div class="col">
         <h5>Suborder: {{ num }}</h5>
         <form id="new_order_form_{{ num }}">
-            <div>
+            <div class="pb-1">
                 <label for="new_order_type_{{ num }}"
                        class="sm font-weight-bold mb-0">Order Type</label>
                 <select class="form-control form-control-sm rounded-sm"
@@ -18,7 +18,7 @@
 
             <div id="new_order_fields_{{ num }}"></div>
 
-            <div>
+            <div class="pb-1">
                 <label for="new_order_copies_{{ num }}"
                        class="sm font-weight-bold mb-0">Number of Copies</label>
                 <input class="form-control form-control-sm rounded-sm mt-0"
@@ -26,7 +26,7 @@
                        type="text">
             </div>
 
-            <div>
+            <div class="pb-1">
                 <label for="new_order_status_{{ num }}"
                        class="sm font-weight-bold mb-0">Status</label>
                 <select class="form-control form-control-sm rounded-sm mt-0"
@@ -59,6 +59,3 @@
     </div>
 </div>
 <hr class="mt-2" style="border: solid black">
-
-<!-- new suborder script -->
-<script src="/static/js/new_suborder_form.js"></script>

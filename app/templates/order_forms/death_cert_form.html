@@ -40,7 +40,7 @@
     </div>
 
     <div class="pb-1">
-        <h6>Date of Birth</h6>
+        <h6>Date of Death</h6>
         <div class="row">
             <div class="col-2">
                 <div>
@@ -80,10 +80,18 @@
     </div>
 
     <div class="pb-1">
-        <label for="new_order_bp_{{ num }}"
-               class="sm font-weight-bold mb-0">Place of Birth</label>
+        <label for="new_order_cemetery_{{ num }}"
+               class="sm font-weight-bold mb-0">Cemetery</label>
         <input class="form-control form-control-sm rounded-sm mt-0"
-               id="new_order_bp_{{ num }}"
+               id="new_order_cemetery_{{ num }}"
+               type="text">
+    </div>
+
+    <div class="pb-1">
+        <label for="new_order_dp_{{ num }}"
+               class="sm font-weight-bold mb-0">Place of Death</label>
+        <input class="form-control form-control-sm rounded-sm mt-0"
+               id="new_order_dp_{{ num }}"
                type="text">
     </div>
 
@@ -140,7 +148,7 @@
     </div>
 
     <div>
-        <input name="exemplification_{{ num }}" type="radio" value="Yes"
+        <input name="exemplification_{{ num }}" type="radio" value="Letter of Exemplification"
                id="new_order_exp_{{ num }}"/>
         <label for="new_order_exp_{{ num }}">Attach "Letter of Exemplification</label>
     </div>
