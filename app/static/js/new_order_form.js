@@ -23,20 +23,15 @@ function getAllFormsData() {
     $('form').each(function (index, form) {
         if (index === 0) { // first form is customer_info
             order_info = convertFormToJSON($('#'+form.id).serializeArray())
-            console.log('order_info')
-            console.log(order_info)
         } else {
             let suborder_info = convertFormToJSON($('#'+form.id).serializeArray())
             let type = suborder_info['order_type']
-            console.log('suborder_info')
-            console.log(suborder_info)
             // only do something if the form is not default type
             if (type !== 'default') {
                 suborders[index - 1] = suborder_info;
             }
         }
     });
-    console.log(suborders)
     return [order_info, suborders]
 }
 

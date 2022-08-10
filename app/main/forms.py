@@ -124,6 +124,7 @@ class NewPhotoGalleryForm(FlaskForm):
     add_description = StringField('Additional Description')
     size = RadioField('Size', choices=size.GALLERY_RADIO)
     delivery_method = RadioField('Delivery Method', choices=delivery_method.RADIO)
+    comment = StringField('Comment')
 
     def __init__(self, *args, **kwargs):
         super(NewPhotoGalleryForm, self).__init__(*args, **kwargs)
