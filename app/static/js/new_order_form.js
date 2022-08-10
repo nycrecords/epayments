@@ -9,12 +9,59 @@ $(document).ready(function () {
 
 function setPlaceOrderBtn() {
     $('#place_order_btn').click(function() {
-        // get all inputs from all suborder forms
-        $("form").each(function () {
-            let inputs = $(this).find(':input')
-            console.log(inputs)
-            console.log('next')
-        });
+        // gets customer information
+        let info = getAllFormsData();
+        let order_info = info[0]
+        let suborders = info[1]
+        placeOrder(order_info, suborders)
+    });
+}
+
+function getAllFormsData() {
+    let order_info;
+    let suborders = []
+    $('form').each(function (index, form) {
+        if (index === 0) { // first form is customer_info
+            order_info = convertFormToJSON($('#'+form.id).serializeArray())
+            console.log('order_info')
+            console.log(order_info)
+        } else {
+            let suborder_info = convertFormToJSON($('#'+form.id).serializeArray())
+            let type = suborder_info['order_type']
+            console.log('suborder_info')
+            console.log(suborder_info)
+            // only do something if the form is not default type
+            if (type !== 'default') {
+                suborders[index - 1] = suborder_info;
+            }
+        }
+    });
+    console.log(suborders)
+    return [order_info, suborders]
+}
+
+function convertFormToJSON(form_data) {
+    let data = {};
+    $(form_data).each(function(index, obj){
+        data[obj.name] = obj.value;
+    });
+    return data;
+}
+
+function placeOrder(order_info, suborders) {
+    console.log('suborders')
+    console.log(suborders)
+    $.ajax({
+        type:'POST',
+        url: 'api/v1/orders/new',
+        data: JSON.stringify({
+            'order_info': order_info,
+            'suborders': suborders
+        }),
+        datatype: 'json',
+        success: function(result) {
+            console.log('nice')
+        }
     });
 }
 
@@ -58,11 +105,16 @@ function renderSuborder() {
 }
 
 function setOrderTypeChange(suborder_count) {
-    let elem_id = 'new_order_type_' + suborder_count;
+    let elem_id = 'order_type_' + suborder_count;
     $('#' + elem_id).on('change', function () {
         console.log('changed')
         let type = $('#' + elem_id).val();
-        orderTypeTemplateRender(type, suborder_count);
+        if (type === 'default') // if the option is select an order type
+            $('#new_order_fields_' + suborder_count).hide()
+        else {
+            $('#new_order_fields_' + suborder_count).show()
+            orderTypeTemplateRender(type, suborder_count);
+        }
     });
 }
 

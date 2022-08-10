@@ -25,16 +25,9 @@
                         <h3>New Order</h3>
                     </div>
                 </div>
-
-
             </div>
             <hr>
-
-
-
         </div>
-
-
     </section>
     <!-- top section -->
 
@@ -43,46 +36,47 @@
         <div class="container small">
             <div class="row">
                 <div class="col-4 border-right">
+                    <form id="customer_form">
+                        <div class="pb-1">
+                            {{ form.name.label(class="control-label font-weight-bold mb-0", for="name") }}
+                            {{ form.name(class="form-control form-control-sm rounded-sm mt-0") }}
+                        </div>
 
-                    <div class="pb-1">
-                        {{ form.name.label(class="control-label font-weight-bold mb-0", for="name") }}
-                        {{ form.name(class="form-control form-control-sm rounded-sm mt-0") }}
-                    </div>
+                        <div class="pb-1">
+                            {{ form.email.label(class="control-label font-weight-bold mb-0", for="email") }}
+                            {{ form.email(class="form-control form-control-sm rounded-sm mt-0") }}
+                        </div>
 
-                    <div class="pb-1">
-                        {{ form.email.label(class="control-label font-weight-bold mb-0", for="email") }}
-                        {{ form.email(class="form-control form-control-sm rounded-sm mt-0") }}
-                    </div>
+                        <div class="pb-1">
+                            {{ form.address_line_1.label(class="control-label font-weight-bold mb-0", for="address_line_1") }}
+                            {{ form.address_line_1(class="form-control form-control-sm rounded-sm mt-0") }}
+                        </div>
 
-                    <div class="pb-1">
-                        {{ form.address_line_1.label(class="control-label font-weight-bold mb-0", for="address_line_1") }}
-                        {{ form.address_line_1(class="form-control form-control-sm rounded-sm mt-0") }}
-                    </div>
+                        <div class="pb-1">
+                            {{ form.address_line_2.label(class="control-label font-weight-bold mb-0", for="address_line_2") }}
+                            {{ form.address_line_2(class="form-control form-control-sm rounded-sm mt-0") }}
+                        </div>
 
-                    <div class="pb-1">
-                        {{ form.address_line_2.label(class="control-label font-weight-bold mb-0", for="address_line_2") }}
-                        {{ form.address_line_2(class="form-control form-control-sm rounded-sm mt-0") }}
-                    </div>
+                        <div class="pb-1">
+                            {{ form.city.label(class="control-label font-weight-bold mb-0", for="city") }}
+                            {{ form.city(class="form-control form-control-sm rounded-sm mt-0") }}
+                        </div>
 
-                    <div class="pb-1">
-                        {{ form.city.label(class="control-label font-weight-bold mb-0", for="city") }}
-                        {{ form.city(class="form-control form-control-sm rounded-sm mt-0") }}
-                    </div>
+                        <div class="pb-1">
+                            {{ form.state.label(class="control-label font-weight-bold mb-0", for="state") }}
+                            {{ form.state(class="form-control form-control-sm rounded-sm mt-0") }}
+                        </div>
 
-                    <div class="pb-1">
-                        {{ form.state.label(class="control-label font-weight-bold mb-0", for="state") }}
-                        {{ form.state(class="form-control form-control-sm rounded-sm mt-0") }}
-                    </div>
+                        <div class="pb-1">
+                            {{ form.zip_code.label(class="control-label font-weight-bold mb-0", for="zip_code") }}
+                            {{ form.zip_code(class="form-control form-control-sm rounded-sm mt-0") }}
+                        </div>
 
-                    <div class="pb-1">
-                        {{ form.zip_code.label(class="control-label font-weight-bold mb-0", for="zip_code") }}
-                        {{ form.zip_code(class="form-control form-control-sm rounded-sm mt-0") }}
-                    </div>
-
-                    <div class="pb-1">
-                        {{ form.phone.label(class="control-label font-weight-bold mb-0", for="phone") }}
-                        {{ form.phone(class="form-control form-control-sm rounded-sm mt-0") }}
-                    </div>
+                        <div class="pb-1">
+                            {{ form.phone.label(class="control-label font-weight-bold mb-0", for="phone") }}
+                            {{ form.phone(class="form-control form-control-sm rounded-sm mt-0") }}
+                        </div>
+                    </form>
 
                     <div class="pb-1">
                         <div class="row">

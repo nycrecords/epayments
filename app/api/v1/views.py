@@ -134,7 +134,7 @@ def new_order() -> Response:
     :return:
     """
     json = request.get_json(force=True)
-    create_new_order(json['orderInfo'], json['suborderList'])
+    create_new_order(json['order_info'], json['suborders'])
     return jsonify(), 200
 
 

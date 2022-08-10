@@ -10,3 +10,11 @@ MANHATTAN = 'Manhattan'
 STATEN_ISLAND = 'Staten Island'
 BROOKLYN = 'Brooklyn'
 QUEENS = 'Queens'
+
+RADIO = [
+    (BRONX, 'Bronx'),
+    (MANHATTAN, 'Manhattan'),
+    (STATEN_ISLAND, 'Staten Island'),
+    (BROOKLYN, 'Brooklyn'),
+    (QUEENS, 'Queens')
+]

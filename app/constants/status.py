@@ -36,3 +36,13 @@ DROPDOWN = [
     (REFUND, 'Refund'),
     (DONE, 'Done'),
 ]
+
+NEW_ORDER_DROPDOWN = [
+    (RECEIVED, 'Received'),
+    (MICROFILM, 'Microfilm: When an order needs to be printed from the Microfilm'),
+    (OFFSITE, 'Offsite: Has to be ordered from Offsite to be fulfilled'),
+    (PROCESSING, 'Processing: For photo orders only'),
+    (NOT_FOUND, 'Not Found: A Not Found letter was sent to the customer'),
+    (UNDELIVERABLE, 'Undeliverable: When an order is returned as undeliverable by USPS'),
+    (REFUND, 'Refund: The order has been sent to Administration for a refund'),
+]

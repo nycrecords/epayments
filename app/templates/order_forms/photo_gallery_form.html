@@ -1,65 +1,36 @@
 <div>
     <div class="pb-1">
-        <label for="new_order_identifier_{{ num }}"
-               class="sm font-weight-bold mb-0">Image Identifier</label>
-        <input class="form-control form-control-sm rounded-sm mt-0"
-               id="new_order_identifier_{{ num }}"
-               type="text">
+        {{ form.image_identifier.label(class="control-label font-weight-bold mb-0", for="image_identifier") }}
+        {{ form.image_identifier(class="form-control form-control-sm rounded-sm mt-0") }}
     </div>
 
     <div class="pb-1">
-        <label for="new_order_desc_{{ num }}"
-               class="sm font-weight-bold mb-0">Title/Description of Image</label>
-        <input class="form-control form-control-sm rounded-sm mt-0"
-               id="new_order_desc_{{ num }}"
-               type="text">
+        {{ form.description.label(class="control-label font-weight-bold mb-0", for="description") }}
+        {{ form.description(class="form-control form-control-sm rounded-sm mt-0") }}
     </div>
 
     <div class="pb-1">
-        <label for="new_order_addDesc_{{ num }}"
-               class="sm font-weight-bold mb-0">Additional Description</label>
-        <input class="form-control form-control-sm rounded-sm mt-0"
-               id="new_order_addDesc_{{ num }}"
-               type="text">
+        {{ form.add_description.label(class="control-label font-weight-bold mb-0", for="add_description") }}
+        {{ form.add_description(class="form-control form-control-sm rounded-sm mt-0") }}
     </div>
 
     <div>
-        <h6>Print Information</h6>
         <h6>Size</h6>
-        <div>
-            <input name="size_{{ num }}" type="radio" value="mail" id="new_order_dmethod1_{{ num }}"/>
-            <label for="new_order_dmethod1_{{ num }}">8" x 10" Print</label>
-        </div>
-
-        <div>
-            <input name="size_{{ num }}" type="radio" value="email" id="new_order_dmethod2_{{ num }}"/>
-            <label for="new_order_dmethod2_{{ num }}">11" x 14" Print</label>
-        </div>
-
-        <div>
-            <input name="size_{{ num }}" type="radio" value="pickup" id="new_order_dmethod3_{{ num }}"/>
-            <label for="new_order_dmethod3_{{ num }}">16" x 20" Print</label>
-        </div>
+        {% for radiobtn in form.size %}
+            <div>
+                {{ radiobtn }}
+                {{ radiobtn.label }}
+            </div>
+        {% endfor %}
     </div>
 
     <div>
         <h6>Delivery Method</h6>
-        <div>
-            <input name="dmethod_{{ num }}" type="radio" value="mail" id="new_order_dmethod1_{{ num }}"/>
-            <label for="new_order_dmethod1_{{ num }}">Mail</label>
-        </div>
-
-        <div>
-            <input name="dmethod_{{ num }}" type="radio" value="email" id="new_order_dmethod2_{{ num }}"/>
-            <label for="new_order_dmethod2_{{ num }}">Email</label>
-        </div>
-    </div>
-
-    <div class="pb-1">
-        <label for="new_order_comment_{{ num }}"
-               class="sm font-weight-bold mb-0">Comment</label>
-        <input class="form-control form-control-sm rounded-sm mt-0"
-               id="new_order_comment_{{ num }}"
-               type="text">
+        {% for radiobtn in form.delivery_method %}
+            <div>
+                {{ radiobtn }}
+                {{ radiobtn.label }}
+            </div>
+        {% endfor %}
     </div>
 </div>

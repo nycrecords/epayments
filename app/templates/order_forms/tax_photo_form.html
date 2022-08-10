@@ -1,129 +1,77 @@
 <div>
     <div>
         <h6>Collection</h6>
-        <div>
-            <input name="collection_{{ num }}" type="radio" value="1940" id="new_order_collection1_{{ num }}"/>
-            <label for="new_order_collection1_{{ num }}">1940</label>
-        </div>
-
-        <div>
-            <input name="collection_{{ num }}" type="radio" value="1980" id="new_order_collection2_{{ num }}"/>
-            <label for="new_order_collection2_{{ num }}">1980</label>
-        </div>
-
-        <div>
-            <input name="collection_{{ num }}" type="radio" value="both" id="new_order_collection3_{{ num }}"/>
-            <label for="new_order_collection3_{{ num }}">Both</label>
-        </div>
+        {% for radiobtn in form.collection %}
+            <div>
+                {{ radiobtn }}
+                {{ radiobtn.label }}
+            </div>
+        {% endfor %}
     </div>
 
     <div>
         <h6>Borough</h6>
-        <div>
-            <input name="borough_{{ num }}" type="radio" value="Manhattan" id="new_order_rb1_{{ num }}"/>
-            <label for="new_order_rb1_{{ num }}">Manhattan</label>
-        </div>
-
-        <div>
-            <input name="borough_{{ num }}" type="radio" value="Brooklyn" id="new_order_rb2_{{ num }}"/>
-            <label for="new_order_rb2_{{ num }}">Brooklyn</label>
-        </div>
-
-        <div>
-            <input name="borough_{{ num }}" type="radio" value="Bronx" id="new_order_rb3_{{ num }}"/>
-            <label for="new_order_rb3_{{ num }}">Bronx</label>
-        </div>
-
-        <div>
-            <input name="borough_{{ num }}" type="radio" value="Queens" id="new_order_rb4_{{ num }}"/>
-            <label for="new_order_rb4_{{ num }}">Queens</label>
-        </div>
-
-        <div>
-            <input name="borough_{{ num }}" type="radio" value="Staten Island" id="new_order_rb5_{{ num }}"/>
-            <label for="new_order_rb5_{{ num }}">Staten Island</label>
-        </div>
+        {% for radiobtn in form.borough %}
+            <div>
+                {{ radiobtn }}
+                {{ radiobtn.label }}
+            </div>
+        {% endfor %}
     </div>
 
     <div class="pb-1">
-        <label for="new_order_identifier_{{ num }}"
-               class="sm font-weight-bold mb-0">Image Identifier</label>
-        <input class="form-control form-control-sm rounded-sm mt-0"
-               id="new_order_identifier_{{ num }}"
-               type="text">
+        {{ form.image_identifier.label(class="control-label font-weight-bold mb-0", for="image_identifier") }}
+        {{ form.image_identifier(class="form-control form-control-sm rounded-sm mt-0") }}
     </div>
 
     <div class="pb-1">
-        <label for="new_order_building_{{ num }}"
-               class="sm font-weight-bold mb-0">Building Number</label>
-        <input class="form-control form-control-sm rounded-sm mt-0"
-               id="new_order_building_{{ num }}"
-               type="text">
+        {{ form.building_num.label(class="control-label font-weight-bold mb-0", for="building_num") }}
+        {{ form.building_num(class="form-control form-control-sm rounded-sm mt-0") }}
     </div>
 
     <div class="pb-1">
-        <label for="new_order_street_{{ num }}"
-               class="sm font-weight-bold mb-0">Street Name</label>
-        <input class="form-control form-control-sm rounded-sm mt-0"
-               id="new_order_street_{{ num }}"
-               type="text">
+        {{ form.street.label(class="control-label font-weight-bold mb-0", for="street") }}
+        {{ form.street(class="form-control form-control-sm rounded-sm mt-0") }}
+    </div>
+
+
+    <div class="pb-1">
+        {{ form.description.label(class="control-label font-weight-bold mb-0", for="description") }}
+        {{ form.description(class="form-control form-control-sm rounded-sm mt-0") }}
     </div>
 
     <div class="pb-1">
-        <label for="new_order_desc_{{ num }}"
-               class="sm font-weight-bold mb-0">Description</label>
-        <input class="form-control form-control-sm rounded-sm mt-0"
-               id="new_order_desc_{{ num }}"
-               type="text">
+        {{ form.block.label(class="control-label font-weight-bold mb-0", for="block") }}
+        {{ form.block(class="form-control form-control-sm rounded-sm mt-0") }}
     </div>
 
     <div class="pb-1">
-        <h6>Block & Lot Information</h6>
-        <label for="new_order_block_{{ num }}"
-               class="sm font-weight-bold mb-0">Block</label>
-        <input class="form-control form-control-sm rounded-sm mt-0"
-               id="new_order_block_{{ num }}"
-               type="text">
-
-        <label for="new_order_lot_{{ num }}"
-               class="sm font-weight-bold mb-0">Lot</label>
-        <input class="form-control form-control-sm rounded-sm mt-0"
-               id="new_order_lot_{{ num }}"
-               type="text">
+        {{ form.lot.label(class="control-label font-weight-bold mb-0", for="lot") }}
+        {{ form.lot(class="form-control form-control-sm rounded-sm mt-0") }}
     </div>
 
     <div class="pb-1">
-        <label for="new_order_roll_{{ num }}"
-               class="sm font-weight-bold mb-0">Roll # (1940s Only)</label>
-        <input class="form-control form-control-sm rounded-sm mt-0"
-               id="new_order_roll_{{ num }}"
-               type="text">
+        {{ form.order_roll.label(class="control-label font-weight-bold mb-0", for="order_roll") }}
+        {{ form.order_roll(class="form-control form-control-sm rounded-sm mt-0") }}
     </div>
 
-    <div class="pb-1">
-        <h6>Print Information</h6>
+    <div>
         <h6>Size</h6>
-        <div>
-            <input name="size_{{ num }}" type="radio" value="mail" id="new_order_dmethod1_{{ num }}"/>
-            <label for="new_order_dmethod1_{{ num }}">8" x 10" Print</label>
-        </div>
-
-        <div>
-            <input name="size_{{ num }}" type="radio" value="email" id="new_order_dmethod2_{{ num }}"/>
-            <label for="new_order_dmethod2_{{ num }}">11" x 14" Print</label>
-        </div>
+        {% for radiobtn in form.size %}
+            <div>
+                {{ radiobtn }}
+                {{ radiobtn.label }}
+            </div>
+        {% endfor %}
     </div>
 
     <div>
         <h6>Delivery Method</h6>
-        <div>
-            <input name="dmethod_{{ num }}" type="radio" value="mail" id="new_order_dmethod1_{{ num }}"/>
-            <label for="new_order_dmethod1_{{ num }}">Mail</label>
-        </div>
-
-        <div>
-            <input name="dmethod_{{ num }}" type="radio" value="email" id="new_order_dmethod2_{{ num }}"/>
-            <label for="new_order_dmethod2_{{ num }}">Email</label>
-        </div>
+        {% for radiobtn in form.delivery_method %}
+            <div>
+                {{ radiobtn }}
+                {{ radiobtn.label }}
+            </div>
+        {% endfor %}
     </div>
 </div>

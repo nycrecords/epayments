@@ -372,7 +372,7 @@ def generate_csv(search_params: Dict[str, str]) -> str:
                    ]
     header_last = ['Number of Copies',
                    'Exemplification',
-                   'Exemplication Copies',
+                   'Exemplification Copies',
                    'Raised Seal',
                    'Raised Seal Copies',
                    'No Amends',
@@ -875,11 +875,25 @@ def create_new_order(order_info_dict: Dict[str, str], suborder_list: List[Dict])
     :param suborder_list:
     :return:
     """
-    order_types_list = [suborder['orderType'] for suborder in suborder_list]
+    print('inside create_new_order')
+    print(suborder_list)
+    for suborder in suborder_list:
+        print('1')
+        print(type(suborder))
+        print(suborder['order_type'])
+    order_types_list = [suborder['order_type'] for suborder in suborder_list]
+    print(order_types_list)
+    print('after orders')
 
     year = str(date.today().year)
+    print('after year')
+    print(year)
     next_order_number = OrderNumberCounter.query.filter_by(year=year).one().next_order_number
+    print('aftr order-num')
+    print(next_order_number)
     order_id = 'EPAY-{0:s}-{1:03d}'.format(year, next_order_number)
+    print('after order_id')
+    print('ssss')
 
     order = Orders(_id=order_id,
                    date_submitted=date.today(),
@@ -888,25 +902,27 @@ def create_new_order(order_info_dict: Dict[str, str], suborder_list: List[Dict])
                    multiple_items=True if len(suborder_list) > 1 else False)
     db.session.add(order)
 
+
     customer = Customers(billing_name=order_info_dict['name'],
                          shipping_name=order_info_dict['name'],
                          email=order_info_dict.get('email'),
-                         address_line_1=order_info_dict.get('addressLine1'),
-                         address_line_2=order_info_dict.get('addressLine2'),
+                         address_line_1=order_info_dict.get('address_line_1'),
+                         address_line_2=order_info_dict.get('address_line_2'),
                          city=order_info_dict.get('city'),
-                         state=order_info_dict.get('NY'),
-                         zip_code=order_info_dict.get('zipCode'),
+                         state=order_info_dict.get('state'),
+                         zip_code=order_info_dict.get('zip_code'),
                          phone=order_info_dict.get('phone'),
                          order_number=order.id)
     db.session.add(customer)
     db.session.commit()
+    print('made customer')
 
     for suborder in suborder_list:
         next_suborder_number = order.next_suborder_number
         suborder_id = '{} - {}'.format(order_id, next_suborder_number)
 
-        order_type = suborder['orderType']
-        if not suborder.get('certificateNum'):
+        order_type = suborder['order_type']
+        if not suborder.get('certificate_num'):
             if order_type == order_types.BIRTH_CERT:
                 order_type = order_types.BIRTH_SEARCH
             elif order_type == order_types.DEATH_CERT:
@@ -942,29 +958,29 @@ def create_new_order(order_info_dict: Dict[str, str], suborder_list: List[Dict])
             order_types.PHOTO_GALLERY: _create_new_photo_gallery
         }
 
-        handler_for_order_type[suborder['orderType']](suborder, new_suborder)
+        handler_for_order_type[suborder['order_type']](suborder, new_suborder)
 
 
 def _create_new_birth_object(suborder: Dict[str, Union[str, List[Dict]]], new_suborder_obj: Suborders):
-    certificate_number = suborder.get('certificateNum')
+    certificate_number = suborder.get('certificate_num')
 
     if certificate_number:
         birth_object = BirthCertificate(certificate_number=certificate_number,
-                                        first_name=suborder.get('firstName'),
-                                        last_name=suborder['lastName'],
-                                        middle_name=suborder.get('middleName'),
+                                        first_name=suborder.get('first_name'),
+                                        last_name=suborder['last_name'],
+                                        middle_name=suborder.get('middle_name'),
                                         gender=suborder.get('gender'),
-                                        father_name=suborder.get('fatherName'),
-                                        mother_name=suborder.get('motherName'),
-                                        num_copies=suborder['numCopies'],
+                                        father_name=suborder.get('father_name'),
+                                        mother_name=suborder.get('mother_name'),
+                                        num_copies=suborder['num_copies'],
                                         month=suborder.get('month'),
                                         day=suborder.get('day'),
                                         years=[y['value'] for y in suborder.get('years') if y['value']],
-                                        birth_place=suborder.get('birthPlace'),
-                                        borough=[b['name'].upper() for b in suborder['boroughs'] if b['checked']],
-                                        letter=suborder.get('letter'),
+                                        birth_place=suborder.get('birth_place'),
+                                        borough=[b['name'].upper() for b in suborder['borough'] if b['checked']],
+                                        letter=suborder.get('exemplification'),
                                         comment=suborder.get('comment'),
-                                        _delivery_method=suborder['deliveryMethod'],
+                                        _delivery_method=suborder['delivery_method'],
                                         suborder_number=new_suborder_obj.id)
     else:
         birth_object = BirthSearch(first_name=suborder.get('firstName'),

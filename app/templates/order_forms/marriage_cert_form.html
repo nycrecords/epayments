@@ -1,144 +1,83 @@
 <div>
     <div class="pb-1">
-        <label for="new_order_cert_{{ num }}"
-               class="sm font-weight-bold mb-0">Certificate Number (if known)</label>
-        <input class="form-control form-control-sm rounded-sm mt-0"
-               id="new_order_cert_{{ num }}"
-               type="text">
+        {{ form.certificate_num.label(class="control-label font-weight-bold mb-0", for="certificate_num") }}
+        {{ form.certificate_num(class="form-control form-control-sm rounded-sm mt-0") }}
     </div>
 
     <div class="pb-1">
-        <label for="new_order_bgs_lname_{{ num }}"
-               class="sm font-weight-bold mb-0">Last Name of Bride/Groom/Spouse</label>
-        <input class="form-control form-control-sm rounded-sm mt-0"
-               id="new_order_bgs_lname_{{ num }}"
-               type="text">
+        {{ form.bgs_last_name.label(class="control-label font-weight-bold mb-0", for="bgs_last_name") }}
+        {{ form.bgs_last_name(class="form-control form-control-sm rounded-sm mt-0") }}
     </div>
 
     <div class="pb-1">
-        <label for="new_order_bgs_fname2_{{ num }}"
-               class="sm font-weight-bold mb-0">First Name of Bride/Groom/Spouse</label>
-        <input class="form-control form-control-sm rounded-sm mt-0"
-               id="new_order_bgs_fname_{{ num }}"
-               type="text">
+        {{ form.bgs_first_name.label(class="control-label font-weight-bold mb-0", for="bgs_first_name") }}
+        {{ form.bgs_first_name(class="form-control form-control-sm rounded-sm mt-0") }}
     </div>
 
     <div class="pb-1">
-        <label for="new_order_bgs_lname2_{{ num }}"
-               class="sm font-weight-bold mb-0">Last Name of Bride/Groom/Spouse</label>
-        <input class="form-control form-control-sm rounded-sm mt-0"
-               id="new_order_bgs_lname_{{ num }}"
-               type="text">
+        {{ form.bgs_last_name2.label(class="control-label font-weight-bold mb-0", for="bgs_last_name2") }}
+        {{ form.bgs_last_name2(class="form-control form-control-sm rounded-sm mt-0") }}
     </div>
 
     <div class="pb-1">
-        <label for="new_order_bgs_fname2_{{ num }}"
-               class="sm font-weight-bold mb-0">First Name of Bride/Groom/Spouse</label>
-        <input class="form-control form-control-sm rounded-sm mt-0"
-               id="new_order_bgs_fname2_{{ num }}"
-               type="text">
+        {{ form.bgs_first_name2.label(class="control-label font-weight-bold mb-0", for="bgs_first_name2") }}
+        {{ form.bgs_first_name2(class="form-control form-control-sm rounded-sm mt-0") }}
     </div>
 
-    <div class="pb-1">
+    <div>
         <h6>Date of Marriage</h6>
-        <div class="row">
-            <div class="col-2">
-                <div>
-                    <label for="new_order_month_{{ num }}"
-                           class="sm font-weight-bold mb-0">Month</label>
-                    <input class="form-control form-control-sm rounded-sm mt-0"
-                           id="new_order_month_{{ num }}" type="text">
-                </div>
-            </div>
+        <div class="pb-1">
+            {{ form.month.label(class="control-label font-weight-bold mb-0", for="month") }}
+            {{ form.month(class="form-control form-control-sm rounded-sm mt-0") }}
+        </div>
 
-            <div class="col-2">
-                <div>
-                    <label for="new_order_day_{{ num }}"
-                           class="sm font-weight-bold mb-0">Day</label>
-                    <input class="form-control form-control-sm rounded-sm mt-0"
-                           id="new_order_day_{{ num }}" type="text">
-                </div>
-            </div>
+        <div class="pb-1">
+            {{ form.day.label(class="control-label font-weight-bold mb-0", for="day") }}
+            {{ form.day(class="form-control form-control-sm rounded-sm mt-0") }}
+        </div>
 
-            <div class="col-2">
-                <div>
-                    <label for="new_order_year_{{ num }}"
-                           class="sm font-weight-bold mb-0">Year</label>
-                    <input class="form-control form-control-sm rounded-sm mt-0"
-                           id="new_order_year_{{ num }}" type="text">
-                </div>
-            </div>
+        <div class="pb-1">
+            {{ form.year.label(class="control-label font-weight-bold mb-0", for="year") }}
+            {{ form.year(class="form-control form-control-sm rounded-sm mt-0") }}
         </div>
     </div>
 
     <div class="pb-1">
-        <label for="new_order_addYears_{{ num }}"
-               class="sm font-weight-bold mb-0">Additional Years To Search (comma separated)</label>
-        <input class="form-control form-control-sm rounded-sm mt-0"
-               id="new_order_addYears_{{ num }}"
-               type="text">
+        {{ form.add_year.label(class="control-label font-weight-bold mb-0", for="add_year") }}
+        {{ form.add_year(class="form-control form-control-sm rounded-sm mt-0") }}
     </div>
 
     <div class="pb-1">
-        <label for="new_order_bp_{{ num }}"
-               class="sm font-weight-bold mb-0">Place of Marriage</label>
-        <input class="form-control form-control-sm rounded-sm mt-0"
-               id="new_order_bp_{{ num }}"
-               type="text">
+        {{ form.marriage_place.label(class="control-label font-weight-bold mb-0", for="marriage_place") }}
+        {{ form.marriage_place(class="form-control form-control-sm rounded-sm mt-0") }}
     </div>
 
     <div>
-        <h6>Borough/County</h6>
-        <div>
-            <input name="borough_{{ num }}" type="radio" value="Manhattan" id="new_order_rb1_{{ num }}"/>
-            <label for="new_order_rb1_{{ num }}">Manhattan</label>
-        </div>
-
-        <div>
-            <input name="borough_{{ num }}" type="radio" value="Brooklyn" id="new_order_rb2_{{ num }}"/>
-            <label for="new_order_rb2_{{ num }}">Brooklyn</label>
-        </div>
-
-        <div>
-            <input name="borough_{{ num }}" type="radio" value="Bronx" id="new_order_rb3_{{ num }}"/>
-            <label for="new_order_rb3_{{ num }}">Bronx</label>
-        </div>
-
-        <div>
-            <input name="borough_{{ num }}" type="radio" value="Queens" id="new_order_rb4_{{ num }}"/>
-            <label for="new_order_rb4_{{ num }}">Queens</label>
-        </div>
-
-        <div>
-            <input name="borough_{{ num }}" type="radio" value="Staten Island" id="new_order_rb5_{{ num }}"/>
-            <label for="new_order_rb5_{{ num }}">Staten Island</label>
-        </div>
-    </div>
-
-    <div class="pb-1">
-        <label for="new_order_comment_{{ num }}"
-               class="sm font-weight-bold mb-0">Comment</label>
-        <input class="form-control form-control-sm rounded-sm mt-0"
-               id="new_order_comment_{{ num }}"
-               type="text">
+        <h6>Borough</h6>
+        {% for radiobtn in form.borough %}
+            <div>
+                {{ radiobtn }}
+                {{ radiobtn.label }}
+            </div>
+        {% endfor %}
     </div>
 
     <div>
-        <input name="exemplification_{{ num }}" type="radio" value="Yes"
-               id="new_order_exp_{{ num }}"/>
-        <label for="new_order_exp_{{ num }}">Attach "Letter of Exemplification</label>
+        {% for radiobtn in form.exemplification %}
+            <div>
+                {{ radiobtn }}
+                {{ radiobtn.label }}
+            </div>
+        {% endfor %}
     </div>
 
     <div>
         <h6>Delivery Method</h6>
-        <div>
-            <input name="dmethod_{{ num }}" type="radio" value="mail" id="new_order_dmethod1_{{ num }}"/>
-            <label for="new_order_dmethod1_{{ num }}">Mail</label>
-        </div>
-
-        <div>
-            <input name="dmethod_{{ num }}" type="radio" value="email" id="new_order_dmethod2_{{ num }}"/>
-            <label for="new_order_dmethod2_{{ num }}">Email</label>
-        </div>
+        {% for radiobtn in form.delivery_method %}
+            <div>
+                {{ radiobtn }}
+                {{ radiobtn.label }}
+            </div>
+        {% endfor %}
     </div>
 </div>

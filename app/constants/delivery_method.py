@@ -9,3 +9,9 @@ DROPDOWN = [
     (EMAIL, 'Email'),
     (PICKUP, 'Pickup')
 ]
+
+RADIO = [
+    (MAIL, 'Mail'),
+    (EMAIL, 'Email'),
+    (PICKUP, 'Pickup')
+]
