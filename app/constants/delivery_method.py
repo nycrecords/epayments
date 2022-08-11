@@ -10,7 +10,7 @@ DROPDOWN = [
     (PICKUP, 'Pickup')
 ]
 
-RADIO = [
+FORM_DROPDOWN = [
     (MAIL, 'Mail'),
     (EMAIL, 'Email'),
     (PICKUP, 'Pickup')

@@ -1,14 +1,16 @@
 let suborder_count = 1; // global variable to keep track of the number of new suborders
 
 $(document).ready(function () {
+    displaySuborderTotal()
     setClearBtn();
     setPlaceOrderBtn();
     setPlusBtn();
     renderSuborder();
+    setSuborderCloseBtn();
 });
 
 function setPlaceOrderBtn() {
-    $('#place_order_btn').click(function() {
+    $('#place_order_btn').click(function () {
         // gets customer information
         let info = getAllFormsData();
         let order_info = info[0]
@@ -17,14 +19,35 @@ function setPlaceOrderBtn() {
     });
 }
 
+function setSuborderCloseBtn(sub_num) {
+    $('#suborder_close_btn_' + sub_num).click(function () {
+        // remove suborder div
+        $('#suborder_' + sub_num).remove();
+        // update every suborder number display
+        let counter = 1;
+        let suborder_displays = document.querySelectorAll("[id^='suborder_num_']");
+        suborder_displays.forEach(function (elem) {
+            $('#' + elem.id).html('Suborder: ' + counter)
+            counter++;
+        });
+        suborder_count--;
+        displaySuborderTotal();
+    });
+}
+
+function displaySuborderTotal() {
+    $('#total_new_suborders').html('Total New Suborders: ' + suborder_count)
+}
+
 function getAllFormsData() {
     let order_info;
     let suborders = []
     $('form').each(function (index, form) {
         if (index === 0) { // first form is customer_info
-            order_info = convertFormToJSON($('#'+form.id).serializeArray())
+            order_info = convertFormToJSON($('#' + form.id).serializeArray())
         } else {
-            let suborder_info = convertFormToJSON($('#'+form.id).serializeArray())
+            let suborder_info = convertFormToJSON($('#' + form.id).serializeArray())
+            console.log(suborder_info)
             let type = suborder_info['order_type']
             // only do something if the form is not default type
             if (type !== 'default') {
@@ -37,7 +60,7 @@ function getAllFormsData() {
 
 function convertFormToJSON(form_data) {
     let data = {};
-    $(form_data).each(function(index, obj){
+    $(form_data).each(function (index, obj) {
         data[obj.name] = obj.value;
     });
     return data;
@@ -46,22 +69,26 @@ function convertFormToJSON(form_data) {
 function placeOrder(order_info, suborders) {
     console.log('suborders')
     console.log(suborders)
-    $.ajax({
-        type:'POST',
-        url: 'api/v1/orders/new',
-        data: JSON.stringify({
-            'order_info': order_info,
-            'suborders': suborders
-        }),
-        datatype: 'json',
-        success: function(result) {
-            console.log('nice')
-        }
-    });
+    if (suborders.length > 0) {
+        $.ajax({
+            type: 'POST',
+            url: 'api/v1/orders/new',
+            data: JSON.stringify({
+                'order_info': order_info,
+                'suborders': suborders
+            }),
+            datatype: 'json',
+            success: function (result) {
+                console.log('order placed')
+            }
+        });
+    } else {
+        console.log("empty suborders")
+    }
 }
 
-function setClearBtn(){
-    $('#clear_btn').click(function() {
+function setClearBtn() {
+    $('#clear_btn').click(function () {
         $('#name').val('');
         $('#email').val('');
         $('#address_line_1').val('');
@@ -74,12 +101,14 @@ function setClearBtn(){
         // remove all suborders
         suborder_count = 0;
         $('#suborder_col').html('');
+        displaySuborderTotal()
     });
 }
 
 function setPlusBtn() {
-    $('#plus_btn').click(function() {
+    $('#plus_btn').click(function () {
         suborder_count++;
+        displaySuborderTotal()
         renderSuborder();
     });
 }
@@ -92,9 +121,10 @@ function renderSuborder() {
             'suborder_count': suborder_count
         }),
         datatype: 'json',
-        success: function(result) {
+        success: function (result) {
             $('#suborder_col').append(result['suborder_form']);
             setOrderTypeChange(suborder_count); // set order type select field after suborder renders
+            setSuborderCloseBtn(suborder_count);
         }
     });
 }
@@ -122,7 +152,7 @@ function orderTypeTemplateRender(order_type, suborder_count) {
             'suborder_count': suborder_count,
         }),
         datatype: 'json',
-        success: function(result) {
+        success: function (result) {
             $('#new_order_fields_' + suborder_count).html(result['template']);
         }
     });

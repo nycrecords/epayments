@@ -10,28 +10,23 @@
     </div>
 
     <div class="pb-1">
-        {{ form.add_description.label(class="control-label font-weight-bold mb-0", for="add_description") }}
-        {{ form.add_description(class="form-control form-control-sm rounded-sm mt-0") }}
+        {{ form.additional_description.label(class="control-label font-weight-bold mb-0", for="additional_description") }}
+        {{ form.additional_description(class="form-control form-control-sm rounded-sm mt-0") }}
     </div>
 
-    <div>
-        <h6>Size</h6>
-        {% for radiobtn in form.size %}
-            <div>
-                {{ radiobtn }}
-                {{ radiobtn.label }}
-            </div>
-        {% endfor %}
+    <div class="pb-1">
+        {{ form.size.label(class="control-label font-weight-bold mb-0", for="size") }}
+        {{ form.size(class="form-control form-control-sm rounded-sm mt-0") }}
     </div>
 
-    <div>
-        <h6>Delivery Method</h6>
-        {% for radiobtn in form.delivery_method %}
-            <div>
-                {{ radiobtn }}
-                {{ radiobtn.label }}
-            </div>
-        {% endfor %}
+    <div class="pb-1">
+        {{ form.delivery_method.label(class="control-label font-weight-bold mb-0", for="delivery_method") }}
+        {{ form.delivery_method(class="form-control form-control-sm rounded-sm mt-0") }}
+    </div>
+
+    <div class="pb-1">
+        {{ form.contact_email.label(class="control-label font-weight-bold mb-0", for="contact_email") }}
+        {{ form.contact_email(class="form-control form-control-sm rounded-sm mt-0") }}
     </div>
 
     <div class="pb-1">

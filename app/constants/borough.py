@@ -11,7 +11,7 @@ STATEN_ISLAND = 'Staten Island'
 BROOKLYN = 'Brooklyn'
 QUEENS = 'Queens'
 
-RADIO = [
+FORM_DROPDOWN = [
     (BRONX, 'Bronx'),
     (MANHATTAN, 'Manhattan'),
     (STATEN_ISLAND, 'Staten Island'),

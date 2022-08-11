@@ -5,46 +5,48 @@
     </div>
 
     <div class="pb-1">
-        {{ form.bgs_last_name.label(class="control-label font-weight-bold mb-0", for="bgs_last_name") }}
-        {{ form.bgs_last_name(class="form-control form-control-sm rounded-sm mt-0") }}
+        {{ form.groom_last_name.label(class="control-label font-weight-bold mb-0", for="groom_last_name") }}
+        {{ form.groom_last_name(class="form-control form-control-sm rounded-sm mt-0") }}
     </div>
 
     <div class="pb-1">
-        {{ form.bgs_first_name.label(class="control-label font-weight-bold mb-0", for="bgs_first_name") }}
-        {{ form.bgs_first_name(class="form-control form-control-sm rounded-sm mt-0") }}
+        {{ form.groom_first_name.label(class="control-label font-weight-bold mb-0", for="groom_first_name") }}
+        {{ form.groom_first_name(class="form-control form-control-sm rounded-sm mt-0") }}
     </div>
 
     <div class="pb-1">
-        {{ form.bgs_last_name2.label(class="control-label font-weight-bold mb-0", for="bgs_last_name2") }}
-        {{ form.bgs_last_name2(class="form-control form-control-sm rounded-sm mt-0") }}
+        {{ form.bride_last_name.label(class="control-label font-weight-bold mb-0", for="bride_last_name") }}
+        {{ form.bride_last_name(class="form-control form-control-sm rounded-sm mt-0") }}
     </div>
 
     <div class="pb-1">
-        {{ form.bgs_first_name2.label(class="control-label font-weight-bold mb-0", for="bgs_first_name2") }}
-        {{ form.bgs_first_name2(class="form-control form-control-sm rounded-sm mt-0") }}
+        {{ form.bride_first_name.label(class="control-label font-weight-bold mb-0", for="bride_first_name") }}
+        {{ form.bride_first_name(class="form-control form-control-sm rounded-sm mt-0") }}
     </div>
 
-    <div>
+    <div class="pb-1">
         <h6>Date of Marriage</h6>
-        <div class="pb-1">
-            {{ form.month.label(class="control-label font-weight-bold mb-0", for="month") }}
-            {{ form.month(class="form-control form-control-sm rounded-sm mt-0") }}
-        </div>
+        <div class="row">
+            <div class="col-2">
+                {{ form.month.label(class="control-label font-weight-bold mb-0", for="month") }}
+                {{ form.month(class="form-control form-control-sm rounded-sm mt-0") }}
+            </div>
 
-        <div class="pb-1">
-            {{ form.day.label(class="control-label font-weight-bold mb-0", for="day") }}
-            {{ form.day(class="form-control form-control-sm rounded-sm mt-0") }}
-        </div>
+            <div class="col-2">
+                {{ form.day.label(class="control-label font-weight-bold mb-0", for="day") }}
+                {{ form.day(class="form-control form-control-sm rounded-sm mt-0") }}
+            </div>
 
-        <div class="pb-1">
-            {{ form.year.label(class="control-label font-weight-bold mb-0", for="year") }}
-            {{ form.year(class="form-control form-control-sm rounded-sm mt-0") }}
+            <div class="col-2">
+                {{ form.year.label(class="control-label font-weight-bold mb-0", for="year") }}
+                {{ form.year(class="form-control form-control-sm rounded-sm mt-0") }}
+            </div>
         </div>
     </div>
 
     <div class="pb-1">
-        {{ form.add_year.label(class="control-label font-weight-bold mb-0", for="add_year") }}
-        {{ form.add_year(class="form-control form-control-sm rounded-sm mt-0") }}
+        {{ form.additional_years.label(class="control-label font-weight-bold mb-0", for="additional_years") }}
+        {{ form.additional_years(class="form-control form-control-sm rounded-sm mt-0") }}
     </div>
 
     <div class="pb-1">
@@ -52,33 +54,29 @@
         {{ form.marriage_place(class="form-control form-control-sm rounded-sm mt-0") }}
     </div>
 
-    <div>
-        <h6>Borough</h6>
-        {% for radiobtn in form.borough %}
-            <div>
-                {{ radiobtn }}
-                {{ radiobtn.label }}
-            </div>
-        {% endfor %}
+    <div class="pb-1">
+        {{ form.borough.label(class="control-label font-weight-bold mb-0", for="borough") }}
+        {{ form.borough(class="form-control form-control-sm rounded-sm mt-0") }}
     </div>
 
     <div>
-        {% for radiobtn in form.exemplification %}
-            <div>
-                {{ radiobtn }}
-                {{ radiobtn.label }}
-            </div>
-        {% endfor %}
+        {{ form.exemplification }}
+        {{ form.exemplification.label(for="exemplification") }}
     </div>
 
     <div>
-        <h6>Delivery Method</h6>
-        {% for radiobtn in form.delivery_method %}
-            <div>
-                {{ radiobtn }}
-                {{ radiobtn.label }}
-            </div>
-        {% endfor %}
+        {{ form.raised_seals }}
+        {{ form.raised_seals.label(for="raised_seals") }}
+    </div>
+
+    <div>
+        {{ form.no_amends }}
+        {{ form.no_amends.label(for="no_amends") }}
+    </div>
+
+    <div class="pb-1">
+        {{ form.delivery_method.label(class="control-label font-weight-bold mb-0", for="delivery_method") }}
+        {{ form.delivery_method(class="form-control form-control-sm rounded-sm mt-0") }}
     </div>
 
     <div class="pb-1">
