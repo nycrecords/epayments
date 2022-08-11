@@ -955,14 +955,13 @@ def _create_new_birth_object(suborder: Dict[str, Union[str, List[Dict]]], new_su
     exemplification = True if 'exemplification' in suborder else False
     raised_seals = True if 'raised_seals' in suborder else False
     no_amends = True if 'no_amends' in suborder else False
-    gender = None if suborder['gender'] == '' else suborder['gender']
 
     if certificate_number:
         birth_object = BirthCertificate(certificate_number=certificate_number,
                                         first_name=suborder.get('first_name'),
                                         last_name=suborder['last_name'],
                                         middle_name=suborder.get('middle_name'),
-                                        gender=gender,
+                                        gender=suborder['gender'],
                                         father_name=suborder.get('father_name'),
                                         mother_name=suborder.get('mother_name'),
                                         num_copies=suborder['num_copies'],
@@ -982,7 +981,7 @@ def _create_new_birth_object(suborder: Dict[str, Union[str, List[Dict]]], new_su
         birth_object = BirthSearch(first_name=suborder.get('first_name'),
                                    last_name=suborder['last_name'],
                                    middle_name=suborder.get('middle_name'),
-                                   gender=gender,
+                                   gender=suborder['gender'],
                                    father_name=suborder.get('father_name'),
                                    mother_name=suborder.get('mother_name'),
                                    num_copies=suborder['num_copies'],

@@ -7,3 +7,8 @@
 
 MALE = 'Male'
 FEMALE = 'Female'
+
+FORM_DROPDOWN = [
+    (MALE, 'Male'),
+    (FEMALE, 'Female')
+]

@@ -2,7 +2,7 @@ from flask_wtf import FlaskForm
 from wtforms import StringField, SubmitField, IntegerField, SelectField, BooleanField
 from wtforms.fields.html5 import DateField
 from wtforms.validators import Required
-from app.constants import status, delivery_method, order_types, borough, size
+from app.constants import status, delivery_method, order_types, borough, size, gender
 from datetime import datetime
 
 
@@ -52,7 +52,7 @@ class NewSuborderForm(FlaskForm):
 
 class NewBirthCertForm(FlaskForm):
     certificate_num = IntegerField('Certificate Number (If Known)')
-    gender = StringField('Gender')
+    gender = SelectField('Gender', choices=gender.FORM_DROPDOWN)
     last_name = StringField('Last Name')
     first_name = StringField('First Name')
     middle_name = StringField('Middle Name')
@@ -76,7 +76,7 @@ class NewBirthCertForm(FlaskForm):
 
 class NewDeathCertForm(FlaskForm):
     certificate_num = IntegerField('Certificate Number (If Known)')
-    gender = StringField('Gender')
+    gender = SelectField('Gender', choices=gender.FORM_DROPDOWN)
     last_name = StringField('Last Name')
     first_name = StringField('First Name')
     middle_name = StringField('Middle Name')
