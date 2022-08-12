@@ -1,10 +1,9 @@
 {% if orders %}
-
     <div class="overflow-auto h6 small" style="height: 80vh">
         {% for order in orders %}
             <div class="container">
-                <div class="row pt-1">
-                    <div class="col-6 py-1">
+                <div class="row py-2">
+                    <div class="col-6">
                         <div><strong>Order#: </strong>{{ order['order_number'] }}</div>
                         <div id="suborder_{{ loop.index }}" data-value="{{ order['suborder_number'] }}">
                             <strong>Suborder#: </strong>{{ order['suborder_number'] }}
@@ -14,7 +13,7 @@
                         <div><strong>Email: </strong>{{ order['customer']['email'] }}</div>
                         <div><strong>Date Received: </strong>{{ order['date_received'].split(' ')[0] }}</div>
                     </div>
-                    <div class="col-6 py-1">
+                    <div class="col-6">
                         <div id="status_{{ loop.index }}"
                              class="list-group-item">{{ order['current_status'] }}</div>
                     </div>

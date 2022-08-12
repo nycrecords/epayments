@@ -1,12 +1,24 @@
 $(document).ready(function () {
     $("#search_button").click(function () {
-        getOrders();
+        let email = $('#email').val()
+        // if the email input is empty or is a valid email then get orders
+        if (email.length === 0 || isValidEmail(email))
+            getOrders();
     })
 
     $("#clear_button").click(function () {
         clearForm();
     })
 });
+
+function isValidEmail(email)  {
+    // pattern matches (string)@(string).(domain 2-3 letters)
+    let email_pattern = new RegExp('[a-z0-9]+@[a-z]+\.[a-z]{2,3}');
+    let is_valid = email_pattern.test(email)
+    if (!is_valid)
+        alert('Invalid Email In Search Form')
+    return is_valid;
+}
 
 // clears all form inputs
 function clearForm() {
@@ -57,6 +69,7 @@ function getOrders() {
 }
 
 // create and populate order_rows table with search results
+// data is a json file
 function createOrderTable(data) {
     $.ajax({
         type: 'POST',
@@ -71,15 +84,12 @@ function createOrderTable(data) {
             $('#order_rows').html(response['order_rows']);
         }
     });
-
-    // results is a json file
-    console.log(data);
 }
 
 /**
  * converts date from y/m/d -> m/d/y
  * @param date data that is y/m/d format
- * @returns {string|*} date in m/d/y format
+ * @returns {string|*} date in m/d/y format or empty string if date is not given
  */
 function convertDate(date) {
     if (date === "")

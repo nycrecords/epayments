@@ -15,7 +15,9 @@ function setPlaceOrderBtn() {
         let info = getAllFormsData();
         let order_info = info[0]
         let suborders = info[1]
-        placeOrder(order_info, suborders)
+        if (isValid(order_info, 'customer') && isValid(suborders)) {
+            placeOrder(order_info, suborders);
+        }
     });
 }
 
@@ -39,6 +41,7 @@ function displaySuborderTotal() {
     $('#total_new_suborders').html('Total New Suborders: ' + suborder_count)
 }
 
+// gets all the form data from the customer form and all new suborder forms
 function getAllFormsData() {
     let order_info;
     let suborders = []
@@ -47,7 +50,6 @@ function getAllFormsData() {
             order_info = convertFormToJSON($('#' + form.id).serializeArray())
         } else {
             let suborder_info = convertFormToJSON($('#' + form.id).serializeArray())
-            console.log(suborder_info)
             let type = suborder_info['order_type']
             // only do something if the form is not default type
             if (type !== 'default') {
@@ -56,6 +58,21 @@ function getAllFormsData() {
         }
     });
     return [order_info, suborders]
+}
+
+function isValid(form, form_type='suborder') {
+    if (form_type === 'suborder') {
+        return form.length !== 0 && form['order_type'] === 'default';
+    }
+    else {
+        // pattern matches (string)@(string).(domain 2-3 letters)
+        let email_pattern = new RegExp('[a-z0-9]+@[a-z]+\.[a-z]{2,3}');
+        let email = form['email'];
+        let is_valid = email_pattern.test(email)
+        if (!is_valid)
+            alert('Invalid Email')
+        return is_valid;
+    }
 }
 
 function convertFormToJSON(form_data) {
@@ -67,8 +84,6 @@ function convertFormToJSON(form_data) {
 }
 
 function placeOrder(order_info, suborders) {
-    console.log('suborders')
-    console.log(suborders)
     if (suborders.length > 0) {
         $.ajax({
             type: 'POST',
@@ -79,11 +94,11 @@ function placeOrder(order_info, suborders) {
             }),
             datatype: 'json',
             success: function (result) {
-                console.log('order placed')
+                alert('Order Placed')
             }
         });
     } else {
-        console.log("empty suborders")
+        alert('There are no suborders to place')
     }
 }
 
@@ -132,7 +147,6 @@ function renderSuborder() {
 function setOrderTypeChange(suborder_count) {
     let elem_id = 'order_type_' + suborder_count;
     $('#' + elem_id).on('change', function () {
-        console.log('changed')
         let type = $('#' + elem_id).val();
         if (type === 'default') // if the option is select an order type
             $('#new_order_fields_' + suborder_count).hide()

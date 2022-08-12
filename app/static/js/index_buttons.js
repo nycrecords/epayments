@@ -12,7 +12,6 @@ function setDownloadBtns() {
 }
 
 function printAjaxCall(type) {
-    console.log('clicked')
     let c_drs = convertDate($('#date_received_start').val());
     let c_dre = convertDate($('#date_received_end').val());
     let c_srs = convertDate($('#date_submitted_start').val());
@@ -36,7 +35,6 @@ function printAjaxCall(type) {
         datatype: 'json',
         success: function (result) {
             window.open(result['url']);
-            console.log(result);
         }
     });
 }
@@ -87,7 +85,7 @@ function showXLSXBtn() {
     $('#order_type').on('change', function () {
         if ($('#order_type').val() === 'all') {
             $('#xlsx_btn').hide();
-        } else {
+        } else if ($('#xlsx_btn').is(':hidden')){ // only call show if it was previously hidden
             $('#xlsx_btn').show();
         }
     });
@@ -117,7 +115,6 @@ function setXLSXBtn() {
                 'date_submitted_end': c_sre,
             },
             success: function (result) {
-                console.log(result)
                 window.open(result['url']);
             }
         })

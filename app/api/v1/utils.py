@@ -169,6 +169,8 @@ def _print_orders(search_params: Dict[str, str]) -> str:
         'Photo Gallery': 'photo_gallery.html',
         'Property Card': 'property_card.html',
         "OCME": "ocme.html",
+        'HVR': 'hvr.html',
+        'No Amends': 'no_amends.html'
     }
 
     html = ''
