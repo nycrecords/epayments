@@ -1,11 +1,13 @@
 import os
 from datetime import datetime
+from time import localtime, strftime
 from xml.etree import ElementTree
 
 import requests
 from dateutil import parser
 from flask import current_app
 
+from app.email_utils import send_email
 from app.utils import import_file
 
 
@@ -22,6 +24,7 @@ def import_from_api(start_date, end_date):
     }
     response = requests.get(current_app.config["IMPORT_URL"], headers=headers, params=params, verify=False)
     files_list = response.json()["files"]
+    msg_body = []
     for item in files_list or []:
         resp = requests.get(item["xmlFile"]["url"], verify=False)
         tree = ElementTree.fromstring(resp.text)
@@ -38,4 +41,14 @@ def import_from_api(start_date, end_date):
 
                 with open(file, "wb") as f:
                     f.write(r.content)
-        import_file(tree, date_submitted)
+
+        if import_file(tree, date_submitted):
+            msg_body.append(f"Successfully imported {item['xmlFile']['name']}")
+        else:
+            msg_body.append(f"Failed to import {item['xmlFile']['name']}")
+    send_email(
+        current_app.config["IMPORT_MAIL_TO"],
+        f"ePayments Import {strftime('%Y-%m-%d %H:%M:%S', localtime())}",
+        "email_templates/import_status",
+        msg_body=msg_body,
+    )

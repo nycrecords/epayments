@@ -28,7 +28,7 @@ def send_email(to, subject, template, **kwargs):
     :return: A thread to be used in send_async_email
     """
     app = current_app._get_current_object()
-    msg = Message(subject, sender=app.config["MAIL_SENDER"], recipients=[to], cc=[app.config["MAIL_SENDER"]])
+    msg = Message(subject, sender=app.config["MAIL_SENDER"], recipients=[to])
     msg.html = render_template(template + ".html", **kwargs)
     thr = Thread(target=send_async_email, args=[app, msg])
     thr.start()
