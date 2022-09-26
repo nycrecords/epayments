@@ -1,14 +1,9 @@
-from flask_wtf import FlaskForm
-from wtforms import StringField, SubmitField, IntegerField, SelectField, BooleanField
-from wtforms.fields.html5 import DateField
-from wtforms.validators import Required
-from app.constants import status, delivery_method, order_types, borough, size, gender
 from datetime import datetime
 
+from flask_wtf import FlaskForm
+from wtforms import StringField, DateField, IntegerField, SelectField, BooleanField
 
-class NameForm(FlaskForm):
-    name = StringField('What is your name?', validators=[Required()])
-    submit = SubmitField('Submit')
+from app.constants import status, delivery_method, order_types, borough, size, gender
 
 
 class SearchOrderForm(FlaskForm):

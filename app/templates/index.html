@@ -4,7 +4,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width,initial-scale=1">
     <link rel="shortcut icon" type="image/x-icon" href="{{ url_for('static', filename='/img/favicon.ico') }}">
-    <title>New ePayments</title>
+    <title>ePayments</title>
 
     <!-- Font Awesome -->
     <link rel="stylesheet" href="/static/fontawesome/css/all.min.css">
@@ -24,7 +24,7 @@
                     <button type="button" class="btn btn-light" data-toggle="modal" data-target="#change_pass_modal">
                         Change Password
                     </button>
-                    <a href="{{ url_for("main.newlogout") }}" class="btn btn-primary">Logout</a>
+                    <a href="{{ url_for("main.logout") }}" class="btn btn-primary">Logout</a>
                 </div>
 
                 <div class="modal fade" id="change_pass_modal" tabindex="-1" role="dialog"
@@ -56,10 +56,8 @@
                                 <button type="button" class="btn btn-success rounded-sm" id="pass_submit_btn">Save</button>
                             </div>
                         </div>
-                        <!-- modal -->
                     </div>
                 </div>
-                <!-- Change Password Modal -->
             </div>
         </div>
 
@@ -70,9 +68,8 @@
             <div class="row">
 
                 <div id="left_side" class="col-2 pr-0">
-                    {% include "searchform.html" %}
+                    {% include "search_form.html" %}
                 </div>
-                <!-- search form div -->
 
                 <div id='middle' class="col-8">
                     <div class="container-fluid">
@@ -83,7 +80,6 @@
                         </div>
                     </div>
                 </div>
-                <!-- order rows div -->
 
                 <div id="right_side" class="col-2 pl-0">
                     <div class="container">
@@ -127,23 +123,18 @@
                             </div>
 
                         </div>
-                        <!-- print btns -->
                     </div>
                 </div>
-                <!-- right side -->
             </div>
         </div>
 
     </section>
 
      <!-- JQUERY -->
-    <script src="https://code.jquery.com/jquery-3.3.1.min.js"
-            integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
+    <script src="/static/js/plugins/jquery-3.3.1.min.js"></script>
 
     <!-- bootstrap javascript -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.1.3/dist/js/bootstrap.min.js"
-            integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy"
-            crossorigin="anonymous"></script>
+    <script src="/static/js/plugins/bootstrap.min.js"></script>
 
     <!-- NYC template JS (RTL, search and language toggle, back to top)  -->
     <script src="/static/js/main.js"></script>

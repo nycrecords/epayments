@@ -2,6 +2,7 @@
     <div class="overflow-auto h6 small" style="height: 80vh">
         {% for order in orders %}
             <div class="container">
+                <!-- top row with meta data -->
                 <div class="row py-2">
                     <div class="col-6">
                         <div><strong>Order#: </strong>{{ order['order_number'] }}</div>
@@ -18,13 +19,16 @@
                              class="list-group-item">{{ order['current_status'] }}</div>
                     </div>
                 </div>
-                <!-- top row with meta data -->
+
+                <!-- bottom row with nav tabs -->
                 <div class="row pb-1">
                     <div class="container">
                         <div>
+                            <!-- collapse tabs -->
                             <div id="collapse_{{ loop.index }}">
                                 <p class="mb-1">
-                                    <button class="btn btn-primary btn-sm rounded-sm" type="button" data-toggle="collapse"
+                                    <button class="btn btn-primary btn-sm rounded-sm" type="button"
+                                            data-toggle="collapse"
                                             data-target="#history_{{ loop.index }}" aria-expanded="false"
                                             aria-controls="history_{{ loop.index }}"
                                             id="history_btn_{{ loop.index }}">
@@ -123,10 +127,8 @@
                                 </div>
                             </div>
                         </div>
-                        <!-- collapse tabs -->
                     </div>
                 </div>
-                <!-- bottom row with nav tabs -->
                 <hr style="border: solid gray">
             </div>
         {% endfor %}

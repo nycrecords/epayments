@@ -881,9 +881,6 @@ def create_new_order(order_info_dict: Dict[str, str], suborder_list: List[Dict])
 
     year = str(date.today().year)
     next_order_number = OrderNumberCounter.query.filter_by(year=year).one().next_order_number
-    # order = OrderNumberCounter(year=year, _next_order_number=1)
-    # db.session.add(order)
-    # db.session.commit()
     order_id = 'EPAY-{0:s}-{1:03d}'.format(year, next_order_number)
 
     order = Orders(_id=order_id,

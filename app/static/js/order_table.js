@@ -2,23 +2,7 @@ $(document).ready(function () {
     setMoreInfoBtns();
     setHistoryBtns();
     setUpdateBtns();
-    renameStatus();
 });
-
-// rename the status to include their description
-function renameStatus() {
-    let status = document.querySelectorAll("[id^='status_']");
-    status.forEach(function (elem) {
-        let row_num = elem.id.split('_')[1]
-        let status_info =  $('#updated_status_' + row_num + ' ' + 'option:selected').text().split(':');
-
-        let status = "<strong>" + status_info[0] + "</strong>";
-        if (status_info[0] !== 'Received')
-            status += ":" + status_info[1];
-
-        $('#' + elem.id).html(status);
-    });
-}
 
 // sets the update button in update status to submit the update
 function setUpdateBtns() {
@@ -47,7 +31,8 @@ function setUpdateBtns() {
                     success: function () {
                         alert("Status Has Been Updated");
                         $('#update_comment_' + row_num).val('');
-                        $('#status_' + row_num).text(update_status);
+                        $("#status_" + row_num).text(update_status);
+                        $("#update_status_" + row_num).collapse("hide");
                     },
                 });
             }
@@ -55,7 +40,7 @@ function setUpdateBtns() {
     });
 }
 
-// sets the morinfo collapse button to display more info
+// sets the More Info collapse button to display more info
 function setMoreInfoBtns() {
     let moreInfoBtn = document.querySelectorAll("[id^='moreinfo_btn']");
     moreInfoBtn.forEach(function (btn) {
@@ -68,17 +53,7 @@ function setMoreInfoBtns() {
                     type: 'POST',
                     url: 'api/v1/more_info/' + suborder_number,
                     success: function (result) {
-                        $.ajax({
-                            type: 'POST',
-                            url: 'listinfo',
-                            data: JSON.stringify({
-                                'order_info': result['order_info']
-                            }),
-                            datatype: 'json',
-                            success: function (result) {
-                                $('#info_' + row_num).html(result['info_tab']);
-                            }
-                        });
+                        $('#info_' + row_num).html(result['info_tab']);
                     }
                 });
             }
@@ -99,17 +74,7 @@ function setHistoryBtns() {
                     type: 'GET',
                     url: 'api/v1/history/' + suborder_number,
                     success: function (result) {
-                        $.ajax({
-                            type: 'POST',
-                            url: 'listhistory',
-                            data: JSON.stringify({
-                                'history': result['history']
-                            }),
-                            datatype: 'json',
-                            success: function (result) {
-                                $('#history_body_' + row_num).html(result['history_tab']);
-                            }
-                        });
+                        $('#history_body_' + row_num).html(result['history_tab']);
                     }
                 });
             }

@@ -1,4 +1,6 @@
 $(document).ready(function () {
+    getOrders();
+
     $("#search_button").click(function () {
         let email = $('#email').val()
         // if the email input is empty or is a valid email then get orders
@@ -62,26 +64,10 @@ function getOrders() {
             'size': 150
         }),
         datatype: "json",
-        success: function (result) {
-            createOrderTable(result);
-        }
-    });
-}
-
-// create and populate order_rows table with search results
-// data is a json file
-function createOrderTable(data) {
-    $.ajax({
-        type: 'POST',
-        url: "listorders",
-        data: JSON.stringify({
-            'all_orders': data['all_orders']
-        }),
-        datatype: "json",
-        success: function (response) {
+        success: function (data) {
             $('#total_orders').html('<strong>Total orders: </strong>' + data['order_count']);
             $('#total_suborders').html('<strong>Total suborders: </strong>' + data['suborder_count']);
-            $('#order_rows').html(response['order_rows']);
+            $('#order_rows').html(data['order_rows']);
         }
     });
 }

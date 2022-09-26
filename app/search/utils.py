@@ -194,7 +194,8 @@ def search_queries(order_number=None,
     """Arguments will match search parameters
         :param order_number: search by order number
         :param suborder_number: search by suborder number
-        :param order_type:  search by order type
+        :param order_type: search by order type
+        :param delivery_method: search by delivery method
         :param status: search by status
         :param billing_name: search by billing name
         :param email: search by email
@@ -208,10 +209,6 @@ def search_queries(order_number=None,
         :param search_type: search or print
 
         :return: elasticsearch results in json format
-
-    Args:
-        delivery_method:
-        delivery_method:
     """
     query_field = {
         'billing_name': billing_name,
@@ -231,10 +228,6 @@ def search_queries(order_number=None,
     }
 
     formatted_date_range = format_date_range(date_range)
-
-    # Set time of formatted date_submitted_end to be 11:59 PM if start and end date are not empty string and are the same
-    if date_submitted_start and date_submitted_end and (date_submitted_start == date_submitted_end):
-        formatted_date_range['date_submitted_end'] = formatted_date_range['date_submitted_end'].split(" ")[0] + " 11:59 PM"
 
     dsl_gen = DSLGenerator(query_fields=format_queries(query_field),
                            date_range=formatted_date_range,
