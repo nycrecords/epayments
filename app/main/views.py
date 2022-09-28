@@ -86,6 +86,16 @@ def newSuborderForm():
                                                  num=json['suborder_count'],
                                                  form=NewSuborderForm()))
 
+@main.route('/new_order', methods=['GET', 'POST'])
+def new_order():
+    new_order_form = NewOrderForm()
+    new_suborder_form = NewSuborderForm()
+    if request.method == "POST":
+        return new_order_form.data
+    return render_template('order_forms/new_order_form.html',
+                           form=new_order_form,
+                           new_suborder_form=new_suborder_form,
+                           suborders=new_order_form.suborder)
 
 @main.route('/newSuborder', methods=['POST'])
 def newSuborder():

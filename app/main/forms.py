@@ -1,9 +1,10 @@
-from datetime import datetime
-
 from flask_wtf import FlaskForm
-from wtforms import StringField, DateField, IntegerField, SelectField, BooleanField
-
+from wtforms.fields import StringField, SubmitField, IntegerField, SelectField, BooleanField, DateField, FormField, \
+    FieldList
+from wtforms.validators import DataRequired, ValidationError, Email
+from wtforms import validators
 from app.constants import status, delivery_method, order_types, borough, size, gender
+from datetime import datetime
 
 
 class SearchOrderForm(FlaskForm):
@@ -23,21 +24,17 @@ class SearchOrderForm(FlaskForm):
         super(SearchOrderForm, self).__init__(*args, **kwargs)
 
 
-class NewOrderForm(FlaskForm):
-    name = StringField('Name')
-    email = StringField('Email')
-    address_line_1 = StringField('Address line 1')
-    address_line_2 = StringField('Address line 2')
-    city = StringField('City')
-    state = StringField('State')
-    zip_code = IntegerField('Zip Code')
-    phone = IntegerField('Phone')
-
-    def __init__(self, *args, **kwargs):
-        super(NewOrderForm, self).__init__(*args, **kwargs)
+def validate_numeric(form, field):
+    if field.data != "":
+        try:
+            int(field.data)
+        except ValueError:
+            formatted_field = field.name.replace("_", " ")
+            raise ValidationError(f"Invalid {formatted_field}.")
 
 
 class NewSuborderForm(FlaskForm):
+    order_types = SelectField("Order Type", choices=order_types.ORDER_TYPES_LIST)
     num_copies = IntegerField('Number of Copies')
     status = SelectField('Status', choices=status.NEW_ORDER_DROPDOWN)
 
@@ -45,10 +42,33 @@ class NewSuborderForm(FlaskForm):
         super(NewSuborderForm, self).__init__(*args, **kwargs)
 
 
+class NewOrderForm(FlaskForm):
+    name = StringField('Name', validators=[DataRequired(), validators.Length(max=64)])
+    email = StringField('Email', validators=[DataRequired(), Email(), validators.length(max=64)])
+    address_line_1 = StringField('Address Line 1', validators=[validators.length(max=64)])
+    address_line_2 = StringField('Address Line 2', validators=[validators.length(max=64)])
+    city = StringField('City', validators=[DataRequired()])
+    state = StringField('State', validators=[validators.length(max=64)])
+    zip_code = StringField('Zip Code', validators=[DataRequired(), validators.length(min=5, max=5), validate_numeric])
+    phone = StringField('Phone', validators=[validators.length(max=64), validate_numeric])
+    suborder = FieldList(FormField(NewSuborderForm), min_entries=1)
+
+    def __init__(self, *args, **kwargs):
+        super(NewOrderForm, self).__init__(*args, **kwargs)
+
+
+# class NewSuborderForm(FlaskForm):
+#     num_copies = IntegerField('Number of Copies')
+#     status = SelectField('Status', choices=status.NEW_ORDER_DROPDOWN)
+#
+#     def __init__(self, *args, **kwargs):
+#         super(NewSuborderForm, self).__init__(*args, **kwargs)
+
+
 class NewBirthCertForm(FlaskForm):
     certificate_num = IntegerField('Certificate Number (If Known)')
     gender = SelectField('Gender', choices=gender.FORM_DROPDOWN)
-    last_name = StringField('Last Name')
+    last_name = StringField('Last Name', validators=[DataRequired()])
     first_name = StringField('First Name')
     middle_name = StringField('Middle Name')
     month = StringField('Month')
@@ -61,8 +81,8 @@ class NewBirthCertForm(FlaskForm):
     mother_name = StringField("Mother's Name")
     comment = StringField('Comment')
     exemplification = BooleanField('Attach Letter of Exemplification')
-    raised_seals = BooleanField('Raised Seals')
-    no_amends = BooleanField('No Amends')
+    raised_seals = BooleanField('Raised Seals', validators=[DataRequired()])
+    no_amends = BooleanField('No Amends', validators=[DataRequired()])
     delivery_method = SelectField('Delivery Method', choices=delivery_method.FORM_DROPDOWN)
 
     def __init__(self, *args, **kwargs):
@@ -72,7 +92,7 @@ class NewBirthCertForm(FlaskForm):
 class NewDeathCertForm(FlaskForm):
     certificate_num = IntegerField('Certificate Number (If Known)')
     gender = SelectField('Gender', choices=gender.FORM_DROPDOWN)
-    last_name = StringField('Last Name')
+    last_name = StringField('Last Name', validators=[DataRequired()])
     first_name = StringField('First Name')
     middle_name = StringField('Middle Name')
     month = StringField('Month')
@@ -86,8 +106,8 @@ class NewDeathCertForm(FlaskForm):
     mother_name = StringField("Mother's Name")
     comment = StringField('Comment')
     exemplification = BooleanField('Attach Letter of Exemplification')
-    raised_seals = BooleanField('Raised Seals')
-    no_amends = BooleanField('No Amends')
+    raised_seals = BooleanField('Raised Seals', validators=[DataRequired()])
+    no_amends = BooleanField('No Amends', validators=[DataRequired()])
     delivery_method = SelectField('Delivery Method', choices=delivery_method.FORM_DROPDOWN)
 
     def __init__(self, *args, **kwargs):
@@ -96,20 +116,20 @@ class NewDeathCertForm(FlaskForm):
 
 class NewMarriageCertForm(NewDeathCertForm):
     certificate_num = IntegerField('Certificate Number (If Known)')
-    groom_last_name = StringField('Last Name of Groom')
+    groom_last_name = StringField('Last Name of Groom', validators=[DataRequired()])
     groom_first_name = StringField('First Name of Groom')
-    bride_last_name = StringField('Last Name of Bride')
+    bride_last_name = StringField('Last Name of Bride', validators=[DataRequired()])
     bride_first_name = StringField('First Name of Bride')
     month = StringField('Month')
     day = StringField('Day')
     year = StringField('Year')
     additional_years = StringField('Additional Years (Separated by comma)')
     marriage_place = StringField('Place of Marriage')
-    borough = SelectField('Borough', choices=borough.FORM_DROPDOWN)
+    borough = SelectField('Borough', choices=borough.FORM_DROPDOWN, validators=[DataRequired()])
     comment = StringField('Comment')
     exemplification = BooleanField('Attach Letter of Exemplification')
     raised_seals = BooleanField('Raised Seals')
-    no_amends = BooleanField('No Amends')
+    no_amends = BooleanField('No Amends', validators=[DataRequired()])
     delivery_method = SelectField('Delivery Method', choices=delivery_method.FORM_DROPDOWN)
 
     def __init__(self, *args, **kwargs):
@@ -130,11 +150,12 @@ class NewPhotoGalleryForm(FlaskForm):
 
 
 class NewTaxPhotoForm(FlaskForm):
-    collection = SelectField('Collection', choices=[('1940', '1940'), ('1980', '1980'), ('both', 'Both')])
-    borough = SelectField('Borough', choices=borough.FORM_DROPDOWN)
+    collection = SelectField('Collection', choices=[('1940', '1940'), ('1980', '1980'), ('both', 'Both')],
+                             validators=[DataRequired()])
+    borough = SelectField('Borough', choices=borough.FORM_DROPDOWN, validators=[DataRequired()])
     image_identifier = StringField('Image Identifier')
-    building_num = IntegerField('Building Number')
-    street = StringField('Street Name')
+    building_num = IntegerField('Building Number', validators=[DataRequired()])
+    street = StringField('Street Name', validators=[DataRequired()])
     description = StringField('Description')
     block = StringField('Block')
     lot = StringField('Lot')

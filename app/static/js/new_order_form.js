@@ -7,6 +7,7 @@ $(document).ready(function () {
     setPlusBtn();
     renderSuborder();
     setSuborderCloseBtn();
+    addSuborder();
 });
 
 function setPlaceOrderBtn() {
@@ -60,11 +61,10 @@ function getAllFormsData() {
     return [order_info, suborders]
 }
 
-function isValid(form, form_type='suborder') {
+function isValid(form, form_type = 'suborder') {
     if (form_type === 'suborder') {
         return form.length !== 0 && form['order_type'] === 'default';
-    }
-    else {
+    } else {
         // pattern matches (string)@(string).(domain 2-3 letters)
         let email_pattern = new RegExp('[a-z0-9]+@[a-z]+\.[a-z]{2,3}');
         let email = form['email'];
@@ -171,3 +171,24 @@ function orderTypeTemplateRender(order_type, suborder_count) {
         }
     });
 }
+
+function addSuborder() {
+    $("#add-suborder-btn").click(function () {
+        $.ajax({
+            type: 'POST',
+            url: 'newSuborderForm',
+            data: JSON.stringify({
+                'suborder_count': suborder_count
+            }),
+            datatype: 'json',
+
+            success: function (result) {
+                $(`#suborders_col`).append(result[`suborder_form`]);
+                setOrderTypeChange(suborder_count); // set order type select field after suborder renders
+                setSuborderCloseBtn(suborder_count);
+                console.log(result[`suborder_form`])
+            }
+        });
+    })
+}
+

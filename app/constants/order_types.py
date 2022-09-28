@@ -30,11 +30,18 @@ VITAL_RECORDS_LIST = [
     PROPERTY_CARD
 ]
 
+ORDER_TYPES_LIST = [
+    BIRTH_CERT,
+    DEATH_CERT,
+    MARRIAGE_CERT,
+    PHOTO_GALLERY,
+    TAX_PHOTO
+]
+
 PHOTOS_LIST = [
     TAX_PHOTO,
     PHOTO_GALLERY
 ]
-
 
 CLIENT_ID_DICT = {
     "10000102": "Birth Search",
@@ -50,7 +57,6 @@ CLIENT_ID_DICT = {
     "10000120": "OCME",
     "10000107": "HVR",
 }
-
 
 DROPDOWN = [
     (ALL, "All"),
