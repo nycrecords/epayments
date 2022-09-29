@@ -13,7 +13,7 @@ from app.constants import (
     event_type,
     printing
 )
-from app.constants import order_types
+from app.constants import order_type
 from app.constants.customer import EMPTY_CUSTOMER
 from app.constants.search import ELASTICSEARCH_MAX_SIZE
 from app.db_utils import create_object, update_object

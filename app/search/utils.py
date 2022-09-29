@@ -5,7 +5,7 @@ from flask import current_app
 from sqlalchemy.orm import joinedload
 
 from app import es
-from app.constants import order_types
+from app.constants import order_type
 from app.constants.search import DATETIME_FORMAT, ES_DATETIME_FORMAT, RESULTS_CHUNK_SIZE
 from app.models import (
     BirthSearch,

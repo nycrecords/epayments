@@ -4,10 +4,12 @@ from datetime import datetime
 from flask import render_template, redirect, url_for, request, current_app, send_from_directory, flash, jsonify
 from flask_login import login_user, current_user, logout_user
 
+from app.constants import status, order_type
 from app.import_utils import import_from_api
 from app.main import main
-from app.main.forms import (SearchOrderForm, NewOrderForm, NewSuborderForm, NewBirthCertForm, NewDeathCertForm,
-                            NewMarriageCertForm, NewPhotoGalleryForm, NewTaxPhotoForm)
+from app.main.forms import (SearchOrderForm, MainOrderForm, SuborderForm, BirthCertificateOrderForm,
+                            DeathCertificateOrderForm,
+                            MarriageCertificateOrderForm, PhotoGalleryOrderForm, TaxPhotoOrderForm)
 from app.main.utils import allowed_file, import_xml
 from app.models import Users
 
@@ -74,29 +76,31 @@ def logout():
     return redirect(url_for('main.index'))
 
 
-@main.route('/newOrder', methods=['GET'])
-def newOrder():
-    return render_template('order_forms/new_order_form.html', form=NewOrderForm())
+@main.route('/order', methods=['GET', 'POST'])
+def order():
+    main_order_form = MainOrderForm()
+    suborders = SuborderForm()
+    if request.method == "POST":
+        return main_order_form.data
+    return render_template('order_forms/main_order_form.html',
+                           form=main_order_form,
+                           suborders=suborders)
 
 
 @main.route('/newSuborderForm', methods=['POST'])
 def newSuborderForm():
     json = request.get_json(force=True)
-    return jsonify(suborder_form=render_template('order_forms/new_suborder_form.html',
+    return jsonify(suborder_form=render_template('order_forms/suborder_form_.html',
                                                  num=json['suborder_count'],
-                                                 form=NewSuborderForm()))
+                                                 form=SuborderForm()))
 
 
-@main.route('/new_order', methods=['GET', 'POST'])
-def new_order():
-    new_order_form = NewOrderForm()
-    new_suborder_form = NewSuborderForm()
-    if request.method == "POST":
-        return new_order_form.data
-    return render_template('order_forms/new_order_form.html',
-                           form=new_order_form,
-                           new_suborder_form=new_suborder_form,
-                           suborders=new_order_form.suborder)
+@main.route('/suborder_form', methods=['POST'])
+def suborder_form():
+    json = request.get_json(force=True)
+    return render_template('order_forms/suborder_form.html', status=status.ORDER_STATUS_LIST,
+                           order_types=order_type.ORDER_TYPES_LIST,
+                           suborder_count=json["suborder_count"])
 
 
 @main.route('/newSuborder', methods=['POST'])
@@ -106,11 +110,11 @@ def newSuborder():
     suborder_count = json['suborder_count']
 
     template_handler = {
-        'Birth Cert': ('birth_cert_form.html', NewBirthCertForm()),
-        'Death Cert': ('death_cert_form.html', NewDeathCertForm()),
-        'Marriage Cert': ('marriage_cert_form.html', NewMarriageCertForm()),
-        'Photo Gallery': ('photo_gallery_form.html', NewPhotoGalleryForm()),
-        'Tax Photo': ('tax_photo_form.html', NewTaxPhotoForm())
+        'Birth Cert': ('birth_cert_form.html', BirthCertificateOrderForm()),
+        'Death Cert': ('death_cert_form.html', DeathCertificateOrderForm()),
+        'Marriage Cert': ('marriage_cert_form.html', MarriageCertificateOrderForm()),
+        'Photo Gallery': ('photo_gallery_form.html', PhotoGalleryOrderForm()),
+        'Tax Photo': ('tax_photo_form.html', TaxPhotoOrderForm())
     }
     template = 'order_forms/{}'.format(template_handler[order_type][0])
     form = template_handler[order_type][1]

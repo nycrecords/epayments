@@ -37,7 +37,7 @@ DROPDOWN = [
     (DONE, 'Done'),
 ]
 
-NEW_ORDER_DROPDOWN = [
+ORDER_STATUS_LIST = [
     (RECEIVED, 'Received'),
     (MICROFILM, 'Microfilm: When an order needs to be printed from the Microfilm'),
     (OFFSITE, 'Offsite: Has to be ordered from Offsite to be fulfilled'),

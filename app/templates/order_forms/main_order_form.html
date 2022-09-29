@@ -39,7 +39,7 @@
             </div>
         {% endfor %}
         <form method="POST"
-              action="{{ url_for("main.new_order") }}">
+              action="{{ url_for("main.order") }}">
             <div class="row">
                 <div class="col-4 border-right">
                     {{ form.hidden_tag() }}
@@ -68,7 +68,8 @@
 
                     <div class="pb-1">
                         {{ form.address_line_2.label(class="control-label font-weight-bold mb-0") }}
-                        {{ form.address_line_2(class="form-control form-control-sm rounded-sm mt-0", placeholder="Address Line 2") }}
+                        {{ form.address_line_2(class="form-control form-control-sm rounded-sm mt-0", placeholder="Address Line 2") }}git
+                        ad
                     </div>
 
                     <div class="pb-1">
@@ -102,6 +103,7 @@
                         {% endfor %}
                     </div>
 
+
                     <div>
                         <div class="pb-1 row">
                             <div class="container">
@@ -113,7 +115,7 @@
                                         value="place-order">Place Order
                                     <i class="fas"></i>
                                 </button>
-                                <a href="{{ url_for("main.new_order") }}"
+                                <a href="{{ url_for("main.order") }}"
                                    class="btn btn-danger rounded-sm">Clear</a>
                             </div>
                         </div>
@@ -123,8 +125,7 @@
                 <div class="col-8">
                     <div class="container overflow-auto" style="height: 85vh">
                         <div id="suborders_col">
-                            {{ form.suborder }}
-                            {#                        {{ suborders }}#}
+                            {{ form.suborders(class="list-unstyled") }}
                         </div>
                     </div>
                 </div>
@@ -148,7 +149,8 @@
 <script src="/static/js/responsive-table.js"></script>
 
 <!-- new order script -->
-<script src="/static/js/new_order_form.js"></script>
+<script src="/static/js/order.js"></script>
+{#<script src="/static/js/new_order_form.js"></script>#}
 
 </body>
 </html>

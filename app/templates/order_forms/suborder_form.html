@@ -1,0 +1,54 @@
+<li class="pb-3">
+    <div class="col">
+        <div class="row">
+            <div class="col-4">
+                <label class="row font-weight-bold"
+                       for="suborders-{{ suborder_count }}">Suborder {{ suborder_count }}
+                </label>
+            </div>
+            <div class="col text-right pb-2">
+                <button id="suborder_close_btn_{{ suborder_count }}" class="btn btn-danger btn-sm rounded-sm"
+                        type="button"
+                        role="button">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+        </div>
+        <table id="suborders-{{ suborder_count }}" class="">
+            <tbody>
+            <tr>
+                <th><label for="suborders-{{ suborder_count }}-order_types">Order Type</label>
+                </th>
+                <td>
+                    <select id="suborders-{{ suborder_count }}-order_types"
+                            name="suborders-{{ suborder_count }}-order_types" required="">
+                        <option value="" style="display: none">-Select Order Type-</option>
+                        {% for order_type in order_types %}
+                            <option value="{{ order_type }}">{{ order_type }}</option>
+                        {% endfor %} <br>
+                    </select>
+                </td>
+            </tr>
+            <tr>
+                <th><label for="suborders-{{ suborder_count }}-num_copies">Number of Copies</label>
+                </th>
+                <td>
+                    <input id="suborders-{{ suborder_count }}-num_copies" min="1"
+                           name="suborders-{{ suborder_count }}-num_copies"
+                           required=""
+                           type="number">
+                </td>
+            </tr>
+            <tr>
+                <th><label for="suborders-{{ suborder_count }}-status">Status</label></th>
+                <td>
+                    <select id="suborders-{{ suborder_count }}-status" name="suborders-{{ suborder_count }}-status">
+                        {% for option in status %}
+                            <option value="{{ option[1] }}">{{ option[1] }}</option>
+                        {% endfor %}
+                    </select>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+</li>

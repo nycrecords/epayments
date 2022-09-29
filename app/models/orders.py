@@ -1,8 +1,8 @@
 from sqlalchemy.dialects.postgresql import ARRAY
 
 from app import db, es
-from app.constants import order_types, status
-from app.constants.search import DATETIME_FORMAT, ES_DATETIME_FORMAT
+from app.constants import order_type, status
+from app.constants.search import DATETIME_FORMAT
 
 
 class Orders(db.Model):
@@ -83,18 +83,18 @@ class Suborders(db.Model):
     client_id = db.Column(db.Integer, nullable=True)
     order_type = db.Column(
         db.Enum(
-            order_types.BIRTH_SEARCH,
-            order_types.BIRTH_CERT,
-            order_types.MARRIAGE_SEARCH,
-            order_types.MARRIAGE_CERT,
-            order_types.DEATH_SEARCH,
-            order_types.DEATH_CERT,
-            order_types.NO_AMENDS,
-            order_types.TAX_PHOTO,
-            order_types.PHOTO_GALLERY,
-            order_types.PROPERTY_CARD,
-            order_types.OCME,
-            order_types.HVR,
+            order_type.BIRTH_SEARCH,
+            order_type.BIRTH_CERT,
+            order_type.MARRIAGE_SEARCH,
+            order_type.MARRIAGE_CERT,
+            order_type.DEATH_SEARCH,
+            order_type.DEATH_CERT,
+            order_type.NO_AMENDS,
+            order_type.TAX_PHOTO,
+            order_type.PHOTO_GALLERY,
+            order_type.PROPERTY_CARD,
+            order_type.OCME,
+            order_type.HVR,
             name='order_type'), nullable=False)
     order_number = db.Column(db.String(64), db.ForeignKey('orders.id'), nullable=False)
     status = db.Column(
@@ -187,8 +187,8 @@ class Suborders(db.Model):
             index='suborders',
             id=self.id,
             doc={
-                    'metadata': metadata,
-                    'current_status': self.status,
+                'metadata': metadata,
+                'current_status': self.status,
             }
         ) if metadata else \
             es.update(
