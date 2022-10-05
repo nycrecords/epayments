@@ -1,15 +1,12 @@
 import os
 from datetime import datetime
 
-from flask import render_template, redirect, url_for, request, current_app, send_from_directory, flash, jsonify
+from flask import render_template, redirect, url_for, request, current_app, send_from_directory, flash
 from flask_login import login_user, current_user, logout_user
 
-from app.constants import status, order_type
 from app.import_utils import import_from_api
 from app.main import main
-from app.main.forms import (SearchOrderForm, MainOrderForm, SuborderForm, BirthCertificateOrderForm,
-                            DeathCertificateOrderForm,
-                            MarriageCertificateOrderForm, PhotoGalleryOrderForm, TaxPhotoOrderForm)
+from app.main.forms import SearchOrderForm, MainOrderForm
 from app.main.utils import allowed_file, import_xml
 from app.models import Users
 
@@ -79,43 +76,27 @@ def logout():
 @main.route('/order', methods=['GET', 'POST'])
 def order():
     main_order_form = MainOrderForm()
-    suborders = SuborderForm()
+
     if request.method == "POST":
-        return main_order_form.data
+        if main_order_form.validate_on_submit():
+            flash(main_order_form.errors)
+            return main_order_form.data
+
     return render_template('order_forms/main_order_form.html',
                            form=main_order_form,
-                           suborders=suborders)
+                           form_id=0)
 
 
-@main.route('/newSuborderForm', methods=['POST'])
-def newSuborderForm():
-    json = request.get_json(force=True)
-    return jsonify(suborder_form=render_template('order_forms/suborder_form_.html',
-                                                 num=json['suborder_count'],
-                                                 form=SuborderForm()))
-
-
-@main.route('/suborder_form', methods=['POST'])
+@main.route("/suborder_form", methods=["POST"])
 def suborder_form():
-    json = request.get_json(force=True)
-    return render_template('order_forms/suborder_form.html', status=status.ORDER_STATUS_LIST,
-                           order_types=order_type.ORDER_TYPES_LIST,
-                           suborder_count=json["suborder_count"])
+    form = MainOrderForm()
+    order_type = request.form['order-type']
 
+    # Append a new suborders (FieldList) to MainOrderForm
+    suborder = getattr(form, 'suborders').append_entry()
+    # Get index of appended suborders
+    idx = int(suborder.id.replace('suborders-', ''))
+    # Append a new FieldList of order_type to suborders
+    form.suborders[idx][order_type].append_entry()
 
-@main.route('/newSuborder', methods=['POST'])
-def newSuborder():
-    json = request.get_json(force=True)
-    order_type = json['order_type']
-    suborder_count = json['suborder_count']
-
-    template_handler = {
-        'Birth Cert': ('birth_cert_form.html', BirthCertificateOrderForm()),
-        'Death Cert': ('death_cert_form.html', DeathCertificateOrderForm()),
-        'Marriage Cert': ('marriage_cert_form.html', MarriageCertificateOrderForm()),
-        'Photo Gallery': ('photo_gallery_form.html', PhotoGalleryOrderForm()),
-        'Tax Photo': ('tax_photo_form.html', TaxPhotoOrderForm())
-    }
-    template = 'order_forms/{}'.format(template_handler[order_type][0])
-    form = template_handler[order_type][1]
-    return jsonify(template=render_template(template, num=suborder_count, form=form))
+    return render_template('order_forms/suborder_form.html', form=form)

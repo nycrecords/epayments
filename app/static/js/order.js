@@ -1,25 +1,42 @@
-let suborder_count = 1
-
+let suborderCount = 1
+let suborderId = 0
 $(document).ready(function () {
-    let addSuborderBtn = document.getElementById("add-suborder-btn");
-    addSuborderBtn.addEventListener("click", function () {
-        getSuborderForm();
-    });
+    deleteSuborder()
+    updateSuborderTotal()
+    $("#suborders-0")
 });
 
-
-function getSuborderForm() {
+// Handle adding suborder from order_type field
+$("#add-suborder").click(function () {
+    let orderType = "&orderType=" + $("#order_type").val()
     $.ajax({
-        type: 'POST',
-        url: 'suborder_form',
-        data: JSON.stringify({
-            'suborder_count': suborder_count
-        }),
-        datatype: 'json',
+        type: "POST",
+        url: "suborder_form",
+        data: $("#order-form").serialize() + orderType,
+        datatype: "json",
         success: function (result) {
-            console.log(result)
-            $("#suborders").append(result)
+            $("#suborders").html(result);
         }
     });
-    suborder_count++;
+    $("#order-type").prop("selectedIndex", 0);
+})
+
+function deleteSuborder(formId) {
+    $(`#delete-suborder-btn-${formId}`).click(function () {
+        $(`#suborder-${formId}`).remove();
+        let counter = 1;
+        let suborders = document.querySelectorAll(".suborder-form-label");
+        suborders.forEach(function (elem) {
+            $(elem).html(`Suborder: ${counter}`);
+            counter++;
+        });
+        suborderCount--
+        console.log(suborderCount)
+        updateSuborderTotal()
+    });
+}
+
+function updateSuborderTotal() {
+    let suborderTotal = document.getElementById("suborders").children.length
+    $("#suborder-total").html(`<h4>Total Suborders: ${suborderTotal}</h4>`)
 }

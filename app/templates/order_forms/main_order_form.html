@@ -9,6 +9,7 @@
     <link rel="stylesheet" href="/static/fontawesome/css/all.min.css">
     <!-- NYC Theme CSS -->
     <link rel="stylesheet" href="/static/css/theme.css">
+    <link rel="stylesheet" href="/static/css/main_order_form.css">
 </head>
 
 <body>
@@ -19,8 +20,7 @@
             <div class="col justify-content-center">
                 <div>
                     <h3>New Order</h3>
-                    <div id="total_new_suborders"></div>
-                    <h1>{{ form.suborder_count }}</h1>
+                    <h1 id="suborder-total"></h1>
                 </div>
             </div>
         </div>
@@ -38,8 +38,7 @@
                 {{ messages }}
             </div>
         {% endfor %}
-        <form method="POST"
-              action="{{ url_for("main.order") }}">
+        <form method="POST" action="{{ url_for("main.order") }}" id="order-form" novalidate>
             <div class="row">
                 <div class="col-4 border-right">
                     {{ form.hidden_tag() }}
@@ -68,8 +67,7 @@
 
                     <div class="pb-1">
                         {{ form.address_line_2.label(class="control-label font-weight-bold mb-0") }}
-                        {{ form.address_line_2(class="form-control form-control-sm rounded-sm mt-0", placeholder="Address Line 2") }}git
-                        ad
+                        {{ form.address_line_2(class="form-control form-control-sm rounded-sm mt-0", placeholder="Address Line 2") }}
                     </div>
 
                     <div class="pb-1">
@@ -103,7 +101,6 @@
                         {% endfor %}
                     </div>
 
-
                     <div>
                         <div class="pb-1 row">
                             <div class="container">
@@ -115,18 +112,40 @@
                                         value="place-order">Place Order
                                     <i class="fas"></i>
                                 </button>
-                                <a href="{{ url_for("main.order") }}"
-                                   class="btn btn-danger rounded-sm">Clear</a>
+                                <button id="clear-suborders" class="btn btn-danger rounded-sm" type="button"
+                                >Clear
+                                    <i class="fas"></i>
+                                </button>
                             </div>
                         </div>
                     </div>
                 </div>
                 <!-- suborders -->
                 <div class="col-8">
-                    <div class="container overflow-auto" style="height: 85vh">
-                        <div id="suborders_col">
-                            {{ form.suborders(class="list-unstyled") }}
+                    <div class="container row">
+                        <div class="col-8 pb-2">
+                            <label for="order-type" class="suborder-form-label">Order Type</label>
+                            <div class="input-group">
+                                <select name="order-type" id="order-type" class="form-control-sm rounded-sm">
+                                    <option value="">-- Select an Order Type --</option>
+                                    <option value="birth_certificate_form">Birth Certificate</option>
+                                    <option value="death_certificate_form">Death Certificate</option>
+                                    <option value="marriage_certificate_form">Marriage Certificate</option>
+                                    <option value="photo_gallery_form">Photo Gallery</option>
+                                    <option value="tax_photo_form">Tax Photo</option>
+                                </select>
+                                <button id="add-suborder"
+                                        class="input-group-btn btn btn-success btn-sm rounded-sm"
+                                        type="button">
+                                    <i class="fas fa-plus"></i>
+                                </button>
+                            </div>
                         </div>
+                    </div>
+                    <hr class="pb-2">
+
+                    <div class="container overflow-auto" style="height: 85vh">
+                        <span id="suborders">{% include "order_forms/suborder_form.html" %}</span>
                     </div>
                 </div>
             </div>
@@ -150,7 +169,6 @@
 
 <!-- new order script -->
 <script src="/static/js/order.js"></script>
-{#<script src="/static/js/new_order_form.js"></script>#}
 
 </body>
 </html>
