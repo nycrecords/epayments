@@ -79,12 +79,11 @@ def order():
 
     if request.method == "POST":
         if main_order_form.validate_on_submit():
-            flash(main_order_form.errors)
-            return main_order_form.data
-
-    return render_template('order_forms/main_order_form.html',
-                           form=main_order_form,
-                           form_id=0)
+            if len(main_order_form.suborders) < 1:
+                flash("Suborder required to place order.")
+            else:
+                return main_order_form.data
+    return render_template('order_forms/main_order_form.html', form=main_order_form)
 
 
 @main.route("/suborder_form", methods=["POST"])
@@ -97,6 +96,6 @@ def suborder_form():
     # Get index of appended suborders
     idx = int(suborder.id.replace('suborders-', ''))
     # Append a new FieldList of order_type to suborders
-    form.suborders[idx][order_type].append_entry()
+    form.suborders[-1][order_type].append_entry()
 
     return render_template('order_forms/suborder_form.html', form=form)

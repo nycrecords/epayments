@@ -20,7 +20,7 @@
             <div class="col justify-content-center">
                 <div>
                     <h3>New Order</h3>
-                    <h1 id="suborder-total"></h1>
+                    <div id="suborder-total"></div>
                 </div>
             </div>
         </div>
@@ -104,18 +104,14 @@
                     <div>
                         <div class="pb-1 row">
                             <div class="container">
-                                <button id="add-suborder-btn" class="btn btn-success rounded-sm" type="button"
-                                        role="button">
-                                    <i class="fas fa-plus"></i>
-                                </button>
                                 <button id="submit" class="btn btn-success rounded-sm" type="submit" name="submit"
                                         value="place-order">Place Order
                                     <i class="fas"></i>
                                 </button>
-                                <button id="clear-suborders" class="btn btn-danger rounded-sm" type="button"
-                                >Clear
+                                <a id="clear" href="{{ url_for("main.order") }}" class="btn btn-danger rounded-sm"
+                                   type="button">Clear
                                     <i class="fas"></i>
-                                </button>
+                                </a>
                             </div>
                         </div>
                     </div>
@@ -125,8 +121,8 @@
                     <div class="container row">
                         <div class="col-8 pb-2">
                             <label for="order-type" class="suborder-form-label">Order Type</label>
-                            <div class="input-group">
-                                <select name="order-type" id="order-type" class="form-control-sm rounded-sm">
+                            <div class="d-flex">
+                                <select name="order-type" id="order-type" class="form-control-sm rounded-sm mr-1">
                                     <option value="">-- Select an Order Type --</option>
                                     <option value="birth_certificate_form">Birth Certificate</option>
                                     <option value="death_certificate_form">Death Certificate</option>
