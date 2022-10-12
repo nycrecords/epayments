@@ -867,7 +867,7 @@ def generate_csv(search_params: Dict[str, str]) -> str:
 
     wb.close()
 
-    return url_for('static', filename='files/{}'.format(filename), _external=True)
+    return url_for('static', filename='files/{}'.format(filename))
 
 
 def create_new_order(order_info_dict: Dict[str, str], suborder_list: List[Dict]):

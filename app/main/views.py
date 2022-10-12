@@ -39,12 +39,6 @@ def import_tar():
     return render_template('main/import.html')
 
 
-# noinspection PyTypeChecker,PyTypeChecker
-@main.route('/static/files/<string:filename>', methods=['GET', 'POST'])
-def download(filename):
-    return send_from_directory(current_app.config["PRINT_FILE_PATH"], filename, as_attachment=True)
-
-
 @main.route('/login', methods=['GET', 'POST'])
 def login():
     """ Initial load in the login page """
