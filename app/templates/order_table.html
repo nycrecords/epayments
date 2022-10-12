@@ -50,6 +50,27 @@
                                             id="update_status_btn_{{ loop.index }}">
                                         Update Status
                                     </button>
+
+                                    {% if order['order_type'] == 'No Amends' %}
+                                        <button class="btn btn-secondary btn-sm rounded-sm"
+                                                type="button"
+                                                onclick="window.open('/api/v1/uploads/{{ order['suborder_number'] }}', '_blank')">
+                                            Download File
+                                        </button>
+                                    {% endif %}
+
+                                    {% if order['order_type'] == 'Tax Photo' %}
+                                        <button class="btn btn-secondary btn-sm rounded-sm update-block-lot-roll-btn"
+                                                type="button"
+                                                data-index="{{ loop.index }}"
+                                                data-toggle="collapse"
+                                                data-target="#update_block_lot_roll_{{ loop.index }}"
+                                                aria-expanded="false"
+                                                aria-controls="update_block_lot_roll_{{ loop.index }}"
+                                                id="update_block_lot_roll_btn_{{ loop.index }}">
+                                            Update Block/Lot/Roll
+                                        </button>
+                                    {% endif %}
                                 </p>
 
                                 <div class="collapse" id="history_{{ loop.index }}"
@@ -122,6 +143,51 @@
                                                         class="btn btn-success btn-sm rounded-sm" role="button">Update
                                                 </button>
                                             </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="collapse" id="update_block_lot_roll_{{ loop.index }}"
+                                     data-parent="#collapse_{{ loop.index }}">
+                                    <div class="card card-body">
+                                        <div id="info_{{ loop.index }}">
+                                            <form class="col-4">
+                                                <div class="mb-2">
+                                                    <label for="update_block_{{ loop.index }}"
+                                                           class="sm font-weight-bold">Block #</label>
+                                                    <input type="text"
+                                                           class="form-control form-control-sm rounded-sm"
+                                                           id="update_block_{{ loop.index }}">
+                                                </div>
+                                                <div class="mb-2">
+                                                    <label for="update_lot_{{ loop.index }}"
+                                                           class="sm font-weight-bold">Lot #</label>
+                                                    <input type="text"
+                                                           class="form-control form-control-sm rounded-sm"
+                                                           id="update_lot_{{ loop.index }}">
+                                                </div>
+                                                <div class="mb-2">
+                                                    <label for="update_roll_{{ loop.index }}"
+                                                           class="sm font-weight-bold">Roll #</label>
+                                                    <input type="text"
+                                                           class="form-control form-control-sm rounded-sm"
+                                                           id="update_roll_{{ loop.index }}">
+                                                </div>
+                                                <button id="confirm_block_lot_roll_btn_{{ loop.index }}"
+                                                        type="submit"
+                                                        class="btn btn-success btn-sm rounded-sm confirm_block_lot_roll_btn"
+                                                        data-index="{{ loop.index }}"
+                                                        role="button">Update
+                                                </button>
+                                            </form>
+{#                                            <div class="text-right">#}
+{#                                                <button id="confirm_block_lot_roll_btn_{{ loop.index }}"#}
+{#                                                        type="submit"#}
+{#                                                        class="btn btn-success btn-sm rounded-sm confirm_block_lot_roll_btn"#}
+{#                                                        data-index="{{ loop.index }}"#}
+{#                                                        role="button">Update#}
+{#                                                </button>#}
+{#                                            </div>#}
                                         </div>
                                     </div>
                                 </div>

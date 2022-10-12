@@ -23,13 +23,23 @@
     </p>
 
     <p>
-        <b>NUMBER OF COPIES:</b> <br/>
-        {{ order_info['metadata']['num_copies'] }}
+        <b>ALT LAST NAME:</b> <br/>
+        {{ order_info['metadata']['alt_last_name'] or '' }}
     </p>
 
     <p>
-        <b>CEMETERY:</b> <br/>
-        {{ order_info['metadata']['cemetery'] or '' }}
+        <b>ALT MIDDLE NAME:</b> <br/>
+        {{ order_info['metadata']['alt_middle_name'] or '' }}
+    </p>
+
+    <p>
+        <b>ALT FIRST NAME:</b> <br/>
+        {{ order_info['metadata']['alt_first_name'] or '' }}
+    </p>
+
+    <p>
+        <b>AGE AT DEATH:</b> <br/>
+        {{ order_info['metadata']['age_at_death'] or '' }}
     </p>
 
     <p>
@@ -68,14 +78,43 @@
     </p>
 
     <p>
-        <b>LETTER:</b> <br/>
-        {{ "Yes" if order_info['metadata']['letter'] else "No" }}
+        <b>NUMBER OF COPIES:</b> <br/>
+        {{ order_info['metadata']['num_copies'] }}
     </p>
 
-    {% if order_info['metadata']['comment'] %}
+    <p>
+        <b>EXEMPLIFICATION:</b> <br/>
+        {{ "Yes" if order_info['metadata']['exemplification'] else "No" }}
+    </p>
+
+    {% if order_info['metadata']['exemplification'] %}
         <p>
-            <b>COMMENT:</b> <br/>
-            {{ order_info['metadata']['comment'] }}
+            <b>EXEMPLIFICATION COPIES:</b> <br/>
+            {{ order_info['metadata']['exemplification_copies'] }}
+        </p>
+    {% endif %}
+
+    <p>
+        <b>RAISED SEAL:</b> <br/>
+        {{ "Yes" if order_info['metadata']['raised_seal'] else "No" }}
+    </p>
+
+    {% if order_info['metadata']['raised_seal'] %}
+        <p>
+            <b>RAISED SEAL COPIES:</b> <br/>
+            {{ order_info['metadata']['raised_seal_copies'] }}
+        </p>
+    {% endif %}
+
+    <p>
+        <b>NO AMENDS:</b> <br/>
+        {{ "Yes" if order_info['metadata']['no_amends'] else "No" }}
+    </p>
+
+    {% if order_info['metadata']['no_amends'] %}
+        <p>
+            <b>NO AMENDS COPIES:</b> <br/>
+            {{ order_info['metadata']['no_amends_copies'] }}
         </p>
     {% endif %}
 

@@ -108,6 +108,10 @@ def update_tax_photo(suborder_number: str, block_no: str, lot_no: str, roll_no: 
 
         db.session.add(event)
         db.session.commit()
+
+        suborder = Suborders.query.filter_by(id=suborder_number).one()
+        suborder.es_update(tax_photo.serialize)
+
         message = 'Tax Photo Info Updated'
     return message
 
@@ -435,7 +439,7 @@ def generate_csv(search_params: Dict[str, str]) -> str:
                 suborder['_source'].get('metadata').get('alt_last_name', ''),
                 suborder['_source'].get('metadata').get('month'),
                 suborder['_source'].get('metadata').get('day'),
-                suborder['_source'].get('metadata').get('year'),
+                suborder['_source'].get('metadata').get('years'),
                 suborder['_source'].get('metadata').get('birth_place', ''),
                 suborder['_source'].get('metadata').get('borough', ''),
                 suborder['_source'].get('metadata').get('num_copies'),
@@ -509,7 +513,7 @@ def generate_csv(search_params: Dict[str, str]) -> str:
                 suborder['_source'].get('metadata').get('alt_bride_last_name', ''),
                 suborder['_source'].get('metadata').get('month'),
                 suborder['_source'].get('metadata').get('day'),
-                suborder['_source'].get('metadata').get('year'),
+                suborder['_source'].get('metadata').get('years'),
                 suborder['_source'].get('metadata').get('marriage_place', ''),
                 suborder['_source'].get('metadata').get('borough', ''),
                 suborder['_source'].get('metadata').get('num_copies'),
@@ -579,7 +583,7 @@ def generate_csv(search_params: Dict[str, str]) -> str:
                 suborder['_source'].get('metadata').get('age_at_death', ''),
                 suborder['_source'].get('metadata').get('month'),
                 suborder['_source'].get('metadata').get('day'),
-                suborder['_source'].get('metadata').get('year'),
+                suborder['_source'].get('metadata').get('years'),
                 suborder['_source'].get('metadata').get('death_place', ''),
                 suborder['_source'].get('metadata').get('borough', ''),
                 suborder['_source'].get('metadata').get('num_copies'),
@@ -634,7 +638,7 @@ def generate_csv(search_params: Dict[str, str]) -> str:
             'Borough',
             'Block',
             'Lot',
-            'Building Name',
+            'Building Number',
             'Street',
             'Number of Copies',
             'Raised Seal',
@@ -689,9 +693,7 @@ def generate_csv(search_params: Dict[str, str]) -> str:
             'Number of Copies',
             'Raised Seal',
             'Raised Seal Copies',
-            'Delivery Method',
-            'Contact Number',
-            'Contact Email'
+            'Delivery Method'
         ]
 
         header_data = header_init + add_header
@@ -723,11 +725,9 @@ def generate_csv(search_params: Dict[str, str]) -> str:
                 suborder['_source'].get('metadata').get('raised_seal'),
                 suborder['_source'].get('metadata').get('raised_seal_copies'),
                 suborder['_source'].get('metadata').get('delivery_method'),
-                suborder['_source'].get('metadata').get('contact_number'),
-                suborder['_source'].get('metadata').get('contact_email'),
             ]
 
-            conent.append(row_content)
+            contents.append(row_content)
 
     elif order_type == order_types.HVR:
         add_header = [
@@ -754,9 +754,9 @@ def generate_csv(search_params: Dict[str, str]) -> str:
                 suborder['_source'].get('customer').get('state'),
                 suborder['_source'].get('customer').get('zip_code'),
                 suborder['_source'].get('customer').get('country'),
-                suborder['_source'].get('customer').get('link'),
-                suborder['_source'].get('customer').get('record_id'),
-                suborder['_source'].get('customer').get('type'),
+                suborder['_source'].get('metadata').get('link'),
+                suborder['_source'].get('metadata').get('record_id'),
+                suborder['_source'].get('metadata').get('type'),
                 suborder['_source'].get('metadata').get('num_copies'),
                 suborder['_source'].get('metadata').get('exemplification'),
                 suborder['_source'].get('metadata').get('exemplification_copies'),

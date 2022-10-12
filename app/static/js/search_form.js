@@ -10,6 +10,7 @@ $(document).ready(function () {
 
     $("#clear_button").click(function () {
         clearForm();
+        $('#xlsx_btn').hide();
     })
 });
 

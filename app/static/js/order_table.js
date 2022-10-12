@@ -81,3 +81,40 @@ function setHistoryBtns() {
         });
     });
 }
+
+$(".update-block-lot-roll-btn").click(function() {
+    let index = $(this).data("index");
+    let suborder_number = $("#suborder_" + index).attr("data-value");
+
+    $.ajax({
+       type: "GET",
+       url: "api/v1/tax_photo/" + suborder_number,
+       success: function(result) {
+           $("#update_block_" + index).val(result["block_no"]);
+           $("#update_lot_" + index).val(result["lot_no"]);
+           $("#update_roll_" + index).val(result["roll_no"]);
+       }
+    });
+});
+
+$(".confirm_block_lot_roll_btn").click(function (event) {
+    event.preventDefault();
+
+    let index = $(this).data("index");
+    let suborder_number = $("#suborder_" + index).attr("data-value");
+
+    $.ajax({
+        type: "POST",
+        url: "api/v1/tax_photo/" + suborder_number,
+        data: JSON.stringify({
+            "suborder_number": suborder_number,
+            "block_no": $("#update_block_" + index).val(),
+            "lot_no": $("#update_lot_" + index).val(),
+            "roll_no": $("#update_roll_" + index).val(),
+        }),
+        success: function (result) {
+            alert(result["message"]);
+        }
+    });
+    $("#update_block_lot_roll_" + index).collapse("hide");
+});
