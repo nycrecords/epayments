@@ -12,6 +12,11 @@ from app.main.utils import allowed_file, import_xml
 from app.models import Users
 
 
+@main.route('/health', methods=['GET'])
+def health():
+    return ''
+
+
 @main.route('/', methods=['GET', 'POST'])
 def index():
     """Default route for the application."""
