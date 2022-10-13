@@ -10,12 +10,3 @@ MANHATTAN = 'Manhattan'
 STATEN_ISLAND = 'Staten Island'
 BROOKLYN = 'Brooklyn'
 QUEENS = 'Queens'
-
-FORM_DROPDOWN = [
-    ("", "-- Select Borough --"),
-    (BRONX, 'Bronx'),
-    (MANHATTAN, 'Manhattan'),
-    (STATEN_ISLAND, 'Staten Island'),
-    (BROOKLYN, 'Brooklyn'),
-    (QUEENS, 'Queens')
-]

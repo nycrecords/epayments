@@ -1,7 +1,7 @@
 from sqlalchemy.dialects.postgresql import ARRAY
 
 from app import db, es
-from app.constants import order_type, status
+from app.constants import status, order_type
 from app.constants.search import DATETIME_FORMAT
 
 

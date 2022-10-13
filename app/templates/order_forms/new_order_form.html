@@ -1,0 +1,120 @@
+{% extends "base.html" %}
+{% block content %}
+    <main id="skip-header-target" role="main">
+        <div class="container-fluid  pb-6">
+            <div class="row">
+                <div class="col-12">
+                    <div class="container-fluid">
+                        <h4 class="text-center"><span><p>New Order</p></span></h4>
+                        <h6 class="text-center"><span><p id="suborder-total"></p></span></h6>
+                        <hr>
+                    </div>
+                </div>
+                <div class="col-12 pt-2">
+                    <div class="container small">
+                        <form method="POST" action="{{ url_for("main.new_order") }}" id="order-form">
+                            <div class="row">
+                                <div class="col-4 border-right">
+                                    {{ form.hidden_tag() }}
+                                    <div class="pb-1">
+                                        {{ form.name.label(class="control-label font-weight-bold mb-0") }}
+                                        <span style="color: red;">*</span>
+                                        {{ form.name(class="form-control form-control-sm rounded-sm mt-0", placeholder="Name") }}
+                                        {% for error in form.name.errors %}
+                                            <span style="color: red;">[{{ error }}]</span>
+                                        {% endfor %}
+                                    </div>
+                                    <div class="pb-1">
+                                        {{ form.email.label(class="control-label font-weight-bold mb-0") }}
+                                        <span style="color: red;">*</span>
+                                        {{ form.email(class="form-control form-control-sm rounded-sm mt-0", placeholder="Email") }}
+                                        {% for error in form.email.errors %}
+                                            <span style="color: red;">[{{ error }}]</span>
+                                        {% endfor %}
+                                    </div>
+                                    <div class="pb-1">
+                                        {{ form.address_line_1.label(class="control-label font-weight-bold mb-0") }}
+                                        {{ form.address_line_1(class="form-control form-control-sm rounded-sm mt-0", placeholder="Address Line 1") }}
+                                    </div>
+                                    <div class="pb-1">
+                                        {{ form.address_line_2.label(class="control-label font-weight-bold mb-0") }}
+                                        {{ form.address_line_2(class="form-control form-control-sm rounded-sm mt-0", placeholder="Address Line 2") }}
+                                    </div>
+                                    <div class="pb-1">
+                                        {{ form.city.label(class="control-label font-weight-bold mb-0") }}
+                                        <span style="color: red;">*</span>
+                                        {{ form.city(class="form-control form-control-sm rounded-sm mt-0", placeholder="City") }}
+                                        {% for error in form.city.errors %}
+                                            <span style="color: red;">[{{ error }}]</span>
+                                        {% endfor %}
+                                    </div>
+                                    <div class="pb-1">
+                                        {{ form.state.label(class="control-label font-weight-bold mb-0") }}
+                                        {{ form.state(class="form-control form-control-sm rounded-sm mt-0", placeholder="State") }}
+                                    </div>
+                                    <div class="pb-1">
+                                        {{ form.zip_code.label(class="control-label font-weight-bold mb-0") }}
+                                        <span style="color: red;">*</span>
+                                        {{ form.zip_code(class="form-control form-control-sm rounded-sm mt-0", placeholder="Zip Code") }}
+                                        {% for error in form.zip_code.errors %}
+                                            <span style="color: red;">[{{ error }}]</span>
+                                        {% endfor %}
+                                    </div>
+                                    <div class="pb-1">
+                                        {{ form.phone.label(class="control-label font-weight-bold mb-0") }}
+                                        {{ form.phone(class="form-control form-control-sm rounded-sm mt-0", placeholder="Phone") }}
+                                        {% for error in form.phone.errors %}
+                                            <span style="color: red;">[{{ error }}]</span>
+                                        {% endfor %}
+                                    </div>
+                                    <div>
+                                        <div class="pt-1 row btns ">
+                                            <div class="container">
+                                                <button id="submit" class="btn btn-success rounded-sm"
+                                                        type="submit"
+                                                        name="submit"
+                                                        value="place-order">Place Order
+                                                    <i class="fas"></i>
+                                                </button>
+                                                <a href="{{ url_for("main.new_order") }}"
+                                                   class="btn btn-danger rounded-sm"
+                                                   type="button">Clear
+                                                    <i class="fas"></i>
+                                                </a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- suborders -->
+                                <div class="col-8">
+                                    <div class="container row">
+                                        <div class="col-8 pb-2">
+                                            <label for="order-type" class="suborder-form-label">Order Type</label>
+                                            <div class="d-flex">
+                                                <select name="order-type" id="order-type"
+                                                        class="form-control-sm rounded-sm mr-1">
+                                                    {% for order_type in order_types %}
+                                                        <option value="{{ order_type[0] }}"> {{ order_type[1] }}</option>
+                                                    {% endfor %}
+                                                </select>
+                                                <button id="add-suborder"
+                                                        class="input-group-btn btn btn-success btn-sm rounded-sm"
+                                                        type="button">
+                                                    <i class="fas fa-plus"></i>
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <hr class="pb-2">
+                                    <div class="container overflow-auto" style="height: 85vh">
+                                        <span id="suborders">{% include "order_forms/suborder_form.html" %}</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+{% endblock %}

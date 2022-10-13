@@ -6,9 +6,10 @@ from flask_login import login_user, current_user, logout_user
 
 from app.import_utils import import_from_api
 from app.main import main
-from app.main.forms import SearchOrderForm, MainOrderForm
+from app.main.forms import SearchOrderForm, MainOrderForm, SignInForm
 from app.main.utils import allowed_file, import_xml
 from app.models import Users
+from app.constants import form_choices
 
 
 @main.route('/', methods=['GET', 'POST'])
@@ -47,23 +48,22 @@ def download(filename):
 @main.route('/login', methods=['GET', 'POST'])
 def login():
     """ Initial load in the login page """
-    if request.method == 'POST':
-        email = request.form['email']
-        password = request.form['password']
-
-        user = Users.query.filter_by(email=email).one_or_none()
+    if current_user.is_authenticated:
+        return redirect(url_for("main.index"))
+    form = SignInForm()
+    if form.validate_on_submit():
+        user = Users.query.filter_by(email=form.username.data).first()
+        password = form.password.data
         if user is None:
-            error = 'Invalid Email'
-            flash(error, 'danger')
+            flash('Invalid Email Address')
         else:
             valid_password = user.verify_password(password)
             if not valid_password:
-                error = 'Invalid Password'
-                flash(error, 'danger')
+                flash('Invalid Password')
             else:
                 login_user(user)
                 return redirect(url_for('main.index'))
-    return render_template('login.html')
+    return render_template('login.html', form=form)
 
 
 @main.route('/logout', methods=['GET'])
@@ -73,17 +73,17 @@ def logout():
     return redirect(url_for('main.index'))
 
 
-@main.route('/order', methods=['GET', 'POST'])
-def order():
-    main_order_form = MainOrderForm()
+@main.route('/new_order', methods=['GET', 'POST'])
+def new_order():
+    form = MainOrderForm()
 
     if request.method == "POST":
-        if main_order_form.validate_on_submit():
-            if len(main_order_form.suborders) < 1:
+        if form.validate_on_submit():
+            if len(form.suborders) < 1:
                 flash("Suborder required to place order.")
             else:
-                return main_order_form.data
-    return render_template('order_forms/main_order_form.html', form=main_order_form)
+                return form.data
+    return render_template('order_forms/new_order_form.html', form=form, order_types=form_choices.ORDER_TYPES)
 
 
 @main.route("/suborder_form", methods=["POST"])

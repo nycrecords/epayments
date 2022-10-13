@@ -1,19 +1,18 @@
-import xlsxwriter
 from datetime import date, datetime
+from os.path import join
 from typing import Dict, List, Union
 
+import xlsxwriter
 from flask import render_template, current_app, url_for
 from flask_login import current_user
-from os.path import join
 from xhtml2pdf.pisa import CreatePDF
 
 from app import db
 from app.constants import (
     collection,
     event_type,
-    printing
+    printing,
 )
-from app.constants import order_type
 from app.constants.customer import EMPTY_CUSTOMER
 from app.constants.search import ELASTICSEARCH_MAX_SIZE
 from app.db_utils import create_object, update_object
@@ -195,6 +194,7 @@ def _print_small_labels(search_params: Dict[str, str]) -> str:
     :return:
     """
     order_number = search_params.get('order_number')
+
     suborder_number = search_params.get('suborder_number')
     order_type = search_params.get('order_type')
     delivery_method = search_params.get('delivery_method')
@@ -727,7 +727,7 @@ def generate_csv(search_params: Dict[str, str]) -> str:
                 suborder['_source'].get('metadata').get('contact_email'),
             ]
 
-            conent.append(row_content)
+            contents.append(row_content)
 
     elif order_type == order_types.HVR:
         add_header = [

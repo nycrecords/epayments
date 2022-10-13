@@ -5,11 +5,11 @@
 """
 
 BIRTH_SEARCH = "Birth Search"
-BIRTH_CERT = "Birth Certificate"
+BIRTH_CERT = "Birth Cert"
 MARRIAGE_SEARCH = "Marriage Search"
-MARRIAGE_CERT = "Marriage Certificate"
+MARRIAGE_CERT = "Marriage Cert"
 DEATH_SEARCH = "Death Search"
-DEATH_CERT = "Death Certificate"
+DEATH_CERT = "Death Cert"
 NO_AMENDS = "No Amends"
 TAX_PHOTO = "Tax Photo"
 PHOTO_GALLERY = "Photo Gallery"
@@ -28,14 +28,6 @@ VITAL_RECORDS_LIST = [
     DEATH_CERT,
     DEATH_SEARCH,
     PROPERTY_CARD
-]
-
-ORDER_TYPES_LIST = [
-    BIRTH_CERT,
-    DEATH_CERT,
-    MARRIAGE_CERT,
-    PHOTO_GALLERY,
-    TAX_PHOTO
 ]
 
 PHOTOS_LIST = [
