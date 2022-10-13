@@ -12,6 +12,11 @@ from app.models import Users
 from app.constants import form_choices
 
 
+@main.route('/health', methods=['GET'])
+def health():
+    return ''
+
+
 @main.route('/', methods=['GET', 'POST'])
 def index():
     """Default route for the application."""
@@ -37,12 +42,6 @@ def import_tar():
         if start_date and end_date:
             import_from_api(start_date, end_date)
     return render_template('main/import.html')
-
-
-# noinspection PyTypeChecker,PyTypeChecker
-@main.route('/static/files/<string:filename>', methods=['GET', 'POST'])
-def download(filename):
-    return send_from_directory(current_app.config["PRINT_FILE_PATH"], filename, as_attachment=True)
 
 
 @main.route('/login', methods=['GET', 'POST'])

@@ -3,9 +3,8 @@
 {% block content %}
     <br/>
     <p>
-        <b>IMAGE_IDENTIFIER:</b>
-        <br/>
-        {{ order_info['metadata']['image_id'] or "Not Provided" }}
+        <b>IMAGE ID:</b><br/>
+        {{ order_info['metadata']['image_id'] or '' }}
         <br/>
     </p>
 
@@ -23,24 +22,24 @@
 
     <p>
         <b>ROLL:</b><br/>
-        {{ order_info['metadata']['roll'] or "Not Provided" }}
+        {{ order_info['metadata']['roll'] or '' }}
         <br/>
     </p>
 
     <p>
         <b>BLOCK:</b><br/>
-        {{ order_info['metadata']['block'] or "Not Provided" }}
+        {{ order_info['metadata']['block'] or '' }}
         <br/>
     </p>
 
     <p>
         <b>LOT:</b><br/>
-        {{ order_info['metadata']['lot'] or "Not Provided" }}
+        {{ order_info['metadata']['lot'] or '' }}
         <br/>
     </p>
 
     <p>
-        <b>BUILDING_NUMBER:</b><br/>
+        <b>BUILDING NUMBER:</b><br/>
         {{ order_info['metadata']['building_number'] }}
         <br/>
     </p>
@@ -53,7 +52,7 @@
 
     <p>
         <b>DESCRIPTION:</b><br/>
-        {{ order_info['metadata']['description'] or "Not Provided" }}
+        {{ order_info['metadata']['description'] or '' }}
         <br/>
     </p>
 
@@ -69,6 +68,11 @@
         <br/>
     </p>
 
+    <p>
+        <b>DELIVERY METHOD:</b><br/>
+        {{ order_info['metadata']['delivery_method'].title() }}
+    </p>
+
     {% if order_info['metadata']['contact_number'] %}
         <p>
             <b>CONTACT NUMBER:</b><br/>
@@ -77,8 +81,11 @@
         </p>
     {% endif %}
 
-    <p>
-        <b>DELIVERY METHOD:</b> <br/>
-        {{ order_info['metadata']['delivery_method'].title() }}
-    </p>
+    {% if order_info['metadata']['contact_email'] %}
+        <p>
+            <b>CONTACT EMAIL:</b><br/>
+            {{ order_info['metadata']['contact_email'] }}
+            <br/>
+        </p>
+    {% endif %}
 {% endblock %}

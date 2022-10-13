@@ -47,7 +47,7 @@ def import_from_api(start_date, end_date):
         else:
             msg_body.append(f"Failed to import {item['xmlFile']['name']}")
     send_email(
-        current_app.config["IMPORT_MAIL_TO"],
+        current_app.config["IMPORT_MAIL_TO"].split(","),
         f"ePayments Import {strftime('%Y-%m-%d %H:%M:%S', localtime())}",
         "email_templates/import_status",
         msg_body=msg_body,

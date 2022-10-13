@@ -8,38 +8,73 @@
     </p>
 
     <p>
-        <b>LAST NAME - GROOM:</b> <br/>
+        <b>GROOM LAST NAME:</b> <br/>
         {{ order_info['metadata']['groom_last_name'] }}
     </p>
 
     <p>
-        <b>FIRST NAME - GROOM:</b> <br/>
-        {{ order_info['metadata']['groom_first_name'] }}
+        <b>GROOM FIRST NAME:</b> <br/>
+        {{ order_info['metadata']['groom_first_name'] or '' }}
     </p>
 
     <p>
-        <b>LAST NAME - BRIDE:</b> <br/>
+        <b>GROOM MIDDLE NAME:</b> <br/>
+        {{ order_info['metadata']['groom_middle_name'] or '' }}
+    </p>
+
+    <p>
+        <b>BRIDE LAST NAME:</b> <br/>
         {{ order_info['metadata']['bride_last_name'] }}
     </p>
 
     <p>
-        <b>FIRST NAME - BRIDE:</b> <br/>
-        {{ order_info['metadata']['bride_first_name'] }}
+        <b>BRIDE FIRST NAME:</b> <br/>
+        {{ order_info['metadata']['bride_first_name'] or '' }}
     </p>
 
     <p>
-        <b>NUMBER OF COPIES:</b> <br/>
-        {{ order_info['metadata']['num_copies'] }}
+        <b>BRIDE MIDDLE NAME:</b> <br/>
+        {{ order_info['metadata']['bride_middle_name'] or '' }}
+    </p>
+
+    <p>
+        <b>ALT GROOM LAST NAME:</b> <br/>
+        {{ order_info['metadata']['alt_groom_last_name'] or '' }}
+    </p>
+
+    <p>
+        <b>ALT GROOM FIRST NAME:</b> <br/>
+        {{ order_info['metadata']['alt_groom_first_name'] or '' }}
+    </p>
+
+    <p>
+        <b>ALT GROOM MIDDLE NAME:</b> <br/>
+        {{ order_info['metadata']['alt_groom_middle_name'] or '' }}
+    </p>
+
+    <p>
+        <b>ALT BRIDE LAST NAME:</b> <br/>
+        {{ order_info['metadata']['alt_bride_last_name'] or '' }}
+    </p>
+
+    <p>
+        <b>ALT BRIDE FIRST NAME:</b> <br/>
+        {{ order_info['metadata']['alt_bride_first_name'] or '' }}
+    </p>
+
+    <p>
+        <b>ALT BRIDE MIDDLE NAME:</b> <br/>
+        {{ order_info['metadata']['alt_bride_middle_name'] or '' }}
     </p>
 
     <p>
         <b>MONTH:</b> <br/>
-        {{ order_info['metadata']['month'] }}
+        {{ order_info['metadata']['month'] or '' }}
     </p>
 
     <p>
         <b>DAY:</b> <br/>
-        {{ order_info['metadata']['day'] }}
+        {{ order_info['metadata']['day'] or '' }}
     </p>
 
     <p>
@@ -58,14 +93,43 @@
     </p>
 
     <p>
-        <b>LETTER:</b> <br/>
-        {{ "Yes" if order_info['metadata']['letter'] else "No" }}
+        <b>NUMBER OF COPIES:</b> <br/>
+        {{ order_info['metadata']['num_copies'] }}
     </p>
 
-    {% if order_info['metadata']['comment'] %}
+    <p>
+        <b>EXEMPLIFICATION:</b> <br/>
+        {{ "Yes" if order_info['metadata']['exemplification'] else "No" }}
+    </p>
+
+    {% if order_info['metadata']['exemplification'] %}
         <p>
-            <b>COMMENT:</b> <br/>
-            {{ order_info['metadata']['comment'] }}
+            <b>EXEMPLIFICATION COPIES:</b> <br/>
+            {{ order_info['metadata']['exemplification_copies'] }}
+        </p>
+    {% endif %}
+
+    <p>
+        <b>RAISED SEAL:</b> <br/>
+        {{ "Yes" if order_info['metadata']['raised_seal'] else "No" }}
+    </p>
+
+    {% if order_info['metadata']['raised_seal'] %}
+        <p>
+            <b>RAISED SEAL COPIES:</b> <br/>
+            {{ order_info['metadata']['raised_seal_copies'] }}
+        </p>
+    {% endif %}
+
+    <p>
+        <b>NO AMENDS:</b> <br/>
+        {{ "Yes" if order_info['metadata']['no_amends'] else "No" }}
+    </p>
+
+    {% if order_info['metadata']['no_amends'] %}
+        <p>
+            <b>NO AMENDS COPIES:</b> <br/>
+            {{ order_info['metadata']['no_amends_copies'] }}
         </p>
     {% endif %}
 

@@ -3,60 +3,65 @@
 {% block content %}
     <br/>
     <p>
-        <b>Link:</b> <br/>
-        <a href="{{ order_info['metadata']['link'] }}">{{ order_info['metadata']['link'] }}</a>
+        <b>Link:</b><br/>
+        <a href="{{ order_info['metadata']['link'] }}" target="_blank">{{ order_info['metadata']['link'] }}</a>
     </p>
 
     <p>
-        <b>Record ID:</b> <br/>
+        <b>Record ID:</b><br/>
         {{ order_info['metadata']['record_id'] }}
     </p>
 
     <p>
-        <b>Type:</b> <br/>
+        <b>Type:</b><br/>
         {{ order_info['metadata']['type'] }}
     </p>
 
     <p>
-        <b>Number of Copies:</b> <br/>
+        <b>Number of Copies:</b><br/>
         {{ order_info['metadata']['num_copies'] }}
     </p>
 
     <p>
-        <b>Exemplification:</b> <br/>
-        {{ order_info['metadata']['exemplification'] }}
+        <b>EXEMPLIFICATION:</b> <br/>
+        {{ "Yes" if order_info['metadata']['exemplification'] else "No" }}
     </p>
+
+    {% if order_info['metadata']['exemplification'] %}
+        <p>
+            <b>EXEMPLIFICATION COPIES:</b><br/>
+            {{ order_info['metadata']['exemplification_copies'] }}
+        </p>
+    {% endif %}
 
     <p>
-        <b>Exemplification Copies:</b> <br/>
-        {{ order_info['metadata']['exemplification_copies'] }}
+        <b>RAISED SEAL:</b><br/>
+        {{ "Yes" if order_info['metadata']['raised_seal'] else "No" }}
     </p>
+
+    {% if order_info['metadata']['raised_seal'] %}
+        <p>
+            <b>RAISED SEAL COPIES:</b><br/>
+            {{ order_info['metadata']['raised_seal_copies'] }}
+        </p>
+    {% endif %}
 
     <p>
-        <b>Raised Seal:</b> <br/>
-        {{ order_info['metadata']['raised_seal'] }}
+        <b>NO AMENDS:</b><br/>
+        {{ "Yes" if order_info['metadata']['no_amends'] else "No" }}
     </p>
+
+    {% if order_info['metadata']['no_amends'] %}
+        <p>
+            <b>NO AMENDS COPIES:</b><br/>
+            {{ order_info['metadata']['no_amends_copies'] }}
+        </p>
+    {% endif %}
 
     <p>
-        <b>Raised Seal:</b> <br/>
-        {{ order_info['metadata']['raised_seal_copies'] }}
+        <b>DELIVERY METHOD:</b><br/>
+        {{ order_info['metadata']['delivery_method'].title() }}
     </p>
-
-    <p>
-        <b>No Amends:</b> <br/>
-        {{ order_info['metadata']['no_amends'] }}
-    </p>
-
-    <p>
-        <b>No Amends Copies:</b> <br/>
-        {{ order_info['metadata']['no_amends_copies'] }}
-    </p>
-
-    <p>
-        <b>Delivery Method:</b> <br/>
-        {{ order_info['metadata']['delivery_method'] }}
-    </p>
-
 {% endblock %}
 
 

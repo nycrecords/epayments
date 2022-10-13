@@ -2,49 +2,71 @@
 
 {% block content %}
     <p>
-        <b>BOROUGH: </b><br/>
-        {{ order_info['metadata']['borough'] or "Not Provided" }}
-        <br/>
-    </p>
-    <p>
-        <b>BLOCK: </b><br/>
-        {{ order_info['metadata']['block'] or "Not Provided" }}
-        <br/>
-    </p>
-    <p>
-        <b>LOT: </b><br/>
-        {{ order_info['metadata']['lot'] or "Not Provided" }}
-        <br/>
-    </p>
-    <p>
-        <b>BUILDING_NUMBER: </b><br/>
-        {{ order_info['metadata']['building_number'] or "Not Provided" }}
-        <br/>
-    </p>
-    <p>
-        <b>STREET: </b><br/>
-        {{ order_info['metadata']['street'] or "Not Provided" }}
-        <br/>
-    </p>
-    <p>
-        <b>DESCRIPTION: </b><br/>
-        {{ order_info['metadata']['description'] or "Not Provided" }}
+        <b>BOROUGH:</b><br/>
+        {{ order_info['metadata']['borough'] }}
         <br/>
     </p>
 
     <p>
-        <b>CERTIFIED: </b><br/>
-        {{ "Certified" if order_info['metadata']['mail_pickup'] else "Not Certified" }}
-        <br/>
-    </p>
-    <p>
-
-    <p>
-        <b>MAIL_PICKUP: </b><br/>
-        {{ "Mail" if order_info['metadata']['mail_pickup'] else "Pickup" }}
+        <b>BLOCK:</b><br/>
+        {{ order_info['metadata']['block'] }}
         <br/>
     </p>
 
+    <p>
+        <b>LOT:</b><br/>
+        {{ order_info['metadata']['lot'] }}
+        <br/>
+    </p>
+
+    <p>
+        <b>BUILDING NUMBER:</b><br/>
+        {{ order_info['metadata']['building_number'] or '' }}
+        <br/>
+    </p>
+    <p>
+        <b>STREET:</b><br/>
+        {{ order_info['metadata']['street'] or '' }}
+        <br/>
+    </p>
+
+    <p>
+        <b>NUMBER OF COPIES:</b> <br/>
+        {{ order_info['metadata']['num_copies'] }}
+    </p>
+
+    <p>
+        <b>RAISED SEAL:</b> <br/>
+        {{ "Yes" if order_info['metadata']['raised_seal'] else "No" }}
+    </p>
+
+    {% if order_info['metadata']['raised_seal'] %}
+        <p>
+            <b>RAISED SEAL COPIES:</b> <br/>
+            {{ order_info['metadata']['raised_seal_copies'] }}
+        </p>
+    {% endif %}
+
+    <p>
+        <b>DELIVERY METHOD:</b><br/>
+        {{ order_info['metadata']['delivery_method'].title() }}
+    </p>
+
+    {% if order_info['metadata']['contact_number'] %}
+        <p>
+            <b>CONTACT NUMBER:</b><br/>
+            {{ order_info['metadata']['contact_number'] }}
+            <br/>
+        </p>
+    {% endif %}
+
+    {% if order_info['metadata']['contact_email'] %}
+        <p>
+            <b>CONTACT EMAIL:</b><br/>
+            {{ order_info['metadata']['contact_email'] }}
+            <br/>
+        </p>
+    {% endif %}
 {% endblock %}
 
 
