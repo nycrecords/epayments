@@ -182,6 +182,7 @@ def search_queries(order_number=None,
                    delivery_method='',
                    status='',
                    billing_name=None,
+                   email=None,
                    date_received_start='',
                    date_received_end='',
                    date_submitted_start='',
@@ -193,9 +194,11 @@ def search_queries(order_number=None,
     """Arguments will match search parameters
         :param order_number: search by order number
         :param suborder_number: search by suborder number
-        :param order_type:  search by order type
+        :param order_type: search by order type
+        :param delivery_method: search by delivery method
         :param status: search by status
         :param billing_name: search by billing name
+        :param email: search by email
         :param date_received_start: search by starting date
         :param date_received_end: search by ending date
         :param date_submitted_start: search by starting date submitted
@@ -214,6 +217,7 @@ def search_queries(order_number=None,
         'current_status': status,
         'multiple_items': multiple_items,
         'metadata.delivery_method': delivery_method,
+        'email': email
     }
 
     date_range = {
@@ -224,10 +228,6 @@ def search_queries(order_number=None,
     }
 
     formatted_date_range = format_date_range(date_range)
-
-    # Set time of formatted date_submitted_end to be 11:59 PM if start and end date are not empty string and are the same
-    if date_submitted_start and date_submitted_end and (date_submitted_start == date_submitted_end):
-        formatted_date_range['date_submitted_end'] = formatted_date_range['date_submitted_end'].split(" ")[0] + " 11:59 PM"
 
     dsl_gen = DSLGenerator(query_fields=format_queries(query_field),
                            date_range=formatted_date_range,
@@ -254,6 +254,9 @@ def format_queries(query_fields):
 
     if query_fields['billing_name'] is not None:
         query_fields['billing_name'] = query_fields['billing_name'].strip()
+
+    if query_fields['email'] is not None:
+        query_fields['email'] = query_fields['email'].strip()
 
     # Removes 'all' and sets it to nothing: no parameters is all in this case
     if query_fields['current_status'] == 'all':
@@ -321,6 +324,16 @@ class DSLGenerator(object):
                         'match': {
                             "customer.billing_name": {
                                 'query': self.__query_fields[i],
+                                'operator': 'and'
+                            }
+                        }
+                    })
+                elif i == 'email':
+                    self.__filters.append({
+                        'match': {
+                            'customer.email': {
+                                'query': self.__query_fields[i],
+                                'operator': 'and'
                             }
                         }
                     })

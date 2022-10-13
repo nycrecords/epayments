@@ -1,6 +1,6 @@
 import os
 from datetime import date
-from flask import current_app, jsonify, request, Response, send_file, send_from_directory
+from flask import current_app, jsonify, render_template, request, Response, send_from_directory
 from flask_login import login_user, logout_user, current_user, login_required
 from sqlalchemy import desc
 
@@ -63,6 +63,7 @@ def get_orders() -> Response:
         date_submitted_end = json.get('date_submitted_end')
         start = json.get('start')
         size = json.get('size')
+        email = json.get('email')
 
         multiple_items = ''
         if order_type == 'multiple_items':
@@ -75,6 +76,7 @@ def get_orders() -> Response:
                                 delivery_method,
                                 status,
                                 billing_name,
+                                email,
                                 date_received_start,
                                 date_received_end,
                                 date_submitted_start,
@@ -92,6 +94,7 @@ def get_orders() -> Response:
             order_count=order_total,
             suborder_count=suborder_total,
             all_orders=formatted_orders,
+            order_rows=render_template('order_table.html', orders=formatted_orders)
         ), 200
 
     else:
@@ -104,6 +107,7 @@ def get_orders() -> Response:
             order_count=order_total,
             suborder_count=suborder_total,
             all_orders=formatted_orders,
+            order_rows=render_template('order_table.html', orders=formatted_orders),
         ), 200
 
 
@@ -132,7 +136,7 @@ def new_order() -> Response:
     :return:
     """
     json = request.get_json(force=True)
-    create_new_order(json['orderInfo'], json['suborderList'])
+    create_new_order(json['order_info'], json['suborders'])
     return jsonify(), 200
 
 
@@ -226,7 +230,10 @@ def history(suborder_number: str) -> Response:
                                               [event_type.UPDATE_STATUS, event_type.INITIAL_IMPORT])
                                           ).order_by(desc(Events.timestamp)).all()]
 
-    return jsonify(history=status_history), 200
+    return jsonify(
+        history=status_history,
+        history_tab=render_template('history_row.html', history=status_history)
+    ), 200
 
 
 # noinspection PyTypeChecker,PyTypeChecker
@@ -242,8 +249,29 @@ def more_info(suborder_number: str) -> Response:
     if request.method == 'POST':
         order_info = SearchFunctions.format_first_result(search_queries(suborder_number=suborder_number,
                                                                         search_type='print'))
+        order_type = order_info['order_type']
+        order_type_template_handler = {
+            'Birth Search': 'birth_search.html',
+            'Birth Cert': 'birth_cert.html',
+            'Marriage Search': 'marriage_search.html',
+            'Marriage Cert': 'marriage_cert.html',
+            'Death Search': 'death_search.html',
+            'Death Cert': 'death_cert.html',
+            'Tax Photo': 'tax_photo.html',
+            'Photo Gallery': 'photo_gallery.html',
+            'Property Card': 'property_card.html',
+            'OCME': 'ocme.html',
+            'HVR': 'hvr.html',
+            'No Amends': 'no_amends.html'
+        }
 
-        return jsonify(order_info=order_info), 200
+        info_tab = render_template('orders/{}'.format(order_type_template_handler[order_type]),
+                                   order_info=order_info)
+
+        return jsonify(
+            order_info=order_info,
+            info_tab=info_tab
+        ), 200
 
 
 # noinspection PyTypeChecker,PyTypeChecker

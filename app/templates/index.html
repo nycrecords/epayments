@@ -1,1 +1,150 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><link rel="shortcut icon" href="/favicon.ico"><title>New ePayments</title><link href="/static/css/main.6aec4a0c.css" rel="stylesheet"></head><body><div id="root"></div><script type="text/javascript" src="/static/js/main.d0640746.js"></script></body></html>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <link rel="shortcut icon" type="image/x-icon" href="{{ url_for('static', filename='/img/favicon.ico') }}">
+    <title>ePayments</title>
+
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="/static/fontawesome/css/all.min.css">
+
+    <!-- NYC Theme CSS -->
+    <link rel="stylesheet" href="/static/css/theme.css">
+
+</head>
+<body>
+
+    <section>
+        <div class="container justify-content-center text-center">
+            <h1>ePayments</h1>
+            <div class="mb-2">
+                <p>
+                    Hi {{ user }}
+                    <button type="button" class="btn btn-light" data-toggle="modal" data-target="#change_pass_modal">
+                        Change Password
+                    </button>
+                    <a href="{{ url_for("main.logout") }}" class="btn btn-primary">Logout</a>
+                </div>
+
+                <div class="modal fade" id="change_pass_modal" tabindex="-1" role="dialog"
+                     aria-labelledby="password_modal"
+                     aria-hidden="true">
+                    <div class="modal-dialog" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header text-center justify-content-center">
+                                <h5 class="modal-title">Password Change</h5>
+                            </div>
+                            <div class="modal-body text-left">
+                                <div>
+                                    <label for="new_pass" class="font-weight-bold">New Password</label>
+                                    <input type="password" class="form-control rounded-sm" id="new_pass"
+                                           name="new_password"
+                                           placeholder="New Password" required>
+                                </div>
+                                <div>
+                                    <label for="confirm_pass" class="font-weight-bold">Confirm Password</label>
+                                    <input type="password" class="form-control rounded-sm" id="confirm_pass"
+                                           name="confirm_pass"
+                                           placeholder="Re-enter New Password" required>
+                                </div>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-danger rounded-sm" data-dismiss="modal"
+                                        id="modal_close">Close
+                                </button>
+                                <button type="button" class="btn btn-success rounded-sm" id="pass_submit_btn">Save</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </section>
+
+    <section id="search">
+        <div class="container-fluid">
+            <div class="row">
+
+                <div id="left_side" class="col-2 pr-0">
+                    {% include "search_form.html" %}
+                </div>
+
+                <div id='middle' class="col-8">
+                    <div class="container-fluid">
+                        <div id="orders">
+                            <h5 class="text-center">Search Results</h5>
+                            <hr>
+                            <div id="order_rows"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="right_side" class="col-2 pl-0">
+                    <div class="container">
+                        <div id="order_counts" class="pb-2">
+                            <div id="total_orders"></div>
+                            <div id="total_suborders"></div>
+                        </div>
+
+                        <div id="util_btns">
+                            <div class="text-center pb-1"><i class="fas fa-tools"></i></div>
+
+                            <div class="pb-1">
+                                <a id="new_order_btn" href="{{ url_for("main.newOrder") }}"
+                                   class="btn btn-light btn-block rounded-sm">
+                                    Create New Order
+                                </a>
+                            </div>
+
+                            <div class="pb-1">
+                                <button id="order_sheets_btn" class="btn btn-light btn-block rounded-sm" type="submit"
+                                        role="button">Order Sheets
+                                </button>
+                            </div>
+
+                            <div class="pb-1">
+                                <button id="large_labels_btn" class="btn btn-light btn-block rounded-sm" type="submit"
+                                        role="button">Large Labels
+                                </button>
+                            </div>
+
+                            <div class="pb-1">
+                                <button id="small_labels_btn" class="btn btn-light btn-block rounded-sm" type="submit"
+                                        role="button">Small Labels
+                                </button>
+                            </div>
+
+                            <div class="pb-1">
+                                <button id="xlsx_btn" class="btn btn-light btn-block rounded-sm" type="submit"
+                                        role="button">XLSX
+                                </button>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </section>
+
+     <!-- JQUERY -->
+    <script src="/static/js/plugins/jquery-3.3.1.min.js"></script>
+
+    <!-- bootstrap javascript -->
+    <script src="/static/js/plugins/bootstrap.min.js"></script>
+
+    <!-- NYC template JS (RTL, search and language toggle, back to top)  -->
+    <script src="/static/js/main.js"></script>
+    <script src="/static/js/responsive-table.js"></script>
+
+    <!-- script for search form -->
+    <script src="/static/js/search_form.js"></script>
+
+    <!-- index buttons script -->
+    <script src="/static/js/index_buttons.js"></script>
+
+</body>
+</html>

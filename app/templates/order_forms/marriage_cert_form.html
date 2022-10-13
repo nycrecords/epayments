@@ -1,0 +1,86 @@
+<div>
+    <div class="pb-1">
+        {{ form.certificate_num.label(class="control-label font-weight-bold mb-0", for="certificate_num") }}
+        {{ form.certificate_num(class="form-control form-control-sm rounded-sm mt-0") }}
+    </div>
+
+    <div class="pb-1">
+        {{ form.groom_last_name.label(class="control-label font-weight-bold mb-0", for="groom_last_name") }}
+        {{ form.groom_last_name(class="form-control form-control-sm rounded-sm mt-0") }}
+    </div>
+
+    <div class="pb-1">
+        {{ form.groom_first_name.label(class="control-label font-weight-bold mb-0", for="groom_first_name") }}
+        {{ form.groom_first_name(class="form-control form-control-sm rounded-sm mt-0") }}
+    </div>
+
+    <div class="pb-1">
+        {{ form.bride_last_name.label(class="control-label font-weight-bold mb-0", for="bride_last_name") }}
+        {{ form.bride_last_name(class="form-control form-control-sm rounded-sm mt-0") }}
+    </div>
+
+    <div class="pb-1">
+        {{ form.bride_first_name.label(class="control-label font-weight-bold mb-0", for="bride_first_name") }}
+        {{ form.bride_first_name(class="form-control form-control-sm rounded-sm mt-0") }}
+    </div>
+
+    <div class="pb-1">
+        <h6>Date of Marriage</h6>
+        <div class="row">
+            <div class="col-2">
+                {{ form.month.label(class="control-label font-weight-bold mb-0", for="month") }}
+                {{ form.month(class="form-control form-control-sm rounded-sm mt-0") }}
+            </div>
+
+            <div class="col-2">
+                {{ form.day.label(class="control-label font-weight-bold mb-0", for="day") }}
+                {{ form.day(class="form-control form-control-sm rounded-sm mt-0") }}
+            </div>
+
+            <div class="col-2">
+                {{ form.year.label(class="control-label font-weight-bold mb-0", for="year") }}
+                {{ form.year(class="form-control form-control-sm rounded-sm mt-0") }}
+            </div>
+        </div>
+    </div>
+
+    <div class="pb-1">
+        {{ form.additional_years.label(class="control-label font-weight-bold mb-0", for="additional_years") }}
+        {{ form.additional_years(class="form-control form-control-sm rounded-sm mt-0") }}
+    </div>
+
+    <div class="pb-1">
+        {{ form.marriage_place.label(class="control-label font-weight-bold mb-0", for="marriage_place") }}
+        {{ form.marriage_place(class="form-control form-control-sm rounded-sm mt-0") }}
+    </div>
+
+    <div class="pb-1">
+        {{ form.borough.label(class="control-label font-weight-bold mb-0", for="borough") }}
+        {{ form.borough(class="form-control form-control-sm rounded-sm mt-0") }}
+    </div>
+
+    <div>
+        {{ form.exemplification }}
+        {{ form.exemplification.label(for="exemplification") }}
+    </div>
+
+    <div>
+        {{ form.raised_seals }}
+        {{ form.raised_seals.label(for="raised_seals") }}
+    </div>
+
+    <div>
+        {{ form.no_amends }}
+        {{ form.no_amends.label(for="no_amends") }}
+    </div>
+
+    <div class="pb-1">
+        {{ form.delivery_method.label(class="control-label font-weight-bold mb-0", for="delivery_method") }}
+        {{ form.delivery_method(class="form-control form-control-sm rounded-sm mt-0") }}
+    </div>
+
+    <div class="pb-1">
+        {{ form.comment.label(class="control-label font-weight-bold mb-0", for="comment") }}
+        {{ form.comment(class="form-control form-control-sm rounded-sm mt-0") }}
+    </div>
+</div>

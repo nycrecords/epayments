@@ -4,9 +4,8 @@ from getpass import getpass
 from flask_migrate import Migrate
 
 from app import create_app, db
-from app.models import Orders, Suborders, Customers, BirthSearch, \
-    MarriageSearch, DeathSearch, BirthCertificate, MarriageCertificate, \
-    DeathCertificate, PropertyCard, TaxPhoto, PhotoGallery, Events, Users
+from app.models import (Orders, Suborders, Customers, BirthSearch, MarriageSearch, DeathSearch, BirthCertificate,
+                        MarriageCertificate, DeathCertificate, PropertyCard, TaxPhoto, PhotoGallery, Events, Users)
 from app.search.utils import recreate
 
 COV = None
@@ -42,7 +41,6 @@ def daily_import():
     end_date = datetime.combine(today, datetime.min.time()).isoformat()
 
     import_from_api(start_date, end_date)
-
 
 
 @app.cli.command()

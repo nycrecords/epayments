@@ -1,0 +1,105 @@
+<div class="container">
+    <form id="search_form" method="POST" class="text-left">
+        <div class="pb-1">
+            {{ form.order_number.label(class="control-label font-weight-bold mb-0", for="order_number") }}
+            {{ form.order_number(class="form-control form-control-sm rounded-sm mt-0", maxlength="64", type="number",
+            min=0) }}
+        </div>
+
+        <div class="pb-1">
+            {{ form.suborder_number.label(class="control-label font-weight-bold mb-0", for="suborder_number") }}
+            {{ form.suborder_number(class="form-control form-control-sm rounded-sm mt-0",  maxlength="32", type="number",
+            min=0) }}
+        </div>
+
+        <div class="pb-1">
+            {{ form.order_type.label(class="control-label font-weight-bold mb-0", for="order_type") }}
+            {{ form.order_type(class="form-control form-control-sm rounded-sm mt-0") }}
+        </div>
+
+        <div class="pb-1">
+            {{ form.delivery_method.label(class="control-label font-weight-bold mb-0", for="delivery_method") }}
+            {{ form.delivery_method(class="form-control form-control-sm rounded-sm mt-0") }}
+        </div>
+
+        <div class="pb-1">
+            {{ form.status.label(class="control-label font-weight-bold mb-0", for="status") }}
+            {{ form.status(class="form-control form-control-sm rounded-sm mt-0") }}
+        </div>
+
+        <div class="pb-1">
+            {{ form.billing_name.label(class="control-label font-weight-bold mb-0", for="billing_name") }}
+            {{ form.billing_name(class="form-control form-control-sm rounded-sm mt-0", maxlength="64") }}
+        </div>
+
+        <div class="pb-1">
+            {{ form.email.label(class="control-label font-weight-bold mb-0", for="billing_name") }}
+            {{ form.email(class="form-control form-control-sm rounded-sm mt-0", maxlength="64", type="email") }}
+        </div>
+
+        <div class="pb-2">
+            <div>
+                <div class="nav nav-tabs nav-justified device-md py-1" role="tablist">
+                    <a class="nav-item nav-link btn-light btn-sm active" id="tab_received_btn"
+                       href="#tab_received" data-toggle="tab"
+                       aria-controls="tab_received" aria-selected="true" role="tab">
+                        Received
+                    </a>
+
+                    <a class="nav-item nav-link btn-sm btn-light" id="tab_submitted_btn" href="#tab_submitted"
+                       data-toggle="tab"
+                       aria-controls="tab_submitted" aria-selected="false" role="tab">
+                        Submitted
+                    </a>
+                </div>
+
+                <div class="tab-content" id="tabs_content">
+                    <div class="tab-pane fade show active" id="tab_received" aria-labelledby="tab_received_btn"
+                         role="tabpanel">
+                        <div class="pb-1">
+                            {{ form.date_received_start.label(class="control-label font-weight-bold mb-0",
+                                    for="date_received_start") }}
+                            {{ form.date_received_start(class="form-control form-control-sm rounded-sm mt-0") }}
+                        </div>
+
+                        <div class="pb-1">
+                            {{ form.date_received_end.label(class="control-label font-weight-bold mb-0",
+                                    for="date_received_end") }}
+                            {{ form.date_received_end(class="form-control form-control-sm rounded-sm mt-0") }}
+                        </div>
+                    </div>
+
+                    <div class="tab-pane fade" id="tab_submitted" aria-labelledby="tab_submitted_btn" role="tabpanel">
+                        <div>
+                            {{ form.date_submitted_start.label(class="control-label font-weight-bold mb-0",
+                                    for="date_submitted_start") }}
+                            {{ form.date_submitted_start(class="form-control form-control-sm rounded-sm mt-0") }}
+                        </div>
+
+                        <div>
+                            {{ form.date_submitted_end.label(class="control-label font-weight-bold mb-0",
+                                    for="date_submitted_end") }}
+                            {{ form.date_submitted_end(class="form-control form-control-sm rounded-sm mt-0") }}
+                        </div>
+                    </div>
+                </div>
+                <!-- tab_content -->
+            </div>
+            <!-- nav_tabs -->
+        </div>
+        <!-- py-2 -->
+    </form>
+    <!-- search_form -->
+
+    <div id='form_buttons' class="row">
+        <div class="col">
+            <button id='clear_button' type="submit" class="btn btn-danger btn-block rounded-sm" role="button">Clear
+            </button>
+        </div>
+        <div class="col">
+            <button id='search_button' type="submit" class="btn btn-success btn-block rounded-sm" role="button">Search
+            </button>
+        </div>
+    </div>
+
+</div>

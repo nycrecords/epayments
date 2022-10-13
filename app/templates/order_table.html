@@ -1,0 +1,202 @@
+{% if orders %}
+    <div class="overflow-auto h6 small" style="height: 80vh">
+        {% for order in orders %}
+            <div class="container">
+                <!-- top row with meta data -->
+                <div class="row py-2">
+                    <div class="col-6">
+                        <div><strong>Order#: </strong>{{ order['order_number'] }}</div>
+                        <div id="suborder_{{ loop.index }}" data-value="{{ order['suborder_number'] }}">
+                            <strong>Suborder#: </strong>{{ order['suborder_number'] }}
+                        </div>
+                        <div><strong>Order Type: </strong>{{ order['order_type'] }}</div>
+                        <div><strong>Billing Name: </strong>{{ order['customer']['billing_name'] }}</div>
+                        <div><strong>Email: </strong>{{ order['customer']['email'] }}</div>
+                        <div><strong>Date Received: </strong>{{ order['date_received'].split(' ')[0] }}</div>
+                    </div>
+                    <div class="col-6">
+                        <div id="status_{{ loop.index }}"
+                             class="list-group-item">{{ order['current_status'] }}</div>
+                    </div>
+                </div>
+
+                <!-- bottom row with nav tabs -->
+                <div class="row pb-1">
+                    <div class="container">
+                        <div>
+                            <!-- collapse tabs -->
+                            <div id="collapse_{{ loop.index }}">
+                                <p class="mb-1">
+                                    <button class="btn btn-primary btn-sm rounded-sm" type="button"
+                                            data-toggle="collapse"
+                                            data-target="#history_{{ loop.index }}" aria-expanded="false"
+                                            aria-controls="history_{{ loop.index }}"
+                                            id="history_btn_{{ loop.index }}">
+                                        History
+                                    </button>
+
+                                    <button class="btn btn-info btn-sm rounded-sm" type="button" data-toggle="collapse"
+                                            data-target="#moreinfo_{{ loop.index }}" aria-expanded="false"
+                                            aria-controls="moreinfo_{{ loop.index }}"
+                                            id="moreinfo_btn_{{ loop.index }}">
+                                        More Info
+                                    </button>
+
+                                    <button class="btn btn-secondary btn-sm rounded-sm" type="button"
+                                            data-toggle="collapse"
+                                            data-target="#update_status_{{ loop.index }}"
+                                            aria-expanded="false"
+                                            aria-controls="update_status_{{ loop.index }}"
+                                            id="update_status_btn_{{ loop.index }}">
+                                        Update Status
+                                    </button>
+
+                                    {% if order['order_type'] == 'No Amends' %}
+                                        <button class="btn btn-secondary btn-sm rounded-sm"
+                                                type="button"
+                                                onclick="window.open('/api/v1/uploads/{{ order['suborder_number'] }}', '_blank')">
+                                            Download File
+                                        </button>
+                                    {% endif %}
+
+                                    {% if order['order_type'] == 'Tax Photo' %}
+                                        <button class="btn btn-secondary btn-sm rounded-sm update-block-lot-roll-btn"
+                                                type="button"
+                                                data-index="{{ loop.index }}"
+                                                data-toggle="collapse"
+                                                data-target="#update_block_lot_roll_{{ loop.index }}"
+                                                aria-expanded="false"
+                                                aria-controls="update_block_lot_roll_{{ loop.index }}"
+                                                id="update_block_lot_roll_btn_{{ loop.index }}">
+                                            Update Block/Lot/Roll
+                                        </button>
+                                    {% endif %}
+                                </p>
+
+                                <div class="collapse" id="history_{{ loop.index }}"
+                                     data-parent="#collapse_{{ loop.index }}">
+                                    <div class="card card-body">
+                                        <table class="table table-bordered table-striped small mb-0">
+                                            <thead class="thead-light">
+                                            <tr>
+                                                <th scope="col">Date</th>
+                                                <th scope="col">Previous Status</th>
+                                                <th scope="col">Updated Status</th>
+                                                <th scope="col">Comment</th>
+                                            </tr>
+                                            </thead>
+                                            <tbody id="history_body_{{ loop.index }}"></tbody>
+                                        </table>
+                                    </div>
+                                </div>
+
+                                <div class="collapse" id="moreinfo_{{ loop.index }}"
+                                     data-parent="#collapse_{{ loop.index }}">
+                                    <div class="card card-body">
+                                        <div id="info_{{ loop.index }}"></div>
+                                    </div>
+                                </div>
+
+                                <div class="collapse" id="update_status_{{ loop.index }}"
+                                     data-parent="#collapse_{{ loop.index }}">
+                                    <div class="card card-body">
+                                        <div id="info_{{ loop.index }}">
+                                            <form class="h6 small">
+                                                <div class="mb-2">
+                                                    <label for="updated_status_{{ loop.index }}"
+                                                           class="sm font-weight-bold">Update Status</label>
+                                                    <select class="form-control form-control-sm rounded-sm"
+                                                            id="updated_status_{{ loop.index }}">
+                                                        <option value="Received">Received</option>
+                                                        <option value="Microfilm">Microfilm: When an order needs to be
+                                                            printed from the Microfilm
+                                                        </option>
+                                                        <option value="Offsite">Offsite: Has to be ordered from Offsite
+                                                            to be fulfilled
+                                                        </option>
+                                                        <option value="Processing">Processing: For photo orders only
+                                                        </option>
+                                                        <option value="Not_Found">Not Found: A Not Found letter was sent
+                                                            to the customer
+                                                        </option>
+                                                        <option value="Undeliverable">Undeliverable: When an order is
+                                                            returned as undeliverable by USPS
+                                                        </option>
+                                                        <option value="Refund">Refund: The order has been sent to
+                                                            Administration for a refund
+                                                        </option>
+                                                        <option value="Done">Done: The order has been completed. No more
+                                                            work is needed.
+                                                        </option>
+                                                    </select>
+                                                </div>
+                                                <div class="mb-2">
+                                                    <label for="update_comment_{{ loop.index }}"
+                                                           class="sm font-weight-bold">Comment</label>
+                                                    <textarea class="form-control form-control-sm rounded-sm"
+                                                              id="update_comment_{{ loop.index }}"
+                                                              rows="3"></textarea>
+                                                </div>
+                                            </form>
+                                            <div class="text-right">
+                                                <button id="update_btn_{{ loop.index }}" type="submit"
+                                                        class="btn btn-success btn-sm rounded-sm" role="button">Update
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="collapse" id="update_block_lot_roll_{{ loop.index }}"
+                                     data-parent="#collapse_{{ loop.index }}">
+                                    <div class="card card-body">
+                                        <div id="info_{{ loop.index }}">
+                                            <form class="col-4">
+                                                <div class="mb-2">
+                                                    <label for="update_block_{{ loop.index }}"
+                                                           class="sm font-weight-bold">Block #</label>
+                                                    <input type="text"
+                                                           class="form-control form-control-sm rounded-sm"
+                                                           id="update_block_{{ loop.index }}">
+                                                </div>
+                                                <div class="mb-2">
+                                                    <label for="update_lot_{{ loop.index }}"
+                                                           class="sm font-weight-bold">Lot #</label>
+                                                    <input type="text"
+                                                           class="form-control form-control-sm rounded-sm"
+                                                           id="update_lot_{{ loop.index }}">
+                                                </div>
+                                                <div class="mb-2">
+                                                    <label for="update_roll_{{ loop.index }}"
+                                                           class="sm font-weight-bold">Roll #</label>
+                                                    <input type="text"
+                                                           class="form-control form-control-sm rounded-sm"
+                                                           id="update_roll_{{ loop.index }}">
+                                                </div>
+                                                <button id="confirm_block_lot_roll_btn_{{ loop.index }}"
+                                                        type="submit"
+                                                        class="btn btn-success btn-sm rounded-sm confirm_block_lot_roll_btn"
+                                                        data-index="{{ loop.index }}"
+                                                        role="button">Update
+                                                </button>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <hr style="border: solid gray">
+            </div>
+        {% endfor %}
+    </div>
+
+{% else %}
+    <div>
+        <h6 class="text-center">No Results</h6>
+    </div>
+{% endif %}
+
+<!-- script for order table -->
+<script src="/static/js/order_table.js"></script>
