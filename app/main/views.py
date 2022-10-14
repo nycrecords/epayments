@@ -1,15 +1,15 @@
 import os
 from datetime import datetime
 
-from flask import render_template, redirect, url_for, request, current_app, send_from_directory, flash, jsonify
+from flask import render_template, redirect, url_for, request, current_app, send_from_directory, flash
 from flask_login import login_user, current_user, logout_user
 
 from app.import_utils import import_from_api
 from app.main import main
-from app.main.forms import (SearchOrderForm, NewOrderForm, NewSuborderForm, NewBirthCertForm, NewDeathCertForm,
-                            NewMarriageCertForm, NewPhotoGalleryForm, NewTaxPhotoForm)
+from app.main.forms import SearchOrderForm, MainOrderForm, SignInForm
 from app.main.utils import allowed_file, import_xml
 from app.models import Users
+from app.constants import form_choices
 
 
 @main.route('/health', methods=['GET'])
@@ -47,23 +47,22 @@ def import_tar():
 @main.route('/login', methods=['GET', 'POST'])
 def login():
     """ Initial load in the login page """
-    if request.method == 'POST':
-        email = request.form['email']
-        password = request.form['password']
-
-        user = Users.query.filter_by(email=email).one_or_none()
+    if current_user.is_authenticated:
+        return redirect(url_for("main.index"))
+    form = SignInForm()
+    if form.validate_on_submit():
+        user = Users.query.filter_by(email=form.username.data).first()
+        password = form.password.data
         if user is None:
-            error = 'Invalid Email'
-            flash(error, 'danger')
+            flash('Invalid Email Address')
         else:
             valid_password = user.verify_password(password)
             if not valid_password:
-                error = 'Invalid Password'
-                flash(error, 'danger')
+                flash('Invalid Password')
             else:
                 login_user(user)
                 return redirect(url_for('main.index'))
-    return render_template('login.html')
+    return render_template('login.html', form=form)
 
 
 @main.route('/logout', methods=['GET'])
@@ -73,32 +72,29 @@ def logout():
     return redirect(url_for('main.index'))
 
 
-@main.route('/newOrder', methods=['GET'])
-def newOrder():
-    return render_template('order_forms/new_order_form.html', form=NewOrderForm())
+@main.route('/new_order', methods=['GET', 'POST'])
+def new_order():
+    form = MainOrderForm()
+
+    if request.method == "POST":
+        if form.validate_on_submit():
+            if len(form.suborders) < 1:
+                flash("Suborder required to place order.")
+            else:
+                return form.data
+    return render_template('order_forms/new_order_form.html', form=form, order_types=form_choices.ORDER_TYPES)
 
 
-@main.route('/newSuborderForm', methods=['POST'])
-def newSuborderForm():
-    json = request.get_json(force=True)
-    return jsonify(suborder_form=render_template('order_forms/new_suborder_form.html',
-                                                 num=json['suborder_count'],
-                                                 form=NewSuborderForm()))
+@main.route("/suborder_form", methods=["POST"])
+def suborder_form():
+    form = MainOrderForm()
+    order_type = request.form['order-type']
 
+    # Append a new suborders (FieldList) to MainOrderForm
+    suborder = getattr(form, 'suborders').append_entry()
+    # Get index of appended suborders
+    idx = int(suborder.id.replace('suborders-', ''))
+    # Append a new FieldList of order_type to suborders
+    form.suborders[-1][order_type].append_entry()
 
-@main.route('/newSuborder', methods=['POST'])
-def newSuborder():
-    json = request.get_json(force=True)
-    order_type = json['order_type']
-    suborder_count = json['suborder_count']
-
-    template_handler = {
-        'Birth Cert': ('birth_cert_form.html', NewBirthCertForm()),
-        'Death Cert': ('death_cert_form.html', NewDeathCertForm()),
-        'Marriage Cert': ('marriage_cert_form.html', NewMarriageCertForm()),
-        'Photo Gallery': ('photo_gallery_form.html', NewPhotoGalleryForm()),
-        'Tax Photo': ('tax_photo_form.html', NewTaxPhotoForm())
-    }
-    template = 'order_forms/{}'.format(template_handler[order_type][0])
-    form = template_handler[order_type][1]
-    return jsonify(template=render_template(template, num=suborder_count, form=form))
+    return render_template('order_forms/suborder_form.html', form=form)

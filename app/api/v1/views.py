@@ -36,7 +36,7 @@ def get_orders() -> Response:
     Retrieves the data for orders to be displayed.
 
     If a form is submitted, the parameters including order_number, suborder_number,
-    order_type, billing_name, date_received_start, and date_receieved_end will be retrieved
+    order_type, billing_name, date_received_start, and date_received_end will be retrieved
     from the form data and used in a function called get_orders_by_fields to filter orders.
 
     Else, orders are filtered with today's date.

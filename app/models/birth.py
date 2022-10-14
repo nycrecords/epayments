@@ -1,7 +1,7 @@
 from sqlalchemy.dialects.postgresql import ARRAY
 
 from app import db
-from app.constants import gender, order_types, delivery_method
+from app.constants import gender, delivery_method, order_type
 
 
 class BirthSearch(db.Model):
@@ -26,7 +26,7 @@ class BirthSearch(db.Model):
     suborder_number -- Column: BigInteger, foreignKey
     """
     __tablename__ = 'birth_search'
-    __mapper_args__ = {'polymorphic_identity': order_types.BIRTH_SEARCH}
+    __mapper_args__ = {'polymorphic_identity': order_type.BIRTH_SEARCH}
     id = db.Column(db.Integer, primary_key=True)
     first_name = db.Column(db.String(40), nullable=True)
     last_name = db.Column(db.String(25), nullable=False)
