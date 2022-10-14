@@ -13,3 +13,6 @@ CSS for the Create Orders Form
     content: "\f138"
 }
 
+.collapsing {
+    transition: none;
+}
