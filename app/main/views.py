@@ -51,7 +51,7 @@ def login():
         email = request.form['email']
         password = request.form['password']
 
-        user = Users.query.filter_by(email=email).one_or_none()
+        user = Users.query.filter_by(email=email, is_active=True).one_or_none()
         if user is None:
             error = 'Invalid Email'
             flash(error, 'danger')
