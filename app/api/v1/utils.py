@@ -11,7 +11,8 @@ from app import db
 from app.constants import (
     collection,
     event_type,
-    printing
+    printing,
+    status as search_status
 )
 from app.constants import order_types
 from app.constants.customer import EMPTY_CUSTOMER
@@ -336,13 +337,14 @@ def generate_csv(search_params: Dict[str, str]) -> str:
         URL string of the CSV.
     """
     order_type = search_params.get('order_type')
+    status = search_params.get('status')
 
     suborder_results = search_queries(
         order_number=search_params.get('order_number'),
         suborder_number=search_params.get('suborder_number'),
         order_type=order_type,
         delivery_method=search_params.get('delivery_method'),
-        status=search_params.get('status'),
+        status=status,
         billing_name=search_params.get('billing_name'),
         email=search_params.get('email'),
         date_received_start=search_params.get('date_received_start'),
@@ -352,7 +354,10 @@ def generate_csv(search_params: Dict[str, str]) -> str:
         search_type='csv',
     )
 
-    filename = 'orders_{}_{}.xlsx'.format(order_type, datetime.now().strftime('%m_%d_%Y_at_%I_%M_%p'))
+    if status == 'Refund':
+        filename = 'orders_{}_refunds_{}.xlsx'.format(order_type, datetime.now().strftime('%m_%d_%Y_at_%I_%M_%p'))
+    else:
+        filename = 'orders_{}_{}.xlsx'.format(order_type, datetime.now().strftime('%m_%d_%Y_at_%I_%M_%p'))
     path = join(current_app.config["PRINT_FILE_PATH"], filename)
     wb = xlsxwriter.Workbook(path)
     ws = wb.add_worksheet()
@@ -850,6 +855,33 @@ def generate_csv(search_params: Dict[str, str]) -> str:
                 suborder['_source'].get('metadata').get('certificate_number'),
                 suborder['_source'].get('metadata').get('borough'),
                 suborder['_source'].get('metadata').get('years'),
+            ]
+            contents.append(row_content)
+
+    elif order_type == order_types.ALL and status == search_status.REFUND:
+        add_header = [
+            'Order Number',
+            'Suborder Number',
+            'Order Type',
+            'Customer Name',
+            'Email',
+            'Total',
+            'Date Received'
+        ]
+
+        header_data = add_header
+
+        for suborder in suborder_results['hits']['hits']:
+            if suborder['_source'].get('metadata') is None:
+                print(suborder)
+            row_content = [
+                suborder['_source']['order_number'],
+                suborder['_source']['suborder_number'],
+                suborder['_source'].get('order_type'),
+                suborder['_source'].get('customer')['billing_name'],
+                suborder['_source'].get('customer').get('email'),
+                suborder['_source'].get('total'),
+                suborder['_source'].get('date_received')[:8],  # Remove time from string
             ]
             contents.append(row_content)
 

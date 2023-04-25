@@ -75,7 +75,8 @@ class SearchFunctions(object):
                                        'order_type',
                                        'customer',
                                        'metadata',
-                                       'current_status'
+                                       'current_status',
+                                       'total'
                                    ],
                                    size=size,
                                    from_=start)

@@ -1,7 +1,13 @@
 $(document).ready(function () {
     setPassSaveBtn();
     setDownloadBtns();
-    showXLSXBtn();
+})
+
+$(document).change(function () {
+    if ($('#order_type').val() === 'all' && $('#status').val() !== 'Refund')
+        $('#xlsx_btn').hide();
+    else
+        $('#xlsx_btn').show();
 })
 
 function setDownloadBtns() {
@@ -75,19 +81,6 @@ function setPassSaveBtn() {
                 alert(result['responseJSON']['error']['message']);
             }
         });
-    });
-}
-
-function showXLSXBtn() {
-    // initial disable when loaded
-    $('#xlsx_btn').hide();
-    // change csv accessibility everytime order_type is changed
-    $('#order_type').on('change', function () {
-        if ($('#order_type').val() === 'all') {
-            $('#xlsx_btn').hide();
-        } else if ($('#xlsx_btn').is(':hidden')){ // only call show if it was previously hidden
-            $('#xlsx_btn').show();
-        }
     });
 }
 
