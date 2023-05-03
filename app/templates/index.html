@@ -2,7 +2,7 @@
 {% block content %}
     <main id="skip-header-target" role="main">
         <section id="search">
-            <div class="container-fluid pt-2 pb-6">
+            <div class="container-fluid pb-6">
                 <div class="row">
                     <div id="left_side" class="col-2 pr-0">
                         {% include "search_form.html" %}
@@ -55,7 +55,7 @@
 
                                 <div class="pb-1">
                                     <button id="xlsx_btn" class="btn btn-light btn-block rounded-sm" type="submit"
-                                            role="button">XLSX
+                                            role="button" style="display: none;">XLSX
                                     </button>
                                 </div>
                             </div>
@@ -69,4 +69,5 @@
 
 {% block js %}
     <script src="{{ url_for("static", filename="/js/search_form.js") }}"></script>
+    <script src="{{ url_for("static", filename="/js/index_buttons.js") }}"></script>
 {% endblock %}

@@ -22,7 +22,15 @@
                 {% endfor %}
                 <div class="panel collapse" id="{{ field[0].id }}-panel">
                     <div class="card card-body">
-                        {{ field[0] }}
+                        {% for field in field[0] %}
+                            {% if field.flags.required %}
+                                {{ field.label(class_='font-weight-bold', required=field.flags.required) }}
+                                {{ field(class_='form-control form-control-sm rounded-sm mb-2') }}
+                            {% else %}
+                                {{ field.label(class_='font-weight-bold')}}
+                                {{ field(class_='form-control form-control-sm rounded-sm mb-2') }}
+                            {% endif %}
+                        {% endfor %}
                     </div>
                 </div>
                 <br>

@@ -9,7 +9,7 @@ from flask import current_app
 from app import db, scheduler
 from app.constants import event_type
 from app.constants import status
-from app.constants.order_type import CLIENT_ID_DICT
+from app.constants.order_types import CLIENT_ID_DICT
 from app.date_utils import calculate_date_received
 from app.file_utils import sftp_ctx
 from app.models import Orders, Events, BirthSearch, BirthCertificate, Hvr, MarriageCertificate, \
@@ -197,6 +197,10 @@ def import_file(tree, date_submitted):
         clients_data_list = clients_data_item.split('|')
         client_id = clients_data_list[clients_data_list.index("ClientID") + 1]
         order_type = CLIENT_ID_DICT[client_id]
+        try:
+            total = clients_data_list[clients_data_list.index("SUBORDER_TOTAL") + 1]
+        except ValueError:
+            total = None
 
         # Suborder Number used to identify multi-part orders
         suborder_number = clients_data_list[clients_data_list.index("OrderNo") + 1]
@@ -212,7 +216,8 @@ def import_file(tree, date_submitted):
                              client_id=client_id,
                              order_type=order_type,
                              order_number=order_number,
-                             _status=status.RECEIVED)
+                             _status=status.RECEIVED,
+                             total=total)
 
         db.session.add(suborder)
         db.session.commit()
@@ -937,7 +942,8 @@ def import_file(tree, date_submitted):
                     client_id=client_id,
                     order_type=order_type,
                     order_number=order_number,
-                    _status=status.RECEIVED
+                    _status=status.RECEIVED,
+                    total=total
                 )
                 db.session.add(suborder_1940)
 
@@ -947,7 +953,8 @@ def import_file(tree, date_submitted):
                     client_id=client_id,
                     order_type=order_type,
                     order_number=order_number,
-                    _status=status.RECEIVED
+                    _status=status.RECEIVED,
+                    total=total
                 )
                 db.session.add(suborder_1980)
 

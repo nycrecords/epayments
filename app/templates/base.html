@@ -9,7 +9,7 @@
         {% if title %}
             <title>{{ title }} • ePayments</title>
         {% else %}
-            <title>ePayments • DORIS</title>
+            <title>ePayments - DORIS</title>
         {% endif %}
         <link rel="shortcut icon" href="{{ url_for('static', filename='/images/favicon.ico') }}">
         <!-- Font Awesome -->
@@ -32,7 +32,7 @@
                                 <a class="text-reset" href="https://www1.nyc.gov/">
                                     <strong>nyc.gov</strong>
                                 </a>
-                                <span class="mx-1" aria-hidden="true">|</span>Department of Records
+                                <span class="mx-1" aria-hidden="true">|</span>Department of Records | ePayments
                             </p>
                         </div>
                         <div class="col-auto">
@@ -62,7 +62,7 @@
             </div>
             <div class="wrap-header">
                 <div class="container-fluid wide">
-                    <div class="row pt-2 pb-2 align-items-center">
+                    <div class="row align-items-center">
                         <div class="col-lg">
                             <div class="d-flex justify-content-center justify-content-lg-start">
                                 <a class="align-self-center" href="{{ url_for("main.index") }}" title="Home">
@@ -72,7 +72,7 @@
                             </div>
                         </div>
                         <div class="col-lg-auto border-top border-lg-0">
-                            <div class="row no-gutters justify-content-between">
+                            <div class="row no-gutters d-flex justify-content-center">
                                 <div class="col-auto">
                                     <ul class="extensible-list horizontal">
                                         {% if not current_user.is_anonymous %}
@@ -165,22 +165,29 @@
                 </form>
             </div>
         </header>
-        {% if not current_user.is_anonymous %}
-            <div id="skip-header-content">
-                <div class="bg-primary py-3">
-                    <div class="container text-center">
-                        <h1 class="display-6 text-white">ePayments</h1>
-                    </div>
-                </div>
-            </div>
-        {% endif %}
-        <div class="container pt-2">
-            {% with messages = get_flashed_messages() %}
+        <div class="container">
+            {% with messages = get_flashed_messages(with_categories=true) %}
                 {% if messages %}
-                    {% for message in messages %}
-                        <div class="alert alert-warning alert-dismissible fade show" role="alert">
-                            {{ message }}
-                        </div>
+                    {% for category, message in messages %}
+                        {% if category == "success" %}
+                            <div>
+                                <div class="alert alert-success alert-dismissible fade show" role="alert">
+                                    <button type="button" class="btn btn-lg close text-decoration-none" role="button" data-dismiss="alert" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
+                                        {{ message }}
+                                </div>
+                            </div>
+                        {% else %}
+                            <div>
+                                <div class="alert alert-warning alert-dismissible fade show" role="alert">
+                                    <button type="button" class="btn btn-lg close text-decoration-none" role="button" data-dismiss="alert" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
+                                        {{ message }}
+                                </div>
+                            </div>
+                        {% endif %}
                     {% endfor %}
                 {% endif %}
             {% endwith %}
@@ -315,7 +322,7 @@
                                      src="{{ url_for("static", filename="/images/nyc-bubble-logo.svg") }}"
                                      width="90" alt="NYC Logo">
                             </a>
-                            <p class="fs-sm">City of New York - 2022 All Rights Reserved. NYC is a trademark and
+                            <p class="fs-sm">City of New York - 2023 All Rights Reserved. NYC is a trademark and
                                 service
                                 mark of the City of New York.</p>
                             <ul class="extensible-list horizontal fs-sm">

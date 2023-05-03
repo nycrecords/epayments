@@ -1,15 +1,16 @@
 import os
 from datetime import datetime
 
-from flask import render_template, redirect, url_for, request, current_app, send_from_directory, flash
+from flask import render_template, redirect, url_for, request, current_app, send_from_directory, flash, jsonify
 from flask_login import login_user, current_user, logout_user
 
+from app.api.v1.utils import create_new_order
+from app.constants.suborder_form import ORDER_TYPES
 from app.import_utils import import_from_api
 from app.main import main
 from app.main.forms import SearchOrderForm, MainOrderForm, SignInForm
 from app.main.utils import allowed_file, import_xml
 from app.models import Users
-from app.constants import form_choices
 
 
 @main.route('/health', methods=['GET'])
@@ -51,14 +52,14 @@ def login():
         return redirect(url_for("main.index"))
     form = SignInForm()
     if form.validate_on_submit():
-        user = Users.query.filter_by(email=form.username.data).first()
+        user = Users.query.filter_by(email=form.username.data, is_active=True).one_or_none()
         password = form.password.data
         if user is None:
-            flash('Invalid Email Address')
+            flash('Invalid Email Address', 'error')
         else:
             valid_password = user.verify_password(password)
             if not valid_password:
-                flash('Invalid Password')
+                flash('Invalid Password', 'error')
             else:
                 login_user(user)
                 return redirect(url_for('main.index'))
@@ -79,10 +80,12 @@ def new_order():
     if request.method == "POST":
         if form.validate_on_submit():
             if len(form.suborders) < 1:
-                flash("Suborder required to place order.")
+                flash("Suborder required to place order.", "error")
             else:
-                return form.data
-    return render_template('order_forms/new_order_form.html', form=form, order_types=form_choices.ORDER_TYPES)
+                create_new_order(form.data)
+                flash("Order submitted successfully.", "success")
+                return redirect(url_for('main.new_order'))
+    return render_template('order_forms/new_order_form.html', form=form, order_types=ORDER_TYPES)
 
 
 @main.route("/suborder_form", methods=["POST"])

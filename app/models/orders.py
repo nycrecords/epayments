@@ -1,7 +1,7 @@
 from sqlalchemy.dialects.postgresql import ARRAY
 
 from app import db, es
-from app.constants import status, order_type
+from app.constants import status, order_types
 from app.constants.search import DATETIME_FORMAT
 
 
@@ -83,18 +83,18 @@ class Suborders(db.Model):
     client_id = db.Column(db.Integer, nullable=True)
     order_type = db.Column(
         db.Enum(
-            order_type.BIRTH_SEARCH,
-            order_type.BIRTH_CERT,
-            order_type.MARRIAGE_SEARCH,
-            order_type.MARRIAGE_CERT,
-            order_type.DEATH_SEARCH,
-            order_type.DEATH_CERT,
-            order_type.NO_AMENDS,
-            order_type.TAX_PHOTO,
-            order_type.PHOTO_GALLERY,
-            order_type.PROPERTY_CARD,
-            order_type.OCME,
-            order_type.HVR,
+            order_types.BIRTH_SEARCH,
+            order_types.BIRTH_CERT,
+            order_types.MARRIAGE_SEARCH,
+            order_types.MARRIAGE_CERT,
+            order_types.DEATH_SEARCH,
+            order_types.DEATH_CERT,
+            order_types.NO_AMENDS,
+            order_types.TAX_PHOTO,
+            order_types.PHOTO_GALLERY,
+            order_types.PROPERTY_CARD,
+            order_types.OCME,
+            order_types.HVR,
             name='order_type'), nullable=False)
     order_number = db.Column(db.String(64), db.ForeignKey('orders.id'), nullable=False)
     status = db.Column(
@@ -108,6 +108,7 @@ class Suborders(db.Model):
             status.REFUND,
             status.DONE,
             name='status'), nullable=True)
+    total = db.Column(db.String(32), nullable=True)
 
     order = db.relationship('Orders', backref='orders', uselist=False)
     # TODO: 'polymorphic_on': order_type
@@ -128,12 +129,14 @@ class Suborders(db.Model):
             order_type,
             order_number,
             _status,
+            total=None,
             client_id=None):
         self.id = id
         self.client_id = client_id
         self.order_type = order_type
         self.order_number = order_number
         self.status = _status
+        self.total = total
 
     @property
     def serialize(self):
@@ -147,6 +150,7 @@ class Suborders(db.Model):
             'customer_email': self.order.customer.email,
             'order_type': self.order_type,
             'current_status': self.status,
+            'total': self.total,
         }
 
     # Elasticsearch
@@ -178,6 +182,7 @@ class Suborders(db.Model):
                 'current_status': self.status,
                 'multiple_items': self.order.multiple_items,
                 'order_types': self.order.order_types,
+                'total': self.total
             }
         )
 

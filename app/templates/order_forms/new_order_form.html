@@ -69,18 +69,13 @@
                                     </div>
                                     <div>
                                         <div class="pt-1 row btns ">
-                                            <div class="container">
-                                                <button id="submit" class="btn btn-success rounded-sm"
-                                                        type="submit"
-                                                        name="submit"
-                                                        value="place-order">Place Order
-                                                    <i class="fas"></i>
+                                            <div class="col">
+                                                <button id='clear_button' type="button" class="btn btn-danger btn-block rounded-sm" role="button">Clear
                                                 </button>
-                                                <a href="{{ url_for("main.new_order") }}"
-                                                   class="btn btn-danger rounded-sm"
-                                                   type="button">Clear
-                                                    <i class="fas"></i>
-                                                </a>
+                                            </div>
+                                            <div class="col">
+                                                <button id='submit' type="submit" class="btn btn-success btn-block rounded-sm" role="button">Submit
+                                                </button>
                                             </div>
                                         </div>
                                     </div>
@@ -106,7 +101,7 @@
                                         </div>
                                     </div>
                                     <hr class="pb-2">
-                                    <div class="container overflow-auto" style="height: 85vh">
+                                    <div class="container overflow-auto" style="height: 60vh">
                                         <span id="suborders">{% include "order_forms/suborder_form.html" %}</span>
                                     </div>
                                 </div>

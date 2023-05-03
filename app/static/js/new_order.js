@@ -1,5 +1,9 @@
 $(document).ready(function () {
     updateSuborderTotal();
+
+    $("#clear_button").click(function () {
+        clearCustomerForm();
+    })
 });
 
 $(document).on("click", "button.close", function () {
@@ -28,7 +32,7 @@ $("#add-suborder").click(function () {
 });
 
 function updateSuborderTotal() {
-    let suborderTotal = document.querySelectorAll("#suborders table").length;
+    let suborderTotal = document.getElementById("suborders").childElementCount;
     $("#suborder-total").html(`Total Suborders: ${suborderTotal}`);
 }
 
@@ -39,3 +43,15 @@ $("#submit").click(function () {
         $(".panel").addClass("show");
     }
 });
+
+// Clears all customer form inputs
+function clearCustomerForm() {
+    $("#name").val("");
+    $("#email").val("");
+    $("#address_line_1").val("");
+    $("#address_line_2").val("");
+    $("#city").val("");
+    $("#state").val("");
+    $("#zip_code").val("");
+    $("#phone").val("");
+}
