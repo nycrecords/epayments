@@ -3,15 +3,20 @@ $(document).ready(function () {
     setDownloadBtns();
 })
 
-$(document).change(function () {
-    let xlsxBtn = $('#xlsx_btn')
+$('#order_type, #status').on('change', function () {
+    let xlsxBtn = $('#xlsx_btn');
     let orderType = $('#order_type').val();
+    let status = $('#status').val();
 
-    orderType !== 'all' ? xlsxBtn.show().html("XLSX") : xlsxBtn.hide();
+    if (orderType !== 'all') {
+      xlsxBtn.text('XLSX').show();
+    } else if (status === 'Refund') {
+      xlsxBtn.text('Refund XLSX').show();
+    } else {
+      xlsxBtn.hide();
+    }
+});
 
-    if (orderType === 'all' && $('#status').val() === 'Refund')
-        xlsxBtn.show().html("Refund XLSX ")
-})
 
 function setDownloadBtns() {
     setOrderBtn();
@@ -62,7 +67,7 @@ function setSmallLabelBtn() {
 
 function setOrderBtn() {
     $('#order_sheets_btn').click(function () {
-        printAjaxCall('orders')
+        printAjaxCall('orders');
     });
 }
 

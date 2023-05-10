@@ -1,9 +1,7 @@
 {% for field_lists in form.suborders %}
-    <!-- field_lists contains all FieldLists in suborders-->
-    <!-- field is one suborder-->
     {% for field in field_lists %}
         {% if field %}
-            <div class="pb-2 pt-2">
+            <div class="pb-2 pt-2 suborder">
                 <div class="d-flex">
                     <a class="btn collapsed btn-block text-left btn-sm mr-auto" type="button" data-toggle="collapse"
                        data-target="#{{ field[0].id }}-panel"
@@ -23,13 +21,13 @@
                 <div class="panel collapse" id="{{ field[0].id }}-panel">
                     <div class="card card-body">
                         {% for field in field[0] %}
+                            {% set label_class = 'font-weight-bold' %}
                             {% if field.flags.required %}
-                                {{ field.label(class_='font-weight-bold', required=field.flags.required) }}
-                                {{ field(class_='form-control form-control-sm rounded-sm mb-2') }}
+                                {{ field.label(class_=label_class, required=field.flags.required) }}
                             {% else %}
-                                {{ field.label(class_='font-weight-bold')}}
-                                {{ field(class_='form-control form-control-sm rounded-sm mb-2') }}
+                                {{ field.label(class_=label_class) }}
                             {% endif %}
+                            {{ field(class_="form-control form-control-sm rounded-sm mb-2") }}
                         {% endfor %}
                     </div>
                 </div>

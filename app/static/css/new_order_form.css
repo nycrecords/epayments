@@ -1,10 +1,6 @@
 /*
 CSS for the Create Orders Form
  */
-.suborder-form-label {
-    font-weight: bold;
-}
-
 [data-toggle="collapse"] .fa:before {
     content: "\f13a"
 }

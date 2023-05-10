@@ -906,39 +906,43 @@ def generate_csv(search_params: Dict[str, str]) -> str:
 def create_new_order(form_data):
     year = str(date.today().year)
     next_order_number = OrderNumberCounter.query.filter_by(year=year).one().next_order_number
-    order_id = 'EPAY-{0:s}-{1:03d}'.format(year, next_order_number)
-    order_types_list = []
+    order_id = f"EPAY-{year}-{next_order_number:03d}"
     suborder_list = []
+    order_types_list = []
 
     for suborder in form_data["suborders"]:
-        for form in FORM_TYPES:
-            if suborder.get(form):
-                suborder_list.append({form:suborder[form][0]})
-                order_types_list.append(FORM_TYPES[form])
+        for form_type, form_value in suborder.items():
+            if form_type in FORM_TYPES and form_value:
+                suborder_list.append({form_type: form_value[0]})
+                order_types_list.append(FORM_TYPES[form_type])
 
-    order = Orders(_id=order_id,
-                   date_submitted=date.today(),
-                   date_received=date.today(),
-                   _order_types=order_types_list,
-                   multiple_items=True if len(suborder_list) > 1 else False)
+    order = Orders(
+        _id=order_id,
+        date_submitted=date.today(),
+        date_received=date.today(),
+        _order_types=order_types_list,
+        multiple_items=len(suborder_list) > 1
+    )
     db.session.add(order)
 
-    customer = Customers(billing_name=form_data["name"],
-                         shipping_name=form_data["name"],
-                         email=form_data["email"],
-                         address_line_1=form_data["address_line_1"],
-                         address_line_2=form_data["address_line_2"],
-                         city=form_data["city"],
-                         state=form_data["state"],
-                         zip_code=form_data["zip_code"],
-                         phone=form_data["phone"],
-                         order_number=order_id)
+    customer = Customers(
+        billing_name=form_data["name"],
+        shipping_name=form_data["name"],
+        email=form_data["email"],
+        address_line_1=form_data["address_line_1"],
+        address_line_2=form_data["address_line_2"],
+        city=form_data["city"],
+        state=form_data["state"],
+        zip_code=form_data["zip_code"],
+        phone=form_data["phone"],
+        order_number=order_id
+    )
     db.session.add(customer)
     db.session.commit()
 
     for suborder in suborder_list:
         next_suborder_number = order.next_suborder_number
-        suborder_id = '{} - {}'.format(order_id, next_suborder_number)
+        suborder_id = f"{order_id} - {next_suborder_number}"
         suborder_form = next(iter(suborder.keys()))
         order_type = FORM_TYPES[suborder_form]
         status = suborder.get(suborder_form).get('status')
@@ -948,24 +952,25 @@ def create_new_order(form_data):
             if value == "":
                 suborder[suborder_form][key] = None
 
-        new_suborder = Suborders(id=suborder_id,
-                                 order_type=order_type,
-                                 order_number=order.id,
-                                 _status=status,
-                                 total=None)
+        new_suborder = Suborders(
+            id=suborder_id,
+            order_type=order_type,
+            order_number=order.id,
+            _status=status,
+            total=None
+        )
         db.session.add(new_suborder)
         db.session.commit()
 
         new_suborder.es_create()
 
-        event = Events(suborder_number=new_suborder.id,
-                       type_=event_type.INITIAL_IMPORT,
-                       user_email=current_user.email,
-                       previous_value=None,
-                       new_value={
-                           'status': new_suborder.status,
-                       })
-
+        event = Events(
+            suborder_number=new_suborder.id,
+            type_=event_type.INITIAL_IMPORT,
+            user_email=current_user.email,
+            previous_value=None,
+            new_value={'status': new_suborder.status,}
+        )
         db.session.add(event)
         db.session.commit()
 
@@ -985,44 +990,48 @@ def _create_new_birth_object(suborder: Dict[str, Union[str, List[Dict]]], new_su
     years = _get_years(suborder)
 
     if certificate_number:
-        birth_object = BirthCertificate(certificate_number=certificate_number,
-                                        first_name=suborder.get('first_name'),
-                                        last_name=suborder.get('last_name'),
-                                        middle_name=suborder.get('middle_name'),
-                                        gender=suborder.get('gender'),
-                                        father_name=suborder.get('father_name'),
-                                        mother_name=suborder.get('mother_name'),
-                                        num_copies=suborder.get('num_copies'),
-                                        month=suborder.get('month'),
-                                        day=suborder.get('day'),
-                                        years=years,
-                                        birth_place=suborder.get('birth_place'),
-                                        borough=[suborder.get('borough')],
-                                        comment=suborder.get('comment'),
-                                        _delivery_method=suborder.get('delivery_method'),
-                                        suborder_number=new_suborder_obj.id,
-                                        exemplification=suborder.get('exemplification'),
-                                        raised_seal=suborder.get('raised_seals'),
-                                        no_amends=suborder.get('no_amends'))
+        birth_object = BirthCertificate(
+            certificate_number=certificate_number,
+            first_name=suborder.get('first_name'),
+            last_name=suborder.get('last_name'),
+            middle_name=suborder.get('middle_name'),
+            gender=suborder.get('gender'),
+            father_name=suborder.get('father_name'),
+            mother_name=suborder.get('mother_name'),
+            num_copies=suborder.get('num_copies'),
+            month=suborder.get('month'),
+            day=suborder.get('day'),
+            years=years,
+            birth_place=suborder.get('birth_place'),
+            borough=[suborder.get('borough')],
+            comment=suborder.get('comment'),
+            _delivery_method=suborder.get('delivery_method'),
+            suborder_number=new_suborder_obj.id,
+            exemplification=suborder.get('exemplification'),
+            raised_seal=suborder.get('raised_seals'),
+            no_amends=suborder.get('no_amends')
+        )
     else:
-        birth_object = BirthSearch(first_name=suborder.get('first_name'),
-                                   last_name=suborder.get('last_name'),
-                                   middle_name=suborder.get('middle_name'),
-                                   gender=suborder.get('gender'),
-                                   father_name=suborder.get('father_name'),
-                                   mother_name=suborder.get('mother_name'),
-                                   num_copies=suborder.get('num_copies'),
-                                   month=suborder.get('month'),
-                                   day=suborder.get('day'),
-                                   years=years,
-                                   birth_place=suborder.get('birth_place'),
-                                   borough=[suborder.get('borough')],
-                                   comment=suborder.get('comment'),
-                                   _delivery_method=suborder.get('delivery_method'),
-                                   suborder_number=new_suborder_obj.id,
-                                   exemplification=suborder.get('exemplification'),
-                                   raised_seal=suborder.get('raised_seals'),
-                                   no_amends=suborder.get('no_amends'))
+        birth_object = BirthSearch(
+            first_name=suborder.get('first_name'),
+            last_name=suborder.get('last_name'),
+            middle_name=suborder.get('middle_name'),
+            gender=suborder.get('gender'),
+            father_name=suborder.get('father_name'),
+            mother_name=suborder.get('mother_name'),
+            num_copies=suborder.get('num_copies'),
+            month=suborder.get('month'),
+            day=suborder.get('day'),
+            years=years,
+            birth_place=suborder.get('birth_place'),
+            borough=[suborder.get('borough')],
+            comment=suborder.get('comment'),
+            _delivery_method=suborder.get('delivery_method'),
+            suborder_number=new_suborder_obj.id,
+            exemplification=suborder.get('exemplification'),
+            raised_seal=suborder.get('raised_seals'),
+            no_amends=suborder.get('no_amends')
+        )
     db.session.add(birth_object)
     db.session.commit()
 
@@ -1034,44 +1043,48 @@ def _create_new_death_object(suborder: Dict[str, Union[str, List[Dict]]], new_su
     years = _get_years(suborder)
 
     if certificate_number:
-        death_object = DeathCertificate(certificate_number=certificate_number,
-                                        last_name=suborder.get('last_name'),
-                                        first_name=suborder.get('first_name'),
-                                        middle_name=suborder.get('middle_name'),
-                                        num_copies=suborder.get('num_copies'),
-                                        cemetery=suborder.get('cemetery'),
-                                        month=suborder.get('month'),
-                                        day=suborder.get('day'),
-                                        years=years,
-                                        death_place=suborder.get('death_place'),
-                                        borough=[suborder.get('borough')],
-                                        father_name=suborder.get('father_name'),
-                                        mother_name=suborder.get('mother_name'),
-                                        comment=suborder.get('comment'),
-                                        _delivery_method=suborder.get('delivery_method'),
-                                        suborder_number=new_suborder_obj.id,
-                                        exemplification=suborder.get('exemplification'),
-                                        raised_seal=suborder.get('raised_seals'),
-                                        no_amends=suborder.get('no_amends'))
+        death_object = DeathCertificate(
+            certificate_number=certificate_number,
+            last_name=suborder.get('last_name'),
+            first_name=suborder.get('first_name'),
+            middle_name=suborder.get('middle_name'),
+            num_copies=suborder.get('num_copies'),
+            cemetery=suborder.get('cemetery'),
+            month=suborder.get('month'),
+            day=suborder.get('day'),
+            years=years,
+            death_place=suborder.get('death_place'),
+            borough=[suborder.get('borough')],
+            father_name=suborder.get('father_name'),
+            mother_name=suborder.get('mother_name'),
+            comment=suborder.get('comment'),
+            _delivery_method=suborder.get('delivery_method'),
+            suborder_number=new_suborder_obj.id,
+            exemplification=suborder.get('exemplification'),
+            raised_seal=suborder.get('raised_seals'),
+            no_amends=suborder.get('no_amends')
+        )
     else:
-        death_object = DeathSearch(last_name=suborder.get('last_name'),
-                                   first_name=suborder.get('first_name'),
-                                   middle_name=suborder.get('middle_name'),
-                                   num_copies=suborder.get('num_copies'),
-                                   cemetery=suborder.get('cemetery'),
-                                   month=suborder.get('month'),
-                                   day=suborder.get('day'),
-                                   years=years,
-                                   death_place=suborder.get('death_place'),
-                                   borough=[suborder.get('borough')],
-                                   father_name=suborder.get('father_name'),
-                                   mother_name=suborder.get('mother_name'),
-                                   comment=suborder.get('comment'),
-                                   _delivery_method=suborder.get('delivery_method'),
-                                   suborder_number=new_suborder_obj.id,
-                                   exemplification=suborder.get('exemplification'),
-                                   raised_seal=suborder.get('raised_seals'),
-                                   no_amends=suborder.get('no_amends'))
+        death_object = DeathSearch(
+            last_name=suborder.get('last_name'),
+            first_name=suborder.get('first_name'),
+            middle_name=suborder.get('middle_name'),
+            num_copies=suborder.get('num_copies'),
+            cemetery=suborder.get('cemetery'),
+            month=suborder.get('month'),
+            day=suborder.get('day'),
+            years=years,
+            death_place=suborder.get('death_place'),
+            borough=[suborder.get('borough')],
+            father_name=suborder.get('father_name'),
+            mother_name=suborder.get('mother_name'),
+            comment=suborder.get('comment'),
+            _delivery_method=suborder.get('delivery_method'),
+            suborder_number=new_suborder_obj.id,
+            exemplification=suborder.get('exemplification'),
+            raised_seal=suborder.get('raised_seals'),
+            no_amends=suborder.get('no_amends')
+        )
     db.session.add(death_object)
     db.session.commit()
 
@@ -1082,40 +1095,44 @@ def _create_new_marriage_object(suborder: Dict[str, Union[str, List[Dict]]], new
     certificate_number = suborder.get('certificate_num')
 
     if certificate_number:
-        marriage_object = MarriageCertificate(certificate_number=certificate_number,
-                                              groom_last_name=suborder.get('groom_last_name'),
-                                              groom_first_name=suborder.get('groom_first_name'),
-                                              bride_last_name=suborder.get('bride_last_name'),
-                                              bride_first_name=suborder.get('bride_first_name'),
-                                              num_copies=suborder.get('num_copies'),
-                                              month=suborder.get('month'),
-                                              day=suborder.get('day'),
-                                              years=[str(suborder.get('year'))],
-                                              marriage_place=suborder.get('marriage_place'),
-                                              borough=[suborder.get('borough')],
-                                              comment=suborder.get('comment'),
-                                              _delivery_method=suborder.get('delivery_method'),
-                                              suborder_number=new_suborder_obj.id,
-                                              exemplification=suborder.get('exemplification'),
-                                              raised_seal=suborder.get('raised_seals'),
-                                              no_amends=suborder.get('no_amends'))
+        marriage_object = MarriageCertificate(
+            certificate_number=certificate_number,
+            groom_last_name=suborder.get('groom_last_name'),
+            groom_first_name=suborder.get('groom_first_name'),
+            bride_last_name=suborder.get('bride_last_name'),
+            bride_first_name=suborder.get('bride_first_name'),
+            num_copies=suborder.get('num_copies'),
+            month=suborder.get('month'),
+            day=suborder.get('day'),
+            years=[str(suborder.get('year'))],
+            marriage_place=suborder.get('marriage_place'),
+            borough=[suborder.get('borough')],
+            comment=suborder.get('comment'),
+            _delivery_method=suborder.get('delivery_method'),
+            suborder_number=new_suborder_obj.id,
+            exemplification=suborder.get('exemplification'),
+            raised_seal=suborder.get('raised_seals'),
+            no_amends=suborder.get('no_amends')
+        )
     else:
-        marriage_object = MarriageSearch(groom_last_name=suborder.get('groom_last_name'),
-                                         groom_first_name=suborder.get('groom_first_name'),
-                                         bride_last_name=suborder.get('bride_last_name'),
-                                         bride_first_name=suborder.get('bride_first_name'),
-                                         num_copies=suborder.get('num_copies'),
-                                         month=suborder.get('month'),
-                                         day=suborder.get('day'),
-                                         years=[str(suborder.get('year'))],
-                                         marriage_place=suborder.get('marriage_place'),
-                                         borough=[suborder.get('borough')],
-                                         comment=suborder.get('comment'),
-                                         _delivery_method=suborder.get('delivery_method'),
-                                         suborder_number=new_suborder_obj.id,
-                                         exemplification=suborder.get('exemplification'),
-                                         raised_seal=suborder.get('raised_seals'),
-                                         no_amends=suborder.get('no_amends'))
+        marriage_object = MarriageSearch(
+            groom_last_name=suborder.get('groom_last_name'),
+            groom_first_name=suborder.get('groom_first_name'),
+            bride_last_name=suborder.get('bride_last_name'),
+            bride_first_name=suborder.get('bride_first_name'),
+            num_copies=suborder.get('num_copies'),
+            month=suborder.get('month'),
+            day=suborder.get('day'),
+            years=[str(suborder.get('year'))],
+            marriage_place=suborder.get('marriage_place'),
+            borough=[suborder.get('borough')],
+            comment=suborder.get('comment'),
+            _delivery_method=suborder.get('delivery_method'),
+            suborder_number=new_suborder_obj.id,
+            exemplification=suborder.get('exemplification'),
+            raised_seal=suborder.get('raised_seals'),
+            no_amends=suborder.get('no_amends')
+        )
     db.session.add(marriage_object)
     db.session.commit()
 
@@ -1126,39 +1143,43 @@ def _create_new_tax_photo(suborder: Dict[str, str], new_suborder_obj: Suborders)
     new_collection = suborder.get('collection')
 
     if new_collection in [collection.YEAR_1940, collection.BOTH]:
-        tax_photo_1940 = TaxPhoto(collection=collection.YEAR_1940,
-                                  borough=suborder.get('borough'),
-                                  image_id=suborder.get('image_identifier'),
-                                  roll=suborder.get('roll'),
-                                  block=suborder.get('block'),
-                                  lot=suborder.get('lot'),
-                                  building_number=suborder.get('building_num'),
-                                  street=suborder.get('street'),
-                                  description=suborder.get('description'),
-                                  size=suborder.get('size'),
-                                  num_copies=suborder.get('num_copies'),
-                                  _delivery_method=suborder.get('delivery_method'),
-                                  contact_number=suborder.get('contact_num'),
-                                  suborder_number=new_suborder_obj.id)
+        tax_photo_1940 = TaxPhoto(
+            collection=collection.YEAR_1940,
+            borough=suborder.get('borough'),
+            image_id=suborder.get('image_identifier'),
+            roll=suborder.get('roll'),
+            block=suborder.get('block'),
+            lot=suborder.get('lot'),
+            building_number=suborder.get('building_num'),
+            street=suborder.get('street'),
+            description=suborder.get('description'),
+            size=suborder.get('size'),
+            num_copies=suborder.get('num_copies'),
+            _delivery_method=suborder.get('delivery_method'),
+            contact_number=suborder.get('contact_num'),
+            suborder_number=new_suborder_obj.id
+        )
         db.session.add(tax_photo_1940)
         db.session.commit()
 
         new_suborder_obj.es_update(tax_photo_1940.serialize)
 
     if new_collection in [collection.YEAR_1980, collection.BOTH]:
-        tax_photo_1980 = TaxPhoto(collection=collection.YEAR_1980,
-                                  borough=suborder.get('borough'),
-                                  image_id=suborder.get('image_identifier'),
-                                  block=suborder.get('block'),
-                                  lot=suborder.get('lot'),
-                                  building_number=str(suborder.get('building_num')),
-                                  street=suborder['street'],
-                                  description=suborder.get('description'),
-                                  size=suborder.get('size'),
-                                  num_copies=suborder.get('num_copies'),
-                                  _delivery_method=suborder.get('delivery_method'),
-                                  contact_number=suborder.get('contact_num'),
-                                  suborder_number=new_suborder_obj.id)
+        tax_photo_1980 = TaxPhoto(
+            collection=collection.YEAR_1980,
+            borough=suborder.get('borough'),
+            image_id=suborder.get('image_identifier'),
+            block=suborder.get('block'),
+            lot=suborder.get('lot'),
+            building_number=str(suborder.get('building_num')),
+            street=suborder['street'],
+            description=suborder.get('description'),
+            size=suborder.get('size'),
+            num_copies=suborder.get('num_copies'),
+            _delivery_method=suborder.get('delivery_method'),
+            contact_number=suborder.get('contact_num'),
+            suborder_number=new_suborder_obj.id
+        )
         db.session.add(tax_photo_1980)
         db.session.commit()
 
@@ -1166,16 +1187,18 @@ def _create_new_tax_photo(suborder: Dict[str, str], new_suborder_obj: Suborders)
 
 
 def _create_new_photo_gallery(suborder: Dict[str, str], new_suborder_obj: Suborders):
-    photo_gallery = PhotoGallery(image_id=suborder.get('image_identifier'),
-                                 description=suborder.get('description'),
-                                 additional_description=suborder.get('additional_description'),
-                                 size=suborder.get('size'),
-                                 num_copies=str(suborder.get('num_copies')),
-                                 _delivery_method=suborder.get('delivery_method'),
-                                 contact_number=suborder.get('contact_num'),
-                                 comment=suborder.get('comment'),
-                                 suborder_number=new_suborder_obj.id,
-                                 contact_email=suborder.get('contact_email'))
+    photo_gallery = PhotoGallery(
+        image_id=suborder.get('image_identifier'),
+        description=suborder.get('description'),
+        additional_description=suborder.get('additional_description'),
+        size=suborder.get('size'),
+        num_copies=str(suborder.get('num_copies')),
+        _delivery_method=suborder.get('delivery_method'),
+        contact_number=suborder.get('contact_num'),
+        comment=suborder.get('comment'),
+        suborder_number=new_suborder_obj.id,
+        contact_email=suborder.get('contact_email')
+    )
     db.session.add(photo_gallery)
     db.session.commit()
 
@@ -1186,4 +1209,3 @@ def _get_years(suborder):
     if suborder.get('additional_years') is not None:
         return list(filter(None, [suborder.get('year')] + suborder.get('additional_years').split(',')))
     return [suborder.get('year')]
-
