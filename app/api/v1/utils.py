@@ -865,8 +865,15 @@ def generate_csv(search_params: Dict[str, str]) -> str:
             'Suborder Number',
             'Order Type',
             'Customer Name',
+            'Address line 1',
+            'Address line 2',
+            'City',
+            'State',
+            'Zip Code',
+            'Country',
             'Email',
             'Total',
+            'Date Submitted',
             'Date Received'
         ]
 
@@ -880,9 +887,16 @@ def generate_csv(search_params: Dict[str, str]) -> str:
                 suborder['_source'].get('suborder_number'),
                 suborder['_source'].get('order_type'),
                 suborder['_source'].get('customer')['billing_name'],
+                suborder['_source'].get('customer').get('address_line_one'),
+                suborder['_source'].get('customer').get('address_line_two'),
+                suborder['_source'].get('customer').get('city'),
+                suborder['_source'].get('customer').get('state'),
+                suborder['_source'].get('customer').get('zip_code'),
+                suborder['_source'].get('customer').get('country'),
                 suborder['_source'].get('customer').get('email'),
                 suborder['_source'].get('total'),
-                suborder['_source'].get('date_received')[:8],  # Remove time from string
+                suborder['_source'].get('date_submitted')[:8], # Remove time from string
+                suborder['_source'].get('date_received')[:8],
             ]
             contents.append(row_content)
 

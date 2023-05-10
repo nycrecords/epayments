@@ -72,6 +72,7 @@ class SearchFunctions(object):
                                        'order_number',
                                        'suborder_number',
                                        'date_received',
+                                       'date_submitted',
                                        'order_type',
                                        'customer',
                                        'metadata',
