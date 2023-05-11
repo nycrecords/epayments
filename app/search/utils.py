@@ -155,7 +155,8 @@ def create_docs():
                 'metadata': order_type_models_handler[q.order_type].query.filter_by(
                     suborder_number=q.id).one().serialize,
                 'multiple_items': q.order.multiple_items,
-                'order_types': q.order.order_types
+                'order_types': q.order.order_types,
+                'total': q.total
             })
         except:
             pass

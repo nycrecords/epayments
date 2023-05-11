@@ -197,6 +197,10 @@ def import_file(tree, date_submitted):
         clients_data_list = clients_data_item.split('|')
         client_id = clients_data_list[clients_data_list.index("ClientID") + 1]
         order_type = CLIENT_ID_DICT[client_id]
+        try:
+            total = clients_data_list[clients_data_list.index("SUBORDER_TOTAL") + 1]
+        except ValueError:
+            total = None
 
         # Suborder Number used to identify multi-part orders
         suborder_number = clients_data_list[clients_data_list.index("OrderNo") + 1]
@@ -212,7 +216,8 @@ def import_file(tree, date_submitted):
                              client_id=client_id,
                              order_type=order_type,
                              order_number=order_number,
-                             _status=status.RECEIVED)
+                             _status=status.RECEIVED,
+                             total=total)
 
         db.session.add(suborder)
         db.session.commit()
@@ -937,7 +942,8 @@ def import_file(tree, date_submitted):
                     client_id=client_id,
                     order_type=order_type,
                     order_number=order_number,
-                    _status=status.RECEIVED
+                    _status=status.RECEIVED,
+                    total=total
                 )
                 db.session.add(suborder_1940)
 
@@ -947,7 +953,8 @@ def import_file(tree, date_submitted):
                     client_id=client_id,
                     order_type=order_type,
                     order_number=order_number,
-                    _status=status.RECEIVED
+                    _status=status.RECEIVED,
+                    total=total
                 )
                 db.session.add(suborder_1980)
 
@@ -985,7 +992,8 @@ def import_file(tree, date_submitted):
                 suborder_1940.es_update(customer_order_1940.serialize)
 
                 # Retrieve Print Size
-                size_1980 = clients_data_list[clients_data_list.index("SIZE_2") + 1] if "SIZE_2" in clients_data_list else None
+                size_1980 = clients_data_list[
+                    clients_data_list.index("SIZE_2") + 1] if "SIZE_2" in clients_data_list else None
 
                 # Retrieve Number of Copies
                 num_copies_1980 = clients_data_list[clients_data_list.index("COPIES_2") + 1]
@@ -1030,7 +1038,8 @@ def import_file(tree, date_submitted):
 
             else:
                 # Retrieve Print Size
-                size = clients_data_list[clients_data_list.index("SIZE_1") + 1] if "SIZE_1" in clients_data_list else None
+                size = clients_data_list[
+                    clients_data_list.index("SIZE_1") + 1] if "SIZE_1" in clients_data_list else None
 
                 # Retrieve Number of Copies
                 num_copies = clients_data_list[clients_data_list.index("COPIES_1") + 1]
@@ -1119,7 +1128,8 @@ def import_file(tree, date_submitted):
                 clients_data_list.index("AGE_AT_DEATH") + 1] if "AGE_AT_DEATH" in clients_data_list else None
 
             certificate_number = clients_data_list[
-                clients_data_list.index("CERTIFICATE_NUMBER") + 1] if "CERTIFICATE_NUMBER" in clients_data_list else None
+                clients_data_list.index(
+                    "CERTIFICATE_NUMBER") + 1] if "CERTIFICATE_NUMBER" in clients_data_list else None
 
             # Retrieve Number of Copies
             num_copies = clients_data_list[clients_data_list.index("COPIES") + 1]

@@ -1,0 +1,15 @@
+/*
+CSS for the Create Orders Form
+ */
+[data-toggle="collapse"] .fa:before {
+    content: "\f13a"
+}
+
+[data-toggle="collapse"].collapsed .fa:before {
+    content: "\f138"
+}
+
+label[required]:after {
+    content: " *";
+    color: red;
+}

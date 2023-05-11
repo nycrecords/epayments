@@ -12,6 +12,11 @@
                         <div><strong>Order Type: </strong>{{ order['order_type'] }}</div>
                         <div><strong>Billing Name: </strong>{{ order['customer']['billing_name'] }}</div>
                         <div><strong>Email: </strong>{{ order['customer']['email'] }}</div>
+                        {% if order['total'] is not none %}
+                            <div><strong>Total: </strong>${{ order['total'] }}</div>
+                        {% else %}
+                            <div><strong>Total: </strong>N/A</div>
+                        {% endif %}
                         <div><strong>Date Received: </strong>{{ order['date_received'].split(' ')[0] }}</div>
                     </div>
                     <div class="col-6">
