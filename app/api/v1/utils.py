@@ -864,7 +864,7 @@ def generate_csv(search_params: Dict[str, str]) -> str:
             'Order Number',
             'Suborder Number',
             'Order Type',
-            'Customer Name',
+            'Billing Name',
             'Address line 1',
             'Address line 2',
             'City',
