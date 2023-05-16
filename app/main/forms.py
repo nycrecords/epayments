@@ -1,9 +1,9 @@
 from datetime import datetime
 
 from flask_wtf import FlaskForm
-from wtforms import validators, FieldList, PasswordField, SubmitField
+from wtforms import validators, FieldList, PasswordField, SubmitField, SelectMultipleField
 from wtforms.fields import (StringField, IntegerField, SelectField, BooleanField, DateField, FormField)
-from wtforms.validators import ValidationError, Email, InputRequired
+from wtforms.validators import ValidationError, Email, InputRequired, Optional
 
 from app.constants import status, delivery_method, suborder_form, order_types
 
@@ -40,6 +40,20 @@ def validate_numeric(form, field):
             raise ValidationError(f"Invalid {formatted_field}.")
 
 
+def validate_copies(form, field):
+    if field.data:
+        copies_type = field.short_name + "_copies"
+        if not getattr(form, copies_type).data:
+            formatted_field = copies_type.replace("_", " ").title()
+            raise ValidationError(f"Number of {formatted_field} is required.")
+
+
+def validate_certificate_number(form, field):
+    if field.data:
+        if not any(char.isdigit() for char in field.data):
+            raise ValidationError("Certificate Number must have at least 1 numeric character")
+
+
 def validate_year(form, field):
     if field.data is not None and field.data < 1867:
         if form.day.data is not None and form.month.data != "":
@@ -73,14 +87,19 @@ class BirthCertificateForm(FlaskForm):
     class Meta:
         csrf = False
 
-    num_copies = IntegerField(
+    num_copies = SelectField(
         "Number of Copies",
-        validators=[InputRequired("Number of copies is required."), validators.NumberRange(min=1, max=99)]
+        choices=suborder_form.NUMBER_OF_COPIES,
+        validators=[InputRequired("Number of copies is required."), validators.length(max=1)]
     )
     status = SelectField("Status", choices=suborder_form.ORDER_STATUS)
     certificate_num = StringField(
         "Certificate Number",
-        validators=[InputRequired("Certificate Number is required."), validators.Length(max=40)]
+        validators=[
+            InputRequired("Certificate Number is required."),
+            validators.Length(max=40),
+            validate_certificate_number
+        ]
     )
     first_name = StringField("First Name", validators=[validators.Length(max=40)])
     last_name = StringField(
@@ -110,16 +129,30 @@ class BirthCertificateForm(FlaskForm):
         choices=suborder_form.BOROUGHS,
         validators=[InputRequired("Borough is required."), validators.Length(max=20)]
     )
-    additional_years = StringField("Additional Years (Separated by comma)", validators=[validate_additional_years])
-    comment = StringField("Comment", validators=[validators.Length(max=225)])
-    exemplification = BooleanField("Attach Letter of Exemplification")
-    raised_seals = BooleanField("Raised Seals")
-    no_amends = BooleanField("No Amends")
+    exemplification = BooleanField("Letter of Exemplification", validators=[validate_copies])
+    exemplification_copies = SelectField(
+        "Exemplification Copies",
+        choices=suborder_form.NUMBER_OF_COPIES,
+        validators=[validators.length(max=1)]
+    )
+    raised_seal = BooleanField("Raised Seal", validators=[validate_copies])
+    raised_seal_copies = SelectField(
+        "Raised Seal Copies",
+        choices=suborder_form.NUMBER_OF_COPIES,
+        validators=[validators.length(max=1)]
+    )
+    no_amends = BooleanField("No Amends", validators=[validate_copies])
+    no_amends_copies = SelectField(
+        "No Amends Copies",
+        choices=suborder_form.NUMBER_OF_COPIES,
+        validators=[validators.length(max=1)]
+    )
     delivery_method = SelectField(
         "Delivery Method",
         choices=suborder_form.DELIVERY_METHODS,
         validators=[InputRequired("Delivery Method is required.")]
     )
+    comment = StringField("Comment", validators=[validators.Length(max=225)])
 
     def __init__(self, *args, **kwargs):
         super(BirthCertificateForm, self).__init__(*args, **kwargs)
@@ -129,9 +162,10 @@ class BirthSearchForm(FlaskForm):
     class Meta:
         csrf = False
 
-    num_copies = IntegerField(
+    num_copies = SelectField(
         "Number of Copies",
-        validators=[InputRequired("Number of copies is required."), validators.NumberRange(min=1, max=99)]
+        choices=suborder_form.NUMBER_OF_COPIES,
+        validators=[InputRequired("Number of copies is required."), validators.length(max=1)]
     )
     status = SelectField("Status", choices=suborder_form.ORDER_STATUS)
     first_name = StringField("First Name", validators=[validators.Length(max=40)])
@@ -155,22 +189,42 @@ class BirthSearchForm(FlaskForm):
             validators.number_range(1847, 1909, "Year must be between 1847 and 1909 "),
             validate_year]
     )
+    additional_years = StringField("Additional Years (Separated by comma)", validators=[validate_additional_years])
     birth_place = StringField("Place of Birth", validators=[validators.Length(max=40)])
     borough = SelectField(
         "Borough",
         choices=suborder_form.BOROUGHS,
         validators=[InputRequired("Borough is required."), validators.Length(max=20)]
     )
-    additional_years = StringField("Additional Years (Separated by comma)", validators=[validate_additional_years])
-    comment = StringField("Comment", validators=[validators.Length(max=225)])
-    exemplification = BooleanField("Attach Letter of Exemplification")
-    raised_seals = BooleanField("Raised Seals")
-    no_amends = BooleanField("No Amends")
+    additional_boroughs = SelectMultipleField(
+        "Additional Boroughs (Hold down CTRL while clicking an option for multi-select)",
+        choices=suborder_form.ADDITIONAL_BOROUGHS,
+        render_kw={'size': 5}
+    )
+    exemplification = BooleanField("Letter of Exemplification", validators=[validate_copies])
+    exemplification_copies = SelectField(
+        "Exemplification Copies",
+        choices=suborder_form.NUMBER_OF_COPIES,
+        validators=[validators.length(max=1)]
+    )
+    raised_seal = BooleanField("Raised Seal", validators=[validate_copies])
+    raised_seal_copies = SelectField(
+        "Raised Seal Copies",
+        choices=suborder_form.NUMBER_OF_COPIES,
+        validators=[validators.length(max=1)]
+    )
+    no_amends = BooleanField("No Amends", validators=[validate_copies])
+    no_amends_copies = SelectField(
+        "No Amends Copies",
+        choices=suborder_form.NUMBER_OF_COPIES,
+        validators=[validators.length(max=1)]
+    )
     delivery_method = SelectField(
         "Delivery Method",
         choices=suborder_form.DELIVERY_METHODS,
         validators=[InputRequired("Delivery Method is required.")]
     )
+    comment = StringField("Comment", validators=[validators.Length(max=225)])
 
     def __init__(self, *args, **kwargs):
         super(BirthSearchForm, self).__init__(*args, **kwargs)
@@ -180,14 +234,19 @@ class DeathCertificateForm(FlaskForm):
     class Meta:
         csrf = False
 
-    num_copies = IntegerField(
+    num_copies = SelectField(
         "Number of Copies",
-        validators=[InputRequired("Number of copies is required."), validators.NumberRange(min=1)]
+        choices=suborder_form.NUMBER_OF_COPIES,
+        validators=[InputRequired("Number of copies is required."), validators.length(max=1)]
     )
     status = SelectField("Status", choices=suborder_form.ORDER_STATUS)
     certificate_num = StringField(
         "Certificate Number",
-        validators=[InputRequired("Certificate Number is required."), validators.Length(max=40)]
+        validators=[
+            InputRequired("Certificate Number is required."),
+            validators.Length(max=40),
+            validate_certificate_number
+        ]
     )
     last_name = StringField(
         "Last Name",
@@ -209,7 +268,6 @@ class DeathCertificateForm(FlaskForm):
             validate_year
         ]
     )
-    additional_years = StringField("Additional Years (Separated by comma)", validators=[validate_additional_years])
     death_place = StringField("Place of Death", validators=[validators.Length(max=40)])
     borough = SelectField(
         "Borough",
@@ -218,15 +276,30 @@ class DeathCertificateForm(FlaskForm):
     )
     father_name = StringField("Father's Name", validators=[validators.Length(max=105)])
     mother_name = StringField("Mother's Name", validators=[validators.Length(max=105)])
-    comment = StringField("Comment", validators=[validators.Length(max=225)])
-    exemplification = BooleanField("Attach Letter of Exemplification")
-    raised_seals = BooleanField("Raised Seals")
-    no_amends = BooleanField("No Amends")
+    exemplification = BooleanField("Letter of Exemplification", validators=[validate_copies])
+    exemplification_copies = SelectField(
+        "Exemplification Copies",
+        choices=suborder_form.NUMBER_OF_COPIES,
+        validators=[validators.length(max=1)]
+    )
+    raised_seal = BooleanField("Raised Seal", validators=[validate_copies])
+    raised_seal_copies = SelectField(
+        "Raised Seal Copies",
+        choices=suborder_form.NUMBER_OF_COPIES,
+        validators=[validators.length(max=1)]
+    )
+    no_amends = BooleanField("No Amends", validators=[validate_copies])
+    no_amends_copies = SelectField(
+        "No Amends Copies",
+        choices=suborder_form.NUMBER_OF_COPIES,
+        validators=[validators.length(max=1)]
+    )
     delivery_method = SelectField(
         "Delivery Method",
         choices=suborder_form.DELIVERY_METHODS,
         validators=[InputRequired("Delivery Method is required.")]
     )
+    comment = StringField("Comment", validators=[validators.Length(max=225)])
 
     def __init__(self, *args, **kwargs):
         super(DeathCertificateForm, self).__init__(*args, **kwargs)
@@ -236,9 +309,10 @@ class DeathSearchForm(FlaskForm):
     class Meta:
         csrf = False
 
-    num_copies = IntegerField(
+    num_copies = SelectField(
         "Number of Copies",
-        validators=[InputRequired("Number of copies is required."), validators.NumberRange(min=1)]
+        choices=suborder_form.NUMBER_OF_COPIES,
+        validators=[InputRequired("Number of copies is required."), validators.length(max=1)]
     )
     status = SelectField("Status", choices=suborder_form.ORDER_STATUS)
     last_name = StringField(
@@ -268,17 +342,37 @@ class DeathSearchForm(FlaskForm):
         choices=suborder_form.BOROUGHS,
         validators=[InputRequired("Borough is required."), validators.Length(max=20)]
     )
+    additional_boroughs = SelectMultipleField(
+        "Additional Boroughs (Hold down CTRL while clicking an option for multi-select)",
+        choices=suborder_form.ADDITIONAL_BOROUGHS,
+        render_kw={'size': 5}
+    )
     father_name = StringField("Father's Name", validators=[validators.Length(max=105)])
     mother_name = StringField("Mother's Name", validators=[validators.Length(max=105)])
-    comment = StringField("Comment", validators=[validators.Length(max=225)])
-    exemplification = BooleanField("Attach Letter of Exemplification")
-    raised_seals = BooleanField("Raised Seals")
-    no_amends = BooleanField("No Amends")
+    exemplification = BooleanField("Attach Letter of Exemplification", validators=[validate_copies])
+    exemplification_copies = SelectField(
+        "Exemplification Copies",
+        choices=suborder_form.NUMBER_OF_COPIES,
+        validators=[validators.length(max=1)]
+    )
+    raised_seal = BooleanField("Raised Seal", validators=[validate_copies])
+    raised_seal_copies = SelectField(
+        "Raised Seal Copies",
+        choices=suborder_form.NUMBER_OF_COPIES,
+        validators=[validators.length(max=1)]
+    )
+    no_amends = BooleanField("No Amends", validators=[validate_copies])
+    no_amends_copies = SelectField(
+        "No Amends Copies",
+        choices=suborder_form.NUMBER_OF_COPIES,
+        validators=[validators.length(max=1)]
+    )
     delivery_method = SelectField(
         "Delivery Method",
         choices=suborder_form.DELIVERY_METHODS,
         validators=[InputRequired("Delivery Method is required.")]
     )
+    comment = StringField("Comment", validators=[validators.Length(max=225)])
 
     def __init__(self, *args, **kwargs):
         super(DeathSearchForm, self).__init__(*args, **kwargs)
@@ -288,14 +382,19 @@ class MarriageCertificateForm(FlaskForm):
     class Meta:
         csrf = False
 
-    num_copies = IntegerField(
+    num_copies = SelectField(
         "Number of Copies",
-        validators=[InputRequired("Number of copies is required."), validators.NumberRange(min=1)]
+        choices=suborder_form.NUMBER_OF_COPIES,
+        validators=[InputRequired("Number of copies is required."), validators.length(max=1)]
     )
     status = SelectField("Status", choices=suborder_form.ORDER_STATUS)
     certificate_num = StringField(
         "Certificate Number",
-        validators=[InputRequired("Certificate Number is required."), validators.Length(max=40)]
+        validators=[
+            InputRequired("Certificate Number is required."),
+            validators.Length(max=40),
+            validate_certificate_number
+        ]
     )
     bride_last_name = StringField(
         "Last Name of Bride",
@@ -325,15 +424,30 @@ class MarriageCertificateForm(FlaskForm):
         choices=suborder_form.BOROUGHS,
         validators=[InputRequired("Borough is required."), validators.Length(max=20)]
     )
-    exemplification = BooleanField("Attach Letter of Exemplification")
-    raised_seals = BooleanField("Raised Seals")
-    no_amends = BooleanField("No Amends")
-    comment = StringField("Comment", validators=[validators.Length(max=255)])
+    exemplification = BooleanField("Letter of Exemplification", validators=[validate_copies])
+    exemplification_copies = SelectField(
+        "Exemplification Copies",
+        choices=suborder_form.NUMBER_OF_COPIES,
+        validators=[validators.length(max=1)]
+    )
+    raised_seal = BooleanField("Raised Seal", validators=[validate_copies])
+    raised_seal_copies = SelectField(
+        "Raised Seal Copies",
+        choices=suborder_form.NUMBER_OF_COPIES,
+        validators=[validators.length(max=1)]
+    )
+    no_amends = BooleanField("No Amends", validators=[validate_copies])
+    no_amends_copies = SelectField(
+        "No Amends Copies",
+        choices=suborder_form.NUMBER_OF_COPIES,
+        validators=[validators.length(max=1)]
+    )
     delivery_method = SelectField(
         "Delivery Method",
         choices=suborder_form.DELIVERY_METHODS,
         validators=[InputRequired("Delivery Method is required.")]
     )
+    comment = StringField("Comment", validators=[validators.Length(max=255)])
 
     def __init__(self, *args, **kwargs):
         super(MarriageCertificateForm, self).__init__(*args, **kwargs)
@@ -343,9 +457,10 @@ class MarriageSearchForm(FlaskForm):
     class Meta:
         csrf = False
 
-    num_copies = IntegerField(
+    num_copies = SelectField(
         "Number of Copies",
-        validators=[InputRequired("Number of copies is required."), validators.NumberRange(min=1)]
+        choices=suborder_form.NUMBER_OF_COPIES,
+        validators=[InputRequired("Number of copies is required."), validators.length(max=1)]
     )
     status = SelectField("Status", choices=suborder_form.ORDER_STATUS)
     bride_last_name = StringField(
@@ -371,21 +486,42 @@ class MarriageSearchForm(FlaskForm):
             validate_year
         ]
     )
+    additional_years = StringField("Additional Years (Separated by comma)", validators=[validate_additional_years])
     marriage_place = StringField("Place of Marriage", validators=[validators.Length(max=40)])
     borough = SelectField(
         "Borough",
         choices=suborder_form.BOROUGHS,
         validators=[InputRequired("Borough is required."), validators.Length(max=20)]
     )
-    exemplification = BooleanField("Attach Letter of Exemplification")
-    raised_seals = BooleanField("Raised Seals")
-    no_amends = BooleanField("No Amends")
-    comment = StringField("Comment", validators=[validators.Length(max=255)])
+    additional_boroughs = SelectMultipleField(
+        "Additional Boroughs (Hold down CTRL while clicking an option for multi-select)",
+        choices=suborder_form.ADDITIONAL_BOROUGHS,
+        render_kw={'size': 5}
+    )
+    exemplification = BooleanField("Letter of Exemplification", validators=[validate_copies])
+    exemplification_copies = SelectField(
+        "Exemplification Copies",
+        choices=suborder_form.NUMBER_OF_COPIES,
+        validators=[validators.length(max=1)]
+    )
+    raised_seal = BooleanField("Raised Seal", validators=[validate_copies])
+    raised_seal_copies = SelectField(
+        "Raised Seal Copies",
+        choices=suborder_form.NUMBER_OF_COPIES,
+        validators=[validators.length(max=1)]
+    )
+    no_amends = BooleanField("No Amends", validators=[validate_copies])
+    no_amends_copies = SelectField(
+        "No Amends Copies",
+        choices=suborder_form.NUMBER_OF_COPIES,
+        validators=[validators.length(max=1)]
+    )
     delivery_method = SelectField(
         "Delivery Method",
         choices=suborder_form.DELIVERY_METHODS,
         validators=[InputRequired("Delivery Method is required.")]
     )
+    comment = StringField("Comment", validators=[validators.Length(max=255)])
 
     def __init__(self, *args, **kwargs):
         super(MarriageSearchForm, self).__init__(*args, **kwargs)
@@ -395,9 +531,10 @@ class PhotoGalleryForm(FlaskForm):
     class Meta:
         csrf = False
 
-    num_copies = IntegerField(
+    num_copies = SelectField(
         "Number of Copies",
-        validators=[InputRequired("Number of copies is required."), validators.NumberRange(min=1, max=99)]
+        choices=suborder_form.NUMBER_OF_COPIES,
+        validators=[InputRequired("Number of copies is required."), validators.length(max=1)]
     )
     status = SelectField("Status", choices=suborder_form.ORDER_STATUS)
     image_identifier = StringField(
@@ -407,13 +544,13 @@ class PhotoGalleryForm(FlaskForm):
     description = StringField("Title/Description of Image", validators=[validators.Length(max=500)])
     additional_description = StringField("Additional Description", validators=[validators.Length(max=500)])
     size = SelectField("Size", choices=suborder_form.PHOTO_GALLERY_SIZES)
-    contact_email = StringField("Contact Email", validators=[validators.Length(max=256)])
-    comment = StringField("Comment", validators=[validators.Length(max=255)])
+    contact_email = StringField("Contact Email", validators=[Optional(), Email(), validators.Length(max=256)])
     delivery_method = SelectField(
         "Delivery Method",
         choices=suborder_form.DELIVERY_METHODS,
         validators=[InputRequired("Delivery Method is required.")]
     )
+    comment = StringField("Comment", validators=[validators.Length(max=255)])
 
     def __init__(self, *args, **kwargs):
         super(PhotoGalleryForm, self).__init__(*args, **kwargs)
@@ -423,9 +560,10 @@ class TaxPhotoForm(FlaskForm):
     class Meta:
         csrf = False
 
-    num_copies = IntegerField(
+    num_copies = SelectField(
         "Number of Copies",
-        validators=[InputRequired("Number of copies is required."), validators.NumberRange(min=1, max=99)]
+        choices=suborder_form.NUMBER_OF_COPIES,
+        validators=[InputRequired("Number of copies is required."), validators.length(max=1)]
     )
     status = SelectField("Status", choices=suborder_form.ORDER_STATUS)
     collection = SelectField(
@@ -479,13 +617,19 @@ class SuborderForm(FlaskForm):
 
 class MainOrderForm(FlaskForm):
     name = StringField("Name", validators=[InputRequired(), validators.Length(max=64)])
-    email = StringField("Email", validators=[InputRequired(), Email(), validators.Length(max=64)])
+    country = SelectField(
+        "Country",
+        choices=suborder_form.COUNTRIES,
+        default="United States",
+        validators=[validators.Length(max=64)]
+    )
     address_line_1 = StringField("Address Line 1", validators=[validators.Length(max=64)])
     address_line_2 = StringField("Address Line 2", validators=[validators.Length(max=64)])
-    city = StringField("City", [InputRequired(), validators.Length(max=64)])
-    state = StringField("State", validators=[validators.Length(max=64)])
-    zip_code = StringField("Zip Code", validators=[InputRequired(), validators.Length(min=5, max=5), validate_numeric])
-    phone = StringField("Phone", validators=[validators.Length(max=64), validate_numeric])
+    city = StringField("City", [validators.Length(max=64)])
+    state = SelectField("State", choices=suborder_form.STATES, validators=[validators.Length(max=64)])
+    zip_code = StringField("Zip Code", validators=[Optional(), validators.Length(min=5, max=10), validate_numeric])
+    phone = StringField("Phone", validators=[validators.Length(max=64)])
+    email = StringField("Email", validators=[Optional(), Email(), validators.Length(max=64)])
     suborders = FieldList(FormField(SuborderForm))
 
     def __init__(self, *args, **kwargs):

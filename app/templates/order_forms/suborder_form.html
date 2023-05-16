@@ -21,13 +21,20 @@
                 <div class="panel collapse" id="{{ field[0].id }}-panel">
                     <div class="card card-body">
                         {% for field in field[0] %}
-                            {% set label_class = 'font-weight-bold' %}
-                            {% if field.flags.required %}
-                                {{ field.label(class_=label_class, required=field.flags.required) }}
-                            {% else %}
-                                {{ field.label(class_=label_class) }}
+                            {% set label_class = "font-weight-bold" %}
+                            {% set visibility = "" %}
+
+                            {% if field.label.text in ("Exemplification Copies", "Raised Seal Copies", "No Amends Copies") %}
+                                {% set visibility = "display: none;" %}
                             {% endif %}
-                            {{ field(class_="form-control form-control-sm rounded-sm mb-2") }}
+
+                            {% if field.flags.required %}
+                                {{ field.label(class_=label_class, style=visibility, required=field.flags.required) }}
+                            {% else %}
+                                {{ field.label(class_=label_class, style=visibility) }}
+                            {% endif %}
+
+                            {{ field(class_="form-control form-control-sm rounded-sm mb-2", style=visibility) }}
                         {% endfor %}
                     </div>
                 </div>
