@@ -895,7 +895,7 @@ def generate_csv(search_params: Dict[str, str]) -> str:
                 suborder['_source'].get('customer').get('country'),
                 suborder['_source'].get('customer').get('email'),
                 suborder['_source'].get('total'),
-                suborder['_source'].get('date_submitted')[:8], # Remove time from string
+                suborder['_source'].get('date_submitted')[:8],  # Remove time from string
                 suborder['_source'].get('date_received')[:8],
             ]
             contents.append(row_content)
@@ -942,13 +942,14 @@ def create_new_order(form_data):
     customer = Customers(
         billing_name=form_data["name"],
         shipping_name=form_data["name"],
-        email=form_data["email"],
+        country=form_data["country"],
         address_line_1=form_data["address_line_1"],
         address_line_2=form_data["address_line_2"],
         city=form_data["city"],
         state=form_data["state"],
         zip_code=form_data["zip_code"],
         phone=form_data["phone"],
+        email=form_data["email"],
         order_number=order_id
     )
     db.session.add(customer)
@@ -983,7 +984,7 @@ def create_new_order(form_data):
             type_=event_type.INITIAL_IMPORT,
             user_email=current_user.email,
             previous_value=None,
-            new_value={'status': new_suborder.status,}
+            new_value={'status': new_suborder.status, }
         )
         db.session.add(event)
         db.session.commit()
@@ -1001,7 +1002,6 @@ def create_new_order(form_data):
 
 def _create_new_birth_object(suborder: Dict[str, Union[str, List[Dict]]], new_suborder_obj: Suborders):
     certificate_number = suborder.get('certificate_num')
-    years = _get_years(suborder)
 
     if certificate_number:
         birth_object = BirthCertificate(
@@ -1015,17 +1015,22 @@ def _create_new_birth_object(suborder: Dict[str, Union[str, List[Dict]]], new_su
             num_copies=suborder.get('num_copies'),
             month=suborder.get('month'),
             day=suborder.get('day'),
-            years=years,
+            years=[suborder.get('year')],
             birth_place=suborder.get('birth_place'),
             borough=[suborder.get('borough')],
             comment=suborder.get('comment'),
             _delivery_method=suborder.get('delivery_method'),
             suborder_number=new_suborder_obj.id,
             exemplification=suborder.get('exemplification'),
-            raised_seal=suborder.get('raised_seals'),
-            no_amends=suborder.get('no_amends')
+            exemplification_copies=suborder.get('exemplification_copies'),
+            raised_seal=suborder.get('raised_seal'),
+            raised_seal_copies=suborder.get('raised_seal_copies'),
+            no_amends=suborder.get('no_amends'),
+            no_amends_copies=suborder.get('no_amends_copies')
         )
     else:
+        years = _get_years(suborder)
+        boroughs = _get_boroughs(suborder)
         birth_object = BirthSearch(
             first_name=suborder.get('first_name'),
             last_name=suborder.get('last_name'),
@@ -1038,13 +1043,16 @@ def _create_new_birth_object(suborder: Dict[str, Union[str, List[Dict]]], new_su
             day=suborder.get('day'),
             years=years,
             birth_place=suborder.get('birth_place'),
-            borough=[suborder.get('borough')],
+            borough=boroughs,
             comment=suborder.get('comment'),
             _delivery_method=suborder.get('delivery_method'),
             suborder_number=new_suborder_obj.id,
             exemplification=suborder.get('exemplification'),
-            raised_seal=suborder.get('raised_seals'),
-            no_amends=suborder.get('no_amends')
+            exemplification_copies=suborder.get('exemplification_copies'),
+            raised_seal=suborder.get('raised_seal'),
+            raised_seal_copies=suborder.get('raised_seal_copies'),
+            no_amends=suborder.get('no_amends'),
+            no_amends_copies=suborder.get('no_amends_copies')
         )
     db.session.add(birth_object)
     db.session.commit()
@@ -1054,7 +1062,6 @@ def _create_new_birth_object(suborder: Dict[str, Union[str, List[Dict]]], new_su
 
 def _create_new_death_object(suborder: Dict[str, Union[str, List[Dict]]], new_suborder_obj: Suborders):
     certificate_number = suborder.get('certificate_num')
-    years = _get_years(suborder)
 
     if certificate_number:
         death_object = DeathCertificate(
@@ -1066,7 +1073,7 @@ def _create_new_death_object(suborder: Dict[str, Union[str, List[Dict]]], new_su
             cemetery=suborder.get('cemetery'),
             month=suborder.get('month'),
             day=suborder.get('day'),
-            years=years,
+            years=[suborder.get('year')],
             death_place=suborder.get('death_place'),
             borough=[suborder.get('borough')],
             father_name=suborder.get('father_name'),
@@ -1075,10 +1082,15 @@ def _create_new_death_object(suborder: Dict[str, Union[str, List[Dict]]], new_su
             _delivery_method=suborder.get('delivery_method'),
             suborder_number=new_suborder_obj.id,
             exemplification=suborder.get('exemplification'),
-            raised_seal=suborder.get('raised_seals'),
-            no_amends=suborder.get('no_amends')
+            exemplification_copies=suborder.get('exemplification_copies'),
+            raised_seal=suborder.get('raised_seal'),
+            raised_seal_copies=suborder.get('raised_seal_copies'),
+            no_amends=suborder.get('no_amends'),
+            no_amends_copies=suborder.get('no_amends_copies')
         )
     else:
+        years = _get_years(suborder)
+        boroughs = _get_boroughs(suborder)
         death_object = DeathSearch(
             last_name=suborder.get('last_name'),
             first_name=suborder.get('first_name'),
@@ -1089,15 +1101,18 @@ def _create_new_death_object(suborder: Dict[str, Union[str, List[Dict]]], new_su
             day=suborder.get('day'),
             years=years,
             death_place=suborder.get('death_place'),
-            borough=[suborder.get('borough')],
+            borough=boroughs,
             father_name=suborder.get('father_name'),
             mother_name=suborder.get('mother_name'),
             comment=suborder.get('comment'),
             _delivery_method=suborder.get('delivery_method'),
             suborder_number=new_suborder_obj.id,
             exemplification=suborder.get('exemplification'),
-            raised_seal=suborder.get('raised_seals'),
-            no_amends=suborder.get('no_amends')
+            exemplification_copies=suborder.get('exemplification_copies'),
+            raised_seal=suborder.get('raised_seal'),
+            raised_seal_copies=suborder.get('raised_seal_copies'),
+            no_amends=suborder.get('no_amends'),
+            no_amends_copies=suborder.get('no_amends_copies')
         )
     db.session.add(death_object)
     db.session.commit()
@@ -1118,17 +1133,22 @@ def _create_new_marriage_object(suborder: Dict[str, Union[str, List[Dict]]], new
             num_copies=suborder.get('num_copies'),
             month=suborder.get('month'),
             day=suborder.get('day'),
-            years=[str(suborder.get('year'))],
+            years=[suborder.get('year')],
             marriage_place=suborder.get('marriage_place'),
             borough=[suborder.get('borough')],
             comment=suborder.get('comment'),
             _delivery_method=suborder.get('delivery_method'),
             suborder_number=new_suborder_obj.id,
             exemplification=suborder.get('exemplification'),
-            raised_seal=suborder.get('raised_seals'),
-            no_amends=suborder.get('no_amends')
+            exemplification_copies=suborder.get('exemplification_copies'),
+            raised_seal=suborder.get('raised_seal'),
+            raised_seal_copies=suborder.get('raised_seal_copies'),
+            no_amends=suborder.get('no_amends'),
+            no_amends_copies=suborder.get('no_amends_copies')
         )
     else:
+        years = _get_years(suborder)
+        boroughs = _get_boroughs(suborder)
         marriage_object = MarriageSearch(
             groom_last_name=suborder.get('groom_last_name'),
             groom_first_name=suborder.get('groom_first_name'),
@@ -1137,15 +1157,18 @@ def _create_new_marriage_object(suborder: Dict[str, Union[str, List[Dict]]], new
             num_copies=suborder.get('num_copies'),
             month=suborder.get('month'),
             day=suborder.get('day'),
-            years=[str(suborder.get('year'))],
+            years=years,
             marriage_place=suborder.get('marriage_place'),
-            borough=[suborder.get('borough')],
+            borough=boroughs,
             comment=suborder.get('comment'),
             _delivery_method=suborder.get('delivery_method'),
             suborder_number=new_suborder_obj.id,
             exemplification=suborder.get('exemplification'),
-            raised_seal=suborder.get('raised_seals'),
-            no_amends=suborder.get('no_amends')
+            exemplification_copies=suborder.get('exemplification_copies'),
+            raised_seal=suborder.get('raised_seal'),
+            raised_seal_copies=suborder.get('raised_seal_copies'),
+            no_amends=suborder.get('no_amends'),
+            no_amends_copies=suborder.get('no_amends_copies')
         )
     db.session.add(marriage_object)
     db.session.commit()
@@ -1223,3 +1246,9 @@ def _get_years(suborder):
     if suborder.get('additional_years') is not None:
         return list(filter(None, [suborder.get('year')] + suborder.get('additional_years').split(',')))
     return [suborder.get('year')]
+
+
+def _get_boroughs(suborder):
+    if suborder.get('additional_boroughs') is not None:
+        return list(set([suborder.get('borough')] + suborder.get('additional_boroughs')))
+    return [suborder.get('borough')]
