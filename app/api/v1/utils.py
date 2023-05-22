@@ -984,7 +984,7 @@ def create_new_order(form_data):
             type_=event_type.INITIAL_IMPORT,
             user_email=current_user.email,
             previous_value=None,
-            new_value={'status': new_suborder.status, }
+            new_value={'status': new_suborder.status}
         )
         db.session.add(event)
         db.session.commit()
@@ -1030,7 +1030,6 @@ def _create_new_birth_object(suborder: Dict[str, Union[str, List[Dict]]], new_su
         )
     else:
         years = _get_years(suborder)
-        boroughs = _get_boroughs(suborder)
         birth_object = BirthSearch(
             first_name=suborder.get('first_name'),
             last_name=suborder.get('last_name'),
@@ -1043,7 +1042,7 @@ def _create_new_birth_object(suborder: Dict[str, Union[str, List[Dict]]], new_su
             day=suborder.get('day'),
             years=years,
             birth_place=suborder.get('birth_place'),
-            borough=boroughs,
+            borough=suborder.get('boroughs'),
             comment=suborder.get('comment'),
             _delivery_method=suborder.get('delivery_method'),
             suborder_number=new_suborder_obj.id,
@@ -1090,7 +1089,6 @@ def _create_new_death_object(suborder: Dict[str, Union[str, List[Dict]]], new_su
         )
     else:
         years = _get_years(suborder)
-        boroughs = _get_boroughs(suborder)
         death_object = DeathSearch(
             last_name=suborder.get('last_name'),
             first_name=suborder.get('first_name'),
@@ -1101,7 +1099,7 @@ def _create_new_death_object(suborder: Dict[str, Union[str, List[Dict]]], new_su
             day=suborder.get('day'),
             years=years,
             death_place=suborder.get('death_place'),
-            borough=boroughs,
+            borough=suborder.get('boroughs'),
             father_name=suborder.get('father_name'),
             mother_name=suborder.get('mother_name'),
             comment=suborder.get('comment'),
@@ -1148,7 +1146,6 @@ def _create_new_marriage_object(suborder: Dict[str, Union[str, List[Dict]]], new
         )
     else:
         years = _get_years(suborder)
-        boroughs = _get_boroughs(suborder)
         marriage_object = MarriageSearch(
             groom_last_name=suborder.get('groom_last_name'),
             groom_first_name=suborder.get('groom_first_name'),
@@ -1159,7 +1156,7 @@ def _create_new_marriage_object(suborder: Dict[str, Union[str, List[Dict]]], new
             day=suborder.get('day'),
             years=years,
             marriage_place=suborder.get('marriage_place'),
-            borough=boroughs,
+            borough=suborder.get('boroughs'),
             comment=suborder.get('comment'),
             _delivery_method=suborder.get('delivery_method'),
             suborder_number=new_suborder_obj.id,
@@ -1208,7 +1205,7 @@ def _create_new_tax_photo(suborder: Dict[str, str], new_suborder_obj: Suborders)
             image_id=suborder.get('image_identifier'),
             block=suborder.get('block'),
             lot=suborder.get('lot'),
-            building_number=str(suborder.get('building_num')),
+            building_number=suborder.get('building_num'),
             street=suborder['street'],
             description=suborder.get('description'),
             size=suborder.get('size'),
@@ -1243,12 +1240,10 @@ def _create_new_photo_gallery(suborder: Dict[str, str], new_suborder_obj: Subord
 
 
 def _get_years(suborder):
-    if suborder.get('additional_years') is not None:
-        return list(filter(None, [suborder.get('year')] + suborder.get('additional_years').split(',')))
-    return [suborder.get('year')]
+    additional_years = suborder.get('additional_years')
+    year = suborder.get('year')
 
+    if additional_years:
+        return [year for year in [year] + additional_years.split(',') if year]
 
-def _get_boroughs(suborder):
-    if suborder.get('additional_boroughs') is not None:
-        return list(set([suborder.get('borough')] + suborder.get('additional_boroughs')))
-    return [suborder.get('borough')]
+    return [year]

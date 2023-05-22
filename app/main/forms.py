@@ -32,7 +32,7 @@ class SearchOrderForm(FlaskForm):
 
 
 def validate_numeric(form, field):
-    if field.data != "":
+    if field.data:
         try:
             int(field.data)
         except ValueError:
@@ -55,32 +55,34 @@ def validate_certificate_number(form, field):
 
 
 def validate_year(form, field):
-    if field.data is not None and field.data < 1867:
-        if form.day.data is not None and form.month.data != "":
-            pass
-        else:
-            raise ValidationError("If the year entered is before 1867, Month and Day fields are required.")
+    year = field.data
+    day = form.day.data
+    month = form.month.data
+
+    if year is not None and year < 1867 and (day is None or month == ""):
+        raise ValidationError("If the year entered is before 1867, Month and Day fields are required.")
 
 
 def validate_additional_years(form, field):
-    if field.data is not None and field.data != "":
-        min_year = form.year.flags.min
-        max_year = form.year.flags.max
-        additional_years = field.data.replace(" ", "")
-        years = additional_years.split(",")
+    if field.data:
+        form_min_year = form.year.flags.min
+        form_max_year = form.year.flags.max
+        form_year_input = form.year.data
+        form_additional_years_input = field.data.replace(" ", "")
+        additional_years = form_additional_years_input.split(",")
         error_msg = "Invalid value entered for Additional Years."
-        for year in years:
+        for year in additional_years:
             try:
                 form_year = int(year)
-                if form_year < min_year:
-                    error_msg = f"Additional Year values must be greater than or equal to {min_year}."
+                if form_year == form_year_input:
+                    error_msg = f"Additional Year values cannot be equal to {form_year_input}."
                     raise ValidationError()
-                if form_year > max_year:
-                    error_msg = f"Additional Year values must be less than or equal to {max_year}."
+                if not (form_min_year <= form_year <= form_max_year):
+                    error_msg = f"Additional Year values must be between {form_min_year} and {form_max_year}."
                     raise ValidationError()
             except ValueError:
                 raise ValidationError(f"{error_msg}")
-        form.additional_years.data = additional_years
+        form.additional_years.data = form_additional_years_input
 
 
 class BirthCertificateForm(FlaskForm):
@@ -191,14 +193,10 @@ class BirthSearchForm(FlaskForm):
     )
     additional_years = StringField("Additional Years (Separated by comma)", validators=[validate_additional_years])
     birth_place = StringField("Place of Birth", validators=[validators.Length(max=40)])
-    borough = SelectField(
-        "Borough",
-        choices=suborder_form.BOROUGHS,
-        validators=[InputRequired("Borough is required."), validators.Length(max=20)]
-    )
-    additional_boroughs = SelectMultipleField(
-        "Additional Boroughs (Hold down CTRL while clicking an option for multi-select)",
+    boroughs = SelectMultipleField(
+        "Borough (Hold down CTRL while clicking an option for multi-select)",
         choices=suborder_form.ADDITIONAL_BOROUGHS,
+        validators=[InputRequired("Borough is required.")],
         render_kw={'size': 5}
     )
     exemplification = BooleanField("Letter of Exemplification", validators=[validate_copies])
@@ -337,14 +335,10 @@ class DeathSearchForm(FlaskForm):
     )
     additional_years = StringField("Additional Years (Separated by comma)", validators=[validate_additional_years])
     death_place = StringField("Place of Death", validators=[validators.Length(max=40)])
-    borough = SelectField(
-        "Borough",
-        choices=suborder_form.BOROUGHS,
-        validators=[InputRequired("Borough is required."), validators.Length(max=20)]
-    )
-    additional_boroughs = SelectMultipleField(
-        "Additional Boroughs (Hold down CTRL while clicking an option for multi-select)",
+    boroughs = SelectMultipleField(
+        "Borough (Hold down CTRL while clicking an option for multi-select)",
         choices=suborder_form.ADDITIONAL_BOROUGHS,
+        validators=[InputRequired("Borough is required.")],
         render_kw={'size': 5}
     )
     father_name = StringField("Father's Name", validators=[validators.Length(max=105)])
@@ -488,14 +482,10 @@ class MarriageSearchForm(FlaskForm):
     )
     additional_years = StringField("Additional Years (Separated by comma)", validators=[validate_additional_years])
     marriage_place = StringField("Place of Marriage", validators=[validators.Length(max=40)])
-    borough = SelectField(
-        "Borough",
-        choices=suborder_form.BOROUGHS,
-        validators=[InputRequired("Borough is required."), validators.Length(max=20)]
-    )
-    additional_boroughs = SelectMultipleField(
-        "Additional Boroughs (Hold down CTRL while clicking an option for multi-select)",
+    boroughs = SelectMultipleField(
+        "Borough (Hold down CTRL while clicking an option for multi-select)",
         choices=suborder_form.ADDITIONAL_BOROUGHS,
+        validators=[InputRequired("Borough is required.")],
         render_kw={'size': 5}
     )
     exemplification = BooleanField("Letter of Exemplification", validators=[validate_copies])
@@ -577,13 +567,13 @@ class TaxPhotoForm(FlaskForm):
         validators=[InputRequired("Borough is required.")]
     )
     image_identifier = StringField("Image Identifier", validators=[validators.Length(max=35)])
-    building_num = IntegerField(
+    building_num = StringField(
         "Building Number",
-        validators=[InputRequired("Building Number is required."), validators.NumberRange(min=1)]
+        validators=[InputRequired("Building Number is required."), validators.Length(min=1, max=10)]
     )
     street = StringField("Street Name", validators=[InputRequired("Street is required."), validators.Length(max=40)])
-    block = StringField("Block", validators=[validators.Length(max=9)], default=None)
-    lot = StringField("Lot", validators=[validators.Length(max=9)], default=None)
+    block = StringField("Block", validators=[validators.Length(max=9)])
+    lot = StringField("Lot", validators=[validators.Length(max=9)])
     description = StringField("Description", validators=[validators.Length(max=35)])
     roll = StringField("Roll # (1940s Only)", validators=[validators.Length(max=9)])
     size = SelectField("Size", choices=suborder_form.TAX_PHOTO_SIZES)
