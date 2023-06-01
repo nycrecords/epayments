@@ -961,6 +961,7 @@ def create_new_order(form_data):
         suborder_form = next(iter(suborder.keys()))
         order_type = FORM_TYPES[suborder_form]
         status = suborder.get(suborder_form).get('status')
+        total = f"{suborder.get(suborder_form).get('total'):.2f}"
 
         # Clean empty form values
         for key, value in suborder[suborder_form].items():
@@ -972,7 +973,7 @@ def create_new_order(form_data):
             order_type=order_type,
             order_number=order.id,
             _status=status,
-            total=None
+            total=total
         )
         db.session.add(new_suborder)
         db.session.commit()
@@ -986,6 +987,11 @@ def create_new_order(form_data):
             previous_value=None,
             new_value={'status': new_suborder.status}
         )
+
+        comment = suborder.get(suborder_form).get('comment')
+        if comment:
+            event.new_value["comment"] = comment
+
         db.session.add(event)
         db.session.commit()
 
@@ -999,6 +1005,7 @@ def create_new_order(form_data):
 
         handler_for_order_type[order_type.split()[0]](suborder[suborder_form], new_suborder)
 
+    return order_id
 
 def _create_new_birth_object(suborder: Dict[str, Union[str, List[Dict]]], new_suborder_obj: Suborders):
     certificate_number = suborder.get('certificate_num')
@@ -1018,7 +1025,6 @@ def _create_new_birth_object(suborder: Dict[str, Union[str, List[Dict]]], new_su
             years=[suborder.get('year')],
             birth_place=suborder.get('birth_place'),
             borough=[suborder.get('borough')],
-            comment=suborder.get('comment'),
             _delivery_method=suborder.get('delivery_method'),
             suborder_number=new_suborder_obj.id,
             exemplification=suborder.get('exemplification'),
@@ -1043,7 +1049,6 @@ def _create_new_birth_object(suborder: Dict[str, Union[str, List[Dict]]], new_su
             years=years,
             birth_place=suborder.get('birth_place'),
             borough=suborder.get('boroughs'),
-            comment=suborder.get('comment'),
             _delivery_method=suborder.get('delivery_method'),
             suborder_number=new_suborder_obj.id,
             exemplification=suborder.get('exemplification'),
@@ -1077,7 +1082,6 @@ def _create_new_death_object(suborder: Dict[str, Union[str, List[Dict]]], new_su
             borough=[suborder.get('borough')],
             father_name=suborder.get('father_name'),
             mother_name=suborder.get('mother_name'),
-            comment=suborder.get('comment'),
             _delivery_method=suborder.get('delivery_method'),
             suborder_number=new_suborder_obj.id,
             exemplification=suborder.get('exemplification'),
@@ -1102,7 +1106,6 @@ def _create_new_death_object(suborder: Dict[str, Union[str, List[Dict]]], new_su
             borough=suborder.get('boroughs'),
             father_name=suborder.get('father_name'),
             mother_name=suborder.get('mother_name'),
-            comment=suborder.get('comment'),
             _delivery_method=suborder.get('delivery_method'),
             suborder_number=new_suborder_obj.id,
             exemplification=suborder.get('exemplification'),
@@ -1134,7 +1137,6 @@ def _create_new_marriage_object(suborder: Dict[str, Union[str, List[Dict]]], new
             years=[suborder.get('year')],
             marriage_place=suborder.get('marriage_place'),
             borough=[suborder.get('borough')],
-            comment=suborder.get('comment'),
             _delivery_method=suborder.get('delivery_method'),
             suborder_number=new_suborder_obj.id,
             exemplification=suborder.get('exemplification'),
@@ -1157,7 +1159,6 @@ def _create_new_marriage_object(suborder: Dict[str, Union[str, List[Dict]]], new
             years=years,
             marriage_place=suborder.get('marriage_place'),
             borough=suborder.get('boroughs'),
-            comment=suborder.get('comment'),
             _delivery_method=suborder.get('delivery_method'),
             suborder_number=new_suborder_obj.id,
             exemplification=suborder.get('exemplification'),
@@ -1174,50 +1175,27 @@ def _create_new_marriage_object(suborder: Dict[str, Union[str, List[Dict]]], new
 
 
 def _create_new_tax_photo(suborder: Dict[str, str], new_suborder_obj: Suborders):
-    new_collection = suborder.get('collection')
+    tax_photo = TaxPhoto(
+        collection=suborder.get('collection'),
+        borough=suborder.get('borough'),
+        image_id=suborder.get('image_identifier'),
+        roll=suborder.get('roll'),
+        block=suborder.get('block'),
+        lot=suborder.get('lot'),
+        building_number=suborder.get('building_num'),
+        street=suborder.get('street'),
+        description=suborder.get('description'),
+        size=suborder.get('size'),
+        num_copies=suborder.get('num_copies'),
+        _delivery_method=suborder.get('delivery_method'),
+        contact_number=suborder.get('contact_num'),
+        contact_email=suborder.get('contact_email'),
+        suborder_number=new_suborder_obj.id
+    )
+    db.session.add(tax_photo)
+    db.session.commit()
 
-    if new_collection in [collection.YEAR_1940, collection.BOTH]:
-        tax_photo_1940 = TaxPhoto(
-            collection=collection.YEAR_1940,
-            borough=suborder.get('borough'),
-            image_id=suborder.get('image_identifier'),
-            roll=suborder.get('roll'),
-            block=suborder.get('block'),
-            lot=suborder.get('lot'),
-            building_number=suborder.get('building_num'),
-            street=suborder.get('street'),
-            description=suborder.get('description'),
-            size=suborder.get('size'),
-            num_copies=suborder.get('num_copies'),
-            _delivery_method=suborder.get('delivery_method'),
-            contact_number=suborder.get('contact_num'),
-            suborder_number=new_suborder_obj.id
-        )
-        db.session.add(tax_photo_1940)
-        db.session.commit()
-
-        new_suborder_obj.es_update(tax_photo_1940.serialize)
-
-    if new_collection in [collection.YEAR_1980, collection.BOTH]:
-        tax_photo_1980 = TaxPhoto(
-            collection=collection.YEAR_1980,
-            borough=suborder.get('borough'),
-            image_id=suborder.get('image_identifier'),
-            block=suborder.get('block'),
-            lot=suborder.get('lot'),
-            building_number=suborder.get('building_num'),
-            street=suborder['street'],
-            description=suborder.get('description'),
-            size=suborder.get('size'),
-            num_copies=suborder.get('num_copies'),
-            _delivery_method=suborder.get('delivery_method'),
-            contact_number=suborder.get('contact_num'),
-            suborder_number=new_suborder_obj.id
-        )
-        db.session.add(tax_photo_1980)
-        db.session.commit()
-
-        new_suborder_obj.es_update(tax_photo_1980.serialize)
+    new_suborder_obj.es_update(tax_photo.serialize)
 
 
 def _create_new_photo_gallery(suborder: Dict[str, str], new_suborder_obj: Suborders):
@@ -1229,9 +1207,8 @@ def _create_new_photo_gallery(suborder: Dict[str, str], new_suborder_obj: Subord
         num_copies=str(suborder.get('num_copies')),
         _delivery_method=suborder.get('delivery_method'),
         contact_number=suborder.get('contact_num'),
-        comment=suborder.get('comment'),
-        suborder_number=new_suborder_obj.id,
-        contact_email=suborder.get('contact_email')
+        contact_email=suborder.get('contact_email'),
+        suborder_number=new_suborder_obj.id
     )
     db.session.add(photo_gallery)
     db.session.commit()
