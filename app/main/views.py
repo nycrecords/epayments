@@ -63,6 +63,7 @@ def login():
             else:
                 login_user(user)
                 return redirect(url_for('main.index'))
+
     return render_template('login.html', form=form)
 
 
@@ -78,13 +79,16 @@ def new_order():
     form = MainOrderForm()
 
     if request.method == "POST":
-        if form.validate_on_submit():
-            if len(form.suborders) < 1:
-                flash("Suborder required to place order.", "error")
-            else:
-                create_new_order(form.data)
-                flash("Order submitted successfully.", "success")
-                return redirect(url_for('main.new_order'))
+        if not form.validate_on_submit():
+            flash("Not all required fields have been entered correctly. Please correct the fields in red below",
+                  "error")
+        elif len(form.suborders) < 1:
+            flash("Suborder required to place order.", "error")
+        else:
+            order = create_new_order(form.data)
+            flash(f"Order#: {order} submitted successfully.", "success")
+            return redirect(url_for('main.new_order'))
+
     return render_template('order_forms/new_order_form.html', form=form, order_types=ORDER_TYPES)
 
 
@@ -93,11 +97,11 @@ def suborder_form():
     form = MainOrderForm()
     order_type = request.form['order-type']
 
-    # Append a new suborders (FieldList) to MainOrderForm
-    suborder = getattr(form, 'suborders').append_entry()
-    # Get index of appended suborders
-    idx = int(suborder.id.replace('suborders-', ''))
-    # Append a new FieldList of order_type to suborders
-    form.suborders[-1][order_type].append_entry()
+    # Append a new suborder to MainOrderForm
+    suborder = form.suborders.append_entry()
+
+    # Append a new FieldList of order_type to the suborder
+    suborder[order_type].append_entry()
 
     return render_template('order_forms/suborder_form.html', form=form)
+
