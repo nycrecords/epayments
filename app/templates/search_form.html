@@ -1,41 +1,16 @@
 <div class="container">
     <form id="search_form" method="POST" class="text-left">
-        <div class="pb-1">
-            {{ form.order_number.label(class="control-label font-weight-bold mb-0", for="order_number") }}
-            {{ form.order_number(class="form-control form-control-sm rounded-sm mt-0", maxlength="64", type="number",
-            min=0) }}
-        </div>
+        {% set label_class = "control-label font-weight-bold mb-0" %}
+        {% set input_class = "form-control form-control-sm rounded-sm mt-0" %}
 
-        <div class="pb-1">
-            {{ form.suborder_number.label(class="control-label font-weight-bold mb-0", for="suborder_number") }}
-            {{ form.suborder_number(class="form-control form-control-sm rounded-sm mt-0",  maxlength="32", type="number",
-            min=0) }}
-        </div>
-
-        <div class="pb-1">
-            {{ form.order_type.label(class="control-label font-weight-bold mb-0", for="order_type") }}
-            {{ form.order_type(class="form-control form-control-sm rounded-sm mt-0") }}
-        </div>
-
-        <div class="pb-1">
-            {{ form.delivery_method.label(class="control-label font-weight-bold mb-0", for="delivery_method") }}
-            {{ form.delivery_method(class="form-control form-control-sm rounded-sm mt-0") }}
-        </div>
-
-        <div class="pb-1">
-            {{ form.status.label(class="control-label font-weight-bold mb-0", for="status") }}
-            {{ form.status(class="form-control form-control-sm rounded-sm mt-0") }}
-        </div>
-
-        <div class="pb-1">
-            {{ form.billing_name.label(class="control-label font-weight-bold mb-0", for="billing_name") }}
-            {{ form.billing_name(class="form-control form-control-sm rounded-sm mt-0", maxlength="64") }}
-        </div>
-
-        <div class="pb-1">
-            {{ form.email.label(class="control-label font-weight-bold mb-0", for="billing_name") }}
-            {{ form.email(class="form-control form-control-sm rounded-sm mt-0", maxlength="64", type="email") }}
-        </div>
+        {% for input in form %}
+            {% if "date" not in input.id %}
+                <div class="pb-1">
+                    {{ input.label(class=label_class) }}
+                    {{ input(class=input_class, placeholder=input.label.text) }}
+                </div>
+            {% endif %}
+        {% endfor %}
 
         <div class="pb-2">
             <div>
@@ -57,29 +32,25 @@
                     <div class="tab-pane fade show active" id="tab_received" aria-labelledby="tab_received_btn"
                          role="tabpanel">
                         <div class="pb-1">
-                            {{ form.date_received_start.label(class="control-label font-weight-bold mb-0",
-                                    for="date_received_start") }}
-                            {{ form.date_received_start(class="form-control form-control-sm rounded-sm mt-0") }}
+                            {{ form.date_received_start.label(class=label_class) }}
+                            {{ form.date_received_start(class=input_class) }}
                         </div>
 
                         <div class="pb-1">
-                            {{ form.date_received_end.label(class="control-label font-weight-bold mb-0",
-                                    for="date_received_end") }}
-                            {{ form.date_received_end(class="form-control form-control-sm rounded-sm mt-0") }}
+                            {{ form.date_received_end.label(class=label_class) }}
+                            {{ form.date_received_end(class=input_class) }}
                         </div>
                     </div>
 
                     <div class="tab-pane fade" id="tab_submitted" aria-labelledby="tab_submitted_btn" role="tabpanel">
-                        <div>
-                            {{ form.date_submitted_start.label(class="control-label font-weight-bold mb-0",
-                                    for="date_submitted_start") }}
-                            {{ form.date_submitted_start(class="form-control form-control-sm rounded-sm mt-0") }}
+                        <div class="pb-1">
+                            {{ form.date_submitted_start.label(class=label_class) }}
+                            {{ form.date_submitted_start(class=input_class) }}
                         </div>
 
-                        <div>
-                            {{ form.date_submitted_end.label(class="control-label font-weight-bold mb-0",
-                                    for="date_submitted_end") }}
-                            {{ form.date_submitted_end(class="form-control form-control-sm rounded-sm mt-0") }}
+                        <div class="pb-1">
+                            {{ form.date_submitted_end.label(class=label_class) }}
+                            {{ form.date_submitted_end(class=input_class) }}
                         </div>
                     </div>
                 </div>

@@ -18,66 +18,24 @@
                                     {{ form.hidden_tag() }}
                                     {% set label_class = "control-label font-weight-bold mb-0" %}
                                     {% set input_class = "form-control form-control-sm rounded-sm mt-0" %}
-                                    <div class="pb-1">
-                                        {{ form.name.label(class=label_class, required=true) }}
-                                        {{ form.name(class=input_class, placeholder="Name") }}
-                                        {% for error in form.name.errors %}
-                                            <span style="color: red;">[{{ error }}]</span>
-                                        {% endfor %}
-                                    </div>
-                                    <div class="pb-1">
-                                        {{ form.country.label(class=label_class) }}
-                                        {% for error in form.country.errors %}
-                                            <span style="color: red;">[{{ error }}]</span>
-                                        {% endfor %}
-                                        {{ form.country(class=input_class) }}
-                                    </div>
-                                    <div class="pb-1">
-                                        {{ form.address_line_1.label(class=label_class) }}
-                                        {{ form.address_line_1(class=input_class, placeholder="Address Line 1") }}
-                                        {% for error in form.address_line_1.errors %}
-                                            <span style="color: red;">[{{ error }}]</span>
-                                        {% endfor %}
-                                    </div>
-                                    <div class="pb-1">
-                                        {{ form.address_line_2.label(class=label_class) }}
-                                        {{ form.address_line_2(class=input_class, placeholder="Address Line 2") }}
-                                    </div>
-                                    <div class="pb-1">
-                                        {{ form.city.label(class=label_class) }}
-                                        {{ form.city(class=input_class, placeholder="City") }}
-                                        {% for error in form.city.errors %}
-                                            <span style="color: red;">[{{ error }}]</span>
-                                        {% endfor %}
-                                    </div>
-                                    <div class="pb-1">
-                                        {{ form.state.label(class=label_class) }}
-                                        {{ form.state(class=input_class) }}
-                                        {% for error in form.state.errors %}
-                                            <span style="color: red;">[{{ error }}]</span>
-                                        {% endfor %}
-                                    </div>
-                                    <div class="pb-1">
-                                        {{ form.zip_code.label(class=label_class) }}
-                                        {{ form.zip_code(class=input_class, placeholder="Zip Code") }}
-                                        {% for error in form.zip_code.errors %}
-                                            <span style="color: red;">[{{ error }}]</span>
-                                        {% endfor %}
-                                    </div>
-                                    <div class="pb-1">
-                                        {{ form.phone.label(class=label_class) }}
-                                        {{ form.phone(class=input_class, placeholder="Phone") }}
-                                        {% for error in form.phone.errors %}
-                                            <span style="color: red;">[{{ error }}]</span>
-                                        {% endfor %}
-                                    </div>
-                                    <div class="pb-1">
-                                        {{ form.email.label(class=label_class) }}
-                                        {{ form.email(class=input_class, placeholder="Email") }}
-                                        {% for error in form.email.errors %}
-                                            <span style="color: red;">[{{ error }}]</span>
-                                        {% endfor %}
-                                    </div>
+
+                                    {% for input in form %}
+                                        {% if input.id not in ("suborders", "csrf_token") %}
+                                            <div class="pb-1">
+                                                {% if input.id == "name" %}
+                                                    {{ input.label(class=label_class, required=true ) }}
+                                                {% else %}
+                                                    {{ input.label(class=label_class) }}
+                                                {% endif %}
+
+                                                {{ input(class=input_class, placeholder=input.label.text) }}
+                                                {% for error in input.errors %}
+                                                    <span style="color: red;">[{{ error }}]</span>
+                                                {% endfor %}
+                                            </div>
+                                        {% endif %}
+                                    {% endfor %}
+
                                     <div>
                                         <div class="pt-1 row btns">
                                             <div class="col">
