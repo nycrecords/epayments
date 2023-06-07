@@ -642,6 +642,7 @@ class TaxPhotoForm(FlaskForm):
 
 
 class SuborderForm(FlaskForm):
+    # CSRF is disabled because SuborderForm is a FieldList of MainOrderForm
     class Meta:
         csrf = False
 

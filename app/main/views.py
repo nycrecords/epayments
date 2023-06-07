@@ -79,12 +79,15 @@ def new_order():
     form = MainOrderForm()
 
     if request.method == "POST":
+        # Validate form fields. This is checked first to avoid nested ifs
         if not form.validate_on_submit():
             flash("Not all required fields have been entered correctly. Please correct the fields in red below",
                   "error")
+        # Ensure suborder exists in form before saving new order
         elif len(form.suborders) < 1:
             flash("Suborder required to place order.", "error")
         else:
+            # Create order and save to db
             order = create_new_order(form.data)
             flash(f"Order#: {order} submitted successfully.", "success")
             return redirect(url_for('main.new_order'))
