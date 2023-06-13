@@ -5,8 +5,8 @@
             <div class="row">
                 <div class="col-12">
                     <div class="container-fluid">
-                        <h4 class="text-center"><span><p>New Order</p></span></h4>
-                        <h6 class="text-center"><span><p id="suborder-total"></p></span></h6>
+                        <h4 class="text-center"><span>New Order</span></h4>
+                        <h6 class="text-center"><span id="suborder-total"></span></h6>
                         <hr>
                     </div>
                 </div>
@@ -16,65 +16,37 @@
                             <div class="row">
                                 <div class="col-4 border-right">
                                     {{ form.hidden_tag() }}
-                                    <div class="pb-1">
-                                        {{ form.name.label(class="control-label font-weight-bold mb-0") }}
-                                        <span style="color: red;">*</span>
-                                        {{ form.name(class="form-control form-control-sm rounded-sm mt-0", placeholder="Name") }}
-                                        {% for error in form.name.errors %}
-                                            <span style="color: red;">[{{ error }}]</span>
-                                        {% endfor %}
-                                    </div>
-                                    <div class="pb-1">
-                                        {{ form.email.label(class="control-label font-weight-bold mb-0") }}
-                                        <span style="color: red;">*</span>
-                                        {{ form.email(class="form-control form-control-sm rounded-sm mt-0", placeholder="Email") }}
-                                        {% for error in form.email.errors %}
-                                            <span style="color: red;">[{{ error }}]</span>
-                                        {% endfor %}
-                                    </div>
-                                    <div class="pb-1">
-                                        {{ form.address_line_1.label(class="control-label font-weight-bold mb-0") }}
-                                        {{ form.address_line_1(class="form-control form-control-sm rounded-sm mt-0", placeholder="Address Line 1") }}
-                                    </div>
-                                    <div class="pb-1">
-                                        {{ form.address_line_2.label(class="control-label font-weight-bold mb-0") }}
-                                        {{ form.address_line_2(class="form-control form-control-sm rounded-sm mt-0", placeholder="Address Line 2") }}
-                                    </div>
-                                    <div class="pb-1">
-                                        {{ form.city.label(class="control-label font-weight-bold mb-0") }}
-                                        <span style="color: red;">*</span>
-                                        {{ form.city(class="form-control form-control-sm rounded-sm mt-0", placeholder="City") }}
-                                        {% for error in form.city.errors %}
-                                            <span style="color: red;">[{{ error }}]</span>
-                                        {% endfor %}
-                                    </div>
-                                    <div class="pb-1">
-                                        {{ form.state.label(class="control-label font-weight-bold mb-0") }}
-                                        {{ form.state(class="form-control form-control-sm rounded-sm mt-0", placeholder="State") }}
-                                    </div>
-                                    <div class="pb-1">
-                                        {{ form.zip_code.label(class="control-label font-weight-bold mb-0") }}
-                                        <span style="color: red;">*</span>
-                                        {{ form.zip_code(class="form-control form-control-sm rounded-sm mt-0", placeholder="Zip Code") }}
-                                        {% for error in form.zip_code.errors %}
-                                            <span style="color: red;">[{{ error }}]</span>
-                                        {% endfor %}
-                                    </div>
-                                    <div class="pb-1">
-                                        {{ form.phone.label(class="control-label font-weight-bold mb-0") }}
-                                        {{ form.phone(class="form-control form-control-sm rounded-sm mt-0", placeholder="Phone") }}
-                                        {% for error in form.phone.errors %}
-                                            <span style="color: red;">[{{ error }}]</span>
-                                        {% endfor %}
-                                    </div>
+                                    {% set label_class = "control-label font-weight-bold mb-0" %}
+                                    {% set input_class = "form-control form-control-sm rounded-sm mt-0" %}
+
+                                    {% for input in form %}
+                                        {% if input.id not in ("suborders", "csrf_token") %}
+                                            <div class="pb-1">
+                                                {% if input.id == "name" %}
+                                                    {{ input.label(class=label_class, required=true ) }}
+                                                {% else %}
+                                                    {{ input.label(class=label_class) }}
+                                                {% endif %}
+
+                                                {{ input(class=input_class, placeholder=input.label.text) }}
+                                                {% for error in input.errors %}
+                                                    <span style="color: red;">[{{ error }}]</span>
+                                                {% endfor %}
+                                            </div>
+                                        {% endif %}
+                                    {% endfor %}
+
                                     <div>
-                                        <div class="pt-1 row btns ">
+                                        <div class="pt-1 row btns">
                                             <div class="col">
-                                                <button id='clear_button' type="button" class="btn btn-danger btn-block rounded-sm" role="button">Clear
+                                                <button id='clear_button' type="button"
+                                                        class="btn btn-danger btn-block rounded-sm" role="button">Clear
                                                 </button>
                                             </div>
                                             <div class="col">
-                                                <button id='submit' type="submit" class="btn btn-success btn-block rounded-sm" role="button">Submit
+                                                <button id='submit' type="submit"
+                                                        class="btn btn-success btn-block rounded-sm" role="button">
+                                                    Submit
                                                 </button>
                                             </div>
                                         </div>
@@ -84,7 +56,8 @@
                                 <div class="col-8">
                                     <div class="container row">
                                         <div class="col-8 pb-2">
-                                            <label for="order-type" class="suborder-form-label font-weight-bold">Order Type</label>
+                                            <label for="order-type" class="suborder-form-label font-weight-bold">Order
+                                                Type</label>
                                             <div class="d-flex">
                                                 <select name="order-type" id="order-type"
                                                         class="form-control-sm rounded-sm mr-1">
