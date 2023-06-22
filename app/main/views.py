@@ -1,8 +1,8 @@
 import os
 from datetime import datetime
 
-from flask import render_template, redirect, url_for, request, current_app, send_from_directory, flash, jsonify
-from flask_login import login_user, current_user, logout_user
+from flask import render_template, redirect, url_for, request, current_app, flash
+from flask_login import login_user, current_user, logout_user, login_required
 
 from app.api.v1.utils import create_new_order
 from app.constants.suborder_form import ORDER_TYPES
@@ -75,6 +75,7 @@ def logout():
 
 
 @main.route('/new_order', methods=['GET', 'POST'])
+@login_required
 def new_order():
     form = MainOrderForm()
 
