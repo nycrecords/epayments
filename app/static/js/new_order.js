@@ -49,6 +49,10 @@ $(document).ready(function () {
         });
     }
 
+    function formatTotal(totalInput) {
+        totalInput.value = parseFloat(totalInput.value).toFixed(2);
+    }
+
     // Handle visibility of number of copies option when exemplification, raised_seals, or no_amends is checked
     function setCopiesVisibility() {
         $("#suborders").on("click", "input[type='checkbox']", function () {
@@ -75,6 +79,10 @@ $(document).ready(function () {
 
         suborders.on("click", "input[id*='contact_num']", function () {
             formatPhoneNumbers(this);
+        });
+
+        suborders.on("blur", "input[id*='total']", function () {
+            formatTotal(this);
         });
 
         $("#phone").on("click", function () {

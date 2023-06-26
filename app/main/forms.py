@@ -55,7 +55,7 @@ def validate_copies(form, field):
 def validate_certificate_number(form, field):
     if field.data:
         if not any(char.isdigit() for char in field.data):
-            raise ValidationError("Certificate Number must have at least 1 numeric character")
+            raise ValidationError("Certificate Number must have at least 1 numeric character.")
 
 
 def validate_additional_years(form, field):
@@ -93,9 +93,8 @@ def validate_additional_years(form, field):
 
 
 def validate_total(form, field):
-    total = str(field.data)
-
-    if '.' in total and len(total.split(".")[1]) != 2:
+    total = field.data
+    if total < 0 or ("." in str(total) and len(str(total).split(".")[1]) != 2):
         raise ValidationError("Invalid value entered for total.")
 
 
@@ -135,7 +134,7 @@ class BirthCertificateForm(FlaskForm):
         "Year (1847 - 1909)",
         validators=[
             InputRequired("Year is required."),
-            validators.number_range(1847, 1909, "Year must be between 1847 and 1909 "),
+            validators.number_range(1847, 1909, "Year must be between 1847 and 1909.")
         ]
     )
     birth_place = StringField("Place of Birth", validators=[validators.Length(max=40)])
@@ -169,8 +168,7 @@ class BirthCertificateForm(FlaskForm):
     )
     total = DecimalField(
         "Total",
-        validators=[InputRequired("Total is required."), validate_total],
-        render_kw={'step': ".01"}
+        validators=[InputRequired("Total is required."), validate_total]
     )
     comment = TextAreaField("Comment", validators=[validators.Length(max=225)])
 
@@ -206,7 +204,7 @@ class BirthSearchForm(FlaskForm):
         "Year (1847 - 1909)",
         validators=[
             InputRequired("Year is required."),
-            validators.number_range(1847, 1909, "Year must be between 1847 and 1909 "),
+            validators.number_range(1847, 1909, "Year must be between 1847 and 1909.")
         ]
     )
     additional_years = StringField("Additional Years (Separated by comma)", validators=[validate_additional_years])
@@ -242,8 +240,7 @@ class BirthSearchForm(FlaskForm):
     )
     total = DecimalField(
         "Total",
-        validators=[InputRequired("Total is required."), validate_total],
-        render_kw={'step': ".01"}
+        validators=[InputRequired("Total is required."), validate_total]
     )
     comment = TextAreaField("Comment", validators=[validators.Length(max=225)])
 
@@ -285,7 +282,7 @@ class DeathCertificateForm(FlaskForm):
         "Year (1795 - 1948)",
         validators=[
             InputRequired("Year is required."),
-            validators.number_range(1795, 1948, "Year must be between 1795 and 1948 "),
+            validators.number_range(1795, 1948, "Year must be between 1795 and 1948.")
         ]
     )
     death_place = StringField("Place of Death", validators=[validators.Length(max=40)])
@@ -321,8 +318,7 @@ class DeathCertificateForm(FlaskForm):
     )
     total = DecimalField(
         "Total",
-        validators=[InputRequired("Total is required."), validate_total],
-        render_kw={'step': ".01"}
+        validators=[InputRequired("Total is required."), validate_total]
     )
     comment = TextAreaField("Comment", validators=[validators.Length(max=225)])
 
@@ -356,7 +352,7 @@ class DeathSearchForm(FlaskForm):
         "Year (1795 - 1948)",
         validators=[
             InputRequired("Year is required."),
-            validators.number_range(1795, 1948, "Year must be between 1795 and 1948 "),
+            validators.number_range(1795, 1948, "Year must be between 1795 and 1948.")
         ]
     )
     additional_years = StringField("Additional Years (Separated by comma)", validators=[validate_additional_years])
@@ -394,8 +390,7 @@ class DeathSearchForm(FlaskForm):
     )
     total = DecimalField(
         "Total",
-        validators=[InputRequired("Total is required."), validate_total],
-        render_kw={'step': ".01"}
+        validators=[InputRequired("Total is required."), validate_total]
     )
     comment = TextAreaField("Comment", validators=[validators.Length(max=225)])
 
@@ -440,7 +435,7 @@ class MarriageCertificateForm(FlaskForm):
         "Year (1790 - 1949)",
         validators=[
             InputRequired("Year is required"),
-            validators.number_range(1790, 1949, message="Year must be between 1790 and 1949 "),
+            validators.number_range(1790, 1949, message="Year must be between 1790 and 1949.")
         ]
     )
     marriage_place = StringField("Place of Marriage", validators=[validators.Length(max=40)])
@@ -474,8 +469,7 @@ class MarriageCertificateForm(FlaskForm):
     )
     total = DecimalField(
         "Total",
-        validators=[InputRequired("Total is required."), validate_total],
-        render_kw={'step': ".01"}
+        validators=[InputRequired("Total is required."), validate_total]
     )
     comment = TextAreaField("Comment", validators=[validators.Length(max=225)])
 
@@ -512,7 +506,7 @@ class MarriageSearchForm(FlaskForm):
         "Year (1790 - 1949)",
         validators=[
             InputRequired("Year is required"),
-            validators.number_range(1790, 1949, message="Year must be between 1790 and 1949 "),
+            validators.number_range(1790, 1949, message="Year must be between 1790 and 1949.")
         ]
     )
     additional_years = StringField("Additional Years (Separated by comma)", validators=[validate_additional_years])
@@ -548,8 +542,7 @@ class MarriageSearchForm(FlaskForm):
     )
     total = DecimalField(
         "Total",
-        validators=[InputRequired("Total is required."), validate_total],
-        render_kw={'step': ".01"}
+        validators=[InputRequired("Total is required."), validate_total]
     )
     comment = TextAreaField("Comment", validators=[validators.Length(max=225)])
 
@@ -583,8 +576,7 @@ class PhotoGalleryForm(FlaskForm):
     )
     total = DecimalField(
         "Total",
-        validators=[InputRequired("Total is required."), validate_total],
-        render_kw={'step': ".01"}
+        validators=[InputRequired("Total is required."), validate_total]
     )
     comment = TextAreaField("Comment", validators=[validators.Length(max=225)])
 
@@ -630,8 +622,7 @@ class TaxPhotoForm(FlaskForm):
     )
     total = DecimalField(
         "Total",
-        validators=[InputRequired("Total is required."), validate_total],
-        render_kw={'step': ".01"}
+        validators=[InputRequired("Total is required."), validate_total]
     )
     contact_num = StringField("Contact Number", validators=[validators.Length(max=64)])
     contact_email = StringField("Contact Email", validators=[Optional(), Email(), validators.Length(max=256)])
