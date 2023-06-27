@@ -26,7 +26,7 @@ class SearchOrderForm(FlaskForm):
     status = SelectField("Status", choices=status.DROPDOWN)
     billing_name = StringField("Billing Name", validators=[validators.Length(max=64)])
     email = EmailField("Email", validators=[Optional(), Email(), validators.Length(max=64)])
-    date_received_start = DateField("Received Start Date", format="%Y-%m-%d", default=datetime.today())
+    date_received_start = DateField("Received Start Date", format="%Y-%m-%d", default=datetime.today)
     date_received_end = DateField("Received End Date", format="%Y-%m-%d")
     date_submitted_start = DateField("Submitted Start Date", format="%Y-%m-%d")
     date_submitted_end = DateField("Submitted End Date", format="%Y-%m-%d")
