@@ -384,17 +384,24 @@ def change_password() -> Response:
                     'code': 400,
                     'message': 'Passwords cannot be empty.',
                 }), 400
-        if len(value) < 6:
+        if len(value) < 8:
             return jsonify(
                 error={
                     'code': 400,
-                    'message': 'Password must contain at least 6 characters.',
+                    'message': 'Password must contain at least 8 characters.',
                 }), 400
-        if len(value) > 12:
+        if len(value) > 20:
             return jsonify(
                 error={
                     'code': 400,
-                    'message': 'Password must contain less than 12 characters.',
+                    'message': 'Password must contain less than 20 characters.',
+                }), 400
+        special_characters = " !\"#$%&'()*+,-./:;<=>?@[\]^_`{|}~"
+        if not any(c in special_characters for c in value):
+            return jsonify(
+                error={
+                    'code': 400,
+                    'message': 'Password must contain a special character.',
                 }), 400
 
     user = Users.query.filter_by(email=current_user.email).one_or_none()
