@@ -19,6 +19,7 @@ HVR = "HVR"
 PHOTOS = 'photos'
 VITAL_RECORDS = 'vital_records'
 ALL = 'all'
+MANUAL_ENTRIES = 'manual_entries'
 
 VITAL_RECORDS_LIST = [
     BIRTH_CERT,
@@ -66,4 +67,5 @@ DROPDOWN = [
     (NO_AMENDS, "No Amends"),
     (OCME, "OCME"),
     (HVR, "HVR"),
+    (MANUAL_ENTRIES, "--Manual Entries--"),
 ]

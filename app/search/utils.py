@@ -221,6 +221,10 @@ def search_queries(order_number=None,
         'email': email
     }
 
+    if order_type == 'manual_entries':
+        query_field['manual_entries'] = True
+        order_type = 'all'
+
     date_range = {
         'date_received_start': date_received_start,
         'date_received_end': date_received_end,
@@ -338,6 +342,12 @@ class DSLGenerator(object):
                             }
                         }
                     })
+                elif i == 'manual_entries':
+                    self.__filters.append({
+                        'prefix': {
+                            'order_number': 'EPAY'
+                        },
+                    })
                 else:
                     self.__filters.append({
                         'term': {
@@ -437,10 +447,10 @@ class DSLGenerator(object):
             return {
                 'sort': [
                     '_score',
-
+                    {'order_number': 'asc'},
+                    {'suborder_number': 'asc'},
                     {'date_received': 'desc'} if self.__query_fields['current_status'] else {'date_received': 'asc'}
                     if self.__date_range['date_received_start'] else {'date_received': 'desc'},
-
                     {'date_submitted': 'asc'},
                 ],
                 'query': {

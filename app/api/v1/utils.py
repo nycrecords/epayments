@@ -859,7 +859,7 @@ def generate_csv(search_params: Dict[str, str]) -> str:
             ]
             contents.append(row_content)
 
-    elif order_type == order_types.ALL and status == search_status.REFUND:
+    elif order_type == order_types.ALL and status == search_status.REFUND or order_type == 'manual_entries':
         add_header = [
             'Order Number',
             'Suborder Number',
