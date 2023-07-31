@@ -156,7 +156,8 @@ def create_docs():
                     suborder_number=q.id).one().serialize,
                 'multiple_items': q.order.multiple_items,
                 'order_types': q.order.order_types,
-                'total': q.total
+                'total': q.total,
+                'check_mo_number': q.order.check_mo_number
             })
         except:
             pass
@@ -192,24 +193,26 @@ def search_queries(order_number=None,
                    start=0,
                    size=RESULTS_CHUNK_SIZE,
                    search_type='search'):
-    """Arguments will match search parameters
-        :param order_number: search by order number
-        :param suborder_number: search by suborder number
-        :param order_type: search by order type
-        :param delivery_method: search by delivery method
-        :param status: search by status
-        :param billing_name: search by billing name
-        :param email: search by email
-        :param date_received_start: search by starting date
-        :param date_received_end: search by ending date
-        :param date_submitted_start: search by starting date submitted
-        :param date_submitted_end: search by ending date submitted
-        :param multiple_items: search by multiple items in cart
-        :param start: starting index of the set
-        :param size: size of results pool
-        :param search_type: search or print
+    """
+    Perform an Elasticsearch search based on search parameters.
 
-        :return: elasticsearch results in json format
+    :param order_number: Search by order number
+    :param suborder_number: Search by suborder number
+    :param order_type: Search by order type
+    :param delivery_method: Search by delivery method
+    :param status: Search by status
+    :param billing_name: Search by billing name
+    :param email: Search by email
+    :param date_received_start: Search by starting date received
+    :param date_received_end: Search by ending date received
+    :param date_submitted_start: Search by starting date submitted
+    :param date_submitted_end: Search by ending date submitted
+    :param multiple_items: Search by multiple items in the cart
+    :param start: Starting index of the result set
+    :param size: Size of the results pool
+    :param search_type: Search or print (default is 'search')
+
+    :return: Elasticsearch results in JSON format
     """
     query_field = {
         'billing_name': billing_name,
@@ -218,9 +221,10 @@ def search_queries(order_number=None,
         'current_status': status,
         'multiple_items': multiple_items,
         'metadata.delivery_method': delivery_method,
-        'email': email
+        'email': email,
     }
 
+    # Handle special case for order type
     if order_type == 'manual_entries':
         query_field['manual_entries'] = True
         order_type = 'all'
@@ -234,10 +238,12 @@ def search_queries(order_number=None,
 
     formatted_date_range = format_date_range(date_range)
 
-    dsl_gen = DSLGenerator(query_fields=format_queries(query_field),
-                           date_range=formatted_date_range,
-                           order_type=format_order_type(order_type),
-                           search_type=search_type)
+    dsl_gen = DSLGenerator(
+        query_fields=format_queries(query_field),
+        date_range=formatted_date_range,
+        order_type=format_order_type(order_type),
+        search_type=search_type
+    )
     dsl = dsl_gen.match_all()
 
     if any(query_field.values()) or any(date_range.values()):
@@ -447,11 +453,10 @@ class DSLGenerator(object):
             return {
                 'sort': [
                     '_score',
-                    {'order_number': 'asc'},
-                    {'suborder_number': 'asc'},
                     {'date_received': 'desc'} if self.__query_fields['current_status'] else {'date_received': 'asc'}
                     if self.__date_range['date_received_start'] else {'date_received': 'desc'},
                     {'date_submitted': 'asc'},
+                    {'suborder_number': 'asc'},
                 ],
                 'query': {
                     'bool': {

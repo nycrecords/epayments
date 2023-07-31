@@ -11,6 +11,7 @@ class Events(db.Model):
     Events are any type of action that happened to a request after it was submitted
 
     id - an integer that is the primary key of an Events
+    order_number - a string containing the order number for the event that occurred
     suborder_number - a foreign key that links to a suborder's primary key
     user_id - a foreign key that links to the user_id of the person who performed the event
     type - a string containing the type of event that occurred
@@ -20,12 +21,14 @@ class Events(db.Model):
     """
     __tablename__ = 'events'
     id = db.Column(db.Integer, primary_key=True)
+    order_number = db.Column(db.String(64))
     suborder_number = db.Column(db.String(32), db.ForeignKey('suborders.id', ondelete='CASCADE'))
     user_email = db.Column(db.String(100), db.ForeignKey('users.email'))  # who did the action
     type = db.Column(db.Enum(
         event_type.UPDATE_STATUS,
         event_type.UPDATE_TAX_PHOTO,
         event_type.INITIAL_IMPORT,
+        event_type.UPDATE_CHECK_MO_NUMBER,
         name='event_type'), nullable=False
     )
     timestamp = db.Column(db.DateTime)
@@ -43,13 +46,15 @@ class Events(db.Model):
                  user_email=None,
                  previous_value=None,
                  new_value=None,
-                 timestamp=None):
+                 timestamp=None,
+                 order_number=None):
         self.suborder_number = suborder_number
-        self.user_email = user_email
         self.type = type_
+        self.user_email = user_email
         self.previous_value = previous_value
         self.new_value = new_value
         self.timestamp = timestamp or datetime.now(timezone('US/Eastern'))
+        self.order_number = order_number
 
     @property
     def status_history(self):
