@@ -21,7 +21,7 @@ class Events(db.Model):
     """
     __tablename__ = 'events'
     id = db.Column(db.Integer, primary_key=True)
-    order_number = db.Column(db.String(64))
+    order_number = db.Column(db.String(64), db.ForeignKey('orders.id'), nullable=True)
     suborder_number = db.Column(db.String(32), db.ForeignKey('suborders.id', ondelete='CASCADE'))
     user_email = db.Column(db.String(100), db.ForeignKey('users.email'))  # who did the action
     type = db.Column(db.Enum(

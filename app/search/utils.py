@@ -227,6 +227,7 @@ def search_queries(order_number=None,
     # Handle special case for order type
     if order_type == 'manual_entries':
         query_field['manual_entries'] = True
+        # Set order_type to all since manual_entries is not recognized as a search type
         order_type = 'all'
 
     date_range = {

@@ -52,6 +52,7 @@ class Orders(db.Model):
         self.multiple_items = multiple_items
         self._next_suborder_number = _next_suborder_number
         self.check_mo_number = check_mo_number
+
     @property
     def serialize(self):
         """Return object data in easily serializable format"""

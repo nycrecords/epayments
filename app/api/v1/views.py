@@ -333,8 +333,8 @@ def check_mo_number(order_number) -> Response:
         ), 200
     else:
         json = request.get_json(force=True)
-        check_mo_number = json.get('check_mo_number')
-        message = update_check_mo_number(order, check_mo_number)
+        check_mo_number_value = json.get('check_mo_number')
+        message = update_check_mo_number(order, check_mo_number_value)
         return jsonify(message=message, suborder_count=len(order.orders)), 200
 
 

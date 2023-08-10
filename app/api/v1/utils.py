@@ -119,14 +119,22 @@ def update_tax_photo(suborder_number: str, block_no: str, lot_no: str, roll_no: 
 
 def update_check_mo_number(order: Orders, check_mo_number: str) -> str:
     """
-    This function is used for the Check/Money Order Number API POST method,
-    will update these fields from JSON sent back
+    Update the Check/Money Order Number for the given order via API POST method.
 
-    :param order:
-    :param check_mo_number:
-    :return: {}
+    This method is called through an API POST request to update the Check/Money Order
+    Number for the provided order object with the new value if it differs from the
+    existing value.
+
+    Args:
+        order (Orders): The order object to update.
+        check_mo_number (str): The new Check/Money Order Number.
+
+    Returns:
+        str: A message indicating the result of the update. Possible messages:
+            - 'No changes were made': If the new value is empty or equal to the current value.
+            - 'Check/Money Order Number Updated': If the update is successful.
+
     """
-
     message = 'No changes were made'
     new_value = {}
     previous_value = {}
@@ -896,7 +904,7 @@ def generate_csv(search_params: Dict[str, str]) -> str:
             ]
             contents.append(row_content)
 
-    elif order_type == order_types.ALL and status == search_status.REFUND or order_type == 'manual_entries':
+    elif (order_type == order_types.ALL and status == search_status.REFUND) or order_type == 'manual_entries':
         add_header = [
             'Order Number',
             'Suborder Number',
@@ -912,8 +920,10 @@ def generate_csv(search_params: Dict[str, str]) -> str:
             'Total',
             'Date Submitted',
             'Date Received',
-            "Check/Money Order Number" if order_type == 'manual_entries' else None
         ]
+
+        if order_type == 'manual_entries':
+            add_header.append("Check/Money Order Number")
 
         header_data = add_header
 
