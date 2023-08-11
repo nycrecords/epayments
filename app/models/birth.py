@@ -1,7 +1,7 @@
 from sqlalchemy.dialects.postgresql import ARRAY
 
 from app import db
-from app.constants import gender, order_types, delivery_method
+from app.constants import gender, delivery_method, order_types
 
 
 class BirthSearch(db.Model):

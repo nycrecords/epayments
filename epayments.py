@@ -56,7 +56,7 @@ def reset_db():
 
 @app.cli.command()
 def create_test_user():
-    user = Users('test@email.com', '1234')
+    user = Users('test@email.com', '1234', is_active=True)
     db.session.add(user)
     db.session.commit()
 
@@ -73,7 +73,7 @@ def create_user():
     if password != confirm_password:
         return print("Passwords are not the same. Please try again.")
 
-    user = Users(email=email, password=password)
+    user = Users(email=email, password=password, is_active=True)
     db.session.add(user)
     db.session.commit()
 
@@ -106,4 +106,3 @@ def test(coverage=False):
 def es_recreate():
     """Recreates the index and docs"""
     recreate()
-

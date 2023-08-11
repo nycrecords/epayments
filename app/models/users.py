@@ -10,6 +10,7 @@ class Users(UserMixin, db.Model):
     created_at = db.Column(db.DateTime, nullable=False, default=dt.datetime.utcnow)
     updated_at = db.Column(db.DateTime, nullable=False, default=dt.datetime.utcnow)
     password_hash = db.Column(db.String(128))
+    is_active = db.Column(db.Boolean, default=False)
 
     def __init__(self, email, password=None, **kwargs):
         """Create instance."""

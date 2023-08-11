@@ -54,6 +54,7 @@ requests = "*"
 holidays = "*"
 flask-wtf = "*"
 xlsxwriter = "*"
+email-validator = "*"
 
 [requires]
 python_version = "3.9.2"
