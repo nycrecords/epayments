@@ -14,6 +14,7 @@ from app.api.v1.utils import (
     _print_small_labels,
     update_tax_photo,
     generate_csv,
+    update_check_mo_number,
 )
 from app.constants import event_type
 from app.constants import printing
@@ -23,6 +24,7 @@ from app.models import (
     Suborders,
     TaxPhoto,
     Users,
+    Orders,
 )
 from app.search.searchfunctions import SearchFunctions
 from app.search.utils import search_queries
@@ -295,6 +297,45 @@ def tax_photo(suborder_number) -> Response:
 
         message = update_tax_photo(suborder_number, block_no, lot_no, roll_no)
         return jsonify(message=message), 200
+
+
+# noinspection PyTypeChecker,PyTypeChecker
+@api.route('/check_mo_number/<string:order_number>', methods=['GET', 'POST'])
+@login_required
+def check_mo_number(order_number) -> Response:
+    """
+    Retrieve or update the Check/Money Order number associated with an order.
+
+    - GET: Returns the Check/Money Order number of the specified order.
+        Returns:
+        - JSON response containing the Check/Money Order number.
+        - HTTP status code 200 (OK).
+
+    - POST: Updates the Check/Money Order number of the specified order with new information.
+        Request Payload (JSON):
+        - check_mo_number: The new Check/Money Order number to be updated.
+
+        Returns:
+        - JSON response containing a message indicating the outcome of the update and the count of suborders within the order.
+        - HTTP status code 200 (OK).
+
+    :param order_number: The unique identifier of the order.
+    :type order_number: str
+
+    :return: JSON response containing relevant information based on the operation performed.
+    :rtype: Response
+    """
+    order = Orders.query.get(order_number)
+
+    if request.method == 'GET':
+        return jsonify(
+            check_mo_number=order.check_mo_number
+        ), 200
+    else:
+        json = request.get_json(force=True)
+        check_mo_number_value = json.get('check_mo_number')
+        message = update_check_mo_number(order, check_mo_number_value)
+        return jsonify(message=message, suborder_count=len(order.orders)), 200
 
 
 # noinspection PyTypeChecker,PyTypeChecker

@@ -652,6 +652,7 @@ class SuborderForm(FlaskForm):
 
 class MainOrderForm(FlaskForm):
     name = StringField("Name", validators=[InputRequired(), validators.Length(max=64)])
+    check_mo_number = StringField("Check/Money Order Number", validators=[validators.Length(max=20)])
     country = SelectField(
         "Country",
         choices=suborder_form.COUNTRIES,

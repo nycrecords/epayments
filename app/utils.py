@@ -1126,6 +1126,8 @@ def import_file(tree, date_submitted):
 
             age = clients_data_list[
                 clients_data_list.index("AGE_AT_DEATH") + 1] if "AGE_AT_DEATH" in clients_data_list else None
+            if age == "null":
+                age = None
 
             certificate_number = clients_data_list[
                 clients_data_list.index(
