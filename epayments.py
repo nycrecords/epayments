@@ -58,6 +58,7 @@ def reset_db():
 
 @app.cli.command()
 def create_test_user():
+    """Creates user for development testing."""
     user = Users('test@email.com', is_active=True, last_sign_in_at=datetime.utcnow(), guid=uuid4().hex)
     db.session.add(user)
     db.session.commit()
@@ -65,6 +66,12 @@ def create_test_user():
 
 @app.cli.command()
 def create_user_roles():
+    """
+    Creates new user roles based on the roles specified in the 'roles_to_add' list.
+    Checks for existing roles to avoid duplicates and then adds any new roles
+    to the database.
+    """
+    # Add new roles to this list
     roles_to_add = ['admin', 'agency_user']
 
     existing_roles = Role.query.filter(Role.name.in_(roles_to_add)).all()
@@ -81,6 +88,10 @@ def create_user_roles():
 
 @app.cli.command()
 def assign_admin_role():
+    """
+    Assigns the 'admin' role to a user identified by their email address.
+    If the user is found, they are granted the admin role and their account is activated.
+    """
     user_email = input("Enter user email: ")
     user = Users.query.filter_by(email=user_email).first()
 
