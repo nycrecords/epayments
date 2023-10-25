@@ -1,0 +1,25 @@
+<script type="text/javascript">
+    "use strict";
+    {% if current_user.is_authenticated %}
+        {% set use_saml = config['USE_SAML']  %}
+        {% set logoutUrl = url_for('auth.saml') ~ '?slo' if use_saml else url_for('auth.logout') %}
+        {% set redirUrl = url_for('auth.logout') ~ '?timeout=true' %}
+        $(document).ready(function () {
+            $.sessionTimeout({
+                title: "Session Timeout",
+                message: "Your session is about to expire.",
+                countdownMessage: 'You will be automatically logged out in {timer}.',
+                countdownSmart: true,
+                countdownBar: true,
+                keepAliveUrl: '{{ url_for('main.active') }}',
+                warnAfter: 25 * 60 * 1000,
+                redirAfter: 30 * 60 * 1000,
+                logoutUrl: '{{ logoutUrl }}',
+                redirUrl: '{{ redirUrl }}',
+            });
+            {% if duplicate_session %}
+                $("#concurrent-session-modal").modal("show");
+            {% endif %}
+        });
+    {% endif %}
+</script>

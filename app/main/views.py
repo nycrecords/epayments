@@ -1,16 +1,24 @@
 import os
 from datetime import datetime
 
-from flask import render_template, redirect, url_for, request, current_app, flash
-from flask_login import login_user, current_user, logout_user, login_required
+from flask import render_template, redirect, url_for, request, current_app, flash, session
+from flask_login import current_user, login_required
 
+from app import login_manager
 from app.api.v1.utils import create_new_order
 from app.constants.suborder_form import ORDER_TYPES
 from app.import_utils import import_from_api
 from app.main import main
-from app.main.forms import SearchOrderForm, MainOrderForm, SignInForm
+from app.main.forms import SearchOrderForm, MainOrderForm
 from app.main.utils import allowed_file, import_xml
 from app.models import Users
+
+
+@login_manager.user_loader
+def user_loader(guid: str) -> Users:
+    user = Users.query.filter_by(guid=guid).one_or_none()
+    if user.session_id == session.sid:
+        return user
 
 
 @main.route('/health', methods=['GET'])
@@ -19,14 +27,21 @@ def health():
 
 
 @main.route('/', methods=['GET', 'POST'])
+@login_required
 def index():
-    """Default route for the application."""
-    if not current_user.is_authenticated:
-        return redirect(url_for("main.login"))
-    return render_template('index.html', user=current_user.get_id(), form=SearchOrderForm())
+    if current_user.is_authenticated:
+        duplicate_session = request.args.get('duplicate_session')
+        return render_template(
+            'index.html',
+            user=current_user.get_id(),
+            duplicate_session=duplicate_session,
+            form=SearchOrderForm()
+        )
+    return redirect(url_for('auth.login'))
 
 
 @main.route('/import', methods=['GET', 'POST'])
+@login_required
 def import_tar():
     """Import Orders into the database from the tar file."""
     if request.method == 'POST':
@@ -45,58 +60,27 @@ def import_tar():
     return render_template('main/import.html')
 
 
-@main.route('/login', methods=['GET', 'POST'])
-def login():
-    """ Initial load in the login page """
-    if current_user.is_authenticated:
-        return redirect(url_for("main.index"))
-    form = SignInForm()
-    if form.validate_on_submit():
-        user = Users.query.filter_by(email=form.username.data, is_active=True).one_or_none()
-        password = form.password.data
-        if user is None:
-            flash('Invalid Email Address', 'error')
-        else:
-            valid_password = user.verify_password(password)
-            if not valid_password:
-                flash('Invalid Password', 'error')
-            else:
-                login_user(user)
-                return redirect(url_for('main.index'))
-
-    return render_template('login.html', form=form)
-
-
-@main.route('/logout', methods=['GET'])
-def logout():
-    logout_user()
-    flash('Logout Successful', 'success')
-    return redirect(url_for('main.index'))
-
-
 @main.route('/new_order', methods=['GET', 'POST'])
 @login_required
 def new_order():
     form = MainOrderForm()
-
     if request.method == "POST":
         # Validate form fields. This is checked first to avoid nested ifs
         if not form.validate_on_submit():
-            flash("Not all required fields have been entered correctly. Please correct the fields in red below",
-                  "error")
+            flash('Not all required fields have been entered correctly. Please correct the fields in red below.',
+                  'error')
         # Ensure suborder exists in form before saving new order
         elif len(form.suborders) < 1:
-            flash("Suborder required to place order.", "error")
+            flash('Suborder required to place order.', 'error')
         else:
             # Create order and save to db
             order = create_new_order(form.data)
-            flash(f"Order#: {order} submitted successfully.", "success")
+            flash(f'Order#: {order} submitted successfully.', 'success')
             return redirect(url_for('main.new_order'))
-
     return render_template('order_forms/new_order_form.html', form=form, order_types=ORDER_TYPES)
 
 
-@main.route("/suborder_form", methods=["POST"])
+@main.route('/suborder_form', methods=['POST'])
 def suborder_form():
     form = MainOrderForm()
     order_type = request.form['order-type']
@@ -109,3 +93,12 @@ def suborder_form():
 
     return render_template('order_forms/suborder_form.html', form=form)
 
+
+@main.route('/active', methods=['POST'])
+def active():
+    """
+    Extends a user's session.
+    :return:
+    """
+    session.modified = True
+    return 'OK'

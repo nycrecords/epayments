@@ -1,7 +1,7 @@
 from datetime import datetime
 
 from flask_wtf import FlaskForm
-from wtforms import validators, FieldList, PasswordField, SubmitField, SelectMultipleField, DecimalField, TextAreaField, \
+from wtforms import validators, FieldList, SubmitField, SelectMultipleField, DecimalField, TextAreaField, \
     EmailField
 from wtforms.fields import (StringField, IntegerField, SelectField, BooleanField, DateField, FormField)
 from wtforms.validators import ValidationError, Email, InputRequired, Optional
@@ -9,10 +9,9 @@ from wtforms.validators import ValidationError, Email, InputRequired, Optional
 from app.constants import status, delivery_method, suborder_form, order_types
 
 
-class SignInForm(FlaskForm):
+class LoginForm(FlaskForm):
     username = StringField("Email Address", validators=[InputRequired(), Email()])
-    password = PasswordField("Password", validators=[InputRequired()])
-    submit = SubmitField("Sign In")
+    submit = SubmitField("Log In")
 
 
 class SearchOrderForm(FlaskForm):

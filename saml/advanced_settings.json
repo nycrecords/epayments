@@ -1,0 +1,33 @@
+{
+  "security": {
+    "nameIdEncrypted": false,
+    "authnRequestsSigned": true,
+    "logoutRequestSigned": true,
+    "logoutResponseSigned": true,
+    "signMetadata": false,
+    "wantMessagesSigned": false,
+    "wantAssertionsSigned": true,
+    "wantNameId": true,
+    "wantNameIdEncrypted": false,
+    "wantAssertionsEncrypted": false,
+    "signatureAlgorithm": "http://www.w3.org/2000/09/xmldsig#rsa-sha1",
+    "digestAlgorithm": "http://www.w3.org/2000/09/xmldsig#sha1"
+  },
+  "contactPerson": {
+    "technical": {
+      "givenName": "ePayments Support",
+      "emailAddress": "svargas@records.nyc.gov"
+    },
+    "support": {
+      "givenName": "ePayments Support",
+      "emailAddress": "svargas@records.nyc.gov"
+    }
+  },
+  "organization": {
+    "en-US": {
+      "name": "epayments_stg",
+      "displayname": "ePayments",
+      "url": "https://steven-dev.appdev.records.nycnet/"
+    }
+  }
+}

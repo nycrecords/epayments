@@ -1,375 +1,360 @@
 <!DOCTYPE html>
 <html lang="en" dir="ltr">
-    <head>
-        <!-- Required meta tags -->
-        <meta charset="utf-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-        <!-- Corrects IE Compatibility Mode -->
-        <meta http-equiv="X-UA-Compatible" content="IE=edge">
-        {% if title %}
-            <title>{{ title }} • ePayments</title>
-        {% else %}
-            <title>ePayments - DORIS</title>
-        {% endif %}
-        <link rel="shortcut icon" href="{{ url_for('static', filename='/images/favicon.ico') }}">
-        <!-- Font Awesome -->
-        <link rel="stylesheet" href="{{ url_for("static", filename="/fontawesome/css/all.min.css") }}">
-        <!-- NYC Theme CSS -->
-        <link rel="stylesheet" href="{{ url_for("static", filename="/css/theme.css") }}">
-        <!-- Custom Theme -->
-        <link rel="stylesheet" href="{{ url_for("static", filename="/css/new_order_form.css") }}">
-    </head>
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <!-- Corrects IE Compatibility Mode -->
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    {% if title %}
+        <title>{{ title }} • ePayments</title>
+    {% else %}
+        <title>ePayments - DORIS</title>
+    {% endif %}
+    <link rel="shortcut icon" href="{{ url_for('static', filename='/images/favicon.ico') }}">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="{{ url_for("static", filename="/fontawesome/css/all.min.css") }}">
+    <!-- NYC Theme CSS -->
+    <link rel="stylesheet" href="{{ url_for("static", filename="/css/theme.css") }}">
+    <!-- Custom Theme -->
+    <link rel="stylesheet" href="{{ url_for("static", filename="/css/new_order_form.css") }}">
+    <link rel="stylesheet" href="{{ url_for("static", filename="/css/dataTables.bootstrap4.min.css") }}">
+</head>
 
-    <body>
-        <!-- For keyboard users -->
-        <a class="sr-only sr-only-focusable skip-menu" href="#skip-header-target">Skip Header</a>
-        <header id="global-header" role="banner">
-            <div class="bg-dark text-white" id="nyc-top-header">
-                <div class="container-fluid wide">
-                    <div class="row py-1 align-items-center justify-content-between">
-                        <div class="col-auto">
-                            <p class="d-none d-md-flex fs-md">
-                                <a class="text-reset" href="https://www1.nyc.gov/">
-                                    <strong>nyc.gov</strong>
+<body>
+<!-- For keyboard users -->
+<a class="sr-only sr-only-focusable skip-menu" href="#skip-header-target">Skip Header</a>
+<header id="global-header" role="banner">
+    {% set use_saml = config['USE_SAML'] %}
+    <div class="bg-dark text-white" id="nyc-top-header">
+        <div class="container-fluid ">
+            <div class="row py-1 align-items-center justify-content-between">
+                <div class="col-auto">
+                    <p class="d-none d-md-flex fs-md">
+                        <a class="text-reset" href="https://www1.nyc.gov/">
+                            <strong>nyc.gov</strong>
+                        </a>
+                        <span class="mx-1" aria-hidden="true">|</span>Department of Records | ePayments
+                    </p>
+                </div>
+                <div class="col-auto">
+                    <ul class="extensible-list horizontal fs-md">
+                        <li>
+                            <a class="text-reset" href="http://www1.nyc.gov/">
+                                <strong>311</strong>
+                            </a>
+                        </li>
+                        <li>
+                            <a class="text-reset" href="http://www1.nyc.gov/home/search/index.page">
+                                <strong>Search all NYC.gov</strong>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="https://www1.nyc.gov/" title="Go to nyc.gov">
+                                <img class="d-block"
+                                     src="{{ url_for("static", filename="/images/nyc-bubble-logo.svg") }}"
+                                     width="45"
+                                     alt="NYC Logo">
+                            </a>
+                        </li>
+                        {% if use_saml and current_user.is_anonymous %}
+                            <li>
+                                <a class="text-reset" href="{{ url_for('auth.saml') }}">
+                                    <strong>Log In</strong>
                                 </a>
-                                <span class="mx-1" aria-hidden="true">|</span>Department of Records | ePayments
-                            </p>
-                        </div>
-                        <div class="col-auto">
-                            <ul class="extensible-list horizontal fs-md">
-                                <li>
-                                    <a class="text-reset" href="http://www1.nyc.gov/">
-                                        <strong>311</strong>
-                                    </a>
-                                </li>
-                                <li>
-                                    <a class="text-reset" href="http://www1.nyc.gov/home/search/index.page">
-                                        <strong>Search all NYC.gov</strong>
-                                    </a>
-                                </li>
-                                <li>
-                                    <a href="https://www1.nyc.gov/" title="Go to nyc.gov">
-                                        <img class="d-block"
-                                             src="{{ url_for("static", filename="/images/nyc-bubble-logo.svg") }}"
-                                             width="45"
-                                             alt="NYC Logo">
-                                    </a>
-                                </li>
-                            </ul>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="wrap-header">
-                <div class="container-fluid wide">
-                    <div class="row align-items-center">
-                        <div class="col-lg">
-                            <div class="d-flex justify-content-center justify-content-lg-start">
-                                <a class="align-self-center" href="{{ url_for("main.index") }}" title="Home">
-                                    <img src="{{ url_for("static" , filename="/images/records_logo.svg") }}"
-                                         alt="DORIS">
+                            </li>
+                        {% elif use_saml and current_user.is_authenticated %}
+                            <li>
+                                <a class="text-reset" href="{{ url_for('auth.saml') ~ '?slo' }}">
+                                    <strong>Log Out</strong>
                                 </a>
-                            </div>
-                        </div>
-                        <div class="col-lg-auto border-top border-lg-0">
-                            <div class="row no-gutters d-flex justify-content-center">
-                                <div class="col-auto">
-                                    <ul class="extensible-list horizontal">
-                                        {% if not current_user.is_anonymous %}
-                                            <li><p>Hi, {{ current_user.email }}</p></li>
-                                            <li>
-                                                <a href="{{ url_for("main.logout") }}" class="no-btn-style"
-                                                   title="Logout"><i class="fa fa-sign-out-alt"></i></a>
-                                            </li>
-                                            <li>
-                                                <a href="{{ url_for("main.index") }}" class="no-btn-style"
-                                                   title="Home"><i class="fa fa-home"></i></a>
-                                            </li>
-                                            <li>
-                                                <button type="button" class="btn no-btn-style " data-toggle="modal"
-                                                        data-target="#change_pass_modal" title="Change Password"><i
-                                                        class="fa fa-cog"></i>
-                                                </button>
-                                            </li>
-                                            <div class="modal fade" id="change_pass_modal" tabindex="-1" role="dialog"
-                                                 aria-labelledby="password_modal"
-                                                 aria-hidden="true">
-                                                <div class="modal-dialog" role="document">
-                                                    <div class="modal-content">
-                                                        <div class="modal-header text-center justify-content-center">
-                                                            <h5 class="modal-title">Change Password</h5>
-                                                        </div>
-                                                        <div class="modal-body text-left">
-                                                            <div>
-                                                                <label for="new_pass" class="font-weight-bold">New
-                                                                    Password</label>
-                                                                <input type="password" class="form-control rounded-sm"
-                                                                       id="new_pass"
-                                                                       name="new_password"
-                                                                       placeholder="New Password" required>
-                                                            </div>
-                                                            <div>
-                                                                <label for="confirm_pass" class="font-weight-bold">Confirm
-                                                                    Password</label>
-                                                                <input type="password" class="form-control rounded-sm"
-                                                                       id="confirm_pass"
-                                                                       name="confirm_pass"
-                                                                       placeholder="Re-enter New Password" required>
-                                                            </div>
-                                                        </div>
-                                                        <div class="modal-footer">
-                                                            <button type="button" class="btn btn-danger rounded-sm"
-                                                                    data-dismiss="modal"
-                                                                    id="modal_close">Close
-                                                            </button>
-                                                            <button type="button" class="btn btn-success rounded-sm"
-                                                                    id="pass_submit_btn">Save
-                                                            </button>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        {% endif %}
-                                        <li>
-                                            <button class="no-btn-style" type="button" title="Language"
-                                                    data-toggle="collapse" data-target="#global-language"
-                                                    aria-controls="global-language" aria-expanded="false">
-                                                <span class="sr-only">Language</span>
-                                                <span class="fas fa-language fa-lg" role="img"></span>
-                                            </button>
-                                        </li>
-                                    </ul>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="container-fluid border-top collapse" id="global-language">
-                <div class="narrow py-2">
-                    <div id="google_translate_element"></div>
-                </div>
-            </div>
-            <div class="container-fluid border-top collapse" id="global-search">
-                <form class="narrow py-2" aria-label="Search" role="search">
-                    <div class="input-group">
-                        <label class="sr-only" for="global-search-bar">Search</label>
-                        <input class="form-control form-control-lg" id="global-search-bar" placeholder="Search">
-                        <div class="input-group-btn">
-                            <button class="btn btn-primary btn-lg" type="button" title="Search">
-                                <span class="sr-only">Search</span>
-                                <span class="fas fa-arrow-right" role="img"></span>
-                            </button>
-                        </div>
-                    </div>
-                </form>
-            </div>
-        </header>
-        <div class="container">
-            {% with messages = get_flashed_messages(with_categories=true) %}
-                {% if messages %}
-                    {% for category, message in messages %}
-                        {% if category == "success" %}
-                            <div>
-                                <div class="alert alert-success alert-dismissible fade show" role="alert">
-                                    <button type="button" class="btn btn-lg close text-decoration-none" role="button" data-dismiss="alert" aria-label="Close">
-                                        <span aria-hidden="true">&times;</span>
-                                    </button>
-                                        {{ message }}
-                                </div>
-                            </div>
-                        {% else %}
-                            <div>
-                                <div class="alert alert-warning alert-dismissible fade show" role="alert">
-                                    <button type="button" class="btn btn-lg close text-decoration-none" role="button" data-dismiss="alert" aria-label="Close">
-                                        <span aria-hidden="true">&times;</span>
-                                    </button>
-                                        {{ message }}
-                                </div>
-                            </div>
+                            </li>
+                        {% elif current_user.is_authenticated %}
+                            <li>
+                                <a class="text-reset" href="{{ url_for('auth.logout') }}">
+                                    <strong>Log Out</strong>
+                                </a>
+                            </li>
                         {% endif %}
-                    {% endfor %}
-                {% endif %}
-            {% endwith %}
+                    </ul>
+                </div>
+            </div>
         </div>
-        {% block content %}{% endblock %}
-        <footer class="bg-black" id="global-footer" role="contentinfo">
-            <h2 class="sr-only">Page Footer</h2>
-            <div class="bg-dark text-white" id="nyc-footer">
-                <div class="container py-3 d-none" id="languages">
-                    <div class="row fs-md">
-                        <div class="col-6 col-md-4 col-lg mb-2 mb-lg-0">
-                            <ul class="extensible-list">
-                                <li><a class="lang-select text-reset" href="#" data-lang="ar">عربى</a></li>
-                                <li><a class="lang-select text-reset" href="#" data-lang="bn">বাঙালি</a></li>
-                            </ul>
-                        </div>
-                        <div class="col-6 col-md-4 col-lg mb-2 mb-lg-0">
-                            <ul class="extensible-list">
-                                <li><a class="lang-select text-reset" href="#" data-lang="zh-CN">中文</a></li>
-                                <li><a class="lang-select text-reset" href="#" data-lang="fr">français</a></li>
-                            </ul>
-                        </div>
-                        <div class="col-6 col-md-4 col-lg mb-2 mb-lg-0">
-                            <ul class="extensible-list">
-                                <li><a class="lang-select text-reset" href="#" data-lang="ht">Kreyòl Ayisyen</a>
+    </div>
+    <div class="wrap-header">
+        <div class="container-fluid wide">
+            <div class="row align-items-center">
+                <div class="col-lg">
+                    <div class="d-flex justify-content-center justify-content-lg-start">
+                        <a class="align-self-center" href="{{ url_for("main.index") }}" title="Home">
+                            <img src="{{ url_for("static" , filename="/images/records_logo.svg") }}"
+                                 alt="DORIS">
+                        </a>
+                    </div>
+                </div>
+                <div class="col-lg-auto border-top border-lg-0">
+                    <div class="row no-gutters d-flex justify-content-center">
+                        <div class="col-auto">
+                            <ul class="extensible-list horizontal">
+                                {% if not current_user.is_anonymous %}
+                                    <li><p>Hi, {{ current_user.email }}</p></li>
+                                    <li>
+                                        <a href="{{ url_for("main.index") }}" class="no-btn-style"
+                                           title="Home"><i class="fa fa-home"></i></a>
+                                    </li>
+                                    {% if current_user.is_admin %}
+                                        <li>
+                                            <a href="{{ url_for('admin.index') }}" class="no-btn-style">
+                                                <i class="fa fa-cog"></i>
+                                            </a>
+                                        </li>
+                                    {% endif %}
+                                {% endif %}
+                                <li>
+                                    <button class="no-btn-style" type="button" title="Language"
+                                            data-toggle="collapse" data-target="#global-language"
+                                            aria-controls="global-language" aria-expanded="false">
+                                        <span class="sr-only">Language</span>
+                                        <span class="fas fa-language fa-lg" role="img"></span>
+                                    </button>
                                 </li>
-                                <li><a class="lang-select text-reset" href="#" data-lang="ko">한국어</a></li>
-                            </ul>
-                        </div>
-                        <div class="col-6 col-md-4 col-lg mb-2 mb-lg-0">
-                            <ul class="extensible-list">
-                                <li><a class="lang-select text-reset" href="#" data-lang="pl">Polskie</a></li>
-                                <li><a class="lang-select text-reset" href="#" data-lang="ru">русский</a></li>
-                            </ul>
-                        </div>
-                        <div class="col-6 col-md-4 col-lg">
-                            <ul class="extensible-list">
-                                <li><a class="lang-select text-reset" href="#" data-lang="es">Español</a></li>
-                                <li><a class="lang-select text-reset" href="#" data-lang="ur">اردو</a></li>
                             </ul>
                         </div>
                     </div>
                 </div>
-                <!-- #languages -->
-                <div class="container py-3" id="languages">
-                    <ul class="fs-md" role="list">
+            </div>
+        </div>
+    </div>
+    <div class="container-fluid border-top collapse" id="global-language">
+        <div class="narrow py-2">
+            <div id="google_translate_element"></div>
+        </div>
+    </div>
+    <div class="container-fluid border-top collapse" id="global-search">
+        <form class="narrow py-2" aria-label="Search" role="search">
+            <div class="input-group">
+                <label class="sr-only" for="global-search-bar">Search</label>
+                <input class="form-control form-control-lg" id="global-search-bar" placeholder="Search">
+                <div class="input-group-btn">
+                    <button class="btn btn-primary btn-lg" type="button" title="Search">
+                        <span class="sr-only">Search</span>
+                        <span class="fas fa-arrow-right" role="img"></span>
+                    </button>
+                </div>
+            </div>
+        </form>
+    </div>
+</header>
+<div class="container">
+    {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+            {% for category, message in messages %}
+                {% if category == "success" %}
+                    <div>
+                        <div class="alert alert-success alert-dismissible fade show" role="alert">
+                            <button type="button" class="btn btn-lg close text-decoration-none" role="button"
+                                    data-dismiss="alert" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                            {{ message }}
+                        </div>
+                    </div>
+                {% else %}
+                    <div>
+                        <div class="alert alert-warning alert-dismissible fade show" role="alert">
+                            <button type="button" class="btn btn-lg close text-decoration-none" role="button"
+                                    data-dismiss="alert" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                            {{ message }}
+                        </div>
+                    </div>
+                {% endif %}
+            {% endfor %}
+        {% endif %}
+    {% endwith %}
+</div>
+{% block content %}{% endblock %}
+<footer class="bg-black" id="global-footer" role="contentinfo">
+    <h2 class="sr-only">Page Footer</h2>
+    <div class="bg-dark text-white" id="nyc-footer">
+        <div class="container py-3 d-none" id="languages">
+            <div class="row fs-md">
+                <div class="col-6 col-md-4 col-lg mb-2 mb-lg-0">
+                    <ul class="extensible-list">
                         <li><a class="lang-select text-reset" href="#" data-lang="ar">عربى</a></li>
                         <li><a class="lang-select text-reset" href="#" data-lang="bn">বাঙালি</a></li>
+                    </ul>
+                </div>
+                <div class="col-6 col-md-4 col-lg mb-2 mb-lg-0">
+                    <ul class="extensible-list">
                         <li><a class="lang-select text-reset" href="#" data-lang="zh-CN">中文</a></li>
                         <li><a class="lang-select text-reset" href="#" data-lang="fr">français</a></li>
-                        <li><a class="lang-select text-reset" href="#" data-lang="ht">Kreyòl Ayisyen</a></li>
+                    </ul>
+                </div>
+                <div class="col-6 col-md-4 col-lg mb-2 mb-lg-0">
+                    <ul class="extensible-list">
+                        <li><a class="lang-select text-reset" href="#" data-lang="ht">Kreyòl Ayisyen</a>
+                        </li>
                         <li><a class="lang-select text-reset" href="#" data-lang="ko">한국어</a></li>
+                    </ul>
+                </div>
+                <div class="col-6 col-md-4 col-lg mb-2 mb-lg-0">
+                    <ul class="extensible-list">
                         <li><a class="lang-select text-reset" href="#" data-lang="pl">Polskie</a></li>
                         <li><a class="lang-select text-reset" href="#" data-lang="ru">русский</a></li>
+                    </ul>
+                </div>
+                <div class="col-6 col-md-4 col-lg">
+                    <ul class="extensible-list">
                         <li><a class="lang-select text-reset" href="#" data-lang="es">Español</a></li>
                         <li><a class="lang-select text-reset" href="#" data-lang="ur">اردو</a></li>
                     </ul>
                 </div>
-                <!-- #languages -->
-                <hr class="opacity-10" aria-hidden="true">
-                <div class="container py-3">
-                    <div class="row">
-                        <div class="col-md-6 col-lg-8 mb-3 mb-lg-0">
-                            <nav class="row fs-md" role="navigation">
-                                <div class="col-lg mb-3 mb-lg-0">
-                                    <ul class="extensible-list">
-                                        <li>
-                                            <a class="text-reset"
-                                               href="http://www1.nyc.gov/nyc-resources/agencies.page">
-                                                <strong>City Agencies</strong>
-                                            </a>
-                                        </li>
-                                        <li>
-                                            <a class="text-reset" href="https://a858-nycnotify.nyc.gov/notifynyc/">
-                                                <strong>Notify NYC</strong>
-                                            </a>
-                                        </li>
-                                        <li>
-                                            <a class="text-reset"
-                                               href="http://www1.nyc.gov/connect/mobile-applications.page">
-                                                <strong>NYC Mobile Apps</strong>
-                                            </a>
-                                        </li>
-                                    </ul>
-                                </div>
-                                <div class="col-lg mb-3 mb-lg-0">
-                                    <ul class="extensible-list">
-                                        <li>
-                                            <a class="text-reset" href="http://www1.nyc.gov/home/contact-us.page">
-                                                <strong>Contact NYC Government</strong>
-                                            </a>
-                                        </li>
-                                        <li>
-                                            <a class="text-reset" href="https://a856-citystore.nyc.gov/">
-                                                <strong>CityStore</strong>
-                                            </a>
-                                        </li>
-                                        <li>
-                                            <a class="text-reset" href="http://maps.nyc.gov/doitt/nycitymap/">
-                                                <strong>Maps</strong>
-                                            </a>
-                                        </li>
-                                    </ul>
-                                </div>
-                                <div class="col-lg mb-3 mb-lg-0">
-                                    <ul class="extensible-list">
-                                        <li>
-                                            <a class="text-reset"
-                                               href="https://a127-ess.nyc.gov/psp/prdess/?cmd=login&languageCd=ENG&">
-                                                <strong>City Employees</strong>
-                                            </a>
-                                        </li>
-                                        <li>
-                                            <a class="text-reset"
-                                               href="http://www1.nyc.gov/connect/social-media.page">
-                                                <strong>Stay Connected</strong>
-                                            </a>
-                                        </li>
-                                        <li>
-                                            <a class="text-reset"
-                                               href="http://www1.nyc.gov/nyc-resources/resident-toolkit.page">
-                                                <strong>Resident Toolkit</strong>
-                                            </a>
-                                        </li>
-                                    </ul>
-                                </div>
-                            </nav>
-                        </div>
-                        <div class="col-md-6 col-lg-4">
-                            <a class="mb-2" href="https://www1.nyc.gov" title="Go to nyc.gov" target="_blank">
-                                <img class="mb-2"
-                                     src="{{ url_for("static", filename="/images/nyc-bubble-logo.svg") }}"
-                                     width="90" alt="NYC Logo">
-                            </a>
-                            <p class="fs-sm">City of New York - 2023 All Rights Reserved. NYC is a trademark and
-                                service
-                                mark of the City of New York.</p>
-                            <ul class="extensible-list horizontal fs-sm">
+            </div>
+        </div>
+        <!-- #languages -->
+        <div class="container py-3" id="languages">
+            <ul class="fs-md" role="list">
+                <li><a class="lang-select text-reset" href="#" data-lang="ar">عربى</a></li>
+                <li><a class="lang-select text-reset" href="#" data-lang="bn">বাঙালি</a></li>
+                <li><a class="lang-select text-reset" href="#" data-lang="zh-CN">中文</a></li>
+                <li><a class="lang-select text-reset" href="#" data-lang="fr">français</a></li>
+                <li><a class="lang-select text-reset" href="#" data-lang="ht">Kreyòl Ayisyen</a></li>
+                <li><a class="lang-select text-reset" href="#" data-lang="ko">한국어</a></li>
+                <li><a class="lang-select text-reset" href="#" data-lang="pl">Polskie</a></li>
+                <li><a class="lang-select text-reset" href="#" data-lang="ru">русский</a></li>
+                <li><a class="lang-select text-reset" href="#" data-lang="es">Español</a></li>
+                <li><a class="lang-select text-reset" href="#" data-lang="ur">اردو</a></li>
+            </ul>
+        </div>
+        <!-- #languages -->
+        <hr class="opacity-10" aria-hidden="true">
+        <div class="container py-3">
+            <div class="row">
+                <div class="col-md-6 col-lg-8 mb-3 mb-lg-0">
+                    <nav class="row fs-md" role="navigation">
+                        <div class="col-lg mb-3 mb-lg-0">
+                            <ul class="extensible-list">
                                 <li>
-                                    <a class="text-reset" href="http://www1.nyc.gov/home/privacy-policy.page">Privacy
-                                        Policy</a>
+                                    <a class="text-reset"
+                                       href="http://www1.nyc.gov/nyc-resources/agencies.page">
+                                        <strong>City Agencies</strong>
+                                    </a>
                                 </li>
                                 <li>
-                                    <a class="text-reset" href="http://www1.nyc.gov/home/terms-of-use.page">Terms
-                                        of Use</a>
+                                    <a class="text-reset" href="https://a858-nycnotify.nyc.gov/notifynyc/">
+                                        <strong>Notify NYC</strong>
+                                    </a>
                                 </li>
                                 <li>
-                                    <a class="text-reset" href="http://www1.nyc.gov/site/mopd/index.page"
-                                       title="Mayor's Office for People with Disabilities">
-                                        <span class="sr-only">Mayor's Office for People with Disabilities</span>
-                                        <span class="fab fa-lg fa-accessible-icon"></span>
+                                    <a class="text-reset"
+                                       href="http://www1.nyc.gov/connect/mobile-applications.page">
+                                        <strong>NYC Mobile Apps</strong>
                                     </a>
                                 </li>
                             </ul>
                         </div>
-                    </div>
+                        <div class="col-lg mb-3 mb-lg-0">
+                            <ul class="extensible-list">
+                                <li>
+                                    <a class="text-reset" href="http://www1.nyc.gov/home/contact-us.page">
+                                        <strong>Contact NYC Government</strong>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a class="text-reset" href="https://a856-citystore.nyc.gov/">
+                                        <strong>CityStore</strong>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a class="text-reset" href="http://maps.nyc.gov/doitt/nycitymap/">
+                                        <strong>Maps</strong>
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                        <div class="col-lg mb-3 mb-lg-0">
+                            <ul class="extensible-list">
+                                <li>
+                                    <a class="text-reset"
+                                       href="https://a127-ess.nyc.gov/psp/prdess/?cmd=login&languageCd=ENG&">
+                                        <strong>City Employees</strong>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a class="text-reset"
+                                       href="http://www1.nyc.gov/connect/social-media.page">
+                                        <strong>Stay Connected</strong>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a class="text-reset"
+                                       href="http://www1.nyc.gov/nyc-resources/resident-toolkit.page">
+                                        <strong>Resident Toolkit</strong>
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                    </nav>
+                </div>
+                <div class="col-md-6 col-lg-4">
+                    <a class="mb-2" href="https://www1.nyc.gov" title="Go to nyc.gov" target="_blank">
+                        <img class="mb-2"
+                             src="{{ url_for("static", filename="/images/nyc-bubble-logo.svg") }}"
+                             width="90" alt="NYC Logo">
+                    </a>
+                    <p class="fs-sm">City of New York - 2023 All Rights Reserved. NYC is a trademark and
+                        service
+                        mark of the City of New York.</p>
+                    <ul class="extensible-list horizontal fs-sm">
+                        <li>
+                            <a class="text-reset" href="http://www1.nyc.gov/home/privacy-policy.page">Privacy
+                                Policy</a>
+                        </li>
+                        <li>
+                            <a class="text-reset" href="http://www1.nyc.gov/home/terms-of-use.page">Terms
+                                of Use</a>
+                        </li>
+                        <li>
+                            <a class="text-reset" href="http://www1.nyc.gov/site/mopd/index.page"
+                               title="Mayor's Office for People with Disabilities">
+                                <span class="sr-only">Mayor's Office for People with Disabilities</span>
+                                <span class="fab fa-lg fa-accessible-icon"></span>
+                            </a>
+                        </li>
+                    </ul>
                 </div>
             </div>
-        </footer>
+        </div>
+    </div>
+</footer>
 
-        <!-- jQuery (full, compressed version) -->
-        <script src="{{ url_for("static", filename="/js/plugins/jquery-3.3.1.min.js") }}"></script>
+<!-- jQuery (full, compressed version) -->
+<script src="{{ url_for("static", filename="/js/plugins/jquery-3.3.1.min.js") }}"></script>
 
-        <!-- Popper.js and Bootstrap JS -->
-        <script src="{{ url_for("static", filename="/js/plugins/bootstrap.min.js") }}"></script>
-        <script src="{{ url_for("static", filename="/js/plugins/popper.min.js") }}"></script>
+<!-- Popper.js and Bootstrap JS -->
+<script src="{{ url_for("static", filename="/js/plugins/bootstrap.min.js") }}"></script>
+<script src="{{ url_for("static", filename="/js/plugins/popper.min.js") }}"></script>
+<script src="{{ url_for("static", filename="/js/plugins/session-timeout.min.js") }}"></script>
+{% include 'auth/concurrent_session_modal.html' %}
+{% include 'base.js.html' %}
 
-        <!-- Google Translate -->
-        <script>
-            function googleTranslateElementInit() {
-                new google.translate.TranslateElement({
-                    pageLanguage: 'en'
-                }, 'google_translate_element');
-            }
-        </script>
+<!-- Google Translate -->
+<script>
+    function googleTranslateElementInit() {
+        new google.translate.TranslateElement({
+            pageLanguage: 'en'
+        }, 'google_translate_element');
+    }
+</script>
 
-        <script src="https://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
+<script src="https://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
 
-        <!-- NYC template JS (RTL, search and language toggle, back to top)  -->
-        <script src="{{ url_for("static", filename="/js/main.js") }}"></script>
+<!-- NYC template JS (RTL, search and language toggle, back to top)  -->
+<script src="{{ url_for("static", filename="/js/main.js") }}"></script>
 
-        {% block js %}{% endblock %}
-    </body>
+{% block js %}{% endblock %}
+</body>
 </html>
 
