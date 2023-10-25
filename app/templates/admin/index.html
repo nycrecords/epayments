@@ -1,0 +1,72 @@
+{% extends "base.html" %}
+{% block content %}
+    <h5 class="text-center">Admin</h5>
+    <div class="container mt-4" style="height: 100vh">
+        <table id="admin" class="display" style="width: 100%">
+            <thead>
+            <tr>
+                <th>User</th>
+                <th>Role</th>
+                <th>Assign Role</th>
+            </tr>
+            </thead>
+            <tbody>
+                {% for user in user_list %}
+                    <tr>
+                        <td>{{ user.email }}</td>
+                        <td>{{ user.role|replace("_", " ")|title if user.role else "Inactive" }}</td>
+                        <td>
+                            <form method="post">
+                                <div class="d-flex ">
+                                    <select id="role" name="role" class="form-control-sm rounded-sm mr-2">
+                                        <option value="">Select Role</option>
+
+                                        {% if user.role %}
+                                            <option value="inactive">Inactive</option>
+                                        {% endif %}
+
+                                        {% for role in roles.keys() %}
+                                            {% if user.role != role %}
+                                                    <option value="{{ role }}">{{ roles[role] }}</option>
+                                            {% endif %}
+                                        {% endfor %}
+                                    </select>
+                                    <button class="btn btn-success btn-sm rounded-sm mr-2"
+                                            type="submit"
+                                            title="Update Role"
+                                            name="user"
+                                            value="{{ user.guid }}">Update
+                                    </button>
+                                </div>
+                            </form>
+                        </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+{% endblock %}
+
+{% block js %}
+    <script>
+        $(document).ready(function () {
+            $('#admin').DataTable(
+                {
+                    lengthMenu: [
+                        [10, 25, 50, -1],
+                        [10, 25, 50, 'All']
+                    ],
+                    stateSave: true,
+                    scrollCollapse: true,
+                    scrollY: '55vh',
+                    columns: [
+                        null,
+                        {searchable: true, orderable: true,},
+                        {searchable: false, orderable: false,},
+                    ]
+                }
+            );
+        });
+    </script>
+    <script src="{{ url_for("static", filename="/js/plugins/jquery.dataTables.min.js") }}"></script>
+{% endblock %}
