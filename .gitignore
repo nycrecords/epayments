@@ -34,3 +34,9 @@ postgres-data/
 
 # Development Elasticsearch
 elasticsearch-data
+
+# SAML
+/saml/certs/sp.crt
+/saml/certs/sp.key
+/saml/advanced_settings.json
+/saml/settings.json
