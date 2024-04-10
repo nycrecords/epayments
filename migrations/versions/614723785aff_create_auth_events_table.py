@@ -2,7 +2,7 @@
 """create auth events table
 
 Revision ID: 614723785aff
-Revises: 22e4d3d24107
+Revises: bfb60868b768
 Create Date: 2023-09-11 14:23:18.052839
 
 """
@@ -14,7 +14,7 @@ from sqlalchemy.dialects import postgresql
 
 # revision identifiers, used by Alembic.
 revision = '614723785aff'
-down_revision = '22e4d3d24107'
+down_revision = 'bfb60868b768'
 branch_labels = None
 depends_on = None
 
