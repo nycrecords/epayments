@@ -33,16 +33,20 @@ def create_object(obj):
     #     return str(obj)
 
 
-def update_object(data, obj_type, obj_id, es_update=True):
+def update_object(data, obj_type, obj_id, es_update=True, by_email=False):
     """
     Update a database record and its elasticsearch counterpart.
     :param data: a dictionary of attribute-value pairs
     :param obj_type: sqlalchemy model
     :param obj_id: id of record
     :param es_update: update the elasticsearch index
+    :param by_email: boolean indicating whether identifier is an email
     :return: was the record updated successfully?
     """
-    obj = get_object(obj_type, obj_id)
+    if by_email:
+        obj = get_object_by_email(obj_type, obj_id)
+    else:
+        obj = get_object(obj_type, obj_id)
 
     if obj:
         for attr, value in data.items():
@@ -81,4 +85,17 @@ def get_object(obj_type, obj_id):
         db.session.rollback()
         current_app.logger.exception('Error searching "{}" table for id {}'.format(
             obj_type.__tablename__, obj_id))
+        return None
+
+def get_object_by_email(model, email):
+    """
+    Retrieve an object from the database by its email.
+    :param model: The SQLAlchemy model class representing the database table
+    :param email: The unique identifier for the object
+    :return: The object if found, None otherwise
+    """
+    try:
+        return model.query.filter_by(email=email).first()
+    except SQLAlchemyError as e:
+        current_app.logger.exception("Database error occurred while retrieving object by email: {}".format(e))
         return None

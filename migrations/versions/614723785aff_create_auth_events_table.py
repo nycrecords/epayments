@@ -31,7 +31,6 @@ def upgrade():
         batch_op.add_column(
             sa.Column('last_sign_in_at', sa.DateTime(), nullable=True))
         batch_op.add_column(sa.Column('session_id', sa.String(length=254), nullable=True))
-        batch_op.drop_constraint('users_email_key', type_='unique')
         batch_op.create_unique_constraint(None, ['guid'])
         batch_op.drop_column('password_hash')
 
@@ -74,7 +73,6 @@ def downgrade():
 
     with op.batch_alter_table('users', schema=None) as batch_op:
         batch_op.add_column(sa.Column('password_hash', sa.VARCHAR(length=128), autoincrement=False, nullable=True))
-        batch_op.create_unique_constraint('users_email_key', ['email'])
         batch_op.drop_column('session_id')
         batch_op.drop_column('last_sign_in_at')
         batch_op.drop_column('email_validated')

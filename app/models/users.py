@@ -7,8 +7,8 @@ from app import db, login_manager
 
 class Users(UserMixin, db.Model):
     __tablename__ = 'users'
-    guid = db.Column(db.String(32), unique=True, primary_key=True)
-    email = db.Column(db.String(100), nullable=False)
+    email = db.Column(db.String(100), primary_key=True, nullable=False)
+    guid = db.Column(db.String(32), unique=True)
     first_name = db.Column(db.String(32), nullable=True)
     middle_initial = db.Column(db.String(1), nullable=True)
     last_name = db.Column(db.String(64), nullable=True)

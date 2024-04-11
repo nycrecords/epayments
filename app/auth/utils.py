@@ -127,7 +127,8 @@ def saml_acs(saml_sp, onelogin_request):
                 update_object(
                     {'session_id': session.sid, 'last_sign_in_at': datetime.utcnow()},
                     Users,
-                    current_user.guid
+                    current_user.guid,
+                    by_email=True
                 )
                 create_auth_event(user.guid, auth_event_type.USER_LOGIN, {'success': True})
             else:

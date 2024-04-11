@@ -17,7 +17,7 @@ from app.models import Users
 @login_manager.user_loader
 def user_loader(guid: str) -> Users:
     user = Users.query.filter_by(guid=guid).one_or_none()
-    if user.session_id == session.sid:
+    if user is not None and user.session_id == session.sid:
         return user
 
 

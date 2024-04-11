@@ -1,4 +1,5 @@
 from datetime import datetime
+from uuid import uuid4
 
 from flask import (request, render_template, redirect,
                    make_response, url_for, flash, current_app, session)
@@ -26,6 +27,7 @@ def logout():
     timeout = request.args.get('timeout')
     duplicate_session = request.args.get('duplicate_session')
     saml_errors = request.args.get('error_message')
+    user_email = current_user.email
     user_guid = session.get('_user_id')
     error_message = None
 
@@ -38,7 +40,7 @@ def logout():
         error_message = 'timeout'
 
     if current_user.is_authenticated:
-        update_object({'session_id': None}, Users, user_guid)
+        update_object({'session_id': None}, Users, user_email, by_email=True)
 
     logout_user()
     create_auth_event(user_guid, auth_event_type.USER_LOGGED_OUT, {'success': True, 'errors': error_message})
@@ -99,6 +101,9 @@ def local_login():
         if user is None:
             flash('Invalid Email Address.', 'error')
         else:
+            if user.guid is None:
+                user.guid = uuid4().hex
+
             if user.agency_user:
                 login_user(user)
                 duplicate_session = user.session_id is not None
@@ -113,7 +118,8 @@ def local_login():
                     'last_sign_in_at': datetime.utcnow()
                 },
                     Users,
-                    current_user.guid
+                    current_user.email,
+                    by_email=True
                 )
                 create_auth_event(user.guid, auth_event_type.USER_LOGIN, {'success': True})
                 return redirect(return_url) if return_url else redirect(url_for('main.index'))
