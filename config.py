@@ -46,6 +46,14 @@ class Config:
     IMPORT_URL = os.environ.get("IMPORT_URL")
     IMPORT_API_KEY = os.environ.get("IMPORT_API_KEY")
 
+    # Authentication Settings
+    USE_SAML = os.environ.get('USE_SAML') == "True"
+    SAML_PATH = os.environ.get('SAML_PATH')
+
+    # Session Settings
+    SESSION_TYPE = os.environ.get('SESSION_TYPE', 'filesystem')
+    SESSION_FILE_THRESHOLD = int(os.environ.get('SESSION_FILE_THRESHOLD')) or 100
+
     @staticmethod
     def init_app(app):
         pass

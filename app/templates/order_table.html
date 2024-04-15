@@ -12,11 +12,17 @@
                         <div><strong>Order Type: </strong>{{ order['order_type'] }}</div>
                         <div><strong>Billing Name: </strong>{{ order['customer']['billing_name'] }}</div>
                         <div><strong>Email: </strong>{{ order['customer']['email'] }}</div>
+                        <div><strong>Total: </strong>{{ "$" ~ order['total'] if order['total'] else 'N/A' }}</div>
+                        <div>
+                            <strong>Check/Money Order#: </strong>
+                            <span id="check_mo_num_{{ loop.index }}">
+                                {{ order['check_mo_number'] if order['check_mo_number'] else 'N/A' }}
+                            </span>
+                        </div>
                         <div><strong>Date Received: </strong>{{ order['date_received'].split(' ')[0] }}</div>
                     </div>
                     <div class="col-6">
-                        <div id="status_{{ loop.index }}"
-                             class="list-group-item">{{ order['current_status'] }}</div>
+                        <div id="status_{{ loop.index }}" class="list-group-item">{{ order['current_status'] }}</div>
                     </div>
                 </div>
 
@@ -28,16 +34,11 @@
                             <div id="collapse_{{ loop.index }}">
                                 <p class="mb-1">
                                     <button class="btn btn-primary btn-sm rounded-sm" type="button"
-                                            data-toggle="collapse"
-                                            data-target="#history_{{ loop.index }}" aria-expanded="false"
-                                            aria-controls="history_{{ loop.index }}"
                                             id="history_btn_{{ loop.index }}">
                                         History
                                     </button>
 
-                                    <button class="btn btn-info btn-sm rounded-sm" type="button" data-toggle="collapse"
-                                            data-target="#moreinfo_{{ loop.index }}" aria-expanded="false"
-                                            aria-controls="moreinfo_{{ loop.index }}"
+                                    <button class="btn btn-info btn-sm rounded-sm" type="button"
                                             id="moreinfo_btn_{{ loop.index }}">
                                         More Info
                                     </button>
@@ -69,6 +70,14 @@
                                                 aria-controls="update_block_lot_roll_{{ loop.index }}"
                                                 id="update_block_lot_roll_btn_{{ loop.index }}">
                                             Update Block/Lot/Roll
+                                        </button>
+                                    {% endif %}
+
+                                    {% if 'EPAY' in order['order_number'] %}
+                                        <button class="btn btn-secondary btn-sm rounded-sm update-check-mo-number-btn"
+                                                data-index="{{ loop.index }}"
+                                                type="button" id="update_check_mo_number_btn_{{ loop.index }}">
+                                            Update Check/Money Order
                                         </button>
                                     {% endif %}
                                 </p>
@@ -157,27 +166,56 @@
                                                            class="sm font-weight-bold">Block #</label>
                                                     <input type="text"
                                                            class="form-control form-control-sm rounded-sm"
-                                                           id="update_block_{{ loop.index }}">
+                                                           id="update_block_{{ loop.index }}"
+                                                           maxlength="9">
                                                 </div>
                                                 <div class="mb-2">
                                                     <label for="update_lot_{{ loop.index }}"
                                                            class="sm font-weight-bold">Lot #</label>
                                                     <input type="text"
                                                            class="form-control form-control-sm rounded-sm"
-                                                           id="update_lot_{{ loop.index }}">
+                                                           id="update_lot_{{ loop.index }}"
+                                                           maxlength="9">
                                                 </div>
                                                 <div class="mb-2">
                                                     <label for="update_roll_{{ loop.index }}"
                                                            class="sm font-weight-bold">Roll #</label>
                                                     <input type="text"
                                                            class="form-control form-control-sm rounded-sm"
-                                                           id="update_roll_{{ loop.index }}">
+                                                           id="update_roll_{{ loop.index }}"
+                                                           maxlength="9">
                                                 </div>
                                                 <button id="confirm_block_lot_roll_btn_{{ loop.index }}"
                                                         type="submit"
                                                         class="btn btn-success btn-sm rounded-sm confirm_block_lot_roll_btn"
                                                         data-index="{{ loop.index }}"
                                                         role="button">Update
+                                                </button>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="collapse" id="update_check_mo_number_{{ loop.index }}"
+                                     data-parent="#collapse_{{ loop.index }}">
+                                    <div class="card card-body">
+                                        <div id="info_{{ loop.index }}">
+                                            <form>
+                                                <div class="mb-2">
+                                                    <label for="update_check_mo_{{ loop.index }}"
+                                                           class="sm font-weight-bold">Check/Money Order #
+                                                    </label>
+                                                    <input type="text"
+                                                           class="form-control form-control-sm rounded-sm col-md-4"
+                                                           id="update_check_mo_{{ loop.index }}"
+                                                           maxlength="20">
+                                                </div>
+                                                <button id="confirm_check_mo_number_btn_{{ loop.index }}"
+                                                        type="submit"
+                                                        class="btn btn-success btn-sm rounded-sm confirm_check_mo_number_btn"
+                                                        data-index="{{ loop.index }}"
+                                                        role="button">
+                                                    Update
                                                 </button>
                                             </form>
                                         </div>

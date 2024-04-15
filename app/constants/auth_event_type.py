@@ -1,0 +1,7 @@
+USER_CREATED = 'user_created'
+USER_LOGIN = 'user_logged_in'
+USER_FAILED_LOG_IN = 'user_failed_login'
+USER_LOGGED_OUT = 'user_logged_out'
+USER_ROLE_CHANGED = 'user_role_changed'
+AGENCY_USER_ACTIVATED = 'agency_user_activated'
+AGENCY_USER_DEACTIVATED = 'agency_user_deactivated'
