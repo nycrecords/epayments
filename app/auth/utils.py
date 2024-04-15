@@ -186,7 +186,7 @@ def _process_user_data(user_data: dict):
     """
     user_attributes = {
         'guid': user_data.get('GUID'),
-        'email': user_data.get('mail'),
+        'email': user_data.get('mail').lower(),
         'first_name': user_data.get('givenName'),
         'middle_initial': user_data.get('middle_name'),
         'last_name': user_data.get('sn'),
@@ -197,7 +197,7 @@ def _process_user_data(user_data: dict):
 
     if domain == 'records.nyc.gov':
         user = Users.query.filter_by(guid=user_attributes['guid']).first() or Users.query.filter(
-            func.lower(Users.email) == user_attributes['email'].lower()).first()
+            func.lower(Users.email) == user_attributes['email']).first()
         if user:
             _update_user_data(user, user_attributes)
         else:
