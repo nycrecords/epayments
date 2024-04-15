@@ -5,6 +5,7 @@ from sqlalchemy.dialects.postgresql import JSONB
 
 from app import db
 from app.constants import auth_event_type
+from app.models.users import Users
 
 
 class AuthEvents(db.Model):
@@ -35,6 +36,10 @@ class AuthEvents(db.Model):
     previous_value = db.Column(JSONB)
     new_value = db.Column(JSONB)
     timestamp = db.Column(db.DateTime, default=datetime.utcnow())
+
+    __table_args__ = (
+        db.ForeignKeyConstraint([user_guid], [Users.guid], onupdate="CASCADE"),
+    )
 
     user = db.relationship(
         "Users",

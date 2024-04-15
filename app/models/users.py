@@ -54,8 +54,12 @@ class Role(db.Model):
 class UserRoles(db.Model):
     __tablename__ = 'user_roles'
     id = db.Column(db.Integer(), primary_key=True)
-    user_id = db.Column(db.String(), db.ForeignKey('users.guid', ondelete='CASCADE'))
+    user_guid = db.Column(db.String(), db.ForeignKey('users.guid', ondelete='CASCADE'))
     role_id = db.Column(db.Integer(), db.ForeignKey('roles.id', ondelete='CASCADE'))
+
+    __table_args__ = (
+        db.ForeignKeyConstraint([user_guid], [Users.guid], onupdate="CASCADE"),
+    )
 
 
 @login_manager.user_loader

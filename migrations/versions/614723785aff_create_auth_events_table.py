@@ -43,10 +43,10 @@ def upgrade():
 
     op.create_table('user_roles',
                     sa.Column('id', sa.Integer(), nullable=False),
-                    sa.Column('user_id', sa.String(), nullable=True),
+                    sa.Column('user_guid', sa.String(), nullable=True),
                     sa.Column('role_id', sa.Integer(), nullable=True),
                     sa.ForeignKeyConstraint(['role_id'], ['roles.id'], ondelete='CASCADE'),
-                    sa.ForeignKeyConstraint(['user_id'], ['users.guid'], ondelete='CASCADE'),
+                    sa.ForeignKeyConstraint(['user_guid'], ['users.guid'], onupdate='CASCADE', ondelete='CASCADE'),
                     sa.PrimaryKeyConstraint('id')
                     )
 
@@ -59,7 +59,7 @@ def upgrade():
                     sa.Column('previous_value', postgresql.JSONB(astext_type=sa.Text()), nullable=True),
                     sa.Column('new_value', postgresql.JSONB(astext_type=sa.Text()), nullable=True),
                     sa.Column('timestamp', sa.DateTime(), nullable=True),
-                    sa.ForeignKeyConstraint(['user_guid'], ['users.guid'], ondelete='CASCADE'),
+                    sa.ForeignKeyConstraint(['user_guid'], ['users.guid'], onupdate='CASCADE', ondelete='CASCADE'),
                     sa.PrimaryKeyConstraint('id')
                     )
 
