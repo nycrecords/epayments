@@ -1,11 +1,13 @@
 import os
-from getpass import getpass
+from datetime import datetime
+from uuid import uuid4
 
 from flask_migrate import Migrate
 
 from app import create_app, db
 from app.models import (Orders, Suborders, Customers, BirthSearch, MarriageSearch, DeathSearch, BirthCertificate,
                         MarriageCertificate, DeathCertificate, PropertyCard, TaxPhoto, PhotoGallery, Events, Users)
+from app.models.users import Role
 from app.search.utils import recreate
 
 COV = None
@@ -56,28 +58,54 @@ def reset_db():
 
 @app.cli.command()
 def create_test_user():
-    user = Users('test@email.com', '1234')
+    """Creates user for development testing."""
+    user = Users('test@email.com', is_active=True, last_sign_in_at=datetime.utcnow(), guid=uuid4().hex)
     db.session.add(user)
     db.session.commit()
 
 
 @app.cli.command()
-def create_user():
+def create_user_roles():
     """
-    Command line tool to create a user in the database.
-    :return: message indicating either error or success
+    Creates new user roles based on the roles specified in the 'roles_to_add' list.
+    Checks for existing roles to avoid duplicates and then adds any new roles
+    to the database.
     """
-    email = input("Enter your email: ")
-    password = getpass("Enter your desired password: ")
-    confirm_password = getpass("Re-enter your password: ")
-    if password != confirm_password:
-        return print("Passwords are not the same. Please try again.")
+    # Add new roles to this list
+    roles_to_add = ['admin', 'agency_user']
 
-    user = Users(email=email, password=password)
-    db.session.add(user)
-    db.session.commit()
+    existing_roles = Role.query.filter(Role.name.in_(roles_to_add)).all()
+    existing_role_names = set(role.name for role in existing_roles)
 
-    return print("Successfully created user, " + email)
+    roles_to_create = [Role(name=role_name) for role_name in roles_to_add if role_name not in existing_role_names]
+
+    if roles_to_create:
+        db.session.add_all(roles_to_create)
+        db.session.commit()
+
+        print("Successfully created user roles.")
+
+
+@app.cli.command()
+def assign_admin_role():
+    """
+    Assigns the 'admin' role to a user identified by their email address.
+    If the user is found, they are granted the admin role and their account is activated.
+    """
+    user_email = input("Enter user email: ")
+    user = Users.query.filter_by(email=user_email).first()
+
+    if user:
+        admin_role = Role.query.filter_by(name='admin').first()
+        user.roles = [admin_role]
+        user.is_active = True
+        db.session.add(user)
+        db.session.commit()
+    else:
+        print("User not found.")
+        return
+
+    print("Successfully assigned admin role to user " + user_email)
 
 
 @app.cli.command()
@@ -106,4 +134,3 @@ def test(coverage=False):
 def es_recreate():
     """Recreates the index and docs"""
     recreate()
-

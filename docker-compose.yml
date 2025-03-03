@@ -52,7 +52,7 @@ services:
       - db
       - es
     ports:
-      - "8080:5000"
+      - "127.0.0.1:8080:5000"
       - "2992:2992"
     <<: *default_volumes
 
