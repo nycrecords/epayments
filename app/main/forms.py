@@ -278,10 +278,10 @@ class DeathCertificateForm(FlaskForm):
         validators=[validators.optional(), validators.number_range(1, 31, "Day must be between 1 and 31.")]
     )
     year = IntegerField(
-        "Year (1795 - 1948)",
+        "Year (1795 - 1949)",
         validators=[
             InputRequired("Year is required."),
-            validators.number_range(1795, 1948, "Year must be between 1795 and 1948.")
+            validators.number_range(1795, 1949, "Year must be between 1795 and 1949.")
         ]
     )
     death_place = StringField("Place of Death", validators=[validators.Length(max=40)])
@@ -348,10 +348,10 @@ class DeathSearchForm(FlaskForm):
         validators=[validators.optional(), validators.number_range(1, 31, "Day must be between 1 and 31.")]
     )
     year = IntegerField(
-        "Year (1795 - 1948)",
+        "Year (1795 - 1949)",
         validators=[
             InputRequired("Year is required."),
-            validators.number_range(1795, 1948, "Year must be between 1795 and 1948.")
+            validators.number_range(1795, 1949, "Year must be between 1795 and 1949.")
         ]
     )
     additional_years = StringField("Additional Years (Separated by comma)", validators=[validate_additional_years])
