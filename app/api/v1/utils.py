@@ -921,7 +921,8 @@ def generate_csv(search_params: Dict[str, str]) -> str:
             'Date Submitted',
             'Date Received',
         ]
-
+        if status == 'Refund' and order_type == 'all':
+            add_header.append('Status Comments')  # Add new column for refund comments
         if order_type == 'manual_entries':
             add_header.append("Check/Money Order Number")
 
@@ -945,8 +946,23 @@ def generate_csv(search_params: Dict[str, str]) -> str:
                 suborder['_source'].get('total'),
                 suborder['_source'].get('date_submitted')[:8],  # Remove time from string
                 suborder['_source'].get('date_received')[:8],
-                suborder['_source'].get('check_mo_number'),
             ]
+
+            # Add refund comments if applicable
+            if status == 'Refund' and order_type == 'all':
+                # Get the most recent refund status update comment from Events table
+                refund_event = Events.query.filter(
+                    Events.suborder_number == suborder['_source'].get('suborder_number'),
+                    Events.type == event_type.UPDATE_STATUS,
+                    Events.new_value['status'].astext == 'Refund'
+                ).order_by(Events.timestamp.desc()).first()
+
+                comment = refund_event.status_history.get('comment', '') if refund_event else ''
+                row_content.append(comment)
+
+            if order_type == 'manual_entries':
+                row_content.append(suborder['_source'].get('check_mo_number'))
+
             contents.append(row_content)
 
     # populate worksheet after header_data and contents is filled
