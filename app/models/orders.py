@@ -1,8 +1,8 @@
 from sqlalchemy.dialects.postgresql import ARRAY
 
 from app import db, es
-from app.constants import order_types, status
-from app.constants.search import DATETIME_FORMAT, ES_DATETIME_FORMAT
+from app.constants import status, order_types
+from app.constants.search import DATETIME_FORMAT
 
 
 class Orders(db.Model):
@@ -16,6 +16,7 @@ class Orders(db.Model):
     client_data -- Column: Text
     order_types -- Column: Array -- type(s) of order(s)
     multiple_items -- Column: Boolean -- whether an order has multiple items
+    check_mo_number -- Column: String(128) -- manually entered check/money order number
     """
 
     __tablename__ = 'orders'
@@ -26,6 +27,7 @@ class Orders(db.Model):
     client_data = db.Column(db.Text, nullable=True)
     order_types = db.Column(ARRAY(db.Text), nullable=True)
     multiple_items = db.Column(db.Boolean, nullable=False)
+    check_mo_number = db.Column(db.String(128), nullable=True)
     suborder = db.relationship('Suborders', backref='suborders', lazy=True)
     customer = db.relationship('Customers', backref='customers', uselist=False)
     _next_suborder_number = db.Column(db.Integer(), db.Sequence('suborder_seq'), name='next_suborder_number')
@@ -39,7 +41,8 @@ class Orders(db.Model):
             multiple_items,
             _next_suborder_number=1,
             confirmation_message=None,
-            client_data=None):
+            client_data=None,
+            check_mo_number=None):
         self.id = _id
         self.date_submitted = date_submitted
         self.date_received = date_received or None
@@ -48,6 +51,7 @@ class Orders(db.Model):
         self.order_types = _order_types
         self.multiple_items = multiple_items
         self._next_suborder_number = _next_suborder_number
+        self.check_mo_number = check_mo_number
 
     @property
     def serialize(self):
@@ -60,6 +64,7 @@ class Orders(db.Model):
             'client_data': self.client_data,
             'order_types': self.order_types,
             'multiple_items': self.multiple_items,
+            'check_mo_number': self.check_mo_number
         }
 
     @property
@@ -108,6 +113,7 @@ class Suborders(db.Model):
             status.REFUND,
             status.DONE,
             name='status'), nullable=True)
+    total = db.Column(db.String(32), nullable=True)
 
     order = db.relationship('Orders', backref='orders', uselist=False)
     # TODO: 'polymorphic_on': order_type
@@ -128,12 +134,14 @@ class Suborders(db.Model):
             order_type,
             order_number,
             _status,
+            total=None,
             client_id=None):
         self.id = id
         self.client_id = client_id
         self.order_type = order_type
         self.order_number = order_number
         self.status = _status
+        self.total = total
 
     @property
     def serialize(self):
@@ -147,6 +155,7 @@ class Suborders(db.Model):
             'customer_email': self.order.customer.email,
             'order_type': self.order_type,
             'current_status': self.status,
+            'total': self.total,
         }
 
     # Elasticsearch
@@ -178,6 +187,8 @@ class Suborders(db.Model):
                 'current_status': self.status,
                 'multiple_items': self.order.multiple_items,
                 'order_types': self.order.order_types,
+                'total': self.total,
+                'check_mo_number': self.order.check_mo_number
             }
         )
 
@@ -187,14 +198,16 @@ class Suborders(db.Model):
             index='suborders',
             id=self.id,
             doc={
-                    'metadata': metadata,
-                    'current_status': self.status,
+                'metadata': metadata,
+                'current_status': self.status,
+                'check_mo_number': self.order.check_mo_number
             }
         ) if metadata else \
             es.update(
                 index='suborders',
                 id=self.id,
                 doc={
-                    'current_status': self.status
+                    'current_status': self.status,
+                    'check_mo_number': self.order.check_mo_number
                 }
             )

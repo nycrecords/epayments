@@ -1,0 +1,22 @@
+/*
+CSS for the Create Orders Form
+ */
+[data-toggle="collapse"] .fa:before {
+    content: "\f13a"
+}
+
+[data-toggle="collapse"].collapsed .fa:before {
+    content: "\f138"
+}
+
+label[required]:after {
+    content: " *";
+    color: red;
+}
+
+/* Hide numeric input arrows */
+input[id*='total']::-webkit-outer-spin-button,
+input[id*='total']::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}

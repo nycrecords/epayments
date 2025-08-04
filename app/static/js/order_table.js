@@ -48,14 +48,18 @@ function setMoreInfoBtns() {
         let row_num = id_array[2];
         let suborder_number = $('#suborder_' + row_num).attr("data-value");
         $('#' + btn.id).click(function () {
-            if (!$('#' + id_array[0] + '_' + row_num).is(":visible")) {
+            let dataTab = $('#' + id_array[0] + '_' + row_num);
+            if (!dataTab.is(":visible")) {
                 $.ajax({
                     type: 'POST',
                     url: 'api/v1/more_info/' + suborder_number,
                     success: function (result) {
                         $('#info_' + row_num).html(result['info_tab']);
+                        dataTab.collapse('toggle');
                     }
                 });
+            } else {
+                dataTab.collapse('toggle');
             }
         });
     });
@@ -69,31 +73,35 @@ function setHistoryBtns() {
         let row_num = id_array[2];
         let suborder_number = $('#suborder_' + row_num).attr("data-value");
         $('#' + btn.id).click(function () {
-            if (!$('#' + id_array[0] + '_' + row_num).is(":visible")) {
+            let dataTab = $('#' + id_array[0] + '_' + row_num);
+            if (!dataTab.is(":visible")) {
                 $.ajax({
                     type: 'GET',
                     url: 'api/v1/history/' + suborder_number,
                     success: function (result) {
                         $('#history_body_' + row_num).html(result['history_tab']);
+                        dataTab.collapse('toggle');
                     }
                 });
+            } else {
+                dataTab.collapse('toggle');
             }
         });
     });
 }
 
-$(".update-block-lot-roll-btn").click(function() {
+$(".update-block-lot-roll-btn").click(function () {
     let index = $(this).data("index");
     let suborder_number = $("#suborder_" + index).attr("data-value");
 
     $.ajax({
-       type: "GET",
-       url: "api/v1/tax_photo/" + suborder_number,
-       success: function(result) {
-           $("#update_block_" + index).val(result["block_no"]);
-           $("#update_lot_" + index).val(result["lot_no"]);
-           $("#update_roll_" + index).val(result["roll_no"]);
-       }
+        type: "GET",
+        url: "api/v1/tax_photo/" + suborder_number,
+        success: function (result) {
+            $("#update_block_" + index).val(result["block_no"]);
+            $("#update_lot_" + index).val(result["lot_no"]);
+            $("#update_roll_" + index).val(result["roll_no"]);
+        }
     });
 });
 
@@ -114,7 +122,60 @@ $(".confirm_block_lot_roll_btn").click(function (event) {
         }),
         success: function (result) {
             alert(result["message"]);
+            $("#update_block_lot_roll_" + index).collapse("hide");
         }
     });
-    $("#update_block_lot_roll_" + index).collapse("hide");
+});
+
+$(".update-check-mo-number-btn").click(function () {
+    let index = $(this).data("index");
+    let order_number = $("#suborder_" + index).attr("data-value").split(" ")[0];
+    let dataTab = $("#update_check_mo_number_" + index);
+
+    if (!dataTab.is(":visible")) {
+        $.ajax({
+            type: "GET",
+            url: "api/v1/check_mo_number/" + order_number,
+            success: function (result) {
+                $("#update_check_mo_" + index).val(result["check_mo_number"]);
+                dataTab.collapse('toggle');
+            }
+        });
+    } else {
+        dataTab.collapse('toggle');
+    }
+});
+
+
+$(".confirm_check_mo_number_btn").click(function (event) {
+    event.preventDefault();
+
+    let index = $(this).data("index");
+    let order_number = $("#suborder_" + index).attr("data-value").split(" ")[0];
+    let checkMoNumber = $("#update_check_mo_" + index).val();
+
+    $.ajax({
+        type: "POST",
+        url: "api/v1/check_mo_number/" + order_number,
+        data: JSON.stringify({
+            "order_number": order_number,
+            "check_mo_number": checkMoNumber,
+        }),
+        success: function (result) {
+            alert(result["message"]);
+
+            // Update the relevant suborders with the new check_mo_number value
+            if (result["suborder_count"] > 1) {
+                $(`*[data-value*="${order_number}"]`).each(function () {
+                    let suborderIndex = $(this).attr('id').split("_")[1];
+                    $("#check_mo_num_" + suborderIndex).text(checkMoNumber);
+                });
+            } else {
+                $("#check_mo_num_" + index).text(checkMoNumber);
+            }
+
+            // Hide the corresponding update_check_mo_number suborder
+            $("#update_check_mo_number_" + index).collapse("hide");
+        }
+    });
 });

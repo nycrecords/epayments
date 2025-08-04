@@ -14,6 +14,7 @@ from app.api.v1.utils import (
     _print_small_labels,
     update_tax_photo,
     generate_csv,
+    update_check_mo_number,
 )
 from app.constants import event_type
 from app.constants import printing
@@ -23,6 +24,7 @@ from app.models import (
     Suborders,
     TaxPhoto,
     Users,
+    Orders,
 )
 from app.search.searchfunctions import SearchFunctions
 from app.search.utils import search_queries
@@ -36,7 +38,7 @@ def get_orders() -> Response:
     Retrieves the data for orders to be displayed.
 
     If a form is submitted, the parameters including order_number, suborder_number,
-    order_type, billing_name, date_received_start, and date_receieved_end will be retrieved
+    order_type, billing_name, date_received_start, and date_received_end will be retrieved
     from the form data and used in a function called get_orders_by_fields to filter orders.
 
     Else, orders are filtered with today's date.
@@ -298,6 +300,45 @@ def tax_photo(suborder_number) -> Response:
 
 
 # noinspection PyTypeChecker,PyTypeChecker
+@api.route('/check_mo_number/<string:order_number>', methods=['GET', 'POST'])
+@login_required
+def check_mo_number(order_number) -> Response:
+    """
+    Retrieve or update the Check/Money Order number associated with an order.
+
+    - GET: Returns the Check/Money Order number of the specified order.
+        Returns:
+        - JSON response containing the Check/Money Order number.
+        - HTTP status code 200 (OK).
+
+    - POST: Updates the Check/Money Order number of the specified order with new information.
+        Request Payload (JSON):
+        - check_mo_number: The new Check/Money Order number to be updated.
+
+        Returns:
+        - JSON response containing a message indicating the outcome of the update and the count of suborders within the order.
+        - HTTP status code 200 (OK).
+
+    :param order_number: The unique identifier of the order.
+    :type order_number: str
+
+    :return: JSON response containing relevant information based on the operation performed.
+    :rtype: Response
+    """
+    order = Orders.query.get(order_number)
+
+    if request.method == 'GET':
+        return jsonify(
+            check_mo_number=order.check_mo_number
+        ), 200
+    else:
+        json = request.get_json(force=True)
+        check_mo_number_value = json.get('check_mo_number')
+        message = update_check_mo_number(order, check_mo_number_value)
+        return jsonify(message=message, suborder_count=len(order.orders)), 200
+
+
+# noinspection PyTypeChecker,PyTypeChecker
 @api.route('/print/<string:print_type>', methods=['POST'])
 @login_required
 def print_order(print_type: str) -> Response:
@@ -384,17 +425,24 @@ def change_password() -> Response:
                     'code': 400,
                     'message': 'Passwords cannot be empty.',
                 }), 400
-        if len(value) < 6:
+        if len(value) < 8:
             return jsonify(
                 error={
                     'code': 400,
-                    'message': 'Password must contain at least 6 characters.',
+                    'message': 'Password must contain at least 8 characters.',
                 }), 400
-        if len(value) > 12:
+        if len(value) > 20:
             return jsonify(
                 error={
                     'code': 400,
-                    'message': 'Password must contain less than 12 characters.',
+                    'message': 'Password must contain less than 20 characters.',
+                }), 400
+        special_characters = " !\"#$%&'()*+,-./:;<=>?@[\]^_`{|}~"
+        if not any(c in special_characters for c in value):
+            return jsonify(
+                error={
+                    'code': 400,
+                    'message': 'Password must contain a special character.',
                 }), 400
 
     user = Users.query.filter_by(email=current_user.email).one_or_none()

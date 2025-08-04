@@ -1,0 +1,42 @@
+{
+    "strict": true,
+    "debug": true,
+    "sp": {
+        "entityId": "https://<sp_domain>/auth/metadata",
+        "assertionConsumerService": {
+            "url": "https://<sp_domain>/auth/saml?acs",
+            "binding": "urn:oasis:names:tc:SAML:2.0:bindings:HTTP-POST"
+        },
+        "singleLogoutService": {
+            "url": "https://<sp_domain>/auth/saml?sls",
+            "binding": "urn:oasis:names:tc:SAML:2.0:bindings:HTTP-Redirect"
+        },
+        "NameIDFormat": "urn:oasis:names:tc:SAML:1.1:nameid-format:transient",
+        // Usually X.509 cert and privateKey of the SP are provided by files placed at
+        // the certs folder. But we can also provide them with the following parameters
+        "x509cert": "",
+        "privateKey": ""
+
+        /*
+         * Key rollover
+         * If you plan to update the SP X.509cert and privateKey
+         * you can define here the new X.509cert and it will be
+         * published on the SP metadata so Identity Providers can
+         * read them and get ready for rollover.
+         */
+        // 'x509certNew': '',
+    },
+
+    "idp": {
+        "entityId": "<idp_metadata_url>",
+        "singleSignOnService": {
+            "url": "<idp_sso_url>",
+            "binding": "urn:oasis:names:tc:SAML:2.0:bindings:HTTP-Redirect"
+        },
+        "singleLogoutService": {
+            "url": "<idp_slo_url>",
+            "binding": "urn:oasis:names:tc:SAML:2.0:bindings:HTTP-Redirect"
+        },
+        "x509cert": "<idp_cert>"
+    }
+}
