@@ -44,10 +44,13 @@
         </p>
     {% endif %}
 
-    <p>
-        <b>DELIVERY METHOD:</b> <br/>
-        {{ order_info['metadata']['delivery_method'].title() }}
-    </p>
+    {% if order_info['metadata']['delivery_method'] %}
+        <p>
+            <b>DELIVERY METHOD:</b>
+            <br/>
+            {{ order_info['metadata']['delivery_method'].title() }}
+        </p>
+    {% endif %}
 
     {% if order_info['metadata']['contact_number'] %}
         <p>

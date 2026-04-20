@@ -1,0 +1,47 @@
+{% extends "base.html" %}
+{% block content %}
+    <main id="skip-header-target" role="main">
+        <section class="featured-panel device-lg">
+            <div class="card bg-primary">
+                <div class="container align-self-center my-3">
+                    <div class="narrow text-white text-center">
+                        <h1>ePayments</h1>
+                    </div>
+                </div>
+
+                <img class="card-img full-opacity-on-device"
+                     src="{{ url_for("static", filename="/images/records-building.jpg") }}"
+                     alt="Card image">
+
+                <div class="card-img-overlay narrow d-flex">
+                    <div class="container align-self-center my-3">
+                        <div class="narrow text-white  text-center">
+                            {% if config['USE_SAML'] %}
+                                <button class="btn btn-lg rounded-sm btn-info"
+                                            type="button"
+                                            onclick="window.location.href='{{ url_for('auth.saml') }}'">Log In
+                                </button>
+                            {% else %}
+                                <h1 class="card-title display-6 font-weight-bold mb-3">Sign In</h1>
+                                <form action="" method="post">
+                                    {{ form.hidden_tag() }}
+                                    <div class="mb-2">
+                                        {{ form.username.label }}
+                                        {{ form.username(class="form-control rounded-sm", placeholder="Email") }}
+                                        {% for error in form.username.errors %}
+                                            <span>[{{ error }}]</span>
+                                        {% endfor %}
+                                    </div>
+
+                                    <h1 class="card-title display-4 font-weight-bold mb-3">
+                                        {{ form.submit(class="btn btn-lg rounded-sm btn-info") }}
+                                    </h1>
+                                </form>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+{% endblock %}

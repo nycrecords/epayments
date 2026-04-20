@@ -35,7 +35,9 @@ class SearchFunctions(object):
                                        'date_received',
                                        'order_type',
                                        'current_status',
-                                       'customer'
+                                       'customer',
+                                       'total',
+                                       'check_mo_number',
                                    ],
                                    size=size,
                                    from_=start)
@@ -71,10 +73,13 @@ class SearchFunctions(object):
                                        'order_number',
                                        'suborder_number',
                                        'date_received',
+                                       'date_submitted',
                                        'order_type',
                                        'customer',
                                        'metadata',
-                                       'current_status'
+                                       'current_status',
+                                       'total',
+                                       'check_mo_number'
                                    ],
                                    size=size,
                                    from_=start)

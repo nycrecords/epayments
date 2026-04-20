@@ -9,9 +9,3 @@ DROPDOWN = [
     (EMAIL, 'Email'),
     (PICKUP, 'Pickup')
 ]
-
-FORM_DROPDOWN = [
-    (MAIL, 'Mail'),
-    (EMAIL, 'Email'),
-    (PICKUP, 'Pickup')
-]
