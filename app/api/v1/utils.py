@@ -201,7 +201,7 @@ def _format_comments(comments, suborder_number, metadata_comment=None):
         metadata_comment: Optional comment captured at order creation time.
 
     Returns:
-        A single string with all comments separated by ' | ', or '' if none.
+        A single string with all comments separated by newline or '' if none.
     """
     entries = []
 
