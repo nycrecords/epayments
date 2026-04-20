@@ -163,6 +163,57 @@ def update_check_mo_number(order: Orders, check_mo_number: str) -> str:
     return message
 
 
+def _get_suborder_comments(suborder_numbers):
+    """Bulk fetch all event comments with timestamps for each suborder."""
+    if not suborder_numbers:
+        return {}
+
+    query = db.session.query(
+        Events.suborder_number,
+        Events.new_value,
+        Events.timestamp
+    ).filter(
+        Events.suborder_number.in_(suborder_numbers),
+        Events.new_value['comment'].astext.isnot(None)
+    ).order_by(
+        Events.suborder_number,
+        Events.timestamp.desc()
+    )
+
+    result = {}
+    for row in query.all():
+        comment = (row.new_value or {}).get('comment', '')
+        if not comment:
+            continue
+        timestamp = row.timestamp.strftime('%Y-%m-%d %H:%M') if row.timestamp else ''
+        entry = f"[{timestamp}] {comment}"
+        result.setdefault(row.suborder_number, []).append(entry)
+
+    return result
+
+
+def _format_comments(comments, suborder_number, metadata_comment=None):
+    """Combine order creation comments from elastic search with all events table comments
+
+    Args:
+        comments: Dict of a suborder_number -> list of timestamped comment strings.
+        suborder_number: The suborder to look up.
+        metadata_comment: Optional comment captured at order creation time.
+
+    Returns:
+        A single string with all comments separated by newline or '' if none.
+    """
+    entries = []
+
+    # Add comment if found from import
+    if metadata_comment:
+        entries.append(f"[Order Created] {metadata_comment}")
+
+    entries.extend(comments.get(suborder_number, []))
+
+    return '\n'.join(entries)
+
+
 def _print_orders(search_params: Dict[str, str]) -> str:
     """
     Generates a PDF of order sheets.
@@ -400,6 +451,23 @@ def generate_csv(search_params: Dict[str, str]) -> str:
         search_type='csv',
     )
 
+    # Fetch all comments from Events table
+    all_suborder_numbers = [
+        suborder['_source']['suborder_number']
+        for suborder in suborder_results['hits']['hits']
+    ]
+    comments = _get_suborder_comments(all_suborder_numbers)
+
+    # Pre-format comments for each suborder
+    formatted_comments = {
+        suborder['_source']['suborder_number']: _format_comments(
+            comments,
+            suborder['_source']['suborder_number'],
+            suborder['_source'].get('metadata', {}).get('comment')
+        )
+        for suborder in suborder_results['hits']['hits']
+    }
+
     if status == 'Refund' and order_type == 'all':
         filename = 'orders_{}_refunds_{}.xlsx'.format(order_type, datetime.now().strftime('%m_%d_%Y_at_%I_%M_%p'))
     else:
@@ -411,6 +479,7 @@ def generate_csv(search_params: Dict[str, str]) -> str:
     # header formats
     header_format = wb.add_format({'bold': 1})
     header_format.set_bg_color('#FFFF00')
+    wrap_format = wb.add_format({'text_wrap': True})
 
     header_init = ['Order Number',
                    'Suborder Number',
@@ -434,7 +503,7 @@ def generate_csv(search_params: Dict[str, str]) -> str:
                    'Raised Seal Copies',
                    'No Amends',
                    'No Amends Copies',
-                   'Comment',
+                   'Comments',
                    'Delivery Method'
                    ]
 
@@ -500,7 +569,7 @@ def generate_csv(search_params: Dict[str, str]) -> str:
                 suborder['_source'].get('metadata').get('raised_seal_copies'),
                 suborder['_source'].get('metadata').get('no_amends'),
                 suborder['_source'].get('metadata').get('no_amends_copies'),
-                'Yes' if suborder['_source'].get('metadata').get('comment') else '',
+                formatted_comments[suborder['_source']['suborder_number']],
                 suborder['_source'].get('metadata').get('delivery_method'),
             ]
             if order_type == order_types.BIRTH_CERT:
@@ -574,7 +643,7 @@ def generate_csv(search_params: Dict[str, str]) -> str:
                 suborder['_source'].get('metadata').get('raised_seal_copies'),
                 suborder['_source'].get('metadata').get('no_amends'),
                 suborder['_source'].get('metadata').get('no_amends_copies'),
-                'Yes' if suborder['_source'].get('metadata').get('comment') else '',
+                formatted_comments[suborder['_source']['suborder_number']],
                 suborder['_source'].get('metadata').get('delivery_method'),
             ]
             if order_type == order_types.MARRIAGE_CERT:
@@ -644,7 +713,7 @@ def generate_csv(search_params: Dict[str, str]) -> str:
                 suborder['_source'].get('metadata').get('raised_seal_copies'),
                 suborder['_source'].get('metadata').get('no_amends'),
                 suborder['_source'].get('metadata').get('no_amends_copies'),
-                'Yes' if suborder['_source'].get('metadata').get('comment') else '',
+                formatted_comments[suborder['_source']['suborder_number']],
                 suborder['_source'].get('metadata').get('delivery_method'),
             ]
             if order_type == order_types.DEATH_CERT:
@@ -656,6 +725,7 @@ def generate_csv(search_params: Dict[str, str]) -> str:
         add_header = [
             'Number of Copies',
             'Filename',
+            'Comments',
             'Delivery Method'
         ]
 
@@ -679,6 +749,7 @@ def generate_csv(search_params: Dict[str, str]) -> str:
                 suborder['_source'].get('customer').get('country'),
                 suborder['_source'].get('metadata').get('num_copies'),
                 suborder['_source'].get('metadata').get('filename'),
+                formatted_comments[suborder['_source']['suborder_number']],
                 suborder['_source'].get('metadata').get('delivery_method'),
             ]
 
@@ -694,6 +765,7 @@ def generate_csv(search_params: Dict[str, str]) -> str:
             'Number of Copies',
             'Raised Seal',
             'Raised Seal Copies',
+            'Comments',
             'Delivery Method',
             'Contact Number',
             'Contact Email'
@@ -725,6 +797,7 @@ def generate_csv(search_params: Dict[str, str]) -> str:
                 suborder['_source'].get('metadata').get('num_copies'),
                 suborder['_source'].get('metadata').get('raised_seal'),
                 suborder['_source'].get('metadata').get('raised_seal_copies'),
+                formatted_comments[suborder['_source']['suborder_number']],
                 suborder['_source'].get('metadata').get('delivery_method'),
                 suborder['_source'].get('metadata').get('contact_number'),
                 suborder['_source'].get('metadata').get('contact_email'),
@@ -744,6 +817,7 @@ def generate_csv(search_params: Dict[str, str]) -> str:
             'Number of Copies',
             'Raised Seal',
             'Raised Seal Copies',
+            'Comments',
             'Delivery Method'
         ]
 
@@ -775,6 +849,7 @@ def generate_csv(search_params: Dict[str, str]) -> str:
                 suborder['_source'].get('metadata').get('num_copies'),
                 suborder['_source'].get('metadata').get('raised_seal'),
                 suborder['_source'].get('metadata').get('raised_seal_copies'),
+                formatted_comments[suborder['_source']['suborder_number']],
                 suborder['_source'].get('metadata').get('delivery_method'),
             ]
 
@@ -815,7 +890,7 @@ def generate_csv(search_params: Dict[str, str]) -> str:
                 suborder['_source'].get('metadata').get('raised_seal_copies'),
                 suborder['_source'].get('metadata').get('no_amends'),
                 suborder['_source'].get('metadata').get('no_amends_copies'),
-                'Yes' if suborder['_source'].get('metadata').get('comment') else '',
+                formatted_comments[suborder['_source']['suborder_number']],
                 suborder['_source'].get('metadata').get('delivery_method'),
             ]
 
@@ -840,7 +915,7 @@ def generate_csv(search_params: Dict[str, str]) -> str:
             'Borough',
             'Block',
             'Lot',
-            'Comment',
+            'Comments',
             'Description',
         ]
 
@@ -865,7 +940,7 @@ def generate_csv(search_params: Dict[str, str]) -> str:
                 suborder['_source'].get('metadata').get('borough', ''),
                 suborder['_source'].get('metadata').get('block', ''),
                 suborder['_source'].get('metadata').get('lot', ''),
-                'Yes' if suborder['_source'].get('metadata').get('comment') else '',
+                formatted_comments[suborder['_source']['suborder_number']],
                 suborder['_source'].get('metadata').get('description', ''),
             ]
 
@@ -883,6 +958,7 @@ def generate_csv(search_params: Dict[str, str]) -> str:
             'Certificate Number',
             'Borough',
             'Years',
+            'Comments',
         ]
 
         header_data = add_header
@@ -901,6 +977,7 @@ def generate_csv(search_params: Dict[str, str]) -> str:
                 suborder['_source'].get('metadata').get('certificate_number'),
                 suborder['_source'].get('metadata').get('borough'),
                 suborder['_source'].get('metadata').get('years'),
+                formatted_comments[suborder['_source']['suborder_number']],
             ]
             contents.append(row_content)
 
@@ -920,9 +997,9 @@ def generate_csv(search_params: Dict[str, str]) -> str:
             'Total',
             'Date Submitted',
             'Date Received',
+            'Comments',
         ]
-        if status == 'Refund' and order_type == 'all':
-            add_header.append('Status Comments')  # Add new column for refund comments
+
         if order_type == 'manual_entries':
             add_header.append("Check/Money Order Number")
 
@@ -946,24 +1023,17 @@ def generate_csv(search_params: Dict[str, str]) -> str:
                 suborder['_source'].get('total'),
                 suborder['_source'].get('date_submitted')[:8],  # Remove time from string
                 suborder['_source'].get('date_received')[:8],
+                formatted_comments[suborder['_source']['suborder_number']],
             ]
-
-            # Add refund comments if applicable
-            if status == 'Refund' and order_type == 'all':
-                # Get the most recent refund status update comment from Events table
-                refund_event = Events.query.filter(
-                    Events.suborder_number == suborder['_source'].get('suborder_number'),
-                    Events.type == event_type.UPDATE_STATUS,
-                    Events.new_value['status'].astext == 'Refund'
-                ).order_by(Events.timestamp.desc()).first()
-
-                comment = refund_event.status_history.get('comment', '') if refund_event else ''
-                row_content.append(comment)
-
             if order_type == 'manual_entries':
                 row_content.append(suborder['_source'].get('check_mo_number'))
 
             contents.append(row_content)
+
+    # Format comments column entries
+    if 'Comments' in header_data:
+        comments_col = header_data.index('Comments')
+        ws.set_column(comments_col, comments_col, 60, wrap_format)
 
     # populate worksheet after header_data and contents is filled
     # write headers
