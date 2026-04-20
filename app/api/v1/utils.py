@@ -211,7 +211,7 @@ def _format_comments(comments, suborder_number, metadata_comment=None):
 
     entries.extend(comments.get(suborder_number, []))
 
-    return ' | '.join(entries)
+    return '\n'.join(entries)
 
 
 def _print_orders(search_params: Dict[str, str]) -> str:
@@ -479,6 +479,7 @@ def generate_csv(search_params: Dict[str, str]) -> str:
     # header formats
     header_format = wb.add_format({'bold': 1})
     header_format.set_bg_color('#FFFF00')
+    wrap_format = wb.add_format({'text_wrap': True})
 
     header_init = ['Order Number',
                    'Suborder Number',
@@ -1028,6 +1029,11 @@ def generate_csv(search_params: Dict[str, str]) -> str:
                 row_content.append(suborder['_source'].get('check_mo_number'))
 
             contents.append(row_content)
+
+    # Format comments column entries
+    if 'Comments' in header_data:
+        comments_col = header_data.index('Comments')
+        ws.set_column(comments_col, comments_col, 60, wrap_format)
 
     # populate worksheet after header_data and contents is filled
     # write headers
